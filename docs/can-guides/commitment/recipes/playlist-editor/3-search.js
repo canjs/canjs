@@ -1,6 +1,6 @@
-var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
+const PlaylistVM = can.DefineMap.extend("PlaylistVM", {
   init: function() {
-    var self = this;
+    const self = this;
 
     self.on("googleAuth", function(ev, googleAuth) {
       self.signedIn = googleAuth.isSignedIn.get();
@@ -31,22 +31,22 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
   get searchResultsPromise() {
     if (this.searchQuery.length > 2) {
 
-      var results = gapi.client.youtube.search.list({
+      const results = gapi.client.youtube.search.list({
           q: this.searchQuery,
-          part: 'snippet',
-          type: 'video'
-        }).then(function(response){
+          part: "snippet",
+          type: "video"
+        }).then(function(response) {
         console.log(response.result.items);
         return response.result.items;
       });
-      return new Promise(function(resolve, reject){
+      return new Promise(function(resolve, reject) {
         results.then(resolve, reject);
       });
     }
   }
 });
 
-var vm = new PlaylistVM();
-var template = can.stache.from("app-template");
-var frag = template(vm);
+const vm = new PlaylistVM();
+const template = can.stache.from("app-template");
+const frag = template(vm);
 document.body.appendChild(frag);

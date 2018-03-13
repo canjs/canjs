@@ -1,6 +1,6 @@
 <script id="app-template" type="text/stache">
   {{#if(googleApiLoadedPromise.isPending)}}
-    <div>Loading Google API ...</div>
+    <div>Loading Google API…</div>
   {{else}}
     {{#if(signedIn)}}
       Welcome {{givenName}}! <button on:click="googleAuth.signOut()">Sign Out</button>
@@ -9,20 +9,20 @@
     {{/if}}
 
     <div>
-      <input value:bind="searchQuery" placeholder="Search for videos"/>
+      <input value:bind="searchQuery" placeholder="Search for videos" />
     </div>
 
     {{#if(searchResultsPromise.isPending)}}
-      <div class="loading">Loading videos...</div>
+      <div class="loading">Loading videos…</div>
     {{/if}}
 
     {{#if(searchResultsPromise.isResolved)}}
       <ul class='source'>
       {{#each(searchResultsPromise.value)}}
-        <li on:draginit="videoDrag(%arguments[1])"
+        <li on:draginit="videoDrag(scope.arguments[1])"
             {{data "dragData"}}>
           <a draggable="false" href="https://www.youtube.com/watch?v={{./id.videoId}}" target='_blank'>
-            <img draggable="false" src="{{./snippet.thumbnails.default.url}}" width="50px"/>
+            <img draggable="false" src="{{./snippet.thumbnails.default.url}}" width="50px" />
           </a>
           {{./snippet.title}}
         </li>
@@ -32,14 +32,14 @@
       {{#if(searchResultsPromise.value.length)}}
         <div class='new-playlist'>
           <ul
-		    on:dropover="addDropPlaceholder(0,getDragData(%arguments[2]))"
+		    on:dropover="addDropPlaceholder(0,getDragData(scope.arguments[2]))"
 			on:dropout="clearDropPlaceholder()"
-			on:dropon="addVideo(0,getDragData(%arguments[2]))">
+			on:dropon="addVideo(0,getDragData(scope.arguments[2]))">
 
             {{#each(videosWithDropPlaceholder)}}
               <li class="{{#if(isPlaceholder)}}placeholder{{/if}}">
                 <a href="https://www.youtube.com/watch?v={{./video.id.videoId}}" target='_blank'>
-                  <img src="{{./video.snippet.thumbnails.default.url}}" width="50px"/>
+                  <img src="{{./video.snippet.thumbnails.default.url}}" width="50px" />
                 </a>
 
                 {{./video.snippet.title}}

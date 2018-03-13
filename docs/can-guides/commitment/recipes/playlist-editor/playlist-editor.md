@@ -1,17 +1,16 @@
 @page guides/recipes/playlist-editor Playlist Editor (Advanced)
 @parent guides/recipes
-@hide
 
-@description Learn how to use YouTube's API to search for videos and make a playlist.  This
-makes authenticated requests with OAuth2. It uses [https://jquerypp.com jQuery++] for
-drag/drop events. It shows using custom attributes and custom events. This guide takes
+@description Learn how to use YouTube’s API to search for videos and make a playlist.  This
+makes authenticated requests with OAuth2. It uses [jQuery++](https://jquerypp.com) for
+drag/drop events. It shows using custom attributes and custom events.  This guide takes
 an hour to complete.
 
 @body
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/meqowis/3/embed?output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/meqowis/5/embed?output">JS Bin on jsbin.com</a>
 
 To use the widget:
 
@@ -45,14 +44,14 @@ The following video goes through this recipe:
 
 In this section, we will:
 
-1. Load Google's JS API client, `gapi`, and initialize it to make requests on behalf of
+1. Load Google’s JS API client, `gapi`, and initialize it to make requests on behalf of
    the registered "CanJS Playlist" app.
-2. Setup a basic CanJS application.
-3. Use the basic CanJS application to show when Google's JS API has finished loading.
+2. Set up a basic CanJS application.
+3. Use the basic CanJS application to show when Google’s JS API has finished loading.
 
 ### What you need to know
 
-- The preferred way of loading Google's JS API is with an `async` script tag like:
+- The preferred way of loading Google’s JS API is with an `async` script tag like:
 
   ```html
   <script async defer src="https://apis.google.com/js/api.js"
@@ -64,13 +63,13 @@ In this section, we will:
   The `async` attribute allows other JS to execute while the `api.js` file is loading.
   Once complete, this will call a `googleScriptLoaded` function.
 
-- Once `api.js` is loaded, it adds the   [gapi](https://developers.google.com/api-client-library/javascript/reference/referencedocs)
-  object to the window.  This is Google's JS API.  It can be used to load other APIs that extend the `gapi` library.
+- Once `api.js` is loaded, it adds the [gapi](https://developers.google.com/api-client-library/javascript/reference/referencedocs)
+  object to the window.  This is Google’s JS API.  It can be used to load other APIs that extend the `gapi` library.
 
   The following can be used to load the OAuth2 GAPI libraries:
 
   ```js
-  gapi.load('client:auth2', completeCallback);
+  gapi.load("client:auth2", completeCallback);
   ```
 
   Once this functionality is loaded, we can tell `gapi` to make requests on behalf of a registered
@@ -79,10 +78,10 @@ In this section, we will:
 
   ```js
   gapi.client.init({
-	  'apiKey': 'AIzaSyAbHbOuFtJRvTX731PQXGSTy59eh5rEiE0',
-      'clientId': '764983721035-85cbj35n0kmkmrba10f4jtte8fhpst84.apps.googleusercontent.com',
-      'discoveryDocs': [ 'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest' ],
-      'scope': 'https://www.googleapis.com/auth/youtube'
+	  apiKey: "AIzaSyAbHbOuFtJRvTX731PQXGSTy59eh5rEiE0",
+    clientId: "764983721035-85cbj35n0kmkmrba10f4jtte8fhpst84.apps.googleusercontent.com",
+    discoveryDocs: [ "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest" ],
+    scope: "https://www.googleapis.com/auth/youtube"
   }).then( completeCallback )
   ```
 
@@ -92,10 +91,10 @@ In this section, we will:
   asynchronous behavior. A promise can be created like:
 
   ```js
-  var messagePromise = new Promise(function(resolve, reject){
-    setTimeout(function(){
-		resolve("Hello There")
-	},1000)
+  const messagePromise = new Promise(function(resolve, reject) {
+    setTimeout(function() {
+      resolve("Hello There");
+    }, 1000);
   });
   ```
 
@@ -106,7 +105,7 @@ In this section, we will:
   Anyone can listen to when `messagePromise` resolves with a value like:
 
   ```js
-  messagePromise.then(function(messageValue){
+  messagePromise.then(function(messageValue) {
 	  messageValue //-> "Hello There"
   });
   ```
@@ -118,15 +117,15 @@ In this section, we will:
 - A [can-stache] template is used to render data into a document fragment:
 
   ```js
-  var template = can.stache("<h1>{{message}}</h1>");
-  var frag = template({message: "Hello World"});
+  const template = can.stache("<h1>{{message}}</h1>");
+  const frag = template({message: "Hello World"});
   frag //-> <h1>Hello World</h1>
   ```
 
-- Load a template from a `<script>` tag with [can-stach.from can.stache.from] like:
+- Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
 
   ```js
-  var template = can.stache.from(SCRIPT_ID);
+  const template = can.stache.from(SCRIPT_ID);
   ```  
 
 - Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
@@ -138,7 +137,7 @@ In this section, we will:
 - [can-define/map/map can.DefineMap] can be used to define the behavior of observable objects like:
 
   ```js
-  var Type = can.DefineMap.extend({
+  const Type = can.DefineMap.extend({
 	  message: "string"
   });
   ```
@@ -148,17 +147,17 @@ In this section, we will:
   [can-component]).
 
   ```js
-  var PlaylistVM = can.DefineMap.extend({
+  const PlaylistVM = can.DefineMap.extend({
 	  message: "string"
   });
 
-  var messageVM = new PlaylistVM();
-  var frag = template(messageVM)
+  const messageVM = new PlaylistVM();
+  const frag = template(messageVM)
   ```
 
 - `can.DefineMap` can specify a default value and a type:
   ```js
-  var PlaylistVM = can.DefineMap.extend({
+  const PlaylistVM = can.DefineMap.extend({
     count: {default: 33}
   });
   new PlaylistVM().count //-> 33
@@ -189,9 +188,9 @@ In this section, we will:
 
 1. Show a `Sign In` button that signs a person into their google account.
 2. Show a `Sign Out` button that signs a person out of their google account.
-3. Automatically know via google's API when the user signs in and out, and update the
+3. Automatically know via google’s API when the user signs in and out, and update the
    page accordingly.
-4. Show a welcome message with the user's given name.
+4. Show a welcome message with the user’s given name.
 
 ### What you need to know
 
@@ -200,8 +199,8 @@ In this section, we will:
   can be retrieved like:
 
   ```js
-  googleApiLoadedPromise.then(function(){
-	  var googleAuth = gapi.auth2.getAuthInstance()
+  googleApiLoadedPromise.then(function() {
+	  const googleAuth = gapi.auth2.getAuthInstance()
   });
   ```
 
@@ -210,8 +209,8 @@ In this section, we will:
   - Know if someone is signed in: `googleAuth.isSignedIn.get()`
   - Sign someone in: `googleAuth.signIn()`
   - Sign someone out: `googleAuth.signOut()`
-  - Listen to when someone's signedIn status changes: `googleAuth.isSignedIn.listen(callback)`
-  - Get the user's name: `googleAuth.currentUser.get().getBasicProfile().getGivenName()`
+  - Listen to when someone’s signedIn status changes: `googleAuth.isSignedIn.listen(callback)`
+  - Get the user’s name: `googleAuth.currentUser.get().getBasicProfile().getGivenName()`
 
 
 
@@ -223,7 +222,7 @@ In this section, we will:
   ```js
   DefineMap.extend({
     signedIn: "boolean",
-    get signedOut(){
+    get signedOut() {
       return !this.signedIn;
     }
   });
@@ -232,10 +231,10 @@ In this section, we will:
 - Use [can-define.types.get asynchronous getters] to get data from asynchronous sources.  For example:
 
   ```js
-  var PlaylistVM = can.DefineMap.extend({
+  const PlaylistVM = can.DefineMap.extend({
     property: {
       get: function(lastSet, resolve) {
-        apiLoadedPromise.then(function(){
+        apiLoadedPromise.then(function() {
 			resolve( api.getValue() );
 		})
       }
@@ -243,27 +242,27 @@ In this section, we will:
   });
   ```
 
-- DefineMap's `init` method can be used to perform initialization behavior.  For example,
+- DefineMap’s `init` method can be used to perform initialization behavior.  For example,
   the following might initialize `googleApiLoadedPromise`:
 
   ```js
   DefineMap.extend({
-	  init: function(){
+	  init: function() {
 		  this.googleApiLoadedPromise = googleApiLoadedPromise;
 	  },
 	  googleApiLoadedPromise: "any"
   })
   ```
 
-- `DefineMap`'s [can-event-queue/map/map.on] lets you listen on changes in a DefineMap.
+- `DefineMap`’s [can-event-queue/map/map.on] lets you listen on changes in a DefineMap.
   This can be used to change values when other values change.  The following will increment
   `nameChange` everytime the `name` property changes:
 
   ```js
   DefineMap.extend({
-	  init: function(){
-		  var self = this;
-		  self.on("name", function(){
+	  init: function() {
+		  const self = this;
+		  self.on("name", function() {
 		      self.nameChange++;	  
 		  })
 	  },
@@ -277,7 +276,7 @@ In this section, we will:
 - Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `sayHi()` when the `<div>` is clicked.
 
    ```html
-   <div on:click="sayHi()"> … </div>
+   <div on:click="sayHi()"> <!-- ... --> </div>
    ```
 
 ### The solution
@@ -307,20 +306,20 @@ In this section, we will:
 
 ### What you need to know
 
-- Use [can-stache-bindings.twoWay value:bind] to setup a two-way binding in `can-stache`.  For example, the following keeps `searchQuery` and the input's `value` in sync:
+- Use [can-stache-bindings.twoWay value:bind] to setup a two-way binding in `can-stache`.  For example, the following keeps `searchQuery` and the input’s `value` in sync:
 
    ```html
-   <input value:bind="searchQuery"/>
+   <input value:bind="searchQuery" />
    ```
 
 - Use `gapi.client.youtube.search.list` to search YouTube like:
 
   ```js
-  var googlePromise = gapi.client.youtube.search.list({
+  const googlePromise = gapi.client.youtube.search.list({
     q: "dogs",
-    part: 'snippet',
-    type: 'video'
-  }).then(function(response){
+    part: "snippet",
+    type: "video"
+  }).then(function(response) {
     response //-> {
 	// result: {
 	//   items: [
@@ -340,7 +339,7 @@ In this section, we will:
 - To convert a `googlePromise` to a native `Promise` use:
 
   ```js
-  new Promise(function(resolve, reject){
+  new Promise(function(resolve, reject) {
     googlePromise.then(resolve, reject);	  
   })
   ```
@@ -382,7 +381,7 @@ In this section, we will:
   You can bind on them manually with jQuery like:
 
   ```js
-  $(element).on('draginit', function(ev, drag) {
+  $(element).on("draginit", function(ev, drag) {
     drag.limit($(this).parent());
     drag.horizontal();
   });
@@ -392,7 +391,7 @@ In this section, we will:
   `drag` events in [can-stache] and pass the `drag` argument to a function like:
 
   ```html
-  on:draginit="startedDrag(%arguments[1])"
+  on:draginit="startedDrag(scope.arguments[1])"
   ```
 
 - The `drag.ghost()` method copies the elements being dragged and drags that
@@ -408,7 +407,7 @@ In this section, we will:
 
   ```js
   PlaylistVM = DefineMap.extend({
-	startedDrag: function(){
+	startedDrag: function() {
 	  console.log("you did it!")
 	}
   });
@@ -439,7 +438,7 @@ In this section, we will:
 2. When the user drags a video over the playlist element, a placeholder of the
    video will appear in the first position of the playlist.
 3. If the video is dragged out of the playlist element, the placeholder will be removed.
-4. If the video is dropped on the playlist element, it will be added to the playlist's
+4. If the video is dropped on the playlist element, it will be added to the playlist’s
    list of videos.
 5. Prepare for inserting the placeholder or video in any position in the list.
 
@@ -452,8 +451,8 @@ In this section, we will:
 
   ```js
   PlaylistVM = DefineMap.extend({
-      ...
-      // {video: video, index: 0}
+    // ...
+    // {video: video, index: 0}
 	  dropPlaceholderData: "any",
 	  // [video1, video2, ...]
 	  playlistVideos: {
@@ -461,11 +460,11 @@ In this section, we will:
 	     Default: can.DefineList
 	  },
 	  get videosWithDropPlaceholder() {
-         var copyOfPlaylistVideos = this.placeListVideos.map(...);
+      const copyOfPlaylistVideos = this.placeListVideos.map( /* ... */ );
 
-         // insert this.dropPlaceholderData into copyOfPlaylistVideos
+      // insert this.dropPlaceholderData into copyOfPlaylistVideos
 
-		 return copyOfPlaylistVideos;
+      return copyOfPlaylistVideos;
 	  }
   })
   ```
@@ -474,8 +473,8 @@ In this section, we will:
   add video to the playlist (`addVideo`) should take an index like:
 
   ```js
-  addDropPlaceholder: function(index, video) { ... }
-  addVideo: function(index, video) { ... }
+  addDropPlaceholder: function(index, video) { /* ... */ }
+  addVideo: function(index, video) { /* ... */ }
   ```
 
   These functions will be called with `0` as the index for this section.  
@@ -492,14 +491,14 @@ In this section, we will:
   You can bind on them manually with jQuery like:
 
   ```js
-  $(element).on('dropon', function(ev, drop, drag) {...});
+  $(element).on("dropon", function(ev, drop, drag) { /* ... */ });
   ```
 
   Notice that `drop` is now the 2nd argument to the event.  You can listen to
   `drop` events in [can-stache], and pass the `drag` argument to a function, like:
 
   ```html
-  on:dropon="addVideo(%arguments[2])"
+  on:dropon="addVideo(scope.arguments[2])"
   ```
 
 - You will need to associate the drag objects with the video being dragged so
@@ -509,11 +508,11 @@ In this section, we will:
   - The `drag.element` is the jQuery-wrapped element that the user initiated the
     drag motion upon.
 
-  - CanJS's `{{data DATANAME}}` helper lets you associate custom data with an element. The following
+  - CanJS’s `{{data DATANAME}}` helper lets you associate custom data with an element. The following
     saves the current `context` of the `<li>` as `"dragData"` on the `<li>`:
 
-    ```
-    <li ($draginit)="videoDrag(%arguments[1])"
+    ```html
+    <li on:draginit="videoDrag(scope.arguments[1])"
               {{data "dragData"}}>
     ```
 
@@ -548,12 +547,12 @@ In this section, we will:
 
 - ViewModels are best left knowing very little about the DOM. This makes them more
   easily unit-testable.  To make this interaction, we need to know where the mouse
-  is in relation to the playlist's videos.  This requires a lot of DOM interaction
+  is in relation to the playlist’s videos.  This requires a lot of DOM interaction
   and is best done outside the ViewModel.
 
-  Specifically, we'd like to translate the `dropmove` and `dropon` events
+  Specifically, we’d like to translate the `dropmove` and `dropon` events
   into other events that let people know where the `dropmove` and `dropon` events
-  are happening in relationship to the __drop target__'s child elements.
+  are happening in relationship to the __drop target__’s child elements.
 
   Our goal is to:
 
@@ -569,8 +568,8 @@ In this section, we will:
   way.  Use [can-control.extend] to define a `can.Control` type, as follows:
 
   ```js
-  var Sortable = can.Control.extend({
-	  ... event handlers and methods ...
+  const Sortable = can.Control.extend({
+	  // Event handlers and methods
   });
   ```
 
@@ -578,12 +577,12 @@ In this section, we will:
   as follows:
 
   ```js
-  var Sortable = can.Control.extend({
+  const Sortable = can.Control.extend({
 	"{element} dropmove": function(el, ev, drop, drag) {
       // do stuff on dropmove like call method:
       this.method();
     },
-	method: function(){
+	method: function() {
 	  // do something
 	}
   });
@@ -606,7 +605,9 @@ In this section, we will:
   This can be useful to create controls on an element with that attribute.  For example, if a user has:
 
   ```html
-  <ul sortable>...</ul>
+  <ul sortable>
+    <!-- ... -->
+  </ul>
   ```
 
   The following will create the `Sortable` control on that `<ul>`:
@@ -627,18 +628,18 @@ In this section, we will:
   });
   ```
 
-- Access the event object in a [can-stache-bindings.event] with `%event`, like:
+- Access the event object in a [can-stache-bindings.event] with `scope.event`, like:
 
   ```html
-  on:sortableinsertat="addVideo(%event.index, %event.dragData)"
+  on:sortableinsertat="addVideo(scope.event.index, scope.event.dragData)"
   ```
 
 - Mouse events like `click` and `dropmove` and `dropon` have a `pageY` property that
-  tells how many pixels down the page a user's mouse is.
-- [jQuery.offset](https://api.jquery.com/offset/) returns an element's position on the page.
-- [jQuery.height](https://api.jquery.com/height/) returns an element's height.
-- If the mouse position is below an element's center, the placeholder should be inserted
-  after the element.  If the mouse position is above an element's center, it should be inserted
+  tells how many pixels down the page a user’s mouse is.
+- [jQuery.offset](https://api.jquery.com/offset/) returns an element’s position on the page.
+- [jQuery.height](https://api.jquery.com/height/) returns an element’s height.
+- If the mouse position is below an element’s center, the placeholder should be inserted
+  after the element.  If the mouse position is above an element’s center, it should be inserted
   before the element.
 
 ### The solution
@@ -697,22 +698,21 @@ In this section, we will:
   To create a playlist:
 
   ```js
-  var lastPromise = gapi.client.youtube.playlists.insert({
-	part: 'snippet,status',
-	resource: {
-	  snippet: {
-		title: PLAYLIST_NAME,
-		description: 'A private playlist created with the YouTube API and CanJS'
+  let lastPromise = gapi.client.youtube.playlists.insert({
+    part: "snippet,status",
+    resource: {
+      snippet: {
+        title: PLAYLIST_NAME,
+        description: "A private playlist created with the YouTube API and CanJS"
 	  },
 	  status: {
-		privacyStatus: 'private'
+      privacyStatus: "private"
 	  }
-	}
   }).then(function(response) {
-	response //->{} response.result.id
-	// result: {
-	//   id: "lk2asf8o"
-	// }
+    response //->{} response.result.id
+    // result: {
+    //   id: "lk2asf8o"
+    // }
   });
   ```
 
@@ -720,7 +720,7 @@ In this section, we will:
 
   ```js
   gapi.client.youtube.playlistItems.insert({
-    part: 'snippet',
+    part: "snippet",
     resource: {
       snippet: {
         playlistId: playlistId,
@@ -735,11 +735,11 @@ In this section, we will:
   ```js
   lastPromise = makeRequest(1);
 
-  lastPromise = lastPromise.then(function(){
+  lastPromise = lastPromise.then(function() {
     return makeRequest(2);	  
   })
 
-  lastPromise = lastPromise.then(function(){
+  lastPromise = lastPromise.then(function() {
     return makeRequest(3);	  
   })
   ```
@@ -750,14 +750,14 @@ In this section, we will:
 - Use [can-stache-bindings.toChild {$disabled}] to make an input disabled, like:
 
   ```html
-  <button disabled:from="createPlaylistPromise.isPending()">...
+  <button disabled:from="createPlaylistPromise.isPending()">
   ```
 
 - When the promise has finished, set the `playlistVideos` property back to an empty list. This
   can be done by listening to `createPlaylistPromise`:
 
   ```js
-  this.on("createPlaylistPromise", function(ev, promise) { ... })
+  this.on("createPlaylistPromise", function(ev, promise) { /* ... */ })
   ```
 
 ### The solution

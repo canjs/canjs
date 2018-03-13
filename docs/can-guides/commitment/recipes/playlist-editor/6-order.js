@@ -1,6 +1,6 @@
-var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
+const PlaylistVM = can.DefineMap.extend("PlaylistVM", {
   init: function() {
-    var self = this;
+    const self = this;
 
     self.on("googleAuth", function(ev, googleAuth) {
       self.signedIn = googleAuth.isSignedIn.get();
@@ -31,15 +31,15 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
   get searchResultsPromise() {
     if (this.searchQuery.length > 2) {
 
-      var results = gapi.client.youtube.search.list({
+      const results = gapi.client.youtube.search.list({
           q: this.searchQuery,
-          part: 'snippet',
-          type: 'video'
-        }).then(function(response){
+          part: "snippet",
+          type: "video"
+        }).then(function(response) {
         console.log(response.result.items);
         return response.result.items;
       });
-      return new Promise(function(resolve, reject){
+      return new Promise(function(resolve, reject) {
         results.then(resolve, reject);
       });
     }
@@ -47,7 +47,7 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
   videoDrag: function(drag) {
     drag.ghost().addClass("ghost");
   },
-  getDragData: function(drag){
+  getDragData: function(drag) {
 	return can.data.get.call(drag.element[0], "dragData");
   },
   dropPlaceholderData: "any",
@@ -73,7 +73,7 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
     }
   },
   get videosWithDropPlaceholder() {
-    var copy = this.playlistVideos.map(function(video) {
+    const copy = this.playlistVideos.map(function(video) {
       return {
         video: video,
         isPlaceholder: false
@@ -89,7 +89,7 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
   }
 });
 
-var Sortable = can.Control.extend({
+const Sortable = can.Control.extend({
   "{element} dropmove": function(el, ev, drop, drag) {
     this.fireEventForDropPosition(ev, drop, drag, "sortableplaceholderat");
   },
@@ -97,13 +97,13 @@ var Sortable = can.Control.extend({
     this.fireEventForDropPosition(ev, drop, drag, "sortableinsertat");
   },
   fireEventForDropPosition: function(ev, drop, drag, eventName) {
-    var dragData = can.data.get.call(drag.element[0], "dragData");
+    const dragData = can.data.get.call(drag.element[0], "dragData");
 
-    var sortables = $(this.element).children();
+    const sortables = $(this.element).children();
 
     for (var i = 0; i < sortables.length; i++) {
       //check if cursor is past 1/2 way
-      var sortable = $(sortables[i]);
+      const sortable = $(sortables[i]);
       if (ev.pageY < Math.floor(sortable.offset().top + sortable.height() / 2)) {
         // index at which it needs to be inserted before
         $(this.element).trigger({
@@ -134,7 +134,7 @@ can.view.callbacks.attr("sortable", function(el) {
   new Sortable(el);
 });
 
-var vm = new PlaylistVM();
-var template = can.stache.from("app-template");
-var frag = template(vm);
+const vm = new PlaylistVM();
+const template = can.stache.from("app-template");
+const frag = template(vm);
 document.body.appendChild(frag);
