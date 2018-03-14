@@ -216,6 +216,43 @@ Next, run Browserify from the command line:
 ./node_modules/browserify/bin/cmd.js -t stringify main.js > bundle.js
 ```
 
+By default Browserify works with CommonJS modules, to use it with ES6 modules (like in this guides), `babelify` plugin should be required:
+
+```
+{
+  ...
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babelify": "^8.0.0",
+    "browserify": "^13.1.1",
+    "stringify": "^5.1.0"
+  },
+  "stringify": {
+    "appliesTo": { "includeExtensions": [".stache"] }
+  },
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "env"
+          ]
+        }
+      ]
+    ]
+  }
+}
+```
+
+And run browserify from the command line:
+```
+./node_modules/browserify/bin/cmd.js -t stringify -t babelify main.js > bundle.js
+```
+
+> An example how to use CanJS and [Browserify](http://browserify.org) with ES6 syntax is available in the [example repo on GitHub](https://github.com/canjs/browserify-example/tree/es6).
+
 Finally, create a page that loads `bundle.js`:
 
 ```
