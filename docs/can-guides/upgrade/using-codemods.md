@@ -252,13 +252,13 @@ can-migrate -a **/*.js -t version-4/can-route/template.js
 …will transform the following:
 
 ```js
-can.route.register(":page", { page: "home" });
+can.route(":page", { page: "home" });
 ```
 
 …to this:
 
 ```js
-can.route.register("{page}", { page: "home" });
+can.route("{page}", { page: "home" });
 ```
 
 #### register
@@ -272,7 +272,7 @@ can-migrate -a **/*.js -t version-4/can-route/register.js
 …will transform the following:
 
 ```js
-can.route.register("{page}", { page: "home" });
+can.route("{page}", { page: "home" });
 ```
 
 …to this:
