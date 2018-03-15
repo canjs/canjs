@@ -447,7 +447,7 @@ translate property changes to a url and a url to property changes. For example,
 
 ```js
 // a route like:
-route("todo/{todoId}");
+route.register("todo/{todoId}");
 
 // and a hash like:
 window.location.hash = "#!todo/7";

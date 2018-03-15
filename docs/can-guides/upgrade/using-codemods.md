@@ -24,7 +24,7 @@ const VM = DefineMap.extend({
     }
 });
 
-route(":page", { page: "home" });
+route.register(":page", { page: "home" });
 route.ready();
 ```
 
@@ -160,7 +160,7 @@ For example, it can transform code like this:
 
 ```js
 import route from "can-route";
-route(":page", { page: "home" });
+route.register(":page", { page: "home" });
 route.ready();
 ```
 
@@ -350,13 +350,13 @@ can-migrate -a **/*.js -t version-4/can-route/page.js
 …will transform the following:
 
 ```js
-can.route(":page", { page: "home" });
+can.route.register(":page", { page: "home" });
 ```
 
 …to this:
 
 ```js
-can.route("{page}", { page: "home" });
+can.route.register("{page}", { page: "home" });
 ```
 
 #### register
@@ -370,7 +370,7 @@ can-migrate -a **/*.js -t version-4/can-route/register.js
 …will transform the following:
 
 ```js
-can.route("{page}", { page: "home" });
+can.route.register("{page}", { page: "home" });
 ```
 
 …to this:
