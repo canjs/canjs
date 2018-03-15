@@ -50,7 +50,7 @@ a simple counter, we can use [can-define/map/map DefineMap] as follows:
 
 ```js
 import DefineMap from "can-define/map/map";
-var Counter = DefineMap.extend({
+const Counter = DefineMap.extend({
     count: {default: 0},
     increment() {
         this.count++;
@@ -62,7 +62,7 @@ We can create instances of `Counter`, call its methods, and
 inspect its state like so:
 
 ```js
-var myCounter = new Counter();
+const myCounter = new Counter();
 myCounter.count //-> 0
 myCounter.increment()
 myCounter.count //-> 1
@@ -83,7 +83,7 @@ definition behaviors to define a `TodosApp` constructor function's `todos` and `
 property behavior:
 
 ```js
-var TodosApp = DefineMap.extend({
+const TodosApp = DefineMap.extend({
     todos: {
         // todos defaults to a DefineList of todo data.
         default: () => new DefineList([
@@ -106,7 +106,7 @@ Instances of `TodosApp` will have default `todos` value and a `completeCount`
 that dynamically changes when `todos` changes:
 
 ```js
-var todosApp = new TodosApp();
+const todosApp = new TodosApp();
 todosApp.todos //-> DefineList[{complete: true, name: "Do the dishes."}, ...]
 
 todosApp.completeCount //-> 2
@@ -138,7 +138,7 @@ The following example increments the _Count_ when the <button>+1</button> is cli
 The demo uses a [can-stache] view:
 
 ```js
-var view = stache(`
+const view = stache(`
   <button on:click='increment()'>+1</button>
   Count: <span>{{count}}</span>
 `);
@@ -246,7 +246,7 @@ The demo defines the `<my-counter>` element with:
 - The `Counter` observable constructor as shown in the [Key-Value Observables](#Key_ValueObservables) section of this guide:
   ```js
   import DefineMap from "can-define/map/map";
-  var Counter = DefineMap.extend({
+  const Counter = DefineMap.extend({
       count: {default: 0},
       increment() {
           this.count++;
@@ -256,7 +256,7 @@ The demo defines the `<my-counter>` element with:
 - The [can-stache] view that incremented the counter as shown in the beginning of this guide:
   ```js
   import stache from "can-stache";
-  var view = stache(`
+  const view = stache(`
     <button on:click='increment()'>+1</button>
     Count: <span>{{count}}</span>
   `);
