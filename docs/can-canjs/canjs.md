@@ -50,7 +50,7 @@ by extending [can-component] with:
   my-counter button {margin-left: 15px;}
 </style>
 <script type="text/steal-module">
-var Component = require("can-component");
+const Component = require("can-component");
 Component.extend({
     tag: "my-counter",
     view: `
@@ -234,7 +234,7 @@ DefineMap.extend({
     name: "string",
     nameChangeCount: {
         value({listenTo, resolve}) {
-            var count = resolve(0);
+            let count = resolve(0);
             listenTo("name", () => {
                 resolve(++count);
             });
@@ -261,7 +261,7 @@ DefineMap.extend({
 // Solo Kefir streams
 const name = Kefir.emitterProperty();
 
-var nameChangeCount = name.scan(function(prev){
+const nameChangeCount = name.scan(function(prev){
     return prev+1;
 },0);
 
@@ -326,8 +326,8 @@ Useful low-level APIs:
   any data type.  For example, you can
   assign all key-values from a [can-define/map/map DefineMap] to a [https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map Map]:
   ```js
-  var meDefineMap = new DefineMap({name: "Justin"});
-  var meMap = canReflect.assign( new Map(), meDefineMap );
+  const meDefineMap = new DefineMap({name: "Justin"});
+  const meMap = canReflect.assign( new Map(), meDefineMap );
   meMap.get("name") //-> "Justin"
   ```
 - [can-util/js/diff-array/diff-array] & [can-util/js/diff-object/diff-object] - Diff objects and arrays.
