@@ -33,7 +33,7 @@ It uses `can.all.js` so you have the [can-core core], [can-ecosystem ecosystem],
 Install [can-core CanJS’s core modules] and StealJS with npm:
 
 ```
-npm install can-component can-compute can-connect can-define can-route can-route-pushstate can-set can-stache can-stache-bindings --save
+npm install can-component can-connect can-define can-route can-route-pushstate can-set can-stache can-stache-bindings --save
 npm install steal steal-stache --save
 ```
 
@@ -53,29 +53,29 @@ Next, add the following [configuration](https://stealjs.com/docs/StealJS.configu
 
 Next, create a `main.stache` template for your app:
 
-```
+```html
 <!-- main.stache -->
 <h1>{{message}}</h1>
 ```
 
 Next, create a `main` module for your application. Import [can-define/map/map] and your template to say “Hello World”:
 
-```
+```js
 // main.js
 import DefineMap from "can-define/map/map";
 import template from "./main.stache!";
 
-var data = new DefineMap({message: "Hello World"});
+const data = new DefineMap({message: "Hello World"});
 
 document.body.appendChild(template(data));
 ```
 
 Finally, create a page that loads `steal.js` and specifies `main` as the main module:
 
-```
+```html
 <html>
   <body>
-    <script src="./node_modules/steal/steal.js" deps-bundle data-main="main"></script>
+    <script src="./node_modules/steal/steal.js" data-main="main"></script>
   </body>
 </html>
 ```
@@ -83,12 +83,12 @@ Finally, create a page that loads `steal.js` and specifies `main` as the main mo
 StealJS supports “modlet” module names that end with `/`.  This means that the above could
 also be written like:
 
-```
+```js
 // main.js
 import DefineMap from "can-define/map/";
 import template from "./main.stache!";
 
-var data = new DefineMap({message: "Hello World"});
+const data = new DefineMap({message: "Hello World"});
 
 document.body.appendChild(template(data));
 ```
@@ -96,12 +96,12 @@ document.body.appendChild(template(data));
 
 Besides ES6 modules, StealJS supports AMD and CommonJS.  You could also write `main.js` like:
 
-```
+```js
 // main.js
-import DefineMap from 'can-define/map/map';
-import template from './main.stache!';
+import DefineMap from "can-define/map/map";
+import template from "./main.stache!";
 
-var data = new DefineMap({message: "Hello World"});
+const data = new DefineMap({message: "Hello World"});
 
 document.body.appendChild(template(data));
 ```
@@ -121,27 +121,27 @@ guide has instructions for how to create a production build.
 Install [can-core CanJS’s core modules] and webpack (with `raw-loader`) with npm:
 
 ```
-npm install can-component can-compute can-connect can-define can-route can-route-pushstate can-set can-stache can-stache-bindings --save
+npm install can-component can-connect can-define can-route can-route-pushstate can-set can-stache can-stache-bindings --save
 npm install webpack raw-loader --save-dev
 ```
 
 Next, create a `main.stache` template for your app:
 
-```
+```html
 <!-- main.stache -->
 <h1>{{message}}</h1>
 ```
 
 Next, create a `main` module for your application. Import [can-define/map/map], [can-stache], and your template to say “Hello World”:
 
-```
+```js
 // main.js
 import DefineMap from 'can-define/map/map';
 import stache from 'can-stache';
 import rawTemplate from 'raw-loader!./main.stache';
 
-var data = new DefineMap({message: "Hello World"});
-var template = stache(rawTemplate);
+const data = new DefineMap({message: "Hello World"});
+const template = stache(rawTemplate);
 
 document.body.appendChild(template(data));
 ```
@@ -149,15 +149,15 @@ document.body.appendChild(template(data));
 Next, run webpack from the command line:
 
 ```
-./node_modules/webpack/bin/webpack.js main.js bundle.js
+./node_modules/webpack/bin/webpack.js -d main.js -o dist/bundle.js
 ```
 
-Finally, create a page that loads `bundle.js`:
+Finally, create a page that loads `dist/bundle.js`:
 
-```
+```html
 <html>
   <body>
-    <script src="./bundle.js" type="text/javascript"></script>
+    <script src="./dist/bundle.js" type="text/javascript"></script>
   </body>
 </html>
 ```
@@ -166,62 +166,77 @@ Finally, create a page that loads `bundle.js`:
 
 > Get started with CanJS and [Browserify](http://browserify.org) by [cloning this example repo on GitHub](https://github.com/canjs/browserify-example).
 
-CanJS works with Browserify. Install [can-core CanJS’s core modules] and Browserify (with `stringify`) with npm:
+CanJS works with Browserify. Install [can-core CanJS’s core modules] and Browserify (with `babelify` and `stringify`) with npm:
 
 ```
-npm install can-component can-compute can-connect can-define can-route can-route-pushstate can-set can-stache can-stache-bindings --save
-npm install browserify stringify --save-dev
+npm install can-component can-connect can-define can-route can-route-pushstate can-set can-stache can-stache-bindings --save
+npm install browserify stringify babelify babel-core babel-preset-env --save-dev
 ```
 
 Next, create a `main.stache` template for your app:
 
-```
+```html
 <!-- main.stache -->
 <h1>{{message}}</h1>
 ```
 
 Next, create a `main.js` file for your application. Import [can-define/map/map], [can-stache], and your template to say “Hello World”:
 
-```
+```js
 // main.js
-import DefineMap from 'can-define/map/map';
-import stache from 'can-stache';
-import rawTemplate from './main.stache';
+import DefineMap from "can-define/map/map";
+import stache from "can-stache";
+import rawTemplate from "./main.stache";
 
-var data = new DefineMap({message: "Hello World"});
-var template = stache(rawTemplate);
+const data = new DefineMap({message: "Hello World"});
+const template = stache(rawTemplate);
 
 document.body.appendChild(template(data));
 ```
 
-Next, change your `package.json` to include the required `stringify` configuration:
+By default, Browserify works with CommonJS modules (with `require()` statements). To use it with ES6 modules (with `import` statements shown above), configure the `babelify` plugin in your `package.json`. We’ll also include the `stringify` configuration for loading [can-stache] templates:
 
 ```
 {
   ...
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babelify": "^8.0.0",
     "browserify": "^13.1.1",
     "stringify": "^5.1.0"
   },
   "stringify": {
     "appliesTo": { "includeExtensions": [".stache"] }
+  },
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "env"
+          ]
+        }
+      ]
+    ]
   }
 }
 ```
-@highlight 7-9
+@highlight 9-23
 
 Next, run Browserify from the command line:
 
 ```
-./node_modules/browserify/bin/cmd.js -t stringify main.js > bundle.js
+./node_modules/browserify/bin/cmd.js -t stringify -t babelify main.js > dist/bundle.js
 ```
 
-Finally, create a page that loads `bundle.js`:
+Finally, create a page that loads `dist/bundle.js`:
 
 ```
 <html>
   <body>
-    <script src="./bundle.js" type="text/javascript"></script>
+    <script src="./dist/bundle.js" type="text/javascript"></script>
   </body>
 </html>
 ```
@@ -246,7 +261,8 @@ The `node_modules/can/dist/global/` directory will include two files:
 
 With `can` installed, you can use it in an HTML page with a `<script>` tag:
 
-    <html>
+```html
+<html>
     <head>
         <title>CanJS</title>
     </head>
@@ -272,14 +288,16 @@ With `can` installed, you can use it in an HTML page with a `<script>` tag:
             );
         </script>
     </body>
-    </html>
+</html>
+```
 @highlight 6-6
 
 ### CDN
 
 Another quick way to start locally is by loading CanJS from a CDN:
 
-    <html>
+```html
+<html>
     <head>
         <title>CanJS</title>
     </head>
@@ -305,7 +323,8 @@ Another quick way to start locally is by loading CanJS from a CDN:
             );
         </script>
     </body>
-    </html>
+</html>
+```
 @highlight 6-6
 
 ## A note on Promises
