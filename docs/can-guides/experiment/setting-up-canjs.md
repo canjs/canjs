@@ -166,11 +166,11 @@ Finally, create a page that loads `dist/bundle.js`:
 
 > Get started with CanJS and [Browserify](http://browserify.org) by [cloning this example repo on GitHub](https://github.com/canjs/browserify-example).
 
-CanJS works with Browserify. Install [can-core CanJS’s core modules] and Browserify (with `stringify`) with npm:
+CanJS works with Browserify. Install [can-core CanJS’s core modules] and Browserify (with `babelify` and `stringify`) with npm:
 
 ```
 npm install can-component can-connect can-define can-route can-route-pushstate can-set can-stache can-stache-bindings --save
-npm install babelify browserify stringify --save-dev
+npm install browserify stringify babelify babel-core babel-preset-env --save-dev
 ```
 
 Next, create a `main.stache` template for your app:
@@ -194,29 +194,7 @@ const template = stache(rawTemplate);
 document.body.appendChild(template(data));
 ```
 
-Next, change your `package.json` to include the required `stringify` configuration:
-
-```
-{
-  ...
-  "devDependencies": {
-    "browserify": "^13.1.1",
-    "stringify": "^5.1.0"
-  },
-  "stringify": {
-    "appliesTo": { "includeExtensions": [".stache"] }
-  }
-}
-```
-@highlight 7-9
-
-Next, run Browserify from the command line:
-
-```
-./node_modules/browserify/bin/cmd.js -t stringify main.js > dist/bundle.js
-```
-
-By default Browserify works with CommonJS modules (with `require()` statements). To use it with ES6 modules (with `import` statements like in the guides), configure the `babelify` plugin in your `packagae.json`:
+By default, Browserify works with CommonJS modules (with `require()` statements). To use it with ES6 modules (with `import` statements shown above), configure the `babelify` plugin in your `package.json`. We’ll also include the `stringify` configuration for loading [can-stache] templates:
 
 ```
 {
@@ -245,15 +223,13 @@ By default Browserify works with CommonJS modules (with `require()` statements).
   }
 }
 ```
-@highlight 12-24
+@highlight 9-23
 
-And run browserify from the command line:
+Next, run Browserify from the command line:
 
 ```
 ./node_modules/browserify/bin/cmd.js -t stringify -t babelify main.js > dist/bundle.js
 ```
-
-> An example how to use CanJS and [Browserify](http://browserify.org) with ES6 syntax is available in the [example repo on GitHub](https://github.com/canjs/browserify-example/tree/es6).
 
 Finally, create a page that loads `dist/bundle.js`:
 
