@@ -339,12 +339,12 @@ To run [all of the version-4/can-route transforms](https://github.com/canjs/can-
 can-migrate -a **/*.js -t version-4/can-route/
 ```
 
-#### page
+#### template
 
 Running this transform:
 
 ```bash
-can-migrate -a **/*.js -t version-4/can-route/page.js
+can-migrate -a **/*.js -t version-4/can-route/template.js
 ```
 
 …will transform the following:
