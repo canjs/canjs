@@ -123,7 +123,7 @@
 			});
 
 			can.route.data = new AppVM();
-			can.route("{page}", { page: "home" });
+			can.route.register("{page}", { page: "home" });
 			can.route.start();
 
 			var template = can.stache.from('chat-template');

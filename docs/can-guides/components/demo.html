@@ -150,7 +150,7 @@ can.Component.extend({
 			"{{/todo}}"
 })
 
-can.route("todos/:id");
+can.route.register("todos/:id");
 
 $("#app").html(can.view("appMustache",{}))
 

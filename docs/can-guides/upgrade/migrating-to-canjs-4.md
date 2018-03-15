@@ -432,7 +432,7 @@ Registering routes in [can-route] used to be done by calling the route function.
 ```js
 import route from "can-route";
 
-route("{page}", { page: "home" });
+route.register("{page}", { page: "home" });
 ````
 
 to:
