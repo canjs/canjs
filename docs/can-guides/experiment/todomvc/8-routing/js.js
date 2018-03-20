@@ -101,5 +101,5 @@ can.route.register("{filter}");
 can.route.start();
 
 const template = can.stache.from("todomvc-template");
-const frag = template(appVM);
-document.body.appendChild(frag);
+const fragment = template(appVM);
+document.body.appendChild(fragment);

@@ -252,9 +252,9 @@ var target = viewTarget([
 // target.clone -> <h1>|Hello||</h1>
 // target.paths -> path: [0], callbacks: [], children: {paths: [1], callbacks:[function(){}]}
 
-var frag = target.hydrate({className: "title", message: "World"});
+var fragment = target.hydrate({className: "title", message: "World"});
 
-frag //-> <h1 class='title'>Hello World</h1>
+// fragment -> <h1 class='title'>Hello World</h1>
 ```
 
 ## can-cid

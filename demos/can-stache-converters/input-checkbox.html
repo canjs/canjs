@@ -25,7 +25,7 @@ var viewModel = new DefineMap({
 	person: person
 });
 
-var frag = template(viewModel, {
+var fragment = template(viewModel, {
   ownership: function(){
 		var list = person.owns;
 		return list.length ? list.join(" and ") : "nothing";
@@ -36,5 +36,5 @@ var frag = template(viewModel, {
 	}
 });
 
-out.appendChild(frag);
+out.appendChild(fragment);
 </script>

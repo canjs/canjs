@@ -55,7 +55,7 @@ Component.extend({
 	}
 });
 
-var frag = stache("<my-items items:from='items' />")({
+var fragment = stache("<my-items items:from='items' />")({
 	items: new DefineList([
 		{ title: "CanJS" },
 		{ title: "StealJS" },
@@ -65,6 +65,6 @@ var frag = stache("<my-items items:from='items' />")({
 	])
 });
 
-document.getElementById("out").appendChild(frag);
+document.getElementById("out").appendChild(fragment);
 </script>
 </body>

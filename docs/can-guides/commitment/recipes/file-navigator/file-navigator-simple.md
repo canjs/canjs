@@ -155,7 +155,7 @@ Let’s render `rootEntityData` in the page with its immediate children.
 - Render the template with data into a documentFragment like:
 
   ```js
-  const frag = template({
+  const fragment = template({
     something: {name: "Derek Brunson"}
   });
   ```
@@ -163,7 +163,7 @@ Let’s render `rootEntityData` in the page with its immediate children.
 - Insert a fragment into the page with:
 
   ```js
-  document.body.appendChild(frag);
+  document.body.appendChild(fragment);
   ```
 
 - Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
@@ -201,9 +201,9 @@ Update the __JavaScript__ tab to:
 ```js
 const template = can.stache.from("entities-template");
 
-const frag = template(rootEntityData);
+const fragment = template(rootEntityData);
 
-document.body.appendChild( frag );
+document.body.appendChild( fragment );
 ```
 @highlight 1-5
 
@@ -261,9 +261,9 @@ Update the __JavaScript__ tab to:
 const template = can.stache.from("entities-template");
 can.stache.registerPartial("entities", template);
 
-const frag = template(rootEntityData);
+const fragment = template(rootEntityData);
 
-document.body.appendChild( frag );
+document.body.appendChild( fragment );
 ```
 @highlight 2
 
@@ -353,9 +353,9 @@ const rootEntity = new Entity(rootEntityData);
 const template = can.stache.from("entities-template");
 can.stache.registerPartial("entities", template);
 
-const frag = template(rootEntity);
+const fragment = template(rootEntity);
 
-document.body.appendChild( frag );
+document.body.appendChild( fragment );
 ```
 @highlight 1-14,19
 
@@ -437,9 +437,9 @@ const rootEntity = new Entity(rootEntityData);
 const template = can.stache.from("entities-template");
 can.stache.registerPartial("entities", template);
 
-const frag = template(rootEntity);              
+const fragment = template(rootEntity);              
 
-document.body.appendChild( frag );
+document.body.appendChild( fragment );
 ```
 @highlight 12-15
 

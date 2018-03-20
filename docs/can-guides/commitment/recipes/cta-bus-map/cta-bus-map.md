@@ -66,8 +66,8 @@ __A Basic CanJS Setup__
   // Get a View
   const view = can.stache.from("my-view");
   // Render the View with the ViewModel instance
-  const frag = view(viewModel);
-  document.body.appendChild(frag);
+  const fragment = view(viewModel);
+  document.body.appendChild(fragment);
   ```
 
 - CanJS uses [can-stache] to render data in a template
@@ -97,7 +97,7 @@ __A Basic CanJS Setup__
 - Render the template with data into a documentFragment like:
 
   ```js
-  const frag = template({
+  const fragment = template({
     something: {name: "Derek Brunson"}
   });
   ```
@@ -105,7 +105,7 @@ __A Basic CanJS Setup__
 - Insert a fragment into the page with:
 
   ```js
-  document.body.appendChild(frag);
+  document.body.appendChild(fragment);
   ```
 
 __Loading Google Maps API__

@@ -118,5 +118,5 @@ can.defineStreamKefir(WeatherViewModel);
 const vm = new WeatherViewModel();
 
 const template = can.stache.from("app-template");
-const frag = template(vm);
-document.body.appendChild(frag);
+const fragment = template(vm);
+document.body.appendChild(fragment);

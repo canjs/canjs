@@ -55,7 +55,7 @@ socket.on("message created", function(message){
 });
 
 // Render application:
-var frag = stache.from("demo-html")(viewModel);
-document.getElementById("out").appendChild(frag);
+var fragment = stache.from("demo-html")(viewModel);
+document.getElementById("out").appendChild(fragment);
 
 </script>

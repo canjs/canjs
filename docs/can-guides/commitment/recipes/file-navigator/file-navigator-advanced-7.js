@@ -93,6 +93,6 @@ const rootFolderVM = new FolderVM({
 });
 
 const template = can.stache.from("app-template");
-const frag = template(rootFolderVM);
+const fragment = template(rootFolderVM);
 
-document.body.appendChild( frag );
+document.body.appendChild( fragment );

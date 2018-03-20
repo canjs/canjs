@@ -21,7 +21,7 @@ var person = new DefineMap({
 });
 
 var template = stache.from("demo-html");
-var frag = template(person, {
+var fragment = template(person, {
 	attendence: function(){
 		return person.attending ? 
 			"are a " + person.attending :
@@ -29,5 +29,5 @@ var frag = template(person, {
 	}
 });
 
-out.appendChild(frag);
+out.appendChild(fragment);
 </script>

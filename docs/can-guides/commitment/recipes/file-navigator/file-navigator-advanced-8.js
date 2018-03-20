@@ -94,6 +94,6 @@ can.Component.extend({
 });
 
 const template = can.stache.from("app-template");
-const frag = template(folder);
+const fragment = template(folder);
 
-document.body.appendChild( frag );
+document.body.appendChild( fragment );
