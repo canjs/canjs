@@ -414,6 +414,42 @@ players.forEach(function(player){
 })
 ```
 
+### can-define-backup is now mixin-based
+
+Previously importing `can-define-backup` would add the `backup`, `restore`, and `isDirty` functions to all `DefineMap`s. In 4.0, the `can-define-backup` mixin function must be called on any maps you would like to use these functions with.
+
+Change:
+
+```js
+import DefineMap from "can-define/map/map";
+import "can-define-backup";
+
+const Recipe = DefineMap.extend("Recipe", {
+	name: "string"
+});
+
+const recipe = new Recipe();
+
+recipe.backup();
+```
+
+to:
+
+```js
+import DefineMap from "can-define/map/map";
+import defineBackup from "can-define-backup";
+
+const Recipe = DefineMap.extend("Recipe", {
+	name: "string"
+});
+defineBackup(Recipe);
+
+const recipe = new Recipe();
+
+recipe.backup();
+```
+@highlight 2,7
+
 ## Non-breaking warnings
 
 In addition to the above breaking changes, you'll likely see several warnings. It's important not to ignore warnings coming from CanJS, as they often pertain to changes that *will* break in a future release (such as in CanJS 5.0). Clear out as many warnings as you can.
