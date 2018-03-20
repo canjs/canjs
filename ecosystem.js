@@ -6,6 +6,7 @@ require("can-debug");
 //require("can-connect-signalr");
 //require("can-connect-cloneable");
 //require("can-connect-ndjson");
+require("can-define-backup");
 //require("can-define-stream");
 ///require("can-define-stream-kefir");
 //require("can-define-validate-validatejs");
