@@ -27,7 +27,7 @@ Component.extend({
 				<input type="text" value:bind="userPhoneNumber" {{#if(phoneNumberError)}}class="error"{{/if}}>
 			</p>
 
-			<input type="submit" disabled:from="phoneNumberError">
+			<input type="submit" disabled:from="phoneNumberIsInvalid">
 		</form>
 	`,
 
@@ -38,12 +38,12 @@ Component.extend({
 			return this.userPhoneNumber && this.userPhoneNumber.replace(/-/g, "");
 		},
 
-		get phoneNumberIsValid() {
-			return /[0-9]{3}[0-9]{3}[0-9]{4}/.test(this.phoneNumber);
+		get phoneNumberIsInvalid() {
+			return /[0-9]{3}[0-9]{3}[0-9]{4}/.test(this.phoneNumber) === false;
 		},
 
 		get phoneNumberError() {
-			if (this.phoneNumber && !this.phoneNumberIsValid) {
+			if (this.phoneNumber && this.phoneNumberIsInvalid) {
 				return "Invalid phone number (ex: 123-456-7890).";
 			};
 		}

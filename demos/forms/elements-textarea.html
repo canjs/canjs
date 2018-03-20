@@ -11,20 +11,28 @@ Component.extend({
 			whatYouTyped: {{whatYouTyped}}
 		</p>
 		<p>
-			value:to="whatYouTyped"
-			<textarea value:to="whatYouTyped"></textarea>
+			<label>
+				value:to="whatYouTyped"
+				<textarea value:to="whatYouTyped"></textarea>
+			</label>
 		</p>
 		<p>
-			value:from="whatYouTyped"
-			<textarea value:from="whatYouTyped"></textarea>
+			<label>
+				value:from="whatYouTyped"
+				<textarea value:from="whatYouTyped"></textarea>
+			</label>
 		</p>
 		<p>
-			value:bind="whatYouTyped"
-			<textarea value:bind="whatYouTyped"></textarea>
+			<label>
+				value:bind="whatYouTyped"
+				<textarea value:bind="whatYouTyped"></textarea>
+			</label>
 		</p>
 		<p>
-			value:from="whatYouTyped" on:input:value:to="whatYouTyped"
-			<textarea value:from="whatYouTyped" on:input:value:to="whatYouTyped"></textarea>
+			<label>
+				value:from="whatYouTyped" on:input:value:to="whatYouTyped"
+				<textarea value:from="whatYouTyped" on:input:value:to="whatYouTyped"></textarea>
+			</label>
 		</p>
 	`,
 

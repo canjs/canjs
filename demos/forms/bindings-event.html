@@ -1,22 +1,22 @@
-<div>0</div>
 <my-counter></my-counter>
 
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
 var Component = require("can-component");
 
-var count = 0;
-var countEl = document.querySelector("div");
-
 Component.extend({
 	tag: "my-counter",
 
 	view: `
+		<p>{{count}}</p>
 		<button on:click="plusOne()">Click Here</button>
 	`,
 
 	ViewModel: {
+		count: {
+			default: 0
+		},
 		plusOne() {
-			countEl.innerHTML = ++count;
+			this.count += 1;
 		}
 	}
 });

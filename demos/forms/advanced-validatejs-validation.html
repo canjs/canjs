@@ -48,8 +48,10 @@ Component.extend({
 			{{/if}}
 
 			<p>
-				Phone Number:
-				<input type="text" value:bind="phoneNumber" {{#if(formatErrors(this, "phoneNumber").length)}}class="error"{{/if}}>
+				<label>
+					Phone Number:
+					<input type="text" value:bind="phoneNumber" {{#if(formatErrors(this, "phoneNumber").length)}}class="error"{{/if}}>
+				</label>
 			</p>
 
 			<input type="submit" disabled:from="errors()">
