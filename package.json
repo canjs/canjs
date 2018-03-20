@@ -109,7 +109,7 @@
     "can-view-model": "4.0.1",
     "can-view-nodelist": "4.0.2",
     "can-view-parser": "4.0.2",
-    "can-view-scope": "4.0.2",
+    "can-view-scope": "4.0.3",
     "can-view-target": "4.0.1",
     "can-zone": "0.6.18",
     "react-view-model": "1.0.0"
