@@ -82,7 +82,7 @@ We recommend reading this guide in full before starting on your migration, to ge
 Even if you have already installed can-migrate in the past, you need to upgrade to version 2 to run the 3-4 codemods.
 
 ```shell
-npm install -g can-migrate@2
+npm install -g can-migrate@3to4
 ```
 
 Once installed you can run any of the codemods discussed in sections below. *Or*, to run all of the 3-4 code mods you can run:
