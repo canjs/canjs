@@ -119,7 +119,7 @@ Consider:
 
 Is `foo` a function or a value? It's impossible to tell when reading this that foo might be a function that will be called.
 
-The exception is built-in helpers or Helper Expressions (when called with >=1 argument). This is so that many changes for helpers 
+The exception is built-in helpers or Helper Expressions (when called with >=1 argument). This is so that many changes for helpers
 like `{{#each items}}` or `{{#eq value1 value2}}` do not hinder upgradability.
 
 In the `{{foo}}` example, change it to:
@@ -291,6 +291,26 @@ Component.extend({
 });
 ```
 
+### enter event
+
+In 3.0 there was a global __enter__ event that could be used like so:
+
+```handlebars
+<input type="text" on:enter="search(scope.element.value)">
+```
+
+In 4.0 this behavior has been moved to the [can-event-dom-enter] package. You can use [can-event-dom-enter/add-global/add-global] to restore the global behavior from 4.0. First install the package:
+
+```shell
+npm install can-event-dom-enter
+```
+
+Then add the global event:
+
+```js
+import "can-event-dom-enter/add-global/add-global";
+```
+
 ### Implicit scope walking
 
 > Interested in creating a codemod for this? Check out this issue:
@@ -369,6 +389,26 @@ These have all been replaced with properties on the `scope` object. Within your 
 
 	<a on:click="./destroy(scope.event)">Delete</a>
 {{/each}}
+```
+
+### Passing string values
+
+In 4.0 we removed the ability in [can-stache] to pass string values directly to components without using a [can-stache-bindings binding syntax]. Previously this looked like so:
+
+```handlebars
+<bit-panel title="Lunch menu">
+```
+
+This behavior was problematic given the (expanding) number of native attributes. In 4.0 you can either pass string values using [can-stache-bindings.toChild]:
+
+```handlebars
+<bit-panel title:from="'Lunch menu'">
+```
+
+Or the new [can-stache-bindings.raw] binding:
+
+```handlebars
+<bit-panel title:raw="Lunch menu">
 ```
 
 ### stache {{log}} helper
