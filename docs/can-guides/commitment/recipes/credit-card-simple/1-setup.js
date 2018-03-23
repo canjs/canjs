@@ -7,5 +7,5 @@ const PaymentVM = can.DefineMap.extend({
 const viewModel = new PaymentVM();
 
 const paymentView = can.stache.from("payment-view");
-const frag = paymentView( viewModel );
-document.body.appendChild( frag );
+const fragment = paymentView( viewModel );
+document.body.appendChild( fragment );

@@ -227,7 +227,7 @@ in the same way it’s expected by the designer.
 - Render the template with data into a documentFragment like:
 
   ```js
-  const frag = template({
+  const fragment = template({
     something: {name: "Derek Brunson"}
   });
   ```
@@ -235,7 +235,7 @@ in the same way it’s expected by the designer.
 - Insert a fragment into the page with:
 
   ```
-  document.body.appendChild(frag);
+  document.body.appendChild(fragment);
   ```
 
 - You can create an `Entity` instance as follows:

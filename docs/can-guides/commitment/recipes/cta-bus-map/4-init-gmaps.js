@@ -53,5 +53,5 @@ can.Component.extend({
 const viewModel = new BusTrackerVM();
 
 const view = can.stache.from("app-view");
-const frag = view(viewModel);
-document.body.appendChild(frag);
+const fragment = view(viewModel);
+document.body.appendChild(fragment);

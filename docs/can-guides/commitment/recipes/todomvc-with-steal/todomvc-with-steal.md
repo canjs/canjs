@@ -68,8 +68,8 @@ covering CanJS core libraries.
   be inserted into the page like:
 
   ```js
-  const frag = view(appVM);
-  document.body.appendChild(frag);
+  const fragment = view(appVM);
+  document.body.appendChild(fragment);
   ```
 
 - Use the following HTML that a designer might have provided:

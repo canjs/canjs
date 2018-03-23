@@ -85,5 +85,5 @@ can.Component.extend({
 });
 
 var template = can.stache.from("todomvc-template");
-var frag = template({todosPromise: Todo.getList({})});
-document.body.appendChild(frag);
+var fragment = template({todosPromise: Todo.getList({})});
+document.body.appendChild(fragment);

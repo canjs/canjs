@@ -79,8 +79,8 @@ viewModel.amount = 1000;
   // Get a View
   const view = can.stache.from("my-view");
   // Render the View with the ViewModel instance
-  const frag = view(viewModel);
-  document.body.appendChild(frag);
+  const fragment = view(viewModel);
+  document.body.appendChild(fragment);
   ```
 
 - CanJS uses [can-stache] to render data in a template
@@ -110,7 +110,7 @@ viewModel.amount = 1000;
 - Render the template with data into a documentFragment like:
 
   ```js
-  const frag = template({
+  const fragment = template({
     something: {name: "Derek Brunson"}
   });
   ```
@@ -118,7 +118,7 @@ viewModel.amount = 1000;
 - Insert a fragment into the page with:
 
   ```js
-  document.body.appendChild(frag);
+  document.body.appendChild(fragment);
   ```
 
 - [can-define/map/map.extend DefineMap.extend] allows you to define a property with a default value like:

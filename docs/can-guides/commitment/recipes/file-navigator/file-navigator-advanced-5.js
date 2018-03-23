@@ -75,8 +75,8 @@ const folder = new Entity({
 });
 
 const template = can.stache.from("app-template");
-const frag = template({
+const fragment = template({
   folder: folder
 });
 
-document.body.appendChild( frag );
+document.body.appendChild( fragment );

@@ -39,5 +39,5 @@ can.connect.superMap({
 });
 
 const template = can.stache.from("todomvc-template");
-const frag = template({ todosPromise: Todo.getList({}) });
-document.body.appendChild(frag);
+const fragment = template({ todosPromise: Todo.getList({}) });
+document.body.appendChild(fragment);

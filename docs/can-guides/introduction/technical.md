@@ -266,13 +266,13 @@ var fullName = compute(function(){
     return firstName()+" "+lastName();
 });
 
-var frag = template({fullName: fullName});
+var fragment = template({fullName: fullName});
 
-assert.equal(frag.firstChild.innerHTML, "Welcome Payal Meyer");
+assert.equal(fragment.firstChild.innerHTML, "Welcome Payal Meyer");
 
 firstName("Ramiya");
 
-assert.equal(frag.firstChild.innerHTML, "Welcome Ramiya Meyer");
+assert.equal(fragment.firstChild.innerHTML, "Welcome Ramiya Meyer");
 ```
 
 ### Batched events

@@ -119,8 +119,8 @@ In this section, we will:
 
   ```js
   var template = can.stache("<h1>{{message}}</h1>");
-  var frag = template({message: "Hello World"});
-  frag //-> <h1>Hello World</h1>
+  var fragment = template({message: "Hello World"});
+  // fragment -> <h1>Hello World</h1>
   ```
 
 - Load a template from a `<script>` tag with [can-stach.from can.stache.from] like:
@@ -153,7 +153,7 @@ In this section, we will:
   });
 
   var messageVM = new PlaylistVM();
-  var frag = template(messageVM)
+  var fragment = template(messageVM)
   ```
 
 - `can.DefineMap` can specify a default value and a type:
