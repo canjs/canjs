@@ -13,8 +13,12 @@ Component.extend({
 	tag: "on-focus",
 
 	view: `
-		<p><span {{#if(scope.vars.focusedOnName}}class="focused"{{/if}}>Name:</span></p>
-		<input type="text" value:bind="name" focused:to="scope.vars.focusedOnName">
+		<label>
+			<span {{#if(scope.vars.focusedOnName}}class="focused"{{/if}}>
+				Name:
+			</span>
+			<input type="text" value:bind="name" focused:to="scope.vars.focusedOnName">
+		</label>
 	`,
 
 	ViewModel: {

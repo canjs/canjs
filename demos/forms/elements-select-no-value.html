@@ -7,7 +7,7 @@ Component.extend({
 	tag: "month-picker",
 
 	view: `
-		<p>
+		<label>
 			What month were you born?
 			<select value:bind="selectedMonth">
 				<option>Jan</option>
@@ -23,9 +23,9 @@ Component.extend({
 				<option>Nov</option>
 				<option>Dec</option>
 			</select>
-		</p>
+		</label>
 
-		Selected month: {{selectedMonth}}
+		<p>Selected month: {{selectedMonth}}</p>
 	`,
 
 	ViewModel: {

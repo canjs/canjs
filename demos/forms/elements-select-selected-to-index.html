@@ -8,7 +8,7 @@ Component.extend({
 	tag: "month-index-picker",
 
 	view: `
-		<p>
+		<label>
 			What month were you born?
 			<select value:bind="selectedIndex">
 				<option>0</option>
@@ -24,14 +24,14 @@ Component.extend({
 				<option>10</option>
 				<option>11</option>
 			</select>
-		</p>
+		</label>
 
-		Selected index: {{selectedIndex}}
+		<p>Selected index: {{selectedIndex}}</p>
 
-		<p>
+		<label>
 			Selected Month:
 			<input value:bind="selected-to-index(selectedIndex, months)">
-		</p>
+		</label>
 	`,
 
 	ViewModel: {

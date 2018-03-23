@@ -7,17 +7,17 @@ Component.extend({
 	tag: "on-input-name",
 
 	view: `
-		<p>
+		<label>
 			Name:
 			<input type="text" value:from="name" on:input:value:to="name">
-		</p>
+		</label>
 
 		<p>Given name: {{name}}</p>
 
-		<p>
+		<label>
 			Name:
 			<input type="text" value:from="name" on:input:value:to="name">
-		</p>
+		</label>
 	`,
 
 	ViewModel: {
