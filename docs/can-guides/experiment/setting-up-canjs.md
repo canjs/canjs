@@ -162,6 +162,8 @@ Finally, create a page that loads `dist/bundle.js`:
 </html>
 ```
 
+Optionally you can use the `can` package, allowing [tree shaking](https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking). See the [guides/advanced-setup experimental guide] for how to do that.
+
 ## Browserify and npm
 
 > Get started with CanJS and [Browserify](http://browserify.org) by [cloning this example repo on GitHub](https://github.com/canjs/browserify-example).
