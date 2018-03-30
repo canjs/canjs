@@ -41,6 +41,6 @@ route.data = appVM;
 route.register("{filter}");
 route.start();
 
-const frag = view(appVM);
-document.body.appendChild(frag);
+const fragment = view(appVM);
+document.body.appendChild(fragment);
 test(appVM);

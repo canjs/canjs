@@ -1,8 +1,9 @@
 @page guides/recipes/todomvc-with-steal TodoMVC with StealJS
 @parent guides/recipes
 
-@description This guide walks through building TodoMVC with
-StealJS.
+@description This tutorial walks through building TodoMVC with
+StealJS. It includes KeyNote presentations
+covering CanJS core libraries.
 
 @body
 
@@ -67,8 +68,8 @@ StealJS.
   be inserted into the page like:
 
   ```js
-  const frag = view(appVM);
-  document.body.appendChild(frag);
+  const fragment = view(appVM);
+  document.body.appendChild(fragment);
   ```
 
 - Use the following HTML that a designer might have provided:

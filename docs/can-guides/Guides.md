@@ -5,33 +5,293 @@
 @group guides/topics 5 topics
 @group guides/contribute 6 contribute
 @group guides/upgrade 7 upgrade
+@templateRender <% %>
 @subchildren
 
-@description Welcome to CanJS! These guides are here to help you develop and improve your relationship with CanJS. After all, picking a JavaScript framework is a commitment.  We want CanJS to be the framework you marry.  This page helps you know how to advance through the different stages of this relationship:
+@description Welcome to CanJS! These guides are here to help you
+master CanJS development, get involved with the CanJS community,
+and contribute back to CanJS.
 
 @body
 
-## Experimenting
+## Development Guides
 
-So now you’ve decided to give CanJS a try.
-The best place to start is the [guides/chat].
-It’s only an hour and shows off CanJS’s best features while you build
-a real-time chat application.  You build the whole thing in a JS&nbsp;Bin.
+The following skill-tree diagram organizes our guides by topic vertically and by difficulty
+horizontally. Harder and longer guides to the right. This allows you to
+take the guides that fit your needs.
 
-Next, you’ll want to try the [guides/todomvc].  This takes about 1.5 hours and touches on
-every core part of CanJS.  You can also follow the whole guide in a JS&nbsp;Bin.
+For example:
 
-After that, check out the [guides/atm].  It takes about 2 hours and shows how to build and __test__
-an ATM. It also shows how to composite state.  The whole guide is done in a JS&nbsp;Bin.
+- A user new to JavaScript programming might start with the [guides/technology-overview]
+  then try a few of the more simple guides: [guides/chat], [guides/recipes/signup-simple], [guides/recipes/file-navigator-simple].
+- An advanced user might jump right to our most advanced guide - [https://donejs.com/place-my-order.html PlaceMyOrder].
 
-You might also want to to go through DoneJS’s [Place My Order Guide](https://donejs.com/place-my-order.html).  This is an in-depth
-look at how CanJS works within the context of a wide variety of other tools.  This guide takes
-about 8 hours.
+We encourage everyone to take a look at:
 
-Finally, when you’re just about to commit, read [guides/setup] to learn how to set up
-CanJS for your particular environment.
+- [guides/technology-overview] to understand CanJS's core concepts.
+- One of the _Platform and Environment Integration_ guides to
+  get CanJS working in your development and production environments.
+- [guides/debugging] to know how to fix problems when they arise.
 
-## Commitment
+> Note: Some of the following guides are on [DoneJS.com](http://donejs.com).
+> DoneJS is another framework built on top of CanJS.
+> These DoneJS guides feature CanJS extensively and are __extremely__
+> useful to understanding how to build a CanJS application even if you are
+> not using DoneJS.
+
+
+<style>
+.down:before {
+    content: "\2193";
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+}
+.down, .down-left, .down-right, .right, .end, .up-right {
+    position: relative;
+    border: solid 1px;
+    padding: 3px;
+}
+.down-left:before {
+    content: "\2199";
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+}
+.up-right:before {
+    content: "\2197";
+    position: absolute;
+    top: -20px;
+    right: -20px;
+}
+.down-right:before {
+    content: "\2198";
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+}
+.right:after {
+    content: "\2192";
+    position: absolute;
+    top: 50%;
+    right: -20px;
+    line-height: 0;
+}
+.skill p {
+    font-size: 0.8em;
+}
+.skill img {
+    width: 100px;
+}
+.skill {
+    border-collapse: separate;
+    border-spacing: 20px;
+    /*margin-bottom: 30px;*/
+}
+.skill td {
+    text-align: center;
+}
+.scroll-contents-right {
+    overflow-x: auto;
+}
+.skill td:nth-child(1) {  
+    border: none;
+    padding: 3px;
+}
+.in-progress {
+    background-color: #ffeeba;
+}
+.proposed {
+    background-color: #f5c6cb;
+}
+</style>
+
+<div class='scroll-contents-right'>
+<table class='skill'>
+<tbody>
+<TR>
+    <td class='right'>Architecture</td>
+    <td class='right'>[guides/technology-overview]
+<p><%this.[guides/technology-overview].description%></p>
+<img src="../docs/can-guides/experiment/technology/overview.svg"
+  alt="Observables are the center hub.  They are connected to the DOM by the view layer, the service layer by the data modeling layer, and the window location by the routing layer"
+  class='bit-docs-screenshot' width='100px'/>
+    </td>
+<td class='right down-right'>[guides/chat]
+<p><%this.[guides/chat].description%></p>
+<img src="../docs/can-guides/experiment/chat/chat.png" width='100px'/>
+</td>
+<td class='right down-right'>[guides/todomvc]
+<p>
+<%this.[guides/todomvc].description%>
+</p>
+<img src="../docs/can-guides/experiment/todomvc/todomvc.png" width='100px'/>
+</td>
+
+ <td class='end'>[https://donejs.com/place-my-order.html PlaceMyOrder]
+ <p>Build and deploy a real-time, multi-page DoneJS application.</p>
+ <img src="https://donejs.com/static/img/place-my-order.png"/>
+ </td>
+</tr>
+
+<TR>
+<td></td>
+<td></td>
+<td></td>
+<td class='up-right right'>[guides/recipes/todomvc-with-steal]
+<p><%this.[guides/recipes/todomvc-with-steal].description%></p>
+<img src="../docs/can-guides/experiment/todomvc/todomvc.png" width='100px'/>
+</td>
+<td class='end'>[https://donejs.com/bitballs.html Bitballs]
+<p>Walk through a DoneJS app built with PostgreSQL.</p>
+<img src="https://donejs.com/static/img/bitballs/bitballs-video.png"/>
+</td>
+</TR>
+
+<TR>
+<td class='right'>Platform and Environment Integration</td>
+<td class='right'>[guides/setup]
+  <p><%this.[guides/setup].description%></p>
+  <img src='../docs/can-guides/experiment/setup.png'/>
+</td>
+<td class='right'>[https://donejs.com/Guide.html DoneJS Chat]
+ <p>Deploy to a
+    CDN. Build a desktop and mobile app.</p>
+ <img src="https://donejs.com/static/img/donejs-chat3.png"/>
+</td>
+ <td class='end'>[https://donejs.com/place-my-order.html PlaceMyOrder]
+ <p>Setup continuous integration, continuous deployment. Deploy to a
+    CDN.  Build a desktop and mobile app.
+ </p>
+ <img src="https://donejs.com/static/img/place-my-order.png"/></td>
+</tr>
+
+
+<TR>
+<td class='right'>Debugging</td>
+<td class='end'>[guides/debugging]
+<p><%this.[guides/debugging].description%></p>
+<img src="../node_modules/can-debug/doc/map-dependency-graph.png"
+  alt="A visual representation of an observable's dependency graph"
+  width="100px"/></td>
+</TR>
+
+<TR>
+<td class='right'>State Management</td>
+<td class='right'>[guides/atm]
+<p><%this.[guides/atm].description%></p>
+<img src="../docs/can-guides/experiment/atm/atm.png" width='100px'/>
+</td>
+<td class='end'>[guides/recipes/credit-card-advanced]
+ <p><%this.[guides/recipes/credit-card-advanced].description%></p>
+ <img src="https://user-images.githubusercontent.com/78602/27451508-d86e9bd8-5754-11e7-954b-a812e1ed63b1.png" width='100px'/>
+</td>
+</TR>
+
+<TR>
+<td class='right'>Testing</td>
+<td class='right'>
+ [guides/atm]
+ <p><%this.[guides/atm].description%></p>
+ <img src="../docs/can-guides/experiment/atm/atm.png" width='100px'/></td>
+<td class='end proposed'>[https://github.com/canjs/canjs/issues/3862 Testing Guide]<p>Proposed. Vote for it in our Survey.</p></td>
+<td></td>
+</TR>
+
+<TR>
+<td class='right'>Routing</td>
+<td class='right'>
+ [https://donejs.com/bitballs.html Bitballs]
+ <p>The Bitballs example routes between a large number of pages.</p>
+ <img src="https://donejs.com/static/img/bitballs/bitballs-video.png" width='100px'/>
+</td>
+<td class='end in-progress'>
+ [https://github.com/canjs/can-route/issues/122 Routing Guide]
+ <p>In Progress.</p>
+</td>
+
+</tr>
+<TR>
+<td class='right'>Data</td>
+<td class='right'>[guides/recipes/file-navigator-advanced]
+ <p><%this.[guides/recipes/file-navigator-advanced].description%></p>
+ <img src="../docs/can-guides/commitment/recipes/file-navigator/file-navigator.png" width='100px'/>
+</td>
+<td class='right down-right proposed'>[https://github.com/canjs/canjs/issues/4014 Data Guide]
+<p>Proposed. Vote for it in our Survey.</p>
+</td>
+<td class='right down-right'>[guides/todomvc]
+ <p>
+ Learn how to retrieve, create, update, and delete items.
+ </p>
+ <img src="../docs/can-guides/experiment/todomvc/todomvc.png" width='100px'/>
+</td>
+<td class='end'>
+ [https://donejs.com/bitballs.html Bitballs]
+ <p>Learn how to connect to a service built on PostgreSQL, handle
+   relationships, and sessions.</p>
+ <img src="https://donejs.com/static/img/bitballs/bitballs-video.png" width='100px'/></td>
+</tr>
+
+<TR>
+<td></td>
+<td></td>
+<td></td>
+<td class='right up-right'>[https://donejs.com/place-my-order.html PlaceMyOrder]
+<p>Build and deploy a real-time, CRUD DoneJS application.</p>
+<img src="https://donejs.com/static/img/place-my-order.png"/>
+</td>
+<td class='end'>
+ [https://github.com/donejs/bitcentive Bitcentive]
+ <p>Example repo showing how to connect to a document-based data layer.</p>
+ <img src="https://raw.githubusercontent.com/donejs/bitcentive/staging/Bitcentive.png"/>
+</td>
+</tr>
+
+<TR>
+<td class='right'>Rich User Interfaces</td>
+<td class='right'>[guides/recipes/signup-simple]
+ <p><%this.[guides/recipes/signup-simple].description%></p>
+ <img src="../docs/can-guides/commitment/recipes/signup-simple/signup.png" width='100px'/>
+</td>
+<td class='right'>[guides/forms]
+ <p><%this.[guides/forms].description%></p>
+ <img src="../docs/can-guides/topics/forms.png" width='100px'/>
+</td>
+<td class='end'>[guides/recipes/playlist-editor]
+  <p><%this.[guides/recipes/playlist-editor].description%></p>
+  <img src="https://user-images.githubusercontent.com/78602/27451781-ea3ed3d6-5755-11e7-8dd8-c4e83bc8aa90.png"/>
+</td>
+</tr>
+
+
+
+<TR>
+<td class='right'>Non-DOM API Integration</td>
+
+<td class='right'>[guides/recipes/canvas-clock]
+<p><%this.[guides/recipes/canvas-clock].description%></p>
+<img src="../docs/can-guides/commitment/recipes/canvas-clock/canvas-clock.png"/>
+</td>
+
+<td class='right'>[guides/recipes/weather-report-simple]
+<p><%this.[guides/recipes/weather-report-simple].description%></p>
+<img src="../docs/can-guides/commitment/recipes/weather-report/weather-report.png"/></td>
+
+<td class='right'>[guides/recipes/cta-bus-map]
+<p><%this.[guides/recipes/cta-bus-map].description%></p>
+<img src="../docs/can-guides/commitment/recipes/cta-bus-map/cta-bus-map.png"/></td>
+
+<td class='end'>[guides/recipes/text-editor]
+<p><%this.[guides/recipes/text-editor].description%></p>
+<img src="../docs/can-guides/commitment/recipes/text-editor/text-editor.png"/></td>
+
+</tr>
+</tbody>
+</table>
+</div>
+
+## Community
 
 Once you’ve committed to CanJS, it’s important that you keep liking it and
 get better at using it.  

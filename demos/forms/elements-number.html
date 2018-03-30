@@ -7,10 +7,10 @@ Component.extend({
 	tag: "number-inputs",
 
 	view: `
-		<p>
+		<label>
 			Number (type: "number"):
 			<input type="number" value:from="favoriteNumber" on:input:value:to="favoriteNumber">
-		</p>
+		</label>
 		<p>
 			Number (type:"number"):
 			 {{#eq(typeof(favoriteNumber), "string"}}
@@ -19,10 +19,10 @@ Component.extend({
 				 {{favoriteNumber}}
 			 {{/eq}}
 		</p>
-		<p>
+		<label>
 			Number (type: "any"):
 			<input type="number" value:from="favoriteNumberAnyType" on:input:value:to="favoriteNumberAnyType">
-		</p>
+		</label>
 		<p>
 			Number (type:"any"):
 			 {{#eq(typeof(favoriteNumberAnyType), "string"}}

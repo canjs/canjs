@@ -7,10 +7,10 @@ Component.extend({
 	tag: "my-name",
 
 	view: `
-		<p>
+		<label>
 			Name:
 			<input type="text" value:from="name" on:change="handleAction('set', 'name', scope.element.value)">
-		</p>
+		</label>
 
 		<p>Given name: {{name}}</p>
 	`,

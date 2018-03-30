@@ -153,7 +153,7 @@ a ViewModel called `AppViewModel`.
 - Render the template with data into a documentFragment like:
 
   ```js
-  const frag = view({
+  const fragment = view({
     something: {name: "Derek Brunson"}
   });
   ```
@@ -161,7 +161,7 @@ a ViewModel called `AppViewModel`.
 - Insert a fragment into the page with:
 
   ```js
-  document.body.appendChild(frag);
+  document.body.appendChild(fragment);
   ```
 
 - [can-define/map/map.extend DefineMap.extend] allows you to define a property with a default value like:

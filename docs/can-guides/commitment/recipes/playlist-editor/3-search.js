@@ -48,5 +48,5 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
 
 var vm = new PlaylistVM();
 var template = can.stache.from("app-template");
-var frag = template(vm);
-document.body.appendChild(frag);
+var fragment = template(vm);
+document.body.appendChild(fragment);

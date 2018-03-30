@@ -6,14 +6,6 @@ credit card payment form with validations. It doesn’t use
 [can-define]. Instead it uses `Kefir.js` streams to make a ViewModel.
 [can-kefir] is used to make the Kefir streams observable to [can-stache].
 
-@hide
-@hide sidebar
-@hide title
-@hide footer
-@hide article
-@hide container
-@hide header
-
 @body
 
 In this guide, you will learn how to:

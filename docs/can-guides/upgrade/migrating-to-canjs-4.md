@@ -82,7 +82,7 @@ We recommend reading this guide in full before starting on your migration, to ge
 Even if you have already installed can-migrate in the past, you need to upgrade to version 2 to run the 3-4 codemods.
 
 ```shell
-npm install -g can-migrate@2
+npm install -g can-migrate@3to4
 ```
 
 Once installed you can run any of the codemods discussed in sections below. *Or*, to run all of the 3-4 code mods you can run:
@@ -119,7 +119,7 @@ Consider:
 
 Is `foo` a function or a value? It's impossible to tell when reading this that foo might be a function that will be called.
 
-The exception is built-in helpers or Helper Expressions (when called with >=1 argument). This is so that many changes for helpers 
+The exception is built-in helpers or Helper Expressions (when called with >=1 argument). This is so that many changes for helpers
 like `{{#each items}}` or `{{#eq value1 value2}}` do not hinder upgradability.
 
 In the `{{foo}}` example, change it to:
@@ -291,6 +291,26 @@ Component.extend({
 });
 ```
 
+### enter event
+
+In 3.0 there was a global __enter__ event that could be used like so:
+
+```handlebars
+<input type="text" on:enter="search(scope.element.value)">
+```
+
+In 4.0 this behavior has been moved to the [can-event-dom-enter] package. You can use [can-event-dom-enter/add-global/add-global] to restore the global behavior from 4.0. First install the package:
+
+```shell
+npm install can-event-dom-enter
+```
+
+Then add the global event:
+
+```js
+import "can-event-dom-enter/add-global/add-global";
+```
+
 ### Implicit scope walking
 
 > Interested in creating a codemod for this? Check out this issue:
@@ -371,6 +391,26 @@ These have all been replaced with properties on the `scope` object. Within your 
 {{/each}}
 ```
 
+### Passing string values
+
+In 4.0 we removed the ability in [can-stache] to pass string values directly to components without using a [can-stache-bindings binding syntax]. Previously this looked like so:
+
+```handlebars
+<bit-panel title="Lunch menu">
+```
+
+This behavior was problematic given the (expanding) number of native attributes. In 4.0 you can either pass string values using [can-stache-bindings.toChild]:
+
+```handlebars
+<bit-panel title:from="'Lunch menu'">
+```
+
+Or the new [can-stache-bindings.raw] binding:
+
+```handlebars
+<bit-panel title:raw="Lunch menu">
+```
+
 ### stache {{log}} helper
 
 > You can migrate this change with this codemod:
@@ -414,6 +454,42 @@ players.forEach(function(player){
 })
 ```
 
+### can-define-backup is now mixin-based
+
+Previously importing `can-define-backup` would add the `backup`, `restore`, and `isDirty` functions to all `DefineMap`s. In 4.0, the `can-define-backup` mixin function must be called on any maps you would like to use these functions with.
+
+Change:
+
+```js
+import DefineMap from "can-define/map/map";
+import "can-define-backup";
+
+const Recipe = DefineMap.extend("Recipe", {
+	name: "string"
+});
+
+const recipe = new Recipe();
+
+recipe.backup();
+```
+
+to:
+
+```js
+import DefineMap from "can-define/map/map";
+import defineBackup from "can-define-backup";
+
+const Recipe = DefineMap.extend("Recipe", {
+	name: "string"
+});
+defineBackup(Recipe);
+
+const recipe = new Recipe();
+
+recipe.backup();
+```
+@highlight 2,7
+
 ## Non-breaking warnings
 
 In addition to the above breaking changes, you'll likely see several warnings. It's important not to ignore warnings coming from CanJS, as they often pertain to changes that *will* break in a future release (such as in CanJS 5.0). Clear out as many warnings as you can.
@@ -432,7 +508,7 @@ Registering routes in [can-route] used to be done by calling the route function.
 ```js
 import route from "can-route";
 
-route("{page}", { page: "home" });
+route.register("{page}", { page: "home" });
 ````
 
 to:

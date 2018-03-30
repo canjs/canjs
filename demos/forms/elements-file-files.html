@@ -3,7 +3,7 @@
 		border-collapse: collapse;
 	}
 
-	td {
+	td, th {
 		border: 1px solid black;
 		padding: 10px;
 	}
@@ -27,16 +27,16 @@ Component.extend({
 			{{#if(selectedFiles.length}}
 				<table>
 					<thead>
-						<td>File name</td>
-						<td>File size</td>
-						<td>File type</td>
+						<th>File name</th>
+						<th>File size</th>
+						<th>File type</th>
 					</thead>
 					<tbody>
 						{{#each(selectedFiles, file=value)}}
 							<tr>
 								<td>{{file.name}}</td>
-								<td>{{file.type}}</td>
 								<td>{{file.size}}</td>
+								<td>{{file.type}}</td>
 							</tr>
 						{{/each}}
 					</tbody>

@@ -11,6 +11,6 @@ const appVM = window.appVM = new AppViewModel({
 	appName: "TodoMVC"
 });
 
-const frag = view(appVM);
-document.body.appendChild(frag);
+const fragment = view(appVM);
+document.body.appendChild(fragment);
 test(appVM);

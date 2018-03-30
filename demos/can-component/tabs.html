@@ -150,7 +150,7 @@ var foodTypes = new DefineList([
 window.foodTypes = foodTypes;
 
 var template = stache.from("demo-html");
-var frag = template({
+var fragment = template({
 	foodTypes: foodTypes,
 	addVegies: function(){
 		foodTypes.push({
@@ -159,5 +159,5 @@ var frag = template({
 		});
 	}
 });
-document.getElementById("out").appendChild(frag);
+document.getElementById("out").appendChild(fragment);
 </script>

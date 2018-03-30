@@ -2,12 +2,13 @@
 @parent guides/recipes
 
 @description This guide walks you through building a file navigation
-widget.  It takes about 45 minutes to complete.  It was written with
-CanJS 3.10. Check out the [guides/recipes/file-navigator-simple]
-for an easier example that produces similar functionality.
+widget that requests data with fetch. It takes about 45 minutes to complete. 
 
 
 @body
+
+> Check out the [guides/recipes/file-navigator-simple]
+for an example that doesn't make data requests.
 
 The final widget looks like:
 
@@ -226,7 +227,7 @@ in the same way it’s expected by the designer.
 - Render the template with data into a documentFragment like:
 
   ```js
-  const frag = template({
+  const fragment = template({
     something: {name: "Derek Brunson"}
   });
   ```
@@ -234,7 +235,7 @@ in the same way it’s expected by the designer.
 - Insert a fragment into the page with:
 
   ```
-  document.body.appendChild(frag);
+  document.body.appendChild(fragment);
   ```
 
 - You can create an `Entity` instance as follows:

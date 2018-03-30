@@ -8,7 +8,7 @@ Component.extend({
 	tag: "pizza-toppings-picker",
 
 	view: `
-		<p>
+		<label>
 			What pizza toppings do you like?
 			<select values:bind="toppings" multiple>
 				<option>Pepperoni</option>
@@ -22,7 +22,7 @@ Component.extend({
 				<option>Pineapple</option>
 				<option>Spinach</option>
 			</select>
-		</p>
+		</label>
 
 		<p>
 			Selected toppings:

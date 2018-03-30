@@ -277,12 +277,12 @@ var template = stache(
 	"</ul>");
 
 // Calls the template with some data
-var frag = template({
+var fragment = template({
 	todos: Todo.getList({})
 });
 
 // Inserts the result into the page
-document.body.appendChild(frag);
+document.body.appendChild(fragment);
 ```
 
 [can-stache] templates use magic tags like `{{}}` to control what
@@ -447,7 +447,7 @@ translate property changes to a url and a url to property changes. For example,
 
 ```js
 // a route like:
-route("todo/{todoId}");
+route.register("todo/{todoId}");
 
 // and a hash like:
 window.location.hash = "#!todo/7";

@@ -31,7 +31,7 @@ The Angular 2’s Hello World app, provided by the angular-cli, is ~100KB minifi
 
 ## Independent Repositories and Packages
 
-CanJS 3.0 is maintained in independent repositories,
+CanJS is maintained in independent repositories,
 each with its own npm package and [semantic version](http://semver.org/) number.
 Organizing CanJS into individual repositories and packages has many benefits.  
 
@@ -61,7 +61,7 @@ To get all of those bug fixes and new features in 3.0, you have to
 take on those breaking changes from 2.3 all at once.  Depending on your company culture,
 and scale of your application, this might not be easy.
 
-Going forward in CanJS 3.0, packages are released independently of
+Going forward from CanJS 3.0, packages are released independently of
 each other.  You can upgrade to bug fixes and new features
 immediately and delay breaking changes (example: `can-route 4.0.0`) until later. You can upgrade breaking changes in steps too.  For example,
 you might upgrade to `can-route 4.0.0` one month and `can-component 4.0.0`
@@ -266,13 +266,13 @@ var fullName = compute(function(){
     return firstName()+" "+lastName();
 });
 
-var frag = template({fullName: fullName});
+var fragment = template({fullName: fullName});
 
-assert.equal(frag.firstChild.innerHTML, "Welcome Payal Meyer");
+assert.equal(fragment.firstChild.innerHTML, "Welcome Payal Meyer");
 
 firstName("Ramiya");
 
-assert.equal(frag.firstChild.innerHTML, "Welcome Ramiya Meyer");
+assert.equal(fragment.firstChild.innerHTML, "Welcome Ramiya Meyer");
 ```
 
 ### Batched events
@@ -845,8 +845,8 @@ The __View__, in _components/todo-list/view.stache_, looks like:
 
     <!-- Create an li with the right class names -->
     <li class="todo {{#if(complete)}}completed{{/if}}
-      {{#if(isDestroying)}}destroying{{/if}}
-      {{#if(isEditing(this))}}editing{{/if}}">
+      {{#if( isDestroying() )}}destroying{{/if}}
+      {{#if(../isEditing(this))}}editing{{/if}}">
 
       <div class="view">
         <!-- Connect this checkbox to the `complete` property
@@ -856,7 +856,7 @@ The __View__, in _components/todo-list/view.stache_, looks like:
                on:change="save()">
 
         <!-- Edit this todo on double click -->
-        <label on:dblclick="edit(this)">{{name}}</label>
+        <label on:dblclick="../edit(this)">{{name}}</label>
 
         <!-- Delete this todo on the server when clicked -->
         <button class="destroy" on:click="destroy()"></button>
@@ -865,9 +865,9 @@ The __View__, in _components/todo-list/view.stache_, looks like:
       <!-- Handle editing this todo with this input element -->
       <input class="edit" type="text"
         value:bind="name"
-        on:enter="updateName()"
-        focused:from="isEditing(this)"
-        on:blur="cancelEdit()"/>
+        on:enter="../updateName()"
+        focused:from="../isEditing(this)"
+        on:blur="../cancelEdit()"/>
     </li>
   {{/each}}
 </ul>

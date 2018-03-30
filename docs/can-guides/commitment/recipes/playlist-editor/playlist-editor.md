@@ -3,8 +3,8 @@
 @hide
 
 @description Learn how to use YouTube's API to search for videos and make a playlist.  This
-makes authenticated requests with OAuth2. It uses [jQuery++](https://jquerypp.com) for
-drag/drop events. It shows using custom attributes and custom events.  This guide takes
+makes authenticated requests with OAuth2. It uses [https://jquerypp.com jQuery++] for
+drag/drop events. It shows using custom attributes and custom events. This guide takes
 an hour to complete.
 
 @body
@@ -119,8 +119,8 @@ In this section, we will:
 
   ```js
   var template = can.stache("<h1>{{message}}</h1>");
-  var frag = template({message: "Hello World"});
-  frag //-> <h1>Hello World</h1>
+  var fragment = template({message: "Hello World"});
+  // fragment -> <h1>Hello World</h1>
   ```
 
 - Load a template from a `<script>` tag with [can-stach.from can.stache.from] like:
@@ -153,7 +153,7 @@ In this section, we will:
   });
 
   var messageVM = new PlaylistVM();
-  var frag = template(messageVM)
+  var fragment = template(messageVM)
   ```
 
 - `can.DefineMap` can specify a default value and a type:

@@ -21,5 +21,5 @@ const todos = new Todo.List([
 ]);
 
 const template = can.stache.from("todomvc-template");
-const frag = template({ todos: todos });
-document.body.appendChild(frag);
+const fragment = template({ todos: todos });
+document.body.appendChild(fragment);

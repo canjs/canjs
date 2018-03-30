@@ -8,10 +8,10 @@ Component.extend({
 	tag: "checkbox-either-or",
 
 	view: `
-		<p>
+		<label>
 			<input type="checkbox" checked:bind="either-or(bestTypeOfPet, 'Dogs', 'Cats')">
 			Dogs or Cats?
-		</p>
+		</label>
 		<p>
 			The superior pet is: {{bestTypeOfPet}}
 		</p>

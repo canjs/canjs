@@ -13,20 +13,28 @@ Component.extend({
 			whatYouTyped: {{whatYouTyped}}
 		</p>
 		<p>
-			value:to="whatYouTyped"
-			<input type="text" value:to="whatYouTyped">
+			<label>
+				value:to="whatYouTyped"
+				<input type="text" value:to="whatYouTyped">
+			</label>
 		</p>
 		<p>
-			value:from="whatYouTyped"
-			<input type="text" value:from="whatYouTyped">
+			<label>
+				value:from="whatYouTyped"
+				<input type="text" value:from="whatYouTyped">
+			</label>
 		</p>
 		<p>
-			value:bind="whatYouTyped"
-			<input type="text" value:bind="whatYouTyped">
+			<label>
+				value:bind="whatYouTyped"
+				<input type="text" value:bind="whatYouTyped">
+			</label>
 		</p>
 		<p>
-			value:from="whatYouTyped" on:input:value:to="whatYouTyped"
-			<input type="text" value:from="whatYouTyped" on:input:value:to="whatYouTyped">
+			<label>
+				value:from="whatYouTyped" on:input:value:to="whatYouTyped"
+				<input type="text" value:from="whatYouTyped" on:input:value:to="whatYouTyped">
+			</label>
 		</p>
 	`,
 

@@ -47,8 +47,8 @@ Get the basic setup for a CanJS app (in a JS Bin) setup by:
 - A [can-stache] template can be loaded from a `<script>` tag with [can-stache.from can.stache.from] and used to render data into a document fragment:
   ```js
   const template = can.stache.from(SCRIPT_ID);
-  const frag = template({message: "Hello World"});
-  frag //-> <h1>Hello World</h1>
+  const fragment = template({message: "Hello World"});
+  // fragment -> <h1>Hello World</h1>
   ```
 
 - [can-define/map/map can.DefineMap] can be used to define the behavior of observable objects like:
@@ -69,7 +69,7 @@ Get the basic setup for a CanJS app (in a JS Bin) setup by:
   });
 
   const messageVM = new MessageViewModel();
-  const frag = template(messageVM)
+  const fragment = template(messageVM)
   ```
 
 ### The solution
@@ -128,8 +128,8 @@ const WeatherViewModel = can.DefineMap.extend({
 const vm = new WeatherViewModel();
 
 const template = can.stache.from("app-template");
-const frag = template( vm );
-document.body.appendChild(frag);
+const fragment = template( vm );
+document.body.appendChild(fragment);
 ```
 @highlight 1-9
 
@@ -179,8 +179,8 @@ const WeatherViewModel = can.DefineMap.extend({
 const vm = new WeatherViewModel();
 
 const template = can.stache.from("app-template");
-const frag = template( vm );
-document.body.appendChild(frag);
+const fragment = template( vm );
+document.body.appendChild(fragment);
 ```
 @highlight 2
 
@@ -375,8 +375,8 @@ const WeatherViewModel = can.DefineMap.extend({
 const vm = new WeatherViewModel();
 
 const template = can.stache.from("app-template");
-const frag = template( vm );
-document.body.appendChild(frag);
+const fragment = template( vm );
+document.body.appendChild(fragment);
 ```
 @highlight 1,5-24,only
 
@@ -526,8 +526,8 @@ const WeatherViewModel = can.DefineMap.extend({
 const vm = new WeatherViewModel();
 
 const template = can.stache.from("app-template");
-const frag = template( vm );
-document.body.appendChild(frag);
+const fragment = template( vm );
+document.body.appendChild(fragment);
 ```
 @highlight 25-28,only
 
@@ -673,8 +673,8 @@ const WeatherViewModel = can.DefineMap.extend({
 const vm = new WeatherViewModel();
 
 const template = can.stache.from("app-template");
-const frag = template( vm );
-document.body.appendChild(frag);
+const fragment = template( vm );
+document.body.appendChild(fragment);
 ```
 @highlight 29-49,only
 
@@ -765,8 +765,8 @@ const WeatherViewModel = can.DefineMap.extend({
 const vm = new WeatherViewModel();
 
 const template = can.stache.from("app-template");
-const frag = template( vm );
-document.body.appendChild(frag);
+const fragment = template( vm );
+document.body.appendChild(fragment);
 ```
 @highlight 4-9,only
 
@@ -960,8 +960,8 @@ const WeatherViewModel = can.DefineMap.extend({
 const vm = new WeatherViewModel();
 
 const template = can.stache.from("app-template");
-const frag = template( vm );
-document.body.appendChild(frag);
+const fragment = template( vm );
+document.body.appendChild(fragment);
 ```
 @highlight 30-51,only
 
