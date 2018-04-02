@@ -60,6 +60,7 @@
     "can-define-stream-kefir": "1.0.0",
     "can-define-validate-validatejs": "1.0.1",
     "can-deparam": "1.0.3",
+    "can-dom-data": "1.0.1",
     "can-dom-data-state": "1.0.1",
     "can-dom-events": "1.2.0",
     "can-dom-mutate": "1.0.4",
