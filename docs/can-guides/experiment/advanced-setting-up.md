@@ -45,4 +45,4 @@ module.exports = {
 
 ## Names
 
-The names that can be exported by this module mirror what is part of the `can` namespace object that you get from `import can from "can"`. You can see the names that `can/es` exports [here](https://github.com/canjs/canjs/blob/master/es.js).
+The names that can be imported from this module mirror what is part of the `can` namespace object that you get from `import can from "can"`. You can see the names that `can/es` exports [here](https://github.com/canjs/canjs/blob/master/es.js).
