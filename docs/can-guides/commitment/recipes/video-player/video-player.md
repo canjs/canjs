@@ -114,6 +114,6 @@ Update the __JavaScript__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-play-mutates.js
-@highlight 57-59,only
+@highlight 66-68,only
 
 ## Result

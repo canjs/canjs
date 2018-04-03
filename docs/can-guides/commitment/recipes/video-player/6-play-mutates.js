@@ -13,8 +13,8 @@ can.Component.extend ({
           {{#if(playing)}}Pause{{else}}Play{{/if}}
         </button>
       <input type="range" value="0" max="1" step="any"
-      value:from="percentComplete"
-      on:change="set('percentComplete', scope.element.value)">
+             value:from="percentComplete"
+             on:change="set('percentComplete', scope.element.value)">
       <span class="curtimetext">{{formatTime(currentTime)}}</span> /
         <span class="durtimetext">{{formatTime(duration)}} </span>
       </div>
@@ -56,16 +56,15 @@ can.Component.extend ({
       }
     },
    events: {
-     "{viewModel} currentTime": function(vm, ev, currentTime){
-        this.element.querySelector("video").currentTime = currentTime;
-      },
-
       "{viewModel} playing": function(vm, ev, isPlaying){
         if(isPlaying) {
           this.element.querySelector("video").play()
         } else {
           this.element.querySelector("video").pause()
         }
-      }
+      },
+      "{viewModel} currentTime": function(vm, ev, currentTime){
+         this.element.querySelector("video").currentTime = currentTime;
+       },
     }
 });
