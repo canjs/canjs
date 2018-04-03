@@ -16,7 +16,7 @@ Error: {{geoLocationError.message}}
   {{#if(showEnterLocation)}}
   <div class="location-entry">
     <label for="location">Enter Your location:</label>
-    <input id="location" value:to="location" type="text"/>
+    <input id="location" value:to="location" type="text" />
   </div>
   {{/if}}
 
@@ -44,10 +44,10 @@ Error: {{geoLocationError.message}}
       <ul>
         {{#each(forecastPromise.value)}}
           <li>
-            <span class='date'>{{date}}</span>
-            <span class='description {{toClassName(text)}}'>{{text}}</span>
-            <span class='high-temp'>{{high}}<sup>&deg;</sup></span>
-            <span class='low-temp'>{{low}}<sup>&deg;</sup></span>
+            <span class="date">{{date}}</span>
+            <span class="description {{toClassName(text)}}">{{text}}</span>
+            <span class="high-temp">{{high}}<sup>&deg;</sup></span>
+            <span class="low-temp">{{low}}<sup>&deg;</sup></span>
           </li>
         {{/each}}
       </ul>
@@ -75,24 +75,24 @@ const yqlURL = "https://query.yahooapis.com/v1/public/yql?";
 const flickrURL = "https://api.flickr.com/services/rest/?"
 
 const WeatherViewModel = can.DefineMap.extend({
-    get fullName(){
+    get fullName() {
 
     },
     geoLocationStream: {
         type: "any",
-        default: function(){
+        default: function() {
             return Kefir.stream(function(emitter) {
-				navigator.geolocation.getCurrentPosition(function(position){
+				navigator.geolocation.getCurrentPosition(function(position) {
                   emitter.value(position);
-                }, function(err){
+                }, function(err) {
                     console.log("getCurrentPositionErr",err);
                   emitter.error(err);
                 });
 
 
-                 const watch = navigator.geolocation.watchPosition(function(position){
+                 const watch = navigator.geolocation.watchPosition(function(position) {
                    emitter.value(position)
-                 }, function(err){
+                 }, function(err) {
                      console.log("watchPositionErr",err);
                    emitter.error(err);
                });
@@ -110,20 +110,20 @@ const WeatherViewModel = can.DefineMap.extend({
 	},
     geoLocationError: {
         stream: function() {
-			return this.geoLocationStream.withHandler(function(emitter, event){
-                if (event.type === 'end') {
+			return this.geoLocationStream.withHandler(function(emitter, event) {
+                if (event.type === "end") {
                     emitter.end();
                   }
-                  if (event.type === 'error') {
+                  if (event.type === "error") {
                     emitter.emit(event.value);
                   }
             });
 		}
     },
-    get showEnableGeoLocationMessage(){
+    get showEnableGeoLocationMessage() {
         return this.geoLocation === undefined && !this.geoLocationError;
     },
-    get showEnterLocation(){
+    get showEnterLocation() {
         return !!this.geoLocationError;
     },
 	geoPlace: {
@@ -138,8 +138,8 @@ const WeatherViewModel = can.DefineMap.extend({
 						format: "json",
 						nojsoncallback: 1
 					})
-				).then(function(response) {
-                    const place = response.json().then(function(response){
+        ).then(function(response) {
+                    const place = response.json().then(function(response) {
                         return response.places.place[0];
                     });
                     place.then(console.log);
@@ -189,8 +189,8 @@ const WeatherViewModel = can.DefineMap.extend({
 			const resetStream = this.toStream(".location").map(function() {
 				return null;
 			});
-            const onePlaceResultStream = this.toStream(".places").map(function(places){
-                if(places.length === 1) {
+            const onePlaceResultStream = this.toStream(".places").map(function(places) {
+                if (places.length === 1) {
                     return places[0]
                 } else {
                     return null;
@@ -228,7 +228,7 @@ const WeatherViewModel = can.DefineMap.extend({
 	toClassName: function(text) {
 		return text.toLowerCase().replace(/ /g, "-");
 	},
-    doSomething: function(){
+    doSomething: function() {
         console.log("something did")
     }
 });

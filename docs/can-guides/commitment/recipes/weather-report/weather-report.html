@@ -4,7 +4,7 @@
   <div class="weather-widget">
     <div class="location-entry">
       <label for="location">Enter Your location:</label>
-      <input id="location" value:to="location" type="text"/>
+      <input id="location" value:to="location" type="text" />
     </div>
 
 	{{#if(placesPromise.isPending)}}
@@ -31,10 +31,10 @@
         <ul>
           {{#each(forecastPromise.value)}}
             <li>
-              <span class='date'>{{date}}</span>
-              <span class='description {{toClassName(text)}}'>{{text}}</span>
-              <span class='high-temp'>{{high}}<sup>&deg;</sup></span>
-              <span class='low-temp'>{{low}}<sup>&deg;</sup></span>
+              <span class="date">{{date}}</span>
+              <span class="description {{toClassName(text)}}">{{text}}</span>
+              <span class="high-temp">{{high}}<sup>&deg;</sup></span>
+              <span class="low-temp">{{low}}<sup>&deg;</sup></span>
             </li>
           {{/each}}
         </ul>
@@ -52,23 +52,23 @@ const yqlURL = "https://query.yahooapis.com/v1/public/yql?";
 const WeatherViewModel = can.DefineMap.extend({
   location: {
     type: "string",
-    set: function(){
+    set: function() {
       this.place = null;
     }
   },
-  get placesPromise(){
-    if(this.location && this.location.length > 2) {
+  get placesPromise() {
+    if (this.location && this.location.length > 2) {
 	  return fetch(
 		  yqlURL+
 		  can.param({
 	        q: 'select * from geo.places where text="'+this.location+'"',
 	        format: "json"
 	      })
-	  ).then(function(response){
+	  ).then(function(response) {
 		  return response.json();
-	  }).then(function(data){
+	  }).then(function(data) {
 		  console.log(data);
-          if(Array.isArray(data.query.results.place)) {
+          if (Array.isArray(data.query.results.place)) {
             return data.query.results.place;
           } else {
             return [data.query.results.place];
@@ -78,40 +78,40 @@ const WeatherViewModel = can.DefineMap.extend({
   },
   places: {
     get: function(lastSet, resolve) {
-      if(this.placesPromise) {
+      if (this.placesPromise) {
         this.placesPromise.then(resolve);
       }
     }
   },
-  get showPlacePicker(){
+  get showPlacePicker() {
     return !this.place && this.places && this.places.length > 1;
   },
   place: {
     type: "any",
-    get: function(lastSet){
-      if(lastSet) {
+    get: function(lastSet) {
+      if (lastSet) {
         return lastSet;
       } else {
-        if(this.places && this.places.length === 1) {
+        if (this.places && this.places.length === 1) {
           return this.places[0];
         }
       }
     }
   },
-  pickPlace: function(place){
+  pickPlace: function(place) {
     this.place = place;
   },
-  get forecastPromise(){
-    if( this.place ) {
+  get forecastPromise() {
+    if ( this.place ) {
 	  return fetch(
   		  yqlURL+
   		  can.param({
   	        q: 'select * from weather.forecast where woeid='+this.place.woeid,
   	        format: "json"
   	      })
-  	  ).then(function(response){
+  	  ).then(function(response) {
   		  return response.json();
-  	  }).then(function(data){
+  	  }).then(function(data) {
         console.log("forecast data", data);
         const forecast = data.query.results.channel.item.forecast;
 
@@ -119,7 +119,7 @@ const WeatherViewModel = can.DefineMap.extend({
       });
     }
   },
-  toClassName: function(text){
+  toClassName: function(text) {
 	return text.toLowerCase().replace(/ /g, "-");
   }
 });

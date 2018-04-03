@@ -5,25 +5,17 @@
 remove imperative code and automatically look up the user’s location using the
 browser’s [geolocation API](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation).  Both of these will be done with event streams.
 
-This guide continues where the [guides/recipes/weather-report-simple Simple Weather Report Guide] left off.  It takes about 25 minutes to complete.  It was written with CanJS 3.8.
-
-@hide
-@hide sidebar
-@hide title
-@hide footer
-@hide article
-@hide container
-@hide header
+This guide continues where the [guides/recipes/weather-report-simple Simple Weather Report Guide] left off.  It takes about 25 minutes to complete.  It was written with CanJS 4.1.
 
 @body
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/jipevu/3/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/jiwabof/4/embed?html,js,output">JS Bin on jsbin.com</a>
 
 __Start this tutorial by cloning the following JS Bin__:
 
-<a class="jsbin-embed" href="https://jsbin.com/qowacac/3/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/jiwabof/1/embed?html,js,output">JS Bin on jsbin.com</a>
 
 This is the ending JS Bin for the [guides/recipes/weather-report-simple Simple Weather Report Guide] with [Kefir.js](https://kefirjs.github.io/kefir/) added.
 
@@ -43,7 +35,7 @@ Currently, when a new `location` is set, the `place` property is set to `null`:
 const WeatherViewModel = can.DefineMap.extend({
   location: {
     type: "string",
-    set: function(){
+    set: function() {
       this.place = null;
     }
   },
@@ -64,11 +56,11 @@ const WeatherViewModel = can.DefineMap.extend({
   ...
   place: {
     type: "any",
-    get: function(lastSet){
-      if(lastSet) {
+    get: function(lastSet) {
+      if (lastSet) {
         return lastSet;
       } else {
-        if(this.places && this.places.length === 1) {
+        if (this.places && this.places.length === 1) {
           return this.places[0];
         }
       }
@@ -96,12 +88,12 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
   const nameStream = can.streamKefir.toStream(person,".name");
 
   // Every time `.name` changes, increase the count 1.
-  const nameChangeCountStream = nameStream.scan(function(lastValue){
+  const nameChangeCountStream = nameStream.scan(function(lastValue) {
 	  return lastValue + 1;
   }, 0);
 
   // Log the current nameChangeStream value
-  nameChangeStream.onValue(function(newValue){
+  nameChangeStream.onValue(function(newValue) {
 	  console.log(newValue);
   });
 
@@ -116,7 +108,7 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
   const person = new can.DefineMap({name: "Justin"});
   const nameStream = can.streamKefir.toStream(person,".name");
 
-  nameStream.onValue(function(newValue){
+  nameStream.onValue(function(newValue) {
 	  console.log(newValue);
   });
 
@@ -129,11 +121,11 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
   ```js
   const person = new can.DefineMap({name: "Justin"});
   const capitalizedNameStream = can.streamKefir.toStream(person,".name")
-  	.map(function(name){
+  	.map(function(name) {
 		return name.toUpperCase()
 	});
 
-  nameStream.onValue(function(newValue){
+  nameStream.onValue(function(newValue) {
 	  console.log(newValue);
   });
 
@@ -148,8 +140,8 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
   Person = can.DefineMap.extend({
 	  name: "string",
 	  nameChangeCount: {
-		  stream: function(){
-			  return this.toStream(".name").scan(function(lastValue){
+		  stream: function() {
+			  return this.toStream(".name").scan(function(lastValue) {
 				  return lastValue + 1;
 			  }, 0);
 		  }
@@ -167,7 +159,7 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
 
   ```js
   const me = new Person({name: "Justin"});
-  me.on("nameChangeCount", function(ev, newValue){
+  me.on("nameChangeCount", function(ev, newValue) {
 	  console.log(newValue);
   });
 
@@ -186,16 +178,16 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
   Person = can.DefineMap.extend({
 	name: "string",
 	nameChangeCount: {
-		stream: function(setStream){
-			const reset = setStream.map(function(value){
+		stream: function(setStream) {
+			const reset = setStream.map(function(value) {
 				return {type: "reset", value: value};
 			});
-			const increment = this.toStream(".name").map(function(){
+			const increment = this.toStream(".name").map(function() {
 				return {type: "increment"}
 			});
 
-			return reset.merge(increment).scan(function(lastValue, next){
-				if(next.type === "increment") {
+			return reset.merge(increment).scan(function(lastValue, next) {
+				if (next.type === "increment") {
 					return lastValue + 1;
 				} else {
 					return next.value;
@@ -211,7 +203,7 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
 
   ```js
   const me = new Person({name: "Justin"});
-  me.on("nameChangeCount", function(ev, newValue){
+  me.on("nameChangeCount", function(ev, newValue) {
 	console.log(newValue);
   });
 
@@ -234,7 +226,7 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
 
   const nameStream = me.toStream(".name");
 
-  nameStream.onValue(function(){ ... })
+  nameStream.onValue(function() { ... })
   ```
 
 ### The solution
@@ -276,8 +268,8 @@ We will do this by:
 
   ```js
   navigator.geolocation.getCurrentPosition(
-      function(position){...},
-      function(err){...});
+      function(position) {...},
+      function(err) {...});
   ```
 
 - The [geolocation](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation)
@@ -285,8 +277,8 @@ We will do this by:
 
   ```js
   const watch = navigator.geolocation.watchPosition(
-      function(position){...},
-      function(err){...});
+      function(position) {...},
+      function(err) {...});
   ```
 
   To cancel watching, call:
@@ -298,11 +290,11 @@ We will do this by:
 - To create a `Kefir` stream, call `Kefir.stream` as follows:
 
   ```js
-  const myStream = Kefir.stream(function setup(emitter){
+  const myStream = Kefir.stream(function setup(emitter) {
 
       // INITIALIZATION CODE
 
-      return function teardown(){
+      return function teardown() {
           // TEARDOWN CODE
       }
   });
@@ -331,13 +323,13 @@ We will do this by:
   the following might listen to where the user’s mouse is on the page:
 
   ```js
-  const cursorPosition = Kefir.stream(function(emitter){
-      const handler = function(ev){
+  const cursorPosition = Kefir.stream(function(emitter) {
+      const handler = function(ev) {
           emitter.emit({pageX: ev.pageX, pageY: pageY});
       };
       document.documentElement.addEventListener("mousemove",handler);
 
-      return function(){
+      return function() {
           document.documentElement.removeEventListener("mousemove",handler);
       }
   })
@@ -346,14 +338,14 @@ We will do this by:
 - Kefir’s `stream.withHandler( handler(emitter, event) )` is able to convert one stream’s events to another stream. All other stream methods like `stream.map` and `stream.scan` can be implemented with `stream.withHandler`. For example, the following maps the `cursorPosition` stream to a `cursorDistance` stream:
 
   ```js
-  cursorDistance = cursorPosition.withHandler(function(emitter, event){
-      if (event.type === 'end') {
+  cursorDistance = cursorPosition.withHandler(function(emitter, event) {
+      if (event.type === "end") {
         emitter.end();
       }
-      if (event.type === 'error') {
+      if (event.type === "error") {
         emitter.error(event.value);
       }
-      if (event.type === 'value') {
+      if (event.type === "value") {
         const pageX = event.value.pageX;
         const pageY = event.value.pageY;
         emitter.value( Math.sqrt(pageX*pageX + pageY*pageY) );
@@ -399,9 +391,9 @@ fetch("https://api.flickr.com/services/rest/?"+
         format: "json",
         nojsoncallback: 1
     })
-).then(function(response){
+).then(function(response) {
     return response.json()
-}).then(function(responseJSON){
+}).then(function(responseJSON) {
     return responseJSON.places.place[0];
 });
 ```
@@ -434,7 +426,7 @@ Update the __JavaScript__ tab:
 Update the __HTML__ tab:
 
 @sourceref ./4-enable-location.html
-@highlight 6-10,only
+@highlight 6-11,only
 
 
 ## Allow user to enter location only if location services failed
@@ -463,6 +455,6 @@ Update the __HTML__ tab:
 
 When finished, you should see something like the following JS Bin:
 
-<a class="jsbin-embed" href="https://jsbin.com/jipevu/3/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/jiwabof/4/embed?html,js,output">JS Bin on jsbin.com</a>
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.0.0"></script>
+<script src="https://static.jsbin.com/js/embed.min.js?4.1.2"></script>
