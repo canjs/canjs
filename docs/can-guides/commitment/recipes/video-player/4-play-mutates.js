@@ -9,7 +9,7 @@ can.Component.extend ({
         <source src="{{src}}"/>
       </video>
       <div class="video_controls_bar">
-        <button class="playpausebtn" on:click="togglePlay()">
+        <button on:click="togglePlay()">
           {{#if(playing)}}Pause{{else}}Play{{/if}}
         </button>
       <span class="curtimetext">{{formatTime(currentTime)}}</span> /

@@ -7,7 +7,7 @@ can.Component.extend ({
         <source src="{{src}}"/>
       </video>
       <div class="video_controls_bar">
-        <button class="playpausebtn">
+        <button>
           {{#if(playing)}}Pause{{else}}Play{{/if}}
         </button>
       </div>
@@ -22,8 +22,5 @@ can.Component.extend ({
       pause(){
         this.playing = false;
       },
-      togglePlay(){
-        this.playing = !this.playing;
-      }
     }
 });

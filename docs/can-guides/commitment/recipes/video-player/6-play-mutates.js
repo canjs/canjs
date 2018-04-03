@@ -9,10 +9,12 @@ can.Component.extend ({
         <source src="{{src}}"/>
       </video>
       <div class="video_controls_bar">
-        <button class="playpausebtn" on:click="togglePlay()">
+        <button  on:click="togglePlay()">
           {{#if(playing)}}Pause{{else}}Play{{/if}}
         </button>
-      <input type="range" value="0" max="1" step="any" value:from="percentComplete" on:change="set('percentComplete', scope.element.value)">
+      <input type="range" value="0" max="1" step="any"
+      value:from="percentComplete"
+      on:change="set('percentComplete', scope.element.value)">
       <span class="curtimetext">{{formatTime(currentTime)}}</span> /
         <span class="durtimetext">{{formatTime(duration)}} </span>
       </div>

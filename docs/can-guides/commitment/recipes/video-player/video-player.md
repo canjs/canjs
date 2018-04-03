@@ -58,7 +58,7 @@ Update the __HTML__ `<body>` element to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-play-reflects.js
-@highlight 5-6,9-13,17,19-27,only
+@highlight 5-6,9-13,17,19-25,only
 
 
 ## Make clicking the play/pause button play/pause the video ##
@@ -72,7 +72,7 @@ Update the __JavaScript__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-play-mutates.js
-@highlight 10,29-37,only
+@highlight 10,25-27,29-37,only
 
 
 ## Show current time and duration ##
@@ -100,7 +100,7 @@ Update the __JavaScript__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-play-mutates.js
-@highlight 15,26-31,only
+@highlight 15-17,28-33,only
 
 
 ## Make sliding the range update the current time ##
