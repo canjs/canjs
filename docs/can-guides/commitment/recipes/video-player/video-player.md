@@ -27,6 +27,18 @@ The following sections are broken down the following parts:
 
 ## Setup ##
 
+__START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
+
+> Click the `JS Bin` button.  The JS Bin will open in a new window. In that new window, under `File`, click `Clone`.
+
+<a class="jsbin-embed" href="http://jsbin.com/gejokos/1/edit?html,css,output">CanJS Video Player on jsbin.com</a>
+
+This JS Bin:
+
+- Creates a `<video>` element that loads a video and shows the native controls.
+- Loads CanJS.
+
+
 ### The problem
 
 - get a custom <video-player> on the page
@@ -117,3 +129,5 @@ Update the __JavaScript__ tab to:
 @highlight 57-59,only
 
 ## Result
+
+<script src="https://static.jsbin.com/js/embed.min.js?4.1.2"></script>
