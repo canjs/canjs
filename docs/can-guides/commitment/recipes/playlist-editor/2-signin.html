@@ -1,6 +1,6 @@
 <script id="app-template" type="text/stache">
   {{#if(googleApiLoadedPromise.isPending)}}
-    <div>Loading Google API ...</div>
+    <div>Loading Google API…</div>
   {{else}}
     {{#if(signedIn)}}
 	  Welcome {{givenName}}! <button on:click="googleAuth.signOut()">Sign Out</button>
