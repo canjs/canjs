@@ -1,6 +1,6 @@
-var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
+const PlaylistVM = can.DefineMap.extend("PlaylistVM", {
   init: function() {
-    var self = this;
+    const self = this;
 
     self.on("googleAuth", function(ev, googleAuth) {
       self.signedIn = googleAuth.isSignedIn.get();
@@ -26,7 +26,7 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
   }
 });
 
-var vm = new PlaylistVM();
-var template = can.stache.from("app-template");
-var fragment = template(vm);
+const vm = new PlaylistVM();
+const template = can.stache.from("app-template");
+const fragment = template(vm);
 document.body.appendChild(fragment);

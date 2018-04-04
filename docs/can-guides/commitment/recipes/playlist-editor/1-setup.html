@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="description" content="CanJS 3.7 - Playlist Editor Final">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>JS Bin</title>
+  <title>CanJS Playlist Editor</title>
 </head>
 <body>
 
 <script id="app-template" type="text/stache">
   {{#if(googleApiLoadedPromise.isPending)}}
-    <div>Loading Google API ...</div>
+    <div>Loading Google API…</div>
   {{else}}
     <div>Loaded Google API</div>
   {{/if}}
@@ -18,22 +17,21 @@
 
 <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
 <script src="https://unpkg.com/jquerypp@2/dist/global/jquerypp.js"></script>
-<script src="https://unpkg.com/can@3/dist/global/can.all.js"></script>
+<script src="https://unpkg.com/can@4/dist/global/can.all.js"></script>
 
 <script>
-var googleScriptLoaded;
-var googleApiLoadedPromise = new Promise(function(resolve){
-  googleScriptLoaded = function(){
-    gapi.load('client:auth2', function() {
-		gapi.client.init({
-			'apiKey': 'AIzaSyBcnGGOryOnmjUC09T78VCFEqRQRgvPnAc',
-			'clientId': '764983721035-85cbj35n0kmkmrba10f4jtte8fhpst84.apps.googleusercontent.com',
-			'discoveryDocs': [ 'https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest' ],
-			'scope': 'https://www.googleapis.com/auth/youtube'
-		}).then(resolve);
-	});
+window.googleApiLoadedPromise = new Promise(function(resolve) {
+  window.googleScriptLoaded = function() {
+    gapi.load("client:auth2", function() {
+      gapi.client.init({
+        apiKey: 'AIzaSyBcnGGOryOnmjUC09T78VCFEqRQRgvPnAc',
+        clientId: '764983721035-85cbj35n0kmkmrba10f4jtte8fhpst84.apps.googleusercontent.com',
+        discoveryDocs: [ "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest" ],
+        scope: "https://www.googleapis.com/auth/youtube"
+      }).then(resolve);
+    });
   }
-})
+});
 </script>
 
 <script async defer src="https://apis.google.com/js/api.js"
