@@ -1,6 +1,6 @@
-can.Component.extend ({
-    tag : 'video-player',
-    view: `
+can.Component.extend({
+  tag: 'video-player',
+  view: `
       <video controls
         on:play="play()"
         on:pause="pause()">
@@ -12,15 +12,15 @@ can.Component.extend ({
         </button>
       </div>
     `,
-    ViewModel: {
-      src: 'string',
-      playing: "boolean",
+  ViewModel: {
+    src: 'string',
+    playing: "boolean",
 
-      play(){
-        this.playing = true;
-      },
-      pause(){
-        this.playing = false;
-      },
+    play() {
+      this.playing = true;
+    },
+    pause() {
+      this.playing = false;
     }
+  }
 });

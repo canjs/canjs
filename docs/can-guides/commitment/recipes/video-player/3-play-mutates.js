@@ -1,6 +1,6 @@
-can.Component.extend ({
-    tag : 'video-player',
-    view: `
+can.Component.extend({
+  tag: 'video-player',
+  view: `
       <video controls
         on:play="play()"
         on:pause="pause()">
@@ -12,27 +12,27 @@ can.Component.extend ({
         </button>
       </div>
     `,
-    ViewModel: {
-      src: 'string',
-      playing: "boolean",
+  ViewModel: {
+    src: 'string',
+    playing: "boolean",
 
-      play(){
-        this.playing = true;
-      },
-      pause(){
-        this.playing = false;
-      },
-      togglePlay(){
-        this.playing = !this.playing;
-      }
+    play() {
+      this.playing = true;
     },
-    events: {
-     "{viewModel} playing": function(vm, ev, isPlaying){
-       if(isPlaying) {
-         this.element.querySelector("video").play()
-       } else {
-         this.element.querySelector("video").pause()
-       }
-     }
-   }
+    pause() {
+      this.playing = false;
+    },
+    togglePlay() {
+      this.playing = !this.playing;
+    }
+  },
+  events: {
+    "{viewModel} playing": function(vm, ev, isPlaying) {
+      if (isPlaying) {
+        this.element.querySelector("video").play()
+      } else {
+        this.element.querySelector("video").pause()
+      }
+    }
+  }
 });

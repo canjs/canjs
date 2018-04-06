@@ -12,9 +12,13 @@ controls around a video element.
 
 In this guide you will learn how to:
 
-- TODO
+- Set up a custom `Video` Player
+- Custom `play` and `pause` `buttons`
+- Make `seekslider` respond to users interaction  
+
 
 The final widget looks like:
+
 
 __TODO__
 
@@ -43,8 +47,27 @@ This JS Bin:
 
 - get a custom <video-player> on the page
 
+```js
+<video-player>
+  <source> </source>
+</video-player>
+```
+
+- add the standard `controls` attribute to the `video` element
+
+```js
+<video-player controls>
+</video-player>
+```
+
+
 ### What you need to know
 
+- Basic HTML tags and attributes
+- `Video-player` - to add the source video
+- `Controls` - to give the video standard buttons to work with
+- `can.Component.extend` -
+- `ViewModel` - CanJS basic viewModel
 ### The solution
 
 Update the __JavaScript__ tab to:
@@ -63,21 +86,35 @@ Update the __HTML__ `<body>` element to:
 
 ### The problem
 
+- Add a `button` to the `video` player for the play/pause
+- Add an event attribute to the `video`
+- Make button's change from pause to play, play to pause.
+- Add custom `div` class for video controls
+
 ### What you need to know
+
+- `<Video onclick:"">` - UI experince with the users
+- `If/Else` statements / expressions
+- Add
 
 ### The solution
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-play-reflects.js
-@highlight 5-6,9-13,17,19-25,only
+@highlight 5-6,9-13,17,19-24,only
 
 
 ## Make clicking the play/pause button play/pause the video ##
 
 ### The problem
 
+- `button` - Adding event listeners
+- `events` - Adding events to the `ViewModel`
+
 ### What you need to know
+
+- `if/esle` - knowing `querySelector` to make a play and pause function 
 
 ### The solution
 
@@ -90,6 +127,8 @@ Update the __JavaScript__ tab to:
 ## Show current time and duration ##
 
 ### The problem
+
+- We need to now add an `onclick` event for the `video` time and duration
 
 ### What you need to know
 
@@ -112,7 +151,7 @@ Update the __JavaScript__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-play-mutates.js
-@highlight 15-17,28-33,only
+@highlight 15-17,28-30,only
 
 
 ## Make sliding the range update the current time ##
@@ -126,7 +165,7 @@ Update the __JavaScript__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-play-mutates.js
-@highlight 66-68,only
+@highlight 69-70,only
 
 ## Result
 
