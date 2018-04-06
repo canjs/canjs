@@ -1,23 +1,22 @@
 can.Component.extend({
   tag: 'video-player',
   view: `
-      <video controls
-        on:play="play()"
-        on:pause="pause()"
-        on:timeupdate="updateTimes(scope.element)"
-        on:loadedmetadata="updateTimes(scope.element)">
-        <source src="{{src}}"/>
-      </video>
-      <div class="video_controls_bar">
-        <button on:click="togglePlay()">
-          {{#if(playing)}}Pause{{else}}Play{{/if}}
-        </button>
+    <video controls
+      on:play="play()"
+      on:pause="pause()"
+      on:timeupdate="updateTimes(scope.element)"
+      on:loadedmetadata="updateTimes(scope.element)">
+      <source src="{{src}}"/>
+    </video>
+    <div class="video_controls_bar">
+      <button on:click="togglePlay()">
+        {{#if(playing)}}Pause{{else}}Play{{/if}}
+      </button>
       <input type="range" value="0" max="1" step="any"
-             value:from="percentComplete"
-             on:change="set('percentComplete',scope.element.value)">
-        <span class="curtimetext">{{formatTime(currentTime)}}</span> /
-        <span class="durtimetext">{{formatTime(duration)}} </span>
-      </div>
+             value:from="percentComplete"/>
+      <span class="curtimetext">{{formatTime(currentTime)}}</span> /
+      <span class="durtimetext">{{formatTime(duration)}} </span>
+    </div>
     `,
   ViewModel: {
     src: 'string',

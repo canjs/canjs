@@ -1,20 +1,19 @@
 can.Component.extend({
   tag: 'video-player',
   view: `
-      <video controls
-        on:play="play()"
-        on:pause="pause()"
-        on:timeupdate="updateTimes(scope.element)"
-        on:loadedmetadata="updateTimes(scope.element)">
-        <source src="{{src}}"/>
-      </video>
-      <div class="video_controls_bar">
-        <button  on:click="togglePlay()">
-          {{#if(playing)}}Pause{{else}}Play{{/if}}
-        </button>
+    <video controls
+      on:play="play()"
+      on:pause="pause()"
+      on:timeupdate="updateTimes(scope.element)"
+      on:loadedmetadata="updateTimes(scope.element)">
+      <source src="{{src}}"/>
+    </video>
+    <div class="video_controls_bar">
+      <button on:click="togglePlay()">
+        {{#if(playing)}}Pause{{else}}Play{{/if}}
+      </button>
       <input type="range" value="0" max="1" step="any"
-             value:from="percentComplete"
-             on:change="set('percentComplete', scope.element.value)">
+             value:bind="percentComplete"/>
         <span class="curtimetext">{{formatTime(currentTime)}}</span> /
         <span class="durtimetext">{{formatTime(duration)}} </span>
       </div>
@@ -28,8 +27,8 @@ can.Component.extend({
     get percentComplete() {
       return this.currentTime / this.duration;
     },
-    updatePercentComplete(newVal) {
-      this.currentTime = newVal * this.duration;
+    set percentComplete(newVal) {
+     this.currentTime = newVal * this.duration;
     },
 
     updateTimes(videoElement) {

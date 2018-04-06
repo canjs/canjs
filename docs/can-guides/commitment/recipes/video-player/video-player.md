@@ -53,14 +53,6 @@ This JS Bin:
 </video-player>
 ```
 
-- add the standard `controls` attribute to the `video` element
-
-```js
-<video-player controls>
-</video-player>
-```
-
-
 ### What you need to know
 
 - Basic HTML tags and attributes
@@ -102,7 +94,7 @@ Update the __HTML__ `<body>` element to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-play-reflects.js
-@highlight 5-6,9-13,17,19-24,only
+@highlight 5-6,9-13,16,17,19-24,only
 
 
 ## Make clicking the play/pause button play/pause the video ##
@@ -114,14 +106,14 @@ Update the __JavaScript__ tab to:
 
 ### What you need to know
 
-- `if/esle` - knowing `querySelector` to make a play and pause function 
+- `if/esle` - knowing `querySelector` to make a play and pause function
 
 ### The solution
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-play-mutates.js
-@highlight 10,25-27,29-37,only
+@highlight 10,24-28,29-36,only
 
 
 ## Show current time and duration ##
@@ -137,7 +129,7 @@ Update the __JavaScript__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-play-mutates.js
-@highlight 7,8,15,16,22,23,25-37,only
+@highlight 7,8,15,16,22-39,only
 
 
 ## Make range show position slider at current time ##
@@ -151,7 +143,7 @@ Update the __JavaScript__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-play-mutates.js
-@highlight 15-17,28-30,only
+@highlight 15,16,27-34,only
 
 
 ## Make sliding the range update the current time ##
@@ -160,12 +152,12 @@ Update the __JavaScript__ tab to:
 
 ### What you need to know
 
-### The solution
+### The solution  
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-play-mutates.js
-@highlight 69-70,only
+@highlight 15,16,30-32,66-69,only
 
 ## Result
 
