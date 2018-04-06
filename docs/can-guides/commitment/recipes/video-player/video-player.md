@@ -10,17 +10,18 @@ controls around a video element.
 
 
 
-In this guide you will learn how to:
+In this guide, you will learn how to create a custom video player using the `<video>` element. The
+custom video player will:
 
-- Set up a custom `Video` Player
-- Custom `play` and `pause` `buttons`
-- Make `seekslider` respond to users interaction  
+- Have custom play / pause buttons.
+- Show the current time and duration of the video.
+- Have a `<input type='range'>` slider that can adjust the position of the video.
 
 
 The final widget looks like:
 
 
-__TODO__
+<a class="jsbin-embed" href="http://jsbin.com/gejokos/3/embed?html,js,output">JS Bin on jsbin.com</a>
 
 The following sections are broken down the following parts:
 
@@ -35,31 +36,106 @@ __START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
 
 > Click the `JS Bin` button.  The JS Bin will open in a new window. In that new window, under `File`, click `Clone`.
 
-<a class="jsbin-embed" href="http://jsbin.com/gejokos/1/edit?html,css,output">CanJS Video Player on jsbin.com</a>
+<a class="jsbin-embed" href="http://jsbin.com/gipisuw/1/edit?html,css,output">CanJS Video Player on jsbin.com</a>
 
 This JS Bin:
 
-- Creates a `<video>` element that loads a video and shows the native controls.
+- Creates a `<video>` element that loads a video. _Right click and select "Show controls" to see the video's controls_.
 - Loads CanJS.
 
 
 ### The problem
 
-- get a custom <video-player> on the page
+- Create a custom `<video-player>` element that takes a `src` attribute and creates a `<video>` element
+  within itself. We should be able to create the video like:
 
-```js
-<video-player>
-  <source> </source>
-</video-player>
-```
+  ```html
+  <video-player src:raw="https://canjs.com/docs/can-guides/commitment/recipes/text-editor/1-setup.webm">
+  </video-player>
+  ```  
+- The embedded `<video>` element should have the native controls enabled.
+
+
 
 ### What you need to know
 
-- Basic HTML tags and attributes
-- `Video-player` - to add the source video
-- `Controls` - to give the video standard buttons to work with
-- `can.Component.extend` -
-- `ViewModel` - CanJS basic viewModel
+To setup a basic CanJS application, you define a custom element in JavaScript and
+use the custom element in your page’s `HTML`.
+
+To define a custom element, extend [can-component] with a [can-component.prototype.tag]
+that matches the name of your custom element.  For example:
+
+```js
+can.Component.extend({
+  tag: "video-player"
+})
+```
+
+Then you can use this tag in your HTML page:
+
+```HTML
+<video-player></video-player>
+```
+
+But this doesn’t do anything.  Components add their own HTML through their [can-component.prototype.view]
+property:
+
+```js
+can.Component.extend({
+  tag: "video-player",
+  view: `<h2>I am a <input value='video'/> player!</h2>`
+});
+```
+
+A component's `view` is rendered with it's [can-component.prototype.ViewModel]. For example, we can
+make the `<input>` say `"AWESOME VIDEO"` by defining a `src` property and using it in the `view` like:
+
+```js
+can.Component.extend({
+  tag: "video-player",
+  view: `<h2>I am a <input value='{{src}}'/> player!</h2>`,
+  ViewModel: {
+    src: {default: "AWESOME VIDEO"}
+  }
+});
+```
+
+But we want the video player to take a `src` attribute value and use that for the
+`<input>`'s `value`. For example, if
+we wanted the input to say `CONFIGURABLE VIDEO` instead of `video`, we would:
+
+1. Update `<video-player>` to pass `"CONFIGURABLE VIDEO"` with [can-stache-bindings.raw]:
+   ```html
+   <video-player src:raw="CONFIGURABLE VIDEO"/>
+   ```
+2. Update the `ViewModel` to define a `src` property like:
+   ```js
+   can.Component.extend({
+     tag: "video-player",
+     view: `<h2>I am a <input value='video'/> player!</h2>`,
+     ViewModel: {
+       src: "string"
+     }
+   });
+   ```
+3. Use the `src` property in the view:
+   ```js
+   can.Component.extend({
+     tag: "video-player",
+     view: `<h2>I am a <input value='{{src}}'/> player!</h2>`,
+     ViewModel: {
+       src: "string"
+     }
+   });
+   ```
+
+Finally, to have a `<video>` element show the _native_ controls, add a `controls`
+attribute like:
+
+```js
+<video controls>
+```
+
 ### The solution
 
 Update the __JavaScript__ tab to:
@@ -85,8 +161,9 @@ Update the __HTML__ `<body>` element to:
 
 ### What you need to know
 
-- `<Video onclick:"">` - UI experince with the users
-- `If/Else` statements / expressions
+- `<Video onclick:"">` - UI experince with the users - listening to events [can-stache-bindings.event].
+  - how to call methods on their VM.
+- `If/Else` statements / expressions [can-stache.helpers.if] [can-stache.helpers.else]
 - Add
 
 ### The solution
@@ -108,6 +185,10 @@ Update the __JavaScript__ tab to:
 
 - `if/esle` - knowing `querySelector` to make a play and pause function
 
+- Component's events object [can-component.prototype.events].
+  - `{viewModel}` -> listen to the view model ... other option `{element} li click`
+- a video element's [.play()](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play) and `.pause()`
+
 ### The solution
 
 Update the __JavaScript__ tab to:
@@ -124,6 +205,24 @@ Update the __JavaScript__ tab to:
 
 ### What you need to know
 
+- We need to listen for changes in a `<video>` time and duration
+- YOu can call VM function (like `formatTime`)
+- Probably just give them a `formatTime` function like:
+
+  ```js
+  formatTime(time) {
+      if (time === null || time === undefined) {
+        return "--"
+      }
+      const durmins = Math.floor(time / 60);
+      let dursecs = Math.floor(time - durmins * 60);
+      if (dursecs < 10) {
+        dursecs = "0" + dursecs;
+      }
+      return durmins + ":" + dursecs
+  }
+  ```
+
 ### The solution
 
 Update the __JavaScript__ tab to:
@@ -138,6 +237,9 @@ Update the __JavaScript__ tab to:
 
 ### What you need to know
 
+- [can-stache-bindings.toChild]
+- how to make a getter [can-define.types.get] (also [can-define.types.propDefinition])
+
 ### The solution
 
 Update the __JavaScript__ tab to:
@@ -151,6 +253,10 @@ Update the __JavaScript__ tab to:
 ### The problem
 
 ### What you need to know
+
+- [can-define.types.set]
+- [can-stache-bindings.twoWay]
+- Hint: how to listen for currentTime changes and update the video player's `currentTIme`
 
 ### The solution  
 
