@@ -1,6 +1,6 @@
-var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
+const PlaylistVM = can.DefineMap.extend("PlaylistVM", {
   init: function() {
-    var self = this;
+    const self = this;
 
     self.on("googleAuth", function(ev, googleAuth) {
       self.signedIn = googleAuth.isSignedIn.get();
@@ -31,15 +31,15 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
   get searchResultsPromise() {
     if (this.searchQuery.length > 2) {
 
-      var results = gapi.client.youtube.search.list({
-          q: this.searchQuery,
-          part: 'snippet',
-          type: 'video'
-        }).then(function(response){
-        console.log(response.result.items);
+      const results = gapi.client.youtube.search.list({
+        q: this.searchQuery,
+        part: "snippet",
+        type: "video"
+      }).then(function(response) {
+        console.info("Search results:", response.result.items);
         return response.result.items;
       });
-      return new Promise(function(resolve, reject){
+      return new Promise(function(resolve, reject) {
         results.then(resolve, reject);
       });
     }
@@ -47,8 +47,8 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
   videoDrag: function(drag) {
     drag.ghost().addClass("ghost");
   },
-  getDragData: function(drag){
-	return can.data.get.call(drag.element[0], "dragData");
+  getDragData: function(drag) {
+    return can.domData.get(drag.element[0], "dragData");
   },
   dropPlaceholderData: "any",
   playlistVideos: {
@@ -73,7 +73,7 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
     }
   },
   get videosWithDropPlaceholder() {
-    var copy = this.playlistVideos.map(function(video) {
+    const copy = this.playlistVideos.map(function(video) {
       return {
         video: video,
         isPlaceholder: false
@@ -89,7 +89,9 @@ var PlaylistVM = can.DefineMap.extend("PlaylistVM", {
   }
 });
 
-var vm = new PlaylistVM();
-var template = can.stache.from("app-template");
-var fragment = template(vm);
+can.addJQueryEvents(jQuery);
+
+const vm = new PlaylistVM();
+const template = can.stache.from("app-template");
+const fragment = template(vm);
 document.body.appendChild(fragment);

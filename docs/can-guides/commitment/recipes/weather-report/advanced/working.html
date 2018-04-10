@@ -16,7 +16,7 @@ Error: {{geoLocationError.message}}
 	{{#if(showEnterLocation)}}
     <div class="location-entry">
       <label for="location">Enter Your location:</label>
-      <input id="location" value:to="location" type="text"/>
+      <input id="location" value:to="location" type="text" />
     </div>
 	{{/if}}
 
@@ -44,10 +44,10 @@ Error: {{geoLocationError.message}}
         <ul>
           {{#each(forecastPromise.value)}}
             <li>
-              <span class='date'>{{date}}</span>
-              <span class='description {{toClassName(text)}}'>{{text}}</span>
-              <span class='high-temp'>{{high}}<sup>&deg;</sup></span>
-              <span class='low-temp'>{{low}}<sup>&deg;</sup></span>
+              <span class="date">{{date}}</span>
+              <span class="description {{toClassName(text)}}">{{text}}</span>
+              <span class="high-temp">{{high}}<sup>&deg;</sup></span>
+              <span class="low-temp">{{low}}<sup>&deg;</sup></span>
             </li>
           {{/each}}
         </ul>
@@ -73,17 +73,17 @@ import Kefir from 'kefir';
 const yqlURL = "https://query.yahooapis.com/v1/public/yql?";
 
 const geoLocationStream = Kefir.stream(function(emitter) {
-    navigator.geolocation.getCurrentPosition(function(position){
+    navigator.geolocation.getCurrentPosition(function(position) {
       emitter.value(position);
-    }, function(err){
+    }, function(err) {
         console.log("getCurrentPositionErr",err);
         emitter.error(err);
     });
 
 
-     const watch = navigator.geolocation.watchPosition(function(position){
+     const watch = navigator.geolocation.watchPosition(function(position) {
        emitter.value(position);
-     }, function(err){
+     }, function(err) {
          emitter.error(err);
      });
 
@@ -100,11 +100,11 @@ const WeatherViewModel = can.DefineMap.extend({
     },
     geoLocationError: {
         stream: function() {
-            return geoLocationStream.withHandler(function(emitter, event){
-                if (event.type === 'end') {
+            return geoLocationStream.withHandler(function(emitter, event) {
+                if (event.type === "end") {
                     emitter.end();
                 }
-                if (event.type === 'error') {
+                if (event.type === "error") {
                     emitter.value(event.value);
                 }
             });
@@ -114,26 +114,26 @@ const WeatherViewModel = can.DefineMap.extend({
         get: function(lastSet, resolve) {
             if (this.geoLocation) {
                 fetch("https://api.flickr.com/services/rest/?" +
-                    can.param({
-                        method: "flickr.places.findByLatLon",
-                        api_key: "df0a221bb43ecbc2abb03426bd84e598",
-                        lat: this.geoLocation.coords.latitude,
-                        lon: this.geoLocation.coords.longitude,
-                        format: "json",
-                        nojsoncallback: 1
-                    })
-                ).then(function(response){
-                    return response.json();
-                }).then(function(responseJSON){
-                    return responseJSON.places.place[0];
+                  can.param({
+                      method: "flickr.places.findByLatLon",
+                      api_key: "df0a221bb43ecbc2abb03426bd84e598",
+                      lat: this.geoLocation.coords.latitude,
+                      lon: this.geoLocation.coords.longitude,
+                      format: "json",
+                      nojsoncallback: 1
+                  })
+                ).then(function(response) {
+                  return response.json();
+                }).then(function(responseJSON) {
+                  return responseJSON.places.place[0];
                 }).then(resolve);
             }
         }
     },
-	get showEnableGeoLocationMessage(){
+	get showEnableGeoLocationMessage() {
         return !this.geoLocation && !this.geoLocationError;
     },
-	get showEnterLocation(){
+	get showEnterLocation() {
         return !!this.geoLocationError;
     },
     location: "string",
@@ -172,8 +172,8 @@ const WeatherViewModel = can.DefineMap.extend({
             const resetStream = this.toStream(".location").map(function() {
                 return null;
             });
-            const onePlaceResultStream = this.toStream(".places").map(function(places){
-                if(places.length === 1) {
+            const onePlaceResultStream = this.toStream(".places").map(function(places) {
+                if (places.length === 1) {
                     return places[0];
                 } else {
                     return null;

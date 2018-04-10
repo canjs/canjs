@@ -11,7 +11,7 @@ Error: {{geoLocationError.message}}
 
   <div class="location-entry">
     <label for="location">Enter Your location:</label>
-    <input id="location" value:to="location" type="text"/>
+    <input id="location" value:to="location" type="text" />
   </div>
 
   {{#if(placesPromise.isPending)}}
@@ -38,10 +38,10 @@ Error: {{geoLocationError.message}}
       <ul>
         {{#each(forecastPromise.value)}}
           <li>
-            <span class='date'>{{date}}</span>
-            <span class='description {{toClassName(text)}}'>{{text}}</span>
-            <span class='high-temp'>{{high}}<sup>&deg;</sup></span>
-            <span class='low-temp'>{{low}}<sup>&deg;</sup></span>
+            <span class="date">{{date}}</span>
+            <span class="description {{toClassName(text)}}">{{text}}</span>
+            <span class="high-temp">{{high}}<sup>&deg;</sup></span>
+            <span class="low-temp">{{low}}<sup>&deg;</sup></span>
           </li>
         {{/each}}
       </ul>
