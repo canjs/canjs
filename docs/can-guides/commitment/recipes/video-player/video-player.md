@@ -21,7 +21,7 @@ custom video player will:
 The final widget looks like:
 
 
-<a class="jsbin-embed" href="http://jsbin.com/sekadux/2/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/sekadux/2/embed?html,js,output">JS Bin on jsbin.com</a>
 
 The following sections are broken down the following parts:
 
@@ -36,7 +36,7 @@ __START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
 
 > Click the `JS Bin` button.  The JS Bin will open in a new window. In that new window, under `File`, click `Clone`.
 
-<a class="jsbin-embed" href="http://jsbin.com/gipisuw/1/edit?html,js,output">CanJS Video Player on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/gipisuw/1/edit?html,js,output">CanJS Video Player on jsbin.com</a>
 
 This JS Bin:
 
@@ -50,7 +50,7 @@ This JS Bin:
   within itself. We should be able to create the video like:
 
   ```html
-  <video-player src:raw="https://canjs.com/docs/can-guides/commitment/recipes/text-editor/1-setup.webm">
+  <video-player src:raw="https://canjs.com/docs/images/tom_jerry.webm">
   </video-player>
   ```  
 - The embedded `<video>` element should have the native controls enabled.
