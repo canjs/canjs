@@ -21,7 +21,7 @@ custom video player will:
 The final widget looks like:
 
 
-<a class="jsbin-embed" href="http://jsbin.com/gejokos/3/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="http://jsbin.com/sekadux/2/embed?html,js,output">JS Bin on jsbin.com</a>
 
 The following sections are broken down the following parts:
 
