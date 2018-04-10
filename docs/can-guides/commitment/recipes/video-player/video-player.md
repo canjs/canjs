@@ -36,7 +36,7 @@ __START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
 
 > Click the `JS Bin` button.  The JS Bin will open in a new window. In that new window, under `File`, click `Clone`.
 
-<a class="jsbin-embed" href="http://jsbin.com/gipisuw/1/edit?html,css,output">CanJS Video Player on jsbin.com</a>
+<a class="jsbin-embed" href="http://jsbin.com/gipisuw/1/edit?html,js,output">CanJS Video Player on jsbin.com</a>
 
 This JS Bin:
 

@@ -51,15 +51,16 @@ can.Component.extend({
     },
     togglePlay() {
       this.playing = !this.playing;
-    }
-  },
-  events: {
-    "{viewModel} playing": function(vm, ev, isPlaying) {
-      if (isPlaying) {
-        this.element.querySelector("video").play()
-      } else {
-        this.element.querySelector("video").pause()
-      }
+    },
+
+    connectedCallback(element){
+      this.listenTo("playing", function(ev, isPlaying){
+        if (isPlaying) {
+          element.querySelector("video").play();
+        } else {
+          element.querySelector("video").pause();
+        }
+      });
     }
   }
 });

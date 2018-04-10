@@ -8,7 +8,7 @@ can.Component.extend({
       on:loadedmetadata="updateTimes(scope.element)">
       <source src="{{src}}"/>
     </video>
-    <div class="video_controls_bar">
+    <div>
       <button on:click="togglePlay()">
         {{#if(playing)}}Pause{{else}}Play{{/if}}
       </button>
@@ -54,18 +54,19 @@ can.Component.extend({
     },
     togglePlay() {
       this.playing = !this.playing;
-    }
-  },
-  events: {
-    "{viewModel} playing": function(vm, ev, isPlaying) {
-      if (isPlaying) {
-        this.element.querySelector("video").play()
-      } else {
-        this.element.querySelector("video").pause()
-      }
     },
-    "{viewModel} currentTime": function(vm, ev, currentTime) {
-      this.element.querySelector("video").currentTime = currentTime;
+
+    connectedCallback(element){
+      this.listenTo("playing", function(ev, isPlaying){
+        if (isPlaying) {
+          element.querySelector("video").play();
+        } else {
+          element.querySelector("video").pause();
+        }
+      });
+      this.listenTo("currentTime", function(ev, currentTime){
+        element.querySelector("video").currentTime = currentTime;
+      });
     }
   }
 });
