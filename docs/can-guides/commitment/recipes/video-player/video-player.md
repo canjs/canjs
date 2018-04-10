@@ -154,17 +154,48 @@ Update the __HTML__ `<body>` element to:
 
 ### The problem
 
-- Add a `button` to the `video` player for the play/pause
-- Add an event attribute to the `video`
-- Make button's change from pause to play, play to pause.
-- Add custom `div` class for video controls
+- `div` - create a __div__ and add a __class__ for custom video controls
+- `button` - create inside the __div__ for the play/pause with __if/else__ expressions
+- `video` - should get a [can-stache-bindings.event] attribute
+
 
 ### What you need to know
 
 - `<Video onclick:"">` - UI experince with the users - listening to events [can-stache-bindings.event].
   - how to call methods on their VM.
-- `If/Else` statements / expressions [can-stache.helpers.if] [can-stache.helpers.else]
-- Add
+  1. Update the `<video>` element with
+    ```html
+    <video on:click="event()">
+    </video>
+    ```
+
+- `If/Else` statements / expressions [can-stache.helpers.if] [can-stache.helpers.else] within the __button__
+    ```html
+    <div class="video_controls_bar">
+      <button>{{#if(playing)}}Pause{{else}}Play{{/if}} </button>
+    </div>
+    ```
+
+  2. The `view` component now gets the __onClick__ attribute inside the `<video>` element:
+    ```html
+      <video on:click="event()">
+      </video>
+    ```
+
+  3. Update the `ViewModel` with values and data types to follow the video __controls__
+  ```html
+    ViewModel: {
+      src: 'string',
+      playing: "",
+
+      if() {
+        event = ;
+      },
+      else() {
+        event =  ;
+      }
+  ```
+
 
 ### The solution
 
