@@ -6,6 +6,6 @@ can.Component.extend({
     </video>
     `,
   ViewModel: {
-    src: 'string'
+    src: 'string',
   }
 });

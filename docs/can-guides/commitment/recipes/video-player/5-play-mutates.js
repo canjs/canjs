@@ -8,14 +8,14 @@ can.Component.extend({
       on:loadedmetadata="updateTimes(scope.element)">
       <source src="{{src}}"/>
     </video>
-    <div class="video_controls_bar">
+    <div>
       <button on:click="togglePlay()">
         {{#if(playing)}}Pause{{else}}Play{{/if}}
       </button>
       <input type="range" value="0" max="1" step="any"
              value:from="percentComplete"/>
-      <span class="curtimetext">{{formatTime(currentTime)}}</span> /
-      <span class="durtimetext">{{formatTime(duration)}} </span>
+      <span>{{formatTime(currentTime)}}</span> /
+      <span>{{formatTime(duration)}} </span>
     </div>
     `,
   ViewModel: {

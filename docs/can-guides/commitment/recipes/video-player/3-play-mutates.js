@@ -6,7 +6,7 @@ can.Component.extend({
       on:pause="pause()">
       <source src="{{src}}"/>
     </video>
-    <div class="video_controls_bar">
+    <div>
       <button on:click="togglePlay()">
         {{#if(playing)}}Pause{{else}}Play{{/if}}
       </button>

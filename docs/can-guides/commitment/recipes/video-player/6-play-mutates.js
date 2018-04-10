@@ -1,7 +1,7 @@
 can.Component.extend({
   tag: 'video-player',
   view: `
-    <video controls
+    <video
       on:play="play()"
       on:pause="pause()"
       on:timeupdate="updateTimes(scope.element)"
@@ -14,9 +14,9 @@ can.Component.extend({
       </button>
       <input type="range" value="0" max="1" step="any"
              value:bind="percentComplete"/>
-        <span class="curtimetext">{{formatTime(currentTime)}}</span> /
-        <span class="durtimetext">{{formatTime(duration)}} </span>
-      </div>
+      <span>{{formatTime(currentTime)}}</span> /
+      <span>{{formatTime(duration)}} </span>
+    </div>
     `,
   ViewModel: {
     src: 'string',
