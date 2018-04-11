@@ -197,7 +197,7 @@ We want the button to be within a `<div>` after the video element like:
     },
   }
   ```
-- You can listen to evens on the DOM with [can-stache-bindings.event].  For example, the following might
+- You can listen to events on the DOM with [can-stache-bindings.event].  For example, the following might
   listen to a click on a `<div>` and call `doSomething()`:
 
   ```html
