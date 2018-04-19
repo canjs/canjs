@@ -141,7 +141,7 @@
     "semver": "^5.5.0",
     "socket.io-client": "^1.7.2",
     "steal": "^1.5.5",
-    "steal-conditional": "^0.4.0",
+    "steal-conditional": "^1.1.0",
     "steal-css": "^1.2.4",
     "steal-qunit": "^1.0.1",
     "steal-socket.io": "^4.0.9",
