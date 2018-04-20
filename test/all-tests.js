@@ -33,4 +33,5 @@ steal("can/test/test.js",
 		"can/view/live/live_test.js",
 		"can/view/scope/scope_test.js",
 		"can/util/string/string_test.js",
-		"can/util/attr/attr_test.js", function() {});
+		"can/util/attr/attr_test.js",
+		"can/util/batch/batch_test.js", function() {});
