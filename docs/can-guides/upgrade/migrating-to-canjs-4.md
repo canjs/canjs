@@ -88,7 +88,7 @@ npm install -g can-migrate@3to4
 Once installed you can run any of the codemods discussed in sections below. *Or*, to run all of the 3-4 code mods you can run:
 
 ```shell
-can-migrate --apply **/*.js --can-version 4
+can-migrate '**/*.js' --can-version 4  --apply
 ```
 
 ## Breaking changes
@@ -131,7 +131,7 @@ In the `{{foo}}` example, change it to:
 
 > You can migrate this change with this codemod:
 > ```
-> can-migrate --apply **/*.* --transform can-stache/route-helpers.js
+> can-migrate '**/*.*' --transform can-stache/route-helpers.js --apply
 > ```
 
 If you are using the route helpers such as [can-stache-route-helpers.routeUrl], it has been moved into its own package now and no longer exists in [can-stache]. Your app will likely not load until you fix this.
@@ -162,7 +162,7 @@ The batching system was replaced with [can-queues] which has a more sophisticate
 
 > To migrate to can-queues with a codemod run:
 > ```
-> can-migrate --apply **/*.* --transform can-queues/batch.js
+> can-migrate '**/*.*' --transform can-queues/batch.js --apply
 > ```
 
 If you are using [can-event/batch/batch] (or can.event) to batch changes like so:
@@ -372,7 +372,7 @@ However, in general the first two methods should cover most cases.
 
 > You can migrate this change with this codemod:
 > ```
-> can-migrate --apply **/*.* --transform can-stache/scope.js
+> can-migrate '**/*.*' --transform can-stache/scope.js --apply
 > ```
 
 In [can-stache] 3 there were several special symbols that were useable within a template such as:
@@ -415,7 +415,7 @@ Or the new [can-stache-bindings.raw] binding:
 
 > You can migrate this change with this codemod:
 > ```
-> can-migrate --apply **/*.* --transform can-stache/console-log.js
+> can-migrate '**/*.*' --transform can-stache/console-log.js --apply
 > ```
 
 Previously can-stache contained a `{{log}}` helper that was useful for logging the current context.
@@ -500,7 +500,7 @@ Some that you might see include:
 
 > To migrate this change with a codemod run:
 > ```
-> can-migrate --apply **/*.* --transform can-route/register.js
+> can-migrate '**/*.*' --transform can-route/register.js --apply
 > ```
 
 Registering routes in [can-route] used to be done by calling the route function. That often confused people since `route` also includes other methods. We simplified this by moving registration to route.register. Change
@@ -532,7 +532,7 @@ route.start();
 
 > You can migrate this change with this codemod:
 > ```
-> can-migrate --apply **/*.* --transform can-define/default.js
+> can-migrate '**/*.*' --transform can-define/default.js --apply
 > ```
 
 In [can-define] 1.0, you would define a default value for a property with the `value` property definition like so:
