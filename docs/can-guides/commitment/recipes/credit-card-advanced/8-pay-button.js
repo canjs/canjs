@@ -1,4 +1,4 @@
-var viewModel = {
+const viewModel = {
 	amount: Kefir.constant(1000),
 
 	userCardNumber: Kefir.emitterProperty(),
@@ -51,9 +51,9 @@ viewModel.card = Kefir.combine([viewModel.cardNumber, viewModel.expiry, viewMode
 	});
 
 // STREAM< Promise<Number> | undefined >
-var paymentPromises = Kefir.combine([viewModel.payClicked], [viewModel.card], (payClicked, card) => {
+const paymentPromises = Kefir.combine([viewModel.payClicked], [viewModel.card], (payClicked, card) => {
 	if (payClicked) {
-        console.log("Asking for token with", card);
+		console.log("Asking for token with", card);
 		return new Promise(function(resolve) {
 			setTimeout(function() {
 				resolve(1000);
@@ -64,7 +64,7 @@ var paymentPromises = Kefir.combine([viewModel.payClicked], [viewModel.card], (p
 
 // STREAM< STREAM<STATUS> >
 // This is a stream of streams of status objects.
-var paymentStatusStream = paymentPromises.map((promise) => {
+const paymentStatusStream = paymentPromises.map((promise) => {
 	if (promise) {
 		// STREAM<STATUS>
 		return Kefir.concat([
@@ -89,7 +89,7 @@ var paymentStatusStream = paymentPromises.map((promise) => {
 // STREAM<STATUS> //{status: "waiting"} | {status: "resolved"}
 viewModel.paymentStatus = paymentStatusStream.flatMap().toProperty();
 
-var view = can.stache.from("app-view");
+const view = can.stache.from("app-view");
 
 document.body.appendChild( view(viewModel) );
 
@@ -125,7 +125,7 @@ function validateCVC(cvc) {
 }
 
 function showOnlyWhenBlurredOnce(errorStream, blurredStream) {
-	var errorEvent = errorStream.map((error) => {
+	const errorEvent = errorStream.map((error) => {
 		if (!error) {
 			return {
 				type: "valid"
@@ -138,7 +138,7 @@ function showOnlyWhenBlurredOnce(errorStream, blurredStream) {
 		}
 	});
 
-	var focusEvents = blurredStream.map((isBlurred) => {
+	const focusEvents = blurredStream.map((isBlurred) => {
 		if (isBlurred === undefined) {
 			return {};
 		}

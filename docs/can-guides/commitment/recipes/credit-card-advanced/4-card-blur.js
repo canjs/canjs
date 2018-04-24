@@ -1,4 +1,4 @@
-var viewModel = {
+const viewModel = {
 	amount: Kefir.constant(1000),
 
 	userCardNumber: Kefir.emitterProperty(),
@@ -13,7 +13,7 @@ viewModel.cardNumber = viewModel.userCardNumber.map((card) => {
 viewModel.cardError = viewModel.cardNumber.map(validateCard).toProperty();
 viewModel.showCardError = showOnlyWhenBlurredOnce(viewModel.cardError, viewModel.userCardNumberBlurred);
 
-var view = can.stache.from("app-view");
+const view = can.stache.from("app-view");
 
 document.body.appendChild( view(viewModel) );
 
@@ -28,7 +28,7 @@ function validateCard(card) {
 }
 
 function showOnlyWhenBlurredOnce(errorStream, blurredStream) {
-	var errorEvent = errorStream.map((error) => {
+	const errorEvent = errorStream.map((error) => {
 		if (!error) {
 			return {
 				type: "valid"
@@ -41,7 +41,7 @@ function showOnlyWhenBlurredOnce(errorStream, blurredStream) {
 		}
 	});
 
-	var focusEvents = blurredStream.map((isBlurred) => {
+	const focusEvents = blurredStream.map((isBlurred) => {
 		if (isBlurred === undefined) {
 			return {};
 		}

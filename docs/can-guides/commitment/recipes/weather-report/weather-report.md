@@ -81,7 +81,7 @@ Update the __HTML__ tab to wrap the template in a `script` tag:
   <div class="weather-widget">
     <div class="location-entry">
       <label for="location">Enter Your location:</label>
-      <input id="location" type='text'/>
+      <input id="location" type="text"/>
     </div>
 
     <p class="loading-message">

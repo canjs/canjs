@@ -16,7 +16,9 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/riyuzuh/2/embed?output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/woxuhu/4/embed?output">
+  Finished Credit Card Guide (Advanced) on jsbin.com
+</a>
 
 To use the widget:
 
@@ -30,7 +32,9 @@ To use the widget:
 
 __START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
 
-<a class="jsbin-embed" href="https://jsbin.com/rajili/2/embed?output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/woxuhu/2/embed?html,output">
+  Starter Credit Card Guide (Advanced) on jsbin.com
+</a>
 
 This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
@@ -42,7 +46,8 @@ The following sections are broken down into:
 - __The solution__ — The solution to the problem.
 
 
-The following video walks through the entire guide:
+The following video walks through the entire guide; it was recorded for CanJS 3,
+but most of the same basic info applies:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/UA4606-W3Sg" frameborder="0" allowfullscreen></iframe>
 
@@ -68,20 +73,21 @@ constant stream to hold the `amount` value.
   the following `numbers` stream produces three numbers with interval of 100 milliseconds:
 
   ```js
-  var numbers = Kefir.sequentially(100, [1, 2, 3]);
+  const numbers = Kefir.sequentially(100, [1, 2, 3]);
   ```
 
-  Now let's create another stream based on the first one. As you might guess, it will produce 2, 4, and 6.
+  Now let’s create another stream based on the first one. As you might guess,
+  it will produce 2, 4, and 6.
 
   ```js
-  var numbers2 = numbers.map(x => x * 2);
+  const numbers2 = numbers.map(x => x * 2);
   ```
 - Kefir supports both streams and properties.  It’s worth reading [Kefir’s documentation on the difference between streams and properties](https://kefirjs.github.io/kefir/#about-observables).  In short:
   - Properties retain their value
   - Streams do not
 - [Kefir.constant](https://kefirjs.github.io/kefir/#constant) creates a property with the specified value:
-  ```
-  var property = Kefir.constant(1);
+  ```js
+  const property = Kefir.constant(1);
   ```
 
 - [can-kefir] integrates streams into CanJS, including [can-stache]
@@ -102,7 +108,7 @@ constant stream to hold the `amount` value.
 Update the __HTML__ tab to:
 
 @sourceref ./1-setup.html
-@highlight 10-22,only
+@highlight 8-20,only
 
 Update the __JavaScript__ tab to:
 
@@ -116,20 +122,20 @@ Update the __JavaScript__ tab to:
 
 Users will be able to enter a card number like `1234-1234-1234-1234`.
 
-Lets read the card number entered by the user, print it back,
+Let’s read the card number entered by the user, print it back,
 and also print back the cleaned card number (the entered number with no dashes).
 
 ### What you need to know
 
-- [can-kefir] adds a [can-kefir/emitterProperty] method that returns a
+- [can-kefir] adds an [can-kefir/emitterProperty] method that returns a
   Kefir property, but also adds an `emitter` object with with `.value()` and `.error()` methods. The end result is a single object that has methods of a stream and property access to its emitter methods.
 
   ```js
   import Kefir from 'can-kefir';
 
-  var age = Kefir.emitterProperty();
+  const age = Kefir.emitterProperty();
 
-  age.onValue(function(age){
+  age.onValue(function(age) {
     console.log(age)
   });
 
@@ -145,16 +151,16 @@ and also print back the cleaned card number (the entered number with no dashes).
   that maps values on one stream to values in a new stream:
 
   ```js
-  var source = Kefir.sequentially(100, [1, 2, 3]);
-  var result = source.map(x => x + 1);
+  const source = Kefir.sequentially(100, [1, 2, 3]);
+  const result = source.map(x => x + 1);
   // source: ---1---2---3X
   // result: ---2---3---4X
   ```
 
 - `<input on:input:value:to="KEY"/>` Listens to the `input` events produced
-  by the `<input>` element and writes the `<input>`'s value to `KEY`.
-- [can-kefir] allows you to write to a `emitterProperty`'s with:
-  ```
+  by the `<input>` element and writes the `<input>`’s value to `KEY`.
+- [can-kefir] allows you to write to a `emitterProperty`’s with:
+  ```html
   <input value:to="emitterProperty.value"/>
   ```
 
@@ -176,7 +182,7 @@ Update the __JavaScript__ tab to:
 ## Output the card error ##
 ### The problem
 
-As someone types a card number, lets show the user a warning message
+As someone types a card number, let’s show the user a warning message
 about what they need to enter for the card number. It should go away
 if the card number is 16 characters.
 
@@ -210,25 +216,25 @@ Update the view in the __HTML__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-card-error.js
-@highlight 12,19-26,only
+@highlight 12,18-26,only
 
 
 
 ## Only show the card error when blurred ##
 ### The problem
 
-Lets only show the cardNumber error if the user blurs the
+Let’s only show the cardNumber error if the user blurs the
 card number input. Once the user blurs, we will update the card number error,
 if there is one, on every keystroke.
 
-We should also add `class='is-error'` to the input when it has an error.
+We should also add `class="is-error"` to the input when it has an error.
 
 For this to work, we will need to track if the user has blurred
 the input in a `userCardNumberBlurred` `emitterProperty`.
 
 ### What you need to know
 
-- We can call an `emitterProperty`'s value in the template when something happens like:
+- We can call an `emitterProperty`’s value in the template when something happens like:
   ```html
   <div on:click="emitterProperty.emitter.value(true)">
   ```
@@ -239,8 +245,8 @@ the input in a `userCardNumberBlurred` `emitterProperty`.
   For example, we might have a `first` and a `last` stream:
 
   ```js
-  var first = Kefir.sequentially(100, ["Justin", "Ramiya"])
-  var last = Kefir.sequentially(100, ["Shah", "Meyer"]).delay(50);
+  const first = Kefir.sequentially(100, ["Justin", "Ramiya"])
+  const last = Kefir.sequentially(100, ["Shah", "Meyer"]).delay(50);
   // first: ---Justin---RamiyaX
   // last:  ------Shah__---Meyer_X
   ```
@@ -248,10 +254,10 @@ the input in a `userCardNumberBlurred` `emitterProperty`.
   We can promote these to event-like objects with `.map`:
 
   ```js
-  var firstEvents = first.map( (first) => {
+  const firstEvents = first.map( (first) => {
       return {type: "first", value: first}
   })
-  var lastEvents = first.map( (last) => {
+  const lastEvents = first.map( (last) => {
       return {type: "last", value: last}
   })
   // firstEvents: ---{t:"f"}---{t:"f"}X
@@ -261,7 +267,7 @@ the input in a `userCardNumberBlurred` `emitterProperty`.
   Next, we can merge these into a single stream:
 
   ```js
-  var merged = Kefir.merge([firstEvents,lastEvents])
+  const merged = Kefir.merge([firstEvents,lastEvents])
   // merged: ---{t:"f"}-{t:"l"}-{t:"f"}-{t:"l"}X
   ```
 
@@ -270,10 +276,10 @@ the input in a `userCardNumberBlurred` `emitterProperty`.
   data:
 
   ```js
-  var state = merged.scan((previous, event) => {
-    var copy = Object.assign({}, previous);
+  const state = merged.scan((previous, event) => {
+    const copy = Object.assign({}, previous);
     copy[event.type] = event.value;
-	 return copy;
+    return copy;
   }, {first: "", last: ""});
   // state: ---{first:"Justin", last:""}
   //          -{first:"Justin", last:"Shah"}
@@ -284,7 +290,7 @@ the input in a `userCardNumberBlurred` `emitterProperty`.
   The following is a more common structure for the reducer pattern:
 
   ```js
-  var state = merged.scan((previous, event) => {
+  const state = merged.scan((previous, event) => {
       switch( event.type ) {
         case "first":
           return Object.assign({}, previous,{
@@ -303,7 +309,7 @@ the input in a `userCardNumberBlurred` `emitterProperty`.
   Finally, we can map this state to another value:
 
   ```js
-  var fullName = state.map( (state) => state.first +" "+ state.last );
+  const fullName = state.map( (state) => state.first +" "+ state.last );
   // fullName: ---Justin
   //             -Justin Shah
   //             -Ramiya Shah
@@ -315,7 +321,7 @@ the input in a `userCardNumberBlurred` `emitterProperty`.
   > set of stream transformations than `Kefir.combine`.
 
 - On any stream, you can call `stream.toProperty()` to return a property that
-  will retain its values. This can be useful if you want a stream's immediate value.
+  will retain its values. This can be useful if you want a stream’s immediate value.
 
 ### The solution
 
@@ -334,13 +340,13 @@ Update the __JavaScript__ tab to:
 ## Read, validate, and show the error of the expiry ##
 ### The problem
 
-Lets make the `expiry` input element just like the `cardNumber`
+Let’s make the `expiry` input element just like the `cardNumber`
 element.  The expiry should be entered like `12-17` and be stored as an
 array like `["12","16"]`.  Make sure to:
 
 - validate the expiry
 - show a warning validation message in a `<div class="message">` element
-- add `class='is-error'` to the element if we should show the `expiry` error.
+- add `class="is-error"` to the element if we should show the `expiry` error.
 
 ### What you need to know
 
@@ -376,12 +382,12 @@ Update the __JavaScript__ tab to:
 ## Read, validate, and show the error of the CVC
 ### The problem
 
-Lets make the `CVC` input element just like the `cardNumber` and `expiry`
+Let’s make the `CVC` input element just like the `cardNumber` and `expiry`
 element.  Make sure to:
 
 - validate the cvc
 - show a warning validation message in a `<div class="message">` element
-- add `class='is-error'` to the element if we should show the `CVC` error.
+- add `class="is-error"` to the element if we should show the `CVC` error.
 
 ### What you need to know
 
@@ -418,17 +424,17 @@ Update the __JavaScript__ tab to:
 ## Disable the pay button if any part of the card has an error ##
 ### The problem
 
-Lets disable the __Pay__ button until the card, exiry, and cvc are valid.
+Let’s disable the __Pay__ button until the card, expiry, and cvc are valid.
 
 ### What you need to know
 
 - `Kefir.combine` can combine several values into a single value:
   ```js
-  var first = Kefir.sequentially(100, ["Justin", "Ramiya"])
-  var last = Kefir.sequentially(100, ["Shah", "Meyer"]).delay(50);
+  const first = Kefir.sequentially(100, ["Justin", "Ramiya"])
+  const last = Kefir.sequentially(100, ["Shah", "Meyer"]).delay(50);
   // first: ---Justin---RamiyaX
   // last:  ------Shah__---Meyer_X
-  var fullName = Kefir.combine([first, last], (first, last) => { return first +" "+ last; })
+  const fullName = Kefir.combine([first, last], (first, last) => { return first +" "+ last; })
   // fullName: ---Justin Shah
   //             -Ramiya Shah
   //             -Ramiya MeyerX
@@ -455,7 +461,7 @@ Update the __JavaScript__ tab to:
 ## Implement the payment button ##
 ### The problem
 
-When the user submits the form, lets simulate making a 2 second AJAX
+When the user submits the form, let’s simulate making a 2 second AJAX
 request to create a payment.  While the request is being made,
 we will change the __Pay__ button to say __Paying__.
 
@@ -464,7 +470,7 @@ we will change the __Pay__ button to say __Paying__.
 - Use the following to create a Promise that takes 2 seconds to resolve:
   ```js
   new Promise(function(resolve) {
-   setTimeout(function() {
+    setTimeout(function() {
       resolve(1000);
     }, 2000);
   });
@@ -484,9 +490,9 @@ we will change the __Pay__ button to say __Paying__.
   where the combinator will not be called when the passive streams emit a value.
 - [Kefir.concat](https://kefirjs.github.io/kefir/#concat) concatenates streams so events are produced in order.
   ```js
-  var a = Kefir.sequentially(100, [0, 1, 2]);
-  var b = Kefir.sequentially(100, [3, 4, 5]);
-  var abc = Kefir.concat([a, b]);
+  const a = Kefir.sequentially(100, [0, 1, 2]);
+  const b = Kefir.sequentially(100, [3, 4, 5]);
+  const abc = Kefir.concat([a, b]);
   //a:    ---0---1---2X
   //b:                ---3---4---5X
   //abc:  ---0---1---2---3---4---5X
@@ -495,11 +501,11 @@ we will change the __Pay__ button to say __Paying__.
 - [Kefir.flatMap](https://kefirjs.github.io/kefir/#flat-map) flattens a stream of
   streams to a single stream of values.
   ```js
-  var count = Kefir.sequentially(100, [1, 2, 3]);
-  var streamOfStreams = count.map( (count) => {
+  const count = Kefir.sequentially(100, [1, 2, 3]);
+  const streamOfStreams = count.map( (count) => {
       return Kefir.interval(40, count).take(4)
   });
-  var result = streamOfStreams.flatMap();
+  const result = streamOfStreams.flatMap();
   // source:      ----------1---------2---------3X
   //
   // spawned 1:             ---1---1---1---1X
@@ -508,22 +514,22 @@ we will change the __Pay__ button to say __Paying__.
   // result:      -------------1---1---1-2-1-2---2-3-2-3---3---3X
   ```
 
-  I think of this like promises' ability to resolve when an "inner" promise
+  I think of this like promises’ ability to resolve when an “inner” promise
   resolves.  For example, `resultPromise` below resolves with the `innerPromise`:
 
   ```js
-  var outerPromise = new Promise((resolve) => {
-      setTimeout(() => { resolve("outer") }, 100);
+  const outerPromise = new Promise((resolve) => {
+    setTimeout(() => { resolve("outer") }, 100);
   });
   return innerPromise = new Promise((resolve) => {
-      setTimeout(() => { resolve("inner") }, 200);
+    setTimeout(() => { resolve("inner") }, 200);
   });
-  var resultPromise = outerPromise.then(function(value){
-     // value -> "outer"
-     return innerPromise;
+  const resultPromise = outerPromise.then(function(value) {
+    // value -> "outer"
+    return innerPromise;
   });
-  resultPromise.then(function(value){
-     // value -> "inner"
+  resultPromise.then(function(value) {
+    // value -> "inner"
   })
   ```
 
@@ -548,7 +554,7 @@ Update the __JavaScript__ tab to:
 ## Disable the payment button while payments are pending ##
 ### The problem
 
-Lets prevent the __Pay__ button from being clicked while the payment is processing.
+Let’s prevent the __Pay__ button from being clicked while the payment is processing.
 
 ### What you need to know
 
@@ -570,6 +576,8 @@ Update the __JavaScript__ tab to:
 
 When complete, you should have a working credit card payment form like the following JS Bin:
 
-<a class="jsbin-embed" href="https://jsbin.com/riyuzuh/2/embed?output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/woxuhu/4/embed?html,js,output">
+  Finished Credit Card Guide (Advanced) on jsbin.com
+</a>
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.1.1"></script>
+<script src="https://static.jsbin.com/js/embed.min.js?4.1.4"></script>
