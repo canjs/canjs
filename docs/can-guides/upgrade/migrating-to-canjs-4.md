@@ -75,6 +75,8 @@ With __can-component__ no longer listed. Go through this process for each packag
 
 If you are using [Yarn](https://yarnpkg.com/en/) the process is almost identical. Instead of `npm outdated` use `yarn outdated`. The output looks the same as what you see above from npm. The major difference is that to install the latest version use `yarn add can-component@latest`.
 
+> If you have a `package-lock.json` or `yarn.lock` file present, you may run into issues with dependencies or sub-dependencies not being installed correctly. To be sure you have the latest versions, delete this file and re-install all dependencies once your `package.json` has been completely updated to the new packages.
+
 ## Using codemods
 
 We recommend reading this guide in full before starting on your migration, to get an understanding of the changes. Once you have, using codemods is a good way to take care of *many* of the changes described below. If you haven't already, review the [using-codemods] guide that discusses what codemods are and the [can-migrate](https://www.npmjs.com/package/can-migrate) tool.
