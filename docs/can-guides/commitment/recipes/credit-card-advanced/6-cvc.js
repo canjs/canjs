@@ -1,4 +1,4 @@
-var viewModel = {
+const viewModel = {
 	amount: Kefir.constant(1000),
 
 	userCardNumber: Kefir.emitterProperty(),
@@ -33,7 +33,7 @@ viewModel.cvc = viewModel.userCVC;
 viewModel.cvcError = viewModel.cvc.map(validateCVC).toProperty();
 viewModel.showCVCError = showOnlyWhenBlurredOnce(viewModel.cvcError, viewModel.userCVCBlurred);
 
-var view = can.stache.from("app-view");
+const view = can.stache.from("app-view");
 
 document.body.appendChild( view(viewModel) );
 
@@ -69,7 +69,7 @@ function validateCVC(cvc) {
 }
 
 function showOnlyWhenBlurredOnce(errorStream, blurredStream) {
-	var errorEvent = errorStream.map((error) => {
+	const errorEvent = errorStream.map((error) => {
 		if (!error) {
 			return {
 				type: "valid"
@@ -82,7 +82,7 @@ function showOnlyWhenBlurredOnce(errorStream, blurredStream) {
 		}
 	});
 
-	var focusEvents = blurredStream.map((isBlurred) => {
+	const focusEvents = blurredStream.map((isBlurred) => {
 		if (isBlurred === undefined) {
 			return {};
 		}

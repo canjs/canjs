@@ -1,4 +1,4 @@
-<script type='text/stache' id='app-view'>
+<script type="text/stache" id="app-view">
 <form on:submit="pay(scope.event)">
 
   {{#if(showCardError.value)}}
@@ -13,20 +13,20 @@
     <div class="message">{{cvcError.value}}</div>
   {{/if}}
 
-  <input type='text' name='number' placeholder='Card Number'
+  <input type="text" name="number" placeholder="Card Number"
     on:input:value:to="userCardNumber.value"
-	on:blur="userCardNumberBlurred.emitter.value(true)"
-    {{#if(showCardError.value)}}class='is-error'{{/if}}/>
+    on:blur="userCardNumberBlurred.emitter.value(true)"
+    {{#if(showCardError.value)}}class="is-error"{{/if}}/>
 
-  <input type='text' name='expiry' placeholder='MM-YY'
+  <input type="text" name="expiry" placeholder="MM-YY"
   	on:input:value:to="userExpiry.value"
-	on:blur="userExpiryBlurred.emitter.value(true)"
-	{{#if(showExpiryError.value)}}class='is-error'{{/if}}/>
+    on:blur="userExpiryBlurred.emitter.value(true)"
+    {{#if(showExpiryError.value)}}class="is-error"{{/if}}/>
 
-  <input type='text' name='cvc' placeholder='CVC'
+  <input type="text" name="cvc" placeholder="CVC"
     on:input:value:to="userCVC.value"
-	on:blur="userCVCBlurred.emitter.value(true)"
-	{{#if(showCVCError.value)}}class='is-error'{{/if}}/>
+    on:blur="userCVCBlurred.emitter.value(true)"
+    {{#if(showCVCError.value)}}class="is-error"{{/if}}/>
 
   <button disabled:from="isCardInvalid.value">
   	{{#eq(paymentStatus.value.status, "pending")}}Paying{{else}}Pay{{/eq}} ${{amount.value}}
