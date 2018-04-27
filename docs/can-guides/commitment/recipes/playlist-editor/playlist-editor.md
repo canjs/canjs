@@ -427,7 +427,7 @@ Update the template in the __HTML__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-drag.js
-@highlight 47-49,only
+@highlight 47-49,52,only
 
 
 ## Drop videos
