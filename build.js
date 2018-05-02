@@ -45,25 +45,13 @@ var exportsMap = {
 stealTools.export({
 	steal: {
 		config: __dirname + "/package.json!npm",
-		main: "can/all"
+		main: "can/can"
 	},
 	options: {
 		useNormalizedDependencies: false,
 		verbose: true
 	},
 	outputs: {
-		"all": {
-			modules: ["can/all"],
-			format: "global",
-			dest: globalJS.dest(__dirname+"/dist/global/can.all.js"),
-			useNormalizedDependencies: true,
-			normalize: function(depName, depLoad, curName, curLoad, loader){
-				return baseNormalize.call(this, depName, depLoad, curName, curLoad, loader, true);
-			},
-			ignore: ignoreModules,
-			exports: exportsMap,
-			removeDevelopmentCode: false
-		},
 		"core": {
 			modules: ["can/can"],
 			format: "global",
