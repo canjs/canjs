@@ -9,14 +9,15 @@ export { default as DefineList } from "can-define/list/list";
 export { default as route } from "can-route";
 export { default as set } from "can-set";
 export { default as SimpleObservable } from "can-simple-observable";
-export { default as stache } from "can-stache";
+export { default as stache } from "./stache";
 export { default as encoder } from "can-attribute-encoder";
 export { default as ajax } from "can-ajax";
 export { default as globals } from "can-globals";
 export { default as Reflect } from "can-reflect";
 export { default as defineLazyValue } from "can-define-lazy-value";
 export { default as domEvents } from "can-dom-events";
-export { default as radioChange } from "can-event-dom-radiochange";
+export { default as radioChangeEvent } from "can-event-dom-radiochange";
+export { default as enterEvent } from "can-event-dom-enter";
 export { default as makeInterfaceValidator } from "can-validate-interface";
 export { default as viewModel } from "can-view-model";
 

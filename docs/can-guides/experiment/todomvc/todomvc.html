@@ -218,6 +218,8 @@ can.route.data = appVM;
 can.route.register("{filter}");
 can.route.start();
 
+can.domEvents.addEvent(can.domEventEnter);
+
 var fragment = template(appVM);
 document.body.appendChild(fragment);
 </script>
