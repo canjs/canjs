@@ -1,4 +1,4 @@
-var viewModel = {
+const viewModel = {
 	amount: Kefir.constant(1000),
 
 	userCardNumber: Kefir.emitterProperty(),
@@ -25,7 +25,7 @@ viewModel.expiry = viewModel.userExpiry.map((expiry) => {
 viewModel.expiryError = viewModel.expiry.map(validateExpiry).toProperty();
 viewModel.showExpiryError = showOnlyWhenBlurredOnce(viewModel.expiryError, viewModel.userExpiryBlurred);
 
-var view = can.stache.from("app-view");
+const view = can.stache.from("app-view");
 
 document.body.appendChild( view(viewModel) );
 
@@ -49,7 +49,7 @@ function validateExpiry(expiry) {
 }
 
 function showOnlyWhenBlurredOnce(errorStream, blurredStream) {
-	var errorEvent = errorStream.map((error) => {
+	const errorEvent = errorStream.map((error) => {
 		if (!error) {
 			return {
 				type: "valid"
@@ -62,7 +62,7 @@ function showOnlyWhenBlurredOnce(errorStream, blurredStream) {
 		}
 	});
 
-	var focusEvents = blurredStream.map((isBlurred) => {
+	const focusEvents = blurredStream.map((isBlurred) => {
 		if (isBlurred === undefined) {
 			return {};
 		}

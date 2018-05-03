@@ -88,13 +88,13 @@ Options
 Runs all the `can-migrate` transforms for upgrading to CanJS 4.0 on the files that match the `**/*.js` glob:
 
 ```bash
-can-migrate --apply **/*.js --can-version 4
+can-migrate '**/*.js' --can-version 4 --apply
 ```
 
 Runs the `can-stache/route-helpers` transform on the files that match the `**/*.js` glob:
 
 ```bash
-can-migrate --apply **/*.js --transform can-stache/route-helpers.js
+can-migrate '**/*.js' --transform can-stache/route-helpers.js --apply
 ```
 
 You can find a [complete list of version-4 transforms on GitHub](https://github.com/canjs/can-migrate/tree/master/src/transforms/version-4).
@@ -106,7 +106,7 @@ You can find a [complete list of version-4 transforms on GitHub](https://github.
 To run [all of the version-4/can-define transforms](https://github.com/canjs/can-migrate/tree/master/src/transforms/version-4/can-define) listed below:
 
 ```bash
-can-migrate -a **/*.js -t version-4/can-define/
+can-migrate '**/*.js' -t version-4/can-define/ -a
 ```
 
 #### default
@@ -114,7 +114,7 @@ can-migrate -a **/*.js -t version-4/can-define/
 Running this transform:
 
 ```bash
-can-migrate -a **/*.js -t version-4/can-define/default.js
+can-migrate '**/*.js' -t version-4/can-define/default.js -a
 ```
 
 …will transform the following:
@@ -148,7 +148,7 @@ const VM = DefineMap.extend({
 Running this transform:
 
 ```bash
-can-migrate -a **/*.js -t version-4/can-define/for-each.js
+can-migrate '**/*.js' -t version-4/can-define/for-each.js -a
 ```
 
 …will transform code like this:
@@ -198,7 +198,7 @@ const VM = DefineMap.extend({
 To run [all of the version-4/can-queues transforms](https://github.com/canjs/can-migrate/tree/master/src/transforms/version-4/can-queues) listed below:
 
 ```bash
-can-migrate -a **/*.js -t version-4/can-queues/
+can-migrate '**/*.js' -t version-4/can-queues/ -a
 ```
 
 #### batch
@@ -206,7 +206,7 @@ can-migrate -a **/*.js -t version-4/can-queues/
 Running this transform:
 
 ```bash
-can-migrate -a **/*.js -t version-4/can-queues/batch.js
+can-migrate '**/*.js' -t version-4/can-queues/batch.js -a
 ```
 
 …will transform the following:
@@ -238,7 +238,7 @@ queues.batch.stop();
 To run [all of the version-4/can-route transforms](https://github.com/canjs/can-migrate/tree/master/src/transforms/version-4/can-route) listed below:
 
 ```bash
-can-migrate -a **/*.js -t version-4/can-route/
+can-migrate '**/*.js' -t version-4/can-route/ -a
 ```
 
 #### template
@@ -246,7 +246,7 @@ can-migrate -a **/*.js -t version-4/can-route/
 Running this transform:
 
 ```bash
-can-migrate -a **/*.js -t version-4/can-route/template.js
+can-migrate '**/*.js' -t version-4/can-route/template.js -a
 ```
 
 …will transform the following:
@@ -266,7 +266,7 @@ can.route("{page}", { page: "home" });
 Running this transform:
 
 ```bash
-can-migrate -a **/*.js -t version-4/can-route/register.js
+can-migrate '**/*.js' -t version-4/can-route/register.js -a
 ```
 
 …will transform the following:
@@ -286,7 +286,7 @@ can.route.register("{page}", { page: "home" });
 Running this transform:
 
 ```bash
-can-migrate -a **/*.js -t version-4/can-route/start.js
+can-migrate '**/*.js' -t version-4/can-route/start.js -a
 ```
 
 …will transform the following:
@@ -306,7 +306,7 @@ can.route.start();
 To run [all of the version-4/can-stache transforms](https://github.com/canjs/can-migrate/tree/master/src/transforms/version-4/can-stache) listed below:
 
 ```bash
-can-migrate -a **/*.js -t version-4/can-stache/
+can-migrate '**/*.js' -t version-4/can-stache/ -a
 ```
 
 #### attr-from
@@ -314,7 +314,7 @@ can-migrate -a **/*.js -t version-4/can-stache/
 Running this transform:
 
 ```bash
-can-migrate -a **/*.js -t version-4/can-stache/attr-from.js
+can-migrate '**/*.js' -t version-4/can-stache/attr-from.js -a
 ```
 
 …will transform the following:
@@ -352,7 +352,7 @@ can-migrate -a **/*.js -t version-4/can-stache/attr-from.js
 Running this transform:
 
 ```bash
-can-migrate -a **/*.js -t version-4/can-stache/console-log.js
+can-migrate '**/*.js' -t version-4/can-stache/console-log.js -a
 ```
 
 …will transform the following:
@@ -372,7 +372,7 @@ can-migrate -a **/*.js -t version-4/can-stache/console-log.js
 Running this transform:
 
 ```bash
-can-migrate -a **/*.js -t version-4/can-stache/route-helpers.js
+can-migrate '**/*.js' -t version-4/can-stache/route-helpers.js -a
 ```
 
 …will transform the following:
@@ -404,7 +404,7 @@ const routeHelpers = require('can-stache-route-helpers');
 Running this transform:
 
 ```bash
-can-migrate -a **/*.js -t version-4/can-stache/scope.js
+can-migrate '**/*.js' -t version-4/can-stache/scope.js -a
 ```
 
 …will transform the following:

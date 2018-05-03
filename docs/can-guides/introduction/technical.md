@@ -11,8 +11,7 @@
 CanJS supports:
 
  - Latest Chrome, Firefox, Edge, Safari
- - IE9+
- - iOS Safari 10+
+ - iOS Safari 11+
  - NodeJS 6+ with [can-vdom] as a document.
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/canjs.svg)](https://saucelabs.com/u/canjs)

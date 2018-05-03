@@ -1,21 +1,21 @@
 // 60 = 2π
 const base60ToRadians = (base60Number) =>
-2 * Math.PI * base60Number / 60;
+  2 * Math.PI * base60Number / 60;
 
 can.Component.extend({
   tag: "analog-clock",
-  view: can.stache(`<canvas id="analog"  width="255" height="255"></canvas>`),
+  view: '<canvas id="analog" width="255" height="255"></canvas>',
   ViewModel: {
     connectedCallback(element) {
-      const canvas = element.firstChild.getContext('2d');
+      const canvas = element.firstChild.getContext("2d");
       const diameter = 255;
       const radius = diameter/2 - 5;
       const center = diameter/2;
 
       const drawNeedle = (length, base60Distance, styles) => {
         Object.assign(canvas, styles);
-        const x = center + length * Math.sin(base60ToRadians(base60Distance)),
-          y = center + length * -1 * Math.cos(base60ToRadians(base60Distance));
+        const x = center + length * Math.sin(base60ToRadians(base60Distance));
+        const y = center + length * -1 * Math.cos(base60ToRadians(base60Distance));
         canvas.beginPath();
         canvas.moveTo(center, center);
         canvas.lineTo(x, y);
@@ -66,45 +66,43 @@ can.Component.extend({
             strokeStyle: "#42F",
             lineCap: "round"
           }
-        );	
-    });
-});
-
-const DigitalClockVM = can.DefineMap.extend("DigitalClockVM",{
-  time: Date,
-  hh(){
-    const hr = this.time.getHours() % 12;
-    return hr === 0 ? 12 : hr;
-  },
-  mm(){
-    return this.time.getMinutes().toString().padStart(2,"00");
-  },
-  ss(){
-    return this.time.getSeconds().toString().padStart(2,"00");
+        );
+      });
+    }
   }
 });
 
 can.Component.extend({
   tag: "digital-clock",
-  view: can.stache(`{{hh()}}:{{mm()}}:{{ss()}}`),
-  ViewModel: DigitalClockVM
-});
-
-const ClockControlsVM = can.DefineMap.extend("ClockControlsVM",{
-  time: {Default: Date, Type: Date},
-  init(){
-    setInterval(() => {
-      this.time = new Date();
-    },1000);
+  view: "{{hh()}}:{{mm()}}:{{ss()}}",
+  ViewModel: {
+    time: Date,
+    hh() {
+      const hr = this.time.getHours() % 12;
+      return hr === 0 ? 12 : hr;
+    },
+    mm() {
+      return this.time.getMinutes().toString().padStart(2, "00");
+    },
+    ss() {
+      return this.time.getSeconds().toString().padStart(2, "00");
+    }
   }
 });
 
 can.Component.extend({
   tag: "clock-controls",
-  ViewModel: ClockControlsVM,
-  view: can.stache(`
+  ViewModel: {
+    time: {Default: Date, Type: Date},
+    init() {
+      setInterval(() => {
+        this.time = new Date();
+      }, 1000);
+    }
+  },
+  view: `
     <p>{{time}}</p>
     <digital-clock time:from="time"/>
     <analog-clock time:from="time"/>
-  `)
+  `
 });
