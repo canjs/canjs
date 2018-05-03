@@ -9,7 +9,7 @@ export { default as define } from "can-define";
 export { default as DefineMap } from "can-define/map/map";
 export { default as DefineList } from "can-define/list/list";
 export { default as route } from "can-route";
-export { default as set } from "can-set";
+export { default as QueryLogic } from "can-query-logic";
 export { default as SimpleObservable } from "can-simple-observable";
 export { default as stache } from "can-stache";
 export { default as encoder } from "can-attribute-encoder";

@@ -1,4 +1,4 @@
-var set = require("can-set");
+var set = require("can-set-legacy");
 var DefineMap = require("can-define/map/map");
 var DefineList = require("can-define/list/list");
 var superMap = require("can-connect/can/super-map/");

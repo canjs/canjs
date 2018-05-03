@@ -6,7 +6,7 @@ require("can-connect/all");
 require("can-define/map/map");
 require("can-define/list/list");
 require("can-route");
-require("can-set");
+require("can-query-logic");
 require("can-simple-observable");
 require("can-stache");
 require("can-stache-route-helpers");
