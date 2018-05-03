@@ -16,7 +16,7 @@
 	  };
 	}
 </script>
-<script src="../../../../dist/global/can.all.js"></script>
+<script src="../../../../dist/global/can.js"></script>
 
 <script type='text/stache' id='todo-create-template'>
 <input id="new-todo"
@@ -217,6 +217,8 @@ var appVM = new AppVM();
 can.route.data = appVM;
 can.route.register("{filter}");
 can.route.start();
+
+can.domEvents.addEvent(can.domEventEnter);
 
 var fragment = template(appVM);
 document.body.appendChild(fragment);

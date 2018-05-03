@@ -1,27 +1,60 @@
-var can = require("can-util/namespace");
+// Core
+export { default as define } from "can-define";
+export { default as DefineMap } from "can-define/map/map";
+export { default as DefineList } from "can-define/list/list";
 
-require("can-assign");
-require("can-component");
-require("can-connect/all");
-require("can-define/map/map");
-require("can-define/list/list");
-require("can-route");
-require("can-query-logic");
-require("can-simple-observable");
-require("can-stache");
-require("can-stache-route-helpers");
-require("can-stache-bindings");
-require("can-attribute-encoder");
-require("can-ajax");
-require("can-globals");
-require("can-reflect");
-require("can-define-lazy-value");
-require("can-dom-events");
-require("can-dom-events/helpers/add-jquery-events");
-require("can-event-dom-enter/add-global/add-global");
-require("can-event-dom-radiochange");
-require("can-parse-uri");
-require("can-validate-interface");
-require("can-view-model");
+export { default as fixture } from "can-fixture";
+export { default as realtimeRestModel } from "can-realtime-rest-model";
+export { default as restModel } from "rest-model";
+export { default as superModel } from "super-model";
 
-module.exports = can;
+export { default as Component } from 'can-component';
+export { default as stache } from "./stache";
+
+export { default as stacheRouteHelpers } from "can-stache-route-helpers";
+export { default as route } from "can-route";
+
+// Infrastruture (gets loaded with core)
+// observable
+export { default as SimpleObservable } from "can-simple-observable";
+// utility
+export { default as default, default as can } from "can-namespace";
+export { default as assign } from "can-assign";
+export { default as attributeEncoder } from "can-attribute-encoder";
+export { default as ajax } from "can-ajax";
+export { default as globals } from "can-globals";
+export { default as Reflect } from "can-reflect";
+export { default as defineLazyValue } from "can-define-lazy-value";
+export { default as domEvents } from "can-dom-events";
+export { default as radioChangeEvent } from "can-event-dom-radiochange";
+export { default as enterEvent } from "can-event-dom-enter";
+export { default as makeInterfaceValidator } from "can-validate-interface";
+export { default as viewModel } from "can-view-model";
+// data
+export { default as connect } from "can-connect/all";
+export { default as memoryStore } from "can-memory-store";
+
+// Ecosystem
+export { default as connectFeathers } from "can-connect-feathers";
+export { default as debug } from "can-debug";
+export { default as defineBackup } from "can-define-backup";
+export { default as defineStream } from "can-define-stream";
+export { default as defineStreamKefir } from "can-define-stream-kefir";
+export { default as defineValidateValidatejs } from "can-define-validate-validatejs";
+export { default as kefir } from "can-kefir";
+export { default as ndjsonStream } from "can-ndjson-stream";
+export { default as observe } from "can-observe";
+export { default as stacheConverters } from "can-stache-converters";
+export { default as validate } from "can-validate";
+export { default as validateValidatejs } from "can-validate-validatejs";
+export { default as stream } from "can-stream";
+export { default as streamKefir } from "can-stream-kefir";
+export { default as Zone } from "can-zone";
+export { default as reactViewModel } from "react-view-model";
+
+// Legacy
+export { default as compute } from "can-compute";
+export { default as CanMap } from "can-map";
+export { default as CanList } from "can-list";
+export { default as canMapDefine } from "can-map-define";
+export { default as set } from "can-set-legacy";
