@@ -33,6 +33,7 @@ export { default as kefir } from "can-kefir";
 export { default as ndjsonStream } from "can-ndjson-stream";
 export { default as observe } from "can-observe";
 export { default as stacheConverters } from "can-stache-converters";
+export { default as stacheRouteHelpers } from "can-stache-route-helpers";
 export { default as validate } from "can-validate";
 export { default as validateValidatejs } from "can-validate-validatejs";
 export { default as stream } from "can-stream";
