@@ -37,7 +37,7 @@ publish-docs:
 	git checkout origin/gh-pages -- CNAME
 	git checkout origin/gh-pages -- release/
 	git commit -m "Publish docs"
-	git push -f origin gh-pages
+	git push -f git@github.com:canjs/next gh-pages
 	git rm -q -r --cached node_modules
 	git checkout -
 	git branch -D gh-pages

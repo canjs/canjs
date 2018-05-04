@@ -12,31 +12,32 @@ Each module is part of an independent package, so you
 should install the ones you use directly:
 
 ```
-npm install can-component can-compute can-connect can-define can-route can-route-pushstate can-set can-stache can-stache-bindings --save
+npm install cna-value can-component can-realtime-rest-model can-define can-route can-route-pushstate --save
 ```
 
 
 Let’s explore each module a bit more.
 
-## can-compute
+## can-value
 
-[can-compute]s represent an observable value.  A compute can contain its
+[can-value]s represent an observable value.  A compute can contain its
 own value and notify listeners of changes like:
 
 ```js
-import compute from 'can-compute';
 
-var name = compute("Justin");
+import value from 'can-value';
+
+var name = value.fromValue("Justin");
 
 // read the value
-name() //-> "Justin"
+name.value //-> "Justin"
 
-name.on("change", function(ev, newVal, oldVal){
+name.on(function(newVal, oldVal){
 	newVal //-> "Matthew"
 	oldVal //-> "Justin"
 });
 
-name("Matthew");
+name.value = "Matthew";
 ```
 
 More commonly, a compute derives its value from other observables.  The following
@@ -46,20 +47,20 @@ compute:
 ```js
 import DefineMap from 'can-define/map/map';
 import DefineList from 'can-define/list/list';
-import compute from 'can-compute';
+import value from 'can-value';
 
 var person = new DefineMap({first: "Justin", last: "Meyer"}),
 	hobbies = new DefineList(["js","bball"]),
-	age = compute(33);
+	age = value.fromValue(33);
 
-var info = compute(function(){
+var info = value.returnedBy(function(){
 	return person.first +" "+ person.last+ " is "+age()+
 		"and like "+hobbies.join(", ")+".";
 });
 
-info() //-> "Justin Meyer is 33 and likes js, bball."
+info.value //-> "Justin Meyer is 33 and likes js, bball."
 
-info.on("change", function(ev, newVal){
+info.on(function(ev, newVal){
 	newVal //-> "Justin Meyer is 33 and likes js."
 });
 

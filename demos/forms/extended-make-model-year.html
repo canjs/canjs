@@ -4,25 +4,25 @@
 var Component = require("can-component");
 var ajax = require("can-ajax");
 var fixture = require("can-fixture");
-var set = require("can-set");
+var QueryLogic = require("can-query-logic");
 
 fixture.delay = 1200;
 
 fixture("/makes", fixture.store([
 	{ id: "1", name: "Ford" },
 	{ id: "2", name: "Nissan" }
-], new set.Algebra(
-	set.props.id("id")
-)));
+],
+{ identity: ["id"] }
+));
 
 fixture("/models", fixture.store([
     { id: "1", makeId: "1", name: "Mustang", years: [ 2013, 2014 ] },
     { id: "2", makeId: "1", name: "Focus", years: [ 2013, 2014 ] },
     { id: "3", makeId: "2", name: "Altima", years: [ 2013, 2014 ] },
     { id: "4", makeId: "2", name: "Leaf", years: [ 2013, 2014 ] },
-], new set.Algebra(
-	set.props.id("id")
-)));
+],
+{ identity: ["id"] }
+));
 
 fixture("/vehicles", fixture.store([
     {id: 1, modelId: "1", year: "2013", name: "2013 Mustang", thumb: "http://mustangsdaily.com/blog/wp-content/uploads/2012/07/01-2013-ford-mustang-gt-review-585x388.jpg"},
@@ -33,9 +33,9 @@ fixture("/vehicles", fixture.store([
     {id: 6, modelId: "3", year: "2014", name: "2014 Altima", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/01-2013-nissan-altima-ny.jpg"},
     {id: 7, modelId: "4", year: "2013", name: "2013 Leaf", thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/01-2013-nissan-altima-ny.jpg"},
     {id: 8, modelId: "4", year: "2014", name: "2014 Leaf", thumb: "http://images.thecarconnection.com/med/2013-nissan-leaf_100414473_m.jpg"},
-], new set.Algebra(
-	set.props.id("id")
-)));
+],
+{ identity: ["id"] }
+));
 
 Component.extend({
 	tag: "my-mmy",
@@ -121,7 +121,7 @@ Component.extend({
 				return ajax({
 					type: "GET",
 					url: "/models",
-					data: { makeId: makeId }
+					data: { filter: { makeId: makeId } }
 				}).then(function(resp) {
 					return resp.data;
 				});
@@ -169,7 +169,7 @@ Component.extend({
 					ajax({
 						type: "GET",
 						url: "/vehicles",
-						data: { modelId: modelId, year: year }
+						data: { filter: { modelId: modelId, year: year } }
 					}).then(function(resp) {
 						resolve(resp.data);
 					});
