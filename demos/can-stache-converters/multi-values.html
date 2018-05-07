@@ -44,10 +44,7 @@ select[multiple] {
 </ul>
 </script>
 <script src="../../node_modules/steal/steal.js" deps-bundle id="demo-source" main="@empty">
-var stache = require("can-stache");
-var DefineMap = require("can-define/map/map");
-var DefineList = require("can-define/list/list");
-require("can-stache-converters");
+import { DefineList, DefineMap, stache, stacheConverters } from "can";
 
 var template = stache.from("demo-html");
 var map = new DefineMap({

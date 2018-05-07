@@ -17,10 +17,7 @@
 </div>
 </script>
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty">
-var DefineMap = require("can-define/map/map");
-var stache = require("can-stache");
-require("can-define/list/list");
-require("can-stache-converters");
+import { DefineList, DefineMap, stache, stacheConverters } from "can";
 
 var template = stache.from("demo-html");
 
