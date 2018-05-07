@@ -67,7 +67,7 @@ Component.extend({
 </script>
 
 ```js
-import Component from "can-component";
+import {Component} from "can";
 
 Component.extend({
     tag: "my-counter",

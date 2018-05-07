@@ -86,26 +86,21 @@
 </script>
 
 <script>
-var todoAlgebra = new can.set.Algebra(
-  can.set.props.boolean("complete"),
-  can.set.props.id("id"),
-  can.set.props.sort("sort")
-);
+
+var Todo = can.DefineMap.extend("Todo",{
+  id: {type: "number", identity: true},
+  name: "string",
+  complete: {type: "boolean", default: false}
+});
 
 var todoStore = can.fixture.store([
   { name: "mow lawn", complete: false, id: 5 },
   { name: "dishes", complete: true, id: 6 },
   { name: "learn canjs", complete: false, id: 7 }
-], todoAlgebra);
+], Todo);
 
 can.fixture("/api/todos", todoStore);
 can.fixture.delay = 1000;
-
-var Todo = can.DefineMap.extend({
-  id: "number",
-  name: "string",
-  complete: {type: "boolean", default: false}
-});
 
 Todo.List = can.DefineList.extend({
   "#": Todo,
@@ -136,12 +131,10 @@ Todo.List = can.DefineList.extend({
   }
 });
 
-can.connect.superMap({
+can.superModel({
   url: "/api/todos",
   Map: Todo,
-  List: Todo.List,
-  name: "todo",
-  algebra: todoAlgebra
+  List: Todo.List
 });
 
 var TodoCreateVM = can.DefineMap.extend({
@@ -195,7 +188,7 @@ var AppVM = can.DefineMap.extend({seal: false},{
     if(!this.filter) {
       return Todo.getList({});
     } else {
-      return Todo.getList({complete: this.filter === "complete"});
+      return Todo.getList({filter: {complete: this.filter === "complete"}});
     }
   },
   todosList: {
