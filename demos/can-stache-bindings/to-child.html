@@ -4,12 +4,7 @@
 </script>
 
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id='demo-source'>
-import "can-view-autorender";
-import "can-stache-bindings";
-import Component from "can-component";
-import DefineList from "can-define/list/list";
-import DefineMap from "can-define/map/map";
-import stache from "can-stache";
+import { Component, DefineList, DefineMap, stache, stacheBindings, viewAutorender } from "can";
 
 var Score = DefineMap.extend({
 	points: "number",

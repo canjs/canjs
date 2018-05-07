@@ -32,6 +32,7 @@ export { default as viewModel } from "can-view-model";
 export { default as Observation } from "can-observation";
 export { default as stacheBindings } from "can-stache-bindings";
 export { default as viewCallbacks } from "can-view-callbacks";
+export { default as queues } from "can-queues";
 
 // data
 export { default as connect } from "can-connect/all";
@@ -55,6 +56,7 @@ export { default as stream } from "can-stream";
 export { default as streamKefir } from "can-stream-kefir";
 export { default as Zone } from "can-zone";
 export { default as reactViewModel } from "react-view-model";
+export { default as viewAutorender } from "can-view-autorender";
 
 // Legacy
 export { default as compute } from "can-compute";
