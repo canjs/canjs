@@ -1,8 +1,7 @@
 <script src="../../node_modules/steal/steal.js" deps-bundle main='@empty'>
-window.can = require("can-namespace");
+import { DefineMap, Observation, can } from "can";
 
-var DefineMap = require("can-define/map/map");
-var Observation = require("can-observation");
+window.can = can;
 
 var person = new DefineMap({
     first: "Justin",
@@ -11,7 +10,7 @@ var person = new DefineMap({
 });
 
 var fullName = new Observation(function fullName(){
-    return person.first +" "+ person.last;
+    return person.first + " " + person.last;
 });
 
 fullName.on(function incrementNameChanges(){
