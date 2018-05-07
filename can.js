@@ -4,7 +4,6 @@ export { default as DefineMap } from "can-define/map/map";
 export { default as DefineList } from "can-define/list/list";
 
 export { default as fixture } from "can-fixture";
-export { default as realtimeRestModel } from "can-realtime-rest-model";
 export { default as restModel } from "can-rest-model";
 export { default as superModel } from "can-super-model";
 

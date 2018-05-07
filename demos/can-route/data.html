@@ -127,7 +127,7 @@ const AppState = DefineMap.extend({
 });
 
 // initialize and call map first, so anything binding to can.route will work correctly
-appState = new AppState();
+let appState = new AppState();
 route.data = appState;
 
 // when the data is ready, set the locations property
@@ -145,7 +145,8 @@ route.addEventListener('change', function(){
 
 let appUrl = new Observation(function() {
   // route.bindings is undocumented API; don’t use it in your app :)
-  return window.location.href + route.bindings.hashchange.get();
+	route.bindings.hashchange.get();
+  return window.location.href;
 });
 
 let template = stache.from("demo-html");
