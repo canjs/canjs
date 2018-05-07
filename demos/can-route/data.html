@@ -22,15 +22,9 @@
 </script>
 
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty">
-var route = require("can-route");
-var DefineList = require("can-define/list/list");
-var DefineMap = require("can-define/map/map");
-var stache = require("can-stache");
-require("can-stache-bindings");
-var superMap = require("can-connect/can/super-map/super-map");
-var fixture = require("can-fixture");
-var Observation = require("can-observation");
-var $ = require("jquery");
+import {DefineList, DefineMap, Observation, fixture,
+	realtimeRestModel, route, stache, stacheBindings } from "can";
+import $ from "jquery";
 
 fixture("GET /locations", function(){
 	return [
@@ -48,7 +42,7 @@ fixture("GET /products", function(){
 	]
 });
 
-var Location = DefineMap.extend({
+const Location = DefineMap.extend({
 	id: "*",
 	name: "string",
 	selected: {
@@ -57,34 +51,32 @@ var Location = DefineMap.extend({
 	}
 });
 
-var LocationList = DefineList.extend({
+const LocationList = DefineList.extend({
 	"#": Location
 });
 
-var locationConnect = superMap({
-	url: "/locations",
+realtimeRestModel({
 	Map: Location,
 	List: LocationList,
-	name: "location"
+	url: "/locations"
 });
 
-var Product = DefineMap.extend({
+const Product = DefineMap.extend({
 	id: "*",
 	name: "string"
 });
 
-var ProductList = DefineList.extend({
+const ProductList = DefineList.extend({
 	"#": Product
 });
 
-var productConnection = superMap({
-	url: "/products",
+realtimeRestModel({
 	Map: Product,
 	List: ProductList,
-	name: "product"
+	url: "/products"
 });
 
-var AppState = DefineMap.extend({
+const AppState = DefineMap.extend({
 	route: "string",
 	products: {
 		// don't serialize this property at all in the route
@@ -103,11 +95,11 @@ var AppState = DefineMap.extend({
 	locationIds: {
 		// comma separated list of ids
 		serialize: function(){
-			var selected = this.locations.filter(function(location){
+			let selected = this.locations.filter(function(location){
 				return location.selected;
 			});
 			if(!selected.length) return;
-			var ids = [];
+			let ids = [];
 			selected.forEach(function(item){
 				ids.push(item.id);
 			});
@@ -115,11 +107,11 @@ var AppState = DefineMap.extend({
 		},
 		// toggle selected from a comma separated list of ids
 		set: function(val){
-			var arr = val || [];
+			let arr = val || [];
 			if(typeof val === "string"){
 				arr = val.split(',')
 			}
-			for (var i = 0; i < arr.length; i++) {
+			for (let i = 0; i < arr.length; i++) {
 				arr[i] = +arr[i];
 			};
 			// for each id, toggle any matched location
@@ -151,13 +143,13 @@ route.addEventListener('change', function(){
 	console.log('something changed');
 });
 
-var appUrl = new Observation(function() {
+let appUrl = new Observation(function() {
   // route.bindings is undocumented API; don’t use it in your app :)
   return window.location.href + route.bindings.hashchange.get();
 });
 
-var template = $("#demo-html").html();
-$("#out").html( stache(template)({
+let template = stache.from("demo-html");
+$("#out").html(template({
     appState: appState,
     appUrl: appUrl,
     back: function(){
@@ -172,6 +164,5 @@ $("#out").html( stache(template)({
         return 'selected';
       }
     }
-  }) );
-
+  }));
 </script>
