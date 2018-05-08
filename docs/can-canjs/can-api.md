@@ -19,8 +19,10 @@
 
 ## Observables
 
+Define observable key-value types with [can-define/map/map]:
+
 ```js
-import {DefineMap, DefineList} from "can";
+import {DefineMap} from "can";
 
 // Define an observable Todo type.
 const Todo = DefineMap.extend("Todo",{
@@ -67,21 +69,16 @@ const Todo = DefineMap.extend("Todo",{
         this.complete != this.complete;
     }
 });
+```
 
-const TodoList = DefineList.extend("TodoList",{
-    "#": {Type: Todo},
+Create and use instances of the observable key-value types:
 
-    get complete(){
-        return this.filter({complete: true})
-    }
-})
-
+```js
 // Create a todo instance:
 var todo = new Todo({name: "Learn Observables"});
 
 // Change a property:
 todo.dueDate = new Date().getTime() + 1000*60*60;
-
 
 // Listen to changes
 var handler = function(ev, newVal, oldVal){};
@@ -105,6 +102,55 @@ todo.assign({
 });
 ```
 
+Define observable list types with [can-define/list/list]:
+
+```js
+import {DefineList} from "can";
+
+// Define an observable TodoList type
+const TodoList = DefineList.extend("TodoList",{
+
+    // Specify the behavior of items in the TodoList
+    "#": {Type: Todo},
+
+    // Create a computed `complete` property
+    get complete(){
+        // Filter all complete todos
+        return this.filter({complete: true})
+    }
+})
+```
+
+Create an use instances of observable list types:
+
+```js
+// Create a todo list
+var todos = new TodoList([
+    {id: 1, name: "learn observable lists"},
+    new Todo({id: 2, name: "mow lawn", complete: true})
+])
+
+// Read the length and access items
+todos.length //-> 2
+todos[0] //-> Todo{id: 1, name: "learn observable lists"}
+
+// Read properties
+todos.complete //-> TodoList[Todo{id: 2, name: "mow lawn", complete: true}]
+
+// Listen for changes:
+todos.on("length", function(event, newLength, oldLength){})
+todos.on("add", function(event, addedItems, index){})
+todos.on("remove", function(event, removedItems, index){})
+
+// Make changes:
+todos.pop();
+
+// Call non-mutating methods
+todos.some(function(todo){
+    return todo.complete = true;
+}) //-> false
+```
+
 <details>
 <summary>Infrastructure APIs</summary>
 
@@ -118,17 +164,253 @@ const fullName = new Observation( function() {
 
 ## Data Modeling
 
-```js
-import {fixture, queryLogic,
-        restModel, realtimeRestModel,
-        superModel} from "can";
+Connect data types to a restful service with [can-rest-model]:
 
-// Define a basic restful model:
+```js
+import {restModel} from "can";
+
 const todoConnection = restModel({
     Map: Todo,
     List: Todo.List,
     url: "/api/todos/{id}"
 });
+```
+
+Retrieve, create, update and destroy data programmatically:
+
+<table>
+<tr>
+    <th>JavaScript API</th>
+    <th>Request</th>
+    <th>Response</th>
+</tr>
+<tr>
+<td>
+
+```js
+Todo.getList({
+  // Selects only the todos that match
+  filter: {
+    complete: {$in: [false, null]}
+  },
+  // Sort the results of the selection
+  sort: "-name",
+  // Paginate the sorted result
+  page: {start: 0, end: 19}
+}) //-> Promise<TodoList[]>
+```
+
+</td>
+<td>
+
+```
+GET /api/todos?
+  filter[complete][$in][]=false&
+  filter[complete][$in][]=null&
+  sort=-name&
+  page[start]=0&
+  page[end]=19
+
+
+
+
+
+```
+
+</td>
+<td>
+
+```js
+{
+  "data": [
+    {
+      "id": 20,
+      "name": "mow lawn",
+      "complete": false
+    },
+    ...
+  ]
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+Todo.get({
+  id: 5
+}) //-> Promise<Todo>
+
+
+
+```
+
+</td>
+<td>
+
+```
+GET /api/todos/5
+
+
+
+
+
+```
+
+</td>
+<td>
+
+```js
+{
+  "id": 5,
+  "name": "do dishes",
+  "complete": true
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+var todo = new Todo({
+  name: "make a model"
+})
+todo.save()  //-> Promise<Todo>
+
+
+```
+
+</td>
+<td>
+
+```
+POST /api/todos
+    {
+      "name": "make a model",
+      "complete": false
+    }
+```
+
+</td>
+<td>
+
+```js
+{
+  "id": 22,
+  "name": "make a model",
+  "complete": false
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+todo.complete = true;
+todo.save()  //-> Promise<Todo>
+
+
+
+
+```
+
+</td>
+<td>
+
+```
+PUT /api/todos/22
+    {
+      "name": "make a model",
+      "complete": true
+    }
+```
+
+</td>
+<td>
+
+```js
+{
+  "id": 22,
+  "name": "make a model",
+  "complete": true
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+todo.destroy()  //-> Promise<Todo>
+
+
+```
+
+</td>
+<td>
+
+```
+DELETE /api/todos/22
+
+
+```
+
+</td>
+<td>
+
+```
+Successful status code (2xx).
+Response body is not necessary.
+```
+
+</td>
+</tr>
+</table>
+
+Check the status of request:
+
+```js
+var todo = new Todo({ name: "make a model"});
+
+// Return if the todo hasn't been persisted
+todo.isNew()    //-> true
+
+// Listen to when any todo is created:
+Todo.on("created", function(ev, todo){});
+
+var savedPromise = todo.save();
+
+// Return if the todo is being created or updated
+todo.isSaving() //-> true
+
+savedPromise.then(function(){
+    todo.isNew() //-> false
+    todo.isSaving() //-> false
+
+    var destroyedPromise = todo.destroy();
+
+    // Return if the todo is being destroyed
+    todo.isDestroying() //-> true
+
+    destroyedPromise.then(function(){
+        todo.isDestroying() //-> false
+    })
+});
+```
+
+
+Connect data types to a restful service and have CanJS automatically manage
+adding and removing items from lists with [can-realtime-rest-model]:
+
+```js
+import {realtimeRestModel} from "can";
 
 // Define a real time restful model
 const todoConnection = realtimeRestModel({
@@ -136,6 +418,7 @@ const todoConnection = realtimeRestModel({
     List: Todo.List,
     url: "/api/todos/{id}"
 });
+
 // Update instances and lists from server-side events:
 socket.on('todo created', (todo) => {
     todoConnection.createInstance(order);
@@ -144,78 +427,730 @@ socket.on('todo created', (todo) => {
 }).on('todo removed', (todo) => {
     todoConnection.destroyInstance(order);
 });
+```
 
-// Define a real time restful model with fall-through
-// localStorage caching
-const todoConnection = superModel({
-    Map: Todo,
-    List: Todo.List,
-    url: "/api/todos/{id}"
-});
+Simulate a service layer where you can create, retrieve, update and delete (CRUD)
+records:
 
+```js
+import {fixture} from "can";
 
-// Get promise that resolves to a `TodoList` of `Todo` instances
-// ======>
-// GET /api/todos?
-//      filter[complete][$in][]=false&
-//      filter[complete][$in][]=null&
-//      sort=-name&
-//      page[start]=0&
-//      end=19
-// <======
-// {data: [{id: 1, name: "mow lawn", ...}, ...]}
-Todo.getList({
-    // Selects only the todos that match.
-    filter: {
-        complete: {$in: [false, null]}
-    },
-    // Sort the results of the selection
-    sort: "-name",
-    // Selects a range of the sorted result
-    page: {start: 0, end: 19}
-});
+var todosStore = fixture.store([
+    {id: 0, name: "use fixtures", complete: false}
+], Todo);
 
-// Get a promise that resolves to a single `Todo` by id
-Todo.get({id: 5});
-
-
-var todo = new Todo({name: "Learn CanJS"});
-// Check if a todo has not been persisted to the server
-todo.isNew() //-> true
-
-// Create a model on the server.
-// POST /api/todos {name: "Learn CanJS", complete: false, ...}
-todo.save()
-
-// Update a model on the server.
-// PUT /api/todos/15 {name: "Learn CanJS", complete: true, ...}
-todo.complete = true;
-todo.save();
-
-// Check if a model is saving
-todo.isSaving() //-> Boolean
-
-// Delete a model
-// DELETE /api/todos/15
-todo.destroy()
-// Check if a model is being destroyed
-todo.isDestroying() //-> Boolean
+fixture("/api/todos/{id}", todosStore);
 ```
 
 ## Views
+
+Render a template that updates the page when any data changes using [can-stache]:
+
+```js
+import {stache} from "can";
+
+// Create a template / view
+var view = stache(`<p>I need to {{name}}</p>`);
+
+var todo = new Todo({name: "learn views"});
+
+// Render the template into document fragment
+var fragment = view(todo);
+
+// Insert fragment in the page
+document.body.appendChild(fragment);
+```
+
+Common [can-stache] tags and built in helpers:
+
+<table>
+<tr>
+    <th>View</th>
+    <th>Data</th>
+    <th>Result</th>
+</tr>
+<tr>
+<td>
+
+```html
+<p>{{value}}</p>
+```
+
+</td>
+<td>
+
+```js
+{value: "<b>esc</b>"}
+```
+
+</td>
+<td>
+
+```html
+<p>&gt;b&lt;esc&gt;/b&lt;</p>
+```
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+<div class="code-toolbar"><pre class=" line-numbers language-html"><code class=" language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>&#123;{{value}}}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><div class="toolbar"><div class="toolbar-item"><a>Copy</a></div></div></div>
+
+</td>
+<td>
+
+```js
+{value: "<b>unescape</b>"}
+```
+
+</td>
+<td>
+
+```html
+<p><b>unescape</b></p>
+```
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+```html
+<p>
+  {{# if( value ) }}
+    Hi
+  {{else}}
+    Bye
+  {{/ if }}
+</p>
+```
+
+</td>
+<td>
+
+```js
+{value: true}
+
+
+
+
+
+
+
+```
+
+</td>
+<td>
+
+```html
+<p>
+
+     Hi  
+
+</p>
+
+
+
+```
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+```html
+<p>
+  {{# if( promise.isPending ) }}
+    Pending
+  {{/ if }}
+  {{# if( promise.isRejected ) }}
+    Rejected {{promise.reason}}
+  {{/ if }}
+  {{# if( promise.isResolved ) }}
+    Resolved {{promise.value}}
+  {{/ if }}
+</p>
+```
+
+</td>
+<td>
+
+```js
+{
+  promise:
+    Promise.resolve("Yo")
+}
+
+
+
+
+
+
+
+
+```
+
+</td>
+<td>
+
+```html
+<p>
+
+     Resolved Yo
+
+</p>
+
+
+
+
+
+
+
+```
+
+</td>
+</tr>
+
+
+<tr>
+<td>
+
+```html
+<ul>
+  {{# each( todos, todo=value ) }}
+    <li>
+      {{todo.name}}-{{../owner}}
+    </li>
+  {{/ each }}
+</ul>
+
+
+```
+
+</td>
+<td>
+
+```js
+{
+  todos: [
+    {name: "lawn"},
+    {name: "dishes"}
+  ],
+  owner: "Justin"
+}
+
+
+```
+
+</td>
+<td>
+
+```html
+<ul>
+  <li>
+    lawn-Justin  
+  <li>
+  <li>
+    dishes-Justin  
+  <li>
+</ul>
+```
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+```html
+<ul>
+  {{# each( todos, todo=value ) }}
+    <li> ... </li>
+  {{else}}
+    <li>No todos</li>
+  {{/ each }}
+</ul>
+```
+
+</td>
+<td>
+
+```js
+{
+  todos: [],
+  owner: "Justin"
+}
+
+
+
+
+```
+
+</td>
+<td>
+
+```html
+<ul>
+
+  <li>No todos</li>
+
+</ul>
+
+
+
+```
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+```html
+<p>
+  {{# eq(value,22) }}
+    YES
+  {{else}}
+    NO
+  {{/ eq }}
+</p>
+```
+
+</td>
+<td>
+
+```js
+{
+  value: 22
+}
+
+
+
+
+
+```
+
+</td>
+<td>
+
+```html
+<p>
+
+     YES  
+
+</p>
+
+
+
+```
+
+</td>
+</tr>
+
+
+<tr>
+<td>
+
+```html
+<p>
+  {{# with(value) }}
+    {{first}} {{last}}
+  {{/ with }}
+</p>
+
+
+```
+
+</td>
+<td>
+
+```js
+{
+  value: {
+    first: "Bohdi",
+    last: "Meyer"
+  }
+}
+
+```
+
+</td>
+<td>
+
+```html
+<p>
+
+     Bohdi Meyer  
+
+</p>
+
+
+```
+
+</td>
+</tr>
+
+</table>
+
+Common [can-stache] expressions:
+
+<table>
+<tr>
+    <th>View</th>
+    <th>Data</th>
+    <th>Result</th>
+</tr>
+<tr>
+<td>
+
+```html
+<p>
+  {{# with(name) }}
+    {{first}} {{../age}}
+  {{/ with}}
+</p>
+
+
+```
+
+</td>
+<td>
+
+```js
+{
+  name: {
+    first: "Ramiya"
+  },
+  age: 3
+}
+```
+
+</td>
+<td>
+
+```html
+<p>
+
+     Ramiya 3  
+
+</p>
+
+
+```
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+```html
+<p>{{ [key] }}</p>
+
+
+
+
+```
+
+</td>
+<td>
+
+```js
+{
+  key: "height",
+  height: 71
+}
+```
+
+</td>
+<td>
+
+```html
+<p>71</p>
+
+
+
+
+```
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+```html
+<p>{{ add(num, 2) }}</p>
+
+
+
+
+
+
+```
+
+</td>
+<td>
+
+```js
+{
+  add(v1, v2){
+    return v1+v2;
+  },
+  num: 3
+}
+```
+
+</td>
+<td>
+
+```html
+<p>5</p>
+
+
+
+
+
+
+```
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+```html
+<p>{{ add(v1=num v2=2) }}</p>
+
+
+
+
+
+
+```
+
+</td>
+<td>
+
+```js
+{
+  add(vals){
+    return vals.v1+vals.v2;
+  },
+  num: 3
+}
+```
+
+</td>
+<td>
+
+```html
+<p>5</p>
+
+
+
+
+
+
+```
+
+</td>
+</tr>
+
+
+
+
+
+</table>
+
+Listen to events on elements, read data, write data, or cross-bind data on elements with [can-stache-bindings]:
+
+<table>
+<tr>
+    <th>View</th>
+    <th>Roughly Equivalent Code</th>
+</tr>
+
+<tr>
+<td>
+
+```js
+<input on:change='todo.method()'/>
+```
+
+</td>
+
+<td>
+
+```js
+input.onchange = todo.method;
+```
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+```js
+<input on:name:by:todo='todo.method()'/>
+```
+
+</td>
+
+<td>
+
+```js
+todo.on("name",todo.method);
+```
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+```js
+<input value:from='todo.name'/>
+
+
+
+```
+
+</td>
+
+<td>
+
+```js
+todo.on("name",()=>{
+  input.value = todo.name;
+});
+```
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+```js
+<input value:to='todo.name'/>
+
+
+
+```
+
+</td>
+
+<td>
+
+```js
+input.addEventListener("change",()=>{
+  todo.name = input.value;
+});
+```
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+```js
+<input on:input:value:to='todo.name'/>
+
+
+
+```
+
+</td>
+
+<td>
+
+```js
+input.addEventListener("input",()=>{
+  todo.name = input.value;
+});
+```
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+```js
+<input value:bind='name'/>
+
+
+
+
+
+
+```
+
+</td>
+
+<td>
+
+```js
+todo.on("name",()=>{
+  input.value = todo.name;
+});
+input.addEventListener("change",()=>{
+  todo.name = input.value;
+});
+```
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+```js
+<custom-element value:raw='VALUE'/>
+```
+
+</td>
+
+<td>
+
+```js
+customElement.value = "VALUE";
+```
+
+</td>
+</tr>
+
+
+
+</table>
+
+Define custom elements with [can-component]:
 
 ```js
 import {Component} from "can";
 
 Component.extend({
+
+    // Defines the tag name
     tag: "my-counter",
-    // `on:click` listens to a click.
-    // `{{count}}` reads the count from the view model
+
+    // Defines the content within the
+    // custom element.
     view: `
-        <input value:to="string-to-any(increment)"/>
         <button on:click="add(1)">+1</button>
         {{count}}
     `,
+    // Defines the `ViewModel` observable
+    // used to render the `view`. This
+    // object is used to extend `DefineMap`.
     ViewModel: {
         count: {type: "number", default: 0},
         add(increment){
@@ -225,13 +1160,70 @@ Component.extend({
 });
 ```
 
-<table>
-<tr>
-<td>
-value:to="key"
-</td>
-<td>
-blah
-</td>
-</tr>
-</table>
+Create custom elements like:
+
+```html
+<my-counter></my-counter>
+```
+
+Listen to events on custom elements, read, write or cross-bind `ViewModel` data with [can-stache-bindings]:
+
+```html
+<!-- Listens to when count changes and passes the value to doSomething -->
+<my-counter on:count="doSomething(scope.viewModel.count)"></my-counter>
+
+<!-- Starts counting at 3 -->
+<my-counter count:from="3"></my-counter>
+
+<!-- Starts counting at startCount -->
+<my-counter count:from="startCount"></my-counter>
+
+<!-- Update parentCount with the value of count -->
+<my-counter count:to="parentCount"></my-counter>
+
+<!-- Cross bind parentCount with count -->
+<my-counter count:bind="parentCount"></my-counter>
+```
+
+Pass [can-component/can-template] views to custom elements to customize layout:
+
+```js
+<my-counter count:from="5">
+  <can-template name="incrementButton" this:from="this">
+    <button on:click="add(5)">ADD 5!</button>
+  </can-template>
+  <can-template name="countDisplay">
+    You have counted to {{count}}!
+  </can-template>
+</my-counter>
+```
+
+Use [can-component/can-slot] to render the passed `<can-template>` views or
+provide default content if a corresponding `<can-template>` was not provided:
+
+```js
+Component.extend({
+    tag: "my-counter",
+
+    view: `
+        <can-slot name="incrementButton"
+                  add:from="add">
+          <button on:click="add(1)">+1</button>
+        </can-slot>
+        <can-slot name="countDisplay"
+                  count:from="count">
+          {{count}}
+        </can-slot>
+    `,
+
+    ViewModel: {
+        count: {type: "number", default: 0},
+        add(increment){
+            this.count += increment;
+        }
+    }
+});
+```
+
+
+> [See it live](https://justinbmeyer.jsbin.com/hexubon/2/edit?html,js,output)
