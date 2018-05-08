@@ -33,6 +33,7 @@ export { default as viewModel } from "can-view-model";
 // data
 export { default as connect } from "can-connect/all";
 export { default as memoryStore } from "can-memory-store";
+export { default as localStore } from "can-local-store";
 
 // Ecosystem
 export { default as connectFeathers } from "can-connect-feathers";
