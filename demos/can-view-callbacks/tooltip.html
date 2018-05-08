@@ -21,18 +21,16 @@ canViewCallbacks.attr(<span tooltip="The attribute name to match.">"tooltip"</sp
 </script>
 
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty">
-var $ = require("jquery");
-var stache = require("can-stache");
-var canViewCallbacks = require("can-view-callbacks");
-require("jquery-ui/ui/widgets/tooltip");
+import { stache, viewCallbacks } from "can";
+import $ from "jquery";
+import "jquery-ui/ui/widgets/tooltip";
 
-canViewCallbacks.attr("tooltip", function( el, attrData ) {
+viewCallbacks.attr("tooltip", (el, attrData) => {
 	$(el).tooltip({
 		content: el.getAttribute("tooltip"),
 		items: "[tooltip]"
 	})
-})
-
+});
 
 $("#app").html(
 	stache.from('demo-html')({})

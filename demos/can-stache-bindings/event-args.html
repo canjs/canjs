@@ -5,11 +5,7 @@
 </script>
 
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id='demo-source'>
-import "can-view-autorender";
-import "can-stache-bindings";
-import "can-stache";
-import viewModel from "can-view-model";
-import DefineList from "can-define/list/list";
+import { DefineList, stache, stacheBindings, viewModel, viewAutorender } from "can";
 
 var el = document.getElementById("demo-html");
 viewModel(el, {

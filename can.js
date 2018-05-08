@@ -4,12 +4,13 @@ export { default as DefineMap } from "can-define/map/map";
 export { default as DefineList } from "can-define/list/list";
 
 export { default as fixture } from "can-fixture";
-export { default as realtimeRestModel } from "can-realtime-rest-model";
 export { default as restModel } from "can-rest-model";
 export { default as superModel } from "can-super-model";
+export { default as realtimeRestModel } from "can-realtime-rest-model";
+export { default as QueryLogic } from "can-query-logic";
 
 export { default as Component } from 'can-component';
-export { default as stache } from "./stache";
+export { default as stache } from "can-stache";
 
 export { default as stacheRouteHelpers } from "can-stache-route-helpers";
 export { default as route } from "can-route";
@@ -30,6 +31,10 @@ export { default as radioChangeEvent } from "can-event-dom-radiochange";
 export { default as enterEvent } from "can-event-dom-enter";
 export { default as makeInterfaceValidator } from "can-validate-interface";
 export { default as viewModel } from "can-view-model";
+export { default as Observation } from "can-observation";
+export { default as stacheBindings } from "can-stache-bindings";
+export { default as viewCallbacks } from "can-view-callbacks";
+export { default as queues } from "can-queues";
 // data
 export { default as connect } from "can-connect/all";
 export { default as memoryStore } from "can-memory-store";
@@ -52,6 +57,7 @@ export { default as stream } from "can-stream";
 export { default as streamKefir } from "can-stream-kefir";
 export { default as Zone } from "can-zone";
 export { default as reactViewModel } from "react-view-model";
+export { default as viewAutorender } from "can-view-autorender";
 
 // Legacy
 export { default as compute } from "can-compute";

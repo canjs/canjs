@@ -14,12 +14,7 @@
 </script>
 </div>
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id='demo-source'>
-import "can-stache-bindings";
-import "can-view-autorender";
-import stache from "can-stache";
-import Component from "can-component";
-import DefineList from "can-define/list/list";
-import DefineMap from "can-define/map/map";
+import { Component, DefineList, DefineMap, stache, stacheBindings, viewAutorender } from "can";
 
 Component.extend({
 	tag: "my-drivers",
