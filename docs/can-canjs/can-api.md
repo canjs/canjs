@@ -121,7 +121,7 @@ const TodoList = DefineList.extend("TodoList",{
 })
 ```
 
-Create an use instances of observable list types:
+Create and use instances of observable list types:
 
 ```js
 // Create a todo list
@@ -1185,7 +1185,7 @@ Listen to events on custom elements, read, write or cross-bind `ViewModel` data 
 <my-counter count:bind="parentCount"></my-counter>
 ```
 
-Pass [can-component/can-template] views to custom elements to customize layout:
+Pass [can-component/can-template can-template] views to custom elements to customize layout:
 
 ```js
 <my-counter count:from="5">
@@ -1198,7 +1198,7 @@ Pass [can-component/can-template] views to custom elements to customize layout:
 </my-counter>
 ```
 
-Use [can-component/can-slot] to render the passed `<can-template>` views or
+Use [can-component/can-slot can-slot] to render the passed `<can-template>` views or
 provide default content if a corresponding `<can-template>` was not provided:
 
 ```js
