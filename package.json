@@ -72,6 +72,7 @@
     "can-kefir": "1.0.2",
     "can-key-tree": "1.0.2",
     "can-list": "^4.0.0",
+    "can-local-store": "<2.0.0",
     "can-log": "1.0.0",
     "can-map": "4.0.1",
     "can-map-define": "4.0.0",
@@ -216,7 +217,7 @@
       "bit-docs-html-canjs": "^2.3.4",
       "bit-docs-prettify": "^0.3.0",
       "bit-docs-html-highlight-line": "^0.3.1",
-      "bit-docs-tag-demo": "^0.5.1",
+      "bit-docs-tag-demo": "^0.5.3",
       "bit-docs-tag-package": "^0.0.5"
     },
     "glob": {

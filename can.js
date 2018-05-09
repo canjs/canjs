@@ -6,6 +6,8 @@ export { default as DefineList } from "can-define/list/list";
 export { default as fixture } from "can-fixture";
 export { default as restModel } from "can-rest-model";
 export { default as superModel } from "can-super-model";
+export { default as realtimeRestModel } from "can-realtime-rest-model";
+export { default as QueryLogic } from "can-query-logic";
 
 export { default as Component } from 'can-component';
 export { default as stache } from "can-stache";
@@ -33,11 +35,10 @@ export { default as Observation } from "can-observation";
 export { default as stacheBindings } from "can-stache-bindings";
 export { default as viewCallbacks } from "can-view-callbacks";
 export { default as queues } from "can-queues";
-
 // data
 export { default as connect } from "can-connect/all";
 export { default as memoryStore } from "can-memory-store";
-export { default as realtimeRestModel } from "can-realtime-rest-model";
+export { default as localStore } from "can-local-store";
 
 // Ecosystem
 export { default as connectFeathers } from "can-connect-feathers";
