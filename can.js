@@ -58,6 +58,7 @@ export { default as streamKefir } from "can-stream-kefir";
 export { default as Zone } from "can-zone";
 export { default as reactViewModel } from "react-view-model";
 export { default as viewAutorender } from "can-view-autorender";
+export { default as fixtureSocket } from "can-fixture-socket";
 
 // Legacy
 export { default as compute } from "can-compute";
