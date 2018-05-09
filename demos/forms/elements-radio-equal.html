@@ -7,8 +7,7 @@ label {
 <checkbox-equal></checkbox-equal>
 
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
-var Component = require("can-component");
-require("can-stache-converters");
+import { Component, stacheConverters } from "can";
 
 Component.extend({
 	tag: "checkbox-equal",

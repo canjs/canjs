@@ -1,10 +1,7 @@
 <text-enter></text-enter>
 
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
-var Component = require("can-component");
-
-var domEvents = require("can-dom-events");
-var enterEvent = require("can-event-dom-enter");
+import { Component, domEvents, enterEvent } from "can";
 
 domEvents.addEvent(enterEvent);
 
