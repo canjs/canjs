@@ -1,6 +1,4 @@
-import Component from "can-component";
-import stache from "can-stache";
-import DefineMap from "can-define/map/map";
+import { Component, DefineMap, stache } from "can";
 import "can/demos/technology-overview/component-slider";
 
 Component.extend({

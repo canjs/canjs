@@ -1,8 +1,5 @@
-import Component from "can-component";
-import stache from "can-stache";
-import DefineMap from "can-define/map/map";
+import { Component, DefineMap, stache, stacheRouteHelpers } from "can";
 import "can/demos/technology-overview/task-editor";
-import "can-stache-route-helpers";
 
 Component.extend({
     tag: "page-home",

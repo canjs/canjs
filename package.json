@@ -69,6 +69,7 @@
     "can-event-dom-radiochange": "2.1.0",
     "can-event-queue": "1.0.1",
     "can-fixture": "^3.0.0-pre.8",
+    "can-fixture-socket": "^1.0.1",
     "can-globals": "1.0.1",
     "can-kefir": "1.0.2",
     "can-key-tree": "1.0.2",

@@ -1,8 +1,5 @@
 <script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" deps-bundle>
-import DefineMap from "can-define/map/map";
-import DefineList from "can-define/list/list";
-import stache from "can-stache";
-import "can-stache-bindings";
+import { DefineList, DefineMap, stache, stacheBindings } from "can";
 
 var TodosApp = DefineMap.extend({
     todos: {
