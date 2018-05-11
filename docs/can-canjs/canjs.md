@@ -330,13 +330,15 @@ Useful low-level APIs:
   const meMap = canReflect.assign( new Map(), meDefineMap );
   meMap.get("name") //-> "Justin"
   ```
-- [can-util/js/diff-array/diff-array] & [can-util/js/diff-object/diff-object] - Diff objects and arrays.
+- [can-diff] - Diff objects and arrays.
 - [can-dom-events] - Listen to DOM events, including custom events, using event delegation.
 - [can-dom-mutate] - MutationObserver polyfill.
 - [can-ajax] - jQuery-like XHR helper.
 - [can-globals] - Feature detection and storage of environmental globals.
 - [can-key-tree] - Tree datatype.
-- [can-util/js/string/string can-string] - String helpers.
+- [can-string] - String helpers.
+- [can-local-store] - localStorage database.
+- [can-key] - get/set/delete nested properties.
 
 Useful integration APIs:
 
