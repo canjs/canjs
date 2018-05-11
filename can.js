@@ -11,6 +11,7 @@ export { default as QueryLogic } from "can-query-logic";
 
 export { default as Component } from 'can-component';
 export { default as stache } from "can-stache";
+export { default as stacheBindings } from "can-stache-bindings";
 
 export { default as stacheRouteHelpers } from "can-stache-route-helpers";
 export { default as route } from "can-route";
@@ -32,7 +33,11 @@ export { default as enterEvent } from "can-event-dom-enter";
 export { default as makeInterfaceValidator } from "can-validate-interface";
 export { default as viewModel } from "can-view-model";
 export { default as Observation } from "can-observation";
-export { default as stacheBindings } from "can-stache-bindings";
+export {default as key} from "can-key";
+export {default as diff} from "can-diff";
+export {default as parseURI} from "can-parse-uri";
+export {default as stringToAny} from "can-string-to-any";
+
 export { default as viewCallbacks } from "can-view-callbacks";
 export { default as queues } from "can-queues";
 // data

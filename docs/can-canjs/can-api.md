@@ -152,6 +152,72 @@ todos.some(function(todo){
 ```
 
 <details>
+<summary>Ecosystem APIs</summary>
+
+Create and use observable objects and arrays with [can-observe]:
+
+```js
+import {observe} from "can";
+
+// Create an observable object
+const todo = observe( {name: "dishes"} );
+
+// get, set and delete properties as usual
+todo.name //-> "dishes"
+todo.id = 1;
+delete todo.id;
+
+// Create an observable array
+const todos = observe([todo]);
+
+// use the array as usual
+todos.push({
+    name: "lawn"
+});
+todos[1].name //-> "lawn"
+```
+
+Define observable objects types:
+
+```js
+class Todo extends observe.Object {
+
+    constructor(props){
+        super(props);
+        // identity?
+        if(this.hasOwnProperty("complete")) {
+            this.complete = false;
+        }
+    }
+
+    // `isDueWithin24Hours` property returns if the `.dueDate`
+    // is in the next 24 hrs.
+    get isDueWithin24Hours(){
+        var msLeft = this.dueDate - new Date();
+        return msLeft >= 0 && msLeft <= 24 * 60 * 60 * 1000;
+    }
+
+    // `nameChangeCount` increments when `name` changes.
+    @@observe.resolvedBy
+    nameChangeCount({listenTo, resolve}) {
+        var count = resolve(0);
+        listenTo("name", ()=> {
+            resolve(++count);
+        })
+    }
+
+    // `toggleComplete` is a method
+    toggleComplete(){
+        this.complete != this.complete;
+    }
+}
+```
+
+
+</details>
+
+
+<details>
 <summary>Infrastructure APIs</summary>
 
 ```js
@@ -1227,3 +1293,185 @@ Component.extend({
 
 
 > [See it live](https://justinbmeyer.jsbin.com/hexubon/2/edit?html,js,output)
+
+
+## Routing
+
+Define routing rules and initialize routing with [can-route]:
+
+```js
+import {route} from "can";
+
+// Create two-way routing rule:
+route.register("{page}", {page: "home"});
+
+// Define routing data type
+const RouteData = DefineMap.extend({
+    // Allow undefined properties to be created
+    seal: false
+},{
+    page: "string"
+});
+
+// Connect routing system to an instance
+// of the routing data type
+route.data = new RouteData();
+// begin routing
+route.start();
+
+
+// Provide access to the route data to your application component
+Component.extend({
+    tag: "my-app",
+    view: `
+        <page-picker page:from="routeData.page"/>
+    `,
+    ViewModel: {
+        routeData: {
+            default(){
+                return route.data;
+            }
+        }
+    }
+});
+```
+
+Create responsive links in [can-stache] views with [can-stache-route-helpers]:
+
+
+```html
+<a href="{{ routeUrl(page='todos') }}"
+   class="{{# routeCurrent(page='todos') }}
+            inactive
+          {{else}}
+            active
+          {{/ routeCurrent}}">Todos
+</a>
+```
+
+
+## Utilities
+
+Make AJAX requests with [can-ajax]:
+
+```js
+import {ajax} from "can-ajax";
+
+ajax({
+    url: "http://query.yahooapis.com/v1/public/yql",
+    data: {
+        format: "json",
+        q: 'select * from geo.places where text="sunnyvale, ca"'
+    }
+}) //-> Promise<Object>
+````
+
+Perform differences with [can-diff]:
+
+```js
+diff.list(["a","b"], ["a","c"])
+//-> [{type: "splice", index: 1, deleteCount: 1, insert: ["c"]}]
+
+diff.map({a: "a"},{a: "A"})
+//-> [{type: "set", key: "a", value: "A"}]
+```
+
+Read and store the results of [feature detection](https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Cross_browser_testing/Feature_detection) with [can-globals]:
+
+```js
+import {globals} from "can";
+
+globals.getKeyValue("isNode")          //-> false
+globals.getKeyValue("isBrowserWindow") //-> true
+globals.getKeyValue("MutationObserver") //-> MutationObserver
+```
+
+Read and write nested values with [can-key]:
+
+```js
+import  {key} from "can";
+
+var task = {
+    name: "learn can-key",
+    owner: { name: {first: "Justin", last: "Meyer"} }
+}
+
+key.delete(task, "owner.name.first");
+key.get(task, "owner.name.last") //-> "Meyer"
+key.set(task, "owner.name.first", "Bohdi");
+```
+
+Operate on any data type with [can-reflect]:
+
+```js
+import {Reflect} from "can";
+
+// Test the type:
+Reflect.isBuiltIn(new Date()) //-> true
+Reflect.isBuiltIn(new Todo()) //-> false
+Reflect.isConstructorLike(function(){}) //-> false
+Reflect.isConstructorLike(Date)         //-> true
+Reflect.isListLike([]) //-> true
+Reflect.isListLike({}) //-> false
+Reflect.isMapLike([]) //-> true
+Reflect.isMapLike({}) //-> true
+Reflect.isMoreListLikeThanMapLike([]) //-> true
+Reflect.isMoreListLikeThanMapLike({}) //-> false
+Reflect.isObservableLike(new Todo()) //-> true
+Reflect.isObservableLike({})         //-> false
+Reflect.isPlainObject({})         //-> true
+Reflect.isPlainObject(new Todo()) //-> false
+Reflect.isPromiseLike(Promise.resolve()) //-> true
+Reflect.isPromiseLike({})                //-> false
+Reflect.isValueLike(22) //-> true
+Reflect.isValueLike({}) //-> false
+
+// Read and mutate key-value data
+var obj = {};
+Reflect.setKeyValue(obj,"prop","VALUE");
+Reflect.getKeyValue(obj,"prop") //-> "VALUE"
+Reflect.deleteKeyValue(obj,"prop","VALUE");
+
+Reflect.assign(obj, {name: "Payal"});
+```
+
+
+Parse a URI into its parts with [can-parse-uri]:
+
+```js
+import {parseURI} from "can";
+
+parseURI("http://foo:8080/bar.html?query#change")
+//-> {
+//  authority: "//foo:8080",
+//  hash: "#change",
+//  host: "foo:8080",
+//  hostname: "foo",
+//  href: "http://foo:8080/bar.html?query#change",
+//  pathname: "/bar.html",
+//  port: "8080",
+//  protocol: "http:",
+//  search: "?query"
+// }
+```
+
+Convert a string into another primitive type with [can-string-to-any]:
+
+```js
+import {stringToAny} from "can";
+stringToAny( "NaN" ); // -> NaN
+stringToAny( "44.4" ); // -> 44.4
+stringToAny( "false" ); // -> false
+```
+
+Convert one string format to another string format with [can-string]:
+
+```js
+import {string} from "can";
+
+string.camelize("foo-bar")) //-> "fooBar"
+string.capitalize("foo")    //-> "Foo"
+string.esc("<div>foo</div>")//-> "&lt;div&gt;foo&lt;/div&gt;"
+string.hyphenate("fooBar")  //-> "foo-bar"
+string.underscore("fooBar") //-> "foo_bar"
+```
