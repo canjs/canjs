@@ -81,7 +81,7 @@
     "can-observation-recorder": "1.0.2",
     "can-observe": "2.1.0",
     "can-param": "1.0.3",
-    "can-parse-uri": "1.0.1",
+    "can-parse-uri": "1.1.0",
     "can-queues": "1.0.1",
     "can-reflect": "1.13.4",
     "can-reflect-dependencies": "1.0.2",
