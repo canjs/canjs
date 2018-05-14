@@ -183,7 +183,7 @@
       "dependencies": {
         "normalize.css": "^5.0.0",
         "steal-conditional": "^0.3.6",
-        "steal-stache": "^3.0.5"
+        "steal-stache": "^4.0.0"
       },
       "package": {
         "steal": {
