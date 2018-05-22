@@ -3,19 +3,7 @@
 
 @description This guide walks you through building a Like-Tinder-Carousel
 
-1.  SETUP EVIL TINDER TITLE
-2.  Show currentProfile and nextProfile
-3.  Like button
-4.  Nope button
-5.  Move the currentProfile
-       - listenTo down, listenTo move, and update howFarPtrHasMoved
-       - use howFarPtrHasMoved in view
-6.  Show when you are liking
-7.  Show when you are noping
-8.  On release, like or nope.
-
 @body
-
 
 
 In this guide, you will learn how to create a custom __Tinder-like-carousel__  .
@@ -27,7 +15,7 @@ The custom widget will:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="http://jsbin.com/pacekeb/22/embed?html,js,output">JS Bin on jsbin.com</a><script src="http://static.jsbin.com/js/embed.min.js?4.1.4"></script>
+<a class="jsbin-embed" href="http://jsbin.com/viruhuw/4/embed?html,js,output&height=600px">JS Bin on jsbin.com</a>
 
 
 The following sections are broken down the folowing parts:
@@ -44,13 +32,12 @@ __START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
 
 > Click the `JS Bin` button.  The JS Bin will open in a new window. In that new window, under `File`, click `Clone`.
 
-<a class="jsbin-embed" href="http://jsbin.com/dutacah/embed?html,js,output">JS Bin on jsbin.com</a><script src="http://static.jsbin.com/js/embed.min.js?4.1.4"></script>
+<a class="jsbin-embed" href="http://jsbin.com/safago/2/embed?html,js,output">JS Bin on jsbin.com</a>
 
 This JS Bin:
 
-- Creates a basic CanJS template, you define a custom element in JavaScript and use the custom element in your page’s `HTML`.
-
-- Creates a custom `<tag-element>` in the `HTML` tab to use for this widget
+- Loads CanJS
+- Loads pepjs polyfill
 
 ### What you need to know
 
@@ -82,7 +69,21 @@ can.Component.extend({
 });
 ```
 
-### Step 2 Show currentProfile and nextProfile
+### The solution
+
+Update the __JavaScript__ tab to:
+
+@sourceref ./0-setup.js
+
+Update the `<body>` element in the __HTML__ tab to:
+
+```js
+<body noscroll>
+    <evil-tinder></evil-tinder>
+</body>
+```
+
+## Show the current and next profile images
 
 
 
@@ -99,10 +100,10 @@ can.Component.extend({
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-profiles.js
-@highlight 1-46,only
+@highlight 8,11,21-41,only
 
 
-### Step 3 Like button
+## Add a like button
 
 
 
@@ -119,33 +120,28 @@ Update the __JavaScript__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-like-btn.js
-@highlight 14-17,46-49,only
+@highlight 17-18,44-47,only
 
 
 
 
-### Step 4 Nope button
+## Add a nope button
 
 
 
 
 ### What you need to know
 
-
-
-
-
-
 ### The solution
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-dislike-btn.js
-@highlight 14-17,53-56,only
+@highlight 16-17,49-52,only
 
 
 
-### Step 5 Move current profile
+## Drag and move the profile to the left and right
 
 
 
@@ -162,44 +158,57 @@ Update the __JavaScript__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-move-current-profile.js
-@highlight 7-10,61-87,only
+@highlight 7-10,39,57-71,only
 
 
-### Step 6 Show like
+## Show liking animation when you drag to the right
 
-
-
-
+### The problem
 ### What you need to know
-
-
-
-
-
-
 ### The solution
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-show-liking.js
-@highlight 6,57-60,only
-
-
-### Step 7 Show nope
+@highlight 5,47-49,only
 
 
 
 
+## Show noping animation when you drag to the left
+
+### The problem
 ### What you need to know
-
-
-
-
-
-
 ### The solution
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-show-nope.js
-@highlight 6,7,58-60,only
+@highlight 5-6,51-53,only
+
+
+
+
+## On release, like or nope
+
+### The problem
+### What you need to know
+### The solution
+
+Update the __JavaScript__ tab to:
+
+@sourceref ./7-release.js
+@highlight 77-88,only
+
+## Add an empty profile
+
+### The problem
+### What you need to know
+### The solution
+
+Update the __JavaScript__ tab to:
+
+@sourceref ./8-empty-profile.js
+@highlight 41-45,48,51,only
+
+<script src="http://static.jsbin.com/js/embed.min.js?4.1.4"></script>

@@ -2,7 +2,8 @@ can.Component.extend({
   tag: "evil-tinder",
   view: `
       <div class="header"></div>
-      <div class='result {{#if(liking)}}liking{{/if}}'></div>
+      <div class='result {{#if(liking)}}liking{{/if}}
+                         {{#if(noping)}}noping{{/if}}'></div>
       <div class="images">
         <div class='current' style="left: {{howFarWeHaveMoved}}px">
           <img src="{{currentProfile.img}}"
@@ -47,6 +48,9 @@ can.Component.extend({
     get liking() {
       return this.howFarWeHaveMoved >= 100;
     },
+    get noping() {
+      return this.howFarWeHaveMoved <= -100;
+    },
 
     like() {
       console.log("LIKED");
@@ -70,6 +74,18 @@ can.Component.extend({
           this.howFarWeHaveMoved = event.clientX - startingX;
         });
 
+        this.listenTo(document, "pointerup", (event) => {
+          this.howFarWeHaveMoved = event.clientX - startingX;
+
+          if (this.liking) {
+            this.like()
+          } else if (this.noping) {
+            this.nope();
+          }
+
+          this.howFarWeHaveMoved = 0;
+          this.stopListening(document);
+        });
       });
     }
   }
