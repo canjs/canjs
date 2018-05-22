@@ -142,3 +142,64 @@ Update the __JavaScript__ tab to:
 
 @sourceref ./3-dislike-btn.js
 @highlight 14-17,53-56,only
+
+
+
+### Step 5 Move current profile
+
+
+
+
+### What you need to know
+
+
+
+
+
+
+### The solution
+
+Update the __JavaScript__ tab to:
+
+@sourceref ./4-move-current-profile.js
+@highlight 7-10,61-87,only
+
+
+### Step 6 Show like
+
+
+
+
+### What you need to know
+
+
+
+
+
+
+### The solution
+
+Update the __JavaScript__ tab to:
+
+@sourceref ./5-show-liking.js
+@highlight 6,57-60,only
+
+
+### Step 7 Show nope
+
+
+
+
+### What you need to know
+
+
+
+
+
+
+### The solution
+
+Update the __JavaScript__ tab to:
+
+@sourceref ./6-show-nope.js
+@highlight 6,7,58-60,only
