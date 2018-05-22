@@ -81,6 +81,7 @@ __Core Collection__
   "can-set": "<%can-set.package.version%>",
   "can-stache": "<%can-stache.package.version%>",
   "can-stache-bindings": "<%can-stache-bindings.package.version%>",
+  "can-stache-route-helpers": "<%can-stache-route-helpers.package.version%>",
 ```  
 
 __Infrastructure Collection__
@@ -88,7 +89,6 @@ __Infrastructure Collection__
 ```js
   "can-construct": "<%can-stache-bindings.package.version%>",
   "can-control": "<%can-control.package.version%>",
-  "can-event": "<%can-event.package.version%>",
   "can-observation": "<%can-observation.package.version%>",
   "can-simple-map": "<%can-simple-map.package.version%>",
   "can-simple-observable": "<%can-simple-observable.package.version%>",
@@ -109,7 +109,6 @@ __Ecosystem collection__
   "can-define-stream": "<%can-define-stream.package.version%>",
   "can-fixture": "<%can-fixture.package.version%>",
   "can-fixture-socket": "<%can-fixture-socket.package.version%>",
-  "can-jquery": "<%can-jquery.package.version%>",
   "can-stache-converters": "<%can-stache-converters.package.version%>",
   "can-stream-kefir": "<%can-stream-kefir.package.version%>",
   "can-vdom": "<%can-vdom.package.version%>",
@@ -122,12 +121,11 @@ __Ecosystem collection__
 __Legacy Collection__
 
 ```js
-  "can-ejs": "<%can-ejs.package.version%>",
+  "can-compute": "<%can-compute.package.version%>",
   "can-list": "<%can-list.package.version%>",
   "can-map": "<%can-map.package.version%>",
-  "can-map-backup": "<%can-map-backup.package.version%>",
   "can-map-define": "<%can-map-define.package.version%>",
-  "can-view-href": "<%can-view-href.package.version%>",
+  "can-validate-legacy": "<%can-validate-legacy.package.version%>",
 ```
 
 ## [can-core Core Collection]
@@ -136,9 +134,6 @@ _The best, most hardened and generally useful libraries in CanJS._
 
 <div class="module-list">
 
-- **[can-compute]** <small><%can-compute.package.version%></small> Observable values and observable composite values
-  - `npm install can-compute --save`
-  - <a class="github-button" href="https://github.com/canjs/can-compute">Star</a>
 - **[can-define]** <small><%can-define.package.version%></small> Observable objects
   - `npm install can-define --save`
   - <a class="github-button" href="https://github.com/canjs/can-define">Star</a>
@@ -172,9 +167,6 @@ _Utility libraries that power the core collection._
 
 <div class="module-list">
 
-- **[can-event]** <small><%can-event.package.version%></small> Event mixin
-  - `npm install can-event --save`
-  - <a class="github-button" href="https://github.com/canjs/can-event">Star</a>
 - **[can-control]** <small><%can-control.package.version%></small> DOM widget constructor
   - `npm install can-control --save`
   - <a class="github-button" href="https://github.com/canjs/can-control">Star</a>
@@ -235,9 +227,6 @@ _Utility libraries that power the core collection._
 - **[can-reflect]** <small><%can-reflect.package.version%></small> Perform reflection on unknown data types
   - `npm install can-reflect --save`
   - <a class="github-button" href="https://github.com/canjs/can-reflect">Star</a>
-- **[can-react-component]** <small><%can-react-component.package.version%></small> Create a React component out of a CanComponent.
-  - `npm install can-react-component --save`
-  - <a class="github-button" href="https://github.com/canjs/can-react-component">Star</a>
 - **[react-view-model]** <small><%react-view-model.package.version%></small> Create an auto-rendering container component with an observable view-model.
   - `npm install react-view-model --save`
   - <a class="github-button" href="https://github.com/canjs/react-view-model">Star</a>
@@ -283,21 +272,9 @@ _Useful libraries that add important features or extend the core collection._
 - **[can-fixture]** <small><%can-fixture.package.version%></small> Simulate AJAX requests
   - `npm install can-fixture --save`
   - <a class="github-button" href="https://github.com/canjs/can-fixture">Star</a>
-- **[can-fixture-socket]** <small><%can-fixture-socket.package.version%></small> Simulate sockets
-  - `npm install can-fixture-socket --save`
-  - <a class="github-button" href="https://github.com/canjs/can-fixture-socket">Star</a>
 - **[can-connect-feathers]** <small><%can-connect-feathers.package.version%></small> Create connections to a FeathersJS API server.
   - `npm install can-connect-feathers --save`
   - <a class="github-button" href="https://github.com/canjs/can-connect-feathers">Star</a>
-- **[can-connect-signalr]** <small><%can-connect-signalr.package.version%></small> Create connections to a FeathersJS API server.
-  - `npm install can-connect-signalr --save`
-  - <a class="github-button" href="https://github.com/canjs/can-connect-signalr">Star</a>
-- **[can-connect-cloneable]** <small><%can-connect-cloneable.package.version%></small> Make clones of Maps.
-  - `npm install can-connect-cloneable --save`
-  - <a class="github-button" href="https://github.com/canjs/can-connect-cloneable">Star</a>
-- **[can-connect-ndjson]** <small><%can-connect-ndjson.package.version%></small> Create connection to an NDJSON stream service
-  - `npm install can-connect-ndjson --save`
-  - <a class="github-button" href="https://github.com/canjs/can-connect-ndjson">Star</a>
 - **[can-zone]** <small><%can-zone.package.version%></small> Track asynchronous activity
   - `npm install can-zone --save`
   - <a class="github-button" href="https://github.com/canjs/can-zone">Star</a>
@@ -313,9 +290,6 @@ _Useful libraries that add important features or extend the core collection._
 - **[can-view-autorender]** <small><%can-view-autorender.package.version%></small> Automatically render templates in script tags
   - `npm install can-view-autorender --save`
   - <a class="github-button" href="https://github.com/canjs/can-view-autorender">Star</a>
-- **[can-jquery]** <small><%can-jquery.package.version%></small> jQuery integrations
-  - `npm install can-jquery --save`
-  - <a class="github-button" href="https://github.com/canjs/can-jquery">Star</a>
 - **[can-construct-super]** <small><%can-construct-super.package.version%></small> Call can-construct base methods easily
   - `npm install can-construct-super --save`
   - <a class="github-button" href="https://github.com/canjs/can-construct-super">Star</a>
@@ -346,9 +320,6 @@ _Useful libraries that add important features or extend the core collection._
 - **[can-observe]** <small><%can-observe.package.version%></small> Create plain observable objects
   - `npm install can-observe --save`
   - <a class="github-button" href="https://github.com/canjs/can-observe">Star</a>
-- **[can-element]** <small><%can-element.package.version%></small> Create custom elements
-	- `npm install can-element --save`
-	- <a class="github-button" href="https://github.com/canjs/can-element">Star</a>
 
 </div>
 
@@ -359,6 +330,9 @@ still accept patches._
 
 <div class="module-list">
 
+- **[can-compute]** <small><%can-compute.package.version%></small> Observable values and observable composite values
+  - `npm install can-compute --save`
+  - <a class="github-button" href="https://github.com/canjs/can-compute">Star</a>
 - **[can-map]** <small><%can-map.package.version%></small> Observable map
   - `npm install can-map --save`
   - <a class="github-button" href="https://github.com/canjs/can-map">Star</a>
@@ -368,15 +342,6 @@ still accept patches._
 - **[can-map-define]** <small><%can-map-define.package.version%></small> Define property behavior
   - `npm install can-map-define --save`
   - <a class="github-button" href="https://github.com/canjs/can-map-define">Star</a>
-- **[can-map-backup]** <small><%can-map-backup.package.version%></small> Save the last state
-  - `npm install can-map-backup --save`
-  - <a class="github-button" href="https://github.com/canjs/can-map-backup">Star</a>
-- **[can-ejs]** <small><%can-ejs.package.version%></small> EJS templates
-  - `npm install can-ejs --save`
-  - <a class="github-button" href="https://github.com/canjs/can-ejs">Star</a>
-- **[can-view-href]** <small><%can-view-href.package.version%></small> Older routing view helpers
-  - `npm install can-view-href --save`
-  - <a class="github-button" href="https://github.com/canjs/can-view-href">Star</a>
 - **[can-validate-legacy]** <small><%can-validate-legacy.package.version%></small> Validation plugin for can-map's.
   - `npm install can-validate-legacy --save`
   - <a class="github-button" href="https://github.com/canjs/can-validate-legacy">Star</a>
