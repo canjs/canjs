@@ -214,18 +214,78 @@ horizontal position to match how far the user has dragged.
   ```
 
 The remaining problem is how to get a `howFarWeHaveMoved` ViewModel property to update
-as the user creates a drag motion. As drag motions 
+as the user creates a drag motion.
+
+- Define a number property on a `ViewModel` with:
+
+  ```js
+  ViewModel: {
+    ...
+    howFarWeHaveMoved: "number"
+  }
+  ```
+
+- As drag motion needs to be captured just not on the
+  element itself, but on the entire `document`, we will setup the event binding in the
+  [can-component/connectedCallback] of the `ViewModel` as follows:
+
+  ```HTML
+    ViewModel: {
+      ...
+      connectedCallback(el) {
+        var current = el.querySelector(".current");
+      }
+    }
+  ```
 
 - Desktop browsers dispatch mouse events. Mobile browsers dispatch touch events.
-  _Most_ desktop and
-- pointer events
-- the [pep polyfill](https://www.npmjs.com/package/pepjs-improved)
-    - touch-action="none" needed for polyfill to work
-- default drag behavior with a mouse we need to cancel `draggable="false"`
-- listen for down on the element you want to star the move
-- listen to the document for the move
-- use `left: {{}}px` to update where an element is in the page
-- `connectedCallback` is where "junk goes"
+  _Most_ desktop and dispatch [Pointer events](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events).
+
+  You can listen to pointer events with [can-event-queue/map/map.listenTo] inside `connectedCallback` like:
+
+  ```js
+  this.listenTo(current, "pointerdown", (event) => { ... })
+  ```
+
+  As mobile safari doesn't support pointer events, we have already installed the
+  [pep pointer event polyfill](https://www.npmjs.com/package/pepjs-improved).
+
+  The polyfill requires that `touch-action="none"` be added to elements that should
+  dispatch pointer events like:
+
+  ```html
+  <img touch-action="none"/>
+  ```
+
+  Drag motions on images in desktop browsers will attempt to drag the image unless
+  this behavior is turned off.  It can be turned off with `draggable="false"` like:
+
+  ```html
+  <img draggable="false"/>
+  ```
+
+- Pointer events dispatch with an `event` object that contains the position of
+  the mouse or finger:
+
+  ```js
+  this.listenTo(current, "pointerdown", (event) => {
+    event.clientX //-> 200
+  })
+  ```
+
+  On a pointerdown, this will be where the drag motion starts. Listen to
+  `pointermove` to be notified as the user moves their mouse or finger.
+
+- Listen to `pointermove` on the `document` instead of the dragged item to
+  better tollerate drag motions that extend outside the dragged item.
+
+  ```js
+  this.listenTo(document, "pointermove", (event) => {
+
+  });
+  ```
+  The difference between `pointermove`'s position and `pointerdown`'s
+  position is how far the current profile `<div>` should be moved.
 
 ### The solution
 
@@ -238,7 +298,26 @@ Update the __JavaScript__ tab to:
 ## Show liking animation when you drag to the right
 
 ### The problem
+
+In this section, we will:
+
+- Show a like "stamp" when the user has dragged the current profile to the right 100 pixels.
+- The like stamp will appear when an element like `<div class='result'>` has `liking`
+  added to its class list.
+
 ### What you need to know
+
+- Use [can-stache.helpers.if] to test if a value is truthy and add a value to an element's class list like:
+  ```html
+  <div class='result {{# if(liking) }}liking{{/ if}}'>
+  ```
+- Use a [can-map-define.get getter] to derive a value from another value on the ViewModel:
+  ```js
+  get liking() {
+    return this.howFarWeHaveMoved >= 100;
+  },
+  ```
+
 ### The solution
 
 Update the __JavaScript__ tab to:
@@ -252,7 +331,15 @@ Update the __JavaScript__ tab to:
 ## Show noping animation when you drag to the left
 
 ### The problem
+
+- Show a nope "stamp" when the user has dragged the current profile to the left 100 pixels.
+- The nope stamp will appear when an element like `<div class='result'>` has `noping`
+  added to its class list.
+
 ### What you need to know
+
+You know everything you need to know!
+
 ### The solution
 
 Update the __JavaScript__ tab to:
@@ -266,7 +353,34 @@ Update the __JavaScript__ tab to:
 ## On release, like or nope
 
 ### The problem
+
+In this section, we will perform one of the following when the user completes their
+drag motion:
+
+- console.log `like` and move to the next profile if the drag motion has moved at least 100 pixels to the right
+- console.log `nope` and move to the next profile if the drag motion has moved at least 100 pixels to the left
+- do nothing if the drag motion did not move 100 pixels horizontally
+
+And, we will perform the following no matter what state the drag motion ends:
+
+- Reset the state of the application so it can accept further drag motions and the
+  new profile image is centered horizontally.
+
 ### What you need to know
+
+- Listen to `pointerup` to know when the user completes their drag motion:
+  ```js
+  this.listenTo(document, "pointerup", (event) => { });
+  ```
+
+- To stopListening to the `pointermove` and `pointerup` events on the document for the
+  `ViewModel` with:
+
+  ```js
+  this.stopListening(document);
+  ```
+
+
 ### The solution
 
 Update the __JavaScript__ tab to:
@@ -277,7 +391,25 @@ Update the __JavaScript__ tab to:
 ## Add an empty profile
 
 ### The problem
+
+In this section, we will:
+
+-  Show the following stop sign url when the user runs out of profiles:
+  `http://stickwix.com/wp-content/uploads/2016/12/Stop-Sign-NH.jpg`.
+
+
 ### What you need to know
+
+- Use [can-define.types.default] to create a default property value:
+
+  ```js
+  emptyProfile: {
+    default () {
+        return {img: "http://stickwix.com/wp-content/uploads/2016/12/Stop-Sign-NH.jpg"};
+    }
+  },
+  ```
+
 ### The solution
 
 Update the __JavaScript__ tab to:
