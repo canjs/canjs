@@ -44,6 +44,11 @@ export { default as queues } from "can-queues";
 export { default as connect } from "can-connect/all";
 export { default as memoryStore } from "can-memory-store";
 export { default as localStore } from "can-local-store";
+// Typed data
+export { default as MaybeBoolean } from "can-data-types/maybe-boolean/maybe-boolean";
+export { default as MaybeDate } from "can-data-types/maybe-date/maybe-date";
+export { default as MaybeNumber } from "can-data-types/maybe-number/maybe-number";
+export { default as MaybeString } from "can-data-types/maybe-string/maybe-string";
 
 // Ecosystem
 export { default as connectFeathers } from "can-connect-feathers";

@@ -1,5 +1,5 @@
 @page guides/technology-overview Technology Overview
-@parent guides/getting-started 1
+@parent guides/essentials 1
 @outline 2
 
 @description Learn the basics of the core parts of CanJS's technology.
@@ -647,3 +647,469 @@ route.register("tasks/{taskId}", {page: "tasks"});
 Now the mini application is able to translate changes in the url to
 properties on the component's view-model.  When the component's view-model
 changes, the view updates the page.
+
+
+## Observables and the service layer ##
+
+CanJS's pattern is that you define application logic in one or more observables, then connect the observables to various browser APIs. CanJS's model layer
+libraries connect observables to backend services.
+
+For example, you
+can connect a `Todo` and `Todo.List` observable to a restful service layer at
+`/api/todos` with [can-rest-model]:
+
+```js
+import {restModel, DefineMap, DefineList} from "can";
+
+const Todo = DefineMap.extend("Todo",{
+
+    // `id` uniquely identifies instances of this type.
+    id: { type: "number", identity: true },
+
+    complete: { type: "boolean", default: false },
+    dueDate: "date",
+    name: "string"
+});
+
+Todo.List = DefineMap.extend("TodoList",{
+    "#": Todo
+});
+
+const todoConnection = restModel({
+    Map: Todo,
+    List: Todo.List,
+    url: "/api/todos/{id}"
+});
+```
+
+This allows you to retrieve, create, update and destroy data
+programmatically through the `Todo` observable. [can-rest-model] mixes in the
+following methods:
+
+<table>
+<tr>
+    <th>JavaScript API</th>
+    <th>Request</th>
+    <th>Response</th>
+</tr>
+<tr>
+<td>
+
+```js
+Todo.getList({
+  // Selects only the todos that match
+  filter: {
+    complete: {$in: [false, null]}
+  },
+  // Sort the results of the selection
+  sort: "-name",
+  // Paginate the sorted result
+  page: {start: 0, end: 19}
+}) //-> Promise<TodoList[]>
+```
+
+</td>
+<td>
+
+```
+GET /api/todos?
+  filter[complete][$in][]=false&
+  filter[complete][$in][]=null&
+  sort=-name&
+  page[start]=0&
+  page[end]=19
+
+
+
+
+
+```
+
+</td>
+<td>
+
+```js
+{
+  "data": [
+    {
+      "id": 20,
+      "name": "mow lawn",
+      "complete": false
+    },
+    ...
+  ]
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+Todo.get({
+  id: 5
+}) //-> Promise<Todo>
+
+
+
+```
+
+</td>
+<td>
+
+```
+GET /api/todos/5
+
+
+
+
+
+```
+
+</td>
+<td>
+
+```js
+{
+  "id": 5,
+  "name": "do dishes",
+  "complete": true
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+var todo = new Todo({
+  name: "make a model"
+})
+todo.save()  //-> Promise<Todo>
+
+
+```
+
+</td>
+<td>
+
+```
+POST /api/todos
+    {
+      "name": "make a model",
+      "complete": false
+    }
+```
+
+</td>
+<td>
+
+```js
+{
+  "id": 22,
+  "name": "make a model",
+  "complete": false
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+todo.complete = true;
+todo.save()  //-> Promise<Todo>
+
+
+
+
+```
+
+</td>
+<td>
+
+```
+PUT /api/todos/22
+    {
+      "name": "make a model",
+      "complete": true
+    }
+```
+
+</td>
+<td>
+
+```js
+{
+  "id": 22,
+  "name": "make a model",
+  "complete": true
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+todo.destroy()  //-> Promise<Todo>
+
+
+```
+
+</td>
+<td>
+
+```
+DELETE /api/todos/22
+
+
+```
+
+</td>
+<td>
+
+```
+Successful status code (2xx).
+Response body is not necessary.
+```
+
+</td>
+</tr>
+</table>
+
+### Retrieving records
+
+Use [can-connect/can/map/map.getList] to retrieve records. For example, the following creates a component that uses `Todo.getList` to load data:
+
+```js
+Component.extend({
+    tag: "todo-list",
+    view: `
+    <ul>
+        {{# if(todosPromise.isResolved) }}
+            {{# each(todosPromise.value) }}
+                <li>
+                    <input type='checkbox' checked:bind='complete' disabled/>
+                    <label>{{name}}</label>
+                    <input type='date' valueAsDate:bind='dueDate' disabled/>
+                </li>
+            {{/ each }}
+        {{/ if}}
+        {{# if(todosPromise.isPending) }}
+            <li>Loading</li>
+        {{/ if}}
+    </ul>
+    `,
+    ViewModel: {
+        todosPromise: {
+            default(){
+                return Todo.getList({});
+            }
+        }
+    }
+});
+```
+
+@highlight 5-6,22
+
+See it in action here:
+
+@demo demos/can-rest-model/can-rest-model-0.html
+
+
+The object passed to `.getList` can be used to filter, sort, and paginate
+the items retrieved. The following adds inputs to control the filtering,
+sorting, and pagination of the component:
+
+```js
+Component.extend({
+    tag: "todo-list",
+    view: `
+    Sort By: <select value:bind="sort">
+        <option value="">none</option>
+        <option value="name">name</option>
+        <option value="dueDate">dueDate</option>
+    </select>
+
+    Show: <select value:bind="completeFilter">
+        <option value="">All</option>
+        <option value="complete">Complete</option>
+        <option value="incomplete">Incomplete</option>
+    </select>
+
+    Due: <select value:bind="dueFilter">
+        <option value="">Anytime</option>
+        <option value="today">Today</option>
+        <option value="week">This Week</option>
+    </select>
+
+    Results <select value:bind="count">
+        <option value="">All</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+    </select>
+
+    <ul>
+        {{# if(todosPromise.isResolved) }}
+            {{# each(todosPromise.value) }}
+                <li>
+                    <input type='checkbox' checked:bind='complete' disabled/>
+                    <label>{{name}}</label>
+                    <input type='date' valueAsDate:bind='dueDate' disabled/>
+                </li>
+            {{/ each }}
+        {{/ if}}
+        {{# if(todosPromise.isPending) }}
+            <li>Loading</li>
+        {{/ if}}
+    </ul>
+    `,
+    ViewModel: {
+        sort: "string",
+        completeFilter: "string",
+        dueFilter: "string",
+        count: {type:"string", default: "10"},
+        get todosPromise(){
+            var query = {filter: {}};
+            if(this.sort) {
+                query.sort =  this.sort;
+            }
+            if(this.completeFilter) {
+                query.filter.complete = this.completeFilter === "complete";
+            }
+            if(this.dueFilter) {
+                var day = 24*60*60*1000;
+                var now = new Date();
+                var today = new Date(now.getFullYear(), now.getMonth(), now.getDate() );
+                if(this.dueFilter === "today") {
+
+                    query.filter.dueDate = {
+                        $gte: now.toString(),
+                        $lt: new Date(now.getTime() + day).toString()
+                    }
+                }
+                if(this.dueFilter === "week") {
+                    var start = today.getTime() - (today.getDay() * day);
+                    query.filter.dueDate = {
+                        $gte: new Date(start).toString(),
+                        $lt: new Date(start + 7*day).toString()
+                    };
+                }
+            }
+            if(this.count) {
+                query.page = {
+                    start: 0,
+                    end: (+this.count)-1
+                };
+            }
+            return Todo.getList(query);
+        }
+    }
+});
+```
+@highlight 4-26,44-47,81
+
+See it in action here:
+
+@demo demos/can-rest-model/can-rest-model-1.html
+
+### Creating records
+
+Use [can-connect/can/map/map.prototype.save] to create records. For example, the following creates a component that uses `Todo.prototype.save` to create data:
+
+```js
+Component.extend({
+    tag: "todo-create",
+    view: `
+        <form on:submit="createTodo(scope.event)">
+            <p>
+                <label>Name</label>
+                <input on:input:value:bind='todo.name'/>
+            </p>
+            <p>
+                <label>Complete</label>
+                <input type='checkbox' checked:bind='todo.complete'/>
+            </p>
+            <p>
+                <label>Date</label>
+                <input type='date' valueAsDate:bind='todo.dueDate'/>
+            </p>
+            <button disabled:from="todo.preventSave()">Create Todo</button>
+            {{# if(todo.isSaving()) }}Creating ....{{/ if}}
+        </form>
+    `,
+    ViewModel: {
+        todo: {
+            Default: Todo
+        },
+        createTodo(event) {
+            event.preventDefault();
+            this.todo.save().then((createdTodo) => {
+                this.todo = new Todo();
+            })
+        }
+    }
+});
+```
+@highlight 4,28
+
+See this in action here:
+
+@demo demos/can-rest-model/can-rest-model-create.html
+
+
+Note that this demo lists newly created todos by listening to `Todo`'s created event as follows:
+
+```js
+Component.extend({
+    tag: "created-todos",
+    view: `
+        <h3>Created Todos</h3>
+        <table>
+            <tr>
+                <th>id</th><th>complete</th>
+                <th>name</th><th>due date</th>
+            </tr>
+            {{# each(todos) }}
+                <tr>
+                    <td>{{id}}</td>
+                    <td><input type='checkbox' checked:bind='complete' disabled/></td>
+                    <td>{{name}}</td>
+                    <td><input type='date' valueAsDate:bind='dueDate' disabled/></td>
+                </tr>
+            {{else}}
+                <tr><td colspan='4'><i>The todos you create will be listed here</i></td></tr>
+            {{/ each }}
+        </table>
+    `,
+    ViewModel: {
+        todos: {Default: Todo.List},
+        connectedCallback(){
+            this.listenTo(Todo,"created", (event, created) => {
+                this.todos.unshift(created);
+            })
+        }
+    }
+});
+```
+@highlight 25
+
+### Updating records
+
+### Destroying records
+
+### Update lists when records are mutated
+
+When records in the page are created, updated, or destroyed, it's commonly needed
+to update lists in the page to reflect those changes.
+
+CanJS provides two ways of doing this:
+
+- Listen to events on the `Todo` type and update lists manually like is done
+  in the previous examples, __OR__
+- Use [can-realtime-rest-model] and [can-query-logic] to update lists automatically.

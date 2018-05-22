@@ -1,8 +1,8 @@
 @page api API Docs
 @parent canjs 2
 @group can-observables 1 Observables
-@group can-data-modeling 2 Data Modeling
-@group can-views 3 Views
+@group can-views 2 Views
+@group can-data-modeling 3 Data Modeling
 @group can-routing 4 Routing
 @group can-js-utilities 5 JS Utilities
 @group can-dom-utilities 6 DOM Utilities
@@ -13,7 +13,9 @@
 @package ../../package.json
 @templateRender <% %>
 @subchildren
-@description Welcome to the CanJS API documentation! This page is a cheat-sheet for the most common APIs within CanJS.
+@description Welcome to the CanJS API documentation!
+This page is a cheat-sheet for the most common APIs within CanJS. Read the
+[guides/technology-overview] page for background on the following APIs.
 
 @body
 
@@ -228,285 +230,6 @@ const fullName = new Observation( function() {
 
 </details>
 
-## Data Modeling
-
-Connect data types to a restful service with [can-rest-model]:
-
-```js
-import {restModel} from "can";
-
-const todoConnection = restModel({
-    Map: Todo,
-    List: Todo.List,
-    url: "/api/todos/{id}"
-});
-```
-
-Retrieve, create, update and destroy data programmatically:
-
-<table>
-<tr>
-    <th>JavaScript API</th>
-    <th>Request</th>
-    <th>Response</th>
-</tr>
-<tr>
-<td>
-
-```js
-Todo.getList({
-  // Selects only the todos that match
-  filter: {
-    complete: {$in: [false, null]}
-  },
-  // Sort the results of the selection
-  sort: "-name",
-  // Paginate the sorted result
-  page: {start: 0, end: 19}
-}) //-> Promise<TodoList[]>
-```
-
-</td>
-<td>
-
-```
-GET /api/todos?
-  filter[complete][$in][]=false&
-  filter[complete][$in][]=null&
-  sort=-name&
-  page[start]=0&
-  page[end]=19
-
-
-
-
-
-```
-
-</td>
-<td>
-
-```js
-{
-  "data": [
-    {
-      "id": 20,
-      "name": "mow lawn",
-      "complete": false
-    },
-    ...
-  ]
-}
-```
-
-</td>
-</tr>
-<tr>
-<td>
-
-```js
-Todo.get({
-  id: 5
-}) //-> Promise<Todo>
-
-
-
-```
-
-</td>
-<td>
-
-```
-GET /api/todos/5
-
-
-
-
-
-```
-
-</td>
-<td>
-
-```js
-{
-  "id": 5,
-  "name": "do dishes",
-  "complete": true
-}
-```
-
-</td>
-</tr>
-<tr>
-<td>
-
-```js
-var todo = new Todo({
-  name: "make a model"
-})
-todo.save()  //-> Promise<Todo>
-
-
-```
-
-</td>
-<td>
-
-```
-POST /api/todos
-    {
-      "name": "make a model",
-      "complete": false
-    }
-```
-
-</td>
-<td>
-
-```js
-{
-  "id": 22,
-  "name": "make a model",
-  "complete": false
-}
-```
-
-</td>
-</tr>
-<tr>
-<td>
-
-```js
-todo.complete = true;
-todo.save()  //-> Promise<Todo>
-
-
-
-
-```
-
-</td>
-<td>
-
-```
-PUT /api/todos/22
-    {
-      "name": "make a model",
-      "complete": true
-    }
-```
-
-</td>
-<td>
-
-```js
-{
-  "id": 22,
-  "name": "make a model",
-  "complete": true
-}
-```
-
-</td>
-</tr>
-<tr>
-<td>
-
-```js
-todo.destroy()  //-> Promise<Todo>
-
-
-```
-
-</td>
-<td>
-
-```
-DELETE /api/todos/22
-
-
-```
-
-</td>
-<td>
-
-```
-Successful status code (2xx).
-Response body is not necessary.
-```
-
-</td>
-</tr>
-</table>
-
-Check the status of request:
-
-```js
-var todo = new Todo({ name: "make a model"});
-
-// Return if the todo hasn't been persisted
-todo.isNew()    //-> true
-
-// Listen to when any todo is created:
-Todo.on("created", function(ev, todo){});
-
-var savedPromise = todo.save();
-
-// Return if the todo is being created or updated
-todo.isSaving() //-> true
-
-savedPromise.then(function(){
-    todo.isNew() //-> false
-    todo.isSaving() //-> false
-
-    var destroyedPromise = todo.destroy();
-
-    // Return if the todo is being destroyed
-    todo.isDestroying() //-> true
-
-    destroyedPromise.then(function(){
-        todo.isDestroying() //-> false
-    })
-});
-```
-
-
-Connect data types to a restful service and have CanJS automatically manage
-adding and removing items from lists with [can-realtime-rest-model]:
-
-```js
-import {realtimeRestModel} from "can";
-
-// Define a real time restful model
-const todoConnection = realtimeRestModel({
-    Map: Todo,
-    List: Todo.List,
-    url: "/api/todos/{id}"
-});
-
-// Update instances and lists from server-side events:
-socket.on('todo created', (todo) => {
-    todoConnection.createInstance(order);
-}).on('todo updated', (todo) => {
-    todoConnection.updateInstance(order);
-}).on('todo removed', (todo) => {
-    todoConnection.destroyInstance(order);
-});
-```
-
-Simulate a service layer where you can create, retrieve, update and delete (CRUD)
-records:
-
-```js
-import {fixture} from "can";
-
-var todosStore = fixture.store([
-    {id: 0, name: "use fixtures", complete: false}
-], Todo);
-
-fixture("/api/todos/{id}", todosStore);
-```
 
 ## Views
 
@@ -1294,6 +1017,285 @@ Component.extend({
 
 > [See it live](https://justinbmeyer.jsbin.com/hexubon/2/edit?html,js,output)
 
+## Data Modeling
+
+Connect data types to a restful service with [can-rest-model]:
+
+```js
+import {restModel} from "can";
+
+const todoConnection = restModel({
+    Map: Todo,
+    List: Todo.List,
+    url: "/api/todos/{id}"
+});
+```
+
+Retrieve, create, update and destroy data programmatically:
+
+<table>
+<tr>
+    <th>JavaScript API</th>
+    <th>Request</th>
+    <th>Response</th>
+</tr>
+<tr>
+<td>
+
+```js
+Todo.getList({
+  // Selects only the todos that match
+  filter: {
+    complete: {$in: [false, null]}
+  },
+  // Sort the results of the selection
+  sort: "-name",
+  // Paginate the sorted result
+  page: {start: 0, end: 19}
+}) //-> Promise<TodoList[]>
+```
+
+</td>
+<td>
+
+```
+GET /api/todos?
+  filter[complete][$in][]=false&
+  filter[complete][$in][]=null&
+  sort=-name&
+  page[start]=0&
+  page[end]=19
+
+
+
+
+
+```
+
+</td>
+<td>
+
+```js
+{
+  "data": [
+    {
+      "id": 20,
+      "name": "mow lawn",
+      "complete": false
+    },
+    ...
+  ]
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+Todo.get({
+  id: 5
+}) //-> Promise<Todo>
+
+
+
+```
+
+</td>
+<td>
+
+```
+GET /api/todos/5
+
+
+
+
+
+```
+
+</td>
+<td>
+
+```js
+{
+  "id": 5,
+  "name": "do dishes",
+  "complete": true
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+var todo = new Todo({
+  name: "make a model"
+})
+todo.save()  //-> Promise<Todo>
+
+
+```
+
+</td>
+<td>
+
+```
+POST /api/todos
+    {
+      "name": "make a model",
+      "complete": false
+    }
+```
+
+</td>
+<td>
+
+```js
+{
+  "id": 22,
+  "name": "make a model",
+  "complete": false
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+todo.complete = true;
+todo.save()  //-> Promise<Todo>
+
+
+
+
+```
+
+</td>
+<td>
+
+```
+PUT /api/todos/22
+    {
+      "name": "make a model",
+      "complete": true
+    }
+```
+
+</td>
+<td>
+
+```js
+{
+  "id": 22,
+  "name": "make a model",
+  "complete": true
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+todo.destroy()  //-> Promise<Todo>
+
+
+```
+
+</td>
+<td>
+
+```
+DELETE /api/todos/22
+
+
+```
+
+</td>
+<td>
+
+```
+Successful status code (2xx).
+Response body is not necessary.
+```
+
+</td>
+</tr>
+</table>
+
+Check the status of request:
+
+```js
+var todo = new Todo({ name: "make a model"});
+
+// Return if the todo hasn't been persisted
+todo.isNew()    //-> true
+
+// Listen to when any todo is created:
+Todo.on("created", function(ev, todo){});
+
+var savedPromise = todo.save();
+
+// Return if the todo is being created or updated
+todo.isSaving() //-> true
+
+savedPromise.then(function(){
+    todo.isNew() //-> false
+    todo.isSaving() //-> false
+
+    var destroyedPromise = todo.destroy();
+
+    // Return if the todo is being destroyed
+    todo.isDestroying() //-> true
+
+    destroyedPromise.then(function(){
+        todo.isDestroying() //-> false
+    })
+});
+```
+
+
+Connect data types to a restful service and have CanJS automatically manage
+adding and removing items from lists with [can-realtime-rest-model]:
+
+```js
+import {realtimeRestModel} from "can";
+
+// Define a real time restful model
+const todoConnection = realtimeRestModel({
+    Map: Todo,
+    List: Todo.List,
+    url: "/api/todos/{id}"
+});
+
+// Update instances and lists from server-side events:
+socket.on('todo created', (todo) => {
+    todoConnection.createInstance(order);
+}).on('todo updated', (todo) => {
+    todoConnection.updateInstance(order);
+}).on('todo removed', (todo) => {
+    todoConnection.destroyInstance(order);
+});
+```
+
+Simulate a service layer where you can create, retrieve, update and delete (CRUD)
+records:
+
+```js
+import {fixture} from "can";
+
+var todosStore = fixture.store([
+    {id: 0, name: "use fixtures", complete: false}
+], Todo);
+
+fixture("/api/todos/{id}", todosStore);
+```
 
 ## Routing
 
