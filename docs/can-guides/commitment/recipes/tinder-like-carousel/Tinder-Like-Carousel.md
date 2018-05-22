@@ -92,6 +92,7 @@ can.Component.extend({
 });
 ```
 
+
 ### The solution
 
 Update the __JavaScript__ tab to:
@@ -132,12 +133,33 @@ If we were to remove items on the `ViewModel` as follows, the images will update
 can.viewModel(document.querySelector("evil-tinder")).profiles.shift()
 ```
 
-
 ### What you need to know
 
 - Use `default` to create a default value
 - Create a getter to read a value
 - Use `.get()` to read from a value in a list in such a way that it is observable
+
+To change the HTML content of the page, use {{expression}} to update the `view` like:
+
+```js
+  <img src="{{customTag.img}}"/> 
+```
+
+Methods can be used to change the ViewModel. The following methods create that
+change the `img` value:
+
+```js
+ViewModel: {
+  profiles: {
+    default () {
+      return [{img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/gru.jpg"},
+    }
+  }
+}
+```
+
+
+Now we need to create a getter to read a value
 
 ### The solution
 
@@ -214,7 +236,7 @@ horizontal position to match how far the user has dragged.
   ```
 
 The remaining problem is how to get a `howFarWeHaveMoved` ViewModel property to update
-as the user creates a drag motion. As drag motions 
+as the user creates a drag motion. As drag motions
 
 - Desktop browsers dispatch mouse events. Mobile browsers dispatch touch events.
   _Most_ desktop and
