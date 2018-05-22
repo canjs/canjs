@@ -39,6 +39,29 @@ This JS Bin:
 - Loads CanJS
 - Loads pepjs polyfill
 
+### The problem
+
+When someone adds `<evil-tinder></evil-tinder>` to their HTML, we want the following HTML  
+to show up:
+
+```html
+<div class="header"></div>
+
+<div class="images">
+  <div class='current'>
+    <img src="http://www.ryangwilson.com/bitovi/evil-tinder/villains/wickedwitch.jpg"/>
+  </div>
+  <div class='next'>
+    <img src="http://www.ryangwilson.com/bitovi/evil-tinder/villains/venom.jpg"/>
+  </div>
+</div>
+
+<div class="footer">
+  <button class="dissBtn">Dislike</button>
+  <button class="likeBtn">Like</button>
+</div>
+```
+
 ### What you need to know
 
 To setup a basic CanJS application, you define a custom element in JavaScript and
@@ -85,15 +108,36 @@ Update the `<body>` element in the __HTML__ tab to:
 
 ## Show the current and next profile images
 
+### The problem
 
+Instead of hard-coding the current and next image urls, we want to show the first two items
+in the following list of profiles:
+
+```js
+[{img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/gru.jpg"},
+ {img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/hannibal.jpg"},
+ {img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/joker.jpg"},
+ {img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/darth.jpg"},
+ {img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/norman.jpg"},
+ {img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/stapuft.jpg"},
+ {img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/dalek.jpg"},
+ {img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/wickedwitch.jpg"},
+ {img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/zod.jpg"},
+ {img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/venom.jpg"}]
+```
+
+If we were to remove items on the `ViewModel` as follows, the images will update:
+
+```js
+can.viewModel(document.querySelector("evil-tinder")).profiles.shift()
+```
 
 
 ### What you need to know
 
-
-
-
-
+- Use `default` to create a default value
+- Create a getter to read a value
+- Use `.get()` to read from a value in a list in such a way that it is observable
 
 ### The solution
 
@@ -105,15 +149,15 @@ Update the __JavaScript__ tab to:
 
 ## Add a like button
 
+### The problem
 
-
+When someone clicks the like button, console.log `LIKED` and remove the
+first profile.
 
 ### What you need to know
 
-
-
-
-
+- on:event bindings
+- remove from the start of an array
 
 ### The solution
 
@@ -127,10 +171,14 @@ Update the __JavaScript__ tab to:
 
 ## Add a nope button
 
+### The problem
 
-
+When someone clicks the like button, console.log `NOPED` and remove the
+first profile.
 
 ### What you need to know
+
+- You know everything you need to know
 
 ### The solution
 
@@ -144,14 +192,40 @@ Update the __JavaScript__ tab to:
 ## Drag and move the profile to the left and right
 
 
+### The problem
+
+In this section we will:
+
+- Move the current profile to the left or right as user drags the image to the
+  left or right.
+- Implement drag functionality so it works on a mobile or desktop device.
+- Move the `<div class='current'>` element
 
 
 ### What you need to know
 
+We need to listen to when a user drags and update the `<div class='current'>` element's
+horizontal position to match how far the user has dragged.
 
+- To update an element's horizontal position with [can-stache] you can set the `element.style.left`
+  property like:
+  ```HTML
+  <div class='current' style="left: {{howFarWeHaveMoved}}px">
+  ```
 
+The remaining problem is how to get a `howFarWeHaveMoved` ViewModel property to update
+as the user creates a drag motion. As drag motions 
 
-
+- Desktop browsers dispatch mouse events. Mobile browsers dispatch touch events.
+  _Most_ desktop and
+- pointer events
+- the [pep polyfill](https://www.npmjs.com/package/pepjs-improved)
+    - touch-action="none" needed for polyfill to work
+- default drag behavior with a mouse we need to cancel `draggable="false"`
+- listen for down on the element you want to star the move
+- listen to the document for the move
+- use `left: {{}}px` to update where an element is in the page
+- `connectedCallback` is where "junk goes"
 
 ### The solution
 
