@@ -1,5 +1,5 @@
 can.Component.extend({
-  tag: 'video-player',
+  tag: "video-player",
   view: `
     <video controls
       on:play="play()"
@@ -8,12 +8,12 @@ can.Component.extend({
     </video>
     <div>
       <button on:click="togglePlay()">
-        {{#if(playing)}}Pause{{else}}Play{{/if}}
+        {{#if(playing)}} Pause {{else}} Play {{/if}}
       </button>
     </div>
-    `,
+  `,
   ViewModel: {
-    src: 'string',
+    src: "string",
     playing: "boolean",
 
     play() {
@@ -26,8 +26,8 @@ can.Component.extend({
       this.playing = !this.playing;
     },
 
-    connectedCallback(element){
-      this.listenTo("playing", function(ev, isPlaying){
+    connectedCallback(element) {
+      this.listenTo("playing", function(event, isPlaying) {
         if (isPlaying) {
           element.querySelector("video").play();
         } else {
