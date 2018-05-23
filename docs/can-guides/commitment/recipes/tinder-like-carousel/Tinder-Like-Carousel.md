@@ -16,7 +16,7 @@ carousel. The custom widget will:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="http://jsbin.com/viruhuw/7/embed?html,js,output&height=600px">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/viruhuw/7/embed?html,js,output&height=600px">JS Bin on jsbin.com</a>
 
 
 The following sections are broken down the folowing parts:
@@ -33,7 +33,7 @@ __START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
 
 > Click the `JS Bin` button.  The JS Bin will open in a new window. In that new window, under `File`, click `Clone`.
 
-<a class="jsbin-embed" href="http://jsbin.com/safago/4/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/safago/4/embed?html,js,output">JS Bin on jsbin.com</a>
 
 This JS Bin:
 
