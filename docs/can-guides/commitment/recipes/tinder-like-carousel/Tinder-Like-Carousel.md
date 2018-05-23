@@ -247,7 +247,7 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-- When someone clicks the like button, console.log `NOPED` and remove the first profile.
+- When someone clicks the nope button, console.log `NOPED` and remove the first profile.
 
 ### What you need to know
 
