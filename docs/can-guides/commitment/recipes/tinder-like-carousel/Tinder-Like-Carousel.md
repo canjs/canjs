@@ -1,22 +1,22 @@
-@page guides/recipes/tinder-like-carousel Tinder-Like-Carousel (Simple)
+@page guides/recipes/tinder-like-carousel Tinder-Like-Carousel (Medium)
 @parent guides/recipes
 
-@description This guide walks you through building a Like-Tinder-Carousel
+@description This guide walks you through building a [Tinder](https://tinder.com/)-like
+carousel. Learn how build apps that use dragging user interactions.
 
 @body
 
 
-In this guide, you will learn how to create a custom __Tinder-like-carousel__  .
-The custom widget will:
+In this guide, you will learn how to create a custom [Tinder](https://tinder.com/)-like
+carousel. The custom widget will:
 
-- Have touch and drag functionality
+- Have touch and drag functionality that works on mobile and desktop.
 - Have custom `<button>`'s for liking and disliking
-- Have how to `shift` to next profiles images using `.get()`
 
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="http://jsbin.com/viruhuw/4/embed?html,js,output&height=600px">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="http://jsbin.com/viruhuw/7/embed?html,js,output&height=600px">JS Bin on jsbin.com</a>
 
 
 The following sections are broken down the folowing parts:
@@ -33,12 +33,13 @@ __START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
 
 > Click the `JS Bin` button.  The JS Bin will open in a new window. In that new window, under `File`, click `Clone`.
 
-<a class="jsbin-embed" href="http://jsbin.com/safago/2/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="http://jsbin.com/safago/4/embed?html,js,output">JS Bin on jsbin.com</a>
 
 This JS Bin:
 
-- Loads CanJS
-- Loads pepjs polyfill
+- Loads CanJS's global build. All of it's packages are available as `can.X`.  For example [can-component]
+  is available as `can.Component`.
+- Loads the [pepjs polyfill](https://www.npmjs.com/package/pepjs-improved) for pointer event support.
 
 ### The problem
 
@@ -88,10 +89,11 @@ can.Component.extend({
     <h2>Evil-Tinder</h2>
   `,
   ViewModel{
-
   }
 });
 ```
+
+> NOTE: We'll make use of the `ViewModel` property later.
 
 
 ### The solution
@@ -136,38 +138,52 @@ can.viewModel(document.querySelector("evil-tinder")).profiles.shift()
 
 ### What you need to know
 
-- Use `default` to create a default value
-- Create a getter to read a value
-- Use `.get()` to read from a value in a list in such a way that it is observable
-
-{{expression}} - Inserts the result of expression in the page.
-To change the HTML content of the page, use {{expression}} to update the `view` like:
-
-```js
-  <img src="{{src.img}}"/>
-```
-
-Methods can be used to change the ViewModel. The following methods create that
-change the `img` value:
-
-```js
-ViewModel: {
-  profiles: {
-    default () {
-      return [{img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/gru.jpg"},
-    }
-  }
-}
-```
-
-- Use a [can-map-define.get getter] to derive a value from another value on the ViewModel, this will allow us to get the next profile image:
+- A component's `view` is rendered with its [can-component.prototype.ViewModel]. For example, we can create
+  a list of profiles and write out an `<img>` for each one like:
 
   ```js
-  get customeTag() {
+  can.Component.extend({
+    tag: "evil-tinder",
+    view: `
+      {{# each(profiles) }}
+          <img src="{{img}}"/>
+      {{/ each}}
+    `,
+    ViewModel: {
+      profiles: {
+        default(){
+          return [{img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/gru.jpg"},
+              {img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/hannibal.jpg"}];
+        }
+      }
+    }
+  });
+  ```
+
+  The [can-define.types.default] behavior specifies the default value of the `profiles`
+  property.
+
+  The `view` uses [can-stache.tags.escaped] to write out values from the `ViewModel` into the DOM.
+
+- Use a [can-map-define.get getter] to derive a value from another value on the ViewModel, this will allow   
+  us to get the next profile image:
+
+  ```js
+  get currentProfile() {
     return this.profiles.get(0);
   },
   ```
 
+  > NOTE Use `.get(0)` to make sure `currentProfile` changes when a is removed from the list.
+
+
+### How to verify it works
+
+Run the following in the `CONSOLE` tab.  The background image should move to the foreground.
+
+```js
+can.viewModel(document.querySelector("evil-tinder")).profiles.shift()
+```
 
 ### The solution
 
@@ -181,27 +197,25 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-- When someone clicks the like button, console.log `LIKED` and remove the first profile.
-- `button` - Adding event listeners
-- `events` - Adding events to the `ViewModel`
+- When someone clicks the like button, console.log `LIKED` and remove the first profile image and show the
+  next one in the list.
 
 
 ### What you need to know
 
-- on:event bindings
-- remove from the start of an array using `.shift`
-- Use [can-stache-bindings.event] to call a function when an element is clicked:
+- Use [can-stache-bindings.event] to call a function on the `ViewModel` when a DOM event happens:
 
   ```js
   <button on:click="doSomething()"></button>
   ```
 
-- Those functions (example: `doSomething`) are usually methods on the Component’s [can-component.prototype.ViewModel].  For example, the following creates a `doSomething` method on the ViewModel:
+- Those functions (example: `doSomething`) are usually methods on the Component’s
+  [can-component.prototype.ViewModel].  For example, the following creates a `doSomething` method on the ViewModel:
 
   ```js
   can.Component.extend({
     tag: "some-element",
-    view: `<button on:click="doSomething('bold')"></button>`,
+    view: `<button on:click="doSomething('dance')"></button>`,
     ViewModel: {
       doSomething(cmd) {
         alert("doing "+cmd);
@@ -209,6 +223,14 @@ Update the __JavaScript__ tab to:
     }
   })
   ```
+
+- Use `.shift` to remove an item from the start of an array:
+  ```js
+  this.profiles.shift();
+  ```
+
+
+
 
 
 ### The solution
@@ -226,8 +248,6 @@ Update the __JavaScript__ tab to:
 ### The problem
 
 - When someone clicks the like button, console.log `NOPED` and remove the first profile.
-- `button` - Adding event listeners
-- `events` - Adding events to the `ViewModel`
 
 ### What you need to know
 
@@ -267,9 +287,6 @@ horizontal position to match how far the user has dragged.
   ```
 
 The remaining problem is how to get a `howFarWeHaveMoved` ViewModel property to update
-<<<<<<< HEAD
-as the user creates a drag motion. As drag motions
-=======
 as the user creates a drag motion.
 
 - Define a number property on a `ViewModel` with:
@@ -293,7 +310,6 @@ as the user creates a drag motion.
       }
     }
   ```
->>>>>>> 7ce96f0847a75b6aa6fe91ada42281304be4bcce
 
 - Desktop browsers dispatch mouse events. Mobile browsers dispatch touch events.
   _Most_ desktop and dispatch [Pointer events](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events).

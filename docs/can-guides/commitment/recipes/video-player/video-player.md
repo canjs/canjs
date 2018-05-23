@@ -87,7 +87,7 @@ can.Component.extend({
 });
 ```
 
-A component's `view` is rendered with it's [can-component.prototype.ViewModel]. For example, we can
+A component's `view` is rendered with its [can-component.prototype.ViewModel]. For example, we can
 make the `<input>` say `"AWESOME VIDEO"` by defining a `src` property and using it in the `view` like:
 
 ```js
