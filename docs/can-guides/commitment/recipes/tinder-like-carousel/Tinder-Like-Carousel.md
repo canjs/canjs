@@ -1,4 +1,4 @@
-@page guides/recipes/tinder-like-carousel Tinder-Like-Carousel (Medium)
+@page guides/recipes/tinder-carousel Tinder Carousel (Medium)
 @parent guides/recipes
 
 @description This guide walks you through building a [Tinder](https://tinder.com/)-like
