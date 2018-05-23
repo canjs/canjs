@@ -21,16 +21,16 @@ can.Component.extend({
   ViewModel: {
     profiles: {
       default () {
-        return [{img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/gru.jpg"},
-          {img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/hannibal.jpg"},
-          {img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/joker.jpg"},
-          {img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/darth.jpg"},
-          {img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/norman.jpg"},
-          {img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/stapuft.jpg"},
-          {img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/dalek.jpg"},
-          {img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/wickedwitch.jpg"},
-          {img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/zod.jpg"},
-          {img: "http://www.ryangwilson.com/bitovi/evil-tinder/villains/venom.jpg"}]
+          return [{img: "https://user-images.githubusercontent.com/78602/40454685-5cab196e-5eaf-11e8-87ac-4af6792994ed.jpg"},
+           {img: "https://user-images.githubusercontent.com/78602/40454705-6bf4d3d8-5eaf-11e8-9562-2bd178485527.jpg"},
+           {img: "https://user-images.githubusercontent.com/78602/40454830-e71178dc-5eaf-11e8-80ee-efd64911e35f.png"},
+           {img: "https://user-images.githubusercontent.com/78602/40454681-59cffdb8-5eaf-11e8-94ac-4849ab08d90c.jpg"},
+           {img: "https://user-images.githubusercontent.com/78602/40454709-6fecc536-5eaf-11e8-9eb5-3da39730adc4.jpg"},
+           {img: "https://user-images.githubusercontent.com/78602/40454711-72b19d78-5eaf-11e8-9732-80155ff8bb52.jpg"},
+           {img: "https://user-images.githubusercontent.com/78602/40454672-566b4984-5eaf-11e8-808d-cb5afd445e89.jpg"},
+           {img: "https://user-images.githubusercontent.com/78602/40454720-7c3d984c-5eaf-11e8-9fa7-f68ddd33e3f0.jpg"},
+           {img: "https://user-images.githubusercontent.com/78602/40454722-802ef694-5eaf-11e8-8964-ca648368720d.jpg"},
+           {img: "https://user-images.githubusercontent.com/78602/40454716-76bef438-5eaf-11e8-9d29-5002260e96e1.jpg"}];
       }
     },
 
