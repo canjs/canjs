@@ -1,5 +1,5 @@
 can.Component.extend({
-  tag: 'video-player',
+  tag: "video-player",
   view: `
     <video
       on:play="play()"
@@ -10,16 +10,16 @@ can.Component.extend({
     </video>
     <div>
       <button on:click="togglePlay()">
-        {{#if(playing)}}Pause{{else}}Play{{/if}}
+        {{#if(playing)}} Pause {{else}} Play {{/if}}
       </button>
       <input type="range" value="0" max="1" step="any"
              value:bind="percentComplete"/>
       <span>{{formatTime(currentTime)}}</span> /
       <span>{{formatTime(duration)}} </span>
     </div>
-    `,
+  `,
   ViewModel: {
-    src: 'string',
+    src: "string",
     playing: "boolean",
     duration: "number",
     currentTime: "number",
@@ -28,7 +28,7 @@ can.Component.extend({
       return this.currentTime / this.duration;
     },
     set percentComplete(newVal) {
-     this.currentTime = newVal * this.duration;
+      this.currentTime = newVal * this.duration;
     },
 
     updateTimes(videoElement) {
@@ -37,14 +37,14 @@ can.Component.extend({
     },
     formatTime(time) {
       if (time === null || time === undefined) {
-        return "--"
+        return "--";
       }
-      const durmins = Math.floor(time / 60);
-      let dursecs = Math.floor(time - durmins * 60);
-      if (dursecs < 10) {
-        dursecs = "0" + dursecs;
+      const minutes = Math.floor(time / 60);
+      let seconds = Math.floor(time - minutes * 60);
+      if (seconds < 10) {
+        seconds = "0" + seconds;
       }
-      return durmins + ":" + dursecs
+      return minutes + ":" + seconds;
     },
     play() {
       this.playing = true;
@@ -56,16 +56,19 @@ can.Component.extend({
       this.playing = !this.playing;
     },
 
-    connectedCallback(element){
-      this.listenTo("playing", function(ev, isPlaying){
+    connectedCallback(element) {
+      this.listenTo("playing", function(event, isPlaying) {
         if (isPlaying) {
           element.querySelector("video").play();
         } else {
           element.querySelector("video").pause();
         }
       });
-      this.listenTo("currentTime", function(ev, currentTime){
-        element.querySelector("video").currentTime = currentTime;
+      this.listenTo("currentTime", function(event, currentTime) {
+        const videoElement = element.querySelector("video");
+        if (currentTime !== videoElement.currentTime) {
+          videoElement.currentTime = currentTime;
+        }
       });
     }
   }
