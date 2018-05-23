@@ -490,4 +490,4 @@ Update the __JavaScript__ tab to:
 @sourceref ./8-empty-profile.js
 @highlight 41-45,48,51,only
 
-<script src="http://static.jsbin.com/js/embed.min.js?4.1.4"></script>
+<script src="https://static.jsbin.com/js/embed.min.js?4.1.4"></script>
