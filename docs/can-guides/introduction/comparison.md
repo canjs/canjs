@@ -36,7 +36,7 @@ Suddenly, the strict unidirectional data flow, is no longer that easy to follow,
 
 ```javascript
 const ViewModel = DefineMap.extend({
-  subreddit: 'string',
+  subreddit: "string",
   posts: {
     get(lastSetValue, resolve) {
       this.postPromise
@@ -131,8 +131,8 @@ One-Way data flow may be simpler to follow, but you end up writing a lot more co
 ```javascript
 // Binding to a Todo models completed property
 const Todo = DefineMap.extend({
-  name: 'string',
-  completed: 'boolean'
+  name: "string",
+  completed: "boolean"
 });
 
 // In stache

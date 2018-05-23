@@ -1,5 +1,5 @@
 can.Component.extend({
-  tag: 'video-player',
+  tag: "video-player",
   view: `
     <video controls
       on:play="play()"
@@ -10,14 +10,14 @@ can.Component.extend({
     </video>
     <div>
       <button on:click="togglePlay()">
-        {{#if(playing)}}Pause{{else}}Play{{/if}}
+        {{#if(playing)}} Pause {{else}} Play {{/if}}
       </button>
       <span>{{formatTime(currentTime)}}</span> /
       <span>{{formatTime(duration)}} </span>
     </div>
-    `,
+  `,
   ViewModel: {
-    src: 'string',
+    src: "string",
     playing: "boolean",
     duration: "number",
     currentTime: "number",
@@ -28,14 +28,14 @@ can.Component.extend({
     },
     formatTime(time) {
       if (time === null || time === undefined) {
-        return "--"
+        return "--";
       }
-      const durmins = Math.floor(time / 60);
-      let dursecs = Math.floor(time - durmins * 60);
-      if (dursecs < 10) {
-        dursecs = "0" + dursecs;
+      const minutes = Math.floor(time / 60);
+      let seconds = Math.floor(time - minutes * 60);
+      if (seconds < 10) {
+        seconds = "0" + seconds;
       }
-      return durmins + ":" + dursecs
+      return minutes + ":" + seconds;
     },
     play() {
       this.playing = true;
@@ -47,8 +47,8 @@ can.Component.extend({
       this.playing = !this.playing;
     },
 
-    connectedCallback(element){
-      this.listenTo("playing", function(ev, isPlaying){
+    connectedCallback(element) {
+      this.listenTo("playing", function(event, isPlaying) {
         if (isPlaying) {
           element.querySelector("video").play();
         } else {
