@@ -5,10 +5,10 @@ can.Component.extend({
 
       <div class="images">
         <div class='current'>
-          <img src="http://www.ryangwilson.com/bitovi/evil-tinder/villains/wickedwitch.jpg"/>
+          <img src="https://user-images.githubusercontent.com/78602/40454720-7c3d984c-5eaf-11e8-9fa7-f68ddd33e3f0.jpg"/>
         </div>
         <div class='next'>
-          <img src="http://www.ryangwilson.com/bitovi/evil-tinder/villains/venom.jpg"/>
+          <img src="https://user-images.githubusercontent.com/78602/40454716-76bef438-5eaf-11e8-9d29-5002260e96e1.jpg"/>
         </div>
       </div>
 
