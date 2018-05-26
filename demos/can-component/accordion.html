@@ -88,17 +88,16 @@ Component.extend({
 			type: "boolean",
 			default: false
 		},
-		title: "string"
-	}),
-	events: {
-		inserted: function(){
-			var vm = this.parentViewModel = canViewModel(this.element.parentNode);
-			vm.addPanel(this.viewModel);
-		},
-		removed: function(){
-			this.parentViewModel.removePanel(this.viewModel);
+		title: "string",
+		connectedCallback: function(element) {
+			var panel = this;
+			var parentViewModel = canViewModel(element.parentNode);
+			parentViewModel.addPanel(panel);
+			return function() {
+				parentViewModel.removePanel(panel);
+			};
 		}
-	}
+	})
 });
 
 var out = document.getElementById("out");
