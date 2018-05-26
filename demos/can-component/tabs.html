@@ -48,7 +48,7 @@ var DefineList = require("can-define/list/list");
 var canViewModel = require("can-view-model");
 var queues = require("can-queues");
 
-var Panel = DefineMap.extend({seal: false}, {
+var Panel = DefineMap.extend("Panel", {
 	active: {
 		type: "boolean",
 		default: false
