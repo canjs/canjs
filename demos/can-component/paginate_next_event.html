@@ -10,7 +10,7 @@
   <ul>
   	{{#each(players, player=value)}}
   		<li {{#scope.root.isEditing(player)}}class="editing"{{/isEditing}}
-  			on:click='editPlayer(player)'>{{player.name}}</li>
+  			on:click='scope.root.editPlayer(player)'>{{player.name}}</li>
   	{{/each}}
   </ul>
   <player-edit
@@ -19,7 +19,7 @@
 </script>
 <script id="player-edit-stache" type="text/stache">
 	{{#if(player)}}
-		<input default:bind="player.name"/>
+		<input value:bind="player.name"/>
 		<button on:click="close()">X</button>
 	{{/if}}
 </script>

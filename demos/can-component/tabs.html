@@ -48,10 +48,18 @@ var DefineList = require("can-define/list/list");
 var canViewModel = require("can-view-model");
 var queues = require("can-queues");
 
-var Panel = DefineMap.extend({
+var Panel = DefineMap.extend("Panel", {
 	active: {
 		type: "boolean",
-		value: false
+		default: false
+	},
+	connectedCallback: function(element) {
+		var panel = this;
+		var parentViewModel = canViewModel(element.parentNode);
+		parentViewModel.addPanel(panel);
+		return function() {
+			parentViewModel.removePanel(panel);
+		};
 	}
 });
 
@@ -130,16 +138,7 @@ Component.extend({
 Component.extend({
 	view: stache("{{#if(active)}}<content></content>{{/if}}"),
 	tag:"my-panel",
-	ViewModel: Panel,
-	events: {
-		inserted: function(){
-			var vm = this.parentViewModel = canViewModel(this.element.parentNode);
-			vm.addPanel(this.viewModel);
-		},
-		removed: function(){
-			this.parentViewModel.removePanel(this.viewModel);
-		}
-	}
+	ViewModel: Panel
 });
 
 var foodTypes = new DefineList([
