@@ -10,10 +10,10 @@ var DefineMap = require("can-define/map/map");
 
 var ViewModel = DefineMap.extend({
 	offset: {
-		value: 0
+		default: 0
 	},
 	limit: {
-		value: 20
+		default: 20
 	},
 	next: function(){
 		this.offset = this.offset + this.limit;

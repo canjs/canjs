@@ -72,7 +72,7 @@ I’m sorry; your browser doesn’t support HTML5 video in WebM with VP8/VP9 or 
 
 ### What you need to know
 
-To setup a basic CanJS application, you define a custom element in JavaScript and
+To set up a basic CanJS application, you define a custom element in JavaScript and
 use the custom element in your page’s `HTML`.
 
 To define a custom element, extend [can-component] with a [can-component.prototype.tag]
@@ -86,7 +86,7 @@ can.Component.extend({
 
 Then you can use this tag in your HTML page:
 
-```HTML
+```html
 <rich-text-editor></rich-text-editor>
 ```
 

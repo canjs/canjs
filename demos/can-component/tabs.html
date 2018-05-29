@@ -43,10 +43,18 @@ my-tabs ul { display: inline-block; }
 <script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id="demo-source">
 import { Component, DefineList, DefineMap, queues, stache, viewModel } from "can";
 
-var Panel = DefineMap.extend({
+var Panel = DefineMap.extend("Panel", {
 	active: {
 		type: "boolean",
 		default: false
+	},
+	connectedCallback: function(element) {
+		var panel = this;
+		var parentViewModel = canViewModel(element.parentNode);
+		parentViewModel.addPanel(panel);
+		return function() {
+			parentViewModel.removePanel(panel);
+		};
 	}
 });
 
@@ -125,16 +133,7 @@ Component.extend({
 Component.extend({
 	view: stache("{{#if(active)}}<content></content>{{/if}}"),
 	tag:"my-panel",
-	ViewModel: Panel,
-	events: {
-		inserted: function(){
-			var vm = this.parentViewModel = canViewModel(this.element.parentNode);
-			vm.addPanel(this.viewModel);
-		},
-		removed: function(){
-			this.parentViewModel.removePanel(this.viewModel);
-		}
-	}
+	ViewModel: Panel
 });
 
 var foodTypes = new DefineList([
