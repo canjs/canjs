@@ -1,38 +1,40 @@
 <html>
 <head>
     <style>
-
+        [type=date] {
+            border: none;
+        }
     </style>
 </head>
 <body>
-<todo-create></todo-create>
 <todo-list></todo-list>
 
-<script src="../../node_modules/steal/steal.js"  deps-bundle></script>
+<script src="../../node_modules/steal/steal.js" deps-bundle></script>
 
 <script type="steal-module" id="demo-source">
-import {realtimeRestModel, DefineMap, DefineList, Component, fixture, stache, Reflect} from "can";
-import "can-stache-converters";
+import {restModel, DefineMap, DefineList, Component, fixture, stache, Reflect} from "can";
 
 const Todo = DefineMap.extend("Todo",{
+
+    // `id` uniquely identifies instances of this type.
     id: { type: "number", identity: true },
+
     complete: { type: "boolean", default: false },
-    dueDate: {type: "date", Default: Date},
-    name: "string",
-    preventSave(){
-        return !this.name || this.isSaving() || this.isDestroying();
-    }
+    dueDate: "date",
+    name: "string"
 });
 
 Todo.List = DefineList.extend("TodoList",{
     "#": Todo
 });
 
-const todoConnection = realtimeRestModel({
+const todoConnection = restModel({
     Map: Todo,
     List: Todo.List,
     url: "/api/todos/{id}"
 });
+
+
 
 var terms = ["can you","please","","","",""],
     verbs = ["clean","walk","do","vaccum","organize","fold","wash","dust","pay","cook","get","take out"],
@@ -51,7 +53,6 @@ var todoStore = fixture.store(100, function(){
 }, Todo);
 
 fixture("/api/todos/{id}", todoStore);
-fixture.delay = 500;
 
 Component.extend({
     tag: "todo-list",
@@ -84,17 +85,9 @@ Component.extend({
         {{# if(todosPromise.isResolved) }}
             {{# each(todosPromise.value) }}
                 <li>
-                    <input type='checkbox'
-                        checked:bind='complete'
-                        on:change="save()"
-                        disabled:from="preventSave()"/>
+                    <input type='checkbox' checked:bind='complete' disabled/>
                     <label>{{name}}</label>
-                    <input type='date'
-                        valueAsDate:bind='dueDate'
-                        on:change="save()"
-                        disabled:from="preventSave()"/>
-                    <button on:click="destroy()"
-                        disabled:from="preventSave()">delete</button>
+                    <input type='date' valueAsDate:bind='dueDate' disabled/>
                 </li>
             {{/ each }}
         {{/ if}}
@@ -144,39 +137,18 @@ Component.extend({
                 }
                 return Todo.getList(query);
             }
-        }
-    }
-});
-
-Component.extend({
-    tag: "todo-create",
-    view: `
-        <form on:submit="createTodo(scope.event)">
-            <p>
-                <label>Name</label>
-                <input on:input:value:bind='todo.name'/>
-            </p>
-            <p>
-                <label>Complete</label>
-                <input type='checkbox' checked:bind='todo.complete'/>
-            </p>
-            <p>
-                <label>Date</label>
-                <input type='date' valueAsDate:bind='todo.dueDate'/>
-            </p>
-            <button disabled:from="todo.preventSave()">Create Todo</button>
-            {{# if(todo.isSaving()) }}Creating ....{{/ if}}
-        </form>
-    `,
-    ViewModel: {
-        todo: {
-            Default: Todo
         },
-        createTodo(event) {
-            event.preventDefault();
-            this.todo.save().then((createdTodo) => {
-                this.todo = new Todo();
+        todos: {
+            get(lastSet, resolve) {
+                this.todosPromise.then(resolve);
+            }
+        },
+        connectedCallback() {
+            this.listenTo(Todo,"created",   (event, createdTodo)   => {
+                
             })
+            this.listenTo(Todo,"updated",   (event, updatedTodo)   => { ... })
+            this.listenTo(Todo,"destroyed", (event, destroyedTodo) => { ... })
         }
     }
 });

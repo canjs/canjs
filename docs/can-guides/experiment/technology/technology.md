@@ -915,7 +915,7 @@ Component.extend({
 });
 ```
 
-@highlight 5-6,22
+@highlight 5-6,22,only
 
 See it in action here:
 
@@ -1012,7 +1012,7 @@ Component.extend({
     }
 });
 ```
-@highlight 4-26,44-47,81
+@highlight 4-26,44-82,only
 
 See it in action here:
 
@@ -1082,7 +1082,7 @@ Component.extend({
                     <td>{{name}}</td>
                     <td><input type='date' valueAsDate:bind='dueDate' disabled/></td>
                 </tr>
-            {{else}}
+            {{ else }}
                 <tr><td colspan='4'><i>The todos you create will be listed here</i></td></tr>
             {{/ each }}
         </table>
@@ -1097,19 +1097,260 @@ Component.extend({
     }
 });
 ```
-@highlight 25
+@highlight 25,only
 
 ### Updating records
 
+Use [can-connect/can/map/map.prototype.save] to update records. For example, the
+following creates a component that uses `Todo.prototype.save` to update data:
+
+```js
+Component.extend({
+    tag: "todo-update",
+    view: `
+        {{# if(todo) }}
+            <h3>Update Todo</h3>
+            <form on:submit="updateTodo(scope.event)">
+                <p>
+                    <label>Name</label>
+                    <input on:input:value:bind='todo.name'/>
+                </p>
+                <p>
+                    <label>Complete</label>
+                    <input type='checkbox' checked:bind='todo.complete'/>
+                </p>
+                <p>
+                    <label>Date</label>
+                    <input type='date' valueAsDate:bind='todo.dueDate'/>
+                </p>
+                <button disabled:from="todo.preventSave()">
+                    {{# if(todo.isSaving()) }}Updating{{else}}Update{{/ if}}Todo
+                </button>
+                <button disabled:from="todo.preventSave()"
+                    on:click="cancelEdit()">Cancel</button>
+
+            </form>
+        {{ else }}
+            <i>Click a todo above to edit it here.</i>
+        {{/ if }}
+    `,
+    ViewModel: {
+        todo: Todo,
+        updateTodo(event) {
+            event.preventDefault();
+            this.todo.save().then(this.cancelEdit.bind(this))
+        },
+        cancelEdit(){
+            this.todo = null;
+        }
+    }
+});
+```
+@highlight 6,32-35
+
+See this in action here:
+
+@demo demos/can-rest-model/can-rest-model-update.html
+
 ### Destroying records
+
+Use [can-connect/can/map/map.prototype.destroy] to delete records. For example, the following creates a component that uses `Todo.prototype.destroy` to delete data:
+
+```js
+Component.extend({
+    tag: "todo-list",
+    view: `
+    <ul>
+        {{# if(todosPromise.isResolved) }}
+            {{# each(todosPromise.value) }}
+                <li>
+                    <input type='checkbox' checked:bind='complete' disabled/>
+                    <label>{{name}}</label>
+                    <input type='date' valueAsDate:bind='dueDate' disabled/>
+                    <button on:click="destroy()">delete</button>
+                </li>
+            {{/ each }}
+        {{/ if}}
+        {{# if(todosPromise.isPending) }}
+            <li>Loading</li>
+        {{/ if}}
+    </ul>
+    `,
+    ViewModel: {
+        todosPromise: {
+            default(){
+                return Todo.getList({});
+            }
+        },
+        connectedCallback(){
+            this.todosPromise.then((todos)=>{
+                this.listenTo(Todo, "destroyed", function(ev, destroyed){
+                    var index = todos.indexOf(destroyed);
+                    todos.splice(index, 1);
+                });
+            });
+        }
+    }
+});
+```
+@highlight 6,11,only
+
+The following example shows this in action. Click the <button>delete</button> button to delete
+todos and have the todo removed from the list.
+
+@demo demos/can-rest-model/can-rest-model-destroy.html
+
+This demo works by calling [can-connect/can/map/map.prototype.destroy] when the <button>delete</button> button
+is clicked.
+
+```html
+<button on:click="destroy()">delete</button>
+```
+
+To keep the list of todos up to date, the above demo works by listening
+when any todo is destroyed and removing it from the list:
+
+```js
+connectedCallback(){
+    this.todosPromise.then((todos)=>{
+        this.listenTo(Todo, "destroyed", function(ev, destroyed){
+            var index = todos.indexOf(destroyed);
+            todos.splice(index, 1);
+        });
+    });
+}
+```
+
 
 ### Update lists when records are mutated
 
-When records in the page are created, updated, or destroyed, it's commonly needed
-to update lists in the page to reflect those changes.
+The previous _Creating Records_, _Updating Records_ and _Destroying Records_
+examples showed how to listen to when records are mutated:
 
-CanJS provides two ways of doing this:
+```js
+this.listenTo(Todo,"created",   (event, createdTodo)   => { ... })
+this.listenTo(Todo,"updated",   (event, updatedTodo)   => { ... })
+this.listenTo(Todo,"destroyed", (event, destroyedTodo) => { ... })
+```
 
-- Listen to events on the `Todo` type and update lists manually like is done
-  in the previous examples, __OR__
-- Use [can-realtime-rest-model] and [can-query-logic] to update lists automatically.
+These listeners can be used to update lists similar to how the _Destroying Records_
+example removed lists:
+
+```js
+connectedCallback(){
+    this.todosPromise.then( (todos)=>{
+        this.listenTo(Todo, "created", function(ev, created){
+            // ADD created to `todos`
+        })
+        this.listenTo(Todo, "destroyed", function(ev, destroyed){
+            // REMOVE destroyed from `todos`
+            var index = todos.indexOf(destroyed);
+            todos.splice(index, 1);
+        });
+        this.listenTo(Todo, "updated", function(ev, updated){
+            // ADD, REMOVE, or UPDATE the position of updated
+            // within `todos`
+        });
+    });
+}
+```
+
+But this is cumbersome, especially when lists contain
+sorted and filtered results. For example, if you are displaying
+only completed todos, you might not want to add newly created
+incomplete todos:
+
+```js
+ViewModel: {
+    todosPromise: {
+        default(){
+            return Todo.getList({filter: {complete: true}});
+        }
+    },
+    connectedCallback(){
+        this.todosPromise.then((todos)=>{
+            this.listenTo(Todo, "created", (ev, createdTodo) => {
+                // make sure the todo is complete:
+                if(createdTodo.complete) {
+                    todos.push(complete);
+                }
+            });
+        });
+    }
+}
+```
+
+Fortunately, [can-realtime-rest-model] using [can-query-logic] can
+automatically update lists for you! If your service layer matches
+what [can-query-logic] expects, you can just replace [can-rest-model] with
+[can-realtime-rest-model] as follows:
+
+```js
+import {realtimeRestModel, DefineMap, DefineList} from "can";
+
+const Todo = DefineMap.extend("Todo",{
+    id: { type: "number", identity: true },
+    complete: { type: "boolean", default: false },
+    dueDate: "date",
+    name: "string"
+});
+
+Todo.List = DefineMap.extend("TodoList",{
+    "#": Todo
+});
+
+const todoConnection = realtimeRestModel({
+    Map: Todo,
+    List: Todo.List,
+    url: "/api/todos/{id}"
+});
+```
+@highlight 1,17
+
+The following uses [can-realtime-rest-model] to create a _filterable_ and _sortable_ grid
+that automatically updates itself when todos are created, updated or destroyed.
+
+Try out the following use cases that [can-realtime-rest-model] provides automatically:
+
+- Delete a todo and the todo will be removed from the list.
+- Sort by date, then create a todo and the todo will be inserted into the right place in the list.
+- Sort by date, then edit a todo's `dueDate` and the todo will be moved to the right place in the list.
+- Show only `Complete` todos, then toggle the todo's complete status and the todo will be removed
+  from the view.
+
+@demo demos/can-realtime-rest-model/can-realtime-rest-model.html
+
+By default, `can-query-logic` assumes your service layer will match a [can-query-logic/query default query structure]
+that looks like:
+
+```js
+Todo.getList({
+    // Selects only the todos that match.
+    filter: {
+        complete: {$in: [false, null]}
+    },
+    // Sort the results of the selection
+    sort: "-name",
+    // Selects a range of the sorted result
+    page: {start: 0, end: 19}
+})
+```
+
+This structures follows the [Fetching Data JSONAPI specification](http://jsonapi.org/format/#fetching).
+
+There's:
+
+- a [filter](http://jsonapi.org/format/#fetching-filtering) property for filtering records,
+- a [sort](http://jsonapi.org/format/#fetching-sorting) property for specifying the order to sort records, and
+- a [page](http://jsonapi.org/format/#fetching-pagination) property that selects a range of the sorted result. _The range indexes are inclusive_.
+
+> __NOTE__: [can-realtime-rest-model] does not follow the rest of the JSONAPI specification. Specifically
+> [can-realtime-rest-model] expects your server to send back JSON data in a different format.
+
+If you control the service layer, we __encourage__ you to make it match the default
+[can-query-logic/query query structure].  The default query structure also supports the following [can-query-logic/comparison-operators]: `$eq`, `$gt`, `$gte`, `$in`,
+`$lt`, `$lte`, `$ne`, `$nin`.
+
+If you are unable to match the default query structure, or need special behavior, read the
+[configuration section of can-query-logic](../can-query-logic.html#Configuration)
+to learn how to configure a custom query logic.

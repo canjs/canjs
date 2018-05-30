@@ -68,6 +68,14 @@ stealTools.export({
 		}
 	}
 }).then(function(result){
+	function sizeSort(m1, m2){
+        if(m1.size > m2.size) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
     var results = [];
     for(var moduleName in result.graph) {
         if(result.graph[moduleName].activeSource) {
@@ -76,17 +84,35 @@ stealTools.export({
         }
     }
     var sum = 0;
-    results.sort(function(m1, m2){
-        if(m1.size > m2.size) {
-            return 1;
-        } else {
-            return -1;
-        }
-    }).forEach(function(m){
+    results.sort(sizeSort).forEach(function(m){
         sum += m.size;
-        console.log(m.size, m.moduleName);
+        //console.log(m.size, m.moduleName);
     });
-    console.log("total "+sum, "count "+results.length, "ave "+(sum/ results.length));
+
+
+	var packages = {};
+	results.forEach(function(mod){
+		var packageName = mod.moduleName.split("@")[0];
+		if(!packages[packageName]) {
+			packages[packageName] = {modules: [], size: 0, name: packageName}
+		}
+		packages[packageName].modules.push(mod);
+		packages[packageName].size += mod.size;
+	});
+
+	Object.keys(packages).map(function(name){ return packages[name]; })
+	.sort(sizeSort).forEach(function(m){
+
+        console.log(m.size, m.name);
+		if(m.modules.length > 1) {
+			m.modules.sort(sizeSort).forEach(function(m){
+				console.log("\t", m.size, m.moduleName)
+			})
+		}
+    });
+
+
+	console.log("total "+sum, "count "+results.length, "ave "+(sum/ results.length));
 	//console.log(result.loader._traceData.parentMap);
 }).catch(function(e){
 
