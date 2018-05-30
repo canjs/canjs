@@ -2,16 +2,29 @@
 @parent guides/upgrade 1
 @templateRender <% %>
 @description This guide walks you through the step-by-step process to upgrade a 3.x app to CanJS 4.
-@outline 0
+
 
 @body
 
-CanJS 4 is an improvement on much of the core infrastructure in CanJS 3. Keeping with the modular structure introduced in 3, CanJS 4 adds new packages such as [can-queues] that improve on [can-event/batch/batch]. The upgrade path to CanJS 4 is fairly simple, and warnings guide most of the changes you need to make.
+
+## Why Upgrade
+
+CanJS 4 is a big step forward in simplifying CanJS and enhancing your understanding of your
+application. Read more details about it [CanJS 4.0's release article](https://www.bitovi.com/blog/canjs-4.0).  The following are some highlights:
+
+- Debugging Tools - CanJS 4.0 makes it easier to discover how your code works (or doesn't)
+  and fix it.  It works with [CanJS's Chrome Debugger Tools](https://chrome.google.com/webstore/detail/hhdfadlgplkpapjfehnjhcebebgmibcb)
+- Simplified Stache Templates - Most of [can-stache]'s quirks have been eliminated or simplified.
+- Streaming property definitions - Contain the behavior of a stateful property within a single streaming property definition.  
+- Determinism and Performance with Queues - CanJS's new queuing system makes callback ordering
+  deterministic, eliminating odd corner cases, improving debuggability and performance.
+- Upgradability - CanJS 4.0 is much easier to upgrade to than 3.0.
+
+
+## Preparing for migration
 
 > Many of the changes in this guide are available as codemods using
 > [can-migrate](#Usingcodemods)
-
-## Preparing for migration
 
 If you are still on CanJS 2.x, you'll first need to upgrade to CanJS 3 before jumping to 4. Follow the [migrate-3 CanJS 3 migration guide] before proceeding with this guide.
 

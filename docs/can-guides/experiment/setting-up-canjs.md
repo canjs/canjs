@@ -1,5 +1,5 @@
 @page guides/setup Setting Up CanJS
-@parent guides/getting-started 1
+@parent guides/essentials 1
 @outline 2
 
 @description Get started with CanJS by installing it with [https://www.npmjs.com/ npm], using a [https://jsbin.com/about JS Bin], or just adding it to an HTML page with a `<script>` tag.

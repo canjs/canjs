@@ -1,5 +1,5 @@
 @page guides/forms Forms
-@parent guides/topics 2
+@parent guides/essentials 3
 @outline 3
 
 @description Learn how to create amazing `<form>`s with CanJS.

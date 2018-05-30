@@ -1,0 +1,151 @@
+<html>
+<head>
+    <style>
+        label {
+            width: 200px;
+            display: inline-block;
+        }
+        li {
+            border: solid 1px white;
+        }
+        .selected {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+    </style>
+</head>
+<body>
+<todo-app></todo-app>
+
+
+<script src="../../node_modules/steal/steal.js" deps-bundle id="demo-source"></script>
+
+<script type="steal-module">
+import {restModel, DefineMap, DefineList, Component, fixture, viewModel} from "can";
+import "can-debug";
+
+const Todo = DefineMap.extend("Todo",{
+    id: { type: "number", identity: true },
+    complete: { type: "boolean", default: false },
+    dueDate: {type: "date", Default: Date},
+    name: "string",
+    preventSave(){
+        return !this.name || this.isSaving();
+    }
+});
+
+Todo.List = DefineList.extend("TodoList",{
+    "#": Todo
+});
+
+const todoConnection = restModel({
+    Map: Todo,
+    List: Todo.List,
+    url: "/api/todos/{id}"
+});
+
+var terms = ["can you","please","","","",""],
+    verbs = ["clean","walk","do","vaccum","organize","fold","wash","dust","pay","cook","get","take out"],
+    subjects = ["dog","laundry","diapers","clothes","car","windows","carpet","taxes","food","gas","trash"];
+
+var dayInMS = 24*60*60*1000;
+var lastWeek = new Date() - (7*dayInMS);
+var fourWeeks = new Date().getTime() + (4*7*dayInMS);
+
+var todoStore = fixture.store(10, function(){
+    return {
+        complete: fixture.rand([true, false],1)[0],
+        dueDate: new Date( fixture.rand(lastWeek, fourWeeks) ).toString(),
+        name: (fixture.rand(terms,1)[0]+" "+fixture.rand(verbs,1)[0]+" "+fixture.rand(subjects,1)[0]).trim()
+    }
+}, Todo);
+
+fixture("/api/todos/{id}", todoStore);
+fixture.delay = 1000;
+
+Component.extend({
+    tag: "todo-update",
+    view: `
+        {{# if(todo) }}
+            <h3>Update Todo</h3>
+            <form on:submit="updateTodo(scope.event)">
+                <p>
+                    <label>Name</label>
+                    <input on:input:value:bind='todo.name'/>
+                </p>
+                <p>
+                    <label>Complete</label>
+                    <input type='checkbox' checked:bind='todo.complete'/>
+                </p>
+                <p>
+                    <label>Date</label>
+                    <input type='date' valueAsDate:bind='todo.dueDate'/>
+                </p>
+                <button disabled:from="todo.preventSave()">
+                    {{# if(todo.isSaving()) }}Updating{{else}}Update{{/ if}}Todo
+                </button>
+                <button disabled:from="todo.preventSave()"
+                    on:click="cancelEdit()">Cancel</button>
+
+            </form>
+        {{ else }}
+            <i>Click a todo above to edit it here.</i>
+        {{/ if }}
+    `,
+    ViewModel: {
+        todo: Todo,
+        updateTodo(event) {
+            event.preventDefault();
+            this.todo.save().then(this.cancelEdit.bind(this))
+        },
+        cancelEdit(){
+            this.todo = null;
+        }
+    }
+});
+
+Component.extend({
+    tag: "todo-list",
+    view: `
+    <ul>
+        {{# if(todosPromise.isResolved) }}
+            {{# each(todosPromise.value) }}
+                <li on:click="../select(this)"
+                    class="{{# eq(this,../selected) }}selected{{/ eq}}">
+                    <input type='checkbox' checked:bind='complete' disabled/>
+                    <label>{{name}}</label>
+                </li>
+            {{/ each }}
+        {{/ if}}
+        {{# if(todosPromise.isPending) }}
+            <li>Loading</li>
+        {{/ if}}
+    </ul>
+    `,
+    ViewModel: {
+        todosPromise: {
+            default(){
+                return Todo.getList({});
+            }
+        },
+        selected: Todo,
+        select(todo) {
+            this.selected = todo;
+        }
+    }
+});
+
+Component.extend({
+    tag: "todo-app",
+    view: `
+        <todo-list selected:bind="scope.vars.selected"></todo-list>
+        <todo-update todo:bind="scope.vars.selected"></todo-list>
+    `
+})
+
+
+</script>
+
+
+</body>
+</html>

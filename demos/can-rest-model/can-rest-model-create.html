@@ -1,0 +1,125 @@
+<html>
+<head>
+    <style>
+        label {
+            width: 100px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+<todo-create></todo-create>
+<created-todos></created-todos>
+
+<script src="../../node_modules/steal/steal.js" deps-bundle id="demo-source"></script>
+
+<script type="steal-module">
+import {restModel, DefineMap, DefineList, Component, fixture} from "can";
+import "can-debug";
+const Todo = DefineMap.extend("Todo",{
+    id: { type: "number", identity: true },
+    complete: { type: "boolean", default: false },
+    dueDate: {type: "date", Default: Date},
+    name: "string",
+    preventSave(){
+        return !this.name || this.isSaving();
+    }
+});
+
+Todo.List = DefineList.extend("TodoList",{
+    "#": Todo
+});
+
+const todoConnection = restModel({
+    Map: Todo,
+    List: Todo.List,
+    url: "/api/todos/{id}"
+});
+
+var terms = ["can you","please","","","",""],
+    verbs = ["clean","walk","do","vaccum","organize","fold","wash","dust","pay","cook","get","take out"],
+    subjects = ["dog","laundry","diapers","clothes","car","windows","carpet","taxes","food","gas","trash"];
+
+var dayInMS = 24*60*60*1000;
+var lastWeek = new Date() - (7*dayInMS);
+var fourWeeks = new Date().getTime() + (4*7*dayInMS);
+
+var todoStore = fixture.store(100, function(){
+    return {
+        complete: fixture.rand([true, false],1)[0],
+        dueDate: new Date( fixture.rand(lastWeek, fourWeeks) ).toString(),
+        name: (fixture.rand(terms,1)[0]+" "+fixture.rand(verbs,1)[0]+" "+fixture.rand(subjects,1)[0]).trim()
+    }
+}, Todo);
+
+fixture("/api/todos/{id}", todoStore);
+
+Component.extend({
+    tag: "todo-create",
+    view: `
+        <form on:submit="createTodo(scope.event)">
+            <p>
+                <label>Name</label>
+                <input on:input:value:bind='todo.name'/>
+            </p>
+            <p>
+                <label>Complete</label>
+                <input type='checkbox' checked:bind='todo.complete'/>
+            </p>
+            <p>
+                <label>Date</label>
+                <input type='date' valueAsDate:bind='todo.dueDate'/>
+            </p>
+            <button disabled:from="todo.preventSave()">Create Todo</button>
+            {{# if(todo.isSaving()) }}Creating ....{{/ if}}
+        </form>
+    `,
+    ViewModel: {
+        todo: {
+            Default: Todo
+        },
+        createTodo(event) {
+            event.preventDefault();
+            this.todo.save().then((createdTodo) => {
+                this.todo = new Todo();
+            })
+        }
+    }
+});
+
+Component.extend({
+    tag: "created-todos",
+    view: `
+        <h3>Created Todos</h3>
+        <table>
+            <tr>
+                <th>id</th><th>complete</th>
+                <th>name</th><th>due date</th>
+            </tr>
+            {{# each(todos) }}
+                <tr>
+                    <td>{{id}}</td>
+                    <td><input type='checkbox' checked:bind='complete' disabled/></td>
+                    <td>{{name}}</td>
+                    <td><input type='date' valueAsDate:bind='dueDate' disabled/></td>
+                </tr>
+            {{else}}
+                <tr><td colspan='4'><i>The todos you create will be listed here</i></td></tr>
+            {{/ each }}
+        </table>
+    `,
+    ViewModel: {
+        todos: {Default: Todo.List},
+        connectedCallback(){
+            this.listenTo(Todo,"created", (ev, created) => {
+                this.todos.unshift(created);
+            })
+        }
+    }
+});
+
+</script>
+
+
+</body>
+</html>
