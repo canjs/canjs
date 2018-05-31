@@ -6,6 +6,20 @@
 
 @body
 
+
+<style>
+table.panels .background td {
+    background: #f4f4f4;
+    padding: 5px 5px 5px 5px;
+    border: solid 1px white;
+    margin: 1px;
+    vertical-align: top;
+}
+table.panels pre {
+    margin-top: 0px;
+}
+</style>
+
 ## Overview
 
 CanJS, at its most simplified, consists of key-value __Observables__
@@ -652,7 +666,8 @@ changes, the view updates the page.
 ## Observables and the service layer ##
 
 CanJS's pattern is that you define application logic in one or more observables, then connect the observables to various browser APIs. CanJS's model layer
-libraries connect observables to backend services.
+libraries connect observables to backend services. CanJS's model layer will make
+AJAX requests to get, create, update, and delete data.
 
 For example, you
 can connect a `Todo` and `Todo.List` observable to a restful service layer at
@@ -668,11 +683,18 @@ const Todo = DefineMap.extend("Todo",{
 
     complete: { type: "boolean", default: false },
     dueDate: "date",
-    name: "string"
+    name: "string",
+
+    toggleComplete(){
+        this.complete = !this.complete;
+    }
 });
 
 Todo.List = DefineMap.extend("TodoList",{
-    "#": Todo
+    "#": Todo,
+    completeAll(){
+        return this.forEach((todo) => { todo.complete = true; });
+    }
 });
 
 const todoConnection = restModel({
@@ -681,31 +703,67 @@ const todoConnection = restModel({
     url: "/api/todos/{id}"
 });
 ```
+@highlight 21-25
 
-This allows you to retrieve, create, update and destroy data
+This allows you to get, create, update and destroy data
 programmatically through the `Todo` observable. [can-rest-model] mixes in the
 following methods:
 
-<table>
+- `Todo.getList({filter: {complete: true}})` - _GET_ a list of todos from `/api/todos`.
+- `Todo.get({id: 5})` - _GET_ a single todo from `/api/todos/5`.
+- `new Todo({name: "Learn CanJS"}).save()` - Create a todo by _POSTing_ it to `/api/todos`.
+- `todo.save()` - Update a todo's data by _PUTing_ it to `/api/todos/5`.
+- `todo.destroy()` - Delete a todo by _DELETE-ing_ it from `/api/todos/5`.
+
+
+The following sections show examples of how to use these methods.
+
+### Retrieving a list of records
+
+Use [can-connect/can/map/map.getList] to retrieve records.
+
+<table class="panels">
 <tr>
     <th>JavaScript API</th>
     <th>Request</th>
     <th>Response</th>
+</tr>
+<tr class='background'>
+<td>
+
+Call `.getList` with _parameters_ used to filter, sort,
+and paginate your list.
+
+</td>
+<td>
+
+The _parameters_ are serialized
+with [can-param] and added to the restful url.
+
+</td>
+<td>
+
+Server responds with `data` property containing the
+records. Configure for other formats with
+[can-connect/data/parse/parse.parseListProp] or [can-connect/data/parse/parse.parseListData].
+
+</td>
 </tr>
 <tr>
 <td>
 
 ```js
 Todo.getList({
-  // Selects only the todos that match
   filter: {
-    complete: {$in: [false, null]}
-  },
-  // Sort the results of the selection
-  sort: "-name",
-  // Paginate the sorted result
-  page: {start: 0, end: 19}
+    complete: false
+  }
 }) //-> Promise<TodoList[]>
+
+
+
+
+
+
 ```
 
 </td>
@@ -713,11 +771,11 @@ Todo.getList({
 
 ```
 GET /api/todos?
-  filter[complete][$in][]=false&
-  filter[complete][$in][]=null&
-  sort=-name&
-  page[start]=0&
-  page[end]=19
+  filter[complete]=false
+
+
+
+
 
 
 
@@ -743,148 +801,30 @@ GET /api/todos?
 
 </td>
 </tr>
-<tr>
-<td>
 
-```js
-Todo.get({
-  id: 5
-}) //-> Promise<Todo>
-
-
-
-```
-
-</td>
-<td>
-
-```
-GET /api/todos/5
-
-
-
-
-
-```
-
-</td>
-<td>
-
-```js
-{
-  "id": 5,
-  "name": "do dishes",
-  "complete": true
-}
-```
-
-</td>
-</tr>
-<tr>
-<td>
-
-```js
-var todo = new Todo({
-  name: "make a model"
-})
-todo.save()  //-> Promise<Todo>
-
-
-```
-
-</td>
-<td>
-
-```
-POST /api/todos
-    {
-      "name": "make a model",
-      "complete": false
-    }
-```
-
-</td>
-<td>
-
-```js
-{
-  "id": 22,
-  "name": "make a model",
-  "complete": false
-}
-```
-
-</td>
-</tr>
-<tr>
-<td>
-
-```js
-todo.complete = true;
-todo.save()  //-> Promise<Todo>
-
-
-
-
-```
-
-</td>
-<td>
-
-```
-PUT /api/todos/22
-    {
-      "name": "make a model",
-      "complete": true
-    }
-```
-
-</td>
-<td>
-
-```js
-{
-  "id": 22,
-  "name": "make a model",
-  "complete": true
-}
-```
-
-</td>
-</tr>
-<tr>
-<td>
-
-```js
-todo.destroy()  //-> Promise<Todo>
-
-
-```
-
-</td>
-<td>
-
-```
-DELETE /api/todos/22
-
-
-```
-
-</td>
-<td>
-
-```
-Successful status code (2xx).
-Response body is not necessary.
-```
-
-</td>
-</tr>
 </table>
 
-### Retrieving records
+`.getList(params)` returns a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+that will eventually resolve to a `Todo.List` of `Todo` instances.  This means that
+properties and methods defined on `Todo.List` and `Todo` will be available:
 
-Use [can-connect/can/map/map.getList] to retrieve records. For example, the following creates a component that uses `Todo.getList` to load data:
+```js
+var todosPromise = Todo.getList({});
+
+todosPromise.then(function(todos){
+    todos    //-> Todos.List[Todo..]
+    todos[0] //-> Todo{id: 1, name: "Learn CanJS", complete: false, ...}
+
+    todos.completeAll();
+    todos[0] //-> Todo{id: 1, name: "Learn CanJS", complete: true, ...}
+
+    todos[0].toggleComplete();
+    todos[0] //-> Todo{id: 1, name: "Learn CanJS", complete: false, ...}
+})
+```
+
+
+The following creates a component that uses `Todo.getList` to load and list data:
 
 ```js
 Component.extend({
@@ -917,7 +857,10 @@ Component.extend({
 
 @highlight 5-6,22,only
 
-See it in action here:
+> NOTE: Promise's values and state can be read in [can-stache] directly via:
+> `promise.value`, `promise.reason`, `promise.isResolved`, `promise.isPending`, and `promise.isRejected`.
+
+See the component in action here:
 
 @demo demos/can-rest-model/can-rest-model-0.html
 
@@ -1018,9 +961,98 @@ See it in action here:
 
 @demo demos/can-rest-model/can-rest-model-1.html
 
-### Creating records
+### Creating records ###
 
-Use [can-connect/can/map/map.prototype.save] to create records. For example, the following creates a component that uses `Todo.prototype.save` to create data:
+Use [can-connect/can/map/map.prototype.save] to create records.
+
+<table class="panels">
+<tr>
+    <th>JavaScript API</th>
+    <th>Request</th>
+    <th>Response</th>
+</tr>
+<tr class='background'>
+<td>
+
+Create an instance and then call `.save()` to
+create a record.
+
+</td>
+<td>
+
+The instance is [can-define/map/map.prototype.serialize serialized]
+and POSTed to the server.
+
+</td>
+<td>
+
+Server responds with the [can-define.types.identity] value and
+all other values on the record. Use
+[can-connect/can/map/map.updateInstanceWithAssignDeep] to
+not require every record value.
+
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+var todo = new Todo({
+  name: "make a model"
+})
+todo.save()  //-> Promise<Todo>
+
+
+```
+
+</td>
+<td>
+
+```
+POST /api/todos
+    {
+      "name": "make a model",
+      "complete": false
+    }
+```
+
+</td>
+<td>
+
+```js
+{
+  "id": 22,
+  "name": "make a model",
+  "complete": false
+}
+```
+
+</td>
+</tr>
+</table>
+
+`.save()` returns a `Promise` that eventually resolves to the same instance that `.save()` was called
+on.  While the record is being saved, [can-connect/can/map/map.prototype.isSaving]
+will return `true`:
+
+```js
+var todo = new Todo({
+  name: "make a model"
+});
+
+todo.isSaving() //-> false
+
+todoPromise = todo.save();
+
+todo.isSaving() //-> true
+
+todoPromise.then(function(){
+    todo.isSaving() //-> false
+});
+```
+
+
+The following creates a component that uses `Todo.prototype.save` to create data:
 
 ```js
 Component.extend({
@@ -1050,15 +1082,16 @@ Component.extend({
         createTodo(event) {
             event.preventDefault();
             this.todo.save().then((createdTodo) => {
+                // Create a new todo instance to receive from data
                 this.todo = new Todo();
             })
         }
     }
 });
 ```
-@highlight 4,28
+@highlight 4,27
 
-See this in action here:
+See this component in action here:
 
 @demo demos/can-rest-model/can-rest-model-create.html
 
@@ -1099,9 +1132,79 @@ Component.extend({
 ```
 @highlight 25,only
 
+When any todo is `created`, `updated`, or `destroyed`, an event is dispatched on the `Todo` type.
+
 ### Updating records
 
-Use [can-connect/can/map/map.prototype.save] to update records. For example, the
+Use [can-connect/can/map/map.prototype.save] to also update records.
+
+<table class="panels">
+<tr>
+    <th>JavaScript API</th>
+    <th>Request</th>
+    <th>Response</th>
+</tr>
+<tr class='background'>
+<td>
+
+On an instance that has already been created,
+change its data and call `.save()` to
+update the record.
+
+</td>
+<td>
+
+The instance is [can-define/map/map.prototype.serialize serialized]
+and PUT to the server.
+
+</td>
+<td>
+
+Server responds with all values on the record. Use
+[can-connect/can/map/map.updateInstanceWithAssignDeep] to
+not require every record value.
+
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+todo.complete = true;
+todo.save()  //-> Promise<Todo>
+
+
+
+
+```
+
+</td>
+<td>
+
+```
+PUT /api/todos/22
+    {
+      "name": "make a model",
+      "complete": true
+    }
+```
+
+</td>
+<td>
+
+```js
+{
+  "id": 22,
+  "name": "make a model",
+  "complete": true
+}
+```
+
+</td>
+</tr>
+</table>
+
+For example, the
 following creates a component that uses `Todo.prototype.save` to update data:
 
 ```js
@@ -1154,7 +1257,61 @@ See this in action here:
 
 ### Destroying records
 
-Use [can-connect/can/map/map.prototype.destroy] to delete records. For example, the following creates a component that uses `Todo.prototype.destroy` to delete data:
+
+Use [can-connect/can/map/map.prototype.destroy] to delete records.
+
+<table class="panels">
+<tr>
+    <th>JavaScript API</th>
+    <th>Request</th>
+    <th>Response</th>
+</tr>
+<tr class='background'>
+<td>
+
+On an instance that has already been created,
+call `.destroy()` to delete the record.
+
+</td>
+<td>
+
+A DELETE request is sent with the instance's [can-define.types.identity].
+
+</td>
+<td>
+
+No response data is necessary. Just
+a successful status code.
+
+</td>
+</tr>
+<tr>
+<td>
+
+```js
+todo.destroy()  //-> Promise<Todo>
+```
+
+</td>
+<td>
+
+```
+DELETE /api/todos/22
+```
+
+</td>
+<td>
+
+```
+200 Status code.
+```
+
+</td>
+</tr>
+</table>
+
+
+The following creates a component that uses `Todo.prototype.destroy` to delete data:
 
 ```js
 Component.extend({
@@ -1258,7 +1415,7 @@ connectedCallback(){
 But this is cumbersome, especially when lists contain
 sorted and filtered results. For example, if you are displaying
 only completed todos, you might not want to add newly created
-incomplete todos:
+incomplete todos. The following only pushes only complete todos onto `todos`:
 
 ```js
 ViewModel: {
@@ -1279,6 +1436,7 @@ ViewModel: {
     }
 }
 ```
+@highlight 11-13
 
 Fortunately, [can-realtime-rest-model] using [can-query-logic] can
 automatically update lists for you! If your service layer matches
@@ -1305,7 +1463,10 @@ const todoConnection = realtimeRestModel({
     url: "/api/todos/{id}"
 });
 ```
-@highlight 1,17
+@highlight 1,14
+
+> NOTE: You can configure [can-query-logic] to match your service layer.
+
 
 The following uses [can-realtime-rest-model] to create a _filterable_ and _sortable_ grid
 that automatically updates itself when todos are created, updated or destroyed.
