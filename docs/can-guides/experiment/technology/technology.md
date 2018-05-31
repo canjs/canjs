@@ -703,7 +703,7 @@ const todoConnection = restModel({
     url: "/api/todos/{id}"
 });
 ```
-@highlight 21-25
+@highlight 24-28
 
 This allows you to get, create, update and destroy data
 programmatically through the `Todo` observable. [can-rest-model] mixes in the
