@@ -666,7 +666,7 @@ changes, the view updates the page.
 ## Observables and the service layer ##
 
 CanJS's pattern is that you define application logic in one or more observables, then connect the observables to various browser APIs. CanJS's model layer
-libraries connect observables to backend services. CanJS's model layer will make
+libraries connect observables to backend services. CanJS's model-layer will make
 AJAX requests to get, create, update, and delete data.
 
 For example, you
@@ -709,7 +709,7 @@ This allows you to get, create, update and destroy data
 programmatically through the `Todo` observable. [can-rest-model] mixes in the
 following methods:
 
-- `Todo.getList({filter: {complete: true}})` - _GET_ a list of todos from `/api/todos`.
+- `Todo.getList({filter: {complete: true}})` - _GET_ a list of todos from `/api/todos?filter[complete]=true`.
 - `Todo.get({id: 5})` - _GET_ a single todo from `/api/todos/5`.
 - `new Todo({name: "Learn CanJS"}).save()` - Create a todo by _POSTing_ it to `/api/todos`.
 - `todo.save()` - Update a todo's data by _PUTing_ it to `/api/todos/5`.
@@ -857,7 +857,7 @@ Component.extend({
 
 @highlight 5-6,22,only
 
-> NOTE: Promise's values and state can be read in [can-stache] directly via:
+> NOTE: A promise's values and state can be read in [can-stache] directly via:
 > `promise.value`, `promise.reason`, `promise.isResolved`, `promise.isPending`, and `promise.isRejected`.
 
 See the component in action here:
@@ -1136,7 +1136,7 @@ When any todo is `created`, `updated`, or `destroyed`, an event is dispatched on
 
 ### Updating records
 
-Use [can-connect/can/map/map.prototype.save] to also update records.
+Also use [can-connect/can/map/map.prototype.save] to update records.
 
 <table class="panels">
 <tr>
@@ -1213,18 +1213,20 @@ Component.extend({
     view: `
         {{# if(todo) }}
             <h3>Update Todo</h3>
-            <form on:submit="updateTodo(scope.event)">
+            <form on:submit="updateTodo(scope.element, scope.event)">
                 <p>
                     <label>Name</label>
-                    <input on:input:value:bind='todo.name'/>
+                    <input name="name" value:from='todo.name' />
                 </p>
                 <p>
                     <label>Complete</label>
-                    <input type='checkbox' checked:bind='todo.complete'/>
+                    <input type='checkbox' name='complete'
+                        checked:from='todo.complete'/>
                 </p>
                 <p>
                     <label>Date</label>
-                    <input type='date' valueAsDate:bind='todo.dueDate'/>
+                    <input type='date'
+                        name='dueDate' valueAsDate:from='todo.dueDate'/>
                 </p>
                 <button disabled:from="todo.preventSave()">
                     {{# if(todo.isSaving()) }}Updating{{else}}Update{{/ if}}Todo
@@ -1239,9 +1241,13 @@ Component.extend({
     `,
     ViewModel: {
         todo: Todo,
-        updateTodo(event) {
+        updateTodo(form, event) {
             event.preventDefault();
-            this.todo.save().then(this.cancelEdit.bind(this))
+            this.todo.assign({
+                name: form.name.value,
+                complete: form.complete.checked,
+                dueDate: form.dueDate.valueAsDate
+            }).save().then(this.cancelEdit.bind(this))
         },
         cancelEdit(){
             this.todo = null;
@@ -1249,7 +1255,7 @@ Component.extend({
     }
 });
 ```
-@highlight 6,32-35
+@highlight 6,34-41
 
 See this in action here:
 
@@ -1401,8 +1407,6 @@ connectedCallback(){
         })
         this.listenTo(Todo, "destroyed", function(ev, destroyed){
             // REMOVE destroyed from `todos`
-            var index = todos.indexOf(destroyed);
-            todos.splice(index, 1);
         });
         this.listenTo(Todo, "updated", function(ev, updated){
             // ADD, REMOVE, or UPDATE the position of updated
@@ -1415,7 +1419,7 @@ connectedCallback(){
 But this is cumbersome, especially when lists contain
 sorted and filtered results. For example, if you are displaying
 only completed todos, you might not want to add newly created
-incomplete todos. The following only pushes only complete todos onto `todos`:
+incomplete todos. The following only pushes complete todos onto `todos`:
 
 ```js
 ViewModel: {
@@ -1465,7 +1469,8 @@ const todoConnection = realtimeRestModel({
 ```
 @highlight 1,14
 
-> NOTE: You can configure [can-query-logic] to match your service layer.
+> NOTE: You can configure [can-query-logic] to match your service layer. Learn
+> more in the [configuration section of can-query-logic](../can-query-logic.html#Configuration).
 
 
 The following uses [can-realtime-rest-model] to create a _filterable_ and _sortable_ grid
@@ -1481,7 +1486,7 @@ Try out the following use cases that [can-realtime-rest-model] provides automati
 
 @demo demos/can-realtime-rest-model/can-realtime-rest-model.html
 
-By default, `can-query-logic` assumes your service layer will match a [can-query-logic/query default query structure]
+By default, [can-query-logic] assumes your service layer will match a [can-query-logic/query default query structure]
 that looks like:
 
 ```js
@@ -1499,17 +1504,17 @@ Todo.getList({
 
 This structures follows the [Fetching Data JSONAPI specification](http://jsonapi.org/format/#fetching).
 
-There's:
+There's a:
 
-- a [filter](http://jsonapi.org/format/#fetching-filtering) property for filtering records,
-- a [sort](http://jsonapi.org/format/#fetching-sorting) property for specifying the order to sort records, and
-- a [page](http://jsonapi.org/format/#fetching-pagination) property that selects a range of the sorted result. _The range indexes are inclusive_.
+- [filter](http://jsonapi.org/format/#fetching-filtering) property for filtering records,
+- [sort](http://jsonapi.org/format/#fetching-sorting) property for specifying the order to sort records, and
+- [page](http://jsonapi.org/format/#fetching-pagination) property that selects a range of the sorted result. _The range indexes are inclusive_.
 
 > __NOTE__: [can-realtime-rest-model] does not follow the rest of the JSONAPI specification. Specifically
 > [can-realtime-rest-model] expects your server to send back JSON data in a different format.
 
 If you control the service layer, we __encourage__ you to make it match the default
-[can-query-logic/query query structure].  The default query structure also supports the following [can-query-logic/comparison-operators]: `$eq`, `$gt`, `$gte`, `$in`,
+[can-query-logic/query query structure] to avoid configuration.  The default query structure also supports the following [can-query-logic/comparison-operators]: `$eq`, `$gt`, `$gte`, `$in`,
 `$lt`, `$lte`, `$ne`, `$nin`.
 
 If you are unable to match the default query structure, or need special behavior, read the

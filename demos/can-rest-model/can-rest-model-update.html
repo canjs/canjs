@@ -68,18 +68,20 @@ Component.extend({
     view: `
         {{# if(todo) }}
             <h3>Update Todo</h3>
-            <form on:submit="updateTodo(scope.event)">
+            <form on:submit="updateTodo(scope.element, scope.event)">
                 <p>
                     <label>Name</label>
-                    <input on:input:value:bind='todo.name'/>
+                    <input name="name" value:from='todo.name' />
                 </p>
                 <p>
                     <label>Complete</label>
-                    <input type='checkbox' checked:bind='todo.complete'/>
+                    <input type='checkbox' name='complete'
+                        checked:from='todo.complete'/>
                 </p>
                 <p>
                     <label>Date</label>
-                    <input type='date' valueAsDate:bind='todo.dueDate'/>
+                    <input type='date'
+                        name='dueDate' valueAsDate:from='todo.dueDate'/>
                 </p>
                 <button disabled:from="todo.preventSave()">
                     {{# if(todo.isSaving()) }}Updating{{else}}Update{{/ if}}Todo
@@ -94,9 +96,13 @@ Component.extend({
     `,
     ViewModel: {
         todo: Todo,
-        updateTodo(event) {
+        updateTodo(form, event) {
             event.preventDefault();
-            this.todo.save().then(this.cancelEdit.bind(this))
+            this.todo.assign({
+                name: form.name.value,
+                complete: form.complete.checked,
+                dueDate: form.dueDate.valueAsDate
+            }).save().then(this.cancelEdit.bind(this))
         },
         cancelEdit(){
             this.todo = null;
@@ -139,7 +145,7 @@ Component.extend({
     tag: "todo-app",
     view: `
         <todo-list selected:bind="scope.vars.selected"></todo-list>
-        <todo-update todo:bind="scope.vars.selected"></todo-list>
+        <todo-update todo:bind="scope.vars.selected"></todo-update>
     `
 })
 
