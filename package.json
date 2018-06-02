@@ -79,7 +79,7 @@
     "can-ndjson-stream": "0.1.8",
     "can-observation": "4.0.1",
     "can-observation-recorder": "1.0.2",
-    "can-observe": "2.1.0",
+    "can-observe": "2.1.1",
     "can-param": "1.0.3",
     "can-parse-uri": "1.0.1",
     "can-queues": "1.0.1",
