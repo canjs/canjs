@@ -15,6 +15,7 @@ export { default as stacheBindings } from "can-stache-bindings";
 
 export { default as stacheRouteHelpers } from "can-stache-route-helpers";
 export { default as route } from "can-route";
+export { default as routePushstate } from "can-route-pushstate";
 
 // Infrastruture (gets loaded with core)
 // observable
