@@ -6,7 +6,7 @@
 
 @body
 
-CanJS 4 is an improvement on much of the core infrastructure in CanJS 3. Keeping with the modular structure introduced in 3, CanJS 4 adds new packages such as [can-queues] that improve on [can-event/batch/batch]. The upgrade path to CanJS 4 is fairly simple, and warnings guide most of the changes you need to make.
+CanJS 4 is an improvement on much of the core infrastructure in CanJS 3. Keeping with the modular structure introduced in 3, CanJS 4 adds new packages such as [can-queues] that improve on [can-event/batch/batch](//v3.canjs.com/doc/can-event/batch/batch.html). The upgrade path to CanJS 4 is fairly simple, and warnings guide most of the changes you need to make.
 
 > Many of the changes in this guide are available as codemods using
 > [can-migrate](#Usingcodemods)
@@ -79,7 +79,7 @@ If you are using [Yarn](https://yarnpkg.com/en/) the process is almost identical
 
 ## Using codemods
 
-We recommend reading this guide in full before starting on your migration, to get an understanding of the changes. Once you have, using codemods is a good way to take care of *many* of the changes described below. If you haven't already, review the [using-codemods] guide that discusses what codemods are and the [can-migrate](https://www.npmjs.com/package/can-migrate) tool.
+We recommend reading this guide in full before starting on your migration, to get an understanding of the changes. Once you have, using codemods is a good way to take care of *many* of the changes described below. If you haven't already, review the [guides/upgrade/using-codemods] guide that discusses what codemods are and the [can-migrate](https://www.npmjs.com/package/can-migrate) tool.
 
 Even if you have already installed can-migrate in the past, you need to upgrade to version 2 to run the 3-4 codemods.
 
@@ -167,7 +167,7 @@ The batching system was replaced with [can-queues] which has a more sophisticate
 > can-migrate '**/*.*' --transform can-queues/batch.js --apply
 > ```
 
-If you are using [can-event/batch/batch] (or can.event) to batch changes like so:
+If you are using [can-event/batch/batch](//v3.canjs.com/doc/can-event/batch/batch.html) (or can.event) to batch changes like so:
 
 ```js
 import canBatch from 'can-event/batch/batch';
@@ -193,7 +193,7 @@ person.last = 'Phillips';
 queues.batch.stop();
 ```
 
-If you were using [can-event] for its event mixin, this has been replaced by [can-event-queue/map/map]. First install this new dependency:
+If you were using [can-event](//v3.canjs.com/doc/can-event.html) for its event mixin, this has been replaced by [can-event-queue/map/map]. First install this new dependency:
 
 ```shell
 npm install can-event-queue --save
@@ -314,9 +314,6 @@ import "can-event-dom-enter/add-global/add-global";
 ```
 
 ### Implicit scope walking
-
-> Interested in creating a codemod for this? Check out this issue:
-> [Create CodeMod for Lack of Implicit Scope Walking #72](https://github.com/canjs/can-migrate/issues/72)
 
 > ***Note***: If you upgrade to the latest version of CanJS 3 before migrating to 4, you should get the warnings about implicit scope walking. It would be a good idea to follow the below advice and fix the warnings before upgrading to CanJS 4.
 
@@ -510,7 +507,7 @@ Registering routes in [can-route] used to be done by calling the route function.
 ```js
 import route from "can-route";
 
-route.register("{page}", { page: "home" });
+route("{page}", { page: "home" });
 ````
 
 to:
