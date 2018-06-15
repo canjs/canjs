@@ -49,6 +49,7 @@
     "can-compute": "4.0.3",
     "can-connect": "^3.0.0-pre.6",
     "can-connect-feathers": "^5.0.0-pre.2",
+    "can-connect-tag": "^1.0.0",
     "can-construct": "^3.4.3",
     "can-construct-super": "3.1.4",
     "can-control": "4.1.0",
