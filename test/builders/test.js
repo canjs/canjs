@@ -13,6 +13,10 @@ var makeIframe = function(src){
 
 QUnit.module("webpack");
 
-QUnit.asyncTest("able to load an app", function(){
+QUnit.asyncTest("Able to load an app", function(){
 	makeIframe(__dirname + "/webpack/site.html?" + Math.random());
+});
+
+QUnit.asyncTest("Unabled modules are tree-shaken out", function(){
+	makeIframe(__dirname + "/webpack/treeshake.html?" + Math.random());
 });
