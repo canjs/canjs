@@ -64,6 +64,7 @@ export { default as Zone } from "./es/can-zone";
 export { default as reactViewModel } from "./es/react-view-model";
 export { default as viewAutorender } from "./es/can-view-autorender";
 export { default as fixtureSocket } from "./es/can-fixture-socket";
+export { default as connectTag } from "./es/can-connect-tag";
 
 // Legacy
 export { default as compute } from "./es/can-compute";
