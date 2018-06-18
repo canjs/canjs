@@ -8,10 +8,12 @@
     "postversion": "git push --tags && git checkout - && git branch -D release && git push",
     "testee": "testee test/index.html --browsers firefox",
     "testee-production": "testee test/production.html --browsers firefox",
+    "testee-builders": "testee test/builders/test.html --browsers firefox",
     "http-server": "http-server -p 3000 --silent",
-    "test": "npm run test-development && npm run test-production",
+    "test": "npm run test-development && npm run test-production && npm run test-builders",
     "test-development": "npm run build && npm run testee",
     "test-production": "npm run build && npm run build-tests && npm run testee-production",
+    "test-builders": "npm run build-webpack-test && npm run testee-builders",
     "ci": "npm run build && npm run test && node test/test-sauce-labs.js",
     "release:pre": "npm version prerelease && npm run build && npm publish --tag=pre",
     "release:patch": "npm version patch && npm run build && npm publish",
@@ -19,6 +21,7 @@
     "release:major": "npm version major && npm run build && npm publish",
     "build": "node build.js",
     "build-tests": "node test/build.js",
+    "build-webpack-test": "webpack -o test/builders/webpack/bundle.js test/builders/webpack/index.js",
     "document": "npm run deps-bundle && bit-docs",
     "document:force": "npm run deps-bundle && bit-docs -fd",
     "deps-bundle": "steal-tools bundle --deps --no-minify"
@@ -47,7 +50,7 @@
     "can-attribute-observable": "<2.0.0",
     "can-component": "^4.1.0",
     "can-compute": "4.0.3",
-    "can-connect": "^3.0.0-pre.6",
+    "can-connect": "^3.0.0-pre.10",
     "can-connect-feathers": "^5.0.0-pre.2",
     "can-connect-tag": "^1.0.0",
     "can-construct": "^3.4.3",
@@ -161,7 +164,9 @@
     "steal-stache": "^4.0.0",
     "steal-tools": "^1.3.6",
     "test-saucelabs": "0.0.3",
-    "testee": "^0.7.0"
+    "testee": "^0.7.0",
+    "webpack": "^4.12.0",
+    "webpack-cli": "^3.0.7"
   },
   "demos": [
     "http://canjs.us/#examples",

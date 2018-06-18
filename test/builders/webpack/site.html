@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<title>WebPack test</title>
+<script src="./bundle.js"></script>
+<my-app></my-app>
+<script>
+(function(){
+	var QUnit = window.parent.QUnit;
+	var removeMyself = window.parent.removeMyself;
+	var name = document.querySelector("#hw-name");
+
+	if(QUnit) {
+		QUnit.ok(!!name, "It rendered");
+		removeMyself();
+	} else {
+		console.log("Got element", name);
+	}
+})();
+</script>
