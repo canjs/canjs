@@ -1,1 +1,1 @@
-export * from "can-component";
+export {default} from "can-component";

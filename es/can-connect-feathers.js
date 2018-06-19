@@ -1,1 +1,1 @@
-export * from "can-connect-feathers";
+export {default} from "can-connect-feathers";

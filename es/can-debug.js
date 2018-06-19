@@ -1,1 +1,1 @@
-export * from "can-debug";
+export {default} from "can-debug";

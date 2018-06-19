@@ -1,1 +1,1 @@
-export * from "can-define-backup";
+export {default} from "can-define-backup";

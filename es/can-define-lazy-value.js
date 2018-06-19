@@ -1,1 +1,1 @@
-export * from "can-define-lazy-value";
+export {default} from "can-define-lazy-value";

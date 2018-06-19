@@ -1,1 +1,1 @@
-export * from "can-connect-tag";
+export {default} from "can-connect-tag";

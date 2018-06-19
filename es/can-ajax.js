@@ -1,1 +1,1 @@
-export * from "can-ajax";
+export {default} from "can-ajax";

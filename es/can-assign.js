@@ -1,1 +1,1 @@
-export * from "can-assign";
+export {default} from "can-assign";

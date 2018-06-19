@@ -1,1 +1,1 @@
-export * from "can-connect/all";
+export {default} from "can-connect/all";

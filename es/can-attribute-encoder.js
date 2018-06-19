@@ -1,1 +1,1 @@
-export * from "can-attribute-encoder";
+export {default} from "can-attribute-encoder";
