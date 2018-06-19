@@ -31,7 +31,7 @@ export { default as enterEvent } from "./es/can-event-dom-enter";
 export { default as makeInterfaceValidator } from "./es/can-validate-interface";
 export { default as viewModel } from "./es/can-view-model";
 export { default as Observation } from "./es/can-observation";
-export {default as key} from "./es/can-key";
+export { default as key } from "./es/can-key";
 export {default as diff} from "./es/can-diff";
 export {default as parseURI} from "./es/can-parse-uri";
 export {default as stringToAny} from "./es/can-string-to-any";
