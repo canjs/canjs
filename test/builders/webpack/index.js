@@ -1,4 +1,6 @@
-import { Component, DefineMap } from "../../../can";
+import { can, Component, DefineMap } from "../../../can";
+
+window.can = can;
 
 const HelloWorldVM = DefineMap.extend("HelloWorld", {
 	name: "string"
