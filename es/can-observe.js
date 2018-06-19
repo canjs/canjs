@@ -1,1 +1,1 @@
-export * from "can-observe";
+export {default} from "can-observe";

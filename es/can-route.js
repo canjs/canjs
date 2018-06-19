@@ -1,1 +1,1 @@
-export * from "can-route";
+export {default} from "can-route";

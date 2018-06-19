@@ -1,1 +1,1 @@
-export * from "can-namespace";
+export {default} from "can-namespace";

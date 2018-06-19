@@ -1,1 +1,1 @@
-export * from "can-define-stream";
+export {default} from "can-define-stream";

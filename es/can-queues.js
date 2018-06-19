@@ -1,1 +1,1 @@
-export * from "can-queues";
+export {default} from "can-queues";

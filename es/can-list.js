@@ -1,1 +1,1 @@
-export * from "can-list";
+export {default} from "can-list";

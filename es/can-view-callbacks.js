@@ -1,1 +1,1 @@
-export * from "can-view-callbacks";
+export {default} from "can-view-callbacks";

@@ -1,1 +1,1 @@
-export * from "can-set-legacy";
+export {default} from "can-set-legacy";

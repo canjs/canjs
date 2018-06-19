@@ -1,1 +1,1 @@
-export * from "can-memory-store";
+export {default} from "can-memory-store";

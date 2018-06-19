@@ -1,1 +1,1 @@
-export * from "can-query-logic";
+export {default} from "can-query-logic";

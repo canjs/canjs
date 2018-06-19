@@ -1,1 +1,1 @@
-export * from "can-local-store";
+export {default} from "can-local-store";

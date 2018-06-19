@@ -1,1 +1,1 @@
-export * from "can-realtime-rest-model";
+export {default} from "can-realtime-rest-model";

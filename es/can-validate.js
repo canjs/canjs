@@ -1,1 +1,1 @@
-export * from "can-validate";
+export {default} from "can-validate";

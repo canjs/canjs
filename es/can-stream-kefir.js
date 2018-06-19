@@ -1,1 +1,1 @@
-export * from "can-stream-kefir";
+export {default} from "can-stream-kefir";

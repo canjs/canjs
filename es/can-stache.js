@@ -1,1 +1,1 @@
-export * from "can-stache";
+export {default} from "can-stache";

@@ -1,1 +1,1 @@
-export * from "can-validate-validatejs";
+export {default} from "can-validate-validatejs";

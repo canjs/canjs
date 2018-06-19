@@ -1,1 +1,1 @@
-export * from "can-fixture-socket";
+export {default} from "can-fixture-socket";

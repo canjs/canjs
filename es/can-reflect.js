@@ -1,1 +1,1 @@
-export * from "can-reflect";
+export {default} from "can-reflect";

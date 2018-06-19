@@ -1,1 +1,1 @@
-export * from "can-globals";
+export {default} from "can-globals";

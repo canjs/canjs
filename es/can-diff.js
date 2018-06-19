@@ -1,1 +1,1 @@
-export * from "can-diff";
+export {default} from "can-diff";

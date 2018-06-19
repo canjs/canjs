@@ -1,1 +1,1 @@
-export * from "can-stache-converters";
+export {default} from "can-stache-converters";

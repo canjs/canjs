@@ -1,1 +1,1 @@
-export * from "can-stache-bindings";
+export {default} from "can-stache-bindings";

@@ -1,1 +1,1 @@
-export * from "can-dom-events";
+export {default} from "can-dom-events";

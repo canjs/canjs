@@ -1,1 +1,1 @@
-export * from "can-kefir";
+export {default} from "can-kefir";

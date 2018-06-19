@@ -1,1 +1,1 @@
-export * from "can-zone";
+export {default} from "can-zone";

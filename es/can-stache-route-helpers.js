@@ -1,1 +1,1 @@
-export * from "can-stache-route-helpers";
+export {default} from "can-stache-route-helpers";

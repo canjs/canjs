@@ -1,1 +1,1 @@
-export * from "can-stream";
+export {default} from "can-stream";

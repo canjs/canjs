@@ -1,1 +1,1 @@
-export * from "can-key";
+export {default} from "can-key";

@@ -1,1 +1,1 @@
-export * from "can-fixture";
+export {default} from "can-fixture";

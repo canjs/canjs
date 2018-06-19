@@ -1,1 +1,1 @@
-export * from "can-map";
+export {default} from "can-map";

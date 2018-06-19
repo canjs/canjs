@@ -1,1 +1,1 @@
-export * from "can-view-autorender";
+export {default} from "can-view-autorender";

@@ -1,1 +1,1 @@
-export * from "can-validate-interface";
+export {default} from "can-validate-interface";

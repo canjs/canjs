@@ -1,1 +1,1 @@
-export * from "can-super-model";
+export {default} from "can-super-model";

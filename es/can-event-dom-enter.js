@@ -1,1 +1,1 @@
-export * from "can-event-dom-enter";
+export {default} from "can-event-dom-enter";

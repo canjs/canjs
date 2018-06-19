@@ -1,1 +1,1 @@
-export * from "can-rest-model";
+export {default} from "can-rest-model";

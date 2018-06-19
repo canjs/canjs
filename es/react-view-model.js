@@ -1,1 +1,1 @@
-export * from "react-view-model";
+export {default} from "react-view-model";

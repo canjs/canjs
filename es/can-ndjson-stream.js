@@ -1,1 +1,1 @@
-export * from "can-ndjson-stream";
+export {default} from "can-ndjson-stream";

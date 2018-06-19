@@ -1,1 +1,1 @@
-export * from "can-simple-observable";
+export {default} from "can-simple-observable";

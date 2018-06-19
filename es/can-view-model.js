@@ -1,1 +1,1 @@
-export * from "can-view-model";
+export {default} from "can-view-model";

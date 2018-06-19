@@ -1,1 +1,1 @@
-export * from "can-string-to-any";
+export {default} from "can-string-to-any";
