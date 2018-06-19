@@ -1,5 +1,5 @@
 // Core
-export { default as define, DefineMap, DefineList } from "./es/can-define";
+export { define, DefineMap, DefineList } from "./es/can-define";
 
 export { default as fixture } from "./es/can-fixture";
 export { default as restModel } from "./es/can-rest-model";
