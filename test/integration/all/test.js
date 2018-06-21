@@ -11,10 +11,23 @@ var makeIframe = function(src){
 	iframe.src = src;
 };
 
+function supportsStaticImport() {
+  var script = document.createElement('script');
+  return 'noModule' in script;
+}
+
 QUnit.module('can.all.js');
 
 if (__dirname !== '/') {
 	QUnit.asyncTest("works without globals (jquery, kefir, etc)", function(){
 		makeIframe(__dirname + "/no-globals.html?" + Math.random());
 	});
+}
+
+QUnit.module('can.mjs');
+
+if(supportsStaticImport() && __dirname !== '/') {
+	QUnit.asyncTest("works in the browser", function(){
+		makeIframe(__dirname + "/es-smoke.html?" + Math.random());
+	})
 }
