@@ -249,6 +249,7 @@ can.debug.logWhatIChange(document.querySelector("input[name=first]"));
 Finally, [can-debug.drawGraph] can draw these relationships in a graph like the following:
 
 <img src="../../node_modules/can-debug/doc/map-dependency-graph.png"
+  class="bit-docs-screenshot"
   alt="A visual representation of an observable's dependency graph"
   width="600px"/>
 
@@ -339,12 +340,14 @@ There is a CanJS Devtools Chrome Extension available in the [Chrome Web Store](h
 Once installed, you will see a CanJS icon next to the address bar:
 
 <img src="../../docs/can-guides/images/devtools/canjs-button-disabled.png"
+  class="bit-docs-screenshot"
   alt="The CanJS Devtools extension icon - disabled"
   width="600px"/>
 
-Initially, this icon will be disabled. In order to enable the extension, you need to install `can-debug` as explained in [guides/debugging#SetupDebugging Setup Debugging]. Make sure you have `can-debug@1.2.0` or higher. Once this is set up, the icon will be enabled:
+Initially, this icon will be disabled. In order to enable the extension, you need to install [can-debug] as explained in [Setup Debugging](#SetupDebugging). Make sure you have `can-debug@1.2.0` or higher. Once this is set up, the icon will be enabled:
 
 <img src="../../docs/can-guides/images/devtools/canjs-button-enabled.png"
+  class="bit-docs-screenshot"
   alt="The CanJS Devtools extension icon - enabled"
   width="600px"/>
 
@@ -355,24 +358,28 @@ The CanJS Devtools extension adds several new pieces of functionality to Chrome'
 When an element is selected in the Elements panel, a CanJS ViewModel Editor will be added in the sidebar:
 
 <img src="../../docs/can-guides/images/devtools/viewmodel-editor.png"
+  class="bit-docs-screenshot"
   alt="The CanJS Devtools ViewModel Editor"
   width="600px"/>
 
 In order to find this, select the Elements panel:
 
 <img src="../../docs/can-guides/images/devtools/devtools-elements-panel.png"
+  class="bit-docs-screenshot"
   alt="The Chrome Developer Tools Elements Panel"
   width="600px"/>
 
 Then, depending on the size of your Developer Tools window, you may need to click on the overflow menu in order to find the CanJS ViewModel Editor:
 
 <img src="../../docs/can-guides/images/devtools/devtools-sidebar-overflow-menu.png"
+  class="bit-docs-screenshot"
   alt="The Chrome Developer Tools sidebar overflow menu"
   width="600px"/>
 
 Once selected, the JSON editor can be used to view and edit the ViewModel for the selected element &mdash; or the closest parent element that has a ViewModel:
 
 <img src="../../docs/can-guides/images/devtools/viewmodel-editor-zoomed.png"
+  class="bit-docs-screenshot"
   alt="The Chrome Developer Tools sidebar overflow menu"
   width="600px"/>
 
@@ -381,49 +388,57 @@ Once selected, the JSON editor can be used to view and edit the ViewModel for th
 Similar to the ViewModel Editor, when an element is selected, a sidebar is added for the CanJS Bindings Graph:
 
 <img src="../../docs/can-guides/images/devtools/bindings-graph.png"
+  class="bit-docs-screenshot"
   alt="The CanJS Devtools Bindings Graph"
   width="600px"/>
 
 If the element that is selected has a ViewModel, the graph will show the relationships for a property of the ViewModel:
 
 <img src="../../docs/can-guides/images/devtools/bindings-graph-viewmodel.png"
+  class="bit-docs-screenshot"
   alt="The CanJS Devtools Bindings Graph"
   width="600px"/>
 
 By default, the property selected will be the _first_ property on the ViewModel alphabetically. You can select a different property by clicking on the header:
 
 <img src="../../docs/can-guides/images/devtools/bindings-graph-viewmodel-click.png"
+  class="bit-docs-screenshot"
   alt="The CanJS Devtools Bindings Graph"
   width="600px"/>
 
 This will give you a dropdown showing all of the available properties:
 
 <img src="../../docs/can-guides/images/devtools/bindings-graph-viewmodel-select-property.png"
+  class="bit-docs-screenshot"
   alt="The CanJS Devtools Bindings Graph"
   width="600px"/>
 
 If the element selected does not have a ViewModel, the graph will show the relationships for the element itself:
 
 <img src="../../docs/can-guides/images/devtools/bindings-graph-element.png"
+  class="bit-docs-screenshot"
   alt="The CanJS Devtools Bindings Graph"
   width="600px"/>
 
 ## Using the CanJS Devtools Queues Stack
 
-As discussed in [guides/debugging#Debugwhatcausedaobservableeventorupdatetohappen_ Debug what caused a observable event or update to happen], the `logStack` method of `can-queues` can help figure out what tasks in CanJS's queue system caused a function to run. In order to make this easier, CanJS Devtools adds a sidebar to the Sources Panel to display the `logStack` output:
+As discussed in [Debug what caused a observable event or update to happen](#Debugwhatcausedaobservableeventorupdatetohappen_), the [can-queues.logStack] method of [can-queues] can help figure out what tasks in CanJS's queue system caused a function to run. In order to make this easier, CanJS Devtools adds a sidebar to the Sources Panel to display the `logStack` output:
 
 <img src="../../docs/can-guides/images/devtools/queues-stack.png"
+  class="bit-docs-screenshot"
   alt="The CanJS Devtools Queues Stack"
   width="600px"/>
 
 When stopped at a breakpoint in the Chrome Developer Tools, you can see this Queues Stack in the sidebar:
 
 <img src="../../docs/can-guides/images/devtools/queues-stack-zoomed.png"
+  class="bit-docs-screenshot"
   alt="The CanJS Devtools Queues Stack"
   width="600px"/>
 
 You can click on any of these functions to go to their definition in the Sources panel:
 
 <img src="../../docs/can-guides/images/devtools/queues-stack-click-through.png"
+  class="bit-docs-screenshot"
   alt="The CanJS Devtools Queues Stack"
   width="600px"/>
