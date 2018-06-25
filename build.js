@@ -64,9 +64,27 @@ stealTools.export({
 			exports: exportsMap,
 			removeDevelopmentCode: false
 		},
-		"+bundled-es": {
+		"+bundled-es core": {
+			modules: ["can/core"],
 			addProcessShim: true,
 			dest: __dirname + "/dist/can.mjs"
+		},
+		"+bundled-es core minified": {
+			modules: ["can/core"],
+			addProcessShim: true,
+			minify: true,
+			dest: __dirname + "/dist/can.min.mjs"
+		},
+		"+bundled-es all": {
+			modules: ["can/can"],
+			addProcessShim: true,
+			dest: __dirname + "/dist/can.all.mjs"
+		},
+		"+bundled-es all minified": {
+			modules: ["can/can"],
+			addProcessShim: true,
+			minify: true,
+			dest: __dirname + "/dist/can.all.min.mjs"
 		}
 	}
 }).catch(function(e){
