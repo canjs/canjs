@@ -601,10 +601,8 @@ Ready to build an app with CanJS? Check out our [guides/chat] or one of our
 
 ## Webpack
 
-> > TODO: git repo, do we need the config?
-
 > You can skip these instructions by
-> [cloning this example repo on GitHub](https://github.com/canjs/webpack-example).
+> [cloning the can-5 branch of this example repo on GitHub](https://github.com/canjs/webpack-example/tree/can-5).
 
 [After setting up Node.js and npm](#Prerequisite_Node_jsandnpmsetup), install `can`, [webpack](https://webpack.js.org)
 (with [raw-loader](https://www.npmjs.com/package/raw-loader)) from npm:
@@ -614,7 +612,7 @@ npm install can@5 --save
 ```
 
 ```
-npm install webpack webpack-cli raw-loader --save-dev
+npm install webpack@4 webpack-cli@3 raw-loader --save-dev
 ```
 
 Next, create an `app.stache` template for your app:
@@ -643,25 +641,34 @@ Component.extend({
 });
 ```
 
-Next, create a webpack config?
+Next, we will create a `webpack.config.js` that enables tree-shaking in development:
 
 ```js
 const path = require('path');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const webpack = require("webpack");
 
 module.exports = {
   entry: './index.js',
-  mode: 'production',
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname)
-  }
+    path: path.resolve(__dirname, 'dist')
+  },
+  mode: "development",
+  plugins: [
+    new webpack.optimize.SideEffectsFlagPlugin(),
+    new UglifyJSPlugin({
+        sourceMap: true,
+        uglifyOptions: { compress: false, mangle: false, dead_code: true }
+    })
+  ]
 };
 ```
 
 Next, run webpack from your terminal:
 
 ```
-./node_modules/webpack/bin/webpack.js -d index.js -o dist/bundle.js
+./node_modules/.bin/webpack
 ```
 
 Finally, create an `index.html` page that loads `dist/bundle.js` and includes
@@ -677,7 +684,37 @@ your `<my-app>` component:
 
 Now you can load that page in your browser at one of the addresses the HTTP
 server showed you earlier (something like [http://localhost:8080/]). You should
-see “Hello World” on the page—if you don’t, join our
+see “Hello World” on the page — if you don’t, join our
+[Gitter chat](https://gitter.im/canjs/canjs) and we can help you figure out what
+went wrong.
+
+### Production build
+
+To build the app to production, create a `webpack.config.prod.js` that configures
+Webpack for a production build:
+
+```js
+const path = require('path');
+
+module.exports = {
+  entry: './index.js',
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist')
+  },
+  mode: "production"
+};
+```
+
+Next run webpack in your terminal with the production configuration:
+
+```
+./node_modules/.bin/webpack --config webpack.config.prod.js
+```
+
+Now you can load that page in your browser at one of the addresses the HTTP
+server showed you earlier (something like [http://localhost:8080/]). You should
+see “Hello World” on the page and the `bundle.js` size should be much smaller. If there's a problem, join our
 [Gitter chat](https://gitter.im/canjs/canjs) and we can help you figure out what
 went wrong.
 
@@ -685,10 +722,7 @@ Ready to build an app with CanJS? Check out our [guides/chat] or one of our
 [guides/recipes]!
 
 
-
-
-
-### Browserify
+## Browserify
 
 > You can skip these instructions by
 > [cloning this example repo on GitHub](https://github.com/canjs/browserify-example).
@@ -792,6 +826,10 @@ went wrong.
 Ready to build an app with CanJS? Check out our [guides/chat] or one of our
 [guides/recipes]!
 
+## DoneJS
+
+Use donejs!
+
 ## Script tags
 
 ### npm
@@ -835,37 +873,3 @@ With `can` installed, use it to create an `index.html` page with a `<script>` ta
 </script>
 ```
 @highlight 3
-
-### CDN
-
-Another quick way to start locally is by loading CanJS from a CDN:
-
-```html
-<!doctype html>
-<title>My CanJS App</title>
-<script src="https://unpkg.com/can@4/dist/global/can.ecosystem.js"></script>
-
-<my-app></my-app>
-
-<script type="text/stache" id="app-template">
-  <h1>{{message}}</h1>
-</script>
-
-<script type="text/javascript">
-  const template = can.stache.from("app-template");
-
-  can.Component.extend({
-    tag: "my-app",
-    view: template,
-    ViewModel: {
-      message: {
-        default: "Hello World"
-      }
-    }
-  });
-</script>
-```
-@highlight 3
-
-Ready to build an app with CanJS? Check out our [guides/chat] or one of our
-[guides/recipes]!

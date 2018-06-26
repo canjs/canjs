@@ -163,7 +163,7 @@
     "steal-qunit": "^1.0.1",
     "steal-socket.io": "^4.0.9",
     "steal-stache": "^4.0.0",
-    "steal-tools": "^2.0.0-pre.7",
+    "steal-tools": "^2.0.0-pre.9",
     "test-saucelabs": "0.0.3",
     "testee": "^0.7.0",
     "webpack": "^4.12.0",
