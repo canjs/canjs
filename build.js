@@ -63,6 +63,10 @@ stealTools.export({
 			ignore: ignoreModules,
 			exports: exportsMap,
 			removeDevelopmentCode: false
+		},
+		"+bundled-es": {
+			addProcessShim: true,
+			dest: __dirname + "/dist/can.mjs"
 		}
 	}
 }).catch(function(e){

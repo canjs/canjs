@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<title>ES build smoke test</title>
+
+<main></main>
+
+<script type="module">
+	import { Component, stache } from "../../../dist/can.mjs";
+
+	Component.extend({
+		tag: "my-app",
+		view: `Hello {{name}}!`,
+		ViewModel: {
+			name: { default: "world" }
+		}
+	});
+
+	document.querySelector("main").appendChild(stache("<my-app></my-app>")());
+	var content = document.querySelector("my-app").textContent;
+
+	var QUnit = window.parent.QUnit;
+	var removeMyself = window.parent.removeMyself;
+	if(QUnit) {
+		QUnit.equal(content, "Hello world!", "It rendered");
+		removeMyself();
+	} else {
+		console.log("Rendered ", content);
+	}
+
+</script>
