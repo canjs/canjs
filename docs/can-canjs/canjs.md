@@ -29,15 +29,61 @@ CanJS makes it easy to to do the common stuff, while helping you build the impos
 ## Easy to do the common stuff
 
 CanJS starts with a familiar object-oriented approach to making
-custom elements. Let's say you want to create a counter widget like the following: (_click the button_):
+custom elements. Let's say you want to create a page that counts clicks like the following: (_click the button_):
 
 <p style="border: 1px solid #ccc; padding: 15px;"><my-counter></my-counter></p>
 
-You want this widget to appear wherever you add `<my-counter></my-counter>` to the
-page.  
+The code for that <u>entire</u> page looks like this:
 
-All you need to do is import [can-component] and define the `<my-counter>` element
-by extending [can-component] with:
+```html
+<!doctype html>
+<html lang="en">
+
+<my-counter></my-counter>
+
+<script type="module">
+import { Component } from "https://unpkg.com/can/dist/global/can.mjs";
+
+Component.extend({
+    tag: "my-counter",
+    view: `
+        Count: <span>{{count}}</span>
+        <button on:click='increment()'>+1</button>
+    `,
+    ViewModel: {
+        count: {default: 0},
+        increment() {
+            this.count++;
+        }
+    }
+});
+</script>
+</html>
+```
+
+Yes, you do __not__ need a build system to get started with CanJS! Copy the code above into your favorite HTML page or
+[play with it in a JS Bin](http://justinbmeyer.jsbin.com/pubiqoc/1/edit?html,js,output).
+
+This page has 3 main parts.
+
+_First_, it places the `<my-counter>` custom element (which will be defined later) in the page.
+
+```html
+<my-counter></my-counter>
+```
+
+_Next_, the page imports [can-component Component] from the CanJS module.  Read [guides/setup]
+for alternative ways to load CanJS.
+
+```html
+<script type="module">
+import { Component } from "https://unpkg.com/can/dist/global/can.mjs";
+...
+</script>
+```
+
+_Finally_, the page defines the `<my-counter>` element
+by extending [can-component Component] with:
 
 - A [can-component.prototype.tag] for the name of the custom element for which you want to define.
 - A [can-component.prototype.view] that provides the HTML content
@@ -45,6 +91,21 @@ by extending [can-component] with:
 - A [can-component.prototype.ViewModel] that defines the methods and stateful properties available to
   the `view`.
 
+```js
+Component.extend({
+    tag: "my-counter",
+    view: `
+        Count: <span>{{count}}</span>
+        <button on:click='increment()'>+1</button>
+    `,
+    ViewModel: {
+        count: {default: 0},
+        increment() {
+            this.count++;
+        }
+    }
+});
+```
 
 <style>
   my-counter button {margin-left: 15px;}
@@ -66,25 +127,7 @@ Component.extend({
 });
 </script>
 
-```js
-import {Component} from "can";
 
-Component.extend({
-    tag: "my-counter",
-    view: `
-        Count: <span>{{count}}</span>
-        <button on:click='increment()'>+1</button>
-    `,
-    ViewModel: {
-        count: {default: 0},
-        increment() {
-            this.count++;
-        }
-    }
-});
-```
-
-<div style="text-align: center;"><a href="http://justinbmeyer.jsbin.com/pubiqoc/1/edit?html,js,output">Play with this example in a JS Bin</a></div>
 
 <style>
 .code-slide pre {
@@ -108,7 +151,7 @@ Component.extend({
 </style>
 
 <br/><br/>
-Convinced already? Get started with one of the tutorials below:
+Ready to go? Get started with one of the tutorials below:
 
 <div class="getting-started-icons">
     <div class="titled-list">
