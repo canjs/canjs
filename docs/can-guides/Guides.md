@@ -1,8 +1,7 @@
 @page guides Guides
 @parent canjs 1
 @group guides/essentials 2 essentials
-@group guides/experiment 3 experiment
-@group guides/contribute 4 contribute
+@group guides/experiment 3 app guides
 @group guides/upgrade 5 upgrade
 @group guides/getting-started 6 other
 @templateRender <% %>
