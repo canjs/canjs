@@ -106,7 +106,7 @@
     "can-validate-legacy": "1.2.0",
     "can-validate-validatejs": "0.1.3",
     "can-vdom": "4.0.1",
-    "can-view-autorender": "4.0.0",
+    "can-view-autorender": "5.0.0-pre.1",
     "can-view-callbacks": "4.0.1",
     "can-view-live": "4.0.5",
     "can-view-model": "4.0.1",
