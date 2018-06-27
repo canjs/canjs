@@ -46,8 +46,8 @@ any development environment. This section gives technical details on these items
 
 - __The `can` package__
 
-  CanJS publishes to [npm](https://www.npmjs.com/) a
-  [can package](https://www.npmjs.com/package/can). It contains:
+  CanJS publishes a
+  [can package](https://www.npmjs.com/package/can) to [npm](https://www.npmjs.com/). It contains:
 
   - `./can.js` - The main export, imports every CanJS subproject and exports it as
     a ES named export. For example, `can.js` looks like this:
@@ -58,7 +58,7 @@ any development environment. This section gives technical details on these items
     ...
     ```
 
-    Most module loaders with tree-shaking (ex: Webpack and StealJS) setups
+    Most module loaders setups with tree-shaking (ex: Webpack and StealJS)
     use this module. Import
     named exports from the `can` package like this:
 
@@ -66,11 +66,10 @@ any development environment. This section gives technical details on these items
     import {Component, restModel} from "can";
     ```
 
-  - `./core.mjs` - An ESM module with named exports of each [can-core] package bundled
-    together. This is useful for examples and prototyping in modern browsers that
-    support ES modules and for real-world apps that use just what's in core CanJS.
-    It's hosted statically on `unpkg` and can be
-    downloaded here.
+  - `./core.mjs` - An ESM module with the named exports of each [can-core] package bundled
+    together in a single file. This is useful for examples and prototyping in modern browsers that
+    support ES modules and for real-world apps that use just what is in core CanJS.
+    It's hosted statically on `unpkg` and can be downloaded [here](https://unpkg.com/can/core.mjs).  
 
     You can import directly from the file as follows:
 
@@ -95,7 +94,7 @@ any development environment. This section gives technical details on these items
     core named exports on it. Use this if you want to create a demo or example that will
     work in browsers that do not support ESM.
 
-  - `./ecosystem.mjs` - An ESM module with named exports of every* package bundled
+  - `./ecosystem.mjs` - An ESM module with named exports of every<a title="can-zone and react-view-model are not included">٭</a> package bundled
     together. This is useful for examples and prototyping in modern browsers that
     support ES modules. It's hosted statically on `unpkg` and can be
     downloaded here.
@@ -117,26 +116,26 @@ any development environment. This section gives technical details on these items
     </script>
     ```
 
-    This file is huge as it includes nearly every extension to
+    This file is large as it includes nearly every extension to
     CanJS. So use of this module in production, without tree-shaking, is
     not advised!
 
   - `./ecosystem.min.mjs` - A minified version of `./ecosystem.mjs`.
 
   - `./dist/global/ecosystem.js` - A JavaScript file that exports a `can` object with
-    every* named export. Use this if you want to create a demo or example that will
+    every<a title="can-zone and react-view-model are not included">٭</a> named export. Use this if you want to create a demo or example that will
     work in browsers that do not support ESM.
 
 ## Hosted setup options (no download needed)
 
-The following shows shows setting up CanJS with scripts hosted online. These are
+The following sections show setting up CanJS with scripts hosted online. These are
 the easiest ways of setting up CanJS for experimentation.  
 
 
 ### Importing the core ES module bundle
 
 The easiest way to get started with CanJS is to [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
-the pre-built ES module from [UNPKG](https://unpkg.com/). This is perfect for
+the bundled ES module from [UNPKG](https://unpkg.com/). This is perfect for
 demos, examples, or even small apps!
 
 The following `HTML` page imports CanJS and uses it to define a custom element:
@@ -169,7 +168,7 @@ The following `HTML` page imports CanJS and uses it to define a custom element:
 The previous example works in all modern browsers, even Edge! If you want to support
 older browsers, use the [traditional JavaScript bundle](#IncludingthecoreJavaScriptbundle) or one of the module loader setups (Webpack, StealJS).
 
-This build only includes CanJS's [can-core] and [can-infrastructure] modules. All modules are exported as named exports. For example, if you want the [can-ajax] infrastructure module, import it like:
+This build only includes CanJS's [can-core] and [can-infrastructure] modules. All modules are exported as named exports. For example, if you want the [can-ajax] infrastructure module, import it as follows:
 
 ```js
 import { Component, ajax } from "//unpkg.com/can@5/core.mjs";
@@ -326,8 +325,10 @@ own modules:
 ### Importing the ecosystem ES module bundle
 
 The [core ES module bundle](#ImportingthecoreESmodulebundle) only includes CanJS's
-[can-core] modules.  This doesn't include ecosystem modules like [can-stache-converters].  The
-ecosystem bundle hosted at `https://unpkg.com/can@5/core.mjs` includes _nearly_ every CanJS module.
+[can-core] modules.  This doesn't include [can-ecosystem] modules like [can-stache-converters].  The
+ecosystem bundle hosted at `https://unpkg.com/can@5/ecosystem.mjs` includes _nearly_ every CanJS module.
+
+The following shows importing and using [can-stache-converters] from `ecosystem.mjs`:
 
 ```html
 <!doctype html>
@@ -371,21 +372,20 @@ The ecosystem bundle does not include:
 
 ### JS Bin
 
-> > (todo)
+> TODO: THIS NEEDS TO BE UPDATED FOR 5.0
+> JSBin issue: https://github.com/jsbin/jsbin/issues/3262
 
-Use this JS Bin to play around with CanJS:
+The following JSBin is a hello-world ready for you to clone and create your own demos:
 
-<a class="jsbin-embed" href="https://jsbin.com/safigic/28/embed?html,js,output">
-  Starter CanJS app on jsbin.com
-</a>
-<script src="https://static.jsbin.com/js/embed.min.js?4.1.4"></script>
+Other JBins:
 
-It uses `can.ecosystem.js` so you have the [can-core core], [can-ecosystem ecosystem], and [can-infrastructure infrastructure] modules available to you.
+- Small routing example
+- Imports Ecosystem 
 
 
 ## StealJS
 
-> > (TODO: git-example)
+> (TODO: git-example)
 
 > You can skip these instructions by
 > [cloning this example repo on GitHub](https://github.com/canjs/stealjs-example).
