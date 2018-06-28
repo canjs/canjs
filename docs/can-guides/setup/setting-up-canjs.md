@@ -63,7 +63,7 @@ any development environment. This section gives technical details on these items
     named exports from the `can` package like this:
 
     ```js
-    import {Component, restModel} from "can";
+    import { Component, restModel } from "can";
     ```
 
   - `./core.mjs` - An ESM module with the named exports of each [can-core] package bundled
@@ -255,7 +255,8 @@ the minified version (`//unpkg.com/can@5/core.min.mjs`).
 Importing multiple modules
 </summary>
 
-You can import multiple modules that load CanJS. The following shows putting components into their own modules:
+The code that uses CanJS doesn't have to be within the `HTML` page itself. Instead you can import modules
+that import CanJS. The following shows putting components into their own modules:
 
 - __index.html__
   ```html
@@ -394,7 +395,7 @@ Other JBins:
 [After setting up Node.js and npm](#Node_jsandnpm), install `can`, [StealJS](https://stealjs.com) and the [steal-stache] plugin from npm:
 
 ```
-npm install can@5 steal@2 steal-stache --save
+npm install can@5 steal@2 steal-stache@4 --save
 ```
 
 Next, add the following [steal configuration](https://stealjs.com/docs/StealJS.configuration.html)
@@ -440,7 +441,7 @@ your template to say “Hello World”:
 
 ```js
 // index.js
-import {Component} from "can";
+import { Component } from "can";
 import view from "./app.stache";
 
 Component.extend({
@@ -488,7 +489,7 @@ npm install can@5 --save
 ```
 
 ```
-npm install webpack@4 webpack-cli@3 raw-loader --save-dev
+npm install webpack@4 webpack-cli@3 raw-loader@0.5 --save-dev
 ```
 
 Next, create an `app.stache` template for your app:
@@ -503,7 +504,7 @@ and your template to say “Hello World”:
 
 ```js
 // index.js
-import {Component} from "can";
+import { Component } from "can";
 import view from "raw-loader!./app.stache";
 
 Component.extend({
@@ -607,8 +608,8 @@ Ready to build an app with CanJS? Check out our [guides/chat] or one of our
 ## Browserify
 
 Unlike Webpack and StealJS, Browserify does not support ES Modules (`import "module"`) and tree-shaking
-natively.  Instead, it's customary to import files with CommonJS (`require("module")`). Therefore there are two
-common setups:
+natively.  Instead, it's standard practice to import files with CommonJS (`require("module")`). Therefore, there are two
+commonly used setups:
 
 
 <details>
@@ -691,11 +692,11 @@ Using ES Modules to import CanJS's individual packages using BabelJS
 > You can skip these instructions by
 > [cloning this example repo on GitHub](https://github.com/canjs/browserify-example).
 
-Browserify does not support tree-shaking, so the individual packages must be required.  This means that
+Browserify does not support tree-shaking, so the individual packages must be imported.  This means that
 instead of importing [can-component Component] like:
 
 ```js
-import {Component} from "can";
+import { Component } from "can";
 ```
 
 You should do it like:
@@ -765,11 +766,11 @@ and your template to say “Hello World”:
 ```js
 // index.js
 import Component from "can-component";
-import template from "./app.stache";
+import view from "./app.stache";
 
 Component.extend({
   tag: "my-app",
-  view: template,
+  view,
   ViewModel: {
     message: {
       default: "Hello World"
@@ -872,7 +873,7 @@ In short, these projects should use the "global" build.  That build can be eithe
   ```
   and found in `./node_modules/can/dist/global/core.js`.
 
-With CanJS downloaded or isntalled, use it to create an `index.html` page with a `<script>` tag:
+With CanJS downloaded or installed, use it to create an `index.html` page with a `<script>` tag:
 
 ```html
 <!doctype html>
@@ -902,7 +903,7 @@ With CanJS downloaded or isntalled, use it to create an `index.html` page with a
 @highlight 3
 
 
-This build only includes CanJS's [can-core] and [can-infrastructure] modules and all of CanJS's named exports are available on the `can` object. For example, if you want the [can-ajax] infrastructure module, use it like `can.ajax`:
+This build only includes CanJS's [can-core] and [can-infrastructure] modules and all of CanJS's named exports are available on the [can-namespace can] object. For example, if you want the [can-ajax] infrastructure module, use it like `can.ajax`:
 
 ```js
 can.Component.extend({
@@ -921,9 +922,9 @@ can.Component.extend({
 ```
 @highlight 10
 
-
-If you want [can-ecosystem] modules, you will need to create a custom
-build. We haven't posted instructions on how to do this yet, even though it's relatively easy. Please tell us on
+If you want to use [can-ecosystem] modules, you can use `./node_modules/can/dist/global/ecosystem.js`. However,
+this file is quite large and shouldn't be used in production so you will want to make your own custom version of
+`ecosystem.js` containing only the modules you need. Unfortunately, we haven't posted instructions on how to do this yet, even though it's relatively easy. Please tell us on
 [Gitter chat](https://gitter.im/canjs/canjs) to hurry up and do it already!
 
 
@@ -1046,7 +1047,7 @@ instead of the named exports from the `can` package.
 For example, instead of importing named exports from the `can` module like:
 
 ```js
-import {Component, DefineMap} from "can";
+import { Component, DefineMap } from "can";
 ```
 
 These packages should be individually installed:
@@ -1095,7 +1096,7 @@ export { default as restModel } from "can-rest-model";
 And then import the named exports from "my-can":
 
 ```js
-import {Component, restModel} from "./my-can";
+import { Component, restModel } from "./my-can";
 ```
 
 </details>
