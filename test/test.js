@@ -79,13 +79,9 @@ require('can-define-stream-kefir/can-define-stream-kefir_test');
 require('can-validate/test');
 require('can-validate-validatejs/test');
 require('can-define-validate-validatejs/test');
-require('react-view-model/test/test#?can/test/browser-supports-react');
-//require('can-react-component/test/test#?can/test/browser-supports-react');
 // require('can-jquery/test/test');
 // require('can-vdom/test/test');
 require('can-view-autorender/test/test');
-// require('can-zone/test/test'); needs to publish this
-// require('can-zone-storage/test/can-zone-storage_zone-test');
 
 
 // Integration tests

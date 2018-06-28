@@ -13,8 +13,6 @@ export { default as validate } from "./es/can-validate";
 export { default as validateValidatejs } from "./es/can-validate-validatejs";
 export { default as stream } from "./es/can-stream";
 export { default as streamKefir } from "./es/can-stream-kefir";
-export { default as Zone } from "./es/can-zone";
-export { default as reactViewModel } from "./es/react-view-model";
 export { default as viewAutorender } from "./es/can-view-autorender";
 export { default as fixtureSocket } from "./es/can-fixture-socket";
 export { default as connectTag } from "./es/can-connect-tag";
