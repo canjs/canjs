@@ -13,6 +13,9 @@ before_install:
       echo "Only docs were updated, skipping tests."
       exit
     fi
+- "echo 'This is running'"
+after_install:
+- "echo 'Install has finished'"
 script: npm run ci
 before_script:
   - npm run http-server &
