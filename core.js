@@ -1,6 +1,7 @@
 // Core
 export { define, DefineMap, DefineList } from "./es/can-define";
 
+export { default as default, default as can } from "./es/can-namespace";
 export { default as fixture } from "./es/can-fixture";
 export { default as restModel } from "./es/can-rest-model";
 export { default as superModel } from "./es/can-super-model";

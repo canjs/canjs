@@ -2,7 +2,6 @@
 // observable
 export { default as SimpleObservable } from "./es/can-simple-observable";
 // utility
-export { default as default, default as can } from "./es/can-namespace";
 export { default as assign } from "./es/can-assign";
 export { default as attributeEncoder } from "./es/can-attribute-encoder";
 export { default as ajax } from "./es/can-ajax";
