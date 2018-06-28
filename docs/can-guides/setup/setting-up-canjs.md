@@ -190,7 +190,7 @@ Component.extend({
 @highlight 1
 
 If you want an [can-ecosystem] module like [can-stache-converters], you can use
-the [ecosystem ES module bundle](#ImportingtheecosystemESmodulebundle), but this bundle should not be used in production as it
+the [ecosystem ES module bundle](#ImportingtheecosystemESmodulebundle), but the ecosystem bundle should not be used in production as it
 loads every ecosystem module in CanJS.
 
 <style>
@@ -221,8 +221,8 @@ Minified core bundle
 </summary>
 
 
-If you use the core ES module in production, make sure to switch to
-its minified version (`//unpkg.com/can@5/core.min.mjs`) like this:
+If you use the core ES module, make sure to switch to
+its minified version (`//unpkg.com/can@5/core.min.mjs`) in production like this:
 
 ```js
 import { Component, ajax } from "//unpkg.com/can@5/core.min.mjs";
@@ -255,8 +255,7 @@ the minified version (`//unpkg.com/can@5/core.min.mjs`).
 Importing multiple modules
 </summary>
 
-You can import multiple modules too. The following shows putting components into their
-own modules:
+You can import multiple modules that load CanJS. The following shows putting components into their own modules:
 
 - __index.html__
   ```html
@@ -281,7 +280,7 @@ own modules:
 
   Component.extend({
       tag: "my-app",
-      view: `CanJS {{feels}} modules`,
+      view: `<my-greeting/><my-counter/>`,
       ViewModel: {
           feels: { default: "😍" }
       }
@@ -302,6 +301,8 @@ own modules:
   ```
 - __my-counter.mjs__
   ```js
+  import { Component } from "//unpkg.com/can@5/core.mjs";
+
   Component.extend({
       tag: "my-counter",
       view: `
@@ -380,7 +381,7 @@ The following JSBin is a hello-world ready for you to clone and create your own 
 Other JBins:
 
 - Small routing example
-- Imports Ecosystem 
+- Imports Ecosystem
 
 
 ## StealJS
@@ -985,7 +986,7 @@ can.Component.extend({
 @highlight 10
 
 If you want an [can-ecosystem] module like [can-stache-converters], you can use
-the [ecosystem JavaScript bundle](#IncludingtheecosystemJavaScriptbundle), but this bundle should not be used in production as it
+the [ecosystem JavaScript bundle](#IncludingtheecosystemJavaScriptbundle), but the ecosystem bundle should not be used in production as it
 loads every ecosystem module in CanJS.
 
 ### Including the ecosystem JavaScript bundle
