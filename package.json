@@ -118,7 +118,7 @@
     "react-view-model": "1.0.0"
   },
   "devDependencies": {
-    "bit-docs": "0.0.8",
+    "bit-docs": "0.0.9",
     "can-make-map": "^1.0.1",
     "can-reflect-tests": "<2.0.0",
     "can-test-helpers": "^1.1.1",
