@@ -24,7 +24,7 @@ var DefineMap = require("can-define/map/map");
 var DefineList = require("can-define/list/list");
 var stache = require("can-stache");
 
-var selectVM = DefineMap.extend({
+var SelectViewModel = DefineMap.extend("SelectViewModel", {
 	selected: {
 		Default: DefineList
 	},
@@ -42,7 +42,7 @@ var selectVM = DefineMap.extend({
 
 Component.extend({
 	tag: "my-items",
-	ViewModel: selectVM,
+	ViewModel: SelectViewModel,
 	view: stache.from("demo-html"),
 	helpers: {
 		isSelected: function(options){
