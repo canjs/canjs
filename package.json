@@ -103,7 +103,7 @@
     "can-util": "3.11.5",
     "can-validate": "1.1.4",
     "can-validate-interface": "1.0.1",
-    "can-validate-legacy": "1.2.0",
+    "can-validate-legacy": "1.2.1",
     "can-validate-validatejs": "0.1.3",
     "can-vdom": "4.0.1",
     "can-view-autorender": "4.0.0",
