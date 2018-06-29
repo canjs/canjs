@@ -6,6 +6,7 @@ require('can-define/test/test');
 // require('can-stache/test/stache-test'); in dev-only
 require('can-stache-bindings/test/tests');
 require('can-set/test/test');
+require('can-value/test/test');
 // can-connect
 // can-stache-route-helpers
 
@@ -13,6 +14,7 @@ require('can-set/test/test');
 // Infrastructure tests
 require('can-ajax/can-ajax-test');
 require('can-assign/can-assign-test');
+require('can-bind/test/test');
 require('can-construct/can-construct_test');
 require('can-construct-super/test/can-construct-super_test');
 require('can-control/can-control_test');

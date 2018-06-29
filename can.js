@@ -1,6 +1,7 @@
 var can = require("can-util/namespace");
 
 require("can-assign");
+require("can-bind");
 require("can-component");
 require("can-connect/all");
 require("can-define/map/map");
@@ -22,6 +23,7 @@ require("can-event-dom-enter/add-global/add-global");
 require("can-event-dom-radiochange");
 require("can-parse-uri");
 require("can-validate-interface");
+require("can-value");
 require("can-view-model");
 
 module.exports = can;
