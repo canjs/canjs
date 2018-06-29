@@ -8,16 +8,39 @@
 
 @body
 
+<style>
+details {
+    border: 1px solid #dfdfdf;
+    background-color: #fdfdfd;
+    border-radius: 4px;
+    padding: 1em 1em 0.5em 1em;
+}
+summary {
+    font-weight: bold;
+    margin: -.5em -.5em 0;
+    padding: .5em;
+    cursor: pointer;
+}
+details[open] {
+    padding: 1em;
+}
+details[open] summary {
+    margin-bottom: .5em;
+}
+span[title] {
+    color: green;
+    cursor: pointer;
+}
+</style>
+
 ## Choosing the right environment
 
-CanJS has a variety of packages, modules, and files ready to meet the needs of any development environment. If you already know what type of
-development environment you have or want, please click one of the links
-above. This section is for people who aren't sure what they
-want.  The following lists common scenarios and provides links to
+CanJS has a variety of packages, modules, and files ready to meet the needs of any development environment. This section is for people who aren't sure what they
+want. The following lists common scenarios and provides links to
 the guide(s) that most closely satisfy that scenario.
 
-- I just want to play, make a demo, or learn CanJS right now! 👉 Use the [ES module bundle](#ImportingthecoreESmodulebundle) or [JSBin](#JSBin).
-- I use Webpack 👉 [Webpack](#Webpack)
+- I just want to play, make a demo, or learn CanJS right now! 👉 Use the [ES module bundle](#ImportingthecoreESmodulebundle) or [JS Bin](#JSBin).
+- I use webpack 👉 [Webpack](#Webpack)
 - I use StealJS 👉 [StealJS](#StealJS)
 - I use Browserify 👉 [Browserify](#Browserify)
 - I want server-side rendering, progressive loading, continuous integration, testing,
@@ -37,8 +60,8 @@ any development environment. This section gives technical details on these items
 
   CanJS is composed from over 80 individual packages.  For example [can-component Component]
   is actually the [can-component](https://www.npmjs.com/package/can-component) package, housed
-  in its own [github repository](https://github.com/canjs/can-component). The modules within
-  these packages are written in ES5 JavaScript and CommonJS, so they can be imported by Webpack, Browserify,
+  in its own [GitHub repository](https://github.com/canjs/can-component). The modules within
+  these packages are written in ES5 JavaScript and CommonJS, so they can be imported by webpack, Browserify,
   StealJS, and a do not require transpiling.
 
   Apps that need long-term flexibility should installing these packages directly. Direct installation
@@ -58,7 +81,7 @@ any development environment. This section gives technical details on these items
     ...
     ```
 
-    Most module loaders setups with tree-shaking (ex: Webpack and StealJS)
+    Most module loaders setups with tree-shaking (ex: webpack 2 and StealJS 2)
     use this module. Import
     named exports from the `can` package like this:
 
@@ -94,7 +117,7 @@ any development environment. This section gives technical details on these items
     core named exports on it. Use this if you want to create a demo or example that will
     work in browsers that do not support ESM.
 
-  - `./ecosystem.mjs` - An ESM module with named exports of every<a title="can-zone and react-view-model are not included">٭</a> package bundled
+  - `./ecosystem.mjs` - An ESM module with named exports of every<span title="can-zone and react-view-model are not included">٭</span> package bundled
     together. This is useful for examples and prototyping in modern browsers that
     support ES modules. It's hosted statically on `unpkg` and can be
     downloaded here.
@@ -103,7 +126,7 @@ any development environment. This section gives technical details on these items
 
     ```js
     <script type="module">
-	import { Component } from "//unpkg.com/can/ecosystem.mjs";
+	import { Component } from "//unpkg.com/can@5/ecosystem.mjs";
 
     	Component.extend({
     		tag: "my-app",
@@ -117,13 +140,13 @@ any development environment. This section gives technical details on these items
     ```
 
     This file is large as it includes nearly every extension to
-    CanJS. So use of this module in production, without tree-shaking, is
+    CanJS. Using this module in production, without tree-shaking, is
     not advised!
 
   - `./ecosystem.min.mjs` - A minified version of `./ecosystem.mjs`.
 
   - `./dist/global/ecosystem.js` - A JavaScript file that exports a `can` object with
-    every<a title="can-zone and react-view-model are not included">٭</a> named export. Use this if you want to create a demo or example that will
+    every<span title="can-zone and react-view-model are not included">٭</span> named export. Use this if you want to create a demo or example that will
     work in browsers that do not support ESM.
 
 ## Hosted setup options (no download needed)
@@ -135,7 +158,7 @@ the easiest ways of setting up CanJS for experimentation.
 ### Importing the core ES module bundle
 
 The easiest way to get started with CanJS is to [import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
-the bundled ES module from [UNPKG](https://unpkg.com/). This is perfect for
+the bundled ES module from [unpkg](https://unpkg.com/). This is perfect for
 demos, examples, or even small apps!
 
 The following `HTML` page imports CanJS and uses it to define a custom element:
@@ -166,7 +189,7 @@ The following `HTML` page imports CanJS and uses it to define a custom element:
 ```
 
 The previous example works in all modern browsers, even Edge! If you want to support
-older browsers, use the [traditional JavaScript bundle](#IncludingthecoreJavaScriptbundle) or one of the module loader setups (Webpack, StealJS).
+older browsers, use the [traditional JavaScript bundle](#IncludingthecoreJavaScriptbundle) or one of the module loader setups (webpack, StealJS).
 
 This build only includes CanJS's [can-core] and [can-infrastructure] modules. All modules are exported as named exports. For example, if you want the [can-ajax] infrastructure module, import it as follows:
 
@@ -192,28 +215,6 @@ Component.extend({
 If you want an [can-ecosystem] module like [can-stache-converters], you can use
 the [ecosystem ES module bundle](#ImportingtheecosystemESmodulebundle), but the ecosystem bundle should not be used in production as it
 loads every ecosystem module in CanJS.
-
-<style>
-details {
-    border: 1px solid #dfdfdf;
-    background-color: #fdfdfd;
-    border-radius: 4px;
-    padding: 1em 1em 0.5em 1em;
-}
-summary {
-    font-weight: bold;
-    margin: -.5em -.5em 0;
-    padding: .5em;
-    cursor: pointer;
-}
-details[open] {
-    padding: 1em;
-}
-details[open] summary {
-    margin-bottom: .5em;
-}
-</style>
-
 
 <details>
 <summary>
@@ -328,7 +329,8 @@ that import CanJS. The following shows putting components into their own modules
 
 The [core ES module bundle](#ImportingthecoreESmodulebundle) only includes CanJS's
 [can-core] modules.  This doesn't include [can-ecosystem] modules like [can-stache-converters].  The
-ecosystem bundle hosted at `https://unpkg.com/can@5/ecosystem.mjs` includes _nearly_ every CanJS module.
+ecosystem bundle hosted at `https://unpkg.com/can@5/ecosystem.mjs` includes every CanJS module
+(except for `can-zone` and `react-view-model`).
 
 The following shows importing and using [can-stache-converters] from `ecosystem.mjs`:
 
@@ -377,7 +379,7 @@ The ecosystem bundle does not include:
 > TODO: THIS NEEDS TO BE UPDATED FOR 5.0
 > JSBin issue: https://github.com/jsbin/jsbin/issues/3262
 
-The following JSBin is a hello-world ready for you to clone and create your own demos:
+The following JS Bin is a hello-world ready for you to clone and create your own demos:
 
 Other JBins:
 
@@ -572,7 +574,7 @@ Production build
 </summary>
 
 To build the app to production, create a `webpack.config.prod.js` that configures
-Webpack for a production build:
+webpack for a production build:
 
 ```js
 const path = require('path');
@@ -607,7 +609,7 @@ Ready to build an app with CanJS? Check out our [guides/chat] or one of our
 
 ## Browserify
 
-Unlike Webpack and StealJS, Browserify does not support ES Modules (`import "module"`) and tree-shaking
+Unlike webpack and StealJS, Browserify does not support ES Modules (`import "module"`) and tree-shaking
 natively.  Instead, it's standard practice to import files with CommonJS (`require("module")`). Therefore, there are two
 commonly used setups:
 
@@ -861,7 +863,7 @@ DoneJS's features.
 
 ## Script tags setups
 
-This section helps guide setups that do not use a module loader like Webpack and StealJS, and instead
+This section helps guide setups that do not use a module loader like webpack and StealJS, and instead
 concatenate scripts, often with a tool like [Grunt](https://gruntjs.com/) and [Gulp](https://gulpjs.com/), and non-node projects like the [Rails Asset Pipeline](http://guides.rubyonrails.org/asset_pipeline.html).
 
 In short, these projects should use the "global" build.  That build can be either:
@@ -938,7 +940,7 @@ If you only support browsers that do support modules please follow the [Importin
 ### Including the core JavaScript bundle
 
 If you want your demo, example, or small app to work in browsers that do not support ES modules,
-then you can use the CDN hosted JavaScript bundle on [UNPKG](https://unpkg.com/#/).  
+then you can use the CDN hosted JavaScript bundle on [unpkg](https://unpkg.com/#/).  
 
 The following `HTML` page includes CanJS and uses it to define a custom element:
 
@@ -994,7 +996,8 @@ loads every ecosystem module in CanJS.
 
 The [core JavaScript bundle](#IncludingthecoreJavaScriptbundle) only includes CanJS's
 [can-core] modules.  This doesn't include ecosystem modules like [can-stache-converters].  The
-ecosystem bundle hosted at `https://unpkg.com/can@5/core.mjs` includes _nearly_ every CanJS module.
+ecosystem bundle hosted at `https://unpkg.com/can@5/core.mjs` includes every CanJS module
+(except for [can-zone] and [react-view-model]).
 
 ```html
 <!doctype html>
