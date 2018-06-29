@@ -24,7 +24,7 @@ var DefineMap = require("can-define/map/map");
 var DefineList = require("can-define/list/list");
 var stache = require("can-stache");
 
-var ViewModel = DefineMap.extend({
+var selectVM = DefineMap.extend({
 	selected: {
 		Default: DefineList
 	},
@@ -42,7 +42,7 @@ var ViewModel = DefineMap.extend({
 
 Component.extend({
 	tag: "my-items",
-	ViewModel: ViewModel,
+	ViewModel: selectVM,
 	view: stache.from("demo-html"),
 	helpers: {
 		isSelected: function(options){
@@ -55,8 +55,8 @@ Component.extend({
 	}
 });
 
-var fragment = stache("<my-items items:from='items' />")({
-	items: new DefineList([
+var fragment = stache("<my-items items:from='titleItems' />")({
+	titleItems: new DefineList([
 		{ title: "CanJS" },
 		{ title: "StealJS" },
 		{ title: "FuncUnit" },
