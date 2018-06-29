@@ -1,5 +1,9 @@
 .tmp*
 dist/
+core.mjs
+core.min.mjs
+ecosystem.mjs
+ecosystem.min.mjs
 *.swp
 *.orig
 util/can.*.js

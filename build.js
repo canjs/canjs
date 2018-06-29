@@ -36,10 +36,21 @@ var ignoreModules = [function(name){
 
 var exportsMap = {
 	"jquery": "jQuery",
-	"can-util/namespace": "can",
+	"can-namespace": "can",
 	"kefir": "Kefir",
 	"validate.js": "validate",
 	"react": "React"
+};
+
+var globalConfig = {
+	format: "global",
+	useNormalizedDependencies: true,
+	normalize: function(depName, depLoad, curName, curLoad, loader){
+		return baseNormalize.call(this, depName, depLoad, curName, curLoad, loader, true);
+	},
+	ignore: ignoreModules,
+	exports: exportsMap,
+	removeDevelopmentCode: false
 };
 
 stealTools.export({
@@ -52,21 +63,35 @@ stealTools.export({
 		verbose: true
 	},
 	outputs: {
-		"core": {
+		"global core": Object.assign({
+			modules: ["can/core"],
+			dest: globalJS.dest(__dirname+"/dist/global/core.js")
+		}, globalConfig),
+		"global ecosystem": Object.assign({
 			modules: ["can/can"],
-			format: "global",
-			dest: globalJS.dest(__dirname+"/dist/global/can.js"),
-			useNormalizedDependencies: true,
-			normalize: function(depName, depLoad, curName, curLoad, loader){
-				return baseNormalize.call(this, depName, depLoad, curName, curLoad, loader, true);
-			},
-			ignore: ignoreModules,
-			exports: exportsMap,
-			removeDevelopmentCode: false
-		},
-		"+bundled-es": {
+			dest: globalJS.dest(__dirname+"/dist/global/ecosystem.js")
+		}, globalConfig),
+		"+bundled-es core": {
+			modules: ["can/core"],
 			addProcessShim: true,
-			dest: __dirname + "/dist/can.mjs"
+			dest: __dirname + "/core.mjs"
+		},
+		"+bundled-es core minified": {
+			modules: ["can/core"],
+			addProcessShim: true,
+			minify: true,
+			dest: __dirname + "/core.min.mjs"
+		},
+		"+bundled-es all": {
+			modules: ["can/can"],
+			addProcessShim: true,
+			dest: __dirname + "/ecosystem.mjs"
+		},
+		"+bundled-es all minified": {
+			modules: ["can/can"],
+			addProcessShim: true,
+			minify: true,
+			dest: __dirname + "/ecosystem.min.mjs"
 		}
 	}
 }).catch(function(e){

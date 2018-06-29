@@ -1,4 +1,4 @@
-import { can, Component, DefineMap } from "../../../can";
+import { can, Component, DefineMap } from "../../../core.js";
 
 window.can = can;
 
