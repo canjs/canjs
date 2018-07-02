@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>CanJS + Modules</title>
+
+<my-app></my-app>
+
+<script type="module">
+	import { Component, fixture, realtimeRestModel } from "//unpkg.com/can@pre/core.mjs";
+
+	Component.extend({
+		tag: "my-app",
+		view: `CanJS {{feels}} modules`,
+		ViewModel: {
+			feels: { default: "😍" }
+		}
+	});
+</script>
