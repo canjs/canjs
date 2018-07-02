@@ -5,7 +5,13 @@ import { DefineMap, route, stache, stacheBindings } from "can";
 import "can/demos/technology-overview/mock-url";
 
 var Counter = DefineMap.extend({
-    count: {default: 0, type: "number"},
+    count: {
+        default: 0,
+        type: "number",
+        set(newValue){
+            return newValue || 0;
+        }
+    },
     increment() {
         this.count++;
     }

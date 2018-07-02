@@ -133,7 +133,7 @@
     "can-view-target": "^4.0.1"
   },
   "devDependencies": {
-    "bit-docs": "0.0.8",
+    "bit-docs": "0.0.11",
     "can-make-map": "^1.0.1",
     "can-reflect-tests": "<2.0.0",
     "can-test-helpers": "^1.1.1",
@@ -225,11 +225,12 @@
       "bit-docs-tag-sourceref": "^0.0.3",
       "bit-docs-generate-html": "^0.8.0",
       "bit-docs-generate-searchmap": "^0.2.0",
-      "bit-docs-html-canjs": "^2.3.4",
+      "bit-docs-html-canjs": "^2.3.9",
       "bit-docs-prettify": "^0.3.0",
       "bit-docs-html-highlight-line": "^0.3.1",
       "bit-docs-tag-demo": "^0.5.3",
-      "bit-docs-tag-package": "^0.0.5"
+      "bit-docs-tag-package": "^0.0.5",
+      "bit-docs-html-codepen-link": "^1.0.3"
     },
     "glob": {
       "pattern": "{node_modules,docs}/{can-*,steal-stache,react-view-model}/**/*.{js,md}",
@@ -246,6 +247,12 @@
       "2.3.33": "https://v2.canjs.com"
     },
     "parent": "canjs",
-    "minifyBuild": true
+    "minifyBuild": true,
+    "codepen": [
+      [
+        "\"can\"",
+        "\"//unpkg.com/can@^5.0.0-pre.1/core.mjs\""
+      ]
+    ]
   }
 }

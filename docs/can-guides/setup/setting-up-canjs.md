@@ -39,7 +39,7 @@ CanJS has a variety of packages, modules, and files ready to meet the needs of a
 want. The following lists common scenarios and provides links to
 the guide(s) that most closely satisfy that scenario.
 
-- I just want to play, make a demo, or learn CanJS right now! 👉 Use the [ES module bundle](#ImportingthecoreESmodulebundle) or [JS Bin](#JSBin).
+- I just want to play, make a demo, or learn CanJS right now! 👉 Use the [ES module bundle](#ImportingthecoreESmodulebundle) or an [online code editor](#OnlineCodeEditors).
 - I use webpack 👉 [Webpack](#Webpack)
 - I use StealJS 👉 [StealJS](#StealJS)
 - I use Browserify 👉 [Browserify](#Browserify)
@@ -117,7 +117,7 @@ any development environment. This section gives technical details on these items
     core named exports on it. Use this if you want to create a demo or example that will
     work in browsers that do not support ESM.
 
-  - `./ecosystem.mjs` - An ESM module with named exports of every<span title="can-zone and react-view-model are not included">٭</span> package bundled
+  - `./all.mjs` - An ESM module with named exports of every<span title="can-zone and react-view-model are not included">٭</span> package bundled
     together. This is useful for examples and prototyping in modern browsers that
     support ES modules. It's hosted statically on `unpkg` and can be
     downloaded here.
@@ -126,7 +126,7 @@ any development environment. This section gives technical details on these items
 
     ```js
     <script type="module">
-	import { Component } from "//unpkg.com/can@5/ecosystem.mjs";
+	import { Component } from "//unpkg.com/can@5/all.mjs";
 
     	Component.extend({
     		tag: "my-app",
@@ -143,9 +143,9 @@ any development environment. This section gives technical details on these items
     CanJS. Using this module in production, without tree-shaking, is
     not advised!
 
-  - `./ecosystem.min.mjs` - A minified version of `./ecosystem.mjs`.
+  - `./all.min.mjs` - A minified version of `./all.mjs`.
 
-  - `./dist/global/ecosystem.js` - A JavaScript file that exports a `can` object with
+  - `./dist/global/all.js` - A JavaScript file that exports a `can` object with
     every<span title="can-zone and react-view-model are not included">٭</span> named export. Use this if you want to create a demo or example that will
     work in browsers that do not support ESM.
 
@@ -372,19 +372,18 @@ The ecosystem bundle does not include:
 - [can-zone]
 - [react-view-model]
 
+### Online Code Editors
 
+The following are CanJS examples in various onine code editors.
 
-### JS Bin
+__Hello World__
 
-> TODO: THIS NEEDS TO BE UPDATED FOR 5.0
-> JSBin issue: https://github.com/jsbin/jsbin/issues/3262
+<p data-height="267" data-theme-id="dark" data-slug-hash="yEGGoK" data-default-tab="js,result" data-user="justinbmeyer" data-embed-version="2" data-pen-title="CanJS 5.0 Hello World" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/yEGGoK/">CanJS 5.0 Hello World</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 
-The following JS Bin is a hello-world ready for you to clone and create your own demos:
+- [CodePen](https://codepen.io/justinbmeyer/pen/yEGGoK/)
+- JS Bin
+- [JSFiddle](https://jsfiddle.net/javascriptmvc/Ldpevngx/5/)
 
-Other JBins:
-
-- Small routing example
-- Imports Ecosystem
 
 
 ## StealJS
@@ -1170,3 +1169,5 @@ browser to see your project. They will be similar to [http://localhost:8080/].
 
 Next, you can choose to use [StealJS](#StealJS), [webpack](#Webpack), or
 [Browserify](#Browserify) to load your project.
+
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>

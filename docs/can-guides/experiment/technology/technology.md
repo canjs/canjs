@@ -2,7 +2,7 @@
 @parent guides/essentials 1
 @outline 2
 
-@description Learn the basics of the core parts of CanJS's technology.
+@description Learn the basics of CanJS's technology.
 
 @body
 
@@ -18,12 +18,19 @@ table.panels .background td {
 table.panels pre {
     margin-top: 0px;
 }
+.obs {color: #800020; font-weight: bold}
+.code-toolbar + a {
+    text-align: center; color: gray; display: block;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+}
 </style>
 
 ## Overview
 
-CanJS, at its most simplified, consists of key-value __Observables__
-connected to different web browser APIs through various connecting
+CanJS, at its most simplified, consists of key-value <span class='obs'>Observables</span>
+connected to web browser APIs through various connecting
 libraries.
 
 
@@ -31,56 +38,64 @@ libraries.
   alt="Observables are the center hub.  They are connected to the DOM by the view layer, the service layer by the data modeling layer, and the window location by the routing layer"
   class='bit-docs-screenshot' width='600px'/>
 
-The general idea is that you create observable objects that encapsulate
-the logic and state of your application and connect those observable
+The general idea is that you create <span class='obs'>observable</span> objects that encapsulate
+the logic and state of your application and connect those <span class='obs'>observable</span>
 objects to:
 
-- The Document Object Model (DOM) to update your page automatically.
-- The route to support the forward and back button.
-- Your service layer to make receiving, creating, updating, and deleting server data easier.
+- The Document Object Model (DOM) to update your [guides/html] automatically.
+- The browser URL to support the forward and back button through [guides/routing].
+- Your service layer to make receiving, creating, updating, and deleting [guides/service-data server data] easier.
 
 
 Instead of worrying about calling the various browser APIs, CanJS abstracts this
 away, so you can focus on the logic of your application. The logic of your
-application is contained within observables.
+application is contained within <span class='obs'>observables</span>.
 
-The rest of this guide walks you through:
-
-- Defining your own [key-value observable](#Key_ValueObservables) types and
-  adding logic to them.
-- Connecting those [observables to DOM elements](#ObservablesandHTMLElements) using:
-  - stache templates like `<span>{{count}}</span>`,  
-  - bindings like `<input value:bind='count'>`, and
-  - components that create custom elements like `<my-counter/>`.
-- Connecting [observables to the browser's location](#Observablesandthebrowser_slocation) and
-  building an example app that routes between different pages, including a login screen.
+The rest of this page walks through the basics of <span class='obs'>observables</span> and brief examples
+of connecting observables to browser APIs. For a deeper dive, please read through the [guides/html], [guides/routing] and [guides/service-data]
+guides.
 
 ## Key-Value Observables
 
 The [can-define/map/map DefineMap] and
-[can-define/list/list DefineList] __Observables__ define the logic and state
-in your application. For example, if we wanted to model
-a simple counter, we can use [can-define/map/map DefineMap] as follows:
+[can-define/list/list DefineList] <span class='obs'>observables</span> define the logic and state
+in your application. For example, the following uses [can-define/map/map DefineMap] to:
+
+- Model a simple `Counter` type.
+- Create instances of `Counter`, call its methods, and inspect its state.
+
 
 ```js
-import DefineMap from "can-define/map/map";
+import {DefineMap} from "can";
+
+// Extend DefineMap to create a custom observable type.
 const Counter = DefineMap.extend({
+
+    // Defines a `count` property that defaults to 0.
     count: {default: 0},
+
+    // Defines an `increment` method that increments
+    // the `count` property.
     increment() {
         this.count++;
     }
 });
-```
 
-We can create instances of `Counter`, call its methods, and
-inspect its state like so:
-
-```js
+// Create an instance of the Counter observable type.
 const myCounter = new Counter();
-myCounter.count //-> 0
+
+// Read the `count` property.
+console.log( myCounter.count ) //-> 0
+
+// Calls the `increment` method.
 myCounter.increment()
-myCounter.count //-> 1
+
+// Read the `count` property again.
+console.log( myCounter.count ) //-> 1
 ```
+@codepen
+
+
 
 `myCounter` is an instance of `Counter`. `myCounter.count` is what we call the _state_ of the `myCounter` instance.  `myCounter.increment` is part of the _logic_ that controls the
 state of `myCounter`.
@@ -92,226 +107,76 @@ state of `myCounter`.
 for defining property behavior. In the previous example, `count: {default: 0}` defined the `count` property to
 have an initial value of `0`. The `{default: 0}` object is a [can-define.types.propDefinition].
 
-The following example uses the [can-define.types.default] and [can-define.types.get] property
-definition behaviors to define a `TodosApp` constructor function's `todos` and `completeCount`
-property behavior:
-
-```js
-const TodosApp = DefineMap.extend({
-    todos: {
-        // todos defaults to a DefineList of todo data.
-        default: () => new DefineList([
-            {complete: true, name: "Do the dishes."},
-            {complete: true, name: "Wash the car."},
-            {complete: false, name: "Learn CanJS."}
-        ])
-    },
-    // completedCount is the number of completed todos in the `todos`
-    // property.
-    completeCount: {
-        get() {
-            return this.todos.filter({complete: true}).length
-        }
-    }
-});
-```
-
-Instances of `TodosApp` will have default `todos` value and a `completeCount`
-that dynamically changes when `todos` changes:
-
-```js
-const todosApp = new TodosApp();
-todosApp.todos //-> DefineList[{complete: true, name: "Do the dishes."}, ...]
-
-todosApp.completeCount //-> 2
-
-todosApp.todos[2].complete = true;
-
-todosApp.completeCount //-> 3
-```
 
 ## Observables and HTML Elements
 
-CanJS's pattern is that you define application logic in one or
-more observables, then you connect these observables to
-various browser APIs. The page's HTML (DOM) is the
-most common browser API people need to connect to. [can-stache], [can-stache-bindings]
-and [can-component] are used to connect the DOM
-to __observables__ like `myCounter`. We can create HTML that:
+CanJS applications use [can-component Component] to connect <span class='obs'>observables</span>
+to a page's HTML elements. We can use [can-component Component] to create a counting widget
+for the `Counter` <span class='obs'>observables</span> we just created.
 
-- Calls methods on observables using [can-stache-bindings].
-- Updates the page when the state of an observable changes using [can-stache].
+The following widget counts the number of times the <button>+1</button> button is clicked:
 
-The following example increments the _Count_ when the <button>+1</button> is clicked:
+<p data-height="106" data-theme-id="dark" data-slug-hash="jKJqoJ" data-default-tab="result" data-user="justinbmeyer" data-embed-version="2" data-pen-title="my-counter (5.pre)" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/jKJqoJ/">my-counter (5.pre)</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 
+In CanJS, widgets are encapsulated with custom elements. Custom elements allow us to put an
+element in our HTML like `<my-counter></my-counter>`, and the widget will spring to life.
 
-@demo demos/technology-overview/observable-dom.html
+The following HTML includes a `<my-counter>` element and defines the `<my-counter>` [can-component Component]:
 
-> __NOTE:__ Click the __JS__ tab to see the code.
+```html
+<!-- Adds the custom element to the page -->
+<my-counter></my-counter>
 
-The demo uses a [can-stache] view:
+<script type="module">
+import { DefineMap, Component } from "can";
 
-```js
-const view = stache(`
-  <button on:click='increment()'>+1</button>
-  Count: <span>{{count}}</span>
-`);
+// Define the `Counter` observable type
+const Counter = DefineMap.extend({
+    count: {default: 0},
+    increment() {
+        this.count++;
+    }
+});
+
+// Extend Component to define a custom element
+Component.extend({
+
+    // The name of the custom element
+    tag: "my-counter",
+
+    // The HTML content within the custom element.
+    //  - {{count}} is a `stache` magic tag.
+    //  - `on:click` is a `stache` event binding.
+    view: `
+        Count: <span>{{count}}</span>
+        <button on:click='increment()'>+1</button>
+    `,
+
+    // The Observable type used to control the
+    // logic of this custom element
+    ViewModel: Counter
+});
+</script>
 ```
+@codepen
 
-The _view_:
-
-- Updates a `<span/>` when the state of `myCounter` changes _using_ `{{count}}`.
-- Creates a <button>+1</button> button that calls methods on `myCounter` when DOM events happen _using_ `on:click='increment()'`.
-
-### Stache templates and bindings
-
-[can-stache] is used to create HTML that updates automatically when observable
-state changes. It uses magic tags to read values and perform simple logic. The following
-are the most commonly used tags:
-
-- [can-stache.tags.escaped] - Inserts the result of `expression` in the page.
-  ```html
-  Count: <span>{{count}}</span>
-  ```
-- [can-stache.helpers.if] - Render the _block_ content if the expression evaluates
-  to a _truthy_ value; otherwise, render the _inverse_ content.
-  ```html
-  {{#if(count)}} Count not 0 {{else}} Count is 0 {{/if}}
-  ```
-- [can-stache.helpers.is] - Render the _block_ content if all comma seperated expressions
-  evaluate to the same value; otherwise, render the _inverse_ content.
-  ```html
-  {{#is(count, 1)}} Count is 1 {{else}} Count is not 1 {{/if}}
-  ```
-- [can-stache.helpers.each] - Render the _block_ content for each item in the list the expression evaluates to.
-  ```html
-  {{#each(items)}} {{name}} {{/each}}
-  ```
-
-[can-stache-bindings] is used pass values between the DOM and observables and call methods on
-observables. Use it to:
-
-- Call methods on observables when DOM events happen. The following uses
-  [can-stache-bindings.event] to call `doSomething` with the `<input>`'s value on a `keypress` event:
-  ```html
-  <input on:keypress="doSomething(scope.element.value)"/>
-  ```
-- Update observables with element attribute and property values.  The following uses [can-stache-bindings.toParent]
-  to send the `<input>`'s _value to_ an observable's `count` property.
-  ```html
-  <input value:to="count"/>
-  ```
-- Update element attribute and property values with observable values.  The following uses [can-stache-bindings.toChild]
-  to update the `<input>`'s _value from_  an observable's `count` property.
-  ```html
-  <input value:from="count"/>
-  ```
-- Cross bind element attribute and property values with observable values.  The following uses
-  [can-stache-bindings.twoWay] to update the `<input>`'s _value_ from  an observable's `count` property
-  and vice versa:
-  ```html
-  <input value:bind="count"/>
-  ```
-
-The following demo:
-
-- Loops through a list of todos with [can-stache.helpers.each] - `{{#each( todos )}} ... {{/each}}`.
-- Write out if all todos are complete with [can-stache.helpers.is] - `{{#is( completeCount, todos.length )}}`.
-- Update the `complete` state of a todo when a _checkbox_ is checked and vice-versa with [can-stache-bindings.twoWay] - `checked:bind='complete'`.
-- Completes every todo with [can-stache-bindings.event] - `on:click='completeAll()'`.
-
-@demo demos/technology-overview/simple-todos.html
-
-
-### Components
-
-The final core __view__ library is [can-component].
-
-<img src="../../docs/can-guides/experiment/technology/observables-dom.png"
-  alt=""
-  class='bit-docs-screenshot'/>
-
-[can-component] is used to create customs elements.  Custom elements are used to
-encapsulate widgets or application logic. For example, you
-might use [can-component] to create a `<percent-slider>` element that creates a
-slider widget on the page:
-
-@demo demos/technology-overview/component-slider.html
-
-Or, you might use [can-component] to make a `<task-editor>` that uses `<percent-slider>`
-and manages the application logic around editing a todo:
-
-@demo demos/technology-overview/task-editor.html
-
-
-A [can-component] is a combination of:
-
-- a [can-define/map/map DefineMap] observable,
-- a [can-stache] view, and
-- a [can-view-callbacks registered] tag name.
-
-For example, the following demo defines and uses a `<my-counter>` custom element. Hit the <button>+1</button> button
-to see it count.
-
-@demo demos/technology-overview/my-counter.html
-
-The demo defines the `<my-counter>` element with:
-
-- The `Counter` observable constructor as shown in the [Key-Value Observables](#Key_ValueObservables) section of this guide:
-  ```js
-  import DefineMap from "can-define/map/map";
-  const Counter = DefineMap.extend({
-      count: {default: 0},
-      increment() {
-          this.count++;
-      }
-  });
-  ```
-- The [can-stache] view that incremented the counter as shown in the beginning of this guide:
-  ```js
-  import stache from "can-stache";
-  const view = stache(`
-    <button on:click='increment()'>+1</button>
-    Count: <span>{{count}}</span>
-  `);
-  ```
-- A [can-component] that combines the `Counter` and `view` as follows:
-  ```js
-  import Component from "can-component";
-
-  Component.extend({
-      tag: "my-counter",
-      ViewModel: Counter,
-      view: view
-  });
-  ```
-
-The demo then creates a `<my-counter>` element like:
+Typically, a Component's <span class='obs'>observable</span> [can-component.prototype.ViewModel] is defined
+inline as follows:
 
 ```html
 <my-counter></my-counter>
-```
 
-So __components__ are just a combination of a [can-stache] __view__ and a
-[can-define/map/map DefineMap] __observable__.  [can-component] calls the observable a
-[can-component.prototype.ViewModel]. This is because CanJS's observables are typically
-built within a [Model-View-ViewModel (MVVM) architecture](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel).
-
-<img src="../../docs/can-guides/experiment/technology/can-component.png"
-  alt="" class='bit-docs-screenshot'/>
-
-Instead of creating the view, view-model as separate entities, they are
-often done together as follows:
-
-```js
-import Component from "can-component";
+<script type="module">
+import { Component } from "can";
 
 Component.extend({
     tag: "my-counter",
     view: `
-        <button on:click='increment()'>+1</button>
         Count: <span>{{count}}</span>
+        <button on:click='increment()'>+1</button>
     `,
+    // If `ViewModel` is set to an Object,
+    // that Object is used to extend `DefineMap`.
     ViewModel: {
         count: {default: 0},
         increment() {
@@ -319,61 +184,33 @@ Component.extend({
         }
     }
 });
+</script>
 ```
+@codepen
 
-[can-component] will create a `can-stache` template from a string [can-component.prototype.view] value
-and define a [can-define/map/map DefineMap] type from a plain
-object [can-component.prototype.ViewModel] value. This is a useful short-hand for creating components. __We will use it for all components going forward.__
+You might have noticed that Components are mostly 2 parts:
 
-#### Passing data to and from components
+- A [can-component.prototype.view] that specifies the HTML content within the custom element. In this case, we’re adding a `<span>` and a `<button>` within the `<my-counter>` element.
+- An <span class='obs'>observable</span> [can-component.prototype.ViewModel] that manages the logic and state of the application.
 
-Components are created by inserting their [can-component.prototype.tag] in the DOM or
-another [can-stache] view. For example, `<my-counter></my-counter>` creates an instance of the
-__ViewModel__ and renders it with the __view__ and inserts the resulting HTML inside the `<my-counter>` tag.
+These work together to receive input from the user, update the state of the application, and then update
+the HTML the user sees accordingly. See how in this 2 minute video:
 
-[can-stache-bindings] can be used to pass values between
-component ViewModels and [can-stache]'s scope.  For example,
-we can start the counter's count at 5 with the following:
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3zMwoEuyX9g" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-```html
-<my-counter count:from='5'></my-counter>
-```
-
-This is shown in the following demo:
-
-@demo demos/technology-overview/my-counter-5.html
-
-[can-stache]'s scope is usually made up of other component ViewModels.  [can-stache-bindings]
-passes values from one ViewModel to another.  For example, the `<task-editor>` component
-connects its `progress` property to the `value` property of the `<my-slider>` with:
-
-```html
-<percent-slider value:bind='progress'/>
-```
-
-@demo demos/technology-overview/task-editor.html
-
-So on a high-level, CanJS applications are composed of components whose logic is managed
-by an observable _view-model_ and whose _views_ create
-other components. The following might be the topology of an example application:
-
-<img src="../../docs/can-guides/experiment/technology/component-architecture-overview.png"
-  alt=""
-  class='bit-docs-screenshot'/>
-
-Notice that `<my-app>`'s _view_ will
-render either `<page-login>`, `<page-signup>`,
-`<page-products>`, or `<page-purchase>` based on
-the state of it's _view-model_.  Those page-level components
-might use sub-components themselves like `<ui-password>` or `<product-list>`.
-
+For more information on how to connect <span class='obs'>observables</span> to the DOM, read the
+[guides/html] guide.
 
 ## Observables and the browser's location
 
-CanJS's pattern is that you define application logic in one or
-more observables, then connect the observables to
-various browser APIs.  For example, you can connect the `myCounter` observable from
-the [Key-Value Observables](#Key_ValueObservables) section to `window.location` with:
+CanJS applications use [can-route route] (or [can-route-pushstate routePushstate]) to connect an
+<span class='obs'>observable</span> to the browser's URL.
+
+The following shows the browser's forward and back buttons connected to the `myCounter` <span class='obs'>observable</span>
+created in the [Key Observables](#Key_ValueObservables) section.
+
+@demo demos/technology-overview/route-counter.html
+
 
 ```js
 import route from "can-route";
@@ -397,1126 +234,11 @@ myCounter.count       //-> 0
 window.location.hash  //-> "#!&count=0"
 ```
 
-@demo demos/technology-overview/route-counter.html
 
-[can-route] is used to setup a bi-directional relationship with an observable and
-the browser's location.
-
-<img src="../../docs/can-guides/experiment/technology/observable-routing.png"
-  alt=""
-  class='bit-docs-screenshot'/>
-
-By default, `can-route` serializes the observable's data with [can-param],
-so that the following observable data produces the following url hashes:
-
-```js
-{foo: "bar"}          //-> "#!&foo=bar"
-{foo: ["bar", "baz"]} //-> "#!&foo[]=bar&foo[]=baz"
-{foo: {bar: "baz"}}   //-> "#!&foo[bar]=baz"
-{foo: "bar & baz"}    //-> "#!&foo=bar+%26+baz"
-```
-
-> __NOTE 1:__ This guide uses hash-based routing instead of pushstate because hash-based routing
-is easier to setup. Pushstate routing requires server-support. Use [can-route-pushstate] for pushstate-based applications. The use of [can-route-pushstate] is almost identical to [can-route].
-
-> __NOTE 2:__ [can-route] uses hash-bangs (`#!`) to comply with a now-deprecated
-> [Google SEO](https://developers.google.com/webmasters/ajax-crawling/docs/getting-started)
-> recommendation.
-
-You can register routes that controls the relationship between the
-observable and the browser's location. The following registers
-a translation between URLs and route properties:
-
-```js
-route.register("{count}")
-```
-
-This results in the following translation between observable data and url hashes:
-
-```js
-{count: 0}                  //-> "#!0"
-{count: 1}                  //-> "#!1"
-{count: 1, type: "counter"} //-> "#!1&type=counter"
-```
-
-You can add data when the url is matched.  The following registers
-data for when the URL is matched:
-
-```js
-route.register("products", {page: "products"});
-route.register("products/{id}", {page: "products"})
-```
-
-This results in the following translation between observable data and url hashes:
-
-```js
-{page: "products"}          //-> "#!products"
-{page: "products", id: 4}   //-> "#!products/4"
-```
-
-Registering the empty route (`""`) provides initial state for the
-application. The following makes sure the count starts at 0 when the hash is empty:
-
-```js
-route.register("",{count: 0});
-```
-
-@demo demos/technology-overview/route-counter-registered.html
-
-
-### Routing and the root component
-
-Understanding how to use [can-route] within an application comprised of [can-component]s
-and their [can-stache] views and observable view-models can be tricky.  
-
-We'll use the following example to help make sense of it:
-
-@demo demos/technology-overview/route-mini-app.html
-
-This example shows the `<page-login>` component until someone has logged in.  Once they have
-done that, it shows a particular component based upon the hash. If the hash is empty (`""` or `"#!"`),
-the `<page-home>` component is shown.  If the hash is like `tasks/{taskId}` it will show the `<task-editor>` component we created previously. (_NOTE: We will show how to persist changes
-to todos in a upcoming service layer section._)
-
-The switching between different components is managed by a `<my-app>` component. The topology of
-the application looks like:
-
-<img src="../../docs/can-guides/experiment/technology/routing-app-overview.png"
-  alt="The my-app component on top. The page-home, page-login, task-editor nodes are children of my-app. percent-slider component is a child of task-editor."
-  class='bit-docs-screenshot'/>  
-
-In most applications, [can-route] is connected to the top-level component's
-[can-component.prototype.ViewModel]. We are going to go through the process of
-building `<my-app>` and connecting it
-to [can-route]. This is usually done in four steps:
-
-1. Connect the top-level component's view-model to the routing [can-route.data].
-2. Have the top-level component's [can-component.prototype.view] display the right sub-components based on the view-model state.
-3. Define the top-level component's view-model (sometimes called _application view-model_).
-4. Register routes that translate between the URL and the application view-model.
-
-### Connect a component's view-model to can-route
-
-To connect a component's view-model to can-route, we first need to create a basic
-component. The following creates a `<my-app>` component that displays its `page` property and
-includes links that will change the page property:
-
-```js
-import Component from "can-component";
-import stache from "can-stache";
-import DefineMap from "can-define/map/map";
-import route from "can-route";
-import "can-stache-route-helpers";
-
-Component.extend({
-    tag: "my-app",
-    view: stache(`
-        The current page is {{page}}.
-        <a href="{{ routeURL(page='home') }}">Home</a>
-        <a href="{{ routeURL(page='tasks') }}">Tasks</a>
-    `),
-    ViewModel: {
-        page: "string"
-    }
-})
-```
-
-> __NOTE:__ Your html needs a `<my-app></my-app>` element to be able to see the
-> component's content.  It should say "The current page is .".
-
-To connect the component's VM to the url, we:
-
-- set [can-route.data] to the custom element.
-- call and [can-route.start] to begin sending url values to the component.
-
-```js
-route.data = document.querySelector("my-app");
-route.start();
-```
-
-At this point, changes in the URL will cause changes in the `page`
-property. See this by clicking the links and the back/refresh buttons below:
-
-@demo demos/technology-overview/route-mini-app-start.html
-
-### Display the right sub-components
-
-When building components, we suggest designing the [can-component.prototype.view]
-before the [can-component.prototype.ViewModel].  This helps you figure out what logic
-the [can-component.prototype.ViewModel] needs to provide an easily understood
-[can-component.prototype.view].
-
-We'll use [can-stache.helpers.switch] to switch between different components
-based on a `componentToShow` property on the view-model. The result looks like the following:
-
-```js
-Component.extend({
-    tag: "my-app",
-    view: stache(`
-        {{#switch(componentToShow)}}
-            {{#case("home")}}
-                <page-home isLoggedIn:from="isLoggedIn" logout:from="logout"/>
-            {{/case}}
-            {{#case("tasks")}}
-                <task-editor id:from="taskId" logout:from="logout"/>
-            {{/case}}
-            {{#case("login")}}
-                <page-login isLoggedIn:bind="isLoggedIn" />
-            {{/case}}
-            {{#default}}
-                <h2>Page Missing</h2>
-            {{/default}}
-        {{/switch}}
-    `),
-    ...
-})
-```
-
-Notice that the view-model will need the following properties:
-
-- __isLoggedIn__ - If the user is logged in.
-- __logout__ - A function that when called logs the user out.
-- __taskId__ - A taskId in the hash.
-
-We will implement these properties and `componentToShow` in the
-[can-component.prototype.ViewModel].
-
-### Define the view-model
-
-Now that we've designed the _view_ it's time to code the observable view-model
-with the logic to make the view behave correctly. We implement the
-`ViewModel` as follows:
-
-```js
-Component.extend({
-    tag: "my-app",
-    ...
-    ViewModel: {
-        // Properties that come from the url
-        page: "string",
-        taskId: "string",
-
-        // A property if the user has logged in.
-        // `serialize: false` keeps `isLoggedIn` from
-        // affecting the `url` and vice-versa.
-        isLoggedIn: {
-            default: false,
-            type: "boolean",
-            serialize: false
-        },
-
-        // We show the login page if someone
-        // isn't logged in, otherwise, we
-        // show what the url points to.
-        get componentToShow(){
-            if(!this.isLoggedIn) {
-                return "login";
-            }
-            return this.page;
-        },
-
-        // A function we pass to sub-components
-        // so they can log out.
-        logout() {
-            this.isLoggedIn = false;
-        }
-    }
-});
-```
-
-> NOTE: The [can-define.types.serialize] property behavior controls the
-> [can-define/map/map.prototype.serialize serializable] properties of
-> a [can-define/map/map DefineMap]. Only
-> serializable properties of the map are used by [can-route] to
-> update the url. `serialize: false` keeps `isLoggedIn` from
-> affecting the `url` and vice-versa. Getters like `componentToShow`
-> are automatically configured with `serialize: false`.
-
-
-Finally, our component works, but the urls aren't easy to
-remember (ex: `#!&page=home`). We will clean that up in the
-next section.
-
-
-### Register routes
-
-Currently, after the user logs in, the application will show `<h2>Page Missing</h2>` because if the url hash is empty, `page` property will be undefined. To have `page`
-be `"home"`, one would have to navigate to `"#!&page=home"` ... yuck!  
-
-We want the `page` property to be `"home"` when the hash is empty.  Furthermore,
-we want urls like `#!tasks` to set the `page` property.  We can do that
-by registering the following route:
-
-```js
-route.register("{page}", {page: "home"});
-```
-
-Finally, we want `#!tasks/5` to set `page` to `"tasks"` and `taskId`
-to `"5"`.  Registering the following route does that:
-
-```js
-route.register("tasks/{taskId}", {page: "tasks"});
-```
-
-Now the mini application is able to translate changes in the url to
-properties on the component's view-model.  When the component's view-model
-changes, the view updates the page.
 
 
 ## Observables and the service layer ##
 
-CanJS's pattern is that you define application logic in one or more observables, then connect the observables to various browser APIs. CanJS's model layer
-libraries connect observables to backend services. CanJS's model-layer will make
-AJAX requests to get, create, update, and delete data.
 
-For example, you
-can connect a `Todo` and `Todo.List` observable to a restful service layer at
-`/api/todos` with [can-rest-model]:
 
-```js
-import {restModel, DefineMap, DefineList} from "can";
-
-const Todo = DefineMap.extend("Todo",{
-
-    // `id` uniquely identifies instances of this type.
-    id: { type: "number", identity: true },
-
-    complete: { type: "boolean", default: false },
-    dueDate: "date",
-    name: "string",
-
-    toggleComplete(){
-        this.complete = !this.complete;
-    }
-});
-
-Todo.List = DefineMap.extend("TodoList",{
-    "#": Todo,
-    completeAll(){
-        return this.forEach((todo) => { todo.complete = true; });
-    }
-});
-
-const todoConnection = restModel({
-    Map: Todo,
-    List: Todo.List,
-    url: "/api/todos/{id}"
-});
-```
-@highlight 24-28
-
-This allows you to get, create, update and destroy data
-programmatically through the `Todo` observable. [can-rest-model] mixes in the
-following methods:
-
-- `Todo.getList({filter: {complete: true}})` - _GET_ a list of todos from `/api/todos?filter[complete]=true`.
-- `Todo.get({id: 5})` - _GET_ a single todo from `/api/todos/5`.
-- `new Todo({name: "Learn CanJS"}).save()` - Create a todo by _POSTing_ it to `/api/todos`.
-- `todo.save()` - Update a todo's data by _PUTing_ it to `/api/todos/5`.
-- `todo.destroy()` - Delete a todo by _DELETE-ing_ it from `/api/todos/5`.
-
-
-The following sections show examples of how to use these methods.
-
-### Retrieving a list of records
-
-Use [can-connect/can/map/map.getList] to retrieve records.
-
-<table class="panels">
-<tr>
-    <th>JavaScript API</th>
-    <th>Request</th>
-    <th>Response</th>
-</tr>
-<tr class='background'>
-<td>
-
-Call `.getList` with _parameters_ used to filter, sort,
-and paginate your list.
-
-</td>
-<td>
-
-The _parameters_ are serialized
-with [can-param] and added to the restful url.
-
-</td>
-<td>
-
-Server responds with `data` property containing the
-records. Configure for other formats with
-[can-connect/data/parse/parse.parseListProp] or [can-connect/data/parse/parse.parseListData].
-
-</td>
-</tr>
-<tr>
-<td>
-
-```js
-Todo.getList({
-  filter: {
-    complete: false
-  }
-}) //-> Promise<TodoList[]>
-
-
-
-
-
-
-```
-
-</td>
-<td>
-
-```
-GET /api/todos?
-  filter[complete]=false
-
-
-
-
-
-
-
-
-
-```
-
-</td>
-<td>
-
-```js
-{
-  "data": [
-    {
-      "id": 20,
-      "name": "mow lawn",
-      "complete": false
-    },
-    ...
-  ]
-}
-```
-
-</td>
-</tr>
-
-</table>
-
-`.getList(params)` returns a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-that will eventually resolve to a `Todo.List` of `Todo` instances.  This means that
-properties and methods defined on `Todo.List` and `Todo` will be available:
-
-```js
-var todosPromise = Todo.getList({});
-
-todosPromise.then(function(todos){
-    todos    //-> Todos.List[Todo..]
-    todos[0] //-> Todo{id: 1, name: "Learn CanJS", complete: false, ...}
-
-    todos.completeAll();
-    todos[0] //-> Todo{id: 1, name: "Learn CanJS", complete: true, ...}
-
-    todos[0].toggleComplete();
-    todos[0] //-> Todo{id: 1, name: "Learn CanJS", complete: false, ...}
-})
-```
-
-
-The following creates a component that uses `Todo.getList` to load and list data:
-
-```js
-Component.extend({
-    tag: "todo-list",
-    view: `
-    <ul>
-        {{# if(todosPromise.isResolved) }}
-            {{# each(todosPromise.value) }}
-                <li>
-                    <input type='checkbox' checked:bind='complete' disabled/>
-                    <label>{{name}}</label>
-                    <input type='date' valueAsDate:bind='dueDate' disabled/>
-                </li>
-            {{/ each }}
-        {{/ if}}
-        {{# if(todosPromise.isPending) }}
-            <li>Loading</li>
-        {{/ if}}
-    </ul>
-    `,
-    ViewModel: {
-        todosPromise: {
-            default(){
-                return Todo.getList({});
-            }
-        }
-    }
-});
-```
-
-@highlight 5-6,22,only
-
-> NOTE: A promise's values and state can be read in [can-stache] directly via:
-> `promise.value`, `promise.reason`, `promise.isResolved`, `promise.isPending`, and `promise.isRejected`.
-
-See the component in action here:
-
-@demo demos/can-rest-model/can-rest-model-0.html
-
-
-The object passed to `.getList` can be used to filter, sort, and paginate
-the items retrieved. The following adds inputs to control the filtering,
-sorting, and pagination of the component:
-
-```js
-Component.extend({
-    tag: "todo-list",
-    view: `
-    Sort By: <select value:bind="sort">
-        <option value="">none</option>
-        <option value="name">name</option>
-        <option value="dueDate">dueDate</option>
-    </select>
-
-    Show: <select value:bind="completeFilter">
-        <option value="">All</option>
-        <option value="complete">Complete</option>
-        <option value="incomplete">Incomplete</option>
-    </select>
-
-    Due: <select value:bind="dueFilter">
-        <option value="">Anytime</option>
-        <option value="today">Today</option>
-        <option value="week">This Week</option>
-    </select>
-
-    Results <select value:bind="count">
-        <option value="">All</option>
-        <option value="10">10</option>
-        <option value="20">20</option>
-    </select>
-
-    <ul>
-        {{# if(todosPromise.isResolved) }}
-            {{# each(todosPromise.value) }}
-                <li>
-                    <input type='checkbox' checked:bind='complete' disabled/>
-                    <label>{{name}}</label>
-                    <input type='date' valueAsDate:bind='dueDate' disabled/>
-                </li>
-            {{/ each }}
-        {{/ if}}
-        {{# if(todosPromise.isPending) }}
-            <li>Loading</li>
-        {{/ if}}
-    </ul>
-    `,
-    ViewModel: {
-        sort: "string",
-        completeFilter: "string",
-        dueFilter: "string",
-        count: {type:"string", default: "10"},
-        get todosPromise(){
-            var query = {filter: {}};
-            if(this.sort) {
-                query.sort =  this.sort;
-            }
-            if(this.completeFilter) {
-                query.filter.complete = this.completeFilter === "complete";
-            }
-            if(this.dueFilter) {
-                var day = 24*60*60*1000;
-                var now = new Date();
-                var today = new Date(now.getFullYear(), now.getMonth(), now.getDate() );
-                if(this.dueFilter === "today") {
-
-                    query.filter.dueDate = {
-                        $gte: now.toString(),
-                        $lt: new Date(now.getTime() + day).toString()
-                    }
-                }
-                if(this.dueFilter === "week") {
-                    var start = today.getTime() - (today.getDay() * day);
-                    query.filter.dueDate = {
-                        $gte: new Date(start).toString(),
-                        $lt: new Date(start + 7*day).toString()
-                    };
-                }
-            }
-            if(this.count) {
-                query.page = {
-                    start: 0,
-                    end: (+this.count)-1
-                };
-            }
-            return Todo.getList(query);
-        }
-    }
-});
-```
-@highlight 4-26,44-82,only
-
-See it in action here:
-
-@demo demos/can-rest-model/can-rest-model-1.html
-
-### Creating records ###
-
-Use [can-connect/can/map/map.prototype.save] to create records.
-
-<table class="panels">
-<tr>
-    <th>JavaScript API</th>
-    <th>Request</th>
-    <th>Response</th>
-</tr>
-<tr class='background'>
-<td>
-
-Create an instance and then call `.save()` to
-create a record.
-
-</td>
-<td>
-
-The instance is [can-define/map/map.prototype.serialize serialized]
-and POSTed to the server.
-
-</td>
-<td>
-
-Server responds with the [can-define.types.identity] value and
-all other values on the record. Use
-[can-connect/can/map/map.updateInstanceWithAssignDeep] to
-not require every record value.
-
-</td>
-</tr>
-<tr>
-<td>
-
-```js
-var todo = new Todo({
-  name: "make a model"
-})
-todo.save()  //-> Promise<Todo>
-
-
-```
-
-</td>
-<td>
-
-```
-POST /api/todos
-    {
-      "name": "make a model",
-      "complete": false
-    }
-```
-
-</td>
-<td>
-
-```js
-{
-  "id": 22,
-  "name": "make a model",
-  "complete": false
-}
-```
-
-</td>
-</tr>
-</table>
-
-`.save()` returns a `Promise` that eventually resolves to the same instance that `.save()` was called
-on.  While the record is being saved, [can-connect/can/map/map.prototype.isSaving]
-will return `true`:
-
-```js
-var todo = new Todo({
-  name: "make a model"
-});
-
-todo.isSaving() //-> false
-
-todoPromise = todo.save();
-
-todo.isSaving() //-> true
-
-todoPromise.then(function(){
-    todo.isSaving() //-> false
-});
-```
-
-
-The following creates a component that uses `Todo.prototype.save` to create data:
-
-```js
-Component.extend({
-    tag: "todo-create",
-    view: `
-        <form on:submit="createTodo(scope.event)">
-            <p>
-                <label>Name</label>
-                <input on:input:value:bind='todo.name'/>
-            </p>
-            <p>
-                <label>Complete</label>
-                <input type='checkbox' checked:bind='todo.complete'/>
-            </p>
-            <p>
-                <label>Date</label>
-                <input type='date' valueAsDate:bind='todo.dueDate'/>
-            </p>
-            <button disabled:from="todo.preventSave()">Create Todo</button>
-            {{# if(todo.isSaving()) }}Creating ....{{/ if}}
-        </form>
-    `,
-    ViewModel: {
-        todo: {
-            Default: Todo
-        },
-        createTodo(event) {
-            event.preventDefault();
-            this.todo.save().then((createdTodo) => {
-                // Create a new todo instance to receive from data
-                this.todo = new Todo();
-            })
-        }
-    }
-});
-```
-@highlight 4,27
-
-See this component in action here:
-
-@demo demos/can-rest-model/can-rest-model-create.html
-
-
-Note that this demo lists newly created todos by listening to `Todo`'s created event as follows:
-
-```js
-Component.extend({
-    tag: "created-todos",
-    view: `
-        <h3>Created Todos</h3>
-        <table>
-            <tr>
-                <th>id</th><th>complete</th>
-                <th>name</th><th>due date</th>
-            </tr>
-            {{# each(todos) }}
-                <tr>
-                    <td>{{id}}</td>
-                    <td><input type='checkbox' checked:bind='complete' disabled/></td>
-                    <td>{{name}}</td>
-                    <td><input type='date' valueAsDate:bind='dueDate' disabled/></td>
-                </tr>
-            {{ else }}
-                <tr><td colspan='4'><i>The todos you create will be listed here</i></td></tr>
-            {{/ each }}
-        </table>
-    `,
-    ViewModel: {
-        todos: {Default: Todo.List},
-        connectedCallback(){
-            this.listenTo(Todo,"created", (event, created) => {
-                this.todos.unshift(created);
-            })
-        }
-    }
-});
-```
-@highlight 25,only
-
-When any todo is `created`, `updated`, or `destroyed`, an event is dispatched on the `Todo` type.
-
-### Updating records
-
-Also use [can-connect/can/map/map.prototype.save] to update records.
-
-<table class="panels">
-<tr>
-    <th>JavaScript API</th>
-    <th>Request</th>
-    <th>Response</th>
-</tr>
-<tr class='background'>
-<td>
-
-On an instance that has already been created,
-change its data and call `.save()` to
-update the record.
-
-</td>
-<td>
-
-The instance is [can-define/map/map.prototype.serialize serialized]
-and PUT to the server.
-
-</td>
-<td>
-
-Server responds with all values on the record. Use
-[can-connect/can/map/map.updateInstanceWithAssignDeep] to
-not require every record value.
-
-</td>
-</tr>
-<tr>
-<td>
-
-```js
-todo.complete = true;
-todo.save()  //-> Promise<Todo>
-
-
-
-
-```
-
-</td>
-<td>
-
-```
-PUT /api/todos/22
-    {
-      "name": "make a model",
-      "complete": true
-    }
-```
-
-</td>
-<td>
-
-```js
-{
-  "id": 22,
-  "name": "make a model",
-  "complete": true
-}
-```
-
-</td>
-</tr>
-</table>
-
-For example, the
-following creates a component that uses `Todo.prototype.save` to update data:
-
-```js
-Component.extend({
-    tag: "todo-update",
-    view: `
-        {{# if(todo) }}
-            <h3>Update Todo</h3>
-            <form on:submit="updateTodo(scope.element, scope.event)">
-                <p>
-                    <label>Name</label>
-                    <input name="name" value:from='todo.name' />
-                </p>
-                <p>
-                    <label>Complete</label>
-                    <input type='checkbox' name='complete'
-                        checked:from='todo.complete'/>
-                </p>
-                <p>
-                    <label>Date</label>
-                    <input type='date'
-                        name='dueDate' valueAsDate:from='todo.dueDate'/>
-                </p>
-                <button disabled:from="todo.preventSave()">
-                    {{# if(todo.isSaving()) }}Updating{{else}}Update{{/ if}}Todo
-                </button>
-                <button disabled:from="todo.preventSave()"
-                    on:click="cancelEdit()">Cancel</button>
-
-            </form>
-        {{ else }}
-            <i>Click a todo above to edit it here.</i>
-        {{/ if }}
-    `,
-    ViewModel: {
-        todo: Todo,
-        updateTodo(form, event) {
-            event.preventDefault();
-            this.todo.assign({
-                name: form.name.value,
-                complete: form.complete.checked,
-                dueDate: form.dueDate.valueAsDate
-            }).save().then(this.cancelEdit.bind(this))
-        },
-        cancelEdit(){
-            this.todo = null;
-        }
-    }
-});
-```
-@highlight 6,34-41
-
-See this in action here:
-
-@demo demos/can-rest-model/can-rest-model-update.html
-
-### Destroying records
-
-
-Use [can-connect/can/map/map.prototype.destroy] to delete records.
-
-<table class="panels">
-<tr>
-    <th>JavaScript API</th>
-    <th>Request</th>
-    <th>Response</th>
-</tr>
-<tr class='background'>
-<td>
-
-On an instance that has already been created,
-call `.destroy()` to delete the record.
-
-</td>
-<td>
-
-A DELETE request is sent with the instance's [can-define.types.identity].
-
-</td>
-<td>
-
-No response data is necessary. Just
-a successful status code.
-
-</td>
-</tr>
-<tr>
-<td>
-
-```js
-todo.destroy()  //-> Promise<Todo>
-```
-
-</td>
-<td>
-
-```
-DELETE /api/todos/22
-```
-
-</td>
-<td>
-
-```
-200 Status code.
-```
-
-</td>
-</tr>
-</table>
-
-
-The following creates a component that uses `Todo.prototype.destroy` to delete data:
-
-```js
-Component.extend({
-    tag: "todo-list",
-    view: `
-    <ul>
-        {{# if(todosPromise.isResolved) }}
-            {{# each(todosPromise.value) }}
-                <li>
-                    <input type='checkbox' checked:bind='complete' disabled/>
-                    <label>{{name}}</label>
-                    <input type='date' valueAsDate:bind='dueDate' disabled/>
-                    <button on:click="destroy()">delete</button>
-                </li>
-            {{/ each }}
-        {{/ if}}
-        {{# if(todosPromise.isPending) }}
-            <li>Loading</li>
-        {{/ if}}
-    </ul>
-    `,
-    ViewModel: {
-        todosPromise: {
-            default(){
-                return Todo.getList({});
-            }
-        },
-        connectedCallback(){
-            this.todosPromise.then((todos)=>{
-                this.listenTo(Todo, "destroyed", function(ev, destroyed){
-                    var index = todos.indexOf(destroyed);
-                    todos.splice(index, 1);
-                });
-            });
-        }
-    }
-});
-```
-@highlight 6,11,only
-
-The following example shows this in action. Click the <button>delete</button> button to delete
-todos and have the todo removed from the list.
-
-@demo demos/can-rest-model/can-rest-model-destroy.html
-
-This demo works by calling [can-connect/can/map/map.prototype.destroy] when the <button>delete</button> button
-is clicked.
-
-```html
-<button on:click="destroy()">delete</button>
-```
-
-To keep the list of todos up to date, the above demo works by listening
-when any todo is destroyed and removing it from the list:
-
-```js
-connectedCallback(){
-    this.todosPromise.then((todos)=>{
-        this.listenTo(Todo, "destroyed", function(ev, destroyed){
-            var index = todos.indexOf(destroyed);
-            todos.splice(index, 1);
-        });
-    });
-}
-```
-
-
-### Update lists when records are mutated
-
-The previous _Creating Records_, _Updating Records_ and _Destroying Records_
-examples showed how to listen to when records are mutated:
-
-```js
-this.listenTo(Todo,"created",   (event, createdTodo)   => { ... })
-this.listenTo(Todo,"updated",   (event, updatedTodo)   => { ... })
-this.listenTo(Todo,"destroyed", (event, destroyedTodo) => { ... })
-```
-
-These listeners can be used to update lists similar to how the _Destroying Records_
-example removed lists:
-
-```js
-connectedCallback(){
-    this.todosPromise.then( (todos)=>{
-        this.listenTo(Todo, "created", function(ev, created){
-            // ADD created to `todos`
-        })
-        this.listenTo(Todo, "destroyed", function(ev, destroyed){
-            // REMOVE destroyed from `todos`
-        });
-        this.listenTo(Todo, "updated", function(ev, updated){
-            // ADD, REMOVE, or UPDATE the position of updated
-            // within `todos`
-        });
-    });
-}
-```
-
-But this is cumbersome, especially when lists contain
-sorted and filtered results. For example, if you are displaying
-only completed todos, you might not want to add newly created
-incomplete todos. The following only pushes complete todos onto `todos`:
-
-```js
-ViewModel: {
-    todosPromise: {
-        default(){
-            return Todo.getList({filter: {complete: true}});
-        }
-    },
-    connectedCallback(){
-        this.todosPromise.then((todos)=>{
-            this.listenTo(Todo, "created", (ev, createdTodo) => {
-                // make sure the todo is complete:
-                if(createdTodo.complete) {
-                    todos.push(complete);
-                }
-            });
-        });
-    }
-}
-```
-@highlight 11-13
-
-Fortunately, [can-realtime-rest-model] using [can-query-logic] can
-automatically update lists for you! If your service layer matches
-what [can-query-logic] expects, you can just replace [can-rest-model] with
-[can-realtime-rest-model] as follows:
-
-```js
-import {realtimeRestModel, DefineMap, DefineList} from "can";
-
-const Todo = DefineMap.extend("Todo",{
-    id: { type: "number", identity: true },
-    complete: { type: "boolean", default: false },
-    dueDate: "date",
-    name: "string"
-});
-
-Todo.List = DefineMap.extend("TodoList",{
-    "#": Todo
-});
-
-const todoConnection = realtimeRestModel({
-    Map: Todo,
-    List: Todo.List,
-    url: "/api/todos/{id}"
-});
-```
-@highlight 1,14
-
-> NOTE: You can configure [can-query-logic] to match your service layer. Learn
-> more in the [configuration section of can-query-logic](../can-query-logic.html#Configuration).
-
-
-The following uses [can-realtime-rest-model] to create a _filterable_ and _sortable_ grid
-that automatically updates itself when todos are created, updated or destroyed.
-
-Try out the following use cases that [can-realtime-rest-model] provides automatically:
-
-- Delete a todo and the todo will be removed from the list.
-- Sort by date, then create a todo and the todo will be inserted into the right place in the list.
-- Sort by date, then edit a todo's `dueDate` and the todo will be moved to the right place in the list.
-- Show only `Complete` todos, then toggle the todo's complete status and the todo will be removed
-  from the view.
-
-@demo demos/can-realtime-rest-model/can-realtime-rest-model.html
-
-By default, [can-query-logic] assumes your service layer will match a [can-query-logic/query default query structure]
-that looks like:
-
-```js
-Todo.getList({
-    // Selects only the todos that match.
-    filter: {
-        complete: {$in: [false, null]}
-    },
-    // Sort the results of the selection
-    sort: "-name",
-    // Selects a range of the sorted result
-    page: {start: 0, end: 19}
-})
-```
-
-This structures follows the [Fetching Data JSONAPI specification](http://jsonapi.org/format/#fetching).
-
-There's a:
-
-- [filter](http://jsonapi.org/format/#fetching-filtering) property for filtering records,
-- [sort](http://jsonapi.org/format/#fetching-sorting) property for specifying the order to sort records, and
-- [page](http://jsonapi.org/format/#fetching-pagination) property that selects a range of the sorted result. _The range indexes are inclusive_.
-
-> __NOTE__: [can-realtime-rest-model] does not follow the rest of the JSONAPI specification. Specifically
-> [can-realtime-rest-model] expects your server to send back JSON data in a different format.
-
-If you control the service layer, we __encourage__ you to make it match the default
-[can-query-logic/query query structure] to avoid configuration.  The default query structure also supports the following [can-query-logic/comparison-operators]: `$eq`, `$gt`, `$gte`, `$in`,
-`$lt`, `$lte`, `$ne`, `$nin`.
-
-If you are unable to match the default query structure, or need special behavior, read the
-[configuration section of can-query-logic](../can-query-logic.html#Configuration)
-to learn how to configure a custom query logic.
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
