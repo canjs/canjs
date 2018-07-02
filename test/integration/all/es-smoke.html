@@ -5,7 +5,7 @@
 <main></main>
 
 <script type="module">
-	import { Component, stache } from "../../../core.mjs";
+	import { Component, stache, Reflect } from "../../../core.mjs";
 
 	Component.extend({
 		tag: "my-app",
@@ -22,6 +22,7 @@
 	var removeMyself = window.parent.removeMyself;
 	if(QUnit) {
 		QUnit.equal(content, "Hello world!", "It rendered");
+		QUnit.ok(!!Reflect, "canReflect is exported");
 		removeMyself();
 	} else {
 		console.log("Rendered ", content);
