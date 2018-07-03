@@ -116,7 +116,7 @@ for the `Counter` <span class='obs'>observables</span> we just created.
 
 The following widget counts the number of times the <button>+1</button> button is clicked:
 
-<p data-height="106" data-theme-id="dark" data-slug-hash="jKJqoJ" data-default-tab="result" data-user="justinbmeyer" data-embed-version="2" data-pen-title="my-counter (5.pre)" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/jKJqoJ/">my-counter (5.pre)</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+@demo demos/technology-overview/my-counter.html
 
 In CanJS, widgets are encapsulated with custom elements. Custom elements allow us to put an
 element in our HTML like `<my-counter></my-counter>`, and the widget will spring to life.
@@ -206,39 +206,275 @@ For more information on how to connect <span class='obs'>observables</span> to t
 CanJS applications use [can-route route] (or [can-route-pushstate routePushstate]) to connect an
 <span class='obs'>observable</span> to the browser's URL.
 
-The following shows the browser's forward and back buttons connected to the `myCounter` <span class='obs'>observable</span>
-created in the [Key Observables](#Key_ValueObservables) section.
+The following shows the browser's forward and back buttons connected to the `<my-counter>` Component's
+<span class='obs'>observable</span> state. Click `+1` a few times. Then click
+the forward (`⇦`) and back (`⇨`) buttons to see the count change:
 
 @demo demos/technology-overview/route-counter.html
 
+Notice how the URL changes when you click the `+1` button AND the _Count_ changes when the
+forward and back button are clicked.  The URL and <span class='obs'>observable</span>
+are cross-bound. Cross bound means:
 
-```js
-import route from "can-route";
+- When the URL changes, the <span class='obs'>observable</span> state updates.
+- When the <span class='obs'>observable</span> state updates, the URL changes.
 
-route.data = myCounter;
+
+
+The following connects the `<my-counter>`'s <span class='obs'>observable</span> [can-component.prototype.ViewModel]
+to the browser's URL:
+
+```html
+<mock-url></mock-url>
+<my-counter></my-counter>
+
+<script type='module'>
+// Imports the <mock-url> element that provides
+// a fake back, forward, and url controls.
+import "//unpkg.com/mock-url@5.0.0";
+
+import {route, Component} from "can";
+
+Component.extend({
+    tag: "my-counter",
+    view: `
+        Count: <span>{{count}}</span>
+        <button on:click='increment()'>+1</button>
+    `,
+    ViewModel: {
+        count: {default: 0},
+        increment() {
+            this.count++;
+        }
+    }
+});
+
+// The `.data` property specifies the observable to cross
+// bind the URL to.  
+route.data = document.querySelector("my-counter");
 route.start();
+</script>
 ```
+@codepen
 
-This will add `#!&count=0` to the [location](https://developer.mozilla.org/en-US/docs/Web/API/Location) hash.  
 
-Now, if you called `increment()` on my counter, the `window.location` would
-change to `#!count=1`. If you hit the back-button, `myCounter.count` would be
-back to `0`:
+Use [can-route.register route.register] to create routing rules.
+Instead of urls like `#!&count=1`, `#!&count=2`, `#!&count=3`;
+the following changes the urls to look like `#!1`, `#!2`, `#!3`:
+
+
+```html
+<mock-url></mock-url>
+<my-counter></my-counter>
+
+<script type='module'>
+// Imports the <mock-url> element that provides
+// a fake back, forward, and url controls.
+import "//unpkg.com/mock-url@5.0.0";
+
+import {route, Component} from "can";
+
+Component.extend({
+    tag: "my-counter",
+    view: `
+        Count: <span>{{count}}</span>
+        <button on:click='increment()'>+1</button>
+    `,
+    ViewModel: {
+        count: {default: 0},
+        increment() {
+            this.count++;
+        }
+    }
+});
+
+// Register rules that translate from the URL to
+// setting properties on the cross-bound observable.
+route.register("{count}");
+route.data = document.querySelector("my-counter");
+route.start();
+</script>
+```
+@codepen
+
+
+For more information on how to connect <span class='obs'>observables</span> to the browser's URL, read the
+[guides/routing] guide.
+
+
+## Observables and backend services ##
+
+CanJS applications use models to connect
+<span class='obs'>observables</span> to backend services. For example,
+lets say the service layer is providing a JSON list of todo data at `/api/todos`. The
+response looks like:
 
 ```js
-myCounter.increment()
-window.location.hash  //-> "#!&count=1"
-
-history.back()
-myCounter.count       //-> 0
-window.location.hash  //-> "#!&count=0"
+{
+    data: [
+        { "id": 1, "name": "cook food",
+          "complete": false, "dueDate": "Wed Jul 11 2018 13:42:31 GMT-0500" },
+        { "id": 2, name: "do taxes",
+          "complete": true, "dueDate": "Sun Jul 29 2018 20:58:25 GMT-0500" },
+        ...
+    ]
+}
 ```
 
+The following loads this list of data and logs it to the console by:
 
+- Defines an <span class='obs'>observable</span> data type to represent individual todos (`Todo`).
+- Defines an <span class='obs'>observable</span> data type to represent a list of todos (`Todo.List`).
+- Connects those <span class='obs'>observable</span> data types to the RESTFUL service layer
+  with [can-rest-model restModel].
+- Uses the [can-connect/can/map/map.getList] method mixed-into the `Todo` type to get
+  the todos from the server and log them to the console.
 
+```js
+import {restModel, DefineMap, DefineList } from "can";
 
-## Observables and the service layer ##
+// Defines the observable Todo type and its properties
+const Todo = DefineMap.extend("Todo",{
 
+    // `id` values must be unique.
+    id: { type: "number", identity: true },
+    complete: { type: "boolean", default: false },
+    dueDate: "date",
+    name: "string"
+});
+
+// Defines an observable list of Todo instances and its methods
+Todo.List = DefineList.extend("TodoList",{
+    "#": Todo,
+
+    // A helper method to complete every todo in the list.
+    completeAll(){
+        return this.forEach((todo) => { todo.complete = true; });
+    }
+});
+
+// Mixes in methods on `Todo` useful for
+// creating, retrieving, updating and deleting
+// data at the url provided.
+restModel({
+    Map: Todo,
+    url: "/api/todos/{id}"
+});
+
+// Call to setup the mock server before we make a request.
+mockServices();
+
+// Gets a Promise that resolves to a `Todo.List` of `Todo` instances.
+var todosPromise = Todo.getList();
+todosPromise.then(function(todos){
+    // .get() converts the Todo instances back to plain JS objects
+    // for easier to read logging.
+    console.log(todos.get())
+})
+
+// The following creates a restful service layer of
+// 20 randomized todos.
+import {fixture} from "//unpkg.com/can@^5.0.0-pre.1/core.mjs";
+function mockServices(){
+  var terms = ["can you","please","","","",""],
+    verbs = ["clean","walk","do","vacuum","organize","fold","wash","dust","pay","cook","get","take out"],
+    subjects = ["dog","laundry","diapers","clothes","car","windows","carpet","taxes","food","gas","trash"];
+
+  var dayInMS = 24*60*60*1000;
+  var lastWeek = new Date() - (7*dayInMS);
+  var fourWeeks = new Date().getTime() + (4*7*dayInMS);
+
+  var todoStore = fixture.store(20, function(){
+      return {
+          complete: fixture.rand([true, false],1)[0],
+          dueDate: new Date( fixture.rand(lastWeek, fourWeeks) ).toString(),
+          name: (fixture.rand(terms,1)[0]+" "+fixture.rand(verbs,1)[0]+" "+fixture.rand(subjects,1)[0]).trim()
+      }
+  }, Todo);
+
+  fixture("/api/todos/{id}", todoStore);
+}
+```
+@codepen
+
+The following lists the todos in the page by defining a `<todo-list>` component
+that
+
+```html
+<todo-list></todo-list>
+
+<script type='module'>
+import {restModel, DefineMap, DefineList } from "can";
+
+const Todo = DefineMap.extend("Todo",{
+    id: { type: "number", identity: true },
+    complete: { type: "boolean", default: false },
+    dueDate: "date",
+    name: "string"
+});
+
+Todo.List = DefineList.extend("TodoList",{
+    "#": Todo,
+    completeAll(){
+        return this.forEach((todo) => { todo.complete = true; });
+    }
+});
+
+restModel({
+    Map: Todo,
+    url: "/api/todos/{id}"
+})
+
+mockServices();
+
+import { Component } from "//unpkg.com/can@^5.0.0-pre.1/core.mjs";
+
+Component.extend({
+    tag: "todo-list",
+    // {{#each()}}
+    view: `
+        <ul>
+            {{# each(todosPromise.value, todo=value) }}
+                <li>
+                    <input type='checkbox' checked:from='complete' disabled/>
+                    <label>{{name}}</label>
+                    <input type='date' valueAsDate:from='dueDate' disabled/>
+                </li>
+            {{/ each }}
+        </ul>
+    `,
+    ViewModel: {
+        todosPromise: {
+            default(){
+                return Todo.getList({})
+            }
+        }
+    }
+});
+
+import {fixture} from "//unpkg.com/can@^5.0.0-pre.1/core.mjs";
+function mockServices(){
+  var terms = ["can you","please","","","",""],
+    verbs = ["clean","walk","do","vacuum","organize","fold","wash","dust","pay","cook","get","take out"],
+    subjects = ["dog","laundry","diapers","clothes","car","windows","carpet","taxes","food","gas","trash"];
+
+  var dayInMS = 24*60*60*1000;
+  var lastWeek = new Date() - (7*dayInMS);
+  var fourWeeks = new Date().getTime() + (4*7*dayInMS);
+
+  var todoStore = fixture.store(20, function(){
+      return {
+          complete: fixture.rand([true, false],1)[0],
+          dueDate: new Date( fixture.rand(lastWeek, fourWeeks) ).toString(),
+          name: (fixture.rand(terms,1)[0]+" "+fixture.rand(verbs,1)[0]+" "+fixture.rand(subjects,1)[0]).trim()
+      }
+  }, Todo);
+
+  fixture("/api/todos/{id}", todoStore);
+}
+</script>
+```
+@codepen
 
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
