@@ -9,7 +9,7 @@ export { default as SimpleMap } from "./es/can-simple-map";
 
 // -> Infrastruture
 export { default as bind } from "./es/can-bind";
-export { default as eventQueue } from "./es/can-event-queue";
+export { mapEventBindings, valueEventBindings } from "./es/can-event-queue";
 export { default as SimpleObservable } from "./es/can-simple-observable";
 
 
