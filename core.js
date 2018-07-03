@@ -49,7 +49,8 @@ export { default as memoryStore } from "./es/can-memory-store";
 
 // -> Core
 export { default as route } from "./es/can-route";
-export { default as routePushState } from "./es/can-route-pushstate";
+export { default as RouteHash } from "./es/can-route-hash";
+export { default as RoutePushstate } from "./es/can-route-pushstate";
 
 // -> Infrastruture
 export { default as param } from "./es/can-param";
