@@ -43,7 +43,7 @@
   "dependencies": {
     "can-ajax": "1.1.4",
     "can-assign": "1.1.1",
-    "can-attribute-encoder": "1.0.4",
+    "can-attribute-encoder": "1.1.0",
     "can-attribute-observable": "0.2.0",
     "can-component": "4.0.7",
     "can-compute": "4.0.3",
