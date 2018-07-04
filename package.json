@@ -237,7 +237,7 @@
       "bit-docs-html-highlight-line": "^0.3.1",
       "bit-docs-tag-demo": "^0.5.3",
       "bit-docs-tag-package": "^0.0.5",
-      "bit-docs-html-codepen-link": "^1.0.3"
+      "bit-docs-html-codepen-link": "^1.0.4"
     },
     "glob": {
       "pattern": "{node_modules,docs}/{can-*,steal-stache,react-view-model}/**/*.{js,md}",
