@@ -1,6 +1,8 @@
-@page guides/service-data Service Data
+@page guides/data Service Layer
 @parent guides/essentials 4
 @outline 2
+
+@description Learn how to get, create, update, and delete backend service layer data.
 
 @body
 
@@ -16,6 +18,27 @@ table.panels pre {
     margin-top: 0px;
 }
 </style>
+
+## Overview
+
+Most applications need to request data from the server.  For example, you might have used
+[XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) to
+make an __AJAX__ request, used the new [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+to get JSON data, or used [jQuery.ajax](http://api.jquery.com/jquery.ajax/) to post form data.
+
+While these techniques are _fine_ in a CanJS application, using CanJS's service-layer modeling tools can solve some difficult problems with little configuration:
+
+- Provide a standard interface for retrieving, creating, updating, and deleting data.
+- Convert raw data from the server to typed data, with methods and special property behaviors.
+- Caching
+- Real time updates of instances and lists
+- Prevent multiple instances of a given id or multiple lists of a given set from being created.
+- Handle relationships between data.
+
+This guide walks you through the basics of CanJS's service layer modeling.
+
+
+## Creating a model
 
 CanJS's pattern is that you define application logic in one or more observables, then connect the observables to various browser APIs. CanJS's model layer
 libraries connect observables to backend services. CanJS's model-layer will make
@@ -70,7 +93,7 @@ following methods:
 
 The following sections show examples of how to use these methods.
 
-### Retrieving a list of records
+## Retrieving a list of records
 
 Use [can-connect/can/map/map.getList] to retrieve records.
 
@@ -313,7 +336,7 @@ See it in action here:
 
 @demo demos/can-rest-model/can-rest-model-1.html
 
-### Creating records ###
+## Creating records ##
 
 Use [can-connect/can/map/map.prototype.save] to create records.
 
@@ -486,7 +509,7 @@ Component.extend({
 
 When any todo is `created`, `updated`, or `destroyed`, an event is dispatched on the `Todo` type.
 
-### Updating records
+## Updating records
 
 Also use [can-connect/can/map/map.prototype.save] to update records.
 
@@ -613,7 +636,7 @@ See this in action here:
 
 @demo demos/can-rest-model/can-rest-model-update.html
 
-### Destroying records
+## Destroying records
 
 
 Use [can-connect/can/map/map.prototype.destroy] to delete records.
@@ -737,7 +760,7 @@ connectedCallback(){
 ```
 
 
-### Update lists when records are mutated
+## Update lists when records are mutated
 
 The previous _Creating Records_, _Updating Records_ and _Destroying Records_
 examples showed how to listen to when records are mutated:

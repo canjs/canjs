@@ -44,7 +44,7 @@ objects to:
 
 - The Document Object Model (DOM) to update your [guides/html] automatically.
 - The browser URL to support the forward and back button through [guides/routing].
-- Your service layer to make receiving, creating, updating, and deleting [guides/service-data server data] easier.
+- Your service layer to make receiving, creating, updating, and deleting [guides/data service data] easier.
 
 
 Instead of worrying about calling the various browser APIs, CanJS abstracts this
@@ -52,7 +52,7 @@ away, so you can focus on the logic of your application. The logic of your
 application is contained within <span class='obs'>observables</span>.
 
 The rest of this page walks through the basics of <span class='obs'>observables</span> and brief examples
-of connecting observables to browser APIs. For a deeper dive, please read through the [guides/html], [guides/routing] and [guides/service-data]
+of connecting observables to browser APIs. For a deeper dive, please read through the [guides/html], [guides/routing] and [guides/data]
 guides.
 
 ## Key-Value Observables
@@ -231,7 +231,7 @@ to the browser's URL:
 <script type='module'>
 // Imports the <mock-url> element that provides
 // a fake back, forward, and url controls.
-import "//unpkg.com/mock-url@5.0.0";
+import "//unpkg.com/mock-url@^5.0.0";
 
 import {route, Component} from "can";
 
@@ -270,7 +270,7 @@ the following changes the urls to look like `#!1`, `#!2`, `#!3`:
 <script type='module'>
 // Imports the <mock-url> element that provides
 // a fake back, forward, and url controls.
-import "//unpkg.com/mock-url@5.0.0";
+import "//unpkg.com/mock-url@^5.0.0";
 
 import {route, Component} from "can";
 
@@ -374,7 +374,7 @@ todosPromise.then(function(todos){
 
 // The following creates a restful service layer of
 // 20 randomized todos.
-import {fixture} from "//unpkg.com/can@^5.0.0-pre.1/core.mjs";
+import {fixture} from "can";
 function mockServices(){
   var terms = ["can you","please","","","",""],
     verbs = ["clean","walk","do","vacuum","organize","fold","wash","dust","pay","cook","get","take out"],
@@ -395,10 +395,16 @@ function mockServices(){
   fixture("/api/todos/{id}", todoStore);
 }
 ```
+@highlight 26-29,35-40
 @codepen
 
+
 The following lists the todos in the page by defining a `<todo-list>` component
-that
+that:
+
+- Gets a promise that resolves to a list of all todos with `Todo.getList({})`.
+- Loops through the list of todos and creates an `<li>` for each one with
+  `{{# each(todosPromise.value, todo=value) }}`.
 
 ```html
 <todo-list></todo-list>
@@ -427,11 +433,10 @@ restModel({
 
 mockServices();
 
-import { Component } from "//unpkg.com/can@^5.0.0-pre.1/core.mjs";
+import { Component } from "can";
 
 Component.extend({
     tag: "todo-list",
-    // {{#each()}}
     view: `
         <ul>
             {{# each(todosPromise.value, todo=value) }}
@@ -452,7 +457,7 @@ Component.extend({
     }
 });
 
-import {fixture} from "//unpkg.com/can@^5.0.0-pre.1/core.mjs";
+import {fixture} from "can";
 function mockServices(){
   var terms = ["can you","please","","","",""],
     verbs = ["clean","walk","do","vacuum","organize","fold","wash","dust","pay","cook","get","take out"],
@@ -474,7 +479,14 @@ function mockServices(){
 }
 </script>
 ```
+@highlight 29-49
 @codepen
+
+You can do a lot more with CanJS's data layer besides showing a list of data. Read
+the [service-data] guide for more information on how to:
+
+- Create, update and delete data.
+- Automatically insert or remove items from lists when data is created, updated or deleted (automatic list management).
 
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
