@@ -64,7 +64,7 @@
     "can-dom-data-state": "1.0.1",
     "can-dom-events": "1.2.0",
     "can-dom-mutate": "1.0.4",
-    "can-event-dom-enter": "2.1.2",
+    "can-event-dom-enter": "2.2.0",
     "can-event-dom-radiochange": "2.1.0",
     "can-event-queue": "1.0.1",
     "can-fixture": "2.0.3",
