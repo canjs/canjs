@@ -58,7 +58,7 @@
     "can-define-lazy-value": "1.0.2",
     "can-define-stream": "1.0.1",
     "can-define-stream-kefir": "1.0.0",
-    "can-define-validate-validatejs": "1.0.1",
+    "can-define-validate-validatejs": "1.1.0",
     "can-deparam": "1.0.3",
     "can-dom-data": "1.0.1",
     "can-dom-data-state": "1.0.1",
