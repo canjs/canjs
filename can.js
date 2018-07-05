@@ -21,13 +21,11 @@ require("can-dom-events");
 require("can-dom-events/helpers/add-jquery-events");
 require("can-event-dom-enter/add-global/add-global");
 require("can-event-dom-radiochange");
+require("can-key");
 require("can-parse-uri");
+require("can-types");
 require("can-validate-interface");
 require("can-value");
 require("can-view-model");
-require("can-key");
-require("can-fixture-socket");
-require("can-view-import");
-require("can-types");
 
 module.exports = can;
