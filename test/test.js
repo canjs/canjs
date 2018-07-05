@@ -50,7 +50,6 @@ require('can-view-parser/test/can-view-parser-test');
 require('can-view-scope/test/scope-test');
 require('can-view-target/test/test');
 require('can-stache-converters/test/test');
-require('can-types/test/test');
 
 
 // Legacy tests
