@@ -25,5 +25,9 @@ require("can-parse-uri");
 require("can-validate-interface");
 require("can-value");
 require("can-view-model");
+require("can-key");
+require("can-fixture-socket");
+require("can-view-import");
+require("can-types");
 
 module.exports = can;
