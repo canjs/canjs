@@ -85,7 +85,7 @@
     "can-queues": "1.0.1",
     "can-reflect": "1.13.4",
     "can-reflect-dependencies": "1.0.2",
-    "can-reflect-promise": "2.0.1",
+    "can-reflect-promise": "2.1.0",
     "can-route": "4.1.1",
     "can-route-pushstate": "4.0.4",
     "can-set": "1.5.2",
