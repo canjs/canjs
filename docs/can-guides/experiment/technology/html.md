@@ -2,7 +2,7 @@
 @parent guides/essentials 2
 @outline 2
 
-@description Learn how to u
+@description Learn how to update HTML and listen to user interactions.
 
 @body
 
@@ -19,36 +19,131 @@ table.panels pre {
 }
 </style>
 
-CanJS's pattern is that you define application logic in one or
-more observables, then you connect these observables to
-various browser APIs. The page's HTML (DOM) is the
-most common browser API people need to connect to. [can-stache], [can-stache-bindings]
-and [can-component] are used to connect the DOM
-to __observables__ like `myCounter`. We can create HTML that:
+## Overview
 
-- Calls methods on observables using [can-stache-bindings].
-- Updates the page when the state of an observable changes using [can-stache].
+In a web application, one of the most common needs  is to listen to user
+interactions and then update the page.  
 
-The following example increments the _Count_ when the <button>+1</button> is clicked:
+Let's say you want to create a page that counts clicks like the following: (_click the `+1` button_):
 
+<p style="border: 1px solid #ccc; padding: 15px;"><my-counter></my-counter></p>
 
-@demo demos/technology-overview/observable-dom.html
+<style>
+  my-counter button {margin-left: 15px;}
+</style>
+<script type="text/steal-module">
+const Component = require("can-component");
+Component.extend({
+    tag: "my-counter",
+    view: " Count: <span>{{count}}</span> <button on:click='increment()'>+1</button> ",
+    ViewModel: {
+        count: {default: 0},
+        increment() {
+            this.count = this.count + 1;
+        }
+    }
+});
+</script>
 
-> __NOTE:__ Click the __JS__ tab to see the code.
+With native HTML (DOM) APIs, you might implement this widget like:
 
-The demo uses a [can-stache] view:
+```html
+<div id="my-counter"></div>
 
-```js
-const view = stache(`
-  <button on:click='increment()'>+1</button>
-  Count: <span>{{count}}</span>
-`);
+<script type="module">
+    // Get the counter element.
+    const counter = document.getElementById("my-counter");
+
+    // Store the state of the widget.
+    var count = 0;
+
+    // Initialize the HTML within the widget.
+    counter.innerHTML = `
+        Count: <span>0</span>
+        <button>+1</button>
+    `;
+
+    // Listen to when the +1 is clicked.
+    counter.querySelector("button").addEventListener("click", function(){
+
+        // Update the HTML.
+        counter.querySelector("span").textContent = (count++)
+    })
+</script>
 ```
+@codepen
 
-The _view_:
 
-- Updates a `<span/>` when the state of `myCounter` changes _using_ `{{count}}`.
-- Creates a <button>+1</button> button that calls methods on `myCounter` when DOM events happen _using_ `on:click='increment()'`.
+This implementation uses `addEventListener()` to listen to user interactions (clicks) and
+`.innerHTML` and `.textContent` to update the page.  CanJS removes the need to
+call these native DOM APIs directly, reducing the amount of code you have to write. But more importantly,
+CanJS will improve this code in other ways:
+
+- It will manage state better.
+- It will be easier to test.
+- Multiple counter widgets can be created easily.
+
+In CanJS, widgets are encapsulated with custom elements. Custom elements allow us to put an
+element in our HTML like `<my-counter></my-counter>`, and the widget will spring to life.
+[can-component Component] is used to create custom elements.
+
+The following implementation uses [can-component Component] to create the counter
+functionality above. This implementation:
+
+- Includes a `<my-counter>` element in the page's HTML.
+- Defines a `<my-counter>` [can-component Component].
+
+```html
+<!-- Adds the custom element to the page -->
+<my-counter></my-counter>
+
+<script type="module">
+import { Component } from "can";
+
+// Define the `Counter` observable type
+const Counter = DefineMap.extend();
+
+// Extend Component to define a custom element
+Component.extend({
+
+    // The name of the custom element
+    tag: "my-counter",
+
+    // The HTML content within the custom element.
+    //  - {{count}} is a `stache` magic tag.
+    //  - `on:click` is a `stache` event binding.
+    view: `
+        Count: <span>{{count}}</span>
+        <button on:click='increment()'>+1</button>
+    `,
+
+    // Defines a DefineMap used to control the
+    // logic of this custom element.
+    ViewModel: {
+        count: {default: 0},
+        increment() {
+            this.count++;
+        }
+    }
+});
+</script>
+```
+@codepen
+
+You might have noticed that Components are mostly 2 parts:
+
+- A [can-stache stache] [can-component.prototype.view] that specifies the HTML content within the custom element. In this case, we’re adding a `<span>` and a `<button>` within the `<my-counter>` element.
+- An <span class='obs'>observable</span> [can-component.prototype.ViewModel] that manages the logic and state of the application.
+
+These work together to receive input from the user, update the state of the application, and then update
+the HTML the user sees accordingly. See how in this 2 minute video:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3zMwoEuyX9g" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+[can-component Component] uses [can-stache stache] to update the HTML
+and [can-stache-bindings stacheBindings] to listen to user interactions and pass data between
+components.  The remainder of this guide breaks down these pieces and goes into more detail
+about how [can-component Component] works and how to use it.
 
 ### Stache templates and bindings
 
@@ -79,15 +174,35 @@ are the most commonly used tags:
 observables. Use it to:
 
 - Call methods on observables when DOM events happen. The following uses
-  [can-stache-bindings.event] to call `doSomething` with the `<input>`'s value on a `keypress` event:
-  ```html
-  <input on:keypress="doSomething(scope.element.value)"/>
+  [can-stache-bindings.event] to call `doSomething` with the `<input>`'s value on a `keyup` event:
+  ```js
+  import {stache} from "can";
+
+  var view = stache(`<input on:keyup="doSomething(scope.element.value)"/>`);
+
+  var viewModel = {
+    doSomething(value) {
+      console.log("You wrote "+value);
+    }
+  };
+  document.body.appendChild( view(viewModel) );
   ```
+  @highlight 3
+  @codepen
+
 - Update observables with element attribute and property values.  The following uses [can-stache-bindings.toParent]
   to send the `<input>`'s _value to_ an observable's `count` property.
-  ```html
-  <input value:to="count"/>
+  ```js
+  import { stache, DefineMap } from "can";
+
+  var view = stache(`<input value:to="count"/> Count: {{count}}`);
+
+  var viewModel = new DefineMap({count: 0});
+  document.body.appendChild( view(viewModel) );
   ```
+  @codepen
+  @highlight 3
+
 - Update element attribute and property values with observable values.  The following uses [can-stache-bindings.toChild]
   to update the `<input>`'s _value from_  an observable's `count` property.
   ```html

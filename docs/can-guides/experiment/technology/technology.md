@@ -30,8 +30,7 @@ table.panels pre {
 ## Overview
 
 CanJS, at its most simplified, consists of key-value <span class='obs'>Observables</span>
-connected to web browser APIs through various connecting
-libraries.
+connected to web browser APIs using various libraries.
 
 
 <img src="../../docs/can-guides/experiment/technology/overview.svg"
@@ -100,15 +99,94 @@ console.log( myCounter.count ) //-> 1
 `myCounter` is an instance of `Counter`. `myCounter.count` is what we call the _state_ of the `myCounter` instance.  `myCounter.increment` is part of the _logic_ that controls the
 state of `myCounter`.
 
+`myCounter` is an <span class='obs'>observable</span> because you can listen to when
+its state changes.  The following uses [can-event-queue/map/map.listenTo]
+to log each time the [can-define/map/map/PropertyNameEvent count] changes:
+
+```js
+import {DefineMap} from "can";
+
+const Counter = DefineMap.extend({
+    count: {default: 0},
+    increment() {
+        this.count++;
+    }
+});
+
+const myCounter = new Counter();
+
+myCounter.listenTo("count", function(event, newCount){
+    console.log(newCount); // logs 1, 10, then 11
+});
+
+myCounter.increment();
+myCounter.count = 10;
+myCounter.increment();
+```
+@highlight 12-14
+@codepen
+
+
+
+[can-define DefineList] creates <span class='obs'>observable</span> lists. Observable lists are mostly commonly
+used with the [service layer](#Observablesandtheservicelayer). The following
+defines a `Counters` list type. Instances of `Counters` will have a `sum` property that returns the sum of
+each `Counter` within the list:
+
+```js
+import {DefineMap, DefineList} from "can";
+
+const Counter = DefineMap.extend({
+    count: {default: 0},
+    increment() {
+        this.count++;
+    }
+});
+
+// Extend DefineList to create a custom observable list type.
+const Counters = DefineList.extend({
+    // "#" specifies the type of items in the list.
+    // Plain objects will be converted to Counter instances.
+    "#": Counter,
+
+    get sum(){
+        // Loop through each counter and sum its count;
+        var sum = 0;
+        this.forEach( (counter) => sum += counter.count );
+        return sum;
+    }
+});
+
+// Create an instance of Counters
+var myCounters = new Counters([
+    new Counter(),
+    new Counter({count: 3}),
+    // Plain objects will be converted to Counter instances.
+    {count: 4}
+]);
+
+console.log( myCounters[0].count ) //-> 0
+
+console.log( myCounters.sum )      //-> 7
+
+myCounters[0].increment();
+console.log( myCounters.sum )      //-> 8
+```
+@codepen
+
+
+
+
 > __NOTE:__ CanJS application logic is coded within instances of `DefineMap` and `DefineList`.
 > You often don’t need the DOM for unit testing!
 
-[can-define/map/map DefineMap] and [can-define/list/list DefineList] have a wide variety of features (and shorthands)
-for defining property behavior. In the previous example, `count: {default: 0}` defined the `count` property to
-have an initial value of `0`. The `{default: 0}` object is a [can-define.types.propDefinition].
+[can-define/map/map DefineMap] and [can-define/list/list DefineList] have a wide variety of features and shorthands for defining property behavior. For more information about how to write logic within
+CanJS's observables read the [can-define/map/map#Use DefineMap Use section] and the
+[can-define.types.propDefinition PropDefinition documentation].
 
 
-## Observables and HTML Elements
+
+## Observables and HTML elements
 
 CanJS applications use [can-component Component] to connect <span class='obs'>observables</span>
 to a page's HTML elements. We can use [can-component Component] to create a counting widget
@@ -255,6 +333,7 @@ route.data = document.querySelector("my-counter");
 route.start();
 </script>
 ```
+@highlight 27-28
 @codepen
 
 
@@ -295,6 +374,7 @@ route.data = document.querySelector("my-counter");
 route.start();
 </script>
 ```
+@highlight 27
 @codepen
 
 
@@ -302,7 +382,7 @@ For more information on how to connect <span class='obs'>observables</span> to t
 [guides/routing] guide.
 
 
-## Observables and backend services ##
+## Observables and the service layer ##
 
 CanJS applications use models to connect
 <span class='obs'>observables</span> to backend services. For example,
@@ -373,7 +453,7 @@ todosPromise.then(function(todos){
 })
 
 // The following creates a restful service layer of
-// 20 randomized todos.
+// 20 randomized todos due between last week and 4 weeks from now.
 import {fixture} from "can";
 function mockServices(){
   var terms = ["can you","please","","","",""],
@@ -483,10 +563,15 @@ function mockServices(){
 @codepen
 
 You can do a lot more with CanJS's data layer besides showing a list of data. Read
-the [service-data] guide for more information on how to:
+the [guides/data] guide for more information on how to:
 
 - Create, update and delete data.
 - Automatically insert or remove items from lists when data is created, updated or deleted (automatic list management).
+
+## Next Steps
+
+Now that you've got a rough idea idea on the major pieces of CanJS, we suggest:
+
 
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
