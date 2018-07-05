@@ -6,6 +6,7 @@ require('can-define/test/test');
 // require('can-stache/test/stache-test'); in dev-only
 require('can-stache-bindings/test/tests');
 require('can-query-logic/can-query-logic-test');
+require('can-value/test/test');
 // can-connect
 // can-stache-route-helpers
 
@@ -13,6 +14,7 @@ require('can-query-logic/can-query-logic-test');
 // Infrastructure tests
 require('can-ajax/can-ajax-test');
 require('can-assign/can-assign-test');
+require('can-bind/test/test');
 require('can-construct/can-construct_test');
 require('can-construct-super/test/can-construct-super_test');
 require('can-control/can-control_test');
@@ -23,6 +25,7 @@ require('can-event-dom-enter/can-event-dom-enter-test');
 require('can-event-dom-radiochange/can-event-dom-radiochange-test');
 require('can-event-queue/can-event-queue-test');
 require('can-globals/can-globals-test');
+require('can-key/can-key-test');
 require('can-key-tree/can-key-tree-test');
 // require('can-observation/can-observation_test'); in dev-only
 require('can-param/can-param-test');
@@ -61,6 +64,7 @@ require('can-map-define/can-map-define_test');
 
 // Ecosystem tests
 require('can-fixture/test/fixture_test');
+require('can-fixture-socket/test/test');
 //require('can-connect-signalr/test');
 //require('can-connect-cloneable/test/test');
 //require('can-connect-feathers/test/test'); depends on babel-polyfill

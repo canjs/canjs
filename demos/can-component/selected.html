@@ -21,7 +21,7 @@
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
 import { Component, DefineList, DefineMap, stache } from "can";
 
-var ViewModel = DefineMap.extend({
+var SelectViewModel = DefineMap.extend("SelectViewModel", {
 	selected: {
 		Default: DefineList
 	},
@@ -39,7 +39,7 @@ var ViewModel = DefineMap.extend({
 
 Component.extend({
 	tag: "my-items",
-	ViewModel: ViewModel,
+	ViewModel: SelectViewModel,
 	view: stache.from("demo-html"),
 	helpers: {
 		isSelected: function(options){
@@ -52,8 +52,8 @@ Component.extend({
 	}
 });
 
-var fragment = stache("<my-items items:from='items' />")({
-	items: new DefineList([
+var fragment = stache("<my-items items:from='titleItems' />")({
+	titleItems: new DefineList([
 		{ title: "CanJS" },
 		{ title: "StealJS" },
 		{ title: "FuncUnit" },
