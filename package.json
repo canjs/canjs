@@ -98,7 +98,7 @@
     "can-stache-key": "1.0.2",
     "can-stache-route-helpers": "0.1.4",
     "can-stream": "1.0.1",
-    "can-stream-kefir": "1.0.1",
+    "can-stream-kefir": "1.1.0",
     "can-symbol": "1.6.1",
     "can-util": "3.11.5",
     "can-validate": "1.1.4",
