@@ -231,8 +231,9 @@
       ]
     },
     "altVersions": {
-      "3.12.1": "https://v3.canjs.com",
-      "2.3.33": "https://v2.canjs.com"
+      "5.0.0": "https://canjs.com",
+      "3.13.1": "https://v3.canjs.com",
+      "2.3.35": "https://v2.canjs.com"
     },
     "parent": "canjs",
     "minifyBuild": true
