@@ -87,6 +87,7 @@
     "can-list": "4.1.0",
     "can-local-store": "1.0.0",
     "can-log": "1.0.0",
+    "can-make-map": "1.0.1",
     "can-map": "4.1.1",
     "can-map-define": "4.2.0",
     "can-memory-store": "1.0.0",
@@ -140,10 +141,8 @@
   },
   "devDependencies": {
     "bit-docs": "0.0.11",
-    "can-make-map": "^1.0.1",
     "can-reflect-tests": "<2.0.0",
     "can-test-helpers": "^1.1.1",
-    "can-route-mock": "<2.0.0",
     "es6-promise-polyfill": "^1.2.0",
     "feathers": "^2.0.3",
     "feathers-authentication-client": "^0.1.6",

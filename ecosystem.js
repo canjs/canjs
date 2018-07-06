@@ -22,6 +22,10 @@ export { default as fixtureSocket } from "./es/can-fixture-socket";
 export { default as ndjsonStream } from "./es/can-ndjson-stream";
 
 
+// Routing
+export { default as RouteMock } from "./es/can-route-mock";
+
+
 // Data Validation
 export { default as defineValidateValidatejs } from "./es/can-define-validate-validatejs";
 export { default as validate } from "./es/can-validate";
