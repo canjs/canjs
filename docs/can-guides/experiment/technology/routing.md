@@ -2,6 +2,9 @@
 @parent guides/essentials 3
 @outline 2
 
+@description Learn how to make your application respond to changes in the URL and
+work with the browser's back and forward buttons.
+
 @body
 
 <style>
@@ -15,23 +18,50 @@ table.panels .background td {
 table.panels pre {
     margin-top: 0px;
 }
+.obs {color: #800020; font-weight: bold}
 </style>
 
-CanJS's pattern is that you define application logic in one or
-more observables, then connect the observables to
-various browser APIs.  For example, you can connect the `myCounter` observable from
-the [Key-Value Observables](#Key_ValueObservables) section to `window.location` with:
+## Overview
 
-```js
-import route from "can-route";
+> __NOTE__ This guide uses hash-based routing instead of pushstate because hash-based routing
+is easier to setup. Pushstate routing requires server-support. Use [can-route-pushstate] for pushstate-based applications. The use of [can-route-pushstate] is almost identical to [can-route].
+
+CanJS's routing works by two-way binding an <span class='obs'>observable</span> to
+the _URL_. When the <span class='obs'>observable</span> changes, the _URL_ will be updated.  This two way binding
+is provided by [can-route route].
+
+For example, you can connect the `myCounter` observable from
+the [guides/technology-overview#Key_ValueObservables Technology Overview's Key-Value Observables section] to `window.location` with:
+
+```html
+<mock-url></mock-url>
+
+<script type="module">
+// Imports the <mock-url> element that provides
+// a fake back, forward, and url controls.
+import "//unpkg.com/mock-url@^5.0.0";
+
+import {DefineMap, route} from "can";
+
+const Counter = DefineMap.extend({
+    count: {default: 0},
+    increment() {
+        this.count++;
+    }
+});
+
+window.myCounter = new Counter();
 
 route.data = myCounter;
 route.start();
+</script>
 ```
+@highlight 19-20
+@codepen
 
 This will add `#!&count=0` to the [location](https://developer.mozilla.org/en-US/docs/Web/API/Location) hash.  
 
-Now, if you called `increment()` on my counter, the `window.location` would
+Now, if you called `myCounter.increment()` in the console, the `window.location` will
 change to `#!count=1`. If you hit the back-button, `myCounter.count` would be
 back to `0`:
 
@@ -63,10 +93,9 @@ so that the following observable data produces the following url hashes:
 {foo: "bar & baz"}    //-> "#!&foo=bar+%26+baz"
 ```
 
-> __NOTE 1:__ This guide uses hash-based routing instead of pushstate because hash-based routing
-is easier to setup. Pushstate routing requires server-support. Use [can-route-pushstate] for pushstate-based applications. The use of [can-route-pushstate] is almost identical to [can-route].
 
-> __NOTE 2:__ [can-route] uses hash-bangs (`#!`) to comply with a now-deprecated
+
+> __NOTE__ [can-route] uses hash-bangs (`#!`) to comply with a now-deprecated
 > [Google SEO](https://developers.google.com/webmasters/ajax-crawling/docs/getting-started)
 > recommendation.
 
@@ -111,7 +140,7 @@ route.register("",{count: 0});
 @demo demos/technology-overview/route-counter-registered.html
 
 
-### Routing and the root component
+## Routing and the root component
 
 Understanding how to use [can-route] within an application comprised of [can-component]s
 and their [can-stache] views and observable view-models can be tricky.  
@@ -142,7 +171,7 @@ to [can-route]. This is usually done in four steps:
 3. Define the top-level component's view-model (sometimes called _application view-model_).
 4. Register routes that translate between the URL and the application view-model.
 
-### Connect a component's view-model to can-route
+## Connect a component's view-model to can-route
 
 To connect a component's view-model to can-route, we first need to create a basic
 component. The following creates a `<my-app>` component that displays its `page` property and
@@ -186,7 +215,7 @@ property. See this by clicking the links and the back/refresh buttons below:
 
 @demo demos/technology-overview/route-mini-app-start.html
 
-### Display the right sub-components
+## Display the right sub-components
 
 When building components, we suggest designing the [can-component.prototype.view]
 before the [can-component.prototype.ViewModel].  This helps you figure out what logic
@@ -228,7 +257,7 @@ Notice that the view-model will need the following properties:
 We will implement these properties and `componentToShow` in the
 [can-component.prototype.ViewModel].
 
-### Define the view-model
+## Define the view-model
 
 Now that we've designed the _view_ it's time to code the observable view-model
 with the logic to make the view behave correctly. We implement the
@@ -285,7 +314,7 @@ remember (ex: `#!&page=home`). We will clean that up in the
 next section.
 
 
-### Register routes
+## Register routes
 
 Currently, after the user logs in, the application will show `<h2>Page Missing</h2>` because if the url hash is empty, `page` property will be undefined. To have `page`
 be `"home"`, one would have to navigate to `"#!&page=home"` ... yuck!  
@@ -308,3 +337,6 @@ route.register("tasks/{taskId}", {page: "tasks"});
 Now the mini application is able to translate changes in the url to
 properties on the component's view-model.  When the component's view-model
 changes, the view updates the page.
+
+
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>

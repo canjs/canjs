@@ -232,7 +232,7 @@
       "bit-docs-generate-searchmap": "^0.2.0",
       "bit-docs-html-canjs": "^2.3.10",
       "bit-docs-prettify": "^0.3.0",
-      "bit-docs-html-highlight-line": "^0.5.2",
+      "bit-docs-html-highlight-line": "^0.5.3",
       "bit-docs-tag-demo": "^0.5.3",
       "bit-docs-tag-package": "^0.0.5",
       "bit-docs-html-codepen-link": "^1.0.6"
