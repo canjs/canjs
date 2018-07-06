@@ -42,7 +42,7 @@ The code for that <u>entire</u> page looks like this:
 <my-counter></my-counter>
 
 <script type="module">
-import { Component } from "https://unpkg.com/can/core.mjs";
+import { Component } from "//unpkg.com/can/core.mjs";
 
 Component.extend({
     tag: "my-counter",
@@ -77,7 +77,7 @@ for alternative ways to load CanJS.
 
 ```html
 <script type="module">
-import { Component } from "https://unpkg.com/can/dist/global/can.mjs";
+import { Component } from "//unpkg.com/can/core.mjs";
 ...
 </script>
 ```
