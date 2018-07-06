@@ -388,15 +388,18 @@ __Hello World__
 
 ## StealJS
 
-> (TODO: git-example)
+<div style="display:none">
 
 > You can skip these instructions by
 > [cloning this example repo on GitHub](https://github.com/canjs/stealjs-example).
 
+
+</div>
+
 [After setting up Node.js and npm](#Node_jsandnpm), install `can`, [StealJS](https://stealjs.com) and the [steal-stache] plugin from npm:
 
 ```
-npm install can@5 steal@2 steal-stache@4 --save
+npm install can@5 steal@^2.0.0-pre.11 steal-stache@4 --save
 ```
 
 Next, add the following [steal configuration](https://stealjs.com/docs/StealJS.configuration.html)

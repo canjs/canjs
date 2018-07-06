@@ -257,7 +257,7 @@
     "codepen": [
       [
         "\"can\"",
-        "\"//unpkg.com/can@^5.0.0-pre.1/core.mjs\""
+        "\"//unpkg.com/can@^5.0.0/core.mjs\""
       ]
     ]
   }
