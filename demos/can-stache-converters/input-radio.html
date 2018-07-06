@@ -11,14 +11,12 @@
   <input type='radio' checked:bind="equal(attending, 'no')" /> No,
   <input type='radio' checked:bind="equal(attending, 'maybe')" /> Maybe
 </p>
-<p>You {{attendence}}.</p>
+<p>You {{attendence()}}.</p>
 </script>
 </div>
-<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty">
-var stache = require("can-stache");
-require("can-stache-converters");
-var DefineMap = require("can-define/map/map");
-			
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
+import { DefineMap, stache, stacheConverters } from "can";
+
 var person = new DefineMap({
   attending: null,
   one: false,
@@ -29,10 +27,10 @@ var person = new DefineMap({
 var template = stache.from("demo-html");
 var fragment = template(person, {
 	attendence: function(){
-		return person.attending ? 
+		return person.attending ?
 			"are a " + person.attending :
 			"have not responded"
-	
+
 	}
 });
 

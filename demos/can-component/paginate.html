@@ -56,16 +56,12 @@
 <div id='out'>
 	<my-app></my-app>
 </div>
-<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty">
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
 var DefineMap = require("can-define/map/map");
 var DefineList = require("can-define/list/list");
 var Component = require("can-component");
 var fixture = require("can-fixture");
-var stache = require("can-stache");
-var baseMap = require("can-connect/can/base-map/base-map");
-var set = require("can-set");
-
-window.can = require("can-util/namespace");
+var realtimeRestModel = require("can-realtime-rest-model");
 
 var Website = DefineMap.extend({
 	id: "number",
@@ -78,19 +74,10 @@ Website.List = DefineList.extend({
 	count: "number"
 });
 
-
-
-var websiteAlgebra = new set.Algebra(
-	set.props.offsetLimit("offset", "limit")
-);
-
-baseMap({
-	idProp: "id",
+realtimeRestModel({
 	Map: Website,
 	List: Website.List,
-	url: "/websites",
-	name: "website",
-	algebra: websiteAlgebra
+	url: "/websites"
 });
 
 
@@ -158,7 +145,7 @@ var websiteStore = fixture.store([{
 	id: 16,
 	name: "Github",
 	url: "http://github.com"
-}], websiteAlgebra);
+}] );
 
 fixture("/websites/{id}", websiteStore);
 
@@ -194,6 +181,12 @@ var Paginate = DefineMap.extend({
 			return this.count ?
 				Math.ceil(this.count / this.limit) : null;
 		}
+	},
+	get start(){
+		return this.offset;
+	},
+	get end(){
+		return this.offset + this.limit  - 1;
 	},
 	next: function() {
 		this.offset = this.offset + this.limit;
@@ -292,8 +285,10 @@ Component.extend({
 		websitesPromise: {
 			get: function() {
 				return Website.getList({
-					limit: this.paginate.limit,
-					offset: this.paginate.offset
+					page: {
+						start: this.paginate.start,
+						end: this.paginate.end
+					}
 				});
 			}
 		}

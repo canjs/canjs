@@ -5,30 +5,33 @@
 
 <div id='list'></div>
 
-<script src="../../node_modules/steal/steal.js" deps-bundle id="demo-source">
+<script src="../../node_modules/steal/steal.js"  id="demo-source">
 var connect = require("can-connect");
 var fixture = require("can-fixture");
 var $ =  require("jquery");
 var DefineMap = require("can-define/map/map");
 var DefineList = require("can-define/list/list");
 var Observation = require("can-observation");
+var QueryLogic = require("can-query-logic");
 var domEvents = require("can-util/dom/events/events");
 require("can-util/dom/events/removed/removed");
 
 var Todo = DefineMap.extend({
-	id: "number",
+	id: {type: "number", identity: true},
 	name: "string",
 	complete: "boolean"
 });
+Todo.queryLogic = new QueryLogic(Todo);
 
 Todo.List = DefineList.extend({
 	"#": Todo
 });
 
 var cache = connect([
-	require("can-connect/data/localstorage-cache/localstorage-cache")
+	require("can-local-store")
 ],{
-	name: "todos"
+	name: "todos",
+	queryLogic: Todo.queryLogic
 });
 
 // A connection that gets todos data
@@ -127,7 +130,7 @@ var updatePage = function(){
 	var complete = window.location.hash !== "#incomplete";
 
 	$("#list").children().remove().triggerHandler("remove");
-	var ul = todoList({complete: complete});
+	var ul = todoList({filter: {complete: complete}});
 	$("#list").html(ul);
 };
 $(window).bind("hashchange", updatePage);
@@ -137,7 +140,7 @@ $(window).bind("hashchange", updatePage);
 fixture.delay = 1000;
 fixture({
 	"GET /todos": function(request){
-		var todos = randomTodos(request.data.complete == "true");
+		var todos = randomTodos(request.data.filter.complete == "true");
 		return {data: todos};
 	}
 });
@@ -151,9 +154,10 @@ function randomTodos(complete){
 
 	var todos = [];
 	var total = fixture.rand(7) + 1;
+	var randomIds = fixture.rand(ids,total, total);
 	for(var i = 0; i < total; i++){
 		todos.push({
-			id: fixture.rand(ids,1)[0],
+			id: randomIds[i],
 			name: fixture.rand(verbs,1)[0]+" "+fixture.rand(names,1)[0],
 			complete: complete
 		});

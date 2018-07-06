@@ -24,10 +24,8 @@
 <div>In focus: <b>{{inFocus}}</b></div>
 </script>
 
-<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty">
-var stache = require("can-stache");
-var DefineMap = require("can-define/map/map");
-require("can-stache-bindings");
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
+import { DefineMap, stache, stacheBindings } from "can";
 
 var template = stache.from("demo-html");
 var ViewModel = DefineMap.extend({

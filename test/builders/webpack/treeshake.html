@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<title>WebPack tree shake</title>
+<script src="./bundle.js"></script>
+<my-app></my-app>
+<script>
+(function(){
+	var QUnit = window.parent.QUnit;
+	var removeMyself = window.parent.removeMyself;
+
+	if(QUnit) {
+		QUnit.ok(!can.connect, "can-connect not used");
+		QUnit.ok(!can.realtimeRestModel, "can-realtime-rest-model not used");
+		QUnit.ok(!can.defineStreamKefir, "can-define-stream-kefir not used");
+		removeMyself();
+	} else {
+		console.log("loaded");
+	}
+})();
+</script>

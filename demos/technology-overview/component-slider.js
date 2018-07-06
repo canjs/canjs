@@ -1,4 +1,4 @@
-import Component from "can-component";
+import { Component } from "can";
 
 function width(el) {
     var cs = window.getComputedStyle(el,null)

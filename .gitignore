@@ -1,5 +1,9 @@
 .tmp*
 dist/
+core.mjs
+core.min.mjs
+ecosystem.mjs
+ecosystem.min.mjs
 *.swp
 *.orig
 util/can.*.js
@@ -14,6 +18,7 @@ docco
 test/builders/steal-tools/dist/
 test/builders/steal-tools/bundle/dist/
 test/builders/browserify/out.js
+test/builders/webpack/bundle.js
 _backup/
 /index.html
 package-lock.json

@@ -11,11 +11,9 @@
 <p>You {{attendence()}}.</p>
 </script>
 </div>
-<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty">
-var DefineMap = require("can-define/map/map");
-var stache = require("can-stache");
-require("can-stache-converters");
-		
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
+import { DefineMap, stache, stacheConverters } from "can";
+
 var person = new DefineMap({
   attending: "no"
 });

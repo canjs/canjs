@@ -20,14 +20,10 @@
 	}
 </style>
 
-<script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" deps-bundle>
-var debug = require("can-debug");
-var DefineMap = require("can-define/map/map");
+<script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" dev-bundle>
+import { DefineMap, debug, stache, stacheBindings } from "can";
 
-var stache = require("can-stache");
-require("can-stache-bindings");
-
-var Person = DefineMap.extend("Person", {
+const Person = DefineMap.extend("Person", {
 	first: "string",
 	last: "string",
 	fullName: {
@@ -37,14 +33,14 @@ var Person = DefineMap.extend("Person", {
 	}
 });
 
-var out = document.querySelector("#out");
-var template = stache.from("demo-html");
-var scope = new Person({first: "Jane", last: "Doe"});
+let out = document.querySelector("#out");
+let template = stache.from("demo-html");
+let scope = new Person({first: "Jane", last: "Doe"});
 
 out.appendChild(template(scope));
 out.addEventListener("click", function(ev) {
-	var el = ev.target;
-	var parent = el.parentNode;
+	let el = ev.target;
+	let parent = el.parentNode;
 	if (el.nodeName === "BUTTON") {
 		debug.logWhatChangesMe(out.querySelector("#full"));
 	}

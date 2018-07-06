@@ -1,13 +1,6 @@
-var can = require("can-util/namespace");
-
-require("can-compute");
-//require("can-event");
-require("can-map");
-require("can-list");
-//require("can-map-backup");
-require("can-map-define");
-//require("can-connect/can/model/model");
-//require("can-ejs");
-//require("can-validate-legacy");
-
-module.exports = can;
+// Legacy
+export { default as compute } from "./es/can-compute";
+export { default as CanMap } from "./es/can-map";
+export { default as CanList } from "./es/can-list";
+export { default as canMapDefine } from "./es/can-map-define";
+export { default as set } from "./es/can-set-legacy";

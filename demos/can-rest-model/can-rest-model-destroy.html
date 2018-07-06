@@ -1,0 +1,95 @@
+<html>
+<head>
+    <style>
+        [type=date] {
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<todo-list></todo-list>
+
+<script src="../../node_modules/steal/steal.js"  dev-bundle></script>
+
+<script type="steal-module" id="demo-source">
+import {restModel, DefineMap, DefineList, Component, fixture, stache, Reflect} from "can";
+
+const Todo = DefineMap.extend("Todo",{
+
+    // `id` uniquely identifies instances of this type.
+    id: { type: "number", identity: true },
+
+    complete: { type: "boolean", default: false },
+    dueDate: "date",
+    name: "string"
+});
+
+Todo.List = DefineList.extend("TodoList",{
+    "#": Todo
+});
+
+const todoConnection = restModel({
+    Map: Todo,
+    List: Todo.List,
+    url: "/api/todos/{id}"
+});
+
+var terms = ["can you","please","","","",""],
+    verbs = ["clean","walk","do","vaccum","organize","fold","wash","dust","pay","cook","get","take out"],
+    subjects = ["dog","laundry","diapers","clothes","car","windows","carpet","taxes","food","gas","trash"];
+
+var dayInMS = 24*60*60*1000;
+var lastWeek = new Date() - (7*dayInMS);
+var fourWeeks = new Date().getTime() + (4*7*dayInMS);
+
+var todoStore = fixture.store(20, function(){
+    return {
+        complete: fixture.rand([true, false],1)[0],
+        dueDate: new Date( fixture.rand(lastWeek, fourWeeks) ).toString(),
+        name: (fixture.rand(terms,1)[0]+" "+fixture.rand(verbs,1)[0]+" "+fixture.rand(subjects,1)[0]).trim()
+    }
+}, Todo);
+
+fixture("/api/todos/{id}", todoStore);
+
+Component.extend({
+    tag: "todo-list",
+    view: `
+    <ul>
+        {{# if(todosPromise.isResolved) }}
+            {{# each(todosPromise.value) }}
+                <li>
+                    <input type='checkbox' checked:bind='complete' disabled/>
+                    <label>{{name}}</label>
+                    <input type='date' valueAsDate:bind='dueDate' disabled/>
+                    <button on:click="destroy()">delete</button>
+                </li>
+            {{/ each }}
+        {{/ if}}
+        {{# if(todosPromise.isPending) }}
+            <li>Loading</li>
+        {{/ if}}
+    </ul>
+    `,
+    ViewModel: {
+        todosPromise: {
+            default(){
+                return Todo.getList({});
+            }
+        },
+        connectedCallback(){
+            this.todosPromise.then((todos)=>{
+                this.listenTo(Todo, "destroyed", function(ev, destroyed){
+                    var index = todos.indexOf(destroyed);
+                    todos.splice(index, 1);
+                });
+            });
+        }
+    }
+});
+
+</script>
+
+
+</body>
+</html>

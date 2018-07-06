@@ -19,18 +19,13 @@
 {{/eq}}
 </script>
 
-<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id='demo-source'>
-var stache = require("can-stache");
-var DefineMap = require("can-define/map/map");
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id='demo-source'>
+import { DefineMap, route, stache, stacheRouteHelpers } from "can";
 
-require("can-stache-route-helpers");
-
-var route = require("can-route");
+const template = stache.from('demo-html');
 
 route.register('{page}',{page: 'home'});
 route.start();
-
-var template = stache(document.getElementById('demo-html').innerHTML);
 
 document.body.appendChild( template(route.data) );
 </script>

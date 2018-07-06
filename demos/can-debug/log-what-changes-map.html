@@ -16,10 +16,8 @@
 	}
 </style>
 
-<script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" deps-bundle>
-var debug = require("can-debug");
-var stache = require("can-stache");
-var DefineMap = require("can-define/map/map");
+<script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" dev-bundle>
+import { DefineMap, debug, stache } from "can";
 
 var Person = DefineMap.extend("Person", {
 	first: "string",

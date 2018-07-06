@@ -8,11 +8,8 @@
 {{/each}}
 <p>You own: {{ownership()}}</p>
 </script>
-<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty">
-var DefineMap = require("can-define/map/map");
-var DefineList = require("can-define/list/list");
-var stache = require("can-stache");
-require("can-stache-converters");
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
+import { DefineList, DefineMap, stache, stacheConverters } from "can";
 
 var template = stache.from("demo-html");
 

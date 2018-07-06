@@ -9,21 +9,13 @@
 </div>
 </script>
 
-<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty">
-var stache = require("can-stache");
-var canViewCallbacks = require("can-view-callbacks");
-var DefineList = require("can-define/list/list");
-var DefineMap = require("can-define/map/map");
-var SimpleObservable = require("can-simple-observable");
-var domEvents = require("can-util/dom/events/events");
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
+import { DefineList, DefineMap, domEvents, SimpleObservable,
+	stache, stacheBindings, viewCallbacks } from "can";
+import $ from "jquery";
+import "jquery-ui/ui/widgets/tooltip";
 
-var $ = require("jquery");
-require("jquery-ui/ui/widgets/tooltip");
-
-require("can-stache-bindings");
-require("can-util/dom/events/attributes/attributes");
-
-canViewCallbacks.attr("toggle", function(el, attrData) {
+viewCallbacks.attr("toggle", function(el, attrData) {
 	var attrValue = el.getAttribute("toggle");
 	var toggleCompute = attrData.scope.compute(attrValue);
 
@@ -32,7 +24,7 @@ canViewCallbacks.attr("toggle", function(el, attrData) {
 	});
 });
 
-canViewCallbacks.attr("fade-in-when", function(el, attrData) {
+viewCallbacks.attr("fade-in-when", function(el, attrData) {
 	var attrValue = el.getAttribute("fade-in-when");
 	var fadeInCompute = attrData.scope.compute(attrValue);
 
@@ -49,7 +41,7 @@ canViewCallbacks.attr("fade-in-when", function(el, attrData) {
 
 	handler(fadeInCompute());
 
-	domEvents.addEventListener.call(el, "removed", function() {
+	domEvents.addEventListener(el, "removed", function() {
 		fadeInCompute.off("change", handler);
 	});
 });

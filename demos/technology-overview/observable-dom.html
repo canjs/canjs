@@ -1,7 +1,5 @@
-<script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" deps-bundle>
-import DefineMap from "can-define/map/map";
-import stache from "can-stache";
-import "can-stache-bindings";
+<script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" dev-bundle>
+import { DefineMap, stache, stacheBindings } from "can";
 
 var Counter = DefineMap.extend({
     count: {default: 0},

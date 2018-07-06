@@ -40,22 +40,13 @@
 </table>
 </script>
 
-<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty">
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
 
-var stache = require("can-stache");
-var canViewCallbacks = require("can-view-callbacks");
-var DefineList = require("can-define/list/list");
-var DefineMap = require("can-define/map/map");
-var domEvents = require("can-util/dom/events/events");
+import { DefineList, DefineMap, domEvents, stache, stacheBindings, viewCallbacks } from "can";
+import $ from "jquery";
+import "jquery-ui/ui/widgets/tooltip";
 
-var $ = require("jquery");
-require("jquery-ui/ui/widgets/tooltip");
-
-require("can-stache-bindings");
-require("can-util/dom/events/attributes/attributes");
-
-
-canViewCallbacks.attr("tooltip", function( el, attrData ) {
+viewCallbacks.attr("tooltip", function( el, attrData ) {
 	// A helper that updates or sets up the tooltip
 	var updateTooltip = function(){
 		$(el).tooltip({
@@ -64,7 +55,7 @@ canViewCallbacks.attr("tooltip", function( el, attrData ) {
 		})
 	}
 	// When the tooltip attribute changes, update the tooltip
-	domEvents.addEventListener.call(el, "attributes", function(ev){
+	domEvents.addEventListener(el, "attributes", function(ev){
 		if(ev.attributeName === "tooltip") {
 			updateTooltip();
 		}

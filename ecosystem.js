@@ -1,36 +1,33 @@
-var can = require("can-util/namespace");
+// Observables
+export { default as debug } from "./es/can-debug";
+export { default as defineBackup } from "./es/can-define-backup";
+export { default as defineStream } from "./es/can-define-stream";
+export { default as defineStreamKefir } from "./es/can-define-stream-kefir";
+export { default as kefir } from "./es/can-kefir";
+export { default as observe } from "./es/can-observe";
+export { default as stream } from "./es/can-stream";
+export { default as streamKefir } from "./es/can-stream-kefir";
 
-require("can-construct-super");
-require("can-connect-feathers");
-require("can-debug");
-//require("can-connect-signalr");
-//require("can-connect-cloneable");
-//require("can-connect-ndjson");
-require("can-define-backup");
-require("can-define-stream");
-require("can-define-stream-kefir");
-require("can-define-validate-validatejs");
-require("can-fixture");
-require("can-fixture-socket");
-//require("can-jquery");
-require("can-kefir");
-require("can-ndjson-stream");
-//if(typeof Proxy === "function"){
-//	require("can-observe");
-//}
-require("can-stache-converters");
-require("can-validate");
-require("can-validate-validatejs");
-require("can-view-import");
-//require("can-react-component");
-require("can-stream");
-require("can-stream-kefir");
-//require("can-zone");
-require("react-view-model");
 
-//if(typeof customElements !== "undefined") {
-	//require("can-element");
-//}
-//require("can-zone-storage");
+// Views
+export { default as stacheConverters } from "./es/can-stache-converters";
+export { default as viewAutorender } from "./es/can-view-autorender";
 
-module.exports = can;
+
+// Data Modeling
+export { default as superModel } from "./es/can-super-model";
+export { default as connectFeathers } from "./es/can-connect-feathers";
+export { default as connectTag } from "./es/can-connect-tag";
+export { default as fixtureSocket } from "./es/can-fixture-socket";
+export { default as ndjsonStream } from "./es/can-ndjson-stream";
+
+
+// Data Validation
+export { default as defineValidateValidatejs } from "./es/can-define-validate-validatejs";
+export { default as validate } from "./es/can-validate";
+export { default as validateValidatejs } from "./es/can-validate-validatejs";
+
+
+// DOM Utilities
+export { default as radioChangeEvent } from "./es/can-event-dom-radiochange";
+export { default as enterEvent } from "./es/can-event-dom-enter";

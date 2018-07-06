@@ -18,11 +18,8 @@
 {{/items}}
 </script>
 </div>
-<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty">
-var Component = require("can-component");
-var DefineMap = require("can-define/map/map");
-var DefineList = require("can-define/list/list");
-var stache = require("can-stache");
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
+import { Component, DefineList, DefineMap, stache } from "can";
 
 var SelectViewModel = DefineMap.extend("SelectViewModel", {
 	selected: {

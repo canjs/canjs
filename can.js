@@ -1,31 +1,3 @@
-var can = require("can-util/namespace");
-
-require("can-assign");
-require("can-bind");
-require("can-component");
-require("can-connect/all");
-require("can-define/map/map");
-require("can-define/list/list");
-require("can-route");
-require("can-set");
-require("can-simple-observable");
-require("can-stache");
-require("can-stache-route-helpers");
-require("can-stache-bindings");
-require("can-attribute-encoder");
-require("can-ajax");
-require("can-globals");
-require("can-reflect");
-require("can-define-lazy-value");
-require("can-dom-events");
-require("can-dom-events/helpers/add-jquery-events");
-require("can-event-dom-enter/add-global/add-global");
-require("can-event-dom-radiochange");
-require("can-key");
-require("can-parse-uri");
-require("can-types");
-require("can-validate-interface");
-require("can-value");
-require("can-view-model");
-
-module.exports = can;
+export * from "./core.js";
+export * from "./ecosystem.js";
+export * from "./legacy.js";

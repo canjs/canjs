@@ -15,13 +15,8 @@
 </ul>
 </script>
 </div>
-<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty" id='demo-source'>
-import "can-view-autorender";
-import "can-stache-bindings";
-import stache from "can-stache";
-import Component from "can-component";
-import DefineMap from "can-define/map/map";
-import DefineList from "can-define/list/list";
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id='demo-source'>
+import { Component, DefineList, DefineMap, stache, stacheBindings, viewAutorender } from "can";
 
 Component.extend({
 	tag: "my-app",

@@ -41,30 +41,27 @@
 </script>
 <script id="tree-combo-stash" type='text/stache'>
   <ul class='breadcrumb'>
-    <li on:click='emptyBreadcrumb()'>{{title}}</li>
+    <li on:click='./emptyBreadcrumb()'>{{title}}</li>
     {{#each(breadcrumb)}}
-      <li on:click='scope.root.updateBreadcrumb(this)'>{{title}}</li>
+      <li on:click='../updateBreadcrumb(this)'>{{title}}</li>
     {{/each}}
   </ul>
   <ul class='options'>
     <content>
       {{#selectableItems}}
-        <li {{#scope.root.isSelected(this)}}class='active'{{/isSelected}} on:click='scope.root.toggle(this)'>
+        <li {{#scope.root.isSelected(this)}}class='active'{{/isSelected}} on:click='../toggle(this)'>
           <input type='checkbox' {{#scope.root.isSelected(this)}}checked{{/isSelected}}/>
             {{title}}
           {{#if(children.length)}}
-            <button class='showChildren' on:click='scope.root.showChildren(.,scope.event)'>+</button>
+            <button class='showChildren' on:click='../showChildren(.,scope.event)'>+</button>
           {{/if}}
         </li>
       {{/selectableItems}}
     </content>
   </ul>
 </script>
-<script src="../../node_modules/steal/steal.js" deps-bundle main="@empty">
-var Component = require("can-component");
-var stache = require("can-stache");
-var DefineMap = require("can-define/map/map");
-var DefineList = require("can-define/list/list");
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
+import { Component, DefineList, DefineMap, stache } from "can";
 
 var ViewModel = DefineMap.extend({
 	items: {
