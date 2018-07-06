@@ -145,7 +145,7 @@ and [can-stache-bindings stacheBindings] to listen to user interactions and pass
 components.  The remainder of this guide breaks down these pieces and goes into more detail
 about how [can-component Component] works and how to use it.
 
-### Stache templates and bindings
+## Stache templates and bindings
 
 [can-stache] is used to create HTML that updates automatically when observable
 state changes. It uses magic tags to read values and perform simple logic. The following
@@ -175,45 +175,107 @@ observables. Use it to:
 
 - Call methods on observables when DOM events happen. The following uses
   [can-stache-bindings.event] to call `doSomething` with the `<input>`'s value on a `keyup` event:
-  ```js
-  import {stache} from "can";
+  ```html
+  <my-demo></my-demo>
 
-  var view = stache(`<input on:keyup="doSomething(scope.element.value)"/>`);
+  <script type="module">
+  import { Component } from "can";
 
-  var viewModel = {
-    doSomething(value) {
-      console.log("You wrote "+value);
-    }
-  };
-  document.body.appendChild( view(viewModel) );
+  Component.extend({
+      tag: "my-demo",
+      view: `<input on:keyup="doSomething(scope.element.value)"/>`,
+      ViewModel: {
+          doSomething(value) {
+            console.log("You wrote "+value);
+          }
+      }
+  });
+  </script>
   ```
-  @highlight 3
+  @highlight 8
   @codepen
 
 - Update observables with element attribute and property values.  The following uses [can-stache-bindings.toParent]
-  to send the `<input>`'s _value to_ an observable's `count` property.
-  ```js
-  import { stache, DefineMap } from "can";
+  to send the `<input>`'s _value to_ the [can-component.prototype.ViewModel]'s `count` property.
+  ```html
+  <my-demo></my-demo>
 
-  var view = stache(`<input value:to="count"/> Count: {{count}}`);
+  <script type="module">
+  import { Component } from "can";
 
-  var viewModel = new DefineMap({count: 0});
-  document.body.appendChild( view(viewModel) );
+  Component.extend({
+      tag: "my-demo",
+      view: `<input value:to="count"/> Count: {{count}}`,
+      ViewModel: {
+          count: "number"
+      }
+  });
+  </script>
   ```
+  @highlight 8
   @codepen
-  @highlight 3
+
 
 - Update element attribute and property values with observable values.  The following uses [can-stache-bindings.toChild]
-  to update the `<input>`'s _value from_  an observable's `count` property.
+  to update the `<input>`'s _value from_  the [can-component.prototype.ViewModel]'s `count` property.
   ```html
-  <input value:from="count"/>
+  <my-demo></my-demo>
+
+  <script type="module">
+  import { Component } from "can";
+
+  Component.extend({
+      tag: "my-demo",
+      view: `<input value:from="count"/>`,
+      ViewModel: {
+          count: {
+              // Makes count increase by 1 every
+              // second.
+              value(prop) {
+                  var count = prop.resolve(0);
+                  var timer = setInterval( () => {
+                      prop.resolve(++count);
+                  },1000);
+                  // Return a cleanup function
+                  // that is called when count
+                  // is longer used.
+                  return () => {
+                      clearTimeout(timer);
+                  };
+              }
+          }
+      }
+  });
+  </script>
   ```
+  @highlight 8
+  @codepen
 - Cross bind element attribute and property values with observable values.  The following uses
-  [can-stache-bindings.twoWay] to update the `<input>`'s _value_ from  an observable's `count` property
+  [can-stache-bindings.twoWay] to update the `<input>`'s _value_ from the [can-component.prototype.ViewModel]'s `count` property
   and vice versa:
   ```html
-  <input value:bind="count"/>
+  <my-demo></my-demo>
+
+  <script type="module">
+  import { Component } from "can";
+
+  Component.extend({
+      tag: "my-demo",
+      view: `
+          <input value:bind="count"/> Count: {{count}}
+          <button on:click="increment()">+1</button>
+      `,
+      ViewModel: {
+          count: "number",
+          increment() {
+              this.count++;
+          }
+      }
+  });
+  </script>
   ```
+  @highlight 9
+  @codepen
 
 The following demo:
 
@@ -225,7 +287,7 @@ The following demo:
 @demo demos/technology-overview/simple-todos.html
 
 
-### Components
+## Components
 
 The final core __view__ library is [can-component].
 
@@ -261,7 +323,7 @@ The demo defines the `<my-counter>` element with:
 
 - The `Counter` observable constructor as shown in the [Key-Value Observables](#Key_ValueObservables) section of this guide:
   ```js
-  import DefineMap from "can-define/map/map";
+  import {DefineMap} from "can";
   const Counter = DefineMap.extend({
       count: {default: 0},
       increment() {
@@ -271,7 +333,7 @@ The demo defines the `<my-counter>` element with:
   ```
 - The [can-stache] view that incremented the counter as shown in the beginning of this guide:
   ```js
-  import stache from "can-stache";
+  import {stache} from "can";
   const view = stache(`
     <button on:click='increment()'>+1</button>
     Count: <span>{{count}}</span>
@@ -279,7 +341,7 @@ The demo defines the `<my-counter>` element with:
   ```
 - A [can-component] that combines the `Counter` and `view` as follows:
   ```js
-  import Component from "can-component";
+  import {Component} from "can";
 
   Component.extend({
       tag: "my-counter",
@@ -306,7 +368,7 @@ Instead of creating the view, view-model as separate entities, they are
 often done together as follows:
 
 ```js
-import Component from "can-component";
+import {Component} from "can";
 
 Component.extend({
     tag: "my-counter",
@@ -327,7 +389,7 @@ Component.extend({
 and define a [can-define/map/map DefineMap] type from a plain
 object [can-component.prototype.ViewModel] value. This is a useful short-hand for creating components. __We will use it for all components going forward.__
 
-#### Passing data to and from components
+### Passing data to and from components
 
 Components are created by inserting their [can-component.prototype.tag] in the DOM or
 another [can-stache] view. For example, `<my-counter></my-counter>` creates an instance of the
