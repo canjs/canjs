@@ -16,7 +16,14 @@ before_install:
 - "echo 'This is running'"
 after_install:
 - "echo 'Install has finished'"
-script: npm run ci
+env:
+  - TEST_SUITE=sauce-labs
+  - TEST_SUITE=development
+  - TEST_SUITE=production
+  - TEST_SUITE=builders
+  - TEST_SUITE=global-build
+script:
+  - "npm run test-$TEST_SUITE"
 before_script:
   - npm run http-server &
   - sleep 2

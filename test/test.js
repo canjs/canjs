@@ -84,8 +84,3 @@ require('can-define-validate-validatejs/test');
 // require('can-jquery/test/test');
 // require('can-vdom/test/test');
 require('can-view-autorender/test/test');
-
-
-// Integration tests
-require('../docs/can-guides/experiment/todomvc/test');
-require('./integration/all/test');
