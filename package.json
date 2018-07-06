@@ -219,7 +219,7 @@
     },
     "altVersions": {
       "5.0.0": "https://canjs.com",
-      "4.3.0": "https://v4canjs.com",
+      "4.3.0": "https://v4.canjs.com",
       "2.3.35": "https://v2.canjs.com"
     },
     "parent": "canjs",
