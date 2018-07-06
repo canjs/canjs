@@ -42,7 +42,7 @@ The code for that <u>entire</u> page looks like this:
 <my-counter></my-counter>
 
 <script type="module">
-import { Component } from "https://unpkg.com/can/dist/global/can.mjs";
+import { Component } from "https://unpkg.com/can/core.mjs";
 
 Component.extend({
     tag: "my-counter",
@@ -62,7 +62,7 @@ Component.extend({
 ```
 
 Yes, you do __not__ need a build system to get started with CanJS! Copy the code above into your favorite HTML page or
-[play with it in a JS Bin](http://justinbmeyer.jsbin.com/pubiqoc/1/edit?html,js,output).
+[play with it in a CodePen](https://codepen.io/justinbmeyer/pen/VdJVbe?editors=1010).
 
 This page has 3 main parts.
 
