@@ -55,6 +55,16 @@ var platforms = [/*{
 
 var url = 'http://canjs.test:3000/test/index.html?hidepassed';
 
+var platformFilter = process.env.TEST_PLATFORMS;
+
+if (platformFilter) {
+	platformFilter = platformFilter.split(',');
+
+	platforms = platforms.filter(function(platform) {
+		return platformFilter.indexOf(platform.browserName) > -1;
+	});
+}
+
 testSauceLabs({
 	urls: [{ name: "canjs", url : url }],
 	platforms: platforms,
