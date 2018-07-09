@@ -1,8 +1,10 @@
-can.Component.extend({
+import { Component } from "//unpkg.com/can@5/core.mjs";
+
+Component.extend({
   tag: "rich-text-editor",
   view: `
     <div class="controls">
-      <button on:click='exec("bold")' class='bold'>B</button>
+      <button on:click="exec('bold')" class="bold">B</button>
     </div>
     <div class="editbox" contenteditable="true">
       <ol>
@@ -15,12 +17,12 @@ can.Component.extend({
     </div>
   `,
   ViewModel: {
-    exec(cmd){
-      document.execCommand(cmd, false, false);
+    exec(cmd) {
+      document.execCommand(cmd, false, null);
     }
   }
 });
 
-function getElementsInRange(range, wrapNodeName) { }
+function getElementsInRange(range, wrapNodeName) {}
 
-function rangeContains(outer, inner) { }
+function rangeContains(outer, inner) {}

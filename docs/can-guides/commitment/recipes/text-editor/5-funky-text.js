@@ -1,11 +1,13 @@
-can.Component.extend({
+import { Component } from "//unpkg.com/can@5/core.mjs";
+
+Component.extend({
   tag: "rich-text-editor",
   view: `
     <div class="controls">
-      <button on:click='exec("bold")' class='bold'>B</button>
-      <button on:click='exec("italic")' class='italic'>I</button>
-      <button on:click='copyAll()'>Copy All</button>
-      <button on:click='funky()' class="funky">Funky</button>
+      <button on:click="exec('bold')" class="bold">B</button>
+      <button on:click="exec('italic')" class="italic">I</button>
+      <button on:click="copyAll()">Copy All</button>
+      <button on:click="funky()" class="funky">Funky</button>
     </div>
     <div class="editbox" contenteditable="true">
       <ol>
@@ -18,14 +20,14 @@ can.Component.extend({
     </div>
   `,
   ViewModel: {
-    exec(cmd){
-      document.execCommand(cmd, false, false);
+    exec(cmd) {
+      document.execCommand(cmd, false, null);
     },
     element: "any",
     connectedCallback(el) {
       this.element = el;
     },
-    copyAll(){
+    copyAll() {
       const editBox = this.element.querySelector(".editbox");
       const editBoxRange = document.createRange();
       editBoxRange.selectNodeContents(editBox);
@@ -38,10 +40,10 @@ can.Component.extend({
     },
     funky() {
       const selection = window.getSelection();
-      if(selection && selection.rangeCount) {
+      if (selection && selection.rangeCount) {
         const selectedRange = selection.getRangeAt(0);
-        getElementsInRange(selectedRange,"span").forEach((el) => {
-          el.classList.add("funky")
+        getElementsInRange(selectedRange, "span").forEach(el => {
+          el.classList.add("funky");
         });
       }
     }
@@ -56,4 +58,4 @@ function getElementsInRange(range, wrapNodeName) {
   return elements;
 }
 
-function rangeContains(outer, inner) { }
+function rangeContains(outer, inner) {}

@@ -1,16 +1,14 @@
-<body>
-  <h1>Composer</h1>
-  <rich-text-editor></rich-text-editor>
+<h1>Composer</h1>
+<rich-text-editor></rich-text-editor>
 
-<script src="https://unpkg.com/can/dist/global/can.js"></script>
 <script>
 // from start, this will try `direction` (nextSibling or previousSibling)
 // and call `callback` with each sibling until there are no more siblings
 // it will then move up the parent.  It will end with the parent’s parent is `parent`.
-function siblingThenParentUntil(direction, start, parent, callback){
+function siblingThenParentUntil(direction, start, parent, callback) {
   let cur = start;
-  while(cur.parentNode !== parent) {
-    if(cur[direction]) {
+  while (cur.parentNode !== parent) {
+    if (cur[direction]) {
       // move to sibling
       cur = cur[direction];
       callback(cur);
@@ -22,23 +20,25 @@ function siblingThenParentUntil(direction, start, parent, callback){
   return cur;
 }
 
-function splitRangeStart(range, wrapNodeName){
+function splitRangeStart(range, wrapNodeName) {
   const startContainer = range.startContainer;
   const startWrap = document.createElement(wrapNodeName);
   startWrap.textContent = startContainer.nodeValue.substr(range.startOffset);
-  startContainer.nodeValue = startContainer.nodeValue.substr(0,range.startOffset);
+  startContainer.nodeValue = startContainer.nodeValue.substr(
+    0,
+    range.startOffset
+  );
   startContainer.parentNode.insertBefore(startWrap, startContainer.nextSibling);
   return startWrap;
 }
 
-function splitRangeEnd(range, wrapNodeName){
+function splitRangeEnd(range, wrapNodeName) {
   const endContainer = range.endContainer;
   const endWrap = document.createElement(wrapNodeName);
-  endWrap.textContent = endContainer.nodeValue.substr(0,range.endOffset);
+  endWrap.textContent = endContainer.nodeValue.substr(0, range.endOffset);
   endContainer.nodeValue = endContainer.nodeValue.substr(range.endOffset);
   endContainer.parentNode.insertBefore(endWrap, endContainer);
   return endWrap;
 }
-
 </script>
 </body>

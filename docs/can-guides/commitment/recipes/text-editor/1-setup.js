@@ -1,4 +1,6 @@
-can.Component.extend({
+import { Component } from "//unpkg.com/can@5/core.mjs";
+
+Component.extend({
   tag: "rich-text-editor",
   view: `
     <div class="editbox" contenteditable="true">
@@ -13,6 +15,6 @@ can.Component.extend({
   `
 });
 
-function getElementsInRange(range, wrapNodeName) { }
+function getElementsInRange(range, wrapNodeName) {}
 
-function rangeContains(outer, inner) { }
+function rangeContains(outer, inner) {}
