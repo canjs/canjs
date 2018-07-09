@@ -18,7 +18,7 @@ The final widget looks like:
   CanJS Canvas Clock on jsbin.com
 </a>
 
-The following sections are broken down the following parts:
+The following sections are broken down into the following parts:
 
 - __The problem__ — A description of what the section is trying to accomplish.
 - __What you need to know__ — Information about CanJS that is useful for solving the problem.

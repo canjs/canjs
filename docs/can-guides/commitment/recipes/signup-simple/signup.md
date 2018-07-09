@@ -206,7 +206,7 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-Lets make a request to `GET /api/session` to know if there is a
+Let’s make a request to `GET /api/session` to know if there is a
 session.  If there is a session, we will print out the user’s email address.  If there
 is not a session, we will show the _Sign Up_ form.
 
@@ -333,7 +333,7 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-Lets update the app to log the user out when the _log out_ button is clicked.  We can
+Let’s update the app to log the user out when the _log out_ button is clicked.  We can
 do this by making a `DELETE` request to `/api/session` and updating the `sessionPromise`
 property to have a rejected value.
 
@@ -372,7 +372,7 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-Lets allow the user to go back and forth between the _Sign Up_ page and the _Log In_
+Let’s allow the user to go back and forth between the _Sign Up_ page and the _Log In_
 page. We’ll do this by changing a `page` property to `"signup"` or `"login"`.
 
 We’ll also implement the _Log In_ form’s functionality.  When a session is created,

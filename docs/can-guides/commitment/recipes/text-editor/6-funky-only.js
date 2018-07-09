@@ -1,11 +1,13 @@
-can.Component.extend({
+import { Component } from "//unpkg.com/can@5/core.mjs";
+
+Component.extend({
   tag: "rich-text-editor",
   view: `
     <div class="controls">
-      <button on:click='exec("bold")' class='bold'>B</button>
-      <button on:click='exec("italic")' class='italic'>I</button>
-      <button on:click='copyAll()'>Copy All</button>
-      <button on:click='funky()' class="funky">Funky</button>
+      <button on:click="exec('bold')" class="bold">B</button>
+      <button on:click="exec('italic')" class="italic">I</button>
+      <button on:click="copyAll()">Copy All</button>
+      <button on:click="funky()" class="funky">Funky</button>
     </div>
     <div class="editbox" contenteditable="true">
       <ol>
@@ -18,14 +20,14 @@ can.Component.extend({
     </div>
   `,
   ViewModel: {
-    exec(cmd){
-      document.execCommand(cmd, false, false);
+    exec(cmd) {
+      document.execCommand(cmd, false, null);
     },
     element: "any",
     connectedCallback(el) {
       this.element = el;
     },
-    copyAll(){
+    copyAll() {
       const editBox = this.element.querySelector(".editbox");
       const editBoxRange = document.createRange();
       editBoxRange.selectNodeContents(editBox);
@@ -42,10 +44,10 @@ can.Component.extend({
       editBoxRange.selectNodeContents(editBox);
 
       const selection = window.getSelection();
-      if(selection && selection.rangeCount) {
+      if (selection && selection.rangeCount) {
         const selectedRange = selection.getRangeAt(0);
-        if(rangeContains( editBoxRange, selectedRange) ) {
-          getElementsInRange(selectedRange,"span").forEach((el) => {
+        if (rangeContains(editBoxRange, selectedRange)) {
+          getElementsInRange(selectedRange, "span").forEach(el => {
             el.classList.add("funky");
           });
         }
@@ -63,6 +65,8 @@ function getElementsInRange(range, wrapNodeName) {
 }
 
 function rangeContains(outer, inner) {
-  return outer.compareBoundaryPoints(Range.START_TO_START,inner) <= 0 &&
-    outer.compareBoundaryPoints(Range.END_TO_END,inner) >= 0;
+  return (
+    outer.compareBoundaryPoints(Range.START_TO_START, inner) <= 0 &&
+    outer.compareBoundaryPoints(Range.END_TO_END, inner) >= 0
+  );
 }
