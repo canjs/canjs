@@ -52,7 +52,7 @@
     "can-attribute-encoder": "1.1.0",
     "can-attribute-observable": "1.0.0",
     "can-bind": "1.0.0",
-    "can-child-nodes": "1.0.0",
+    "can-child-nodes": "1.2.0",
     "can-cid": "1.1.2",
     "can-component": "4.2.2",
     "can-compute": "4.1.0",
