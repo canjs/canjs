@@ -11,7 +11,7 @@
     "testee-production": "testee test/production.html --browsers firefox",
     "testee-global-build": "testee test/global-build.html --browsers firefox",
     "http-server": "http-server -p 3000 --silent",
-    "test": "npm run test-development && npm run test-production && npm run test-builders",
+    "test": "npm run test-development && npm run test-production && npm run test-builders && npm run test-global-build",
     "test-builders": "npm run build-webpack-test && npm run testee-builders",
     "test-development": "npm run testee",
     "test-global-build": "npm run build && npm run testee-global-build",
