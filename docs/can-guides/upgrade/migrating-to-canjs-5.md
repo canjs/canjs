@@ -109,7 +109,7 @@ CanJS 5.0:
 
     const todoQueryLogic = new QueryLogic(Todo,{
         toQuery(params){
-            var query = {...params};
+            let query = {...params};
             if(query.orderBy != null) {
                 query.sort = query.orderBy;
                 delete query.orderBy;
@@ -117,7 +117,7 @@ CanJS 5.0:
             return query;
         },
         toParams(query){
-            var params = {...query};
+            let params = {...query};
             if(params.orderBy != null) {
                 params.sort = params.orderBy;
                 delete params.orderBy;
@@ -210,7 +210,7 @@ const Todo = DefineMap.extend({
 });
 Todo.List = DefineList.extend({"#": Todo, ...});
 
-var todoQueryLogic = new QueryLogic(Todo,{
+let todoQueryLogic = new QueryLogic(Todo,{
     toQuery(params){
         return {filter: params};
     },
@@ -314,7 +314,7 @@ In 4.0, [can-connect/can/map/map can-connect/can/map/map] performed __assignment
 from the server. For example, if a todo was created as follows:
 
 ```js
-var todo = new Todo({
+const todo = new Todo({
     name: "laundry",
     complete: false
 }).save();
@@ -564,7 +564,7 @@ const Todo = DefineMap.extend({
 
 const todoQueryLogic = new QueryLogic(Todo,{
     toQuery(params){
-        var query = {...params};
+        let query = {...params};
         if(query.orderBy != null) {
             query.sort = query.orderBy;
             delete query.orderBy;
@@ -583,7 +583,7 @@ const todoQueryLogic = new QueryLogic(Todo,{
         return query;
     },
     toParams(query){
-        var params = {...query};
+        let params = {...query};
         if(params.orderBy != null) {
             params.sort = params.orderBy;
             delete params.orderBy;

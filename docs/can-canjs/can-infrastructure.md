@@ -30,7 +30,7 @@ Person.prototype.method = function(){ ... };
 assign(Person.prototype, canEvent);
 
 // Create an instance
-var me = new Person();
+const me = new Person();
 
 // Now listen and dispatch events!
 me.addEventListener("name", function(){ ... });
@@ -56,7 +56,7 @@ import assign from 'can-util/js/assign/assign';
 // Create the Person type
 function Person(){};
 Person.prototype.setName = function(newName){
-	var oldName = this.name;
+	let oldName = this.name;
 	this.name = newName;
 	this.dispatch("name", [newName, oldName]);
 };
@@ -70,11 +70,11 @@ The `Observation` constructor can be used, similar to a [can-compute] to observe
 a function’s return value by tracking calls to `Observation.add`
 
 ```js
-var person = new Person();
+const person = new Person();
 person.setName("Justin");
 
 
-var greetingObservation = new Observation(function(){
+const greetingObservation = new Observation(function(){
 	return person.getName() + " says hi!";
 }, null, function(newValue){
 	console.log(newValue);
@@ -88,7 +88,7 @@ person.setName("Matt") //-> console.logs "Matt says hi!";
 
 ## can-util
 
-[can-util] is a collection of many different modules that provide various JavaScript
+[can-util] is a collection of many different modules that provide letious JavaScript
 and DOM related utilities.
 
 ### DOM Utilities
@@ -141,9 +141,9 @@ import live from 'can-view-live';
 import compute from 'can-compute';
 import frag from 'can-util/dom/frag/frag';
 
-var message = compute("World");
+let message = compute("World");
 
-var content = frag("Hello","","!");
+let content = frag("Hello","","!");
 
 live.text(content.childNodes[1], message);
 
@@ -183,9 +183,9 @@ html content resulting from that helper (`<b>Justin</b>`).
 ```js
 import parser from 'can-view-parser';
 
-var html = '<h1><span first="foo"></span><span second="bar"></span></h1>';
+let html = '<h1><span first="foo"></span><span second="bar"></span></h1>';
 
-var attrs = [];
+let attrs = [];
 
 parser(html, {
     attrStart: function(attrName){
@@ -202,12 +202,12 @@ attrs //-> ["first", "second"]
 to a call object in closure in JavaScript.  Consider how `message`, `first`, and `last` are looked up in the following JavaScript:
 
 ```js
-var message = "Hello"
+let message = "Hello"
 function outer(){
-    var last = "Abril";
+    let last = "Abril";
 
     function inner(){
-        var first = "Alexis";
+        let first = "Alexis";
         console.log(message + " "+ first + " " + last);
     }
     inner();
@@ -218,9 +218,9 @@ outer();
 [can-view-scope] can be used to create a similar lookup path:
 
 ```js
-var globalScope = new Scope({message: "Hello"});
-var outerScope = globalScope.add({last: "Abril"});
-var innerScope = outerScope.add({first: "Alexis"});
+let globalScope = new Scope({message: "Hello"});
+let outerScope = globalScope.add({last: "Abril"});
+let innerScope = outerScope.add({first: "Alexis"});
 innerScope.get("message") //-> Hello
 innerScope.get("first")   //-> Alexis
 innerScope.get("last")    //-> Abril
@@ -234,7 +234,7 @@ have callbacks called quickly on specific elements within the cloned fragment.
 ```js
 import viewTarget from 'can-view-target';
 
-var target = viewTarget([
+let target = viewTarget([
     {
         tag: "h1",
         callbacks: [function(data){
@@ -252,7 +252,7 @@ var target = viewTarget([
 // target.clone -> <h1>|Hello||</h1>
 // target.paths -> path: [0], callbacks: [], children: {paths: [1], callbacks:[function(){}]}
 
-var fragment = target.hydrate({className: "title", message: "World"});
+let fragment = target.hydrate({className: "title", message: "World"});
 
 // fragment -> <h1 class='title'>Hello World</h1>
 ```
@@ -263,8 +263,8 @@ var fragment = target.hydrate({className: "title", message: "World"});
 
 ```js
 import cid from 'can-cid';
-var x = {};
-var y = {};
+const x = {};
+const y = {};
 
 console.log(cid(x, "demo")); // -> "demo1"
 console.log(cid(x, "prod")); // -> "demo1"
@@ -277,7 +277,7 @@ console.log(cid(y));         // -> "2"
 
 ```js
 import types from 'can-types';
-var oldIsMapLike = types.isMapLike;
+let oldIsMapLike = types.isMapLike;
 types.isMapLike = function(obj){
   return obj instanceof DefineMap || oldIsMapLike.apply(this, arguments);
 };
@@ -291,7 +291,7 @@ types.DefaultMap = DefineMap;
 ```js
 import namespace from 'can-namespace';
 
-var unicorn = {
+const unicorn = {
 	// ...
 };
 
@@ -308,9 +308,9 @@ export default namespace.unicorn = unicorn;
 [can-symbol] contains Symbols used to detail how CanJS may operate on different objects.
 
 ```js
-var MyIDSymbol = CanSymbol("my_ID");
+let MyIDSymbol = CanSymbol("my_ID");
 
-var obj = {};
+const obj = {};
 obj[MyIDSymbol] = 1;
 ```
 
@@ -319,7 +319,7 @@ obj[MyIDSymbol] = 1;
 [can-reflect] allows reflection on unknown data types.
 
 ```js
-var foo = new DefineMap({ bar: "baz" });
+const foo = new DefineMap({ bar: "baz" });
 
 canReflect.getKeyValue(foo, "bar"); // -> "baz"
 ```

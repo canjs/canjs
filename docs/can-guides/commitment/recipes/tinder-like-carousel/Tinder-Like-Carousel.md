@@ -306,7 +306,7 @@ as the user creates a drag motion.
     ViewModel: {
       ...
       connectedCallback(el) {
-        var current = el.querySelector(".current");
+        let current = el.querySelector(".current");
       }
     }
   ```

@@ -435,7 +435,7 @@ const HelloWorldComponent = ng.core.Component({
   }
 });
 
-var AppComponent = ng.core.Component({
+let AppComponent = ng.core.Component({
   selector: 'app',
   template: '<hello-world></hello-world>',
   directives: [HelloWorldComponent]

@@ -20,7 +20,7 @@ method that loops through properties and values on an `DefineMap`:
 ```js
 import DefineMap from 'can-define/map/map';
 
-var map = new DefineMap({name: "Justin"});
+let map = new DefineMap({name: "Justin"});
 
 map.forEach(function(value, property){
 
@@ -119,7 +119,7 @@ Because of how JavaScript works, this means that you can call `.concat` directly
 of `DefineList`:
 
 ```js
-var hobbies = new DefineList(["learning"]);
+let hobbies = new DefineList(["learning"]);
 hobbies.concat(["programming"]);
 ```
 
@@ -145,7 +145,7 @@ of the [can-fixture/StoreType Store type].
 ```js
 import fixture from 'can-fixture';
 
-var todoStore = fixture.store([{id: 1, name: "trash"}]);
+let todoStore = fixture.store([{id: 1, name: "trash"}]);
 
 todoStore.createData  //-> function
 todoStore.destroyData //-> function

@@ -17,7 +17,7 @@ For example, if you have a module `can-unicorn` that you want to make sure is on
 ```js
 import namespace from 'can-namespace';
 
-var unicorn = {
+const unicorn = {
 	// ...
 };
 

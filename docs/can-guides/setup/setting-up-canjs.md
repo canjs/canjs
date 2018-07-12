@@ -628,13 +628,13 @@ Browserify does not support tree-shaking, so the individual packages must be req
 instead of importing [can-component Component] like:
 
 ```js
-var Component = require("can").Component;
+const Component = require("can").Component;
 ```
 
 You should do it like:
 
 ```js
-var Component = require("can-component");
+const Component = require("can-component");
 ```
 
 [After setting up Node.js and npm](#Node_jsandnpm), install [can-component]

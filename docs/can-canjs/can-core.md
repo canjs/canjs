@@ -27,7 +27,7 @@ own value and notify listeners of changes like:
 
 import value from 'can-value';
 
-var name = value.fromValue("Justin");
+let name = value.fromValue("Justin");
 
 // read the value
 name.value //-> "Justin"
@@ -49,11 +49,11 @@ import DefineMap from 'can-define/map/map';
 import DefineList from 'can-define/list/list';
 import value from 'can-value';
 
-var person = new DefineMap({first: "Justin", last: "Meyer"}),
+let person = new DefineMap({first: "Justin", last: "Meyer"}),
 	hobbies = new DefineList(["js","bball"]),
 	age = value.fromValue(33);
 
-var info = value.returnedBy(function(){
+let info = value.returnedBy(function(){
 	return person.first +" "+ person.last+ " is "+age()+
 		"and like "+hobbies.join(", ")+".";
 });
@@ -79,7 +79,7 @@ For example, you can define the behavior of a `Todo` type and a `TodoList` type 
 import DefineMap from 'can-define/map/map';
 import DefineList from 'can-define/list/list';
 
-var Todo = DefineMap.extend({           // A todo has a:
+const Todo = DefineMap.extend({           // A todo has a:
   name: "string",                       // .name that’s a string
   complete: {                           // .complete that’s
 	type: "boolean",                    //        a boolean
@@ -94,7 +94,7 @@ var Todo = DefineMap.extend({           // A todo has a:
   }
 });
 
-var TodoList = DefineList.extend({      // A list of todos:     
+const TodoList = DefineList.extend({      // A list of todos:     
   "#": Todo,                            // has numeric properties
                                         //         as todos
 
@@ -109,7 +109,7 @@ This allows you to create a Todo, read its properties, and
 call back its methods like:
 
 ```js
-var dishes = new Todo({
+const dishes = new Todo({
 	name: "do dishes",
 	// due yesterday
 	dueDate: new Date() - 1000 * 60 * 60 * 24
@@ -125,7 +125,7 @@ And it allows you to create a `TodoList`, access its items and properties
 like:
 
 ```js
-var todos = new TodoList( dishes, {name: "mow lawn", dueDate: new Date()});
+const todos = new TodoList( dishes, {name: "mow lawn", dueDate: new Date()});
 todos.length         //-> 2
 todos[0].complete    //-> true
 todos.completeCount //-> 1
@@ -144,7 +144,7 @@ A `todosAlgebra` set algebra for a `GET /api/todos` service might look like:
 
 ```js
 import set from 'can-set';
-var todosAlgebra = new set.Algebra(
+let todosAlgebra = new set.Algebra(
     // specify the unique identifier property on data
     set.prop.id("_id"),  
     // specify that completed can be true, false or undefined
@@ -189,18 +189,18 @@ import DefineMap from 'can-define/map/map';
 import DefineList from 'can-define/list/list';
 import set from 'can-set';
 
-var Todo = DefineMap.extend({
+const Todo = DefineMap.extend({
 	...
 });
-var TodosList = DefineMap.extend({
+const TodosList = DefineMap.extend({
 	"#": Todo,
 	...
 });
-var todosAlgebra = new set.Algebra({
+const todosAlgebra = new set.Algebra({
 	...
 });
 
-var connection = baseMap({
+const connection = baseMap({
 	url: "/api/todos",
 	Map: Todo,
 	List: TodoList,
@@ -222,7 +222,7 @@ the ability to make requests to the service layer.
    ```
  - [can-connect/can/map/map.prototype.save Create] a Todo
    ```js
-   var todo = new Todo({name: "do dishes", complete: false})
+   const todo = new Todo({name: "do dishes", complete: false})
    todo.save().then(function(todo){})
    ```
  - [can-connect/can/map/map.prototype.save Update] an [can-connect/can/map/map.prototype.isNew already created] Todo
@@ -244,14 +244,14 @@ import dataUrl from 'can-connect/data-url/data-url';
 import constructor from 'can-connect/constructor/constructor';
 import map from 'can-connect/can/map/map';
 
-var options = {
+const options = {
 	url: "/api/todos",
 	Map: Todo,
 	List: TodoList,
 	algebra: todosAlgebra,
 	name: "todo"
 }
-var connection = map(constructor(dataUrl(base(options))));
+const connection = map(constructor(dataUrl(base(options))));
 ```
 
 ## can-stache
@@ -265,7 +265,7 @@ promise loaded from `Todo.getList` like:
 import stache from 'can-stache';
 
 // Creates a template
-var template = stache(
+let template = stache(
 	"<ul>"+
 		"{{#if(todos.isPending)}}<li>Loading…</li>{{/if}}"+
 		"{{#if(todos.isResolved)}}"+
@@ -278,7 +278,7 @@ var template = stache(
 	"</ul>");
 
 // Calls the template with some data
-var fragment = template({
+let fragment = template({
 	todos: Todo.getList({})
 });
 
@@ -307,7 +307,7 @@ import DefineMap from 'can-define/map/map';
 import stache from 'can-stache';
 
 // Defines the todos-list view model
-var TodosListVM = DefineMap.extend({
+let TodosListVM = DefineMap.extend({
 	// An initial value that is a promise containing the
 	// list of all todos.
 	todos: {
@@ -402,7 +402,7 @@ url. Create a map type, [canjs/doc/can-route.map connect it to the url], and [ca
 import route from 'can-route';
 import DefineMap from 'can-define/map/map';
 
-var AppViewModel = DefineMap.extend({
+const AppViewModel = DefineMap.extend({
 	seal: false
 },{
 	// Sets the default type to string
@@ -417,7 +417,7 @@ var AppViewModel = DefineMap.extend({
 	}
 });
 
-var appViewModel = new AppViewModel();
+const appViewModel = new AppViewModel();
 route.map(appViewModel);
 
 route.start();
