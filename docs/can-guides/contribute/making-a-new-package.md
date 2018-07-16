@@ -155,16 +155,16 @@ If you can't you might need to:
 - Add your pacakge's export to [can-namespace] like:
 
   ```js
-  var namespace = require("can-namespace");
+  let namespace = require("can-namespace");
 
-  var myCoolThing = {};
+  const myCoolThing = {};
   module.exports = can.myCoolThing = myCoolThing
   ```
 
 - Make sure to exclude any 3rd-party projects from `canjs/build.js` like:
 
   ```js
-  var ignoreModuleNamesStartingWith = [
+  let ignoreModuleNamesStartingWith = [
   	"jquery",
 	"SOME_OTHER_LIBRARY"
   	...
@@ -174,7 +174,7 @@ If you can't you might need to:
   And train them to be loaded globally on the `window` like:
 
   ```js
-  var exportsMap = {
+  let exportsMap = {
       "jquery": "jQuery",
       "SOME_OTHER_LIBRARY": "SomeOtherLibrary"
 	  ...
@@ -185,10 +185,10 @@ If you can't you might need to:
   the library:
 
   ```js
-  var namespace = require("can-namespace");
-  var SomeOtherLibrary = require("SOME_OTHER_LIBRARY");
+  let namespace = require("can-namespace");
+  let SomeOtherLibrary = require("SOME_OTHER_LIBRARY");
 
-  var myCoolThing;
+  let myCoolThing;
   if(SomeOtherLibrary) {
 	  myCoolThing = SomeOtherLibrary({});
   }

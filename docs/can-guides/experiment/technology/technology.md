@@ -151,14 +151,14 @@ const Counters = DefineList.extend({
 
     get sum(){
         // Loop through each counter and sum its count;
-        var sum = 0;
+        let sum = 0;
         this.forEach( (counter) => sum += counter.count );
         return sum;
     }
 });
 
 // Create an instance of Counters
-var myCounters = new Counters([
+let myCounters = new Counters([
     new Counter(),
     new Counter({count: 3}),
     // Plain objects will be converted to Counter instances.
@@ -445,7 +445,7 @@ restModel({
 mockServices();
 
 // Gets a Promise that resolves to a `Todo.List` of `Todo` instances.
-var todosPromise = Todo.getList();
+let todosPromise = Todo.getList();
 todosPromise.then(function(todos){
     // .get() converts the Todo instances back to plain JS objects
     // for easier to read logging.
@@ -456,15 +456,15 @@ todosPromise.then(function(todos){
 // 20 randomized todos due between last week and 4 weeks from now.
 import {fixture} from "can";
 function mockServices(){
-  var terms = ["can you","please","","","",""],
+  let terms = ["can you","please","","","",""],
     verbs = ["clean","walk","do","vacuum","organize","fold","wash","dust","pay","cook","get","take out"],
     subjects = ["dog","laundry","diapers","clothes","car","windows","carpet","taxes","food","gas","trash"];
 
-  var dayInMS = 24*60*60*1000;
-  var lastWeek = new Date() - (7*dayInMS);
-  var fourWeeks = new Date().getTime() + (4*7*dayInMS);
+  let dayInMS = 24*60*60*1000;
+  let lastWeek = new Date() - (7*dayInMS);
+  let fourWeeks = new Date().getTime() + (4*7*dayInMS);
 
-  var todoStore = fixture.store(20, function(){
+  const todoStore = fixture.store(20, function(){
       return {
           complete: fixture.rand([true, false],1)[0],
           dueDate: new Date( fixture.rand(lastWeek, fourWeeks) ).toString(),
@@ -539,15 +539,15 @@ Component.extend({
 
 import {fixture} from "can";
 function mockServices(){
-  var terms = ["can you","please","","","",""],
+  let terms = ["can you","please","","","",""],
     verbs = ["clean","walk","do","vacuum","organize","fold","wash","dust","pay","cook","get","take out"],
     subjects = ["dog","laundry","diapers","clothes","car","windows","carpet","taxes","food","gas","trash"];
 
-  var dayInMS = 24*60*60*1000;
-  var lastWeek = new Date() - (7*dayInMS);
-  var fourWeeks = new Date().getTime() + (4*7*dayInMS);
+  let dayInMS = 24*60*60*1000;
+  let lastWeek = new Date() - (7*dayInMS);
+  let fourWeeks = new Date().getTime() + (4*7*dayInMS);
 
-  var todoStore = fixture.store(20, function(){
+  const todoStore = fixture.store(20, function(){
       return {
           complete: fixture.rand([true, false],1)[0],
           dueDate: new Date( fixture.rand(lastWeek, fourWeeks) ).toString(),

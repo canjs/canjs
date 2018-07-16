@@ -124,7 +124,7 @@ in a modal instead of "light DOM".
 
 - Component instances can be created like:
   ```js
-  var component = new ProgrammerQuestions({
+  let component = new ProgrammerQuestions({
       viewModel: {
           programmingLanguage: "JS"
       }
@@ -143,7 +143,7 @@ in a modal instead of "light DOM".
   ViewModel: {
       programmerQuestions: {
           default(){
-              return var component = new ProgrammerQuestions({
+              return let component = new ProgrammerQuestions({
                   viewModel: {
                       programmingLanguage: value.bind(this, "programmingLanguage")
                   }

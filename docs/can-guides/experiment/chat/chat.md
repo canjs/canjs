@@ -27,14 +27,14 @@ WebPack or Browserify.  In a real app, your code will look like:
 import DefineMap from 'can-define/map/map';
 import DefineList from 'can-define/list/list';
 
-var Message = DefineMap.extend({ ... });
+let Message = DefineMap.extend({ ... });
 Message.List = DefineList.extend({ ... });
 ```
 
 Not:
 
 ```js
-var Message = can.DefineMap.extend({ ... });
+let Message = can.DefineMap.extend({ ... });
 Message.List = can.DefineList.extend({ ... });
 ```
 

@@ -116,12 +116,12 @@ import DefineList from 'can-define/list/list';
 import DefineMap from 'can-define/map/map';
 import compute from 'can-compute';
 
-var todoList = new DefineList([
+let todoList = new DefineList([
     {name: "dishes",  complete: true},
     {name: "laundry", complete: false}
 ]);
 
-var completedCount = compute(function(){
+let completedCount = compute(function(){
     return todoList.filter(function(todo){
         return todo.complete;
     });
@@ -153,7 +153,7 @@ In event stream libraries or other computed libraries, you must declare your
 dependencies like:
 
 ```js
-var fullNameStream = Kefir.combine(firstNameStream, lastNameStream, function(firstName, lastName){
+let fullNameStream = Kefir.combine(firstNameStream, lastNameStream, function(firstName, lastName){
     return firstName + " " + lastName;
 });
 ```
@@ -169,7 +169,7 @@ fullName: Ember.computed('firstName', 'lastName', function() {
 [can-compute] infers its own dependencies without needing to explicitly declare them, therefore requiring less boilerplate code. This means you can write `fullName` like:
 
 ```js
-var fullName = compute(function(){
+let fullName = compute(function(){
     return firstName() + " " + lastName();
 });
 ```
@@ -191,12 +191,12 @@ following `completedCount` example:
 
 
 ```js
-var todoList = new DefineList([
+let todoList = new DefineList([
     {name: "dishes",  complete: true},
     {name: "laundry", complete: false}
 ]);
 
-var completedCount = compute(function(){
+let completedCount = compute(function(){
     return todoList.filter(function(todo){
         return todo.complete;
     });
@@ -218,10 +218,10 @@ its value is recalculated only when a dependent value changes.
 
 ```js
 import compute from 'can-compute';
-var firstName = compute("Payal");
-var lastName = compute("Meyer");
+let firstName = compute("Payal");
+let lastName = compute("Meyer");
 
-var fullName = compute(function(){
+let fullName = compute(function(){
     console.log("Calculating fullName.");
     return firstName()+" "+lastName();
 });
@@ -256,16 +256,16 @@ change the `firstName` value and immediately check the consequences of that chan
 import stache from 'can-stache';
 import compute from 'can-compute';
 
-var template = stache("<h1>Welcome {{fullName}}</h1>");
+let template = stache("<h1>Welcome {{fullName}}</h1>");
 
-var firstName = compute("Justin");
-var lastName = compute("Meyer");
+let firstName = compute("Justin");
+let lastName = compute("Meyer");
 
-var fullName = compute(function(){
+let fullName = compute(function(){
     return firstName()+" "+lastName();
 });
 
-var fragment = template({fullName: fullName});
+let fragment = template({fullName: fullName});
 
 assert.equal(fragment.firstChild.innerHTML, "Welcome Payal Meyer");
 
@@ -306,19 +306,19 @@ Consider the performance of a `completeAll` method that completes every todo in 
 and a `completeCount` compute that calculates the number of complete todos:
 
 ```js
-var todoList = new DefineList([
+let todoList = new DefineList([
     {name: "dishes",  complete: false},
     {name: "laundry", complete: false}
 ]);
 
-var completeAll = function(){
+let completeAll = function(){
     todoList.forEach(function(todo){
         console.log("completing", todo.name)
         todo.complete = true;
     });
 };
 
-var completedCount = compute(function(){
+let completedCount = compute(function(){
     return todoList.filter(function(todo){
         console.log("  checking", todo.name);
         return todo.complete;
@@ -350,7 +350,7 @@ through every todo.
 However, changing `completeAll` to use `batch.start` and `batch.stop` like:
 
 ```js
-var completeAll = function(){
+let completeAll = function(){
     batch.start();
     todoList.forEach(function(todo){
         console.log("completing", todo.name)
@@ -381,7 +381,7 @@ can improve performance by preventing compute recalculations.
 ```js
 import DefineMap from 'can-define/map/map';
 
-var Person = DefineMap.extend({
+const Person = DefineMap.extend({
     first: "string",
     last: "string",
     get fullName(){
@@ -437,13 +437,13 @@ Putting it together, the following defines an `Address` and `Person` type with s
 
 ```js
 // Address has a street, city, and state property
-var Address = DefineMap.extend({
+const Address = DefineMap.extend({
     street: "string",
     city: "string",
     state: "string"
 })
 
-var Person = DefineMap.extend({
+const Person = DefineMap.extend({
     // first is a string
     first: {type: "string"},
     // last is a string
@@ -483,7 +483,7 @@ We agree with both of these ideas! The following object-oriented `SaltShaker` AP
 developer can immediately understand it.
 
 ```js
-var saltShaker = new SaltShaker();
+const saltShaker = new SaltShaker();
 
 saltShaker.fill();  
 
@@ -505,7 +505,7 @@ SaltShaker = DefineMap.extend({
         this.saltCount = 2;
     },
     shake: function(){
-        var hasSalt = this.saltCount;
+        let hasSalt = this.saltCount;
         this.saltCount = hasSalt ? this.saltCount - 1 : 0;
         return hasSalt ? "salt" : null;
     },
@@ -522,7 +522,7 @@ this can easily lead to bugs.  Instead, the following uses [can-define-stream] a
 to make `saltCount` a function of the calls to `fill` and `shake`:
 
 ```js
-var SaltShaker = DefineMap.extend({
+const SaltShaker = DefineMap.extend({
     saltCount: {
         stream: function() {
             return this.stream("fill")
@@ -540,7 +540,7 @@ var SaltShaker = DefineMap.extend({
         this.dispatch("fill");
     },
     shake: function() {
-		var hadSalt = this.saltCount;
+		let hadSalt = this.saltCount;
         this.dispatch("shake");
         return hadSalt ? "salt" : null;
     },
@@ -563,14 +563,14 @@ stateful values into derived values.  For example, the following defines a `comp
 property on instances of the `TodoList` type:
 
 ```js
-var TodoList = DefineList.extend({
+const TodoList = DefineList.extend({
     "#": Todo,
     get completedCount(){
         return this.filter({complete: true}).length
     }
 });
 
-var todos = new TodoList([{complete: true}, {complete:false}]);
+let todos = new TodoList([{complete: true}, {complete:false}]);
 todos.completedCount //-> 1
 ```
 
@@ -584,7 +584,7 @@ a `todoId`, you might need to load a `todo` from the server.  This `todo` proper
 can be described using [can-define.types.get asynchronous computed getters] as follows:
 
 ```js
-var EditTodoVM = DefineMap.extend({
+const EditTodoVM = DefineMap.extend({
     todoId: "number",
     todo: {
         get: function(lastSetValue, resolve){
@@ -602,7 +602,7 @@ streams.  For example, `lastValidName` keeps track of `Person`’s
 last `name` property that includes a space.
 
 ```js
-var Person = DefineMap.extend({
+const Person = DefineMap.extend({
   name: "string",
   lastValidName: {
     stream: function(){
@@ -613,7 +613,7 @@ var Person = DefineMap.extend({
   }
 });
 
-var me = new Person({name: "James"});
+const me = new Person({name: "James"});
 
 me.on("lastValidName", function(lastValid) {
   console.log(lastValid)
@@ -730,7 +730,7 @@ import set from 'can-set';
 import superMap from 'can-connect/can/super-map/super-map';
 
 // Defines the type of data we get back from the server.
-var Todo = DefineMap.extend({
+const Todo = DefineMap.extend({
   id: "number",
   name: "string",
   complete: {type: "boolean", default: false}
@@ -780,7 +780,7 @@ This model can independently make requests to a RESTful service layer.
   ```
 - [can-connect/can/map/map.prototype.save Create] a Todo
   ```js
-  var todo = new Todo({name: "do dishes", complete: false})
+  const todo = new Todo({name: "do dishes", complete: false})
   todo.save().then(function(todo){})
   ```
 - [can-connect/can/map/map.prototype.save Update] an [can-connect/can/map/map.prototype.isNew already created] Todo
@@ -796,8 +796,8 @@ This model can independently make requests to a RESTful service layer.
 The __ViewModel__, in _components/todo-list/view-model.js_, looks like:
 
 ```js
-var DefineMap = "can-define/map/map";
-var Todo = "../models/todo";
+const DefineMap = "can-define/map/map";
+const Todo = "../models/todo";
 
 export default DefineMap.extend({
   todos: Todo.List,
@@ -904,7 +904,7 @@ Testing the __Model__’s `active` and `complete` properties:
 
 ```js
 test("Todo active and complete", function(){
-    var list = new Todo.List([
+    let list = new Todo.List([
         {name: "dishes", complete: false},
         {name: "lawn", complete: true}
     ]);
@@ -917,12 +917,12 @@ Testing the __ViewModel__’s `edit` and `cancelEdit` methods:
 
 ```js
 test("TodoListVM cancelEdit", function(){
-    var todos = new Todo.List([
+    let todos = new Todo.List([
         {name: "mow lawn", complete: false},
         {name: "dishes", complete: true},
     ]);
 
-    var todoListVM = new TodoListVM({
+    let todoListVM = new TodoListVM({
         todos: todos
     });
 
@@ -947,19 +947,19 @@ test("<todo-list> can update todo name", function(done){
         done();
     });
 
-    var todos = new Todo.List([
+    let todos = new Todo.List([
         {name: "mow lawn", complete: false, id: 22},
         {name: "dishes", complete: true, id: 23},
     ]);
 
-    var template = stache("<todo-list todos:from='todos'/>");
-    var todoListElement = template({todos: todos}).firstChild;
+    let template = stache("<todo-list todos:from='todos'/>");
+    let todoListElement = template({todos: todos}).firstChild;
 
     // double click todo
     todosListElement.querySelector(".todo label").dispatch( new MouseEvent('dblclick') );
 
     // change its value to MOW YARD by hitting enter (which causes a change first)
-    var input = todoListElement.querySelector(".todo input.edit");
+    let input = todoListElement.querySelector(".todo input.edit");
     input.value = "MOW YARD";
 
     input.dispatchEvent( new Event('change') );
@@ -986,7 +986,7 @@ Analog = function(element, timer) {
     timer.on("time", this.drawClock.bind(this) );
 };
 
-var timer = new Timer();
+let timer = new Timer();
 new Analog(document.getElementById("analog"), timer);
 ```
 
@@ -1283,14 +1283,14 @@ To understand how these strategies are used, consider a template like:
 And rendered with `viewModel` like:
 
 ```js
-var ViewModel = DefineMap.extend({
+const ViewModel = DefineMap.extend({
     tasks: Todo.List,
     completeTodos: function(){
         return this.tasks.filter({complete: false});
     }
 });
 
-var viewModel = new ViewModel({
+const viewModel = new ViewModel({
     tasks: new Todo.List([
         {name: "dishes", complete: true},
         {name: "lawn", complete: false}
@@ -1408,7 +1408,7 @@ Let’s look at an example of how we would define a `Todo` type and a list of to
 import DefineList from 'can-define/list/list';
 import DefineMap from 'can-define/map/map';
 
-var Todo = DefineMap.extend({
+const Todo = DefineMap.extend({
 	complete: "boolean",
 	name: "string"
 });
@@ -1560,7 +1560,7 @@ just have to call the [can-connect/real-time/real-time.createInstance],
 when updates happen similar to the following:
 
 ```js
-var socket = io('https://example.com');
+let socket = io('https://example.com');
 
 socket.on('todo created', function(todo){
     Todo.connection.createInstance(todo)

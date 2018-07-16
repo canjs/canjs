@@ -43,7 +43,7 @@ const Todo = DefineMap.extend("Todo",{
     // `isDueWithin24Hours` property returns if the `.dueDate`
     // is in the next 24 hrs.
     get isDueWithin24Hours(){
-        var msLeft = this.dueDate - new Date();
+        let msLeft = this.dueDate - new Date();
         return msLeft >= 0 && msLeft <= 24 * 60 * 60 * 1000;
     },
 
@@ -52,7 +52,7 @@ const Todo = DefineMap.extend("Todo",{
     // `nameChangeCount` increments when `name` changes.
     nameChangeCount: {
         value({listenTo, resolve}) {
-            var count = resolve(0);
+            let count = resolve(0);
             listenTo("name", ()=> {
                 resolve(++count);
             })
@@ -77,13 +77,13 @@ Create and use instances of the observable key-value types:
 
 ```js
 // Create a todo instance:
-var todo = new Todo({name: "Learn Observables"});
+const todo = new Todo({name: "Learn Observables"});
 
 // Change a property:
 todo.dueDate = new Date().getTime() + 1000*60*60;
 
 // Listen to changes
-var handler = function(ev, newVal, oldVal){};
+let handler = function(ev, newVal, oldVal){};
 todo.on("complete", handler);
 // Stop listening to changes
 todo.off("complete", handler);
@@ -127,7 +127,7 @@ Create and use instances of observable list types:
 
 ```js
 // Create a todo list
-var todos = new TodoList([
+const todos = new TodoList([
     {id: 1, name: "learn observable lists"},
     new Todo({id: 2, name: "mow lawn", complete: true})
 ])
@@ -195,14 +195,14 @@ class Todo extends observe.Object {
     // `isDueWithin24Hours` property returns if the `.dueDate`
     // is in the next 24 hrs.
     get isDueWithin24Hours(){
-        var msLeft = this.dueDate - new Date();
+        let msLeft = this.dueDate - new Date();
         return msLeft >= 0 && msLeft <= 24 * 60 * 60 * 1000;
     }
 
     // `nameChangeCount` increments when `name` changes.
     @@observe.resolvedBy
     nameChangeCount({listenTo, resolve}) {
-        var count = resolve(0);
+        let count = resolve(0);
         listenTo("name", ()=> {
             resolve(++count);
         })
@@ -239,12 +239,12 @@ Render a template that updates the page when any data changes using [can-stache]
 import {stache} from "can";
 
 // Create a template / view
-var view = stache(`<p>I need to {{name}}</p>`);
+let view = stache(`<p>I need to {{name}}</p>`);
 
-var todo = new Todo({name: "learn views"});
+const todo = new Todo({name: "learn views"});
 
 // Render the template into document fragment
-var fragment = view(todo);
+let fragment = view(todo);
 
 // Insert fragment in the page
 document.body.appendChild(fragment);
@@ -1131,7 +1131,7 @@ GET /api/todos/5
 <td>
 
 ```js
-var todo = new Todo({
+const todo = new Todo({
   name: "make a model"
 })
 todo.save()  //-> Promise<Todo>
@@ -1232,7 +1232,7 @@ Response body is not necessary.
 Check the status of request:
 
 ```js
-var todo = new Todo({ name: "make a model"});
+const todo = new Todo({ name: "make a model"});
 
 // Return if the todo hasn't been persisted
 todo.isNew()    //-> true
@@ -1240,7 +1240,7 @@ todo.isNew()    //-> true
 // Listen to when any todo is created:
 Todo.on("created", function(ev, todo){});
 
-var savedPromise = todo.save();
+let savedPromise = todo.save();
 
 // Return if the todo is being created or updated
 todo.isSaving() //-> true
@@ -1249,7 +1249,7 @@ savedPromise.then(function(){
     todo.isNew() //-> false
     todo.isSaving() //-> false
 
-    var destroyedPromise = todo.destroy();
+    let destroyedPromise = todo.destroy();
 
     // Return if the todo is being destroyed
     todo.isDestroying() //-> true
@@ -1290,7 +1290,7 @@ records:
 ```js
 import {fixture} from "can";
 
-var todosStore = fixture.store([
+let todosStore = fixture.store([
     {id: 0, name: "use fixtures", complete: false}
 ], Todo);
 
@@ -1393,7 +1393,7 @@ Read and write nested values with [can-key]:
 ```js
 import  {key} from "can";
 
-var task = {
+const task = {
     name: "learn can-key",
     owner: { name: {first: "Justin", last: "Meyer"} }
 }
@@ -1429,7 +1429,7 @@ Reflect.isValueLike(22) //-> true
 Reflect.isValueLike({}) //-> false
 
 // Read and mutate key-value data
-var obj = {};
+const obj = {};
 Reflect.setKeyValue(obj,"prop","VALUE");
 Reflect.getKeyValue(obj,"prop") //-> "VALUE"
 Reflect.deleteKeyValue(obj,"prop","VALUE");

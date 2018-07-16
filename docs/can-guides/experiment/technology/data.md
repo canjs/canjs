@@ -184,7 +184,7 @@ that will eventually resolve to a `Todo.List` of `Todo` instances.  This means t
 properties and methods defined on `Todo.List` and `Todo` will be available:
 
 ```js
-var todosPromise = Todo.getList({});
+let todosPromise = Todo.getList({});
 
 todosPromise.then(function(todos){
     todos    //-> Todos.List[Todo..]
@@ -293,7 +293,7 @@ Component.extend({
         dueFilter: "string",
         count: {type:"string", default: "10"},
         get todosPromise(){
-            var query = {filter: {}};
+            let query = {filter: {}};
             if(this.sort) {
                 query.sort =  this.sort;
             }
@@ -301,9 +301,9 @@ Component.extend({
                 query.filter.complete = this.completeFilter === "complete";
             }
             if(this.dueFilter) {
-                var day = 24*60*60*1000;
-                var now = new Date();
-                var today = new Date(now.getFullYear(), now.getMonth(), now.getDate() );
+                let day = 24*60*60*1000;
+                let now = new Date();
+                let today = new Date(now.getFullYear(), now.getMonth(), now.getDate() );
                 if(this.dueFilter === "today") {
 
                     query.filter.dueDate = {
@@ -312,7 +312,7 @@ Component.extend({
                     }
                 }
                 if(this.dueFilter === "week") {
-                    var start = today.getTime() - (today.getDay() * day);
+                    let start = today.getTime() - (today.getDay() * day);
                     query.filter.dueDate = {
                         $gte: new Date(start).toString(),
                         $lt: new Date(start + 7*day).toString()
@@ -372,7 +372,7 @@ not require every record value.
 <td>
 
 ```js
-var todo = new Todo({
+const todo = new Todo({
   name: "make a model"
 })
 todo.save()  //-> Promise<Todo>
@@ -411,7 +411,7 @@ on.  While the record is being saved, [can-connect/can/map/map.prototype.isSavin
 will return `true`:
 
 ```js
-var todo = new Todo({
+const todo = new Todo({
   name: "make a model"
 });
 
@@ -723,7 +723,7 @@ Component.extend({
         connectedCallback(){
             this.todosPromise.then((todos)=>{
                 this.listenTo(Todo, "destroyed", function(ev, destroyed){
-                    var index = todos.indexOf(destroyed);
+                    let index = todos.indexOf(destroyed);
                     todos.splice(index, 1);
                 });
             });
@@ -752,7 +752,7 @@ when any todo is destroyed and removing it from the list:
 connectedCallback(){
     this.todosPromise.then((todos)=>{
         this.listenTo(Todo, "destroyed", function(ev, destroyed){
-            var index = todos.indexOf(destroyed);
+            let index = todos.indexOf(destroyed);
             todos.splice(index, 1);
         });
     });
