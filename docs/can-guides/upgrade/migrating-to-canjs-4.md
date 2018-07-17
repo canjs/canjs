@@ -22,7 +22,11 @@ application. Read more details about it [CanJS 4.0's release article](https://ww
 - Upgradability - CanJS 4.0 is much easier to upgrade to than 3.0.
 
 
-If you would rather follow along to a presentation, see [CanJS 4 Upgrade Presentation](#CanJS4UpgradePresentation).
+## CanJS 4 Upgrade Video
+
+The following video walks through much of this mirgation guide &mdash; including how to perform the upgrade, the changes you might need to make during the process, and all of the new features in CanJS 4 that you can take advantage of once your app is upgraded. The [slides](https://docs.google.com/presentation/d/1O0kF0Shr8Ema99yWi8fVpGttCUW7rjIHJLBM-u0M39s/edit#slide=id.p) for this presentation are also available.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/w_LqYMSVYW8" frameborder="0" allowfullscreen></iframe>
 
 ## Preparing for migration
 
@@ -573,9 +577,3 @@ const ViewModel = DefineMap.extend({
 	}
 });
 ```
-
-## CanJS 4 Upgrade Presentation
-
-The following presentation walks through how to perform the upgrade, details the changes you might need to make during the process, and explains all of the new features in CanJS 4 that you can take advantage of once your app is upgraded.
-
-<iframe src="https://docs.google.com/presentation/d/e/2PACX-1vSZgIXEmz5VSPqXIATvz-S5jwvxk38_Ogb9fG1jIoS5a94fMUb78IEoJhkxdqyhqUs1bNyAUmW_Mu3G/embed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
