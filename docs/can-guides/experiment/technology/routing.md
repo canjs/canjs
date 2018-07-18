@@ -26,11 +26,71 @@ table.panels pre {
 > __NOTE__ This guide uses hash-based routing instead of pushstate because hash-based routing
 is easier to setup. Pushstate routing requires server-support. Use [can-route-pushstate] for pushstate-based applications. The use of [can-route-pushstate] is almost identical to [can-route].
 
-CanJS's routing works by two-way binding an <span class='obs'>observable</span> to
-the _URL_. When the <span class='obs'>observable</span> changes, the _URL_ will be updated.  This two way binding
-is provided by [can-route route].
 
-For example, you can connect the `myCounter` observable from
+[can-route] is used to setup a bi-directional relationship with an <span class='obs'>observable</span> and
+the browser's location (the _URL_).
+
+<img src="../../docs/can-guides/experiment/technology/observable-routing.png"
+  alt=""
+  class='bit-docs-screenshot'/>
+
+When the <span class='obs'>observable</span> changes, the _URL_ will be updated. When the _URL_ changes
+the <span class='obs'>observable</span> will be updated.
+
+The following example uses [can-route] to cross-bind the _URL_ to an <span class='obs'>observable</span>'s state. To
+see the cross-binding in action, try:
+
+1. Changing the _URL_'s _hash_ to `#!&page=products`. Notice the observable state updates.
+2. Change the <span class='obs'>observable</span>'s state to:
+   ```js
+   {
+    "page": "products",
+    "id": "foosball"
+   }
+   ```
+   Notice the _URL_ updates.
+
+3. Click the back button (`⇦`). Notice the observable state updates.
+
+<p data-height="366" data-theme-id="dark" data-slug-hash="QByxyg" data-default-tab="result" data-user="justinbmeyer" data-embed-version="2" data-pen-title="CanJS5 - routing two-way binding" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/QByxyg/">CanJS5 - routing two-way binding</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+
+The binding between the _URL_ and the observable is set by setting [can-route.data route.data] and
+calling [can-route.start route.start()] as follows:
+
+```html
+<mock-url></mock-url>
+<p>observable's state:</p>
+<bit-json-editor></bit-json-editor>
+<script src="//unpkg.com/mock-url@^5.0.0" type="module"></script>
+<script src="//unpkg.com/bit-json-editor@^5.0.0" type="module"></script>
+
+<script type="module">
+import {DefineMap, route, viewModel} from "//unpkg.com/can@5/core.mjs";
+
+var observable = new DefineMap();
+
+route.data = observable;
+route.start();
+
+// Make the json editor edit the observable.
+viewModel(
+    document.querySelector("bit-json-editor")
+).data = observable;
+</script>
+
+<style>
+bit-json-editor {
+	height: 200px;
+}
+</style>
+```
+@highlight 12-13
+@codepen
+
+<br/>
+
+
+Often, the observable is an instance of a custom type. For example, you can connect the `myCounter` observable from
 the [guides/technology-overview#Key_ValueObservables Technology Overview's Key-Value Observables section] to `window.location` with:
 
 ```html
@@ -61,10 +121,6 @@ route.start();
 
 This will add `#!&count=0` to the [location](https://developer.mozilla.org/en-US/docs/Web/API/Location) hash.  
 
-Now, if you called `myCounter.increment()` in the console, the `window.location` will
-change to `#!count=1`. If you hit the back-button, `myCounter.count` would be
-back to `0`:
-
 ```js
 myCounter.increment()
 window.location.hash  //-> "#!&count=1"
@@ -74,14 +130,16 @@ myCounter.count       //-> 0
 window.location.hash  //-> "#!&count=0"
 ```
 
+
+Now, if you called `myCounter.increment()` in the console, the `window.location` will
+change to `#!count=1`. If you hit the back-button, `myCounter.count` would be
+back to `0`:
+
+
+
 @demo demos/technology-overview/route-counter.html
 
-[can-route] is used to setup a bi-directional relationship with an observable and
-the browser's location.
 
-<img src="../../docs/can-guides/experiment/technology/observable-routing.png"
-  alt=""
-  class='bit-docs-screenshot'/>
 
 By default, `can-route` serializes the observable's data with [can-param],
 so that the following observable data produces the following url hashes:
