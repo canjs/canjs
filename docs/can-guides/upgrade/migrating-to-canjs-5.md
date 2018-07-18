@@ -500,6 +500,25 @@ const ClassRoom = DefineMap.extend({
 
 > NOTE: use [can-symbol] if you want IE11 support.
 
+### Set urlData when using can-route-pushstate
+
+In `can-route-pushstate` 4.X it would automatically register itself as the default binding with `can-route`. In order to reduce the amount of side-effectual packages CanJS has, we changed this in can-route-pushstate 5.0 so that you must explicitly register it.
+
+ To do this you need to:
+
+- import the `RoutePushstate` constructor function.
+- Create a new instance.
+- Set it to the `route.urlData` property.
+
+```js
+import RoutePushstate from 'can-route-pushstate';
+import route from 'can-route';
+
+route.urlData = new RoutePushstate();
+route.register('{page}', { page: 'home' });
+route.start();
+```
+@highlight 4
 
 ## Recommended Changes
 
