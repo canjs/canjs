@@ -374,16 +374,22 @@ The ecosystem bundle does not include:
 
 ### Online Code Editors
 
-The following are CanJS examples in various onine code editors.
+The following are CanJS examples in various online code editors.
 
 __Hello World__
 
 <p data-height="267" data-theme-id="dark" data-slug-hash="yEGGoK" data-default-tab="js,result" data-user="justinbmeyer" data-embed-version="2" data-pen-title="CanJS 5.0 Hello World" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/yEGGoK/">CanJS 5.0 Hello World</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 
 - [CodePen](https://codepen.io/justinbmeyer/pen/yEGGoK/)
-- JS Bin
 - [JSFiddle](https://jsfiddle.net/javascriptmvc/Ldpevngx/5/)
 
+__Routing Example__
+
+- [CodePen](https://codepen.io/justinbmeyer/pen/ejZMEw?editors=1010)
+
+__Model Example__
+
+- [CodePen](https://codepen.io/justinbmeyer/pen/RBRQom)
 
 
 ## StealJS
