@@ -11,10 +11,6 @@ Discovered via [Reddit](https://www.reddit.com/r/javascript/comments/1kffau/appl
 
 <a href="http://www.apple.com/shop/buy-iphone/iphone-7"><span>http://www.apple.com/shop/buy-iphone/iphone-7</span><img src="../../docs/can-guides/images/apps/screenshots-aos.jpg"></a>
 
-## Apple ID Data & Privacy
-
-<a href="https://privacy.apple.com/"><span>https://privacy.apple.com/</span><img src=""></a>
-
 ## Chase
 
 <a href="http://payments.chase.com"><span>http://payments.chase.com</span><img src="../../docs/can-guides/images/apps/screenshots-chase.jpg">
@@ -61,6 +57,9 @@ Fidelity uses JavaScriptMVC (the previous name for CanJS) in its Mutual Fund com
 
 <a href="https://www.fidelity.com/fund-screener/research.shtml"><span>https://www.fidelity.com/fund-screener/research.shtml</span><img src="../../docs/can-guides/images/apps/screenshots-fidelity.jpg"></a>
 
+## Apple ID Data & Privacy
+
+<a href="https://privacy.apple.com/"><span>https://privacy.apple.com/</span><img src="../../docs/can-guides/images/apps/screenshots-apple-id-data-and-privacy.png"></a>
 
 ## Cars.com
 

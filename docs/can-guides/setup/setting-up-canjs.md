@@ -488,12 +488,12 @@ Ready to build an app with CanJS? Check out our [guides/chat] or one of our
 [After setting up Node.js and npm](#Node_jsandnpm), install `can`, [webpack](https://webpack.js.org)
 (with [can-stache-loader](https://www.npmjs.com/package/can-stache-loader)) from npm:
 
-```
+```bash
 npm install can@5 --save
 ```
 
-```
-npm install webpack@4 webpack-cli@3 can-stache-loader@2.0.0 --save-dev
+```bash
+npm install webpack@4 webpack-cli@3 can-stache-loader@2 --save-dev
 ```
 
 Next, create an `app.stache` template for your app:
@@ -509,7 +509,7 @@ and your template to say “Hello World”:
 ```js
 // index.js
 import { Component } from "can";
-import view from "app.stache";
+import view from "./app.stache";
 
 Component.extend({
   tag: "my-app",
@@ -593,6 +593,16 @@ const path = require('path');
 
 module.exports = {
   entry: './index.js',
+  module: {
+   rules: [
+      {
+        test: /\.stache$/,
+        use: {
+          loader: 'can-stache-loader'
+        }
+      }
+    ]
+  },
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist')
