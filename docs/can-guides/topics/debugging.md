@@ -83,7 +83,7 @@ Then, make sure `process.env` is defined in `webpack.config.js`
 with the following:
 
 ```js
-var webpack = require("webpack");
+const webpack = require("webpack");
 
 module.exports = {
     ...
@@ -183,9 +183,9 @@ functions within [can-queues].
 Consider the following code that derives an info value from the person observable:
 
 ```js
-var person = new observe.Object({name: "Fran", age: 15});
+const person = new observe.Object({name: "Fran", age: 15});
 
-var info = new Observation(function updateInfo(){
+const info = new Observation(function updateInfo(){
     return person.name + " is " + person.age;
 });
 
@@ -323,7 +323,7 @@ Component.extend({
     ViewModel: {
         count: {
             value({resolve}) {
-                var count = resolve(0);
+                let count = resolve(0);
                 setInterval(() => {
                     resolve(++count);
                 }, 1000);

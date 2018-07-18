@@ -486,14 +486,14 @@ Ready to build an app with CanJS? Check out our [guides/chat] or one of our
 > [cloning the can-5 branch of this example repo on GitHub](https://github.com/canjs/webpack-example/tree/can-5).
 
 [After setting up Node.js and npm](#Node_jsandnpm), install `can`, [webpack](https://webpack.js.org)
-(with [raw-loader](https://www.npmjs.com/package/raw-loader)) from npm:
+(with [can-stache-loader](https://www.npmjs.com/package/can-stache-loader)) from npm:
 
 ```
 npm install can@5 --save
 ```
 
 ```
-npm install webpack@4 webpack-cli@3 raw-loader@0.5 --save-dev
+npm install webpack@4 webpack-cli@3 can-stache-loader@2.0.0 --save-dev
 ```
 
 Next, create an `app.stache` template for your app:
@@ -509,7 +509,7 @@ and your template to say “Hello World”:
 ```js
 // index.js
 import { Component } from "can";
-import view from "raw-loader!./app.stache";
+import view from "app.stache";
 
 Component.extend({
   tag: "my-app",
@@ -536,6 +536,16 @@ module.exports = {
     path: path.resolve(__dirname, 'dist')
   },
   mode: "development",
+  module: {
+   rules: [
+      {
+        test: /\.stache$/,
+        use: {
+          loader: 'can-stache-loader'
+        }
+      }
+    ]
+  },
   plugins: [
     new webpack.optimize.SideEffectsFlagPlugin(),
     new UglifyJSPlugin({
@@ -587,7 +597,15 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist')
   },
-  mode: "production"
+  mode: "production",
+  rules: [
+      {
+        test: /\.stache$/,
+        use: {
+          loader: 'can-stache-loader'
+        }
+      }
+  ]
 };
 ```
 
@@ -628,13 +646,13 @@ Browserify does not support tree-shaking, so the individual packages must be req
 instead of importing [can-component Component] like:
 
 ```js
-var Component = require("can").Component;
+const Component = require("can").Component;
 ```
 
 You should do it like:
 
 ```js
-var Component = require("can-component");
+const Component = require("can-component");
 ```
 
 [After setting up Node.js and npm](#Node_jsandnpm), install [can-component]

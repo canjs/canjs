@@ -55,7 +55,7 @@ With native HTML (DOM) APIs, you might implement this widget like:
     const counter = document.getElementById("my-counter");
 
     // Store the state of the widget.
-    var count = 0;
+    let count = 0;
 
     // Initialize the HTML within the widget.
     counter.innerHTML = `
@@ -232,8 +232,8 @@ observables. Use it to:
               // Makes count increase by 1 every
               // second.
               value(prop) {
-                  var count = prop.resolve(0);
-                  var timer = setInterval( () => {
+                  let count = prop.resolve(0);
+                  let timer = setInterval( () => {
                       prop.resolve(++count);
                   },1000);
                   // Return a cleanup function

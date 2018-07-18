@@ -103,9 +103,9 @@ Then it briefly explains __how the code works__:
 Finally, it provides minimal sample code:
 
 ```js
-var age = compute(32);
+let age = compute(32);
 
-var nameAndAge = compute(function(){
+let nameAndAge = compute(function(){
     return "Matthew - " + age();
 });
 

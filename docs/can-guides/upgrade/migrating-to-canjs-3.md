@@ -94,14 +94,14 @@ You might be using it in your code to easily reference the library:
 
 ```js
 import can from 'can';
-var body = can.$('body');
+const body = can.$('body');
 ```
 
 Update your code to explicitly require the library on which you depend. For example:
 
 ```js
 import $ from 'jquery';
-var body = $('body');
+const body = $('body');
 ```
 
 ### Set `leakScope` in components
@@ -202,20 +202,20 @@ The `can.view` methods have been removed in CanJS 3. The most common use was to 
 Instead of:
 
 ```js
-var render = can.view('some-id');
+let render = can.view('some-id');
 ```
 
 Just use the DOM APIs and pass the string directly into [can-stache]:
 
 ```js
-var templateString = document.getElementById('some-id').innerHTML;
-var render = stache(templateString);
+let templateString = document.getElementById('some-id').innerHTML;
+let render = stache(templateString);
 ```
 
 If you were using `can.view` to load a template from a URL like so:
 
 ```js
-var render = can.view('./template.stache');
+let render = can.view('./template.stache');
 ```
 
 We encourage you to use [StealJS](https://stealjs.com/) with [steal-stache](#Usingsteal_stachefortemplates):
@@ -575,7 +575,7 @@ A typical map looks like:
 import Map from 'can-map';
 import 'can-map-define';
 
-var CarOwner = Map.extend({
+const CarOwner = Map.extend({
 	define: {
 		cars: {
 			Type: Car.List
@@ -598,7 +598,7 @@ Which can be replaced by flattening it into a [can-define/map/map] like so:
 ```js
 import DefineMap from 'can-define/map/map';
 
-var CarOwner = DefineMap.extend({
+const CarOwner = DefineMap.extend({
 	cars: Car.List,
 	favorite: Car,
 	color: "string",
@@ -612,7 +612,7 @@ var CarOwner = DefineMap.extend({
 Using [can-define] allows you to use maps without the [can-map.prototype.attr .attr()] method that’s needed in [can-map] and [can-list]. To use this with `DefineMap`, just use the `.` (dot) operator instead:
 
 ```js
-var carOwner = new CarOwner();
+const carOwner = new CarOwner();
 
 // This is observable!
 carOwner.favorite = new Car({ make: "Toyota" });
@@ -623,7 +623,7 @@ carOwner.favorite = new Car({ make: "Toyota" });
 ```js
 import CanMap from 'can-map';
 
-var Person = CanMap.extend({
+const Person = CanMap.extend({
   name: "Justin"
 });
 ```
@@ -635,7 +635,7 @@ Here’s the example above updated for `can-define/map/map`:
 ```js
 import DefineMap from 'can-define/map/map';
 
-var Person = DefineMap.extend({
+const Person = DefineMap.extend({
   name: {default: "Justin"}
 });
 ```
@@ -655,7 +655,7 @@ route.bind("change", function(){
 Can be modified to instead use a compute that calls `serialize` on the route’s map:
 
 ```js
-var routeMap = compute(function(){
+let routeMap = compute(function(){
 	return route.map.serialize();
 });
 
@@ -677,7 +677,7 @@ import DefineMap from 'can-define/map/map';
 import DefineList from 'can-define/list/list';
 import superMap from 'can-connect/can/super-map/super-map';
 
-var Message = DefineMap.extend({
+const Message = DefineMap.extend({
 	id: "*"
 });
 
@@ -685,7 +685,7 @@ Message.List = DefineList.extend({
 	"#": Message
 });
 
-var messageConnection = superMap({
+const messageConnection = superMap({
 	url: 'https://chat.donejs.com/api/messages',
 	idProp: 'id',
 	Map: Message,
@@ -714,7 +714,7 @@ Component.extend({
 			this.element = $(this.element);
 		},
 		"li click": function(li){
-			var $li = $(li);
+			let $li = $(li);
 		}
 	}
 });

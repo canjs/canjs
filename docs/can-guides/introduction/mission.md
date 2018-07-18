@@ -153,7 +153,7 @@ you could update it to the following:
 ```js
 import Control from 'can-control';
 
-var TodosController = Control.extend({
+let TodosController = Control.extend({
     "li.complete click": function(el, ev){
         // DO STUFF
     }

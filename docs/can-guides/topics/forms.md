@@ -515,7 +515,7 @@ ViewModel: {
 		}
 	},
 	get modelsPromise() {
-		var makeId = this.makeId;
+		let makeId = this.makeId;
 		if( makeId ) {
 			return ajax({
 				type: "GET",
@@ -528,25 +528,25 @@ ViewModel: {
 	},
 	models: {
 		get: function(lastSet, resolve) {
-			var promise = this.modelsPromise;
+			let promise = this.modelsPromise;
 			if(promise) {
 				promise.then(resolve);
 			}
 		}
 	},
 	get model() {
-		var models = this.models,
+		let models = this.models,
 			modelId = this.modelId;
 
 		if(models && models.length && modelId) {
-			var matched = models.filter(function(model) {
+			let matched = models.filter(function(model) {
 				return modelId == model.id;
 			});
 			return matched[0];
 		}
 	},
 	get years() {
-		var model = this.model;
+		let model = this.model;
 		return model && model.years;
 	},
 	year: {
@@ -561,7 +561,7 @@ ViewModel: {
 	},
 	vehicles: {
 		get: function(lastSet, resolve) {
-			var year = this.year,
+			let year = this.year,
 				modelId = this.modelId;
 
 			if(modelId && year) {
@@ -835,7 +835,7 @@ ViewModel: {
 		}
 	},
 	get modelsPromise() {
-		var makeId = this.makeId;
+		let makeId = this.makeId;
 		if( makeId ) {
 			return ajax({
 				type: "GET",
@@ -848,25 +848,25 @@ ViewModel: {
 	},
 	models: {
 		get: function(lastSet, resolve) {
-			var promise = this.modelsPromise;
+			let promise = this.modelsPromise;
 			if(promise) {
 				promise.then(resolve);
 			}
 		}
 	},
 	get model() {
-		var models = this.models,
+		let models = this.models,
 			modelId = this.modelId;
 
 		if(models && models.length && modelId) {
-			var matched = models.filter(function(model) {
+			let matched = models.filter(function(model) {
 				return modelId == model.id;
 			});
 			return matched[0];
 		}
 	},
 	get years() {
-		var model = this.model;
+		let model = this.model;
 		return model && model.years;
 	},
 	year: {
@@ -881,7 +881,7 @@ ViewModel: {
 	},
 	vehicles: {
 		get: function(lastSet, resolve) {
-			var year = this.year,
+			let year = this.year,
 				modelId = this.modelId;
 
 			if(modelId && year) {
@@ -1002,7 +1002,7 @@ ViewModel: {
 		}
 	},
 	get modelsPromise() {
-		var makeId = this.makeId;
+		let makeId = this.makeId;
 		if( makeId ) {
 			return ajax({
 				type: "GET",
@@ -1015,25 +1015,25 @@ ViewModel: {
 	},
 	models: {
 		get: function(lastSet, resolve) {
-			var promise = this.modelsPromise;
+			let promise = this.modelsPromise;
 			if(promise) {
 				promise.then(resolve);
 			}
 		}
 	},
 	get model() {
-		var models = this.models,
+		let models = this.models,
 			modelId = this.modelId;
 
 		if(models && models.length && modelId) {
-			var matched = models.filter(function(model) {
+			let matched = models.filter(function(model) {
 				return modelId == model.id;
 			});
 			return matched[0];
 		}
 	},
 	get years() {
-		var model = this.model;
+		let model = this.model;
 		return model && model.years;
 	},
 	year: {
@@ -1048,7 +1048,7 @@ ViewModel: {
 	},
 	vehicles: {
 		get: function(lastSet, resolve) {
-			var year = this.year,
+			let year = this.year,
 				modelId = this.modelId;
 
 			if(modelId && year) {
