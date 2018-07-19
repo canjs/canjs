@@ -75,14 +75,15 @@ var AccordionViewModel = DefineMap.extend({
 
 Component.extend({
 	tag: "my-accordion",
-	ViewModel: AccordionViewModel
+	ViewModel: AccordionViewModel,
+	leakScope: true
 });
 
 Component.extend({
-	view:
-		stache("<h2 on:click='makeActive(this)'>{{title}}</h2>"+
-		"{{#if(active)}}<content></content>{{/if}}"),
 	tag:"my-panel",
+	view: `
+		<h2 on:click='makeActive(this)'>{{title}}</h2>
+		{{#if(active)}}<content></content>{{/if}}`,
 	ViewModel: DefineMap.extend('MyPanelVM', {
 		active: {
 			type: "boolean",
