@@ -6,14 +6,14 @@
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty"  id="demo-source">
 import { Component, DefineMap, stache } from "can";
 
-var Counter = DefineMap.extend({
+const Counter = DefineMap.extend({
     count: {default: 0},
     increment() {
         this.count++;
     }
 });
 
-var view = stache(`
+const view = stache(`
     <button on:click='increment()'>+1</button>
     Count: <span>{{count}}</span>
 `);
