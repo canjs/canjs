@@ -369,7 +369,7 @@ The following shows importing and using [can-stache-converters] from `ecosystem.
 
 The ecosystem bundle does not include:
 
-- [can-zone] (
+- [can-zone] (https://github.com/canjs/can-zone)
 - [ylem](https://github.com/bitovi/ylem)
 
 ### Online Code Editors
@@ -1033,7 +1033,7 @@ loads every ecosystem module in CanJS.
 The [core JavaScript bundle](#IncludingthecoreJavaScriptbundle) only includes CanJS's
 [can-core] modules.  This doesn't include ecosystem modules like [can-stache-converters].  The
 ecosystem bundle hosted at `https://unpkg.com/can@5/core.mjs` includes every CanJS module
-(except for [can-zone] and [ylem](https://github.com/bitovi/ylem).
+(except for [can-zone](https://github.com/canjs/can-zone) and [ylem](https://github.com/bitovi/ylem).
 
 ```html
 <!doctype html>
@@ -1070,7 +1070,7 @@ ecosystem bundle hosted at `https://unpkg.com/can@5/core.mjs` includes every Can
 
 The ecosystem bundle does not include:
 
-- [can-zone]
+- [can-zone](https://github.com/canjs/can-zone)
 - [ylem](https://github.com/bitovi/ylem)
 
 
