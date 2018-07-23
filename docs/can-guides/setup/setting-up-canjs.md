@@ -64,7 +64,7 @@ any development environment. This section gives technical details on these items
   these packages are written in ES5 JavaScript and CommonJS, so they can be imported by webpack, Browserify,
   StealJS, and a do not require transpiling.
 
-  Apps that need long-term flexibility should installing these packages directly. Direct installation
+  Apps that need long-term flexibility should install these packages directly. Direct installation
   means you can upgrade a small part of CanJS when needed.
 
 - __The `can` package__
@@ -369,7 +369,7 @@ The following shows importing and using [can-stache-converters] from `ecosystem.
 
 The ecosystem bundle does not include:
 
-- [can-zone]
+- [can-zone] (
 - [react-view-model]
 
 ### Online Code Editors
@@ -1033,7 +1033,7 @@ loads every ecosystem module in CanJS.
 The [core JavaScript bundle](#IncludingthecoreJavaScriptbundle) only includes CanJS's
 [can-core] modules.  This doesn't include ecosystem modules like [can-stache-converters].  The
 ecosystem bundle hosted at `https://unpkg.com/can@5/core.mjs` includes every CanJS module
-(except for [can-zone] and [react-view-model]).
+(except for [can-zone] and [react-view-model](https://github.com/bitovi/ylem).
 
 ```html
 <!doctype html>
@@ -1071,7 +1071,7 @@ ecosystem bundle hosted at `https://unpkg.com/can@5/core.mjs` includes every Can
 The ecosystem bundle does not include:
 
 - [can-zone]
-- [react-view-model]
+- [react-view-model](https://github.com/bitovi/ylem)
 
 
 ## Advanced Setup Recommendations
