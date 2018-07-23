@@ -21,7 +21,7 @@ table.panels pre {
 
 ## Overview
 
-Most applications need to request data from the server.  For example, you might have used
+Most applications need to request data from a server.  For example, you might have used
 [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) to
 make an __AJAX__ request, used the new [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
 to get JSON data, or used [jQuery.ajax](http://api.jquery.com/jquery.ajax/) to post form data.
@@ -40,7 +40,7 @@ This guide walks you through the basics of CanJS's service layer modeling.
 
 ## Creating a model
 
-CanJS's pattern is that you define application logic in one or more observables, then connect the observables to various browser APIs. CanJS's model layer
+CanJS's pattern is such that you define application logic in one or more observables, then connect the observables to various browser APIs. CanJS's model layer
 libraries connect observables to backend services. CanJS's model-layer will make
 AJAX requests to get, create, update, and delete data.
 
@@ -55,7 +55,8 @@ const Todo = DefineMap.extend("Todo",{
 
     // `id` uniquely identifies instances of this type.
     id: { type: "number", identity: true },
-
+	
+	// properties on models can be given types as well as default values
     complete: { type: "boolean", default: false },
     dueDate: "date",
     name: "string",
