@@ -117,7 +117,7 @@ any development environment. This section gives technical details on these items
     core named exports on it. Use this if you want to create a demo or example that will
     work in browsers that do not support ESM.
 
-  - `./all.mjs` - An ESM module with named exports of every<span title="can-zone and react-view-model are not included">٭</span> package bundled
+  - `./all.mjs` - An ESM module with named exports of every<span title="can-zone and ylem are not included">٭</span> package bundled
     together. This is useful for examples and prototyping in modern browsers that
     support ES modules. It's hosted statically on `unpkg` and can be
     downloaded here.
@@ -146,7 +146,7 @@ any development environment. This section gives technical details on these items
   - `./all.min.mjs` - A minified version of `./all.mjs`.
 
   - `./dist/global/all.js` - A JavaScript file that exports a `can` object with
-    every<span title="can-zone and react-view-model are not included">٭</span> named export. Use this if you want to create a demo or example that will
+    every<span title="can-zone and ylem are not included">٭</span> named export. Use this if you want to create a demo or example that will
     work in browsers that do not support ESM.
 
 ## Hosted setup options (no download needed)
@@ -330,7 +330,7 @@ that import CanJS. The following shows putting components into their own modules
 The [core ES module bundle](#ImportingthecoreESmodulebundle) only includes CanJS's
 [can-core] modules.  This doesn't include [can-ecosystem] modules like [can-stache-converters].  The
 ecosystem bundle hosted at `https://unpkg.com/can@5/ecosystem.mjs` includes every CanJS module
-(except for `can-zone` and `react-view-model`).
+(except for `can-zone` and `ylem`).
 
 The following shows importing and using [can-stache-converters] from `ecosystem.mjs`:
 
@@ -370,7 +370,7 @@ The following shows importing and using [can-stache-converters] from `ecosystem.
 The ecosystem bundle does not include:
 
 - [can-zone] (
-- [react-view-model]
+- [ylem](https://github.com/bitovi/ylem)
 
 ### Online Code Editors
 
@@ -1033,7 +1033,7 @@ loads every ecosystem module in CanJS.
 The [core JavaScript bundle](#IncludingthecoreJavaScriptbundle) only includes CanJS's
 [can-core] modules.  This doesn't include ecosystem modules like [can-stache-converters].  The
 ecosystem bundle hosted at `https://unpkg.com/can@5/core.mjs` includes every CanJS module
-(except for [can-zone] and [react-view-model](https://github.com/bitovi/ylem).
+(except for [can-zone] and [ylem](https://github.com/bitovi/ylem).
 
 ```html
 <!doctype html>
@@ -1071,7 +1071,7 @@ ecosystem bundle hosted at `https://unpkg.com/can@5/core.mjs` includes every Can
 The ecosystem bundle does not include:
 
 - [can-zone]
-- [react-view-model](https://github.com/bitovi/ylem)
+- [ylem](https://github.com/bitovi/ylem)
 
 
 ## Advanced Setup Recommendations
