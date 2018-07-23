@@ -157,7 +157,7 @@ so that the following observable data produces the following url hashes:
 > [Google SEO](https://developers.google.com/webmasters/ajax-crawling/docs/getting-started)
 > recommendation.
 
-You can register routes that controls the relationship between the
+You can register routes that control the relationship between the
 observable and the browser's location. The following registers
 a translation between URLs and route properties:
 
