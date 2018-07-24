@@ -1,4 +1,6 @@
-can.Component.extend({
+import {Component} from "//unpkg.com/can@5/core.mjs";
+
+Component.extend({
   tag: "video-player",
   view: `
     <video
