@@ -8,67 +8,70 @@ controls around a video element.
 @body
 
 
-
-
-In this guide, you will learn how to create a custom video player using the `<video>` element. The
+In this guide, you will learn how to create a custom video player using the `<video>` element and [CanJS](http://canjs.com). The
 custom video player will:
 
-- Have custom play / pause buttons.
+- Have custom play and pause buttons.
 - Show the current time and duration of the video.
 - Have a `<input type="range">` slider that can adjust the position of the video.
 
 
-The final widget looks like:
+The final player looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/jaliquj/8/embed?html,js,output">
-  CanJS Video Player on jsbin.com
-</a>
+<p data-height="350" data-theme-id="dark" data-slug-hash="qyRqMx" data-default-tab="js,result" data-user="justinbmeyer" data-embed-version="2" data-pen-title="CanJS 5.0 Video Player - Final" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/qyRqMx/">CanJS 5.0 Video Player - Final</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+
 
 The following sections are broken down into the following parts:
 
 - __The problem__ — A description of what the section is trying to accomplish.
-- __What you need to know__ — Information about CanJS that is useful for solving the problem.
+- __What you need to know__ — Browser or CanJS APIs that are useful for solving the problem.
 - __The solution__ — The solution to the problem.
+
 
 ## Setup ##
 
-__START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
+__START THIS TUTORIAL BY Forking THE FOLLOWING CodePen__:
 
-> Click the `JS Bin` button.  The JS Bin will open in a new window. In that new window, under `File`, click `Clone`.
+> Click the `Edit in CodePen` button.  The CodePen will open in a new window. Click the `Fork` button.
 
-<a class="jsbin-embed" href="https://jsbin.com/jaliquj/3/embed?html,js,output">
-  CanJS Video Player on jsbin.com
-</a>
+<p data-height="320" data-theme-id="dark" data-slug-hash="LBxbam" data-default-tab="js,result" data-user="justinbmeyer" data-embed-version="2" data-pen-title="CanJS 5.0 Video Player - Start" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/LBxbam/">CanJS 5.0 Video Player - Start</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 
-This JS Bin:
+This CodePen:
 
 - Creates a `<video>` element that loads a video. _Right click and select “Show controls” to see the video’s controls_.
-- Loads CanJS.
+- Loads CanJS's custom element library: [can-component Component].
+
 
 
 ### The problem
+
+In this section, we will:
 
 - Create a custom `<video-player>` element that takes a `src` attribute and creates a `<video>` element
   within itself. We should be able to create the video like:
 
   ```html
-  <video-player src:raw="https://canjs.com/docs/images/tom_jerry.webm">
+  <video-player src:raw="http://bit.ly/can-tom-n-jerry">
   </video-player>
   ```  
 - The embedded `<video>` element should have the native controls enabled.
+
+When complete, the result will look exactly the same as the player when you started.  The
+only difference is that we will be using a custom `<video-player>` element in the `HTML`
+tab instead of the native `<video>` element.
 
 
 
 ### What you need to know
 
-To set up a basic CanJS application, you define a custom element in JavaScript and
+To set up a basic CanJS application (or widget), you define a custom element in JavaScript and
 use the custom element in your page’s `HTML`.
 
-To define a custom element, extend [can-component] with a [can-component.prototype.tag]
+To define a custom element, extend [can-component Component] with a [can-component.prototype.tag]
 that matches the name of your custom element.  For example:
 
 ```js
-can.Component.extend({
+Component.extend({
   tag: "video-player"
 })
 ```
@@ -79,57 +82,55 @@ Then you can use this tag in your HTML page:
 <video-player></video-player>
 ```
 
-But this doesn’t do anything.  Components add their own HTML through their [can-component.prototype.view]
+But this doesn’t do anything ... yet.  Components add their own HTML through their [can-component.prototype.view]
 property:
 
 ```js
-can.Component.extend({
+Component.extend({
   tag: "video-player",
-  view: `<h2>I am a <input value="video"/> player!</h2>`
+  view: `<h2>I am a player!</h2>`
 });
 ```
 
-A component’s [can-component.prototype.view] is rendered with its [can-component.prototype.ViewModel]. For example, we can
-make the `<input>` say `"AWESOME VIDEO"` by defining a `src` property and using it in the [can-component.prototype.view] like:
+A component’s [can-component.prototype.view] is rendered with its [can-component.prototype.ViewModel]. For example, we can make a `<video>` display `"http://bit.ly/can-tom-n-jerry"` by defining a `src` property on the `ViewModel` and using it in the [can-component.prototype.view] like:
 
 ```js
-can.Component.extend({
+Component.extend({
   tag: "video-player",
-  view: `<h2>I am a <input value="{{src}}"/> player!</h2>`,
+  view: `
+    <video>
+      <source src="{{src}}"/>
+    </video>
+  `,
   ViewModel: {
-    src: {default: "AWESOME VIDEO"}
+    src: {type: "string", default: "http://bit.ly/can-tom-n-jerry"}
   }
 });
 ```
 
-But we want the video player to take a `src` attribute value and use that for the
-`<input>`’s `value`. For example, if
-we wanted the input to say `CONFIGURABLE VIDEO` instead of `video`, we would:
+But we want the `<video-player>` to take a `src` attribute value itself and use that for the
+`<source>`’s `src`. For example, if
+we wanted the video to play `"http://dl3.webmfiles.org/big-buck-bunny_trailer.webm"` instead of `"http://bit.ly/can-tom-n-jerry"`, we would:
 
-1. Update `<video-player>` to pass `"CONFIGURABLE VIDEO"` with [can-stache-bindings.raw]:
+1. Update `<video-player>` to pass `"http://dl3.webmfiles.org/big-buck-bunny_trailer.webm"` with [can-stache-bindings.raw]:
    ```html
-   <video-player src:raw="CONFIGURABLE VIDEO"/>
+   <video-player src:raw="http://dl3.webmfiles.org/big-buck-bunny_trailer.webm"/>
    ```
 2. Update the [can-component.prototype.ViewModel] to define a `src` property like:
    ```js
-   can.Component.extend({
+   Component.extend({
      tag: "video-player",
-     view: `<h2>I am a <input value="video"/> player!</h2>`,
+     view: `
+       <video>
+         <source src="{{src}}"/>
+       </video>
+     `,
      ViewModel: {
        src: "string"
      }
    });
    ```
-3. Use the `src` property in the view:
-   ```js
-   can.Component.extend({
-     tag: "video-player",
-     view: `<h2>I am a <input value="{{src}}"/> player!</h2>`,
-     ViewModel: {
-       src: "string"
-     }
-   });
-   ```
+   @highlight 5
 
 Finally, to have a `<video>` element show the _native_ controls, add a `controls`
 attribute like:
@@ -140,15 +141,15 @@ attribute like:
 
 ### The solution
 
-Update the __JavaScript__ tab to:
+Update the __JS__ tab to:
 
 @sourceref ./1-setup.js
-@highlight 1-11,only
+@highlight 3-13
 
 Update the __HTML__ to:
 
 @sourceref ./1-setup.html
-@highlight 5,only
+@highlight 1
 
 
 
@@ -213,7 +214,7 @@ We want the button to be within a `<div>` after the video element like:
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-play-reflects.js
-@highlight 5-6,9-13,17,19-24,only
+@highlight 7-8,11-15,19,21-25
 
 
 ## Make clicking the play/pause button play or pause the video ##
@@ -267,7 +268,7 @@ This means that you need to:
 1. Listen to when the `<button>` is clicked and call a ViewModel method that updates the `playing` state.
 2. Listen to when the `playing` state changes and update the state of the `<video>` element.
 
-You already know everything you need to know for step __#1__.  
+You already know everything you need to know for step __#1__.  (Have the button call a `togglePlay` method with `on:click="togglePlay()"` and make the `togglePlay()` method toggle the state of the `playing` property.)
 
 For step __#2__, you need to use the [can-component/connectedCallback] lifecycle hook. This
 hook gives you access to the component’s element and is a good place to do side-effects. Its use looks
@@ -311,7 +312,7 @@ element.querySelector("video")
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-play-mutates.js
-@highlight 10,25-28,29-37,only
+@highlight 12,27-30,31-39
 
 
 ## Show current time and duration ##
@@ -392,7 +393,7 @@ formatted like: `mm:SS`. They should be presented within two spans like:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-play-mutates.js
-@highlight 7,8,15,16,22-39,only
+@highlight 9,10,17,18,24-41
 
 
 ## Make range show position slider at current time ##
@@ -422,7 +423,7 @@ The `<input type="range"/>` element should be after the `<button>` and before th
   ```
 
 - The range will have values from 0 to 1.  We will need to translate the currentTime to
-  a number between 0 and 1. We can do this with a virtual property like:
+  a number between 0 and 1. We can do this with a [can-define.types.get computed getter property] like:
 
   ```js
   ViewModel: {
@@ -443,7 +444,7 @@ The `<input type="range"/>` element should be after the `<button>` and before th
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-play-mutates.js
-@highlight 15-16,27-29,only
+@highlight 17-18,29-31
 
 
 ## Make sliding the range update the current time ##
@@ -489,14 +490,12 @@ Use [can-stache-bindings.twoWay] to two-way bind a value to a [can-component.pro
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-play-mutates.js
-@highlight 4,16,30-32,67-72,only
+@highlight 6,18,32-34,69-74
 
 ## Result
 
 When finished, you should see something like the following JS Bin:
 
-<a class="jsbin-embed" href="https://jsbin.com/jaliquj/8/embed?html,js,output">
-  CanJS Video Player on jsbin.com
-</a>
+<p data-height="360" data-theme-id="dark" data-slug-hash="qyRqMx" data-default-tab="js,result" data-user="justinbmeyer" data-embed-version="2" data-pen-title="CanJS 5.0 Video Player - Final" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/qyRqMx/">CanJS 5.0 Video Player - Final</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.1.4"></script>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
