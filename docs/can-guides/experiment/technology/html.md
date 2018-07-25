@@ -285,7 +285,7 @@ The following demo:
 - Completes every todo with [can-stache-bindings.event] - `on:click='completeAll()'`.
 
 @demo demos/technology-overview/simple-todos.html
-
+@codepen
 
 ## Components
 
