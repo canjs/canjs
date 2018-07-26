@@ -50,9 +50,9 @@ node -v
 Firefox is used to run the repository’s tests.
 
 If you don’t already have it, [download Firefox](https://www.mozilla.org/en-US/firefox/new/).
-Mozilla has guides for installing it on [Linux](https://support.mozilla.org/t5/Install-and-Update/Install-Firefox-on-Linux/ta-p/2516),
-[Mac](https://support.mozilla.org/t5/Install-and-Update/How-to-download-and-install-Firefox-on-Mac/ta-p/3453),
-and [Windows](https://support.mozilla.org/t5/Install-and-Update/How-to-download-and-install-Firefox-on-Windows/ta-p/2210).
+Mozilla has guides for installing it on [Linux](https://support.mozilla.org/en-US/kb/install-firefox-linux),
+[Mac](https://support.mozilla.org/en-US/kb/how-download-and-install-firefox-mac),
+and [Windows](https://support.mozilla.org/en-US/kb/how-download-and-install-firefox-windows).
 Make sure it gets installed into the default location for your operating system.
 
 ## Getting the code and verifying that it’s working
