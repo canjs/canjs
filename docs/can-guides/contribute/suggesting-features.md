@@ -15,7 +15,7 @@ create your issue in the main
 [canjs/canjs issues page](https://github.com/canjs/canjs/issues/new).  The core team will
 move the issue to the correct repository if necessary.
 
-When creating an feature issue, it’s very helpful to include:
+When creating a feature issue, it’s very helpful to include:
 
  - Examples of what using the feature will look like.
  - Benefits and drawbacks of the feature.
