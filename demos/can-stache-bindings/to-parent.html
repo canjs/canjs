@@ -1,29 +1,25 @@
-<script type='text/stache' id='demo-html'>
-<drivers-list selected:to="scope.vars.editing" select:to="scope.vars.select">
-	<ul>
-		{{#each(drivers)}}
-			<li on:click="scope.vars.select(this)">
-				{{title}} {{first}} {{last}} - {{licensePlate}}
-			</li>
-		{{/each}}
-	</ul>
-</drivers-list>
-<edit-plate plateName:bind="scope.vars.editing.licensePlate"/>
-</script>
-
+<my-demo></my-demo>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id='demo-source'>
-import { Component, DefineList, DefineMap, stache, stacheBindings, viewAutorender } from "can";
+import { Component, DefineList, DefineMap } from "can";
 
 Component.extend({
 	tag: "drivers-list",
+	view:`
+		<ul>
+			{{#each(drivers)}}
+				<li on:click="scope.vm.select(this)">
+					{{title}} {{first}} {{last}} - {{licensePlate}}
+				</li>
+			{{/each}}
+		</ul>
+	`,
 	ViewModel: DefineMap.extend({
 		drivers: {
-			default: function() {
-				return new DefineList([
+			default: () => new DefineList([
 					{ title: "Dr.", first: "Cosmo", last: "Kramer", licensePlate: "ASSMAN" },
 					{ title: "Ms.", first: "Elaine", last: "Benes", licensePlate: "621433" }
-				]);
-			}
+			])
+			
 		},
 		selected: {
 			default: false
@@ -38,16 +34,23 @@ Component.extend({
 
 Component.extend({
 	tag: "edit-plate",
-	view: stache("<input value='{{plateName}}' on:input='update(scope.element.value)'/>"),
-	ViewModel: DefineMap.extend({
+	view: `
+		<input value='{{plateName}}' on:input='update(scope.element.value)'/>
+	`,
+	ViewModel: {
 		plateName: "string",
 		update: function(value){
 			this.plateName = value;
 		}
-	})
+	}
 });
 
-var el = document.getElementById("demo-html");
-var fragment = stache(el.innerHTML)({});
-document.body.appendChild(fragment);
+Component.extend({
+	tag: 'my-demo',
+	view: `
+		<drivers-list selected:to="scope.vars.editing" select:to="scope.vars.select">
+		</drivers-list>
+		<edit-plate plateName:bind="scope.vars.editing.licensePlate"/>
+	`
+})
 </script>

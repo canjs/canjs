@@ -1,21 +1,17 @@
-<script type='text/stache' id='demo-html'>
-<p>Alison: <player-scores scores:from="game.scoresForPlayer('Alison')"/></p>
-<p>Jeff: <player-scores scores:from="game.scoresForPlayer('Jeff')"/></p>
-</script>
-
+<demo-html></demo-html>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id='demo-source'>
-import { Component, DefineList, DefineMap, stache, stacheBindings, viewAutorender } from "can";
+import { Component, DefineList, DefineMap } from "can";
 
-var Score = DefineMap.extend({
+const Score = DefineMap.extend("Score", {
 	points: "number",
 	player: "string"
 });
 
-var ScoreList = DefineList.extend({
+Score.List = DefineList.extend("ScoreList", {
 	"#": Score
 }, {
 	sum: function(){
-		var sum = 0;
+		let sum = 0;
 		this.forEach(function(score){
 			sum += score.points;
 		});
@@ -25,15 +21,17 @@ var ScoreList = DefineList.extend({
 
 Component.extend({
 	tag: "player-scores",
-	view: stache('{{#each(scores)}} {{points}} {{/each}} = {{scores.sum()}}'),
-	ViewModel: DefineMap.extend({
-		scores: { Type: ScoreList }
-	})
+	view: `
+		{{#each(scores)}} {{points}} {{/each}} = {{scores.sum()}}
+	`,
+	ViewModel: {
+		scores: { Type: Score.List }
+	}
 });
 
-var Game = DefineMap.extend({
+const Game = DefineMap.extend({
 	scores: {
-		Type: ScoreList
+		Type: Score.List
 	},
 	scoresForPlayer: function(name){
 		return this.scores.filter(function(score){
@@ -42,20 +40,25 @@ var Game = DefineMap.extend({
 	}
 });
 
-var game = new Game({
-	scores: [
-		{player: "Alison", points: 2},
-		{player: "Alison", points: 3},
-		{player: "Jeff", points: 5},
-		{player: "Jeff", points: 1},
-		{player: "Alison", points: 6},
-		{player: "Jeff", points: 1},
-	]
-});
-
-var el = document.getElementById("demo-html");
-var fragment = stache(el.innerHTML)({
-	game: game
-});
-document.body.appendChild(fragment);
+Component.extend({
+	tag: "demo-html",
+	view: `
+		<p>Alison: <player-scores scores:from="game.scoresForPlayer('Alison')"/></p>
+		<p>Jeff: <player-scores scores:from="game.scoresForPlayer('Jeff')"/></p>
+	`,
+	ViewModel: {
+		game: {
+			default: () => new Game({
+				scores: [
+					{player: "Alison", points: 2},
+					{player: "Alison", points: 3},
+					{player: "Jeff", points: 5},
+					{player: "Jeff", points: 1},
+					{player: "Alison", points: 6},
+					{player: "Jeff", points: 1},
+				]
+			})
+		}
+	}
+})
 </script>
