@@ -101,9 +101,9 @@
     "can-observe": "2.2.0",
     "can-param": "1.1.0",
     "can-parse-uri": "1.2.0",
-    "can-query-logic": "file:../can-query-logic",
+    "can-query-logic": "1.0.1",
     "can-queues": "1.1.2",
-    "can-realtime-rest-model": "file:../can-realtime-rest-model",
+    "can-realtime-rest-model": "1.0.0",
     "can-reflect": "1.17.0",
     "can-reflect-dependencies": "1.1.0",
     "can-reflect-promise": "2.1.0",
@@ -258,7 +258,7 @@
     "minifyBuild": true,
     "codepen": [
       [
-        "\"can\"|'can'",
+        "\"can\"",
         "\"//unpkg.com/can@5/core.mjs\""
       ]
     ]
