@@ -1,28 +1,23 @@
 <style type="text/css">
 .active {font-weight: bold}
 </style>
-<script type='text/stache' id='demo-html'>
-<my-tabs addPanel:to="scope.vars.addPanel">
-	<my-panel addPanel:from="scope.vars.addPanel" title:from="'CanJS'">CanJS Content</my-panel>
-	<my-panel addPanel:from="scope.vars.addPanel" title:from="'StealJS'">StealJS Content</my-panel>
-</my-tabs>
-</script>
+<my-demo></my-demo>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
 import { Component, DefineList, DefineMap, queues, stache } from "can";
 
 Component.extend({
 	tag: "my-tabs",
-	view:
-		stache("<ul>"+
-			// Create an LI for each item in the panel's viewModel object
-				"{{#each(panels, panel=value)}}"+
-					"<li {{#scope.root.isActive(panel)}}class='active'{{/isActive}} "+
-							"on:click='scope.root.makeActive(panel)'>"+
-						"{{panel.title}}"+
-					"</li>"+
-				"{{/each}}"+
-			"</ul>"+
-			"<content></content>"),
+	view: `
+		<ul>
+			{{#each(panels, panel=value)}}
+				<li {{#scope.root.isActive(panel)}}class='active'{{/isActive}} 
+						on:click='scope.root.makeActive(panel)'>
+					{{panel.title}}
+				</li>
+			{{/each}}
+		</ul>
+		<content></content>
+	`,
 	ViewModel: DefineMap.extend({
 		// Contains a list of all panel scopes within the
 		// tabs element.
@@ -75,7 +70,7 @@ Component.extend({
 });
 
 Component.extend({
-	view: stache("{{#if(active)}}<content></content>{{/if}}"),
+	view: `{{#if(active)}}<content></content>{{/if}}`,
 	tag:"my-panel",
 	ViewModel: DefineMap.extend({
 		active: { default: false },
@@ -86,8 +81,13 @@ Component.extend({
 	})
 });
 
-var el = document.getElementById("demo-html");
-var fragment = stache(el.innerHTML)({});
-
-document.body.appendChild(fragment);
+Component.extend({
+	tag: 'my-demo',
+	view: `
+		<my-tabs addPanel:to="scope.vars.addPanel">
+			<my-panel addPanel:from="scope.vars.addPanel" title:from="'CanJS'">CanJS Content</my-panel>
+			<my-panel addPanel:from="scope.vars.addPanel" title:from="'StealJS'">StealJS Content</my-panel>
+		</my-tabs>
+	`
+})
 </script>

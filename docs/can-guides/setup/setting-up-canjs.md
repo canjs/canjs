@@ -9,24 +9,6 @@
 @body
 
 <style>
-details {
-    border: 1px solid #dfdfdf;
-    background-color: #fdfdfd;
-    border-radius: 4px;
-    padding: 1em 1em 0.5em 1em;
-}
-summary {
-    font-weight: bold;
-    margin: -.5em -.5em 0;
-    padding: .5em;
-    cursor: pointer;
-}
-details[open] {
-    padding: 1em;
-}
-details[open] summary {
-    margin-bottom: .5em;
-}
 span[title] {
     color: green;
     cursor: pointer;
