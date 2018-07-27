@@ -6,36 +6,30 @@
 </style>
 <div id='out'></div>
 <div id="demo-html">
-<script id="player-list-stache" type="text/stache">
-  <ul>
-  	{{#each(players, player=value)}}
-  		<li {{#scope.root.isEditing(player)}}class="editing"{{/isEditing}}
-  			on:click='scope.root.editPlayer(player)'>{{player.name}}</li>
-  	{{/each}}
-  </ul>
-  <player-edit
-  	on:close="removeEdit()"
-  	player:from="editingPlayer"/>
-</script>
-<script id="player-edit-stache" type="text/stache">
-	{{#if(player)}}
-		<input value:bind="player.name"/>
-		<button on:click="close()">X</button>
-	{{/if}}
-</script>
 </div>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id='demo-source'>
-import Component from "can-component";
-import stache from "can-stache";
-import $ from "jquery";
-import DefineMap from "can-define/map/map";
-import DefineList from "can-define/list/list";
+import { Component, stache, DefineMap, DefineList} from 'can';
 
-var Player = DefineMap.extend({
+const playerList = `<ul>
+	{{#each(players, player=value)}}
+		<li {{#scope.root.isEditing(player)}}class="editing"{{/isEditing}}
+			on:click='scope.root.editPlayer(player)'>{{player.name}}</li>
+	{{/each}}
+</ul>
+<player-edit
+  	on:close="removeEdit()"
+	player:from="editingPlayer"/>`;
+
+const playerEditStache = `{{#if(player)}}
+	<input value:bind="player.name"/>
+	<button on:click="close()">X</button>
+{{/if}}`;
+
+const Player = DefineMap.extend({
 	name: "string"
 });
 
-var PlayerList = DefineMap.extend({
+const PlayerList = DefineMap.extend({
 	editingPlayer: Player,
 	players: {
 		default: function() {
@@ -58,13 +52,13 @@ var PlayerList = DefineMap.extend({
 
 Component.extend({
 	tag: "player-list",
-	view: stache($('#player-list-stache').html()),
+	view: stache(playerList),
 	ViewModel: PlayerList
 });
 
 Component.extend({
 	tag: "player-edit",
-	view: stache($('#player-edit-stache').html()),
+	view: stache(playerEditStache),
 	ViewModel: DefineMap.extend({
 		player: Player,
 		close: function(){
@@ -73,7 +67,7 @@ Component.extend({
 	})
 });
 
-$("#out").html(stache("<player-list/>")({}));
+document.querySelector("#out").appendChild(stache("<player-list/>")({}));
 
 </script>
 </body>

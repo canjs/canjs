@@ -239,6 +239,7 @@ Component.extend({
 See the component in action here:
 
 @demo demos/can-rest-model/can-rest-model-0.html
+@codepen
 
 
 The object passed to `.getList` can be used to filter, sort, and paginate
@@ -336,6 +337,7 @@ Component.extend({
 See it in action here:
 
 @demo demos/can-rest-model/can-rest-model-1.html
+@codepen
 
 ## Creating records ##
 
@@ -470,6 +472,7 @@ Component.extend({
 See this component in action here:
 
 @demo demos/can-rest-model/can-rest-model-create.html
+@codepen
 
 
 Note that this demo lists newly created todos by listening to `Todo`'s created event as follows:
@@ -636,6 +639,7 @@ Component.extend({
 See this in action here:
 
 @demo demos/can-rest-model/can-rest-model-update.html
+@codepen
 
 ## Destroying records
 
@@ -738,6 +742,7 @@ The following example shows this in action. Click the <button>delete</button> bu
 todos and have the todo removed from the list.
 
 @demo demos/can-rest-model/can-rest-model-destroy.html
+@codepen
 
 This demo works by calling [can-connect/can/map/map.prototype.destroy] when the <button>delete</button> button
 is clicked.

@@ -1,14 +1,19 @@
-<script type='text/stache' can-autorender id='demo-html'>
-{{#each(items)}}
-	<li on:click='../items.splice(scope.index,1)'>{{name}}</li>
-{{/each}}
-</script>
-
+<my-items></my-items>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id='demo-source'>
-import { DefineList, stache, stacheBindings, viewModel, viewAutorender } from "can";
+import { Component } from "can";
 
-var el = document.getElementById("demo-html");
-viewModel(el, {
-	items: new DefineList([{name: "first"}, {name: "second"}])
-});
+Component.extend({
+	tag: 'my-items',
+	view: `
+		{{#each(items)}}
+			<li on:click='../items.splice(scope.index,1)'>{{name}}</li>
+		{{/each}}
+	`,
+	ViewModel: {
+		items: {
+			default: () => [{name: "first"}, {name: "second"}]
+			
+		}
+	}
+})
 </script>

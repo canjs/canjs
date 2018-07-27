@@ -9,24 +9,23 @@
 </style>
 <div id="html">
 <div id='out'></div>
-<script type="text/stache" id="demo-html">
-{{#items}}
-  <div {{#isSelected()}}class='selected'{{/isSelected}}
-       on:click='scope.root.toggle(this)'>
-    {{title}}
-  </div>
-{{/items}}
-</script>
 </div>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
 import { Component, DefineList, DefineMap, stache } from "can";
 
-var SelectViewModel = DefineMap.extend("SelectViewModel", {
+const demoHtml = `{{#items}}
+  <div {{#isSelected()}}class='selected'{{/isSelected}}
+       on:click='scope.root.toggle(this)'>
+    {{title}}
+  </div>
+{{/items}}`;
+
+const SelectViewModel = DefineMap.extend("SelectViewModel", {
 	selected: {
 		Default: DefineList
 	},
 	toggle: function(item){
-		var selected = this.selected,
+		const selected = this.selected,
 			index = selected.indexOf(item);
 
 		if( index >= 0 ) {
@@ -40,7 +39,7 @@ var SelectViewModel = DefineMap.extend("SelectViewModel", {
 Component.extend({
 	tag: "my-items",
 	ViewModel: SelectViewModel,
-	view: stache.from("demo-html"),
+	view: stache(demoHtml),
 	helpers: {
 		isSelected: function(options){
 			if( this.selected.indexOf(options.context) >= 0 ) {
@@ -52,7 +51,7 @@ Component.extend({
 	}
 });
 
-var fragment = stache("<my-items items:from='titleItems' />")({
+const fragment = stache("<my-items items:from='titleItems' />")({
 	titleItems: new DefineList([
 		{ title: "CanJS" },
 		{ title: "StealJS" },

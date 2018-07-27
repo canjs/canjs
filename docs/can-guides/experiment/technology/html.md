@@ -298,6 +298,7 @@ might use [can-component] to create a `<percent-slider>` element that creates a
 slider widget on the page:
 
 @demo demos/technology-overview/component-slider.html
+@codepen
 
 Or, you might use [can-component] to make a `<task-editor>` that uses `<percent-slider>`
 and manages the application logic around editing a todo:
@@ -315,6 +316,7 @@ For example, the following demo defines and uses a `<my-counter>` custom element
 to see it count.
 
 @demo demos/technology-overview/my-counter.html
+@codepen
 
 The demo defines the `<my-counter>` element with:
 
@@ -402,6 +404,7 @@ we can start the counter's count at 5 with the following:
 This is shown in the following demo:
 
 @demo demos/technology-overview/my-counter-5.html
+@codepen
 
 [can-stache]'s scope is usually made up of other component ViewModels.  [can-stache-bindings]
 passes values from one ViewModel to another.  For example, the `<task-editor>` component

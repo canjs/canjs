@@ -32,25 +32,24 @@ my-tabs ul:after  { content: "."; display: block; height: 1px; clear: both; visi
 my-tabs ul { display: inline-block; }
 </style>
 <div id='out'></div>
-<script id="demo-html" type="text/stache">
-<p><button on:click="addVegies()">Add Vegetables</button></p>
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
+import { Component, DefineList, DefineMap, queues, stache, viewModel } from "can";
+
+const demoHtml = `<p><button on:click="addVegies()">Add Vegetables</button></p>
 <my-tabs>
   {{#each(foodTypes)}}
     <my-panel title:from='title'>{{content}}</my-panel>
   {{/each}}
-</my-tabs>
-</script>
-<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component, DefineList, DefineMap, queues, stache, viewModel } from "can";
+</my-tabs>`;
 
-var Panel = DefineMap.extend("Panel", {
+const Panel = DefineMap.extend("Panel", {
 	active: {
 		type: "boolean",
 		default: false
 	},
 	connectedCallback: function(element) {
-		var panel = this;
-		var parentViewModel = canViewModel(element.parentNode);
+		const panel = this;
+		const parentViewModel = element.parentNode.viewModel;
 		parentViewModel.addPanel(panel);
 		return function() {
 			parentViewModel.removePanel(panel);
@@ -58,11 +57,11 @@ var Panel = DefineMap.extend("Panel", {
 	}
 });
 
-var PanelList = DefineList.extend({
+const PanelList = DefineList.extend({
 	"#": Panel
 });
 
-var ViewModel = DefineMap.extend({
+const ViewModel = DefineMap.extend({
 	// Contains a list of all panel scopes within the
 	// tabs element.
 	panels: {
@@ -86,7 +85,7 @@ var ViewModel = DefineMap.extend({
 	// it calls this method to remove the panel's viewModel from
 	// the panels array.
 	removePanel: function(panel){
-		var panels = this.panels;
+		const panels = this.panels;
 		queues.batch.start();
 		panels.splice(panels.indexOf(panel),1);
 		// if the panel was active, make the first item active
@@ -136,15 +135,15 @@ Component.extend({
 	ViewModel: Panel
 });
 
-var foodTypes = new DefineList([
+const foodTypes = new DefineList([
 	{title: "Fruits", content: "oranges, apples"},
 	{title: "Breads", content: "pasta, cereal"},
 	{title: "Sweets", content: "ice cream, candy"}
 ]);
 window.foodTypes = foodTypes;
 
-var template = stache.from("demo-html");
-var fragment = template({
+const template = stache(demoHtml);
+const fragment = template({
 	foodTypes: foodTypes,
 	addVegies: function(){
 		foodTypes.push({

@@ -57,13 +57,9 @@
 	<my-app></my-app>
 </div>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
-var DefineMap = require("can-define/map/map");
-var DefineList = require("can-define/list/list");
-var Component = require("can-component");
-var fixture = require("can-fixture");
-var realtimeRestModel = require("can-realtime-rest-model");
+import {DefineMap, DefineList, Component, fixture, realtimeRestModel} from 'can';
 
-var Website = DefineMap.extend({
+const Website = DefineMap.extend({
 	id: "number",
 	name: "string",
 	url: "string"
@@ -81,7 +77,7 @@ realtimeRestModel({
 });
 
 
-var websiteStore = fixture.store([{
+const websiteStore = fixture.store([{
 	id: 1,
 	name: "CanJS",
 	url: "http://canjs.us"
@@ -151,7 +147,7 @@ fixture("/websites/{id}", websiteStore);
 
 fixture.delay = 2000;
 
-var Paginate = DefineMap.extend({
+const Paginate = DefineMap.extend({
 	count: {
 		default: Infinity
 	},
@@ -219,7 +215,7 @@ Component.extend({
 		},
 		waiting: {
 			get: function(lastSet, resolve) {
-				var promise = this.promiseData;
+				const promise = this.promiseData;
 
 				promise.then(function() {
 					resolve(false);

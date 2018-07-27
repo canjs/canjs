@@ -1,24 +1,18 @@
-<div id='demo-html'>
-<script id="app" type="text/stache">
-<my-drivers selected:to="scope.vars.editing"/>
-<edit-plate plateName:bind="scope.vars.editing.licensePlate"/>
-</script>
-<script id='drivers-stache' type='text/stache'>
-<ul>
-	{{#each(drivers)}}
-		<li on:click="scope.root.select(this)">
-			{{title}} {{first}} {{last}} - {{licensePlate}}
-		</li>
-	{{/each}}
-</ul>
-</script>
-</div>
+<my-demo></my-demo>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id='demo-source'>
-import { Component, DefineList, DefineMap, stache, stacheBindings, viewAutorender } from "can";
+import { Component, DefineList, DefineMap } from "can";
 
 Component.extend({
 	tag: "my-drivers",
-	view: stache(document.getElementById("drivers-stache").innerHTML),
+	view: `
+		<ul>
+			{{#each(drivers)}}
+				<li on:click="scope.root.select(this)">
+					{{title}} {{first}} {{last}} - {{licensePlate}}
+				</li>
+			{{/each}}
+		</ul>
+	`,
 	ViewModel: DefineMap.extend({
 		drivers: {
 			default: function () {
@@ -37,7 +31,7 @@ Component.extend({
 
 Component.extend({
 	tag: "edit-plate",
-	view: stache("<input value='{{plateName}}' on:input='update(scope.element.value)'/>"),
+	view: `<input value='{{plateName}}' on:input='update(scope.element.value)'/>`,
 	ViewModel: DefineMap.extend({
 		plateName: "string",
 		update: function(value){
@@ -46,6 +40,11 @@ Component.extend({
 	})
 });
 
-var tree = stache(document.getElementById('app').innerHTML)({});
-document.body.appendChild(tree);
+Component.extend({
+	tag: 'my-demo',
+	view: `
+		<my-drivers selected:to="scope.vars.editing"/>
+		<edit-plate plateName:bind="scope.vars.editing.licensePlate"/>
+	`
+})
 </script>

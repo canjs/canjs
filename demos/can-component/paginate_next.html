@@ -1,14 +1,12 @@
 <body>
 <div id='out'></div>
-<script type="text/stache" id="demo-html">
-Page {{page()}} <button on:click='next()'>Next</button>
-</script>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
-var Component = require("can-component");
-var stache = require("can-stache");
-var DefineMap = require("can-define/map/map");
+import { Component, stache, DefineMap} from 'can';
 
-var ViewModel = DefineMap.extend({
+const demoHtml = `Page {{page()}} <button on:click='next()'>Next</button>`;
+
+
+const ViewModel = DefineMap.extend({
 	offset: {
 		default: 0
 	},
@@ -26,10 +24,10 @@ var ViewModel = DefineMap.extend({
 Component.extend({
 	tag: "my-paginate",
 	ViewModel: ViewModel,
-	view: stache.from("demo-html")
+	view: stache(demoHtml)
 });
 
-var out = document.getElementById("out");
+const out = document.getElementById("out");
 out.appendChild(stache("<my-paginate/>")({}));
 </script>
 </body>
