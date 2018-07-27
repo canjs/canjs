@@ -36,11 +36,11 @@
 	}
 </style>
 <div id='out'></div>
-<script id="demo-html" type="text/stache">
-<div><tree-combo items:from='locations' title:from='"Locations"'/></div>
-</script>
-<script id="tree-combo-stash" type='text/stache'>
-  <ul class='breadcrumb'>
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
+import { Component, DefineList, DefineMap, stache } from "can";
+
+const demoHtml = `<div><tree-combo items:from='locations' title:from='"Locations"'/></div>`;
+const treeComboStash = `  <ul class='breadcrumb'>
     <li on:click='./emptyBreadcrumb()'>{{title}}</li>
     {{#each(breadcrumb)}}
       <li on:click='../updateBreadcrumb(this)'>{{title}}</li>
@@ -58,12 +58,9 @@
         </li>
       {{/selectableItems}}
     </content>
-  </ul>
-</script>
-<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
-import { Component, DefineList, DefineMap, stache } from "can";
+  </ul>`;
 
-var ViewModel = DefineMap.extend({
+const ViewModel = DefineMap.extend({
 	items: {
 		Default: DefineList
 	},
@@ -76,12 +73,12 @@ var ViewModel = DefineMap.extend({
 	title: "*",
 	selectableItems: {
 		get: function(){
-			var breadcrumb = this.breadcrumb;
+			const breadcrumb = this.breadcrumb;
 
 			// if there's an item in the breadcrumb
 			if(breadcrumb.length){
 				// return the last item's children
-				var i = breadcrumb.length - 1;
+				const i = breadcrumb.length - 1;
 				return breadcrumb[i].children;
 			} else{
 				// return the top list of items
@@ -97,12 +94,12 @@ var ViewModel = DefineMap.extend({
 		this.breadcrumb = [];
 	},
 	updateBreadcrumb: function( item ){
-		var breadcrumb = this.breadcrumb,
+		const breadcrumb = this.breadcrumb,
 			index = breadcrumb.indexOf(item);
 		breadcrumb.splice(index + 1, breadcrumb.length - index - 1);
 	},
 	toggle: function(item){
-		var selected = this.selected,
+		const selected = this.selected,
 			index = selected.indexOf(item);
 		if(index === -1 ){
 			selected.push(item);
@@ -117,12 +114,12 @@ var ViewModel = DefineMap.extend({
 
 Component.extend({
 	tag: "tree-combo",
-	view: stache(document.getElementById("tree-combo-stash").innerHTML),
+	view: stache(treeComboStash),
 	ViewModel: ViewModel
 });
 
 
-var base = new DefineMap({
+const base = new DefineMap({
 	locations: [
 	  { id: 1, title: "Midwest", children: [
 	    { id: 5, title: "Illinois", children: [
@@ -174,7 +171,7 @@ var base = new DefineMap({
 	  }]
 });
 
-var template = stache.from('demo-html');
-var fragment = template(base);
+const template = stache(demoHtml);
+const fragment = template(base);
 document.getElementById("out").appendChild(fragment);
 </script>
