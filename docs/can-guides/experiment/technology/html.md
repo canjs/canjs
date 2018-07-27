@@ -100,9 +100,6 @@ functionality above. This implementation:
 <script type="module">
 import { Component } from "can";
 
-// Define the `Counter` observable type
-const Counter = DefineMap.extend();
-
 // Extend Component to define a custom element
 Component.extend({
 
@@ -170,7 +167,7 @@ are the most commonly used tags:
   {{#each(items)}} {{name}} {{/each}}
   ```
 
-[can-stache-bindings] is used pass values between the DOM and observables and call methods on
+[can-stache-bindings] are used to pass values between the DOM and observables and call methods on
 observables. Use it to:
 
 - Call methods on observables when DOM events happen. The following uses
@@ -196,7 +193,7 @@ observables. Use it to:
   @codepen
 
 - Update observables with element attribute and property values.  The following uses [can-stache-bindings.toParent]
-  to send the `<input>`'s _value to_ the [can-component.prototype.ViewModel]'s `count` property.
+  to send the `<input>`'s _value to_ the [can-component.prototype.ViewModel]'s `count` property when the user presses enter.
   ```html
   <my-demo></my-demo>
 
@@ -280,8 +277,8 @@ observables. Use it to:
 The following demo:
 
 - Loops through a list of todos with [can-stache.helpers.each] - `{{#each( todos )}} ... {{/each}}`.
-- Write out if all todos are complete with [can-stache.helpers.is] - `{{#is( completeCount, todos.length )}}`.
-- Update the `complete` state of a todo when a _checkbox_ is checked and vice-versa with [can-stache-bindings.twoWay] - `checked:bind='complete'`.
+- Writes out if all todos are complete with [can-stache.helpers.is] - `{{#is( completeCount, todos.length )}}`.
+- Updates the `complete` state of a todo when a _checkbox_ is checked and vice-versa with [can-stache-bindings.twoWay] - `checked:bind='complete'`.
 - Completes every todo with [can-stache-bindings.event] - `on:click='completeAll()'`.
 
 @demo demos/technology-overview/simple-todos.html
@@ -323,7 +320,7 @@ to see it count.
 
 The demo defines the `<my-counter>` element with:
 
-- The `Counter` observable constructor as shown in the [Key-Value Observables](#Key_ValueObservables) section of this guide:
+- The `Counter` observable constructor as shown in the [Key-Value Observables](technology-overview#Key_ValueObservables) section of the Technology Overview:
   ```js
   import {DefineMap} from "can";
   const Counter = DefineMap.extend({
@@ -344,7 +341,6 @@ The demo defines the `<my-counter>` element with:
 - A [can-component] that combines the `Counter` and `view` as follows:
   ```js
   import {Component} from "can";
-
   Component.extend({
       tag: "my-counter",
       ViewModel: Counter,
@@ -366,8 +362,8 @@ built within a [Model-View-ViewModel (MVVM) architecture](https://en.wikipedia.o
 <img src="../../docs/can-guides/experiment/technology/can-component.png"
   alt="" class='bit-docs-screenshot'/>
 
-Instead of creating the view, view-model as separate entities, they are
-often done together as follows:
+Instead of creating the view and view-model as separate entities, they are
+often created together as follows:
 
 ```js
 import {Component} from "can";

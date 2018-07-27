@@ -42,7 +42,7 @@ the logic and state of your application and connect those <span class='obs'>obse
 objects to:
 
 - The Document Object Model (DOM) to update your [guides/html] automatically.
-- The browser URL to support the forward and back button through [guides/routing].
+- The browser URL to support the forward and back buttons through [guides/routing].
 - Your service layer to make receiving, creating, updating, and deleting [guides/data service data] easier.
 
 
@@ -96,7 +96,7 @@ console.log( myCounter.count ) //-> 1
 
 
 
-`myCounter` is an instance of `Counter`. `myCounter.count` is what we call the _state_ of the `myCounter` instance.  `myCounter.increment` is part of the _logic_ that controls the
+`myCounter` is an instance of `Counter`. `myCounter.count` is part of the _state_ of the `myCounter` instance.  `myCounter.increment` is part of the _logic_ that controls the
 state of `myCounter`.
 
 `myCounter` is an <span class='obs'>observable</span> because you can listen to when
@@ -128,7 +128,7 @@ myCounter.increment();
 
 
 
-[can-define DefineList] creates <span class='obs'>observable</span> lists. Observable lists are mostly commonly
+[can-define/list/list DefineList] creates <span class='obs'>observable</span> lists. Observable lists are mostly commonly
 used with the [service layer](#Observablesandtheservicelayer). The following
 defines a `Counters` list type. Instances of `Counters` will have a `sum` property that returns the sum of
 each `Counter` within the list:
@@ -149,6 +149,7 @@ const Counters = DefineList.extend({
     // Plain objects will be converted to Counter instances.
     "#": Counter,
 
+    // Defines a getter for sum
     get sum(){
         // Loop through each counter and sum its count;
         let sum = 0;
@@ -160,6 +161,7 @@ const Counters = DefineList.extend({
 // Create an instance of Counters
 let myCounters = new Counters([
     new Counter(),
+    // Initializes count with value 3
     new Counter({count: 3}),
     // Plain objects will be converted to Counter instances.
     {count: 4}
@@ -188,7 +190,7 @@ CanJS's observables read the [can-define/map/map#Use DefineMap Use section] and 
 
 ## Observables and HTML elements
 
-CanJS applications use [can-component Component] to connect <span class='obs'>observables</span>
+CanJS applications use [can-component Components] to connect <span class='obs'>observables</span>
 to a page's HTML elements. We can use [can-component Component] to create a counting widget
 for the `Counter` <span class='obs'>observables</span> we just created.
 
@@ -286,7 +288,7 @@ CanJS applications use [can-route route] (or [can-route-pushstate routePushstate
 <span class='obs'>observable</span> to the browser's URL.
 
 The following shows the browser's forward and back buttons connected to the `<my-counter>` Component's
-<span class='obs'>observable</span> state. Click `+1` a few times. Then click
+<span class='obs'>observable</span> state. Click `+1` a few times, then click
 the forward (`⇦`) and back (`⇨`) buttons to see the count change:
 
 @demo demos/technology-overview/route-counter.html
@@ -395,7 +397,7 @@ response looks like:
     data: [
         { "id": 1, "name": "cook food",
           "complete": false, "dueDate": "Wed Jul 11 2018 13:42:31 GMT-0500" },
-        { "id": 2, name: "do taxes",
+        { "id": 2, "name": "do taxes",
           "complete": true, "dueDate": "Sun Jul 29 2018 20:58:25 GMT-0500" },
         ...
     ]
@@ -404,11 +406,11 @@ response looks like:
 
 The following loads this list of data and logs it to the console by:
 
-- Defines an <span class='obs'>observable</span> data type to represent individual todos (`Todo`).
-- Defines an <span class='obs'>observable</span> data type to represent a list of todos (`Todo.List`).
-- Connects those <span class='obs'>observable</span> data types to the RESTFUL service layer
+- Defining an <span class='obs'>observable</span> data type to represent individual todos (`Todo`).
+- Defining an <span class='obs'>observable</span> data type to represent a list of todos (`Todo.List`).
+- Connecting those <span class='obs'>observable</span> data types to the RESTFUL service layer
   with [can-rest-model restModel].
-- Uses the [can-connect/can/map/map.getList] method mixed-into the `Todo` type to get
+- Using the [can-connect/can/map/map.getList] method mixed-into the `Todo` type to get
   the todos from the server and log them to the console.
 
 ```js
@@ -573,6 +575,8 @@ the [guides/data] guide for more information on how to:
 
 Now that you've got a rough idea idea on the major pieces of CanJS, we suggest:
 
-
+- [guides/html HTML]
+- [guides/routing Routing]
+- [guides/data Service Layer]
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
