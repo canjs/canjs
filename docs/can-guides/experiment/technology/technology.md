@@ -195,6 +195,7 @@ for the `Counter` <span class='obs'>observables</span> we just created.
 The following widget counts the number of times the <button>+1</button> button is clicked:
 
 @demo demos/technology-overview/my-counter.html
+@codepen
 
 In CanJS, widgets are encapsulated with custom elements. Custom elements allow us to put an
 element in our HTML like `<my-counter></my-counter>`, and the widget will spring to life.
