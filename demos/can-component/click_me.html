@@ -2,11 +2,8 @@
 <hello-world />
 </script>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="data-source">
-var Component = require("can-component");
-var stache = require("can-stache");
-var DefineMap = require("can-define/map/map");
-
-var HelloWorldVM = DefineMap.extend({
+import {DefineMap, stache, Component} from 'can';
+const HelloWorldVM = DefineMap.extend({
    message: {
 	   default: "Hello There!"
    },
@@ -26,7 +23,7 @@ Component.extend({
    }
 });
 
-var template = stache.from('demo-html');
+const template = stache.from('demo-html');
 document.body.appendChild(template({}));
 </script>
 </body>
