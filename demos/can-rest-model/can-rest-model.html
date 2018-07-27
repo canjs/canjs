@@ -36,15 +36,15 @@ const todoConnection = restModel({
 
 
 
-var terms = ["can you","please","","","",""],
+let terms = ["can you","please","","","",""],
     verbs = ["clean","walk","do","vaccum","organize","fold","wash","dust","pay","cook","get","take out"],
     subjects = ["dog","laundry","diapers","clothes","car","windows","carpet","taxes","food","gas","trash"];
 
-var dayInMS = 24*60*60*1000;
-var lastWeek = new Date() - (7*dayInMS);
-var fourWeeks = new Date().getTime() + (4*7*dayInMS);
+let dayInMS = 24*60*60*1000;
+let lastWeek = new Date() - (7*dayInMS);
+let fourWeeks = new Date().getTime() + (4*7*dayInMS);
 
-var todoStore = fixture.store(30, function(){
+let todoStore = fixture.store(30, function(){
     return {
         complete: fixture.rand([true, false],1)[0],
         dueDate: new Date( fixture.rand(lastWeek, fourWeeks) ).toString(),
@@ -97,7 +97,7 @@ Component.extend({
 
         todosPromise: {
             get(){
-                var query = {filter: {}};
+                let query = {filter: {}};
                 if(this.sort) {
                     query.sort =  this.sort;
                 }
@@ -105,9 +105,9 @@ Component.extend({
                     query.filter.complete = this.completeFilter === "complete";
                 }
                 if(this.dueFilter) {
-                    var day = 24*60*60*1000;
-                    var now = new Date();
-                    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate() );
+                    let day = 24*60*60*1000;
+                    let now = new Date();
+                    let today = new Date(now.getFullYear(), now.getMonth(), now.getDate() );
                     if(this.dueFilter === "today") {
 
                         query.filter.dueDate = {
@@ -116,7 +116,7 @@ Component.extend({
                         }
                     }
                     if(this.dueFilter === "week") {
-                        var start = today.getTime() - (today.getDay() * day);
+                        let start = today.getTime() - (today.getDay() * day);
                         query.filter.dueDate = {
                             $gte: new Date(start).toString(),
                             $lt: new Date(start + 7*day).toString()

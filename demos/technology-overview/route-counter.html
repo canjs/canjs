@@ -4,7 +4,7 @@
 import { DefineMap, route, stache, stacheBindings } from "can";
 import "can/demos/technology-overview/mock-url";
 
-var Counter = DefineMap.extend({
+const Counter = DefineMap.extend({
     count: {
         default: 0,
         type: "number",
@@ -21,7 +21,7 @@ window.myCounter = new Counter();
 route.data = myCounter;
 route.start();
 
-var view = stache(`
+const view = stache(`
   <button on:click='increment()'>+1</button>
   Count: <span>{{count}}</span>
 `);
