@@ -1,18 +1,13 @@
 
 <div id='out'></div>
-<script id="demo-html" type="text/stache">
-<header>
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
+import { Component, stache, DefineMap } from "can";
+
+const demoHtml = `<header>
   <my-greeting>
     {{site}}
   </my-greeting>
-</header>
-</script>
-
-<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
-var Component = require("can-component");
-var stache = require("can-stache");
-var DefineMap = require("can-define/map/map");
-var $ = require("jquery");
+</header>`;
 
 Component.extend({
 	tag: "my-greeting",
@@ -24,6 +19,6 @@ Component.extend({
 	})
 });
 
-var template = stache.from("demo-html");
-$("#out").html(template({site: "CanJS"}));
+const template = stache(demoHtml);
+document.querySelector('#out').appendChild(template({site: "CanJS"}));
 </script>
