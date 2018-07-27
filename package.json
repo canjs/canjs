@@ -258,7 +258,7 @@
     "minifyBuild": true,
     "codepen": [
       [
-        "\"can\"",
+        "\"can\"|'can'",
         "\"//unpkg.com/can@5/core.mjs\""
       ]
     ]
