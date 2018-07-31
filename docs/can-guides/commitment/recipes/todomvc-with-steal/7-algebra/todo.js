@@ -1,10 +1,8 @@
 // models/todo.js
-import DefineMap from "can-define/map/";
-import DefineList from "can-define/list/";
-import set from "can-set";
+import {DefineMap, DefineList} from "can";
 
 const Todo = DefineMap.extend("Todo", {
-	id: "string",
+	id: {type: "string", identity: true},
 	name: "string",
 	complete: {
 		type: "boolean",
@@ -31,11 +29,5 @@ Todo.List = DefineList.extend("TodoList", {
 		return this.length === this.complete.length;
 	}
 });
-
-Todo.algebra = new set.Algebra(
-	set.props.boolean("complete"),
-	set.props.id("id"),
-	set.props.sort("sort")
-);
 
 export default Todo;

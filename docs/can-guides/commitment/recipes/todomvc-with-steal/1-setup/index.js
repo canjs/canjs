@@ -1,16 +1,17 @@
 // index.js
+import {Component, viewModel} from "can";
 import view from "./index.stache";
-import DefineMap from "can-define/map/";
+
 import test from "can-todomvc-test";
 
-const AppViewModel = DefineMap.extend("AppViewModel", {
-	appName: "string"
+Component.extend({
+	tag: "todo-mvc",
+	view,
+	ViewModel: {
+		appName: {default: "TodoMVC"}
+	}
 });
 
-const appVM = window.appVM = new AppViewModel({
-	appName: "TodoMVC"
-});
+const appVM = window.appVM = viewModel(document.querySelector("todo-mvc"));
 
-const fragment = view(appVM);
-document.body.appendChild(fragment);
 test(appVM);

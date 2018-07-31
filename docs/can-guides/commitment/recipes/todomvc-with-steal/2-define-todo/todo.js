@@ -1,5 +1,5 @@
 // models/todo.js
-import DefineMap from "can-define/map/";
+import {DefineMap} from "can";
 
 const Todo = DefineMap.extend("Todo", {
 	id: "string",
