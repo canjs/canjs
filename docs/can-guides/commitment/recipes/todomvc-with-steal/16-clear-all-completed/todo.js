@@ -33,7 +33,7 @@ Todo.List = DefineList.extend("TodoList", {
 			return todo.isSaving();
 		});
 	},
-	updateCompleteTo: function(value) {
+	updateCompleteTo(value) {
 		this.forEach(function(todo) {
 			todo.complete = value;
 			todo.save();

@@ -7,6 +7,8 @@ covering CanJS core libraries.
 
 @body
 
+> NOTICE: This guide is under maintenance.  It's currently being upgraded to CanJS 5.0.
+
 ## Setup (Framework Overview)
 
 ### The problem
@@ -195,7 +197,7 @@ Create the application template:
 Install the test harness:
 
 ```cmd
-npm install can-todomvc-test@2 --save-dev
+npm install can-todomvc-test@5 --save-dev
 ```
 
 Create the main app
@@ -820,12 +822,12 @@ can be simulated like:
 Update _models/todo.js_ to the following:
 
 @sourceref ./15-setter-toggle/todo.js
-@highlight 34-44,only
+@highlight 36-41,only
 
 Update _index.js_ to the following:
 
 @sourceref ./15-setter-toggle/index.js
-@highlight 14-19,only
+@highlight 18-23,only
 
 Update _index.stache_ to the following:
 
@@ -851,7 +853,7 @@ Make the "Clear completed" button work. When the button is clicked, It should de
 Update _models/todo.js_ to the following:
 
 @sourceref ./16-clear-all-completed/todo.js
-@highlight 45-49,only
+@highlight 42-46,only
 
 Update _index.stache_ to the following:
 
@@ -878,7 +880,7 @@ be added if they represent the current page.
   to the URL.  This is done with [can-route.data] like:
 
   ```js
-  route.data = new AppViewModel();
+  route.data = new DefineMap();
   ```
 
 - [can-route] can create pretty routing rules.  For example,
@@ -918,14 +920,10 @@ be added if they represent the current page.
 
 ### The solution
 
-```
-npm install can-route can-stache-route-helpers --save
-```
-
 Update _index.js_ to the following:
 
 @sourceref ./17-routing/index.js
-@highlight 5,10-27,40-42,only
+@highlight 2,9,16-38,only
 
 Update _index.stache_ to the following:
 
