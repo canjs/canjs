@@ -1,6 +1,6 @@
 {
   "name": "can",
-  "version": "5.2.2",
+  "version": "5.3.0",
   "main": "can.js",
   "scripts": {
     "preversion": "npm test",
@@ -92,7 +92,7 @@
     "can-log": "1.0.0",
     "can-make-map": "1.2.0",
     "can-map": "4.1.2",
-    "can-map-define": "4.2.0",
+    "can-map-define": "4.3.3",
     "can-memory-store": "1.0.0",
     "can-namespace": "1.0.0",
     "can-ndjson-stream": "1.0.0",
@@ -108,7 +108,7 @@
     "can-reflect-dependencies": "1.1.0",
     "can-reflect-promise": "2.1.0",
     "can-rest-model": "1.0.0",
-    "can-route": "4.3.1",
+    "can-route": "4.3.4",
     "can-route-hash": "1.0.1",
     "can-route-mock": "1.0.1",
     "can-route-pushstate": "5.0.2",
