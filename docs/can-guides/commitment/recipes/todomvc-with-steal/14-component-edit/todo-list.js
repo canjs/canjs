@@ -1,34 +1,31 @@
 // components/todo-list/todo-list.js
-import Component from "can-component";
-import DefineMap from "can-define/map/";
+import {Component} from "can";
 import view from "./todo-list.stache";
 import Todo from "~/models/todo";
 
-const TodoListVM = DefineMap.extend({
-	todos: Todo.List,
-	editing: Todo,
-	backupName: "string",
-	isEditing: function(todo) {
-		return todo === this.editing;
-	},
-	edit: function(todo) {
-		this.backupName = todo.name;
-		this.editing = todo;
-	},
-	cancelEdit: function() {
-		if (this.editing) {
-			this.editing.name = this.backupName;
-		}
-		this.editing = null;
-	},
-	updateName: function() {
-		this.editing.save();
-		this.editing = null;
-	}
-});
-
 export default Component.extend({
-	tag: "todo-list",
-	view: view,
-	ViewModel: TodoListVM
+    tag: "todo-list",
+    view,
+    ViewModel: {
+	    todos: Todo.List,
+	    editing: Todo,
+	    backupName: "string",
+	    isEditing(todo) {
+	        return todo === this.editing;
+	    },
+	    edit(todo) {
+	        this.backupName = todo.name;
+	        this.editing = todo;
+	    },
+	    cancelEdit() {
+	        if (this.editing) {
+	            this.editing.name = this.backupName;
+	        }
+	        this.editing = null;
+	    },
+	    updateName() {
+	        this.editing.save();
+	        this.editing = null;
+	    }
+	}
 });

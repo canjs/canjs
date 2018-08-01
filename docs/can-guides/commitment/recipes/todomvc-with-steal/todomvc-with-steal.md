@@ -522,9 +522,6 @@ __DELETE /api/todos/{id}__
 
 ### The solution
 
-```
-npm install can-fixture --save
-```
 
 Create _models/todos-fixture.js_ as follows:
 
@@ -555,14 +552,11 @@ Create _models/todos-fixture.js_ as follows:
 
 ### The solution
 
-```
-npm install can-connect --save
-```
 
 Update _models/todo.js_ to the following:
 
 @sourceref ./9-connection/todo.js
-@highlight 5,42-48,only
+@highlight 2,33-37,only
 
 ## List todos from the service layer (can-connect use)
 
@@ -601,7 +595,7 @@ Get all `todos` from the service layer using the "connected" `Todo` type.
 Update _index.js_ to the following:
 
 @sourceref ./10-connection-list/index.js
-@highlight 5,10-12,only
+@highlight 5,13-17,only
 
 ## Toggling a todo’s checkbox updates service layer (can-connect use)
 
@@ -724,14 +718,6 @@ a `DefineMap` property is read for the first time.
 
 ### The solution
 
-```
-npm install can-component can-event-dom-enter --save
-```
-
-Create _components/todo-create/todo-create.stache_ as follows:
-
-@sourceref ./13-component-create/todo-create.stache.html
-
 Create _components/todo-create/todo-create.js_ as follows:
 
 @sourceref ./13-component-create/todo-create.js
@@ -770,7 +756,7 @@ is the list of todos that will be managed by the custom element.
 - Use [can-stache-bindings.toChild] to pass a value from the scope to a component:
 
   ```
-  <some-component {name-in-component}="nameInScope" />
+  <some-component nameInComponent:from="nameInScope" />
   ```
 
 - [can-stache/keys/this] can be used to get the current context in stache:

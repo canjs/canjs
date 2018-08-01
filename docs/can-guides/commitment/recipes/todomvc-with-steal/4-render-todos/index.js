@@ -22,6 +22,6 @@ Component.extend({
 	}
 });
 
-const appVM = window.appVM = viewModel(document.querySelector("todo-mvc"));
+const appVM = window.appVM = document.querySelector("todo-mvc").viewModel;
 
 test(appVM);
