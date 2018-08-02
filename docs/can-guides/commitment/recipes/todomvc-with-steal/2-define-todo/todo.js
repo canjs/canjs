@@ -1,5 +1,5 @@
 // models/todo.js
-import DefineMap from "can-define/map/";
+import {DefineMap} from "can";
 
 const Todo = DefineMap.extend("Todo", {
 	id: "string",
@@ -8,7 +8,7 @@ const Todo = DefineMap.extend("Todo", {
 		type: "boolean",
 		default: false
 	},
-	toggleComplete: function() {
+	toggleComplete() {
 		this.complete = !this.complete;
 	}
 });

@@ -1,17 +1,14 @@
 // models/todo.js
-import DefineMap from "can-define/map/";
-import DefineList from "can-define/list/";
-import set from "can-set";
-import connectBaseMap from "can-connect/can/base-map/";
+import {DefineMap, DefineList, realtimeRestModel} from "can";
 
 const Todo = DefineMap.extend("Todo", {
-	id: "string",
+	id: {type: "string", identity: true},
 	name: "string",
 	complete: {
 		type: "boolean",
 		default: false
 	},
-	toggleComplete: function() {
+	toggleComplete() {
 		this.complete = !this.complete;
 	}
 });
@@ -36,7 +33,7 @@ Todo.List = DefineList.extend("TodoList", {
 			return todo.isSaving();
 		});
 	},
-	updateCompleteTo: function(value) {
+	updateCompleteTo(value) {
 		this.forEach(function(todo) {
 			todo.complete = value;
 			todo.save();
@@ -44,18 +41,10 @@ Todo.List = DefineList.extend("TodoList", {
 	}
 });
 
-Todo.algebra = new set.Algebra(
-	set.props.boolean("complete"),
-	set.props.id("id"),
-	set.props.sort("sort")
-);
-
-Todo.connection = connectBaseMap({
-	url: "/api/todos",
+Todo.connection = realtimeRestModel({
+	url: "/api/todos/{id}",
 	Map: Todo,
-	List: Todo.List,
-	name: "todo",
-	algebra: Todo.algebra
+	List: Todo.List
 });
 
 export default Todo;

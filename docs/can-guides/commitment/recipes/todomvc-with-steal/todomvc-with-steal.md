@@ -7,6 +7,8 @@ covering CanJS core libraries.
 
 @body
 
+> NOTICE: This guide is under maintenance.  It's currently being upgraded to CanJS 5.0.
+
 ## Setup (Framework Overview)
 
 ### The problem
@@ -169,7 +171,7 @@ Install `steal`, `steal-tools`, and CanJS’s core modules:
 
 ```cmd
 npm install steal steal-tools steal-css --save-dev
-npm install can-define can-stache steal-stache --save
+npm install can steal-stache --save
 ```
 
 
@@ -184,7 +186,8 @@ Create the starting HTML page:
 
 ```html
 <!-- index.html -->
-<script src="./node_modules/steal/steal.js"></script>
+<todo-mvc></todo-mvc>
+<script src="./node_modules/steal/steal.js" main></script>
 ```
 
 Create the application template:
@@ -194,7 +197,7 @@ Create the application template:
 Install the test harness:
 
 ```cmd
-npm install can-todomvc-test@2 --save-dev
+npm install can-todomvc-test@5 --save-dev
 ```
 
 Create the main app
@@ -324,7 +327,7 @@ QUnit.equal(todos.allComplete, true, "allComplete");
 Update _models/todo.js_ to the following:
 
 @sourceref ./3-define-todo-list/todo.js
-@highlight 3,17-32,only
+@highlight 2,16-31,only
 
 ## Render a list of todos (can-stache)
 
@@ -369,7 +372,7 @@ Update _models/todo.js_ to the following:
 Update _index.js_ to the following:
 
 @sourceref ./4-render-todos/index.js
-@highlight 4,9-17,only
+@highlight 4,13-21,only
 
 Update _index.stache_ to the following:
 
@@ -420,72 +423,22 @@ Update _index.stache_ to the following:
 @sourceref ./6-toggle-data/index.html
 @highlight 14-15,only
 
-## Define Todo.algebra (can-set)
+## Define Todo's identity
 
 ### The problem
 
-- Create a `set.Algebra` that understand the parameters of the `/api/todos` service layer.  The `/api/todos` service
-  layer will support the following parameters:
-  - `complete` - Specifies a filter on todos’ `complete` field.  Examples: `complete=true`, `complete=false`.
-  - `sort` - Specifies the sorted order the todos should be returned.  Examples: `sort=name`.
-  - `id` - Specifies the `id` property to use in `/api/todos/{id}`
-
-  Example:
-
-  ```
-  GET /api/todos?complete=true&sort=name
-  ```
-
-Example test code:
-
-```js
-QUnit.deepEqual( Todo.algebra.difference({}, {complete: true}), {complete: false} );
-QUnit.deepEqual( Todo.algebra.clauses.id, {id: "id"} );
-
-const sorted = Todo.algebra.getSubset({sort: "name"}, {}, [
-    { name: "mow lawn", complete: false, id: 5 },
-    { name: "dishes", complete: true, id: 6 },
-    { name: "learn canjs", complete: false, id: 7 }
-]);
-QUnit.deepEqual(sorted, [
-    { name: "dishes", complete: true, id: 6 },
-    { name: "learn canjs", complete: false, id: 7 },
-    { name: "mow lawn", complete: false, id: 5 }
-]);
-```
+- CanJS's model needs to know what is the unique identifier of a type.
 
 ### What you need to know
 
-- [The can-set Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZeV2lVNl9XanhHZ0k)
-- [can-set] provides a way to describe the parameters used in the service layer.  You use it to create
-  a [can-set.Algebra] like:
 
-  ```js
-  const todoAlgebra = new set.Algebra(
-    set.props.boolean("completed"),
-    set.props.id("_id"),
-    set.props.offsetLimit("offset","limit")
-  );
-  ```
-
-  The algebra can then be used to perform comparisons between parameters like:
-
-  ```js
-  todoAlgebra.difference({}, {completed: true}) //-> {completed: false}
-  ```
-
-- Use [can-set.props set.props] to describe the behavior of your set parameters.
 
 ### The solution
-
-```
-npm install can-set --save
-```
 
 Update _models/todo.js_ to the following:
 
 @sourceref ./7-algebra/todo.js
-@highlight 4,35-39,only
+@highlight 5,only
 
 ## Simulate the service layer (can-fixture)
 
@@ -571,9 +524,6 @@ __DELETE /api/todos/{id}__
 
 ### The solution
 
-```
-npm install can-fixture --save
-```
 
 Create _models/todos-fixture.js_ as follows:
 
@@ -604,14 +554,11 @@ Create _models/todos-fixture.js_ as follows:
 
 ### The solution
 
-```
-npm install can-connect --save
-```
 
 Update _models/todo.js_ to the following:
 
 @sourceref ./9-connection/todo.js
-@highlight 5,42-48,only
+@highlight 2,33-37,only
 
 ## List todos from the service layer (can-connect use)
 
@@ -650,7 +597,7 @@ Get all `todos` from the service layer using the "connected" `Todo` type.
 Update _index.js_ to the following:
 
 @sourceref ./10-connection-list/index.js
-@highlight 5,10-12,only
+@highlight 5,13-17,only
 
 ## Toggling a todo’s checkbox updates service layer (can-connect use)
 
@@ -773,14 +720,6 @@ a `DefineMap` property is read for the first time.
 
 ### The solution
 
-```
-npm install can-component can-event-dom-enter --save
-```
-
-Create _components/todo-create/todo-create.stache_ as follows:
-
-@sourceref ./13-component-create/todo-create.stache.html
-
 Create _components/todo-create/todo-create.js_ as follows:
 
 @sourceref ./13-component-create/todo-create.js
@@ -819,7 +758,7 @@ is the list of todos that will be managed by the custom element.
 - Use [can-stache-bindings.toChild] to pass a value from the scope to a component:
 
   ```
-  <some-component {name-in-component}="nameInScope" />
+  <some-component nameInComponent:from="nameInScope" />
   ```
 
 - [can-stache/keys/this] can be used to get the current context in stache:
@@ -883,12 +822,12 @@ can be simulated like:
 Update _models/todo.js_ to the following:
 
 @sourceref ./15-setter-toggle/todo.js
-@highlight 34-44,only
+@highlight 36-41,only
 
 Update _index.js_ to the following:
 
 @sourceref ./15-setter-toggle/index.js
-@highlight 14-19,only
+@highlight 18-23,only
 
 Update _index.stache_ to the following:
 
@@ -914,7 +853,7 @@ Make the "Clear completed" button work. When the button is clicked, It should de
 Update _models/todo.js_ to the following:
 
 @sourceref ./16-clear-all-completed/todo.js
-@highlight 45-49,only
+@highlight 42-46,only
 
 Update _index.stache_ to the following:
 
@@ -941,7 +880,7 @@ be added if they represent the current page.
   to the URL.  This is done with [can-route.data] like:
 
   ```js
-  route.data = new AppViewModel();
+  route.data = new DefineMap();
   ```
 
 - [can-route] can create pretty routing rules.  For example,
@@ -981,14 +920,10 @@ be added if they represent the current page.
 
 ### The solution
 
-```
-npm install can-route can-stache-route-helpers --save
-```
-
 Update _index.js_ to the following:
 
 @sourceref ./17-routing/index.js
-@highlight 5,10-27,40-42,only
+@highlight 2,9,16-38,only
 
 Update _index.stache_ to the following:
 

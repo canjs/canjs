@@ -1,46 +1,50 @@
 // index.js
+import {Component, viewModel, route, DefineMap} from "can";
 import view from "./index.stache";
-import DefineMap from "can-define/map/";
 import Todo from "~/models/todo";
-import route from "can-route";
 import "~/models/todos-fixture";
 import test from "can-todomvc-test";
 
-const AppViewModel = DefineMap.extend("AppViewModel", {
-	appName: {type: "string", serialize: false},
-	filter: "string",
-	allTodos: {
-		get: function(lastSet, resolve) {
-			Todo.getList({}).then(resolve);
-		}
-	},
-	get todosList() {
-		if(this.allTodos) {
-			if(this.filter === "complete") {
-				return this.allTodos.complete;
-			} else if(this.filter === "active") {
-				return this.allTodos.active;
-			} else {
-				return this.allTodos;
+
+route.register("{filter}");
+
+Component.extend({
+	tag: "todo-mvc",
+	view,
+	ViewModel: {
+		appName: {default: "TodoMVC"},
+		routeData: {
+			default(){
+				route.data = new DefineMap();
+				route.start();
+				return route.data;
 			}
+		},
+		allTodos: {
+			get: function(lastSet, resolve) {
+				Todo.getList({}).then(resolve);
+			}
+		},
+		get todosList() {
+			if(this.allTodos) {
+				if(this.routeData.filter === "complete") {
+					return this.allTodos.complete;
+				} else if(this.routeData.filter === "active") {
+					return this.allTodos.active;
+				} else {
+					return this.allTodos;
+				}
+			}
+		},
+		get allChecked() {
+			return this.todosList && this.todosList.allComplete;
+		},
+		set allChecked(newVal) {
+			this.todosList && this.todosList.updateCompleteTo(newVal);
 		}
-	},
-	get allChecked() {
-		return this.todosList && this.todosList.allComplete;
-	},
-	set allChecked(newVal) {
-		this.todosList && this.todosList.updateCompleteTo(newVal);
 	}
 });
 
-const appVM = window.appVM = new AppViewModel({
-	appName: "TodoMVC"
-});
+const appVM = window.appVM = document.querySelector("todo-mvc").viewModel;
 
-route.data = appVM;
-route.register("{filter}");
-route.start();
-
-const fragment = view(appVM);
-document.body.appendChild(fragment);
 test(appVM);
