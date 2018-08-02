@@ -14,10 +14,12 @@ covering CanJS core libraries.
 ### The problem
 
 - Setup steal to load a basic CanJS application.  A basic CanJS application has:
-  - A [can-define/map/map] ViewModel and an instance of that ViewModel.
-  - A [can-stache] view that is rendered with the instance of the ViewModel.
-- In addition, this application should load the [can-todomvc-test](https://www.npmjs.com/package/can-todomvc-test) module version 1.0 and
-  pass it the application’s `ViewModel` instance. You will need to declare the version explicitly as different versions of this guide depend on different versions of this package.
+  - A custom element defined by [can-component] and
+    an instance of that custom element in the page's HTML. That component includes a:
+    - A [can-define/map/map] ViewModel and an instance of that ViewModel.
+    - A [can-stache] view that is rendered with the instance of the ViewModel.
+- In addition, this application should load the [can-todomvc-test](https://www.npmjs.com/package/can-todomvc-test) module version 5.0 and
+  pass it the custom element's `ViewModel` instance. You will need to declare the version explicitly as different versions of this guide depend on different versions of this package.
 
 ### What you need to know
 
@@ -45,17 +47,18 @@ covering CanJS core libraries.
   }
   ```
 
-- Define a ViewModel type with [can-define/map/map]:
+- Define a custom element with [can-component]:
 
   ```js
-  import DefineMap from "can-define/map/";
-  const Type = DefineMap.extend({ ... });
-  ```
+  import {Component} from "can";
 
-- Create an instance of a ViewModel by using `new Type(props)`:
-
-  ```js
-  const instance = new Type({ ... });
+  Component.extend({
+      tag: "todo-mvc",
+      view: ...,
+      ViewModel: {
+         ...
+      }
+  });
   ```
 
 - Load a view with the [steal-stache] plugin like:
@@ -66,12 +69,10 @@ covering CanJS core libraries.
 
   Note that [steal-stache] is a StealJS plugin and needs to be configured as such.
 
-- Render a view (or `template`) by passing it data.  It returns a document fragment that can  
-  be inserted into the page like:
+- Add the custom element to your HTML page to see it in action:
 
-  ```js
-  const fragment = view(appVM);
-  document.body.appendChild(fragment);
+  ```html
+  <todo-mvc></todo-mvc>
   ```
 
 - Use the following HTML that a designer might have provided:
@@ -295,7 +296,7 @@ QUnit.equal(todos.allComplete, true, "allComplete");
 
   ```js
   DefineList.extend({
-      #: {type: ItemType}
+      "#": {type: ItemType}
   })
   ```
 

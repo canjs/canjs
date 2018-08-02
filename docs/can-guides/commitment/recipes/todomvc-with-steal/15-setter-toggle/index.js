@@ -1,5 +1,5 @@
 // index.js
-import {Component, viewModel} from "can";
+import {Component} from "can";
 import view from "./index.stache";
 import Todo from "~/models/todo";
 import "~/models/todos-fixture";
