@@ -9,32 +9,40 @@ CanJS has many utilities that help you understand how an application behaves and
 discover common problems. This guide is a central list for those utilities. It introduces
 those utilities and highlights when they are useful.
 
-## Setup Debugging
+## Set Up Debugging
 
-CanJS does not have a global export; instead, every module must be imported. While this
-improves longevity, it makes access to debugging utilities difficult.  The [can-debug]
-project adds a `can` object to the global window, making all of CanJS's packages
+CanJS does not have a single global export; instead, every module must be imported. While this
+improves longevity, it makes access to debugging utilities difficult. The [can-debug]
+package adds a `can` object to the global window, making all of CanJS's packages
 available.
 
 For example, `can-queue`'s [can-queues.logStack] method can be called like:
 
 ```js
-import queues from "can-queues";
+import { queues } from "can";
 queues.logStack();
 ```
 
-However, if any part of your application imports [can-debug], you can log the stack like:
+However, if any part of your application enables [can-debug], you can log the stack like:
 
 ```js
 can.queues.logStack()
 ```
+The following sections show how to enable [can-debug] using ES Modules, StealJS, and Webpack:
+
+### ES Module Setup
+
+If you are using the [core](guides/setup.html#ImportingthecoreESmodulebundle) or [ecosystem](guides/setup.html#ImportingtheecosystemESmodulebundle) ES module bundle, [can-debug] will be enabled automatically.
 
 > NOTE: When first accessing properties on the global `can`, a warning will be logged. This is to discourage
 > relying on the global `can` object.
 
-Therefore, it's useful to import [can-debug] __only__ in development.  The following shows how to set this up
-for Webpack and StealJS:
+Debugging is not enabled automatically with the minified ES module bundles. To enable it, you will need to import [can-debug] from the ecosystem bundle and enable it yourself:
 
+```js
+import { debug } from "//unpkg.com/can@5/ecosystem.min.mjs";
+debug();
+```
 
 ### StealJS setup
 
@@ -49,13 +57,17 @@ Add the following to your main module:
 
 ```js
 //!steal-remove-start
-import can from "can-debug";
+import { debug } from "can";
+debug();
 //!steal-remove-end
 ```
 
+> NOTE: You can also do this using [individual packages](guides/setup.html#Installingindividualpackages)
+> with `import debug from "can-debug";`
+
 #### Conditional loading
 
-Conditional loading makes it possible to load a module only when another module export true. To start, we'll create an `is-dev` module:
+Conditional loading makes it possible to load a module only when another module's export evaluates to `true`. To start, we'll create an `is-dev` module:
 
 ```js
 // is-dev.js
@@ -65,7 +77,10 @@ export default !steal.isEnv("production");
 Then we can conditionally load modules like:
 
 ```js
-import can from "can-debug#?~is-dev";
+import debug from "can-debug#?~is-dev";
+if (debug) {
+	debug();
+}
 ```
 
 ### WebPack Setup
@@ -75,7 +90,8 @@ code to your main module:
 
 ```js
 if (process.env.NODE_ENV !== "production") {
-    require("can-debug");
+    const debug = require("can-debug");
+	debug();
 }
 ```
 
@@ -97,12 +113,11 @@ module.exports = {
 };
 ```
 
-
 ## Provide useful debugger names
 
 CanJS tries to create useful names to help identify the objects and
 functions in your application. It uses [can-reflect]'s [can-reflect.getName]
-to return a useful debugger name.  By default objects are named using the following convention:
+to return a useful debugger name. By default objects are named using the following convention:
 
 - The name starts with the observable constructor name, ex: `DefineMap`.
 - The constructor name is decorated with the following characters based on its type:
@@ -119,7 +134,7 @@ If you are using [can-map], [can-define/map/map] or any other package that inher
 name your function by passing `.extend` a name as the first argument:
 
 ```js
-import DefineMap from "can-define/map/map";
+import { DefineMap } from "can";
 
 export default DefineMap.extend("TheNameOfMyType", { ... })
 ```
@@ -161,7 +176,7 @@ new Observation(function fullName(){
 ```
 
 > NOTE: If your function is a property on an observable map or list like [can-define/map/map],
-> you don't have to name it.  For example, CanJS will name the `fullName` getter in the following example:
+> you don't have to name it. For example, CanJS will name the `fullName` getter in the following example:
 > ```js
 > DefineMap.extend("Person",{
 >   fullName: {
@@ -210,7 +225,7 @@ The following video shows using `logStack`:
 
 
 [can-queues.log can.queues.log] can be used to log when a
-task is enqueued and flushed.  Often, you only want to log when
+task is enqueued and flushed. Often, you only want to log when
 tasks are run. This can be done with:
 
 ```js
@@ -344,7 +359,7 @@ Once installed, you will see a CanJS icon next to the address bar:
   alt="The CanJS Devtools extension icon - disabled"
   width="600px"/>
 
-Initially, this icon will be disabled. In order to enable the extension, you need to install [can-debug] as explained in [Setup Debugging](#SetupDebugging). Make sure you have `can-debug@1.2.0` or higher. Once this is set up, the icon will be enabled:
+Initially, this icon will be disabled. In order to enable the extension, you need to install [can-debug] as explained in [Setup Debugging](#SetUpDebugging). Make sure you have `can-debug@2` or higher. Once this is set up, the icon will be enabled:
 
 <img src="../../docs/can-guides/images/devtools/canjs-button-enabled.png"
   class="bit-docs-screenshot"
