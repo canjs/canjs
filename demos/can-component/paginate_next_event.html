@@ -1,19 +1,16 @@
-<body>
+<div id="out"></div>
 <style>
 	.editing {
 		font-weight: bold;
 	}
 </style>
-<div id='out'></div>
-<div id="demo-html">
-</div>
-<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id='demo-source'>
-import { Component, stache, DefineMap, DefineList} from 'can';
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
+import { Component, stache, DefineMap, DefineList} from "can";
 
 const playerList = `<ul>
 	{{#each(players, player=value)}}
-		<li {{#scope.root.isEditing(player)}}class="editing"{{/isEditing}}
-			on:click='scope.root.editPlayer(player)'>{{player.name}}</li>
+		<li {{#scope.vm.isEditing(player)}}class="editing"{{/isEditing}}
+			on:click='scope.vm.editPlayer(player)'>{{player.name}}</li>
 	{{/each}}
 </ul>
 <player-edit
@@ -67,7 +64,8 @@ Component.extend({
 	})
 });
 
-document.querySelector("#out").appendChild(stache("<player-list/>")({}));
+var out = document.getElementById("out");
+var template = stache("<player-list/>");
+out.appendChild(template({}));
 
 </script>
-</body>
