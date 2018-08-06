@@ -68,7 +68,7 @@ A “fork” is a copy of a repository in your personal GitHub account. “Cloni
 GitHub has a [forking guide](https://help.github.com/articles/fork-a-repo/) and a [cloning guide](https://help.github.com/articles/cloning-a-repository/) that explains how to clone a repo on Linux, Mac, or Windows.
 
 To start, click the __Fork__ button to fork the repository from which you will be working.
-For example, you can fork [can-compute] by pressing its __Fork__ button on GitHub:
+For example, you can fork [can-compute](https://github.com/canjs/can-compute) by pressing its __Fork__ button on GitHub:
 
 <img src="../../../docs/can-guides/contribute/fork.png" width="600px"/>
 
