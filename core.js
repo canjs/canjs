@@ -104,9 +104,5 @@ export { default as reflectPromise } from "./es/can-reflect-promise";
 
 // __ Enable Devtools __
 //!steal-remove-start
-import { default as debug } from "./es/can-debug";
-
-if(process.env.NODE_ENV !== 'production') {
-	debug();
-}
+import "./enable-can-debug";
 //!steal-remove-end
