@@ -303,7 +303,7 @@ In this section, we will:
 Update the `JavaScript` tab to:
 
  - Create a `AppVM` view model type that will manage the behavior of the `todomvc-template` and
-   will update when the url changes.
+   will update when the URL changes.
    - Define a `filter` property that will be updated when the route changes.
    - Define a `route` property that will be updated when the route changes.
    - Define a `todosPromise` property that uses `filter` to determine what data should be
@@ -312,10 +312,10 @@ Update the `JavaScript` tab to:
      - If `filter` is `"complete"`, only complete todos will be loaded.
      - If `filter` is any other value, the active todos will be loaded.
  - Create an instance of the application view model (`appVM`).
- - Connect changes in the url to changes in the `appVM` with [can-route.data].
- - Create a pretty routing rule so if the url looks like `"#!active"`, the `filter` property of
+ - Connect changes in the URL to changes in the `appVM` with [can-route.data].
+ - Create a pretty routing rule so if the URL looks like `"#!active"`, the `filter` property of
    `appVM` will be set to `filter` with [can-route].
- - Initialize the url’s values on `appVM` and set up the two-way connection with [can-route.ready].
+ - Initialize the url’s values on `appVM` and set up the two-way connection with [can-route.start].
  - Render the `todomvc-template` with the `appVM`.
 
 
@@ -324,7 +324,7 @@ Update the `JavaScript` tab to:
 
 Update the __HTML__ tab to:
 
- - Set `href` to a url that will set the desired properties on `appVM` when clicked.
+ - Set `href` to a URL that will set the desired properties on `appVM` when clicked.
  - Add `class='selected'` to the link if the current route matches the current properties of the `appVM` using [can-stache.helpers.routeCurrent].
 
 @sourceref ./8-routing/html.html

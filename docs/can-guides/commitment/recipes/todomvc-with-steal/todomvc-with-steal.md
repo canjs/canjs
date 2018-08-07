@@ -19,7 +19,7 @@ covering CanJS core libraries.
     - A [can-define/map/map] ViewModel and an instance of that ViewModel.
     - A [can-stache] view that is rendered with the instance of the ViewModel.
 - In addition, this application should load the [can-todomvc-test](https://www.npmjs.com/package/can-todomvc-test) module version 5.0 and
-  pass it the custom element's `ViewModel` instance. You will need to declare the version explicitly as different versions of this guide depend on different versions of this package.
+  pass it the custom element’s `ViewModel` instance. You will need to declare the version explicitly as different versions of this guide depend on different versions of this package.
 
 ### What you need to know
 
@@ -428,7 +428,7 @@ Update _index.stache_ to the following:
 
 ### The problem
 
-- CanJS's model needs to know what is the unique identifier of a type.
+- CanJS’s model needs to know what is the unique identifier of a type.
 
 ### What you need to know
 
@@ -863,7 +863,7 @@ Update _index.stache_ to the following:
 
 ## Set up routing (can-route)
 
-Make it so that the following urls display the corresponding
+Make it so that the following URLs display the corresponding
 todos:
 
  - `#!` or ` ` - All todos
@@ -893,7 +893,7 @@ be added if they represent the current page.
   ```
 
 - [can-route.start] initializes the connection between the
-  url and the `AppViewModel`.  After you’ve created all
+  URL and the `AppViewModel`.  After you’ve created all
   your application’s pretty routing rules, call it like:
 
   ```js
@@ -912,7 +912,7 @@ be added if they represent the current page.
   {{/if}}
   ```
 
-  [can-stache-route-helpers.routeUrl] returns a url that will
+  [can-stache-route-helpers.routeUrl] returns a URL that will
   set its first parameters properties:
 
   ```

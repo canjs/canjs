@@ -407,9 +407,9 @@ For example you could:
 
 * use only **can-connect** and **can-define** to create awesome observable models that are connected in realtime to your existing API
 
-* use just **can-route** to take advantage of state-based observable routes, for the easy url updating and decoupling the pattern provides
+* use just **can-route** to take advantage of state-based observable routes, for the easy URL updating and decoupling the pattern provides
 
-Any individual or combination of modules will provide you a great tools for streamlining your web development, and together they become our own little "Megazord” **CanJS**, greater than the sum of it’s parts
+Any individual or combination of modules will provide you a great tools for streamlining your web development, and together they become our own little "Megazord” **CanJS**, greater than the sum of its parts
 
 **Angular 2** is more of an "everything out of the box" framework, where you get everything up front, and it all works together to help you develop more efficiently. The pieces and modules of Angular’s libraries are not really meant to be used on their own, and it would be hard to just extract the tiny bits you need without buying into the whole Angular framework.
 
@@ -456,7 +456,7 @@ Dependency Injection (**DI**) *as a pattern* can provide decoupling from your de
 
 **CanJS** chooses not to include a Dependency Injection framework, opting instead for the developer to decide if they need any more DI than JavaScript can already provide. JavaScript’s prototypal inheritance and mutable runtime instances can serve 90% of the uses for Dependency Injection, and if the developer decided they need a DI library they are free to add their own.
 
-**Angular 2** has doubled down on Dependency Injection, making every part of it’s design incorporate providers, services, and an injection syntax. This creates an odd pattern in **Angular 2** where not only do you have to import a component or service and use it, you also have to declare the provider for it, often just passing the class as a shorthand.
+**Angular 2** has doubled down on Dependency Injection, making every part of its design incorporate providers, services, and an injection syntax. This creates an odd pattern in **Angular 2** where not only do you have to import a component or service and use it, you also have to declare the provider for it, often just passing the class as a shorthand.
 
 Note in the example below `FriendService` is imported, used *and also* needs to be declared in the `providers` metadata:
 

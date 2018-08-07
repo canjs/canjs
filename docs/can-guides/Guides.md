@@ -27,7 +27,7 @@ For example:
 
 We encourage everyone to take a look at:
 
-- [guides/technology-overview] to understand CanJS's core concepts.
+- [guides/technology-overview] to understand CanJS’s core concepts.
 - One of the _Platform and Environment Integration_ guides to
   get CanJS working in your development and production environments.
 - [guides/debugging] to know how to fix problems when they arise.

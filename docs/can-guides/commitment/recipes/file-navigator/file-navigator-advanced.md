@@ -437,7 +437,7 @@ Now we want to make all the folders able to open and close.  This means creating
   });
   ```
   This component will be created anytime a `<my-component>` element is found in the page.  When the component is created, it creates
-  an instance of it’s `ViewModel`, in this case `MyComponentVM`.
+  an instance of its `ViewModel`, in this case `MyComponentVM`.
 
 - You can pass data to a component’s `ViewModel` with [can-stache-bindings.toChild {data-bindings}] like:
 

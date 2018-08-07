@@ -25,8 +25,8 @@ CanJS 5.0:
   - Use nicely documented, pre-built models for common scenarios:
     - [can-rest-model] - A simple restful connection without the need to configure a [can-query-logic].
     - [can-realtime-rest-model] - A simple restful connection with automatic list management.
-    - [can-super-model] - A restful connection with most of [can-connect]'s features already configured.
-  - More easily configure [can-query-logic].  If your service layer matches [can-query-logic]'s expectations,
+    - [can-super-model] - A restful connection with most of [can-connect]’s features already configured.
+  - More easily configure [can-query-logic].  If your service layer matches [can-query-logic]’s expectations,
     all configuration comes from your [can-define/map/map DefineMap].  The following defines a `Todo`
     type and connects it to a restful service. No need to create a `new set.Algebra()`!
 
@@ -81,10 +81,10 @@ CanJS 5.0:
         todos //-> Todo.List[ Todo{id: 2, ...} ]
     })
     ```
-  - If your service layer does not match [can-query-logic]'s expectations,
-    it's far easier to configure than [can-set-legacy can-set]. For example, if
+  - If your service layer does not match [can-query-logic]’s expectations,
+    it’s far easier to configure than [can-set-legacy can-set]. For example, if
     your service layer uses `orderBy` instead of `sort`, you just need to provide functions that
-    translate back and forth between your servers parameters and `can-query-logic`'s [can-query-logic/query query format].
+    translate back and forth between your servers parameters and `can-query-logic`’s [can-query-logic/query query format].
 
     ```js
     import {DefineMap, DefineList, realtimeRestModel, QueryLogic} from "can";
@@ -144,7 +144,7 @@ The following is a list of changes you must make to use CanJS 5.0.
 ### Replace `can-set` with `can-set-legacy`
 
 The biggest change to CanJS 5.0 from 4.0 was the replacement of `can-set` with
-[can-query-logic].  If you are using `can-set`, it's likely you can upgrade by using [can-set-legacy]
+[can-query-logic].  If you are using `can-set`, it’s likely you can upgrade by using [can-set-legacy]
 instead of `can-set`. So if you had code like:
 
 ```js
@@ -226,9 +226,9 @@ superModel({
 })
 ```
 
-> NOTE: If the service layer can be re-written to match [can-query-logic]'s
+> NOTE: If the service layer can be re-written to match [can-query-logic]’s
 > format, configuring a `queryLogic` instance isn't necessary.  Read
-> more about this format in [can-rest-model]'s documentation.
+> more about this format in [can-rest-model]’s documentation.
 
 ### Create a list type on all connections
 
