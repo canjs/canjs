@@ -180,7 +180,7 @@ npm install can steal-stache --save
 Add __steal.plugins__ to _package.json_:
 
 @sourceref ./1-setup/package.json
-@highlight 21-25
+@highlight 17-21
 
 
 Create the starting HTML page:
