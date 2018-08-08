@@ -11,7 +11,7 @@ const Todo = DefineMap.extend("Todo",{
 
     // `complete` is a Boolean, null or undefined
     // and defaults to `true`.
-    complete: { type: "boolean", default: true },
+    complete: { type: "boolean", default: false },
 
     // `dueDate` is a Date, null or undefined.
     dueDate: "date",

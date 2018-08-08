@@ -14,15 +14,69 @@
 @templateRender <% %>
 @subchildren
 @description Welcome to the CanJS API documentation!
-This page is a cheat-sheet for the most common APIs within CanJS. Read the
+This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the
 [guides/technology-overview] page for background on the following APIs.
 
 @body
 
+## Custom Element Basics
+
+Custom elements are defined with [can-component Component]. The following defines
+a `<my-counter>` widget and includes it in the page:
+
+```html
+<!-- Adds the custom element to the page -->
+<my-counter></my-counter>
+
+<script type="module">
+import { Component } from "can";
+
+// Extend Component to define a custom element
+Component.extend({
+
+    // The name of the custom element
+    tag: "my-counter",
+
+    // The HTML content within the custom element.
+    //  - {{count}} is a `stache` magic tag.
+    //  - `on:click` is a `stache` event binding.
+	// Read the VIEWS section below for more details. 👀
+    view: `
+        Count: <span>{{count}}</span>
+        <button on:click='increment()'>+1</button>
+    `,
+
+    // Defines a DefineMap used to control the
+    // logic of this custom element.
+	// Read the OBSERVABLES section below for more details. 👀
+    ViewModel: {
+        count: {default: 0},
+        increment() {
+            this.count++;
+        }
+    }
+});
+</script>
+```
+@codepen
+
+ A component's:
+
+- [can-component.prototype.ViewModel] is defined with the [api#Observables Observables] APIs documented below.
+- [can-component.prototype.view] is defined with the [api#Views Views] APIs documented below.
+
+Also, the [api#ElementBindings Element Bindings] section shows how to pass data between
+components.
+
+
 ## Observables
 
-Define observable key-value types with [can-define/map/map]. Property
-behaviors are defined within a [can-define.types.propDefinition].
+Define custom observable key-value types with [can-define/map/map DefineMap].
+`DefineMap` is used to organize the logic of both your [can-component.prototype.ViewModel Component's ViewModel] and your [api#DataModeling Data Models]. The logic
+is expressed as properties and methods. Property behaviors are defined within a [can-define.types.propDefinition].
+
+The following defines a `Todo` type with numerous property behaviors and
+a `toggleComplete` method.
 
 ```js
 import {DefineMap} from "can";
@@ -37,8 +91,8 @@ const Todo = DefineMap.extend("Todo",{
     id: { type: "number", identity: true },
 
     // `complete` is a Boolean, null or undefined
-    // and defaults to `true`.
-    complete: { type: "boolean", default: true },
+    // and defaults to `false`.
+    complete: { type: "boolean", default: false },
 
     // `dueDate` is a Date, null or undefined.
     dueDate: "date",
@@ -96,13 +150,11 @@ todo.dueDate = new Date().getTime() + 1000*60*60;
 let handler = function(event, newValue, oldValue){
     console.log(newValue) //-> "Learn DefineMap"
 };
-todo.on("name", handler);
+todo.listenTo("name", handler);
 todo.name = "Learn DefineMap";
-// Stop listening to changes
-todo.off("name", handler);
 
-// Listen to changes that can be easily unregistered
-todo.listenTo("complete", function(event, newValue, oldValue){})
+// Stop listening to changes
+todo.stopListening("name", handler);
 // Stop listening to all registered handlers
 todo.stopListening();
 
@@ -135,7 +187,9 @@ Define observable list types with [can-define/list/list]:
 import {DefineList} from "can";
 import Todo from "//canjs.com/demos/api/todo.mjs";
 
-// Define an observable TodoList type
+// -----------------------------------
+// Define an observable TodoList type:
+// -----------------------------------
 const TodoList = DefineList.extend("TodoList",{
 
     // Specify the behavior of items in the TodoList
@@ -144,15 +198,14 @@ const TodoList = DefineList.extend("TodoList",{
     // Create a computed `complete` property
     get complete(){
         // Filter all complete todos
-        return this.filter({complete: true})
+        return this.filter({complete: true});
     }
-})
-```
-@codepen
+});
 
-Create and use instances of observable list types:
+// -----------------------------------
+// Create and use instances of observable list types:
+// -----------------------------------
 
-```js
 // Create a todo list
 const todos = new TodoList([
     {id: 1, name: "learn observable lists"},
@@ -160,24 +213,29 @@ const todos = new TodoList([
 ])
 
 // Read the length and access items
-todos.length //-> 2
-todos[0] //-> Todo{id: 1, name: "learn observable lists"}
+console.log(todos.length) //-> 2
+console.log(todos[0]) //-> Todo{id: 1, name: "learn observable lists"}
 
 // Read properties
-todos.complete //-> TodoList[Todo{id: 2, name: "mow lawn", complete: true}]
+console.log(todos.complete) //-> TodoList[Todo{id: 2, name: "mow lawn", complete: true}]
 
 // Listen for changes:
-todos.on("length", function(event, newLength, oldLength){})
-todos.on("add", function(event, addedItems, index){})
-todos.on("remove", function(event, removedItems, index){})
+todos.listenTo("length", (event, newLength, oldLength) => {
+	console.log(newLength) //-> 1
+})
+todos.listenTo("add", function(event, addedItems, index){})
+todos.listenTo("remove", function(event, removedItems, index){
+	console.log(removedItems.length, index) //-> 1, 1
+})
 
 // Make changes:
 todos.pop();
 
 // Call non-mutating methods
-todos.some(function(todo){
-    return todo.complete = true;
-}) //-> false
+var areSomeComplete = todos.some(function(todo){
+    return todo.complete === true;
+});
+console.log( areSomeComplete ) //-> false
 ```
 
 <details>
@@ -264,6 +322,7 @@ Render a template that updates the page when any data changes using [can-stache]
 
 ```js
 import {stache} from "can";
+import Todo from "//canjs.com/demos/api/todo.mjs";
 
 // Create a template / view
 let view = stache(`<p>I need to {{name}}</p>`);
@@ -276,6 +335,7 @@ let fragment = view(todo);
 // Insert fragment in the page
 document.body.appendChild(fragment);
 ```
+@codepen
 
 Common [can-stache] tags and built in helpers:
 
@@ -948,39 +1008,7 @@ customElement.value = "VALUE";
 
 </table>
 
-Define custom elements with [can-component]:
-
-```js
-import {Component} from "can";
-
-Component.extend({
-
-    // Defines the tag name
-    tag: "my-counter",
-
-    // Defines the content within the
-    // custom element.
-    view: `
-        <button on:click="add(1)">+1</button>
-        {{count}}
-    `,
-    // Defines the `ViewModel` observable
-    // used to render the `view`. This
-    // object is used to extend `DefineMap`.
-    ViewModel: {
-        count: {type: "number", default: 0},
-        add(increment){
-            this.count += increment;
-        }
-    }
-});
-```
-
-Create custom elements like:
-
-```html
-<my-counter></my-counter>
-```
+## Element Bindings
 
 Listen to events on custom elements, read, write or cross-bind `ViewModel` data with [can-stache-bindings]:
 
@@ -1005,7 +1033,7 @@ Pass [can-component/can-template can-template] views to custom elements to custo
 
 ```js
 <my-counter count:from="5">
-  <can-template name="incrementButton" this:from="this">
+  <can-template name="incrementButton">
     <button on:click="add(5)">ADD 5!</button>
   </can-template>
   <can-template name="countDisplay">
