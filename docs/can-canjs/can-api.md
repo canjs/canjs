@@ -21,12 +21,15 @@ This page is a cheat-sheet for the most common APIs within CanJS. Read the
 
 ## Observables
 
-Define observable key-value types with [can-define/map/map]:
+Define observable key-value types with [can-define/map/map]. Property
+behaviors are defined within a [can-define.types.propDefinition].
 
 ```js
 import {DefineMap} from "can";
 
-// Define an observable Todo type.
+// -------------------------------
+// Define an observable Todo type:
+// -------------------------------
 const Todo = DefineMap.extend("Todo",{
 
     // `id` is a Number, null, or undefined and
@@ -41,7 +44,7 @@ const Todo = DefineMap.extend("Todo",{
     dueDate: "date",
 
     // `isDueWithin24Hours` property returns if the `.dueDate`
-    // is in the next 24 hrs.
+    // is in the next 24 hrs. This is a computed property.
     get isDueWithin24Hours(){
         let msLeft = this.dueDate - new Date();
         return msLeft >= 0 && msLeft <= 24 * 60 * 60 * 1000;
@@ -58,24 +61,31 @@ const Todo = DefineMap.extend("Todo",{
             })
         }
     },
-
+	// `owner` is a custom DefineMap with a first and
+	// last property.
     owner: {
         Type: {
             first: "string",
             last: "string"
         }
     },
-
+	// `tags` is an observable list of items that
+	// defaults to including "new"
+	tags: {
+		default(){
+			return ["new"]
+		}
+	},
     // `toggleComplete` is a method
     toggleComplete(){
         this.complete != this.complete;
     }
 });
-```
 
-Create and use instances of the observable key-value types:
+// -----------------------------------------------------------
+// Create and use instances of the observable key-value type:
+// -----------------------------------------------------------
 
-```js
 // Create a todo instance:
 const todo = new Todo({name: "Learn Observables"});
 
@@ -83,18 +93,22 @@ const todo = new Todo({name: "Learn Observables"});
 todo.dueDate = new Date().getTime() + 1000*60*60;
 
 // Listen to changes
-let handler = function(ev, newVal, oldVal){};
-todo.on("complete", handler);
+let handler = function(event, newValue, oldValue){
+    console.log(newValue) //-> "Learn DefineMap"
+};
+todo.on("name", handler);
+todo.name = "Learn DefineMap";
 // Stop listening to changes
-todo.off("complete", handler);
+todo.off("name", handler);
 
 // Listen to changes that can be easily unregistered
-todo.listenTo("complete", function(ev, newVal, oldVal){})
+todo.listenTo("complete", function(event, newValue, oldValue){})
 // Stop listening to all registered handlers
 todo.stopListening();
 
 // Call a method
 todo.toggleComplete();
+console.log(todo.complete) //-> true
 
 // Assign properties
 todo.assign({
@@ -102,12 +116,24 @@ todo.assign({
         first: "Justin", last: "Meyer"
     }
 });
+
+// Serialize to a plain JavaScript object
+console.log( todo.serialize() ) //-> {
+//     complete: true,
+//     dueDate: Date,
+//     name: "Learn DefineMap",
+//     nameChangeCount: 1,
+//     owner: {first: "Justin", last: "Meyer"},
+//     tags: ["new"]
+// }
 ```
+@codepen
 
 Define observable list types with [can-define/list/list]:
 
 ```js
 import {DefineList} from "can";
+import Todo from "//canjs.com/demos/api/todo.mjs";
 
 // Define an observable TodoList type
 const TodoList = DefineList.extend("TodoList",{
@@ -122,6 +148,7 @@ const TodoList = DefineList.extend("TodoList",{
     }
 })
 ```
+@codepen
 
 Create and use instances of observable list types:
 

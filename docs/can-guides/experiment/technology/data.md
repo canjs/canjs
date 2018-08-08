@@ -55,7 +55,7 @@ const Todo = DefineMap.extend("Todo",{
 
     // `id` uniquely identifies instances of this type.
     id: { type: "number", identity: true },
-	
+
 	// properties on models can be given types as well as default values
     complete: { type: "boolean", default: false },
     dueDate: "date",
@@ -66,7 +66,7 @@ const Todo = DefineMap.extend("Todo",{
     }
 });
 
-Todo.List = DefineMap.extend("TodoList",{
+Todo.List = DefineList.extend("TodoList",{
     "#": Todo,
     completeAll(){
         return this.forEach((todo) => { todo.complete = true; });
@@ -79,7 +79,8 @@ const todoConnection = restModel({
     url: "/api/todos/{id}"
 });
 ```
-@highlight 24-28
+@highlight 25-29
+@codepen
 
 This allows you to get, create, update and destroy data
 programmatically through the `Todo` observable. [can-rest-model] mixes in the
