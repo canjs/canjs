@@ -218,7 +218,7 @@ We will do this by:
 Update the `JS` tab to:
 
 @sourceref ./3-multiple-modals.js
-@highlight 94-123,129-135,145-154,164-198,only
+@highlight 94-120,126-132,142-151,161-195,only
 
 ## Next should move to the next window ##
 
@@ -259,6 +259,6 @@ new ProgrammerQuestions({
 ### The solution
 
 @sourceref ./4-next.js
-@highlight 151,161,171,181,187,203,207-209,only
+@highlight 148,158,168,178,184,200,204-206,only
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
