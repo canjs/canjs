@@ -101,3 +101,8 @@ export { default as default, default as can } from "./es/can-namespace";
 export { default as Reflect } from "./es/can-reflect";
 export { default as reflectDependencies } from "./es/can-reflect-dependencies";
 export { default as reflectPromise } from "./es/can-reflect-promise";
+
+// __ Enable Devtools __
+//!steal-remove-start
+import "./enable-can-debug";
+//!steal-remove-end

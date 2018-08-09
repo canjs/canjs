@@ -103,9 +103,6 @@ Component.extend({
 		{{/ each}}
 	`,
 	ViewModel: {
-		get componentToShow() {
-			return this.components[0];
-		},
 		get componentsToShow() {
 			var distance = 20;
 			var count = this.components.length;
