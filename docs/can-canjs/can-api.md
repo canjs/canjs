@@ -19,6 +19,31 @@ This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the
 
 @body
 
+<style>
+.hidden-codepen {
+	display: none;
+}
+.hidden-codepen + .codepen {
+    border: none;
+    position: relative;
+    text-align: left;
+    background: none;
+    color: #4078c0;
+    padding: 0px;
+    cursor: pointer;
+	margin-bottom: 15px;
+	top: 0px;
+	text-decoration: underline;
+}
+.hidden-codepen + .codepen:hover {
+	color: #4078c0;
+    background-color: unset;
+}
+.hidden-codepen + .codepen:before {
+	content: "See the previous examples in your browser!";
+}
+</style>
+
 ## Custom Element Basics
 
 Custom elements are defined with [can-component Component]. The following defines
@@ -237,6 +262,7 @@ var areSomeComplete = todos.some(function(todo){
 });
 console.log( areSomeComplete ) //-> false
 ```
+@codepen
 
 <details>
 <summary>Ecosystem APIs</summary>
@@ -336,6 +362,9 @@ let fragment = view(todo);
 document.body.appendChild(fragment);
 ```
 @codepen
+
+
+
 
 Common [can-stache] tags and built in helpers:
 
@@ -671,6 +700,85 @@ Common [can-stache] tags and built in helpers:
 </tr>
 
 </table>
+<div class='hidden-codepen'>
+
+```html
+<stache-examples></stache-examples>
+
+<script type="module">
+import { Component } from "can";
+
+// Extend Component to define a custom element
+Component.extend({
+    tag: "stache-examples",
+    view: `
+        <p>{{escapeValue}}</p>
+        <p>{{{unescapeValue}}}</p>
+        <p>
+          {{# if( truthyValue ) }}
+            Hi
+          {{else}}
+            Bye
+          {{/ if }}
+        </p>
+        <p>
+          {{# if( promise.isPending ) }}
+            Pending
+          {{/ if }}
+          {{# if( promise.isRejected ) }}
+            Rejected {{promise.reason}}
+          {{/ if }}
+          {{# if( promise.isResolved ) }}
+            Resolved {{promise.value}}
+          {{/ if }}
+        </p>
+        <ul>
+          {{# each( todos, todo=value ) }}
+            <li>
+              {{todo.name}}-{{../owner.first}}
+            </li>
+          {{/ each }}
+        </ul>
+        <p>
+          {{# eq(eqValue,22) }}
+            YES
+          {{else}}
+            NO
+          {{/ eq }}
+        </p>
+        <p>
+          {{# with(owner) }}
+            {{first}} {{last}}
+          {{/ with }}
+        </p>
+    `,
+    ViewModel: {
+        escapeValue: {default: "<b>esc</b>"},
+        unescapeValue: {default: "<b>unescape</b>"},
+        truthyValue: {default: true },
+        promise: {
+            default: () => Promise.resolve("Yo")
+        },
+        todos: {
+            default: ()=> [ {name: "lawn"}, {name: "dishes"} ]
+        },
+        owner: {
+            default() {
+                return {
+                    first: "Bohdi",
+                    last: "Meyer"
+                };
+            }
+        },
+		eqValue: {default: 22}
+    }
+});
+</script>
+```
+
+</div>
+@codepen
+
 
 Common [can-stache] expressions:
 
@@ -737,8 +845,8 @@ Common [can-stache] expressions:
 
 ```js
 {
-  key: "height",
-  height: 71
+  key: "age",
+  age: 3
 }
 ```
 
@@ -746,7 +854,7 @@ Common [can-stache] expressions:
 <td>
 
 ```html
-<p>71</p>
+<p>3</p>
 
 
 
@@ -760,7 +868,7 @@ Common [can-stache] expressions:
 <td>
 
 ```html
-<p>{{ add(num, 2) }}</p>
+<p>{{ add(age, 2) }}</p>
 
 
 
@@ -777,7 +885,7 @@ Common [can-stache] expressions:
   add(v1, v2){
     return v1+v2;
   },
-  num: 3
+  age: 3
 }
 ```
 
@@ -801,7 +909,7 @@ Common [can-stache] expressions:
 <td>
 
 ```html
-<p>{{ add(v1=num v2=2) }}</p>
+<p>{{ add(v1=age v2=2) }}</p>
 
 
 
@@ -818,7 +926,7 @@ Common [can-stache] expressions:
   add(vals){
     return vals.v1+vals.v2;
   },
-  num: 3
+  age: 3
 }
 ```
 
@@ -843,6 +951,48 @@ Common [can-stache] expressions:
 
 
 </table>
+<div class='hidden-codepen'>
+
+```html
+<stache-examples></stache-examples>
+
+<script type="module">
+import { Component } from "can";
+
+// Extend Component to define a custom element
+Component.extend({
+    tag: "stache-examples",
+    view: `
+        <p>
+          {{# with(name) }}
+            {{first}} {{../age}}
+          {{/ with}}
+        </p>
+        <p>{{ [key] }}</p>
+        <p>{{ addArgs(age, 2) }}</p>
+        <p>{{ addProps(v1=age v2=2) }}</p>
+    `,
+    ViewModel: {
+		name: {
+			default() { return {first: "Ramiya"}; }
+		},
+		age: {default: 3},
+		key: {default: "age"},
+		addArgs(v1, v2) {
+			return v1+v2;
+		},
+		addProps(vals){
+			return vals.v1+vals.v2;
+		}
+    }
+});
+</script>
+```
+
+</div>
+@codepen
+
+## Element Bindings
 
 Listen to events on elements, read data, write data, or cross-bind data on elements with [can-stache-bindings]:
 
@@ -851,43 +1001,6 @@ Listen to events on elements, read data, write data, or cross-bind data on eleme
     <th>View</th>
     <th>Roughly Equivalent Code</th>
 </tr>
-
-<tr>
-<td>
-
-```js
-<input on:change='todo.method()'/>
-```
-
-</td>
-
-<td>
-
-```js
-input.onchange = todo.method;
-```
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-```js
-<input on:name:by:todo='todo.method()'/>
-```
-
-</td>
-
-<td>
-
-```js
-todo.on("name",todo.method);
-```
-
-</td>
-</tr>
-
 <tr>
 <td>
 
@@ -985,12 +1098,11 @@ input.addEventListener("change",()=>{
 
 </td>
 </tr>
-
 <tr>
 <td>
 
 ```js
-<custom-element value:raw='VALUE'/>
+<input on:change='todo.method()'/>
 ```
 
 </td>
@@ -998,19 +1110,125 @@ input.addEventListener("change",()=>{
 <td>
 
 ```js
-customElement.value = "VALUE";
+input.onchange = todo.method;
 ```
 
 </td>
 </tr>
 
+<tr>
+<td>
 
+```js
+<div on:name:by:todo='shake(scope.element)'/>
+
+
+
+```
+
+</td>
+
+<td>
+
+```js
+todo.on("name",function(){
+	viewModel.shake(div);
+});
+```
+
+</td>
+</tr>
 
 </table>
+<div class='hidden-codepen'>
 
-## Element Bindings
+```html
+<stache-examples></stache-examples>
+<style>
+.shake {
+    /* Start the shake animation and make the animation last for 0.5 seconds */
+    animation: shake 0.5s;
+}
+@@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+</style>
+<script type="module">
+import { Component } from "can";
 
-Listen to events on custom elements, read, write or cross-bind `ViewModel` data with [can-stache-bindings]:
+// Extend Component to define a custom element
+Component.extend({
+	tag: "stache-examples",
+	view: `
+	    <p>Updates when the todo's name changes:
+			<input value:from='todo.name'/>
+		</p>
+		<p>Updates the todo's name when the input's <code>change</code> event fires:
+			<input value:to='todo.name'/>
+		</p>
+		<p>Updates the todo's name when the input's <code>input</code> event fires:
+			<input on:input:value:to='todo.name'/>
+		</p>
+		<p>Updates when the todo's name changes and update the
+			todo's name when the input's <code>change</code> event fires:
+			<input value:bind='todo.name'/>
+		</p>
+		<p>Calls the todo's <code>sayHi</code> method when the button
+		   is clicked:
+			<button on:click="todo.sayHi()">Say Hi</button>
+		</p>
+		<p>Animate the div when the todo's <code>name</code> event fires:
+			<div on:name:by:todo='shake(scope.element)'
+				on:animationend='removeShake(scope.element)'>{{todo.name}}
+			</div>
+		</p>
+	`,
+	ViewModel: {
+		sayHi: function(){
+			console.log("the ViewModel says hi");
+		},
+		shake(element) {
+			element.classList.add("shake");
+		},
+		removeShake(element) {
+			element.classList.remove("shake");
+		},
+		todo: {
+			default(){
+				return {
+					name: "",
+					sayHi(){
+						console.log("the todo says hi");
+					}
+				}
+			}
+		}
+	}
+});
+</script>
+```
+
+</div>
+@codepen
+
+## Custom Element Bindings
+
+Similar to the bindings on normal elements in the previous section, you can
+listen to events on custom elements, read, write or cross-bind `ViewModel` data with [can-stache-bindings].
+
+The following shows examples of passing data to and from
+the `<my-counter>` element in the [api#CustomElementBasics Custom Elements Basics]
+section:
 
 ```html
 <!-- Listens to when count changes and passes the value to doSomething -->
@@ -1028,6 +1246,62 @@ Listen to events on custom elements, read, write or cross-bind `ViewModel` data 
 <!-- Cross bind parentCount with count -->
 <my-counter count:bind="parentCount"></my-counter>
 ```
+
+<div class='hidden-codepen'>
+
+```html
+<!-- Adds the custom element to the page -->
+<my-app></my-app>
+
+<script type="module">
+import { Component } from "can";
+
+Component.extend({
+	tag: "my-counter",
+	view: `
+		Count: <span>{{count}}</span>
+		<button on:click='increment()'>+1</button>`,
+	ViewModel: {
+		count: {default: 0},
+		increment() {
+			this.count++;
+		}
+	}
+});
+
+Component.extend({
+	tag: "my-app",
+	view: `
+		<p>Calls <code>sayHi</code> when <code>count</code> changes.
+			<my-counter on:count="sayHi(scope.viewModel.count)"></my-counter>
+		</p>
+		<p>Start counting at 3.
+			<my-counter count:from="3"></my-counter>
+		</p>
+		<p>Start counting at <code>startCount</code> ({{startCount}}).
+			<my-counter count:from="startCount"></my-counter>
+		</p>
+		<p>Update <code>parentCount</code> ({{parentCount}}) with the value of count.
+			<my-counter count:to="parentCount"></my-counter>
+		</p>
+		<p>Update <code>bindCount</code> ({{bindCount}}) with the value of count.
+			<my-counter count:bind="bindCount"></my-counter>
+		</p>
+	`,
+	ViewModel: {
+		sayHi(count){
+			console.log("The MyApp ViewModel says hi with",count);
+		},
+		startCount: {default: 4},
+		parentCount: {},
+		bindCount: {default: 10}
+	}
+});
+</script>
+```
+
+</div>
+@codepen
 
 Pass [can-component/can-template can-template] views to custom elements to customize layout:
 
@@ -1069,8 +1343,54 @@ Component.extend({
 });
 ```
 
+<div class='hidden-codepen'>
 
-> [See it live](https://justinbmeyer.jsbin.com/hexubon/2/edit?html,js,output)
+```html
+<!-- Adds the custom element to the page -->
+<my-app></my-app>
+
+<script type="module">
+import { Component } from "can";
+
+can.Component.extend({
+	tag: "my-counter",
+	view: `
+		<can-slot name="incrementButton"
+			this:from="this">
+			<button on:click="add(1)">+1</button>
+		</can-slot>
+		<can-slot name="countDisplay"
+			this:from="this">
+			{{count}}
+		</can-slot>
+	`,
+	ViewModel: {
+		count: {type: "number", default: 0},
+		add(increment){
+			this.count += increment;
+		}
+	}
+});
+
+Component.extend({
+	tag: "my-app",
+	view: `
+		<my-counter count:from="5">
+			<can-template name="incrementButton">
+				<button on:click="add(5)">ADD 5!</button>
+			</can-template>
+			<can-template name="countDisplay">
+				You've counted to {{count}}!
+			</can-template>
+		</my-counter>
+	`
+});
+</script>
+```
+
+</div>
+@codepen
+
 
 ## Data Modeling
 
@@ -1283,6 +1603,9 @@ Response body is not necessary.
 </td>
 </tr>
 </table>
+
+
+
 
 Check the status of request:
 
