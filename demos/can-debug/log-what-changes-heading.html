@@ -5,7 +5,7 @@
 <input id="first" type="text" value:bind="first">
 <input id="last" type="text" value:bind="last">
 
-<button id="btn-log">debug.logWhatChangesMe</button>
+<button id="btn-log">canDebug.logWhatChangesMe</button>
 </script>
 
 <style>
@@ -23,6 +23,8 @@
 <script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" dev-bundle>
 import { DefineMap, debug, stache, stacheBindings } from "can";
 
+const canDebug = debug();
+
 const Person = DefineMap.extend("Person", {
 	first: "string",
 	last: "string",
@@ -33,16 +35,16 @@ const Person = DefineMap.extend("Person", {
 	}
 });
 
-let out = document.querySelector("#out");
-let template = stache.from("demo-html");
-let scope = new Person({first: "Jane", last: "Doe"});
+const out = document.querySelector("#out");
+const template = stache.from("demo-html");
+const scope = new Person({first: "Jane", last: "Doe"});
 
 out.appendChild(template(scope));
 out.addEventListener("click", function(ev) {
-	let el = ev.target;
-	let parent = el.parentNode;
+	const el = ev.target;
+	const parent = el.parentNode;
 	if (el.nodeName === "BUTTON") {
-		debug.logWhatChangesMe(out.querySelector("#full"));
+		canDebug.logWhatChangesMe(out.querySelector("#full"));
 	}
 });
 </script>
