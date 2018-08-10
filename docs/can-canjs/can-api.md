@@ -1321,25 +1321,23 @@ provide default content if a corresponding `<can-template>` was not provided:
 
 ```js
 Component.extend({
-    tag: "my-counter",
-
-    view: `
-        <can-slot name="incrementButton"
-                  add:from="add">
-          <button on:click="add(1)">+1</button>
-        </can-slot>
-        <can-slot name="countDisplay"
-                  count:from="count">
-          {{count}}
-        </can-slot>
-    `,
-
-    ViewModel: {
-        count: {type: "number", default: 0},
-        add(increment){
-            this.count += increment;
-        }
-    }
+	tag: "my-counter",
+	view: `
+		<can-slot name="incrementButton"
+			add:from="add">
+			<button on:click="add(1)">+1</button>
+		</can-slot>
+		<can-slot name="countDisplay"
+			count:from="count">
+			{{count}}
+		</can-slot>
+	`,
+	ViewModel: {
+		count: {type: "number", default: 0},
+		add(increment){
+			this.count += increment;
+		}
+	}
 });
 ```
 
@@ -1356,11 +1354,11 @@ can.Component.extend({
 	tag: "my-counter",
 	view: `
 		<can-slot name="incrementButton"
-			this:from="this">
+			add:from="add">
 			<button on:click="add(1)">+1</button>
 		</can-slot>
 		<can-slot name="countDisplay"
-			this:from="this">
+			count:from="count">
 			{{count}}
 		</can-slot>
 	`,
