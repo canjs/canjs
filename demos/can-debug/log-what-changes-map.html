@@ -1,7 +1,7 @@
 <div id="out"></div>
 
 <script id="demo-html" type="text/stache">
-<button id="btn-log">debug.logWhatChangesMe</button>
+<button id="btn-log">canDebug.logWhatChangesMe</button>
 </script>
 
 <style>
@@ -19,7 +19,9 @@
 <script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" dev-bundle>
 import { DefineMap, debug, stache } from "can";
 
-var Person = DefineMap.extend("Person", {
+const canDebug = debug();
+
+const Person = DefineMap.extend("Person", {
 	first: "string",
 	last: "string",
 	fullName: {
@@ -29,20 +31,20 @@ var Person = DefineMap.extend("Person", {
 	}
 });
 
-var me = new Person({ first: "John", last: "Doe" });
+const me = new Person({ first: "John", last: "Doe" });
 
 // The observable must be bound for `logWhatChangesMe` to work correctly.
 me.on("fullName", function() {});
 
-var out = document.getElementById("out");
-var template = stache.from("demo-html");
+const out = document.getElementById("out");
+const template = stache.from("demo-html");
 
 out.appendChild(template({}));
 out.addEventListener("click", function(ev) {
-	var el = ev.target;
-	var parent = el.parentNode;
+	const el = ev.target;
+	const parent = el.parentNode;
 	if (el.nodeName === "BUTTON") {
-		debug.logWhatChangesMe(me, "fullName");
+		canDebug.logWhatChangesMe(me, "fullName");
 	}
 });
 </script>

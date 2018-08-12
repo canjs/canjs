@@ -1,6 +1,6 @@
 {
   "name": "can",
-  "version": "5.4.0",
+  "version": "5.4.1",
   "main": "can.js",
   "scripts": {
     "preversion": "npm test",
@@ -64,7 +64,7 @@
     "can-construct-super": "3.2.0",
     "can-control": "4.2.0",
     "can-data-types": "1.2.0",
-    "can-debug": "2.0.0",
+    "can-debug": "2.0.1",
     "can-define": "2.5.4",
     "can-define-backup": "2.0.0",
     "can-define-lazy-value": "1.1.0",
