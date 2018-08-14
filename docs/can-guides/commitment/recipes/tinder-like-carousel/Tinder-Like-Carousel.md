@@ -131,9 +131,7 @@ in the following list of profiles:
 If we were to remove items on the `ViewModel` as follows, the images will update:
 
 ```js
-import { viewModel } from "//unpkg.com/can@5/core.mjs";
-
-viewModel(document.querySelector("evil-tinder")).profiles.shift()
+document.querySelector("evil-tinder").viewModel.profiles.shift()
 ```
 
 ### What you need to know
@@ -175,6 +173,14 @@ viewModel(document.querySelector("evil-tinder")).profiles.shift()
   ```
 
   > **NOTE:** Use `.get(0)` to make sure `currentProfile` changes when it’s removed from the list.
+
+### How to verify it works
+
+Run the following in the **Console** tab.  The background image should move to the foreground.
+
+```js
+document.querySelector("evil-tinder").viewModel.profiles.shift()
+```
 
 ### The solution
 
