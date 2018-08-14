@@ -1396,10 +1396,12 @@ Connect data types to a restful service with [can-rest-model]:
 
 ```js
 import {restModel} from "can";
+import Todo from "//canjs.com/demos/api/todo.mjs";
+import TodoList from "//canjs.com/demos/api/todo-list.mjs";
 
 const todoConnection = restModel({
     Map: Todo,
-    List: Todo.List,
+    List: TodoList,
     url: "/api/todos/{id}"
 });
 ```
@@ -1416,6 +1418,8 @@ Retrieve, create, update and destroy data programmatically:
 <td>
 
 ```js
+import Todo from "//canjs.com/demos/api/t-n-c.mjs"
+
 Todo.getList({
   // Selects only the todos that match
   filter: {
@@ -1427,6 +1431,7 @@ Todo.getList({
   page: {start: 0, end: 19}
 }) //-> Promise<TodoList[]>
 ```
+@codepen
 
 </td>
 <td>
@@ -1438,6 +1443,9 @@ GET /api/todos?
   sort=-name&
   page[start]=0&
   page[end]=19
+
+
+
 
 
 
@@ -1459,6 +1467,10 @@ GET /api/todos?
     ...
   ]
 }
+
+
+
+
 ```
 
 </td>
