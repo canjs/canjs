@@ -13,10 +13,10 @@ those utilities and highlights when they are useful.
 
 CanJS does not have a single global export; instead, every module must be imported. While this
 improves longevity, it makes access to debugging utilities difficult. The [can-debug]
-package adds a `can` object to the global window, making all of CanJS's packages
+package adds a `can` object to the global window, making all of CanJS’s packages
 available.
 
-For example, `can-queue`'s [can-queues.logStack] method can be called like:
+For example, `can-queue`’s [can-queues.logStack] method can be called like:
 
 ```js
 import { queues } from "can";
@@ -67,7 +67,7 @@ debug();
 
 #### Conditional loading
 
-Conditional loading makes it possible to load a module only when another module's export evaluates to `true`. To start, we'll create an `is-dev` module:
+Conditional loading makes it possible to load a module only when another module’s export evaluates to `true`. To start, we’ll create an `is-dev` module:
 
 ```js
 // is-dev.js
@@ -116,7 +116,7 @@ module.exports = {
 ## Provide useful debugger names
 
 CanJS tries to create useful names to help identify the objects and
-functions in your application. It uses [can-reflect]'s [can-reflect.getName]
+functions in your application. It uses [can-reflect]’s [can-reflect.getName]
 to return a useful debugger name. By default objects are named using the following convention:
 
 - The name starts with the observable constructor name, ex: `DefineMap`.
@@ -141,7 +141,7 @@ export default DefineMap.extend("TheNameOfMyType", { ... })
 
 #### Label instances
 
-[can-reflect]'s [can-reflect.setName] method can be used to uniquely name a particular object:
+[can-reflect]’s [can-reflect.setName] method can be used to uniquely name a particular object:
 
 ```js
 can.reflect.setName(person, "Person{Justin}");
@@ -239,7 +239,7 @@ was enqueued.
 
 ## Understand what changes an observable or what an observable changes.
 
-[can-debug]'s [can-debug.logWhatChangesMe] logs the observables
+[can-debug]’s [can-debug.logWhatChangesMe] logs the observables
 that change a value. It logs both:
 
 - observables that mutate the value through CanJS libraries (example: `<component viewModelProp:from="value">`).
@@ -253,7 +253,7 @@ can.debug.logWhatChangesMe(me, "fullName");
 can.debug.logWhatChangesMe(document.querySelector("h1.name"));
 ```
 
-[can-debug]'s [can-debug.logWhatIChange] reverses [can-debug.logWhatChangesMe]
+[can-debug]’s [can-debug.logWhatIChange] reverses [can-debug.logWhatChangesMe]
 and logs what observables are changed by an observable value:
 
 ```js
@@ -278,7 +278,7 @@ can.viewModel(document.querySelector("my-component"));
 
 ## Log when an observable changes.
 
-Most of CanJS's observables have a log method that can be used to log when its state changes:
+Most of CanJS’s observables have a log method that can be used to log when its state changes:
 
 ```js
 map.log();
@@ -290,7 +290,7 @@ This can be quite useful when used with [can-view-model]:
 can.viewModel(document.querySelector("my-component")).log();
 ```
 
-CanJS's observable map-types like [can-define/map/map] can be passed
+CanJS’s observable map-types like [can-define/map/map] can be passed
 a property name and log when that property changes:
 
 ```js
@@ -437,7 +437,7 @@ If the element selected does not have a ViewModel, the graph will show the relat
 
 ## Using the CanJS Devtools Queues Stack
 
-As discussed in [Debug what caused a observable event or update to happen](#Debugwhatcausedaobservableeventorupdatetohappen_), the [can-queues.logStack] method of [can-queues] can help figure out what tasks in CanJS's queue system caused a function to run. In order to make this easier, CanJS Devtools adds a sidebar to the Sources Panel to display the `logStack` output:
+As discussed in [Debug what caused a observable event or update to happen](#Debugwhatcausedaobservableeventorupdatetohappen_), the [can-queues.logStack] method of [can-queues] can help figure out what tasks in CanJS’s queue system caused a function to run. In order to make this easier, CanJS Devtools adds a sidebar to the Sources Panel to display the `logStack` output:
 
 <img src="../../docs/can-guides/images/devtools/queues-stack.png"
   class="bit-docs-screenshot"

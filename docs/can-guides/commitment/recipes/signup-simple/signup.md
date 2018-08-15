@@ -230,7 +230,7 @@ viewModel.sessionPromise = Promise.resolve({user: {email: "someone@email.com"}})
   });
   new AppViewModel().myProperty //-> "This string"
   ```
-- [can-util/dom/ajax/ajax can.ajax] can make requests to a url like:
+- [can-util/dom/ajax/ajax can.ajax] can make requests to a URL like:
   ```js
   ajax({
     url: "http://query.yahooapis.com/v1/public/yql",

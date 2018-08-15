@@ -17,7 +17,7 @@ span[title] {
 
 ## Choosing the right environment
 
-CanJS has a variety of packages, modules, and files ready to meet the needs of any development environment. This section is for people who aren't sure what they
+CanJS has a variety of packages, modules, and files ready to meet the needs of any development environment. This section is for people who aren’t sure what they
 want. The following lists common scenarios and provides links to
 the guide(s) that most closely satisfy that scenario.
 
@@ -173,7 +173,7 @@ The following `HTML` page imports CanJS and uses it to define a custom element:
 The previous example works in all modern browsers, even Edge! If you want to support
 older browsers, use the [traditional JavaScript bundle](#IncludingthecoreJavaScriptbundle) or one of the module loader setups (webpack, StealJS).
 
-This build only includes CanJS's [can-core] and [can-infrastructure] modules. All modules are exported as named exports. For example, if you want the [can-ajax] infrastructure module, import it as follows:
+This build only includes CanJS’s [can-core] and [can-infrastructure] modules. All modules are exported as named exports. For example, if you want the [can-ajax] infrastructure module, import it as follows:
 
 ```js
 import { Component, ajax } from "//unpkg.com/can@5/core.mjs";
@@ -226,7 +226,7 @@ Component.extend({
 ```
 
 __NOTE:__ Every use of
-the unminified url (`//unpkg.com/can@5/core.mjs`) must be updated to
+the unminified URL (`//unpkg.com/can@5/core.mjs`) must be updated to
 the minified version (`//unpkg.com/can@5/core.min.mjs`).
 
 </details>
@@ -309,7 +309,7 @@ that import CanJS. The following shows putting components into their own modules
 
 ### Importing the ecosystem ES module bundle
 
-The [core ES module bundle](#ImportingthecoreESmodulebundle) only includes CanJS's
+The [core ES module bundle](#ImportingthecoreESmodulebundle) only includes CanJS’s
 [can-core] modules.  This doesn't include [can-ecosystem] modules like [can-stache-converters].  The
 ecosystem bundle hosted at `https://unpkg.com/can@5/ecosystem.mjs` includes every CanJS module
 (except for `can-zone` and `ylem`).
@@ -628,13 +628,13 @@ Ready to build an app with CanJS? Check out our [guides/chat] or one of our
 ## Browserify
 
 Unlike webpack and StealJS, Browserify does not support ES Modules (`import "module"`) and tree-shaking
-natively.  Instead, it's standard practice to import files with CommonJS (`require("module")`). Therefore, there are two
+natively.  Instead, it’s standard practice to import files with CommonJS (`require("module")`). Therefore, there are two
 commonly used setups:
 
 
 <details>
 <summary>
-Using CommonJS to require CanJS's individual packages
+Using CommonJS to require CanJS’s individual packages
 </summary>
 
 > You can skip these instructions by
@@ -706,7 +706,7 @@ went wrong.
 
 <details>
 <summary>
-Using ES Modules to import CanJS's individual packages using BabelJS
+Using ES Modules to import CanJS’s individual packages using BabelJS
 </summary>
 
 > You can skip these instructions by
@@ -841,7 +841,7 @@ Ready to build an app with CanJS? Check out our [guides/chat] or one of our
 CanJS is part of the fabulous [DoneJS](http://donejs.com) framework. DoneJS is built around CanJS, and
 adds:
 
-- [iOS, Andriod, and desktop builds](https://donejs.com/Features.html#ios-android-and-desktop-builds)
+- [iOS, Android, and desktop builds](https://donejs.com/Features.html#ios-android-and-desktop-builds)
 - [Server-side rendering](https://donejs.com/Features.html#server-side-rendered) (Isomorphic / UniversalJS)
 - [Progressive loading](https://donejs.com/Features.html#progressive-loading)
 - [Continuous integration (testing) and continuous deployment](https://donejs.com/Features.html#continuous-integration--deployment)
@@ -923,7 +923,7 @@ With CanJS downloaded or installed, use it to create an `index.html` page with a
 @highlight 3
 
 
-This build only includes CanJS's [can-core] and [can-infrastructure] modules and all of CanJS's named exports are available on the [can-namespace can] object. For example, if you want the [can-ajax] infrastructure module, use it like `can.ajax`:
+This build only includes CanJS’s [can-core] and [can-infrastructure] modules and all of CanJS’s named exports are available on the [can-namespace can] object. For example, if you want the [can-ajax] infrastructure module, use it like `can.ajax`:
 
 ```js
 can.Component.extend({
@@ -944,7 +944,7 @@ can.Component.extend({
 
 If you want to use [can-ecosystem] modules, you can use `./node_modules/can/dist/global/ecosystem.js`. However,
 this file is quite large and shouldn't be used in production so you will want to make your own custom version of
-`ecosystem.js` containing only the modules you need. Unfortunately, we haven't posted instructions on how to do this yet, even though it's relatively easy. Please tell us on
+`ecosystem.js` containing only the modules you need. Unfortunately, we haven't posted instructions on how to do this yet, even though it’s relatively easy. Please tell us on
 [Gitter chat](https://gitter.im/canjs/canjs) to hurry up and do it already!
 
 
@@ -986,7 +986,7 @@ The following `HTML` page includes CanJS and uses it to define a custom element:
 </html>
 ```
 
-This build only includes CanJS's [can-core] and [can-infrastructure] modules and all of CanJS's named exports are available on the
+This build only includes CanJS’s [can-core] and [can-infrastructure] modules and all of CanJS’s named exports are available on the
 `can` object. For example, if you want the [can-ajax] infrastructure module, use it like `can.ajax`:
 
 ```js
@@ -1012,7 +1012,7 @@ loads every ecosystem module in CanJS.
 
 ### Including the ecosystem JavaScript bundle
 
-The [core JavaScript bundle](#IncludingthecoreJavaScriptbundle) only includes CanJS's
+The [core JavaScript bundle](#IncludingthecoreJavaScriptbundle) only includes CanJS’s
 [can-core] modules.  This doesn't include ecosystem modules like [can-stache-converters].  The
 ecosystem bundle hosted at `https://unpkg.com/can@5/core.mjs` includes every CanJS module
 (except for [can-zone](https://github.com/canjs/can-zone) and [ylem](https://github.com/bitovi/ylem).
@@ -1090,7 +1090,7 @@ import DefineMap from "can-define/map/map"
 Why should I do all that boilerplate?!?!
 </summary>
 
-CanJS's individual packages are released independently of one another.  This allows
+CanJS’s individual packages are released independently of one another.  This allows
 you to update one package without having to upgrade all the other ones when a new `can`
 package is published.  
 

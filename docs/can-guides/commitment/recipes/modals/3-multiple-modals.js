@@ -140,7 +140,7 @@ Component.extend({
 		paymentType: "string",
 
 		occupationQuestions: {
-			default () {
+			default() {
 				return new OccupationQuestions({
 					viewModel: {
 						isDiva: value.bind(this, "isDiva"),
@@ -150,7 +150,7 @@ Component.extend({
 			}
 		},
 		divaQuestions: {
-			default () {
+			default() {
 				return new DivaQuestions({
 					viewModel: {
 						divaExpenses: value.bind(this, "divaExpenses")
@@ -159,7 +159,7 @@ Component.extend({
 			}
 		},
 		programmerQuestions: {
-			default () {
+			default() {
 				return new ProgrammerQuestions({
 					viewModel: {
 						programmingLanguage: value.bind(this, "programmingLanguage")
@@ -168,7 +168,7 @@ Component.extend({
 			}
 		},
 		incomeQuestions: {
-			default () {
+			default() {
 				return new IncomeQuestions({
 					viewModel: {
 						paymentType: value.bind(this, "paymentType")

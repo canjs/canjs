@@ -31,7 +31,7 @@ my-panel {
 my-tabs ul:after  { content: "."; display: block; height: 1px; clear: both; visibility: hidden; }
 my-tabs ul { display: inline-block; }
 </style>
-<div id='out'></div>
+<div id="out"></div>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
 import { Component, DefineList, DefineMap, queues, stache, viewModel } from "can";
 
@@ -119,8 +119,8 @@ Component.extend({
 		stache("<ul>"+
 			// Create an LI for each item in the panel's viewModel object
     		"{{#each(panels, panel=value)}}"+
-    			"<li {{#scope.root.isActive(panel)}}class='active'{{/isActive}} "+
-    			    "on:click='scope.root.makeActive(panel)'>"+
+    			"<li {{#scope.vm.isActive(panel)}}class='active'{{/isActive}} "+
+    			    "on:click='scope.vm.makeActive(panel)'>"+
     			  "{{panel.title}}"+
     			"</li>"+
     		"{{/each}}"+

@@ -687,7 +687,7 @@ other city is still visible.  Let’s hide it!
 
 ### Things to know
 
-- `DefineMap` [can-define.types.set setter]'s can be used to add behavior when a property is set like:
+- `DefineMap` [can-define.types.set setter]’s can be used to add behavior when a property is set like:
 
   ```js
   const MessageViewModel = can.DefineMap.extend({

@@ -2,7 +2,7 @@
 @parent guides/essentials 1
 @outline 2
 
-@description Learn the basics of CanJS's technology.
+@description Learn the basics of CanJS’s technology.
 
 @body
 
@@ -183,7 +183,7 @@ console.log( myCounters.sum )      //-> 8
 > You often don’t need the DOM for unit testing!
 
 [can-define/map/map DefineMap] and [can-define/list/list DefineList] have a wide variety of features and shorthands for defining property behavior. For more information about how to write logic within
-CanJS's observables read the [can-define/map/map#Use DefineMap Use section] and the
+CanJS’s observables read the [can-define/map/map#Use DefineMap Use section] and the
 [can-define.types.propDefinition PropDefinition documentation].
 
 
@@ -302,7 +302,7 @@ are cross-bound. Cross bound means:
 
 
 
-The following connects the `<my-counter>`'s <span class='obs'>observable</span> [can-component.prototype.ViewModel]
+The following connects the `<my-counter>`’s <span class='obs'>observable</span> [can-component.prototype.ViewModel]
 to the browser's URL:
 
 ```html
@@ -311,7 +311,7 @@ to the browser's URL:
 
 <script type='module'>
 // Imports the <mock-url> element that provides
-// a fake back, forward, and url controls.
+// a fake back, forward, and URL controls.
 import "//unpkg.com/mock-url@^5.0.0";
 
 import {route, Component} from "can";
@@ -341,8 +341,8 @@ route.start();
 
 
 Use [can-route.register route.register] to create routing rules.
-Instead of urls like `#!&count=1`, `#!&count=2`, `#!&count=3`;
-the following changes the urls to look like `#!1`, `#!2`, `#!3`:
+Instead of URLs like `#!&count=1`, `#!&count=2`, `#!&count=3`;
+the following changes the URLs to look like `#!1`, `#!2`, `#!3`:
 
 
 ```html
@@ -351,7 +351,7 @@ the following changes the urls to look like `#!1`, `#!2`, `#!3`:
 
 <script type='module'>
 // Imports the <mock-url> element that provides
-// a fake back, forward, and url controls.
+// a fake back, forward, and URL controls.
 import "//unpkg.com/mock-url@^5.0.0";
 
 import {route, Component} from "can";
@@ -438,7 +438,7 @@ Todo.List = DefineList.extend("TodoList",{
 
 // Mixes in methods on `Todo` useful for
 // creating, retrieving, updating and deleting
-// data at the url provided.
+// data at the URL provided.
 restModel({
     Map: Todo,
     url: "/api/todos/{id}"
@@ -565,7 +565,7 @@ function mockServices(){
 @highlight 29-49
 @codepen
 
-You can do a lot more with CanJS's data layer besides showing a list of data. Read
+You can do a lot more with CanJS’s data layer besides showing a list of data. Read
 the [guides/data] guide for more information on how to:
 
 - Create, update and delete data.

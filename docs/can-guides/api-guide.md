@@ -176,7 +176,7 @@ more information and examples on what is being documented.
 
 1. Get a good understand of the purpose behind each module.  
 2. Start with core modules.
-3. Then checkout infrastructure modules.
+3. Then check out infrastructure modules.
 
 If you don’t find what you want on the lowest level, walk up to the parent module, it
 might be in its __#Use__ section.  

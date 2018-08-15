@@ -114,14 +114,14 @@ Update the `JavaScript` tab to:
 - Update the `chat-app` component's `view` to:
   - Check if the `ViewModel`’s `page` property is `"home"`.  If it is, render the __home
     page__’s content.  If it’s not, it will render the __chat messages page__’s content with the   [can-stache.helpers.else] helper.
-  - Use [can-stache-route-helpers.routeUrl] to create the right link urls so that `page`
+  - Use [can-stache-route-helpers.routeUrl] to create the right link URLs so that `page`
     will be set on `appVM` to either `"home"` or `"chat"`.
 - Update the `chat-app` component's `ViewModel` to:
-  - Setup a connection between the `ViewModel` and the route state in the `ViewModel`'s `init` by:
-    - Create a pretty routing rule so if the url looks like `"#!chat"`, the `page` property of
+  - Setup a connection between the `ViewModel` and the route state in the `ViewModel`’s `init` by:
+    - Create a pretty routing rule so if the URL looks like `"#!chat"`, the `page` property of
       `appVM` will be set to `chat` with [can-route.register].  If there is nothing in the hash, `page`
       will be set to `"home"`.
-    - Connect changes in the url to changes in the `<chat-app>`'s `ViewModel` with [can-route.data].
+    - Connect changes in the URL to changes in the `<chat-app>`’s `ViewModel` with [can-route.data].
     - Initialize the url’s values on the `ViewModel` and set up the two-way connection with
       [can-route.start].
   - Include a `page` property that will be updated when the browser’s URL changes.
@@ -147,10 +147,10 @@ those properties change, different content is shown.
 We connected the application view model to the routing system with [can-route.data can-route.data]
 and initialized that connection with [can-route.start can-route.start].
 
-This makes it so if the `page` property changes, the browser’s url will change.  If the
-browser’s url changes, the `page` property changes.  
+This makes it so if the `page` property changes, the browser’s URL will change.  If the
+browser’s URL changes, the `page` property changes.  
 
-> __Key take-away:__  [can-route] two-way binds changes in the browser’s url to
+> __Key take-away:__  [can-route] two-way binds changes in the browser’s URL to
 the application view model and vice versa.  Use changes in
 the application view model to control which content is shown.
 
@@ -165,7 +165,7 @@ Update the `JavaScript` tab to:
 
 - Define a `<chat-messages>` custom element with [can-component].  It's `view` will
   contain the content of the __chat messages page__.
-- Update `<chat-app>`'s `view` to create a `<chat-messages>` element.
+- Update `<chat-app>`’s `view` to create a `<chat-messages>` element.
 
 @sourceref ./3-chat-messages/js.js
 @highlight 1-8,25,only
@@ -226,12 +226,12 @@ Update the `JavaScript` tab to:
  - Connect the `Message` and `Message.List` type to
    the RESTful messages service at `https://chat.donejs.com/api/messages`
    using [can-connect/can/super-map/super-map].
- - Update the `<chat-messages>`'s `view` to:
+ - Update the `<chat-messages>`’s `view` to:
    - Check if the messages are in the process of loading and show a loading indicator.
    - Check if the messages failed to load and display the reason for the failure.
    - If messages successfully loaded, list each message’s name and body.  If there
       are no messages, write out “No messages”.
- - Update the `<chat-messages>`'s `ViewModel` to:
+ - Update the `<chat-messages>`’s `ViewModel` to:
    - Define a `messagesPromise` property on `ChatMessagesVM` that’s
      [can-define.types.default] is initialized to a   [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
      that represents the loading of all messages using [can-connect/can/map/map.getList].

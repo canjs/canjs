@@ -1,13 +1,15 @@
-can.Component.extend({
+import { Component } from "//unpkg.com/can@5/core.mjs";
+
+Component.extend({
   tag: "evil-tinder",
   view: `
       <div class="header"></div>
 
       <div class="images">
-        <div class='current'>
+        <div class="current">
           <img src="{{currentProfile.img}}"/>
         </div>
-        <div class='next'>
+        <div class="next">
           <img src="{{nextProfile.img}}"/>
         </div>
       </div>
@@ -21,7 +23,7 @@ can.Component.extend({
   `,
   ViewModel: {
     profiles: {
-      default () {
+      default() {
         return [{img: "https://user-images.githubusercontent.com/78602/40454685-5cab196e-5eaf-11e8-87ac-4af6792994ed.jpg", name: "gru"},
           {img: "https://user-images.githubusercontent.com/78602/40454705-6bf4d3d8-5eaf-11e8-9562-2bd178485527.jpg", name: "hannibal"},
           {img: "https://user-images.githubusercontent.com/78602/40454830-e71178dc-5eaf-11e8-80ee-efd64911e35f.png", name: "joker"},

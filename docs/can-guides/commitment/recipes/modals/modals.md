@@ -11,12 +11,12 @@ The final widget looks like:
 <p data-height="426" data-theme-id="dark" data-slug-hash="mjyjQN" data-default-tab="result" data-user="justinbmeyer" data-embed-version="2" data-pen-title="CanJS 5.0 - Multiple Modals - Final" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/mjyjQN/">CanJS 5.0 - Multiple Modals - Final</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 
 
-The following sections are broken down the folowing parts:
+The following sections are broken down the following parts:
 
 - __The problem__ - A description of what the section is trying to accomplish.
 
 - __What you need to know__ - Information about CanJS that is useful for solving the problem.
-- __How to verify it works__ - How to make sure the solution works if it's not obvious.
+- __How to verify it works__ - How to make sure the solution works if it’s not obvious.
 - __The solution__ - The solution to the problem.
 
 ## Setup ##
@@ -54,7 +54,7 @@ __START THIS TUTORIAL BY CLONING THE FOLLOWING CodePen__:
 
 This JS Bin:
 
-- Loads all of CanJS's packages. Each package is available as a named export.  For example [can-component]
+- Loads all of CanJS’s packages. Each package is available as a named export.  For example [can-component]
   is available as `import {Component} from "can"`.
 
 
@@ -77,7 +77,7 @@ In this section, we will:
   <custom-element>SOME CONTENT</custom-element>
   ```
   Is available to be rendered with the `<content>` element within the
-  custom element's `view`.  The following would put `SOME CONTENT` within
+  custom element’s `view`.  The following would put `SOME CONTENT` within
   an `<h1>` element:
 
   ```js
