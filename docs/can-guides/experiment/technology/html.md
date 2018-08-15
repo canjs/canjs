@@ -171,7 +171,7 @@ are the most commonly used tags:
 observables. Use it to:
 
 - Call methods on observables when DOM events happen. The following uses
-  [can-stache-bindings.event] to call `doSomething` with the `<input>`'s value on a `keyup` event:
+  [can-stache-bindings.event] to call `doSomething` with the `<input>`’s value on a `keyup` event:
   ```html
   <my-demo></my-demo>
 
@@ -193,7 +193,7 @@ observables. Use it to:
   @codepen
 
 - Update observables with element attribute and property values.  The following uses [can-stache-bindings.toParent]
-  to send the `<input>`'s _value to_ the [can-component.prototype.ViewModel]'s `count` property when the user presses enter.
+  to send the `<input>`’s _value to_ the [can-component.prototype.ViewModel]’s `count` property when the user presses enter.
   ```html
   <my-demo></my-demo>
 
@@ -214,7 +214,7 @@ observables. Use it to:
 
 
 - Update element attribute and property values with observable values.  The following uses [can-stache-bindings.toChild]
-  to update the `<input>`'s _value from_  the [can-component.prototype.ViewModel]'s `count` property.
+  to update the `<input>`’s _value from_  the [can-component.prototype.ViewModel]’s `count` property.
   ```html
   <my-demo></my-demo>
 
@@ -248,7 +248,7 @@ observables. Use it to:
   @highlight 8
   @codepen
 - Cross bind element attribute and property values with observable values.  The following uses
-  [can-stache-bindings.twoWay] to update the `<input>`'s _value_ from the [can-component.prototype.ViewModel]'s `count` property
+  [can-stache-bindings.twoWay] to update the `<input>`’s _value_ from the [can-component.prototype.ViewModel]’s `count` property
   and vice versa:
   ```html
   <my-demo></my-demo>
@@ -356,7 +356,7 @@ The demo then creates a `<my-counter>` element like:
 
 So __components__ are just a combination of a [can-stache] __view__ and a
 [can-define/map/map DefineMap] __observable__.  [can-component] calls the observable a
-[can-component.prototype.ViewModel]. This is because CanJS's observables are typically
+[can-component.prototype.ViewModel]. This is because CanJS’s observables are typically
 built within a [Model-View-ViewModel (MVVM) architecture](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel).
 
 <img src="../../docs/can-guides/experiment/technology/can-component.png"
@@ -394,7 +394,7 @@ another [can-stache] view. For example, `<my-counter></my-counter>` creates an i
 __ViewModel__ and renders it with the __view__ and inserts the resulting HTML inside the `<my-counter>` tag.
 
 [can-stache-bindings] can be used to pass values between
-component ViewModels and [can-stache]'s scope.  For example,
+component ViewModels and [can-stache]’s scope.  For example,
 we can start the counter's count at 5 with the following:
 
 ```html
@@ -406,7 +406,7 @@ This is shown in the following demo:
 @demo demos/technology-overview/my-counter-5.html
 @codepen
 
-[can-stache]'s scope is usually made up of other component ViewModels.  [can-stache-bindings]
+[can-stache]’s scope is usually made up of other component ViewModels.  [can-stache-bindings]
 passes values from one ViewModel to another.  For example, the `<task-editor>` component
 connects its `progress` property to the `value` property of the `<my-slider>` with:
 
@@ -424,8 +424,8 @@ other components. The following might be the topology of an example application:
   alt=""
   class='bit-docs-screenshot'/>
 
-Notice that `<my-app>`'s _view_ will
+Notice that `<my-app>`’s _view_ will
 render either `<page-login>`, `<page-signup>`,
 `<page-products>`, or `<page-purchase>` based on
-the state of it's _view-model_.  Those page-level components
+the state of its _view-model_.  Those page-level components
 might use sub-components themselves like `<ui-password>` or `<product-list>`.

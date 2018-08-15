@@ -39,7 +39,7 @@ __START THIS TUTORIAL BY Forking THE FOLLOWING CodePen__:
 This CodePen:
 
 - Creates a `<video>` element that loads a video. _Right click and select “Show controls” to see the video’s controls_.
-- Loads CanJS's custom element library: [can-component Component].
+- Loads CanJS’s custom element library: [can-component Component].
 
 
 

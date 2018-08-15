@@ -2,58 +2,56 @@
 @parent guides/recipes
 
 @description This guide walks you through building a [Tinder](https://tinder.com/)-like
-carousel. Learn how build apps that use dragging user interactions.
+carousel. Learn how to build apps that use dragging user interactions.
 
 @body
 
 
 In this guide, you will learn how to create a custom [Tinder](https://tinder.com/)-like
-carousel. The custom widget will:
+carousel. The custom widget will have:
 
-- Have touch and drag functionality that works on mobile and desktop.
-- Have custom `<button>`'s for liking and disliking
+- Touch and drag functionality that works on mobile and desktop.
+- Custom `<button>`’s for liking and disliking
 
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/viruhuw/10/embed?html,js,output&height=600px">JS Bin on jsbin.com</a>
+<p data-height="768" data-theme-id="0" data-slug-hash="pZOpRE" data-default-tab="js,result" data-user="chasenlehara" data-pen-title="CanJS Tinder-Like Carousel" class="codepen">
+  See the Pen <a href="https://codepen.io/chasenlehara/pen/pZOpRE/">CanJS Tinder-Like Carousel</a> by Chasen Le Hara (<a href="https://codepen.io/chasenlehara">@chasenlehara</a>) on <a href="https://codepen.io">CodePen</a>.
+</p>
 
-
-The following sections are broken down the folowing parts:
+The following sections are broken down the following parts:
 
 - __The problem__ - A description of what the section is trying to accomplish.
-
 - __What you need to know__ - Information about CanJS that is useful for solving the problem.
-- __How to verify it works__ - How to make sure the solution works if it's not obvious.
 - __The solution__ - The solution to the problem.
 
 ## Setup ##
 
-__START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
+__START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED__:
 
-> Click the `JS Bin` button.  The JS Bin will open in a new window. In that new window, under `File`, click `Clone`.
+<p data-height="265" data-theme-id="0" data-slug-hash="djqJMj" data-default-tab="js" data-user="chasenlehara" data-pen-title="CanJS Tinder-Like Carousel" class="codepen">
+  See the Pen <a href="https://codepen.io/chasenlehara/pen/djqJMj/">CanJS Tinder-Like Carousel</a> by Chasen Le Hara (<a href="https://codepen.io/chasenlehara">@chasenlehara</a>) on <a href="https://codepen.io">CodePen</a>.
+</p>
 
-<a class="jsbin-embed" href="https://jsbin.com/safago/5/embed?html,js,output">JS Bin on jsbin.com</a>
+This CodePen loads:
 
-This JS Bin:
-
-- Loads CanJS's global build. All of it's packages are available as `can.X`.  For example [can-component]
-  is available as `can.Component`.
-- Loads the [pepjs polyfill](https://www.npmjs.com/package/pepjs-improved) for pointer event support.
+- CanJS (`import { Component } from "//unpkg.com/can@5/core.mjs"`).
+- The [pepjs polyfill](https://www.npmjs.com/package/pepjs-improved) for [pointer events](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events) support.
 
 ### The problem
 
-When someone adds `<evil-tinder></evil-tinder>` to their HTML, we want the following HTML  
+When someone adds `<evil-tinder></evil-tinder>` to their HTML, we want the following HTML
 to show up:
 
 ```html
 <div class="header"></div>
 
 <div class="images">
-  <div class='current'>
+  <div class="current">
     <img src="https://user-images.githubusercontent.com/78602/40454720-7c3d984c-5eaf-11e8-9fa7-f68ddd33e3f0.jpg"/>
   </div>
-  <div class='next'>
+  <div class="next">
     <img src="https://user-images.githubusercontent.com/78602/40454716-76bef438-5eaf-11e8-9d29-5002260e96e1.jpg"/>
   </div>
 </div>
@@ -66,34 +64,35 @@ to show up:
 
 ### What you need to know
 
-To setup a basic CanJS application, you define a custom element in JavaScript and
+To set up a basic CanJS application, you define a custom element in JavaScript and
 use the custom element in your page’s `HTML`.
 
 To define a custom element, extend [can-component] with a [can-component.prototype.tag]
-that matches the name of your custom element.  For example:
+that matches the name of your custom element.
 
-We will use `<evil-tinder>` as our custom tag:
+For example, we will use `<evil-tinder>` as our custom tag:
 
 ```js
-can.Component.extend({
+Component.extend({
   tag: "evil-tinder"
 })
 ```
+
 But this doesn’t do anything.  Components add their own HTML through their [can-component.prototype.view]
 property like this:
 
 ```js
-can.Component.extend({
+Component.extend({
   tag: "evil-tinder",
   view: `
     <h2>Evil-Tinder</h2>
   `,
-  ViewModel{
+  ViewModel: {
   }
 });
 ```
 
-> NOTE: We'll make use of the `ViewModel` property later.
+> **NOTE:** We’ll make use of the `ViewModel` property later.
 
 
 ### The solution
@@ -101,20 +100,19 @@ can.Component.extend({
 Update the __JavaScript__ tab to:
 
 @sourceref ./0-setup.js
+@highlight 3-24,only
 
 Update the `<body>` element in the __HTML__ tab to:
 
-```js
-<body noscroll>
-    <evil-tinder></evil-tinder>
-</body>
+```html
+<evil-tinder></evil-tinder>
 ```
 
 ## Show the current and next profile images
 
 ### The problem
 
-Instead of hard-coding the current and next image urls, we want to show the first two items
+Instead of hard-coding the current and next image URLs, we want to show the first two items
 in the following list of profiles:
 
 ```js
@@ -133,7 +131,7 @@ in the following list of profiles:
 If we were to remove items on the `ViewModel` as follows, the images will update:
 
 ```js
-can.viewModel(document.querySelector("evil-tinder")).profiles.shift()
+document.querySelector("evil-tinder").viewModel.profiles.shift()
 ```
 
 ### What you need to know
@@ -142,7 +140,7 @@ can.viewModel(document.querySelector("evil-tinder")).profiles.shift()
   a list of profiles and write out an `<img>` for each one like:
 
   ```js
-  can.Component.extend({
+  Component.extend({
     tag: "evil-tinder",
     view: `
       {{# each(profiles) }}
@@ -165,7 +163,7 @@ can.viewModel(document.querySelector("evil-tinder")).profiles.shift()
 
   The `view` uses [can-stache.tags.escaped] to write out values from the `ViewModel` into the DOM.
 
-- Use a [can-map-define.get getter] to derive a value from another value on the ViewModel, this will allow   
+- Use a [can-map-define.get getter] to derive a value from another value on the ViewModel, this will allow
   us to get the next profile image:
 
   ```js
@@ -174,15 +172,14 @@ can.viewModel(document.querySelector("evil-tinder")).profiles.shift()
   },
   ```
 
-  > NOTE Use `.get(0)` to make sure `currentProfile` changes when a is removed from the list.
-
+  > **NOTE:** Use `.get(0)` to make sure `currentProfile` changes when it’s removed from the list.
 
 ### How to verify it works
 
-Run the following in the `CONSOLE` tab.  The background image should move to the foreground.
+Run the following in the **Console** tab.  The background image should move to the foreground.
 
 ```js
-can.viewModel(document.querySelector("evil-tinder")).profiles.shift()
+document.querySelector("evil-tinder").viewModel.profiles.shift()
 ```
 
 ### The solution
@@ -190,14 +187,14 @@ can.viewModel(document.querySelector("evil-tinder")).profiles.shift()
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-profiles.js
-@highlight 8,11,21-41,only
+@highlight 10,13,23-43,only
 
 
 ## Add a like button
 
 ### The problem
 
-- When someone clicks the like button, console.log `LIKED` and remove the first profile image and show the
+- When someone clicks the like button, [console.log](https://developer.mozilla.org/en-US/docs/Web/API/Console/log) `LIKED`, remove the first profile image, and show the
   next one in the list.
 
 
@@ -205,7 +202,7 @@ Update the __JavaScript__ tab to:
 
 - Use [can-stache-bindings.event] to call a function on the `ViewModel` when a DOM event happens:
 
-  ```js
+  ```html
   <button on:click="doSomething()"></button>
   ```
 
@@ -213,18 +210,18 @@ Update the __JavaScript__ tab to:
   [can-component.prototype.ViewModel].  For example, the following creates a `doSomething` method on the ViewModel:
 
   ```js
-  can.Component.extend({
+  Component.extend({
     tag: "some-element",
     view: `<button on:click="doSomething('dance')"></button>`,
     ViewModel: {
       doSomething(cmd) {
-        alert("doing "+cmd);
+        alert("doing " + cmd);
       }
     }
   })
   ```
 
-- Use `.shift` to remove an item from the start of an array:
+- Use [.shift](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/shift) to remove an item from the start of an array:
   ```js
   this.profiles.shift();
   ```
@@ -238,7 +235,7 @@ Update the __JavaScript__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-like-btn.js
-@highlight 17-18,44-47,only
+@highlight 19-20,46-49,only
 
 
 
@@ -247,7 +244,7 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-- When someone clicks the nope button, console.log `NOPED` and remove the first profile.
+- When someone clicks the nope button, [console.log](https://developer.mozilla.org/en-US/docs/Web/API/Console/log) `NOPED` and remove the first profile.
 
 ### What you need to know
 
@@ -258,7 +255,7 @@ Update the __JavaScript__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-dislike-btn.js
-@highlight 16-17,49-52,only
+@highlight 18-19,51-54,only
 
 
 
@@ -272,18 +269,18 @@ In this section we will:
 - Move the current profile to the left or right as user drags the image to the
   left or right.
 - Implement drag functionality so it works on a mobile or desktop device.
-- Move the `<div class='current'>` element
+- Move the `<div class="current">` element
 
 
 ### What you need to know
 
-We need to listen to when a user drags and update the `<div class='current'>` element's
+We need to listen to when a user drags and update the `<div class="current">` element’s
 horizontal position to match how far the user has dragged.
 
-- To update an element's horizontal position with [can-stache] you can set the `element.style.left`
+- To update an element’s horizontal position with [can-stache] you can set the `element.style.left`
   property like:
   ```HTML
-  <div class='current' style="left: {{howFarWeHaveMoved}}px">
+  <div class="current" style="left: {{howFarWeHaveMoved}}px">
   ```
 
 The remaining problem is how to get a `howFarWeHaveMoved` ViewModel property to update
@@ -293,7 +290,7 @@ as the user creates a drag motion.
 
   ```js
   ViewModel: {
-    ...
+    // ...
     howFarWeHaveMoved: "number"
   }
   ```
@@ -302,9 +299,9 @@ as the user creates a drag motion.
   element itself, but on the entire `document`, we will setup the event binding in the
   [can-component/connectedCallback] of the `ViewModel` as follows:
 
-  ```HTML
+  ```js
     ViewModel: {
-      ...
+      // ...
       connectedCallback(el) {
         let current = el.querySelector(".current");
       }
@@ -320,7 +317,7 @@ as the user creates a drag motion.
   this.listenTo(current, "pointerdown", (event) => { ... })
   ```
 
-  As mobile safari doesn't support pointer events, we have already installed the
+  As mobile Safari doesn't support pointer events, we have already installed the
   [pep pointer event polyfill](https://www.npmjs.com/package/pepjs-improved).
 
   The polyfill requires that `touch-action="none"` be added to elements that should
@@ -357,7 +354,7 @@ as the user creates a drag motion.
 
   });
   ```
-  The difference between `pointermove`'s position and `pointerdown`'s
+  The difference between `pointermove`’s position and `pointerdown`’s
   position is how far the current profile `<div>` should be moved.
 
 ### The solution
@@ -365,7 +362,7 @@ as the user creates a drag motion.
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-move-current-profile.js
-@highlight 7-10,39,57-71,only
+@highlight 9-12,41,59-73,only
 
 
 ## Show liking animation when you drag to the right
@@ -380,7 +377,7 @@ In this section, we will:
 
 ### What you need to know
 
-- Use [can-stache.helpers.if] to test if a value is truthy and add a value to an element's class list like:
+- Use [can-stache.helpers.if] to test if a value is truthy and add a value to an element’s class list like:
   ```html
   <div class='result {{# if(liking) }}liking{{/ if}}'>
   ```
@@ -396,7 +393,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-show-liking.js
-@highlight 5,47-49,only
+@highlight 7,49-51,only
 
 
 
@@ -418,7 +415,7 @@ You know everything you need to know!
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-show-nope.js
-@highlight 5-6,51-53,only
+@highlight 7-8,52-55,only
 
 
 
@@ -430,8 +427,8 @@ Update the __JavaScript__ tab to:
 In this section, we will perform one of the following when the user completes their
 drag motion:
 
-- console.log `like` and move to the next profile if the drag motion has moved at least 100 pixels to the right
-- console.log `nope` and move to the next profile if the drag motion has moved at least 100 pixels to the left
+- [console.log](https://developer.mozilla.org/en-US/docs/Web/API/Console/log) `like` and move to the next profile if the drag motion has moved at least 100 pixels to the right
+- [console.log](https://developer.mozilla.org/en-US/docs/Web/API/Console/log) `nope` and move to the next profile if the drag motion has moved at least 100 pixels to the left
 - do nothing if the drag motion did not move 100 pixels horizontally
 
 And, we will perform the following no matter what state the drag motion ends:
@@ -459,7 +456,7 @@ And, we will perform the following no matter what state the drag motion ends:
 Update the __JavaScript__ tab to:
 
 @sourceref ./7-release.js
-@highlight 77-88,only
+@highlight 79-90,only
 
 ## Add an empty profile
 
@@ -467,8 +464,8 @@ Update the __JavaScript__ tab to:
 
 In this section, we will:
 
--  Show the following stop sign url when the user runs out of profiles:
-  `http://stickwix.com/wp-content/uploads/2016/12/Stop-Sign-NH.jpg`.
+-  Show the following stop sign URL when the user runs out of profiles:
+  `https://stickwix.com/wp-content/uploads/2016/12/Stop-Sign-NH.jpg`.
 
 
 ### What you need to know
@@ -477,8 +474,8 @@ In this section, we will:
 
   ```js
   emptyProfile: {
-    default () {
-        return {img: "http://stickwix.com/wp-content/uploads/2016/12/Stop-Sign-NH.jpg"};
+    default() {
+        return {img: "https://stickwix.com/wp-content/uploads/2016/12/Stop-Sign-NH.jpg"};
     }
   },
   ```
@@ -488,6 +485,14 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./8-empty-profile.js
-@highlight 41-45,48,51,only
+@highlight 43-47,50,53,only
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.1.4"></script>
+## Result
+
+When finished, you should see something like the following CodePen:
+
+<p data-height="768" data-theme-id="0" data-slug-hash="pZOpRE" data-default-tab="js,result" data-user="chasenlehara" data-pen-title="CanJS Tinder-Like Carousel" class="codepen">
+  See the Pen <a href="https://codepen.io/chasenlehara/pen/pZOpRE/">CanJS Tinder-Like Carousel</a> by Chasen Le Hara (<a href="https://codepen.io/chasenlehara">@chasenlehara</a>) on <a href="https://codepen.io">CodePen</a>.
+</p>
+
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>

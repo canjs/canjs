@@ -14,10 +14,10 @@ CanJS 4 is a big step forward in simplifying CanJS and enhancing your understand
 application. Read more details about it [CanJS 4.0's release article](https://www.bitovi.com/blog/canjs-4.0).  The following are some highlights:
 
 - Debugging Tools - CanJS 4.0 makes it easier to discover how your code works (or doesn't)
-  and fix it.  It works with [CanJS's Chrome Debugger Tools](https://chrome.google.com/webstore/detail/hhdfadlgplkpapjfehnjhcebebgmibcb)
-- Simplified Stache Templates - Most of [can-stache]'s quirks have been eliminated or simplified.
+  and fix it.  It works with [CanJS’s Chrome Debugger Tools](https://chrome.google.com/webstore/detail/hhdfadlgplkpapjfehnjhcebebgmibcb)
+- Simplified Stache Templates - Most of [can-stache]’s quirks have been eliminated or simplified.
 - Streaming property definitions - Contain the behavior of a stateful property within a single streaming property definition.  
-- Determinism and Performance with Queues - CanJS's new queuing system makes callback ordering
+- Determinism and Performance with Queues - CanJS’s new queuing system makes callback ordering
   deterministic, eliminating odd corner cases, improving debuggability and performance.
 - Upgradability - CanJS 4.0 is much easier to upgrade to than 3.0.
 

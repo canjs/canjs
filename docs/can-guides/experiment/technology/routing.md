@@ -98,7 +98,7 @@ the [guides/technology-overview#Key_ValueObservables Technology Overview's Key-V
 
 <script type="module">
 // Imports the <mock-url> element that provides
-// a fake back, forward, and url controls.
+// a fake back, forward, and URL controls.
 import "//unpkg.com/mock-url@^5.0.0";
 
 import {DefineMap, route} from "can";
@@ -142,7 +142,7 @@ back to `0`:
 
 
 By default, `can-route` serializes the observable's data with [can-param],
-so that the following observable data produces the following url hashes:
+so that the following observable data produces the following URL hashes:
 
 ```js
 {foo: "bar"}          //-> "#!&foo=bar"
@@ -165,7 +165,7 @@ a translation between URLs and route properties:
 route.register("{count}")
 ```
 
-This results in the following translation between observable data and url hashes:
+This results in the following translation between observable data and URL hashes:
 
 ```js
 {count: 0}                  //-> "#!0"
@@ -173,7 +173,7 @@ This results in the following translation between observable data and url hashes
 {count: 1, type: "counter"} //-> "#!1&type=counter"
 ```
 
-You can add data when the url is matched.  The following registers
+You can add data when the URL is matched.  The following registers
 data for when the URL is matched:
 
 ```js
@@ -181,7 +181,7 @@ route.register("products", {page: "products"});
 route.register("products/{id}", {page: "products"})
 ```
 
-This results in the following translation between observable data and url hashes:
+This results in the following translation between observable data and URL hashes:
 
 ```js
 {page: "products"}          //-> "#!products"
@@ -203,7 +203,7 @@ route.register("",{count: 0});
 Understanding how to use [can-route] within an application comprised of [can-component]s
 and their [can-stache] views and observable view-models can be tricky.  
 
-We'll use the following example to help make sense of it:
+We’ll use the following example to help make sense of it:
 
 @demo demos/technology-overview/route-mini-app.html
 
@@ -261,7 +261,7 @@ Component.extend({
 To connect the component's VM to the url, we:
 
 - set [can-route.data] to the custom element.
-- call and [can-route.start] to begin sending url values to the component.
+- call and [can-route.start] to begin sending URL values to the component.
 
 ```js
 route.data = document.querySelector("my-app");
@@ -280,7 +280,7 @@ before the [can-component.prototype.ViewModel].  This helps you figure out what 
 the [can-component.prototype.ViewModel] needs to provide an easily understood
 [can-component.prototype.view].
 
-We'll use [can-stache.helpers.switch] to switch between different components
+We’ll use [can-stache.helpers.switch] to switch between different components
 based on a `componentToShow` property on the view-model. The result looks like the following:
 
 ```js
@@ -317,7 +317,7 @@ We will implement these properties and `componentToShow` in the
 
 ## Define the view-model
 
-Now that we've designed the _view_ it's time to code the observable view-model
+Now that we've designed the _view_ it’s time to code the observable view-model
 with the logic to make the view behave correctly. We implement the
 `ViewModel` as follows:
 
@@ -341,7 +341,7 @@ Component.extend({
 
         // We show the login page if someone
         // isn't logged in, otherwise, we
-        // show what the url points to.
+        // show what the URL points to.
         get componentToShow(){
             if(!this.isLoggedIn) {
                 return "login";
@@ -367,18 +367,18 @@ Component.extend({
 > are automatically configured with `serialize: false`.
 
 
-Finally, our component works, but the urls aren't easy to
+Finally, our component works, but the URLs aren’t easy to
 remember (ex: `#!&page=home`). We will clean that up in the
 next section.
 
 
 ## Register routes
 
-Currently, after the user logs in, the application will show `<h2>Page Missing</h2>` because if the url hash is empty, `page` property will be undefined. To have `page`
+Currently, after the user logs in, the application will show `<h2>Page Missing</h2>` because if the URL hash is empty, `page` property will be undefined. To have `page`
 be `"home"`, one would have to navigate to `"#!&page=home"` ... yuck!  
 
 We want the `page` property to be `"home"` when the hash is empty.  Furthermore,
-we want urls like `#!tasks` to set the `page` property.  We can do that
+we want URLs like `#!tasks` to set the `page` property.  We can do that
 by registering the following route:
 
 ```js
@@ -392,7 +392,7 @@ to `"5"`.  Registering the following route does that:
 route.register("tasks/{taskId}", {page: "tasks"});
 ```
 
-Now the mini application is able to translate changes in the url to
+Now the mini application is able to translate changes in the URL to
 properties on the component's view-model.  When the component's view-model
 changes, the view updates the page.
 

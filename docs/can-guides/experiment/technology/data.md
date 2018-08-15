@@ -26,7 +26,7 @@ Most applications need to request data from a server.  For example, you might ha
 make an __AJAX__ request, used the new [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
 to get JSON data, or used [jQuery.ajax](http://api.jquery.com/jquery.ajax/) to post form data.
 
-While these techniques are _fine_ in a CanJS application, using CanJS's service-layer modeling tools can solve some difficult problems with little configuration:
+While these techniques are _fine_ in a CanJS application, using CanJS’s service-layer modeling tools can solve some difficult problems with little configuration:
 
 - Provide a standard interface for retrieving, creating, updating, and deleting data.
 - Convert raw data from the server to typed data, with methods and special property behaviors.
@@ -35,13 +35,13 @@ While these techniques are _fine_ in a CanJS application, using CanJS's service-
 - Prevent multiple instances of a given id or multiple lists of a given set from being created.
 - Handle relationships between data.
 
-This guide walks you through the basics of CanJS's service layer modeling.
+This guide walks you through the basics of CanJS’s service layer modeling.
 
 
 ## Creating a model
 
-CanJS's pattern is such that you define application logic in one or more observables, then connect the observables to various browser APIs. CanJS's model layer
-libraries connect observables to backend services. CanJS's model-layer will make
+CanJS’s pattern is such that you define application logic in one or more observables, then connect the observables to various browser APIs. CanJS’s model layer
+libraries connect observables to backend services. CanJS’s model-layer will make
 AJAX requests to get, create, update, and delete data.
 
 For example, you
@@ -476,7 +476,7 @@ See this component in action here:
 @codepen
 
 
-Note that this demo lists newly created todos by listening to `Todo`'s created event as follows:
+Note that this demo lists newly created todos by listening to `Todo`’s created event as follows:
 
 ```js
 Component.extend({

@@ -126,7 +126,7 @@ Component.extend({
 		paymentType: "string",
 
 		divaQuestions: {
-			default () {
+			default() {
 				return new DivaQuestions({
 					viewModel: {
 						divaExpenses: value.bind(this, "divaExpenses")

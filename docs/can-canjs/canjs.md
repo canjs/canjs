@@ -227,7 +227,7 @@ We add a new guide every 6 weeks. [Let us know](http://twitter.com/canjs) what y
 
 <h3 id='solve-problems'>Solve difficult problems</h3>
 
-CanJS has been used to build everything so it's both flexible and has a
+CanJS has been used to build everything so it’s both flexible and has a
 wide variety of extensions and plugins that solve all sorts of problems.
 
 __Flexible Programming Styles__
@@ -328,7 +328,7 @@ state management and templates:
   - [can-connect/data/combine-requests/combine-requests minimizing requests]
   - [can-connect/cache-requests/cache-requests caching] and [fall-through-caching](can-connect/fall-through-cache/fall-through-cache)
   - [can-connect/can/ref/ref relationships]
-  - [can-ndjson-stream Streaming NSJSON fetch responses]
+  - [can-ndjson-stream Streaming NDJSON fetch responses]
 - [can-fixture Service simulation]
 - [can-define-validate-validatejs Validation]
 - [react-view-model React integration]
@@ -344,9 +344,11 @@ And to views:
 - [can-stache-converters Converters that simplify two-way bindings]
 - [can-stache-route-helpers Routing helpers for the view]
 
-If you need even more 🔥, checkout CanJS's parent framework, <a href="http://donejs.com"><img src="https://www.bitovi.com/hubfs/Imported_Blog_Media/donejs-logo-ie.png" style="width: 100px; position: relative; top: 7px;"/></a>, which adds:
+If you need even more 🔥, check out CanJS’s parent framework,
+<a href="http://donejs.com"><img src="https://www.bitovi.com/hubfs/Imported_Blog_Media/donejs-logo-ie.png" style="width: 100px; position: relative; top: 7px;"/></a>,
+which adds:
 
-- iOS, Andriod, and desktop builds
+- iOS, Android, and desktop builds
 - Server-side rendering (Isomorphic / UniversalJS)
 - Progressive loading
 - Continuous Integration (Testing)
@@ -396,7 +398,7 @@ Useful integration APIs:
 
 CanJS is dedicated to supporting you and your
 application long term. As technology progresses and
-tastes change, your code evolves too so you aren't left
+tastes change, your code evolves too so you aren’t left
 maintaining 💩.
 
 <img src="./docs/can-guides/images/introduction/mission-stability-upgrade-new.png">
