@@ -28,7 +28,7 @@ is easier to setup. Pushstate routing requires server-support. Use [can-route-pu
 
 
 [can-route] is used to setup a bi-directional relationship with an <span class='obs'>observable</span> and
-the browser's location (the _URL_).
+the browser's [location](https://developer.mozilla.org/en-US/docs/Web/API/Location) (the _URL_).
 
 <img src="../../docs/can-guides/experiment/technology/observable-routing.png"
   alt=""
