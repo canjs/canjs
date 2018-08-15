@@ -1405,6 +1405,7 @@ const todoConnection = restModel({
     url: "/api/todos/{id}"
 });
 ```
+@codepen
 
 Retrieve, create, update and destroy data programmatically:
 
@@ -1418,8 +1419,6 @@ Retrieve, create, update and destroy data programmatically:
 <td>
 
 ```js
-import Todo from "//canjs.com/demos/api/t-n-c.mjs"
-
 Todo.getList({
   // Selects only the todos that match
   filter: {
@@ -1431,7 +1430,6 @@ Todo.getList({
   page: {start: 0, end: 19}
 }) //-> Promise<TodoList[]>
 ```
-@codepen
 
 </td>
 <td>
@@ -1443,9 +1441,6 @@ GET /api/todos?
   sort=-name&
   page[start]=0&
   page[end]=19
-
-
-
 
 
 
@@ -1467,10 +1462,6 @@ GET /api/todos?
     ...
   ]
 }
-
-
-
-
 ```
 
 </td>
@@ -1663,12 +1654,19 @@ const todoConnection = realtimeRestModel({
 });
 
 // Update instances and lists from server-side events:
-socket.on('todo created', (todo) => {
-    todoConnection.createInstance(order);
-}).on('todo updated', (todo) => {
-    todoConnection.updateInstance(order);
-}).on('todo removed', (todo) => {
-    todoConnection.destroyInstance(order);
+var loc = window.location;
+const socket = new WebSocket('ws://'+loc.host+loc.pathname+"/ws");
+
+socket.addEventListener("todo-created",(event) => {
+    todoConnection.createInstance( JSON.parse(event.data) );
+});
+
+socket.addEventListener("todo-updated",(event) => {
+    todoConnection.updateInstance( JSON.parse(event.data) );
+});
+
+socket.addEventListener("todo-removed",(event) => {
+    todoConnection.destroyInstance( JSON.parse(event.data) );
 });
 ```
 
