@@ -67,7 +67,7 @@ With native HTML (DOM) APIs, you might implement this widget like:
     counter.querySelector("button").addEventListener("click", function(){
 
         // Update the HTML.
-        counter.querySelector("span").textContent = (count++)
+        counter.querySelector("span").textContent = (++count)
     })
 </script>
 ```
