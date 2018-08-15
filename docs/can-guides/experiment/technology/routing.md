@@ -18,7 +18,7 @@ table.panels .background td {
 table.panels pre {
     margin-top: 0px;
 }
-.obs {color: #800020; font-weight: bold}
+.obs {color: #800020;}
 </style>
 
 ## Overview

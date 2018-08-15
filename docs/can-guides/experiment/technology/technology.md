@@ -18,7 +18,7 @@ table.panels .background td {
 table.panels pre {
     margin-top: 0px;
 }
-.obs {color: #800020; font-weight: bold}
+.obs {color: #800020;}
 .code-toolbar + a {
     text-align: center; color: gray; display: block;
     border-right: 1px solid #ccc;
@@ -29,7 +29,7 @@ table.panels pre {
 
 ## Overview
 
-CanJS, at its most simplified, consists of key-value <span class='obs'>Observables</span>
+CanJS, at its most simplified, consists of key-value <span class='obs'>observables</span>
 connected to web browser APIs using various libraries.
 
 
@@ -202,47 +202,8 @@ The following widget counts the number of times the <button>+1</button> button i
 In CanJS, widgets are encapsulated with custom elements. Custom elements allow us to put an
 element in our HTML like `<my-counter></my-counter>`, and the widget will spring to life.
 
-The following HTML includes a `<my-counter>` element and defines the `<my-counter>` [can-component Component]:
-
-```html
-<!-- Adds the custom element to the page -->
-<my-counter></my-counter>
-
-<script type="module">
-import { DefineMap, Component } from "can";
-
-// Define the `Counter` observable type
-const Counter = DefineMap.extend({
-    count: {default: 0},
-    increment() {
-        this.count++;
-    }
-});
-
-// Extend Component to define a custom element
-Component.extend({
-
-    // The name of the custom element
-    tag: "my-counter",
-
-    // The HTML content within the custom element.
-    //  - {{count}} is a `stache` magic tag.
-    //  - `on:click` is a `stache` event binding.
-    view: `
-        Count: <span>{{count}}</span>
-        <button on:click='increment()'>+1</button>
-    `,
-
-    // The Observable type used to control the
-    // logic of this custom element
-    ViewModel: Counter
-});
-</script>
-```
-@codepen
-
-Typically, a Component's <span class='obs'>observable</span> [can-component.prototype.ViewModel] is defined
-inline as follows:
+The previous demo defines its `view` and `ViewModel` as separate entities. However,
+a Component's [can-component.prototype.ViewModel] and view are typically defined inline as follows:
 
 ```html
 <my-counter></my-counter>
@@ -271,38 +232,71 @@ Component.extend({
 
 You might have noticed that Components are mostly 2 parts:
 
-- A [can-component.prototype.view] that specifies the HTML content within the custom element. In this case, we’re adding a `<span>` and a `<button>` within the `<my-counter>` element.
-- An <span class='obs'>observable</span> [can-component.prototype.ViewModel] that manages the logic and state of the application.
+- A [can-component.prototype.view] that specifies the HTML content within the custom element. In this case, we’re adding a `<span>` and a `<button>` within the `<my-counter>` element. Magic tags
+like `{{count}}` are provided by [can-stache stache] and bindings like `on:click` are provided by
+[can-stache-bindings stacheBindings].
+- An observable [can-component.prototype.ViewModel] that manages the logic and state of the application.
 
 These work together to receive input from the user, update the state of the application, and then update
 the HTML the user sees accordingly. See how in this 2 minute video:
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/3zMwoEuyX9g" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
-For more information on how to connect <span class='obs'>observables</span> to the DOM, read the
+For more information on how to connect observables to the DOM, read the
 [guides/html] guide.
 
 ## Observables and the browser's location
 
-CanJS applications use [can-route route] (or [can-route-pushstate routePushstate]) to connect an
-<span class='obs'>observable</span> to the browser's URL.
+CanJS applications use [can-route route] (or mixin [can-route-pushstate RoutePushstate]) to connect an <span class='obs'>observable</span> to the browser's URL. The observable acts like a key-value
+store of the data in the URL.
 
-The following shows the browser's forward and back buttons connected to the `<my-counter>` Component's
-<span class='obs'>observable</span> state. Click `+1` a few times, then click
+The following example shows that:
+
+- When the observable state updates, the URL changes.
+- When the URL changes, the observable state updates.
+
+```js
+import {route, DefineMap} from "//unpkg.com/can@5/core.mjs";
+
+location.hash = "#!&page=todos&id=1";
+
+route.data = new DefineMap({});
+route.start();
+
+// The route data matches what's in the hash.
+console.log(route.data.serialize())
+//-> {id: "1", page: "todos" }
+
+// If you change the route data ...
+route.data.id = 2;
+
+setTimeout(() => {
+	// ... the hash is updated!
+	console.log(location.hash)
+	//-> "#!&page=todos&id=2"
+
+	// If you change the hash ...
+	location.hash = "#!&page=login"
+},20);
+
+setTimeout(()=>{
+	// ... the route data is updated!
+	console.log(route.data.serialize())
+	//-> { page: "login" }
+},40);
+```
+@codepen
+
+The following shows the browser's forward and back buttons connected to the `<my-counter>` Component's observable state. Click `+1` a few times, then click
 the forward (`⇦`) and back (`⇨`) buttons to see the count change:
 
 @demo demos/technology-overview/route-counter.html
 
 Notice how the URL changes when you click the `+1` button AND the _Count_ changes when the
-forward and back button are clicked.  The URL and <span class='obs'>observable</span>
-are cross-bound. Cross bound means:
-
-- When the URL changes, the <span class='obs'>observable</span> state updates.
-- When the <span class='obs'>observable</span> state updates, the URL changes.
+forward and back button are clicked.  
 
 
-
-The following connects the `<my-counter>`’s <span class='obs'>observable</span> [can-component.prototype.ViewModel]
+The following connects the `<my-counter>`’s observable [can-component.prototype.ViewModel]
 to the browser's URL:
 
 ```html
@@ -312,7 +306,7 @@ to the browser's URL:
 <script type='module'>
 // Imports the <mock-url> element that provides
 // a fake back, forward, and URL controls.
-import "//unpkg.com/mock-url@^5.0.0";
+import "//unpkg.com/mock-url@5";
 
 import {route, Component} from "can";
 
@@ -332,7 +326,7 @@ Component.extend({
 
 // The `.data` property specifies the observable to cross
 // bind the URL to.  
-route.data = document.querySelector("my-counter");
+route.data = document.querySelector("my-counter").viewModel;
 route.start();
 </script>
 ```
@@ -381,7 +375,7 @@ route.start();
 @codepen
 
 
-For more information on how to connect <span class='obs'>observables</span> to the browser's URL, read the
+For more information on how to connect observables to the browser's URL, read the
 [guides/routing] guide.
 
 
@@ -406,20 +400,21 @@ response looks like:
 
 The following loads this list of data and logs it to the console by:
 
-- Defining an <span class='obs'>observable</span> data type to represent individual todos (`Todo`).
-- Defining an <span class='obs'>observable</span> data type to represent a list of todos (`Todo.List`).
-- Connecting those <span class='obs'>observable</span> data types to the RESTFUL service layer
+- Defining an observable data type to represent individual todos (`Todo`).
+- Defining an observable data type to represent a list of todos (`Todo.List`).
+- Connecting those observable data types to the RESTFUL service layer
   with [can-rest-model restModel].
 - Using the [can-connect/can/map/map.getList] method mixed-into the `Todo` type to get
   the todos from the server and log them to the console.
 
 ```js
 import {restModel, DefineMap, DefineList } from "can";
+import mockTodosService from "//unpkg.com/todos-fixture@1";
 
 // Defines the observable Todo type and its properties
 const Todo = DefineMap.extend("Todo",{
 
-    // `id` values must be unique.
+    // `identity: true` specifies that `id` values must be unique.
     id: { type: "number", identity: true },
     complete: { type: "boolean", default: false },
     dueDate: "date",
@@ -445,7 +440,7 @@ restModel({
 });
 
 // Call to setup the mock server before we make a request.
-mockServices();
+mockTodosService(20);
 
 // Gets a Promise that resolves to a `Todo.List` of `Todo` instances.
 let todosPromise = Todo.getList();
@@ -453,32 +448,9 @@ todosPromise.then(function(todos){
     // .get() converts the Todo instances back to plain JS objects
     // for easier to read logging.
     console.log(todos.get())
-})
-
-// The following creates a restful service layer of
-// 20 randomized todos due between last week and 4 weeks from now.
-import {fixture} from "can";
-function mockServices(){
-  let terms = ["can you","please","","","",""],
-    verbs = ["clean","walk","do","vacuum","organize","fold","wash","dust","pay","cook","get","take out"],
-    subjects = ["dog","laundry","diapers","clothes","car","windows","carpet","taxes","food","gas","trash"];
-
-  let dayInMS = 24*60*60*1000;
-  let lastWeek = new Date() - (7*dayInMS);
-  let fourWeeks = new Date().getTime() + (4*7*dayInMS);
-
-  const todoStore = fixture.store(20, function(){
-      return {
-          complete: fixture.rand([true, false],1)[0],
-          dueDate: new Date( fixture.rand(lastWeek, fourWeeks) ).toString(),
-          name: (fixture.rand(terms,1)[0]+" "+fixture.rand(verbs,1)[0]+" "+fixture.rand(subjects,1)[0]).trim()
-      }
-  }, Todo);
-
-  fixture("/api/todos/{id}", todoStore);
-}
+});
 ```
-@highlight 26-29,35-40
+@highlight 27-30,36-41
 @codepen
 
 
@@ -494,6 +466,7 @@ that:
 
 <script type='module'>
 import {restModel, DefineMap, DefineList } from "can";
+import mockTodosService from "//unpkg.com/todos-fixture@1";
 
 const Todo = DefineMap.extend("Todo",{
     id: { type: "number", identity: true },
@@ -514,7 +487,7 @@ restModel({
     url: "/api/todos/{id}"
 })
 
-mockServices();
+mockTodosService(20);
 
 import { Component } from "can";
 
@@ -539,30 +512,9 @@ Component.extend({
         }
     }
 });
-
-import {fixture} from "can";
-function mockServices(){
-  let terms = ["can you","please","","","",""],
-    verbs = ["clean","walk","do","vacuum","organize","fold","wash","dust","pay","cook","get","take out"],
-    subjects = ["dog","laundry","diapers","clothes","car","windows","carpet","taxes","food","gas","trash"];
-
-  let dayInMS = 24*60*60*1000;
-  let lastWeek = new Date() - (7*dayInMS);
-  let fourWeeks = new Date().getTime() + (4*7*dayInMS);
-
-  const todoStore = fixture.store(20, function(){
-      return {
-          complete: fixture.rand([true, false],1)[0],
-          dueDate: new Date( fixture.rand(lastWeek, fourWeeks) ).toString(),
-          name: (fixture.rand(terms,1)[0]+" "+fixture.rand(verbs,1)[0]+" "+fixture.rand(subjects,1)[0]).trim()
-      }
-  }, Todo);
-
-  fixture("/api/todos/{id}", todoStore);
-}
 </script>
 ```
-@highlight 29-49
+@highlight 30-50
 @codepen
 
 You can do a lot more with CanJS’s data layer besides showing a list of data. Read
