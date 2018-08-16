@@ -4,7 +4,7 @@ import { DefineMap, route, stache, stacheBindings } from "can";
 import "can/demos/technology-overview/mock-url";
 
 const Counter = DefineMap.extend({
-    count: {default: 0, type: "number"},
+    count: { default: 0, type: "number" },
     increment() {
         this.count++;
     }
@@ -25,5 +25,5 @@ const view = stache(`
 document.body.appendChild( view(myCounter) );
 </script>
 <style>
-body {margin: 0px; padding: 0px;}
+body { margin: 0px; padding: 0px; }
 </style>

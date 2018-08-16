@@ -1,6 +1,6 @@
 <body>
 <mock-url></mock-url>
-<div id='demo-html'>
+<div id="demo-html">
 <my-app></my-app>
 </div>
 
@@ -12,20 +12,20 @@ import "can/demos/technology-overview/mock-url";
 Component.extend({
     tag: "my-app",
     view: `
-        {{#switch(componentToShow)}}
-            {{#case("home")}}
+        {{# switch(componentToShow) }}
+            {{# case("home") }}
                 <page-home isLoggedIn:from="isLoggedIn" logout:from="logout"/>
-            {{/case}}
-            {{#case("tasks")}}
+            {{/ case }}
+            {{# case("tasks") }}
                 <task-editor id:from="taskId" logout:from="logout"/>
-            {{/case}}
-            {{#case("login")}}
+            {{/ case }}
+            {{# case("login") }}
                 <page-login isLoggedIn:bind="isLoggedIn" />
-            {{/case}}
-            {{#default}}
+            {{/ case }}
+            {{# default }}
                 <h2>Page Missing</h2>
-            {{/default}}
-        {{/switch}}
+            {{/ default }}
+        {{/ switch }}
     `,
     ViewModel: {
         page: "string",
@@ -36,7 +36,7 @@ Component.extend({
             }
             return this.page;
         },
-        isLoggedIn: {default: false, type: "boolean", serialize: false},
+        isLoggedIn: { default: false, type: "boolean", serialize: false },
         logout() {
             this.isLoggedIn = false;
         }
@@ -44,8 +44,8 @@ Component.extend({
 });
 
 route.data = document.querySelector("my-app");
-route.register("{page}",{page: "home"});
-route.register("tasks/{taskId}",{page: "tasks"});
+route.register("{page}", { page: "home" });
+route.register("tasks/{taskId}",{ page: "tasks" });
 route.start();
 </script>
 <style>
@@ -67,6 +67,6 @@ p {
 }
 </style>
 <style>
-body {margin: 0px; padding: 0px;}
+body { margin: 0px; padding: 0px; }
 </style>
 </body>
