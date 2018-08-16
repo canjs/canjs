@@ -132,6 +132,7 @@ change to `#!count=1`. If you hit the back-button, `myCounter.count` would be
 back to `0`:
 
 @demo demos/technology-overview/route-counter.html
+@codepen
 
 By default, `can-route` serializes the observable’s data with [can-param],
 so that the following observable data produces the following URL hashes:
@@ -186,6 +187,7 @@ route.register("", { count: 0 });
 ```
 
 @demo demos/technology-overview/route-counter-registered.html
+@codepen
 
 ## Routing and the root component
 
@@ -195,6 +197,7 @@ and their [can-stache] views and observable view-models can be tricky.
 We’ll use the following example to help make sense of it:
 
 @demo demos/technology-overview/route-mini-app.html
+@codepen
 
 This example shows the `<page-login>` component until someone has logged in.  Once they have
 done that, it shows a particular component based upon the hash. If the hash is empty (`""` or `"#!"`),
@@ -257,6 +260,7 @@ At this point, changes in the URL will cause changes in the `page`
 property. See this by clicking the links and the back/refresh buttons below:
 
 @demo demos/technology-overview/route-mini-app-start.html
+@codepen
 
 ## Display the right sub-components
 

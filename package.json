@@ -261,6 +261,14 @@
       [
         "\"can\"",
         "\"//unpkg.com/can@5/core.mjs\""
+      ],
+      [
+        "\"can/demos/technology-overview/mock-url\"",
+        "\"//unpkg.com/mock-url@^5.0.0/mock-url.mjs\""
+      ],
+      [
+        "\"can/demos/technology-overview/route-mini-app-components\"",
+        "\"//unpkg.com/route-mini-app@^5.0.0/components.mjs\""
       ]
     ]
   }
