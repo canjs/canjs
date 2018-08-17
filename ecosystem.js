@@ -7,6 +7,7 @@ export { default as kefir } from "./es/can-kefir";
 export { default as observe } from "./es/can-observe";
 export { default as stream } from "./es/can-stream";
 export { default as streamKefir } from "./es/can-stream-kefir";
+export { default as makeMapCompat } from "./es/can-map-compat";
 
 
 // Views

@@ -92,6 +92,7 @@
     "can-log": "1.0.0",
     "can-make-map": "1.2.0",
     "can-map": "4.3.3",
+    "can-map-compat": "1.0.1",
     "can-map-define": "4.3.3",
     "can-memory-store": "1.0.0",
     "can-namespace": "1.0.0",
