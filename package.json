@@ -269,6 +269,18 @@
       [
         "\"can/demos/technology-overview/route-mini-app-components\"",
         "\"//unpkg.com/route-mini-app@^5.0.0/components.mjs\""
+      ],
+      [
+        "return steal.import(",
+        "return import("
+      ],
+      [
+        "\"can/demos/technology-overview/page-login\"",
+        "\"//unpkg.com/route-mini-app@^5.0.0/page-login.mjs\""
+      ],
+      [
+        "`can/demos/technology-overview/page-${this.page}`",
+        "`//unpkg.com/route-mini-app@^5.0.0/page-${this.page}.mjs`"
       ]
     ]
   }

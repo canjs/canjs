@@ -383,5 +383,259 @@ Now the mini application is able to translate changes in the URL to
 properties on the component’s view-model.  When the component’s view-model
 changes, the view updates the page.
 
+## Create the sub-components programmatically
+
+The [display the right sub-components](#Displaytherightsub_components) section showed how to use a [can-stache.helpers.switch] in the view to display the correct component for each route. As your application grows, the view for handling this routing logic can become very large and very difficult to test.
+
+[can-component#Programmaticallyinstantiatingacomponent Programmatically instatiating can-component]s can be used to move this logic out of the view and into the view-model. Using this technique can greatly increase the maintainability and testability of the routing logic of your application.
+
+To get started with this technique, replace the [can-stache.helpers.switch] with a simple [can-stache.tags.escaped]:
+
+```js
+Component.extend({
+    tag: "my-app",
+    view: `
+		{{componentToShow}}
+    `,
+    // ...
+})
+```
+@highlight 4
+
+Instead of returning a string, the `componentToShow` getter will return an instance of the component that should be shown.
+
+The first step toward making this possible is to import the constructors for the [can-component]s that will be displayed:
+
+```js
+import { PageHome, PageLogin, TaskEditor } from "can/demos/technology-overview/route-mini-app-components";
+
+Component.extend({
+    tag: "my-app",
+    // ...
+    ViewModel: {
+		// ...
+    }
+});
+```
+@highlight 1
+
+Once the component constructors are imported, they can be used to create an instance of the correct component in the `componentToShow` getter:
+
+```js
+import { PageHome, PageLogin, TaskEditor } from "can/demos/technology-overview/route-mini-app-components";
+
+Component.extend({
+    tag: "my-app",
+    // ...
+    ViewModel: {
+		// ...
+        get componentToShow(){
+            if(!this.isLoggedIn) {
+                return new PageLogin({ });
+            }
+
+            switch(this.page) {
+                case "home":
+                    return new PageHome({ });
+                    break;
+                case "tasks":
+                    return new TaskEditor({ });
+                    break;
+                default:
+                    var page404 = document.createElement("h2");
+                    page404.innerHTML = "Page Missing";
+                    return page404;
+                    break;
+            }
+        },
+		// ...
+    }
+});
+```
+@highlight 8-26
+
+Now the correct components will be displayed; however, the data-bindings (like `isLoggedIn:from="isLoggedIn"`) are not set up, so the application will not be fully functional yet. [can-value] can be used to set up one-way and two-way bindings between the root component and each page’s sub-component. This is done by passing the `viewModel` option to the component constructor:
+
+```js
+import { PageHome, PageLogin, TaskEditor } from "can/demos/technology-overview/route-mini-app-components";
+
+Component.extend({
+    tag: "my-app",
+    // ...
+    ViewModel: {
+		// ...
+        get componentToShow(){
+            if(!this.isLoggedIn) {
+                return new PageLogin({
+                    viewModel: {
+                        isLoggedIn: value.bind(this, "isLoggedIn")
+                    }
+                });
+            }
+
+            switch(this.page) {
+                case "home":
+                    return new PageHome({
+                        viewModel: {
+                            isLoggedIn: value.from(this, "isLoggedIn")
+                        }
+                    });
+                    break;
+                case "tasks":
+                    return new TaskEditor({
+                        viewModel: {
+                            id: value.from(this, "taskId")
+                        }
+                    });
+                    break;
+                default:
+                    var page404 = document.createElement("h2");
+                    page404.innerHTML = "Page Missing";
+                    return page404;
+                    break;
+            }
+        },
+		// ...
+    }
+});
+```
+@highlight 11-13,20-22,27-29
+
+The `logout` function also needs to be passed to the `PageHome` and `TaskEditor` components. Since this is a function and is not observable, it can be passed directly to these components without using [can-value].
+
+> Note: make sure to use [Function.prototype.bind()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind) so that the `this` will correctly be the root component, even when called from a child component.
+
+```js
+import { PageHome, PageLogin, TaskEditor } from "can/demos/technology-overview/route-mini-app-components";
+
+Component.extend({
+    tag: "my-app",
+    // ...
+    ViewModel: {
+		// ...
+        get componentToShow(){
+            if(!this.isLoggedIn) {
+                return new PageLogin({
+                    viewModel: {
+                        isLoggedIn: value.bind(this, "isLoggedIn")
+                    }
+                });
+            }
+
+            switch(this.page) {
+                case "home":
+                    return new PageHome({
+                        viewModel: {
+                            isLoggedIn: value.from(this, "isLoggedIn"),
+                            logout: this.logout.bind(this)
+                        }
+                    });
+                    break;
+                case "tasks":
+                    return new TaskEditor({
+                        viewModel: {
+                            id: value.from(this, "taskId"),
+                            logout: this.logout.bind(this)
+                        }
+                    });
+                    break;
+                default:
+                    var page404 = document.createElement("h2");
+                    page404.innerHTML = "Page Missing";
+                    return page404;
+                    break;
+            }
+        },
+		// ...
+    }
+});
+```
+@highlight 22,30
+
+With these changes in place, the application is now working with the routing logic handled entirely by the view-model:
+@demo demos/technology-overview/route-mini-app-programmatic.html
+@codepen
+
+## Progressively load the sub-components
+
+Another benefit of moving the routing logic to the view-model is that it makes it much easier to progressively load the components for each route. With progressive loading, the application will only load the code for the each route when the route is displayed. This prevents loading code for pages the user may never visit.
+
+To make this possible, the code for each route will be imported using a [dynamic import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#Dynamic_Imports) instead of the static `import { Page... } from "...components"` syntax.
+
+> Note: dynamic imports may not be natively supported in every browser, but similar functionality is available in [StealJS](https://stealjs.com/docs/steal.import.html) and [webpack](https://webpack.js.org/api/module-methods/#import-).
+
+Dynamic imports return a promise that will resolve once the code is loaded, so the `componentToShow` property will become a promise. The [can-reflect-promise] package makes it easy to use promises directly in [can-stache]. The view can be updated to display the `value` of the promise once it is resolved:
+
+```js
+Component.extend({
+    tag: "my-app",
+    view: `
+		{{# if(componentToShow.isResolved) }}
+			{{componentToShow.value}}
+		{{/ if }}
+    `,
+    // ...
+})
+```
+@highlight 4-6
+
+> Note, [can-reflect-promise] also adds `isPending` and `isRejected` properties to promises so that the view can handle these states as well.
+
+Then update the `componentToShow` getter to import the correct module. The value passed to the promise’s [then](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then) method will be a module object with a property for each of the module’s exports. In this example, the component constructor is the default export, so an instance of the component can be created using `new module.default({ ... })`. Returning the instances from the `then` method will set `componentToShow.value` to the component instance:
+
+```js
+Component.extend({
+    tag: "my-app",
+    // ...
+    ViewModel: {
+		// ...
+        get componentToShow(){
+			if(!this.isLoggedIn) {
+                return import("can/demos/technology-overview/page-login")
+                    .then((module) => {
+                        return new module.default({
+                            viewModel: {
+                                isLoggedIn: value.bind(this, "isLoggedIn")
+                            }
+                        });
+                    });
+            }
+
+            return import(`can/demos/technology-overview/page-${this.page}`)
+                .then((module) => {
+                    switch(this.page) {
+                        case "home":
+                            return new module.default({
+                                viewModel: {
+                                    isLoggedIn: value.from(this, "isLoggedIn"),
+                                    logout: this.logout.bind(this)
+                                }
+                            });
+                            break;
+                        case "tasks":
+                            return new module.default({
+                                viewModel: {
+                                    id: value.from(this, "taskId"),
+                                    logout: this.logout.bind(this)
+                                }
+                            });
+                            break;
+                        default:
+                            var page404 = document.createElement("h2");
+                            page404.innerHTML = "Page Missing";
+                            return page404;
+                            break;
+                    }
+                });
+        },
+		// ...
+    }
+});
+```
+@highlight 8-10,15,18-19,22,30,43
+
+The application is now progressively loading the code for each route:
+@demo demos/technology-overview/route-mini-app-programmatic-progressive.html
+@codepen
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
