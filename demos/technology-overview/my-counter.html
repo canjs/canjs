@@ -1,9 +1,9 @@
 <body>
-<div id='demo-html'>
+<div id="demo-html">
 <my-counter></my-counter>
 </div>
 
-<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty"  id="demo-source">
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
 import { Component, DefineMap, stache } from "can";
 
 const Counter = DefineMap.extend({
@@ -14,7 +14,7 @@ const Counter = DefineMap.extend({
 });
 
 const view = stache(`
-    <button on:click='increment()'>+1</button>
+    <button on:click="increment()">+1</button>
     Count: <span>{{count}}</span>
 `);
 

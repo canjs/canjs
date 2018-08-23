@@ -1,10 +1,7 @@
 <body>
 <mock-url></mock-url>
-<div id='demo-html'>
 <my-app></my-app>
-</div>
-
-<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty"  id="demo-source">
+<script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" dev-bundle>
 import { Component, route } from "can";
 import "can/demos/technology-overview/route-mini-app-components";
 import "can/demos/technology-overview/mock-url";
@@ -12,20 +9,20 @@ import "can/demos/technology-overview/mock-url";
 Component.extend({
     tag: "my-app",
     view: `
-        {{#switch(componentToShow)}}
-            {{#case("home")}}
+        {{# switch(componentToShow) }}
+            {{# case("home") }}
                 <page-home isLoggedIn:from="isLoggedIn" logout:from="logout"/>
-            {{/case}}
-            {{#case("tasks")}}
+            {{/ case }}
+            {{# case("tasks") }}
                 <task-editor id:from="taskId" logout:from="logout"/>
-            {{/case}}
-            {{#case("login")}}
+            {{/ case }}
+            {{# case("login") }}
                 <page-login isLoggedIn:bind="isLoggedIn" />
-            {{/case}}
-            {{#default}}
+            {{/ case }}
+            {{# default }}
                 <h2>Page Missing</h2>
-            {{/default}}
-        {{/switch}}
+            {{/ default }}
+        {{/ switch }}
     `,
     ViewModel: {
         page: "string",
@@ -36,7 +33,7 @@ Component.extend({
             }
             return this.page;
         },
-        isLoggedIn: {default: false, type: "boolean", serialize: false},
+        isLoggedIn: { default: false, type: "boolean", serialize: false },
         logout() {
             this.isLoggedIn = false;
         }
@@ -44,8 +41,8 @@ Component.extend({
 });
 
 route.data = document.querySelector("my-app");
-route.register("{page}",{page: "home"});
-route.register("tasks/{taskId}",{page: "tasks"});
+route.register("{page}", { page: "home" });
+route.register("tasks/{taskId}",{ page: "tasks" });
 route.start();
 </script>
 <style>
@@ -67,6 +64,6 @@ p {
 }
 </style>
 <style>
-body {margin: 0px; padding: 0px;}
+body { margin: 0px; padding: 0px; }
 </style>
 </body>

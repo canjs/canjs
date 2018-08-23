@@ -1,0 +1,83 @@
+<body>
+<mock-url></mock-url>
+<my-app></my-app>
+<script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" dev-bundle>
+import { Component, route, value } from "can";
+import { PageHome, PageLogin, TaskEditor } from "can/demos/technology-overview/route-mini-app-components";
+import "can/demos/technology-overview/mock-url";
+
+Component.extend({
+    tag: "my-app",
+    view: `
+		{{componentToShow}}
+    `,
+    ViewModel: {
+        page: "string",
+        taskId: "string",
+        get componentToShow(){
+            if(!this.isLoggedIn) {
+                return new PageLogin({
+                    viewModel: {
+                        isLoggedIn: value.bind(this, "isLoggedIn")
+                    }
+                });
+            }
+
+            switch(this.page) {
+                case "home":
+                    return new PageHome({
+                        viewModel: {
+                            isLoggedIn: value.from(this, "isLoggedIn"),
+                            logout: this.logout.bind(this)
+                        }
+                    });
+                    break;
+                case "tasks":
+                    return new TaskEditor({
+                        viewModel: {
+                            id: value.from(this, "taskId"),
+                            logout: this.logout.bind(this)
+                        }
+                    });
+                    break;
+                default:
+                    var page404 = document.createElement("h2");
+                    page404.innerHTML = "Page Missing";
+                    return page404;
+                    break;
+            }
+        },
+        isLoggedIn: { default: false, type: "boolean", serialize: false },
+        logout() {
+            this.isLoggedIn = false;
+        }
+    }
+});
+
+route.data = document.querySelector("my-app");
+route.register("{page}", { page: "home" });
+route.register("tasks/{taskId}",{ page: "tasks" });
+route.start();
+</script>
+<style>
+.slider {
+    border: solid 1px blue;
+    background-color: red;
+    height: 20px;
+    width: 20px;
+    cursor: ew-resize;
+    position: relative;
+}
+percent-slider {
+    border: solid 1px black;
+    padding: 2px;
+    display: block;
+}
+p {
+    margin: 0px 0px 20px 0px;
+}
+</style>
+<style>
+body { margin: 0px; padding: 0px; }
+</style>
+</body>
