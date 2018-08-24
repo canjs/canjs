@@ -59,6 +59,7 @@
     "can-compute": "4.1.0",
     "can-connect": "3.0.2",
     "can-connect-feathers": "5.0.0",
+    "can-connect-ndjson": "1.0.0",
     "can-connect-tag": "1.0.0",
     "can-construct": "3.5.1",
     "can-construct-super": "3.2.0",
