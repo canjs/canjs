@@ -263,7 +263,7 @@
         "\"can\"",
         "\"//unpkg.com/can@5/core.mjs\""
       ],
-	  [
+      [
         "\"can/everything\"",
         "\"//unpkg.com/can@5/everything.mjs\""
       ],
