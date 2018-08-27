@@ -71,6 +71,10 @@ stealTools.export({
 			modules: ["can/can"],
 			dest: globalJS.dest(__dirname+"/dist/global/ecosystem.js")
 		}, globalConfig),
+		"global everything": Object.assign({
+			modules: ["can/can"],
+			dest: globalJS.dest(__dirname+"/dist/global/everything.js")
+		}, globalConfig),
 		"+bundled-es core": {
 			modules: ["can/core"],
 			addProcessShim: true,
@@ -82,16 +86,27 @@ stealTools.export({
 			minify: true,
 			dest: __dirname + "/core.min.mjs"
 		},
-		"+bundled-es all": {
+		"+bundled-es ecosystem": {
 			modules: ["can/can"],
 			addProcessShim: true,
 			dest: __dirname + "/ecosystem.mjs"
 		},
-		"+bundled-es all minified": {
+		"+bundled-es ecosystem minified": {
 			modules: ["can/can"],
 			addProcessShim: true,
 			minify: true,
 			dest: __dirname + "/ecosystem.min.mjs"
+		},
+		"+bundled-es everything": {
+			modules: ["can/can"],
+			addProcessShim: true,
+			dest: __dirname + "/everything.mjs"
+		},
+		"+bundled-es everything minified": {
+			modules: ["can/can"],
+			addProcessShim: true,
+			minify: true,
+			dest: __dirname + "/everything.min.mjs"
 		}
 	}
 }).catch(function(e){

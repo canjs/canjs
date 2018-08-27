@@ -867,6 +867,7 @@ Try out the following use cases that [can-realtime-rest-model] provides automati
   from the view.
 
 @demo demos/can-realtime-rest-model/can-realtime-rest-model.html
+@codepen
 
 By default, [can-query-logic] assumes your service layer will match a [can-query-logic/query default query structure]
 that looks like:
