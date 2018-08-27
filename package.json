@@ -28,7 +28,7 @@
     "document": "npm run deps-bundle && bit-docs",
     "document:force": "npm run deps-bundle && bit-docs -fd",
     "deps-bundle": "node build-dev-bundle",
-    "make-copy-of-globals-for-can4-compat": "echo 'console.warn(\"This build is deprecated. Please update your URLs to the version of CanJS you intend to use, such as https://unpkg.com/can@4/dist/global/can.js\");' | cat - dist/global/core.js > dist/global/can.js && echo 'console.warn(\"This build is deprecated. Please update your URLs to the version of CanJS you intend to use, such as https://unpkg.com/can@4/dist/global/can.all.js\");' | cat - dist/global/ecosystem.js > dist/global/can.all.js"
+    "make-copy-of-globals-for-can4-compat": "echo 'console.warn(\"This build is deprecated. Please update your URLs to the version of CanJS you intend to use, such as https://unpkg.com/can@4/dist/global/can.js\");' | cat - dist/global/core.js > dist/global/can.js && echo 'console.warn(\"This build is deprecated. Please update your URLs to the version of CanJS you intend to use, such as https://unpkg.com/can@4/dist/global/can.all.js\");' | cat - dist/global/everything.js > dist/global/can.all.js"
   },
   "title": "CanJS",
   "description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
