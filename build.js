@@ -74,7 +74,8 @@ stealTools.export({
 		"+bundled-es core": {
 			modules: ["can/core"],
 			addProcessShim: true,
-			dest: __dirname + "/core.mjs"
+			dest: __dirname + "/core.mjs",
+			removeDevelopmentCode: false
 		},
 		"+bundled-es core minified": {
 			modules: ["can/core"],
@@ -85,7 +86,8 @@ stealTools.export({
 		"+bundled-es all": {
 			modules: ["can/can"],
 			addProcessShim: true,
-			dest: __dirname + "/ecosystem.mjs"
+			dest: __dirname + "/ecosystem.mjs",
+			removeDevelopmentCode: false
 		},
 		"+bundled-es all minified": {
 			modules: ["can/can"],
