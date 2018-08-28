@@ -28,7 +28,7 @@
     "document": "npm run deps-bundle && bit-docs",
     "document:force": "npm run deps-bundle && bit-docs -fd",
     "deps-bundle": "node build-dev-bundle",
-    "make-copy-of-globals-for-can4-compat": "echo 'console.warn(\"This build is deprecated. Please update your URLs to the version of CanJS you intend to use, such as https://unpkg.com/can@4/dist/global/can.js\");' | cat - dist/global/core.js > dist/global/can.js && echo 'console.warn(\"This build is deprecated. Please update your URLs to the version of CanJS you intend to use, such as https://unpkg.com/can@4/dist/global/can.all.js\");' | cat - dist/global/ecosystem.js > dist/global/can.all.js"
+    "make-copy-of-globals-for-can4-compat": "echo 'console.warn(\"This build is deprecated. Please update your URLs to the version of CanJS you intend to use, such as https://unpkg.com/can@4/dist/global/can.js\");' | cat - dist/global/core.js > dist/global/can.js && echo 'console.warn(\"This build is deprecated. Please update your URLs to the version of CanJS you intend to use, such as https://unpkg.com/can@4/dist/global/can.all.js\");' | cat - dist/global/everything.js > dist/global/can.all.js"
   },
   "title": "CanJS",
   "description": "MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.",
@@ -66,7 +66,7 @@
     "can-control": "4.2.0",
     "can-data-types": "1.2.0",
     "can-debug": "2.0.1",
-    "can-define": "2.5.6",
+    "can-define": "2.5.8",
     "can-define-backup": "2.0.0",
     "can-define-lazy-value": "1.1.0",
     "can-define-stream": "1.1.0",
@@ -110,7 +110,7 @@
     "can-reflect-dependencies": "1.1.0",
     "can-reflect-promise": "2.1.0",
     "can-rest-model": "1.0.0",
-    "can-route": "4.3.5",
+    "can-route": "4.3.12",
     "can-route-hash": "1.0.1",
     "can-route-mock": "1.0.1",
     "can-route-pushstate": "5.0.2",
@@ -131,7 +131,7 @@
     "can-symbol": "1.6.1",
     "can-validate": "1.2.0",
     "can-validate-interface": "1.0.2",
-    "can-validate-legacy": "1.4.0",
+    "can-validate-legacy": "2.0.0",
     "can-validate-validatejs": "1.0.0",
     "can-value": "1.0.1",
     "can-vdom": "4.4.0",
@@ -262,6 +262,10 @@
       [
         "\"can\"",
         "\"//unpkg.com/can@5/core.mjs\""
+      ],
+      [
+        "\"can/everything\"",
+        "\"//unpkg.com/can@5/everything.mjs\""
       ],
       [
         "\"can/demos/technology-overview/mock-url\"",

@@ -4,6 +4,8 @@ core.mjs
 core.min.mjs
 ecosystem.mjs
 ecosystem.min.mjs
+everything.min.mjs
+everything.mjs
 *.swp
 *.orig
 util/can.*.js

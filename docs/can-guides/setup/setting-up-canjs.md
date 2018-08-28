@@ -99,7 +99,7 @@ any development environment. This section gives technical details on these items
     core named exports on it. Use this if you want to create a demo or example that will
     work in browsers that do not support ESM.
 
-  - `./all.mjs` - An ESM module with named exports of every<span title="can-zone and ylem are not included">٭</span> package bundled
+  - `./everything.mjs` - An ESM module with named exports of every<span title="can-zone and ylem are not included">٭</span> package bundled
     together. This is useful for examples and prototyping in modern browsers that
     support ES modules. It's hosted statically on `unpkg` and can be
     downloaded here.
@@ -108,7 +108,7 @@ any development environment. This section gives technical details on these items
 
     ```js
     <script type="module">
-	import { Component } from "//unpkg.com/can@5/all.mjs";
+	import { Component } from "//unpkg.com/can@5/everything.mjs";
 
     	Component.extend({
     		tag: "my-app",
@@ -125,9 +125,9 @@ any development environment. This section gives technical details on these items
     CanJS. Using this module in production, without tree-shaking, is
     not advised!
 
-  - `./all.min.mjs` - A minified version of `./all.mjs`.
+  - `./everything.min.mjs` - A minified version of `./everything.mjs`.
 
-  - `./dist/global/all.js` - A JavaScript file that exports a `can` object with
+  - `./dist/global/everything.js` - A JavaScript file that exports a `can` object with
     every<span title="can-zone and ylem are not included">٭</span> named export. Use this if you want to create a demo or example that will
     work in browsers that do not support ESM.
 
@@ -195,8 +195,8 @@ Component.extend({
 @highlight 1
 
 If you want an [can-ecosystem] module like [can-stache-converters], you can use
-the [ecosystem ES module bundle](#ImportingtheecosystemESmodulebundle), but the ecosystem bundle should not be used in production as it
-loads every ecosystem module in CanJS.
+the [Everything ES module bundle](#ImportingtheeverythingESmodulebundle), but the everything bundle should not be used in production as it
+loads every module in CanJS.
 
 <details>
 <summary>
@@ -307,14 +307,13 @@ that import CanJS. The following shows putting components into their own modules
 
 
 
-### Importing the ecosystem ES module bundle
+### Importing the everything ES module bundle
 
 The [core ES module bundle](#ImportingthecoreESmodulebundle) only includes CanJS’s
 [can-core] modules.  This doesn't include [can-ecosystem] modules like [can-stache-converters].  The
-ecosystem bundle hosted at `https://unpkg.com/can@5/ecosystem.mjs` includes every CanJS module
-(except for `can-zone` and `ylem`).
+everything bundle hosted at `https://unpkg.com/can@5/everything.mjs` includes every CanJS module (except for `can-zone` and `ylem`).
 
-The following shows importing and using [can-stache-converters] from `ecosystem.mjs`:
+The following shows importing and using [can-stache-converters] from `everything.mjs`:
 
 ```html
 <!doctype html>
@@ -327,7 +326,7 @@ The following shows importing and using [can-stache-converters] from `ecosystem.
     <my-app></my-app>
 
     <script type="module">
-    import { Component, stache, stacheConverters } from "//unpkg.com/can@5/ecosystem.mjs";
+    import { Component, stache, stacheConverters } from "//unpkg.com/can@5/everything.mjs";
 
     stache.addConverter(stacheConverters);
 
@@ -349,7 +348,7 @@ The following shows importing and using [can-stache-converters] from `ecosystem.
 </html>
 ```
 
-The ecosystem bundle does not include:
+The everything bundle does not include:
 
 - [can-zone] (https://github.com/canjs/can-zone)
 - [ylem](https://github.com/bitovi/ylem)
@@ -387,7 +386,7 @@ __Model Example__
 [After setting up Node.js and npm](#Node_jsandnpm), install `can`, [StealJS](https://stealjs.com) and the [steal-stache] plugin from npm:
 
 ```
-npm install can@5 steal@^2.0.0-pre.11 steal-stache@4 --save
+npm install can@5 steal@2 steal-stache@4 --save
 ```
 
 Next, add the following [steal configuration](https://stealjs.com/docs/StealJS.configuration.html)
@@ -942,9 +941,9 @@ can.Component.extend({
 ```
 @highlight 10
 
-If you want to use [can-ecosystem] modules, you can use `./node_modules/can/dist/global/ecosystem.js`. However,
+If you want to use [can-ecosystem] modules, you can use `./node_modules/can/dist/global/everything.js`. However,
 this file is quite large and shouldn't be used in production so you will want to make your own custom version of
-`ecosystem.js` containing only the modules you need. Unfortunately, we haven't posted instructions on how to do this yet, even though it’s relatively easy. Please tell us on
+`everything.js` containing only the modules you need. Unfortunately, we haven't posted instructions on how to do this yet, even though it’s relatively easy. Please tell us on
 [Gitter chat](https://gitter.im/canjs/canjs) to hurry up and do it already!
 
 
@@ -1007,15 +1006,13 @@ can.Component.extend({
 @highlight 10
 
 If you want an [can-ecosystem] module like [can-stache-converters], you can use
-the [ecosystem JavaScript bundle](#IncludingtheecosystemJavaScriptbundle), but the ecosystem bundle should not be used in production as it
-loads every ecosystem module in CanJS.
+the [everything JavaScript bundle](#IncludingtheeverythingJavaScriptbundle), but the everything bundle should not be used in production as it
+loads every module in CanJS.
 
-### Including the ecosystem JavaScript bundle
+### Including the everything JavaScript bundle
 
 The [core JavaScript bundle](#IncludingthecoreJavaScriptbundle) only includes CanJS’s
-[can-core] modules.  This doesn't include ecosystem modules like [can-stache-converters].  The
-ecosystem bundle hosted at `https://unpkg.com/can@5/core.mjs` includes every CanJS module
-(except for [can-zone](https://github.com/canjs/can-zone) and [ylem](https://github.com/bitovi/ylem).
+[can-core] modules.  This doesn't include ecosystem modules like [can-stache-converters].  The everything bundle hosted at `https://unpkg.com/can@5/everything.mjs` includes every CanJS module (except for [can-zone](https://github.com/canjs/can-zone) and [ylem](https://github.com/bitovi/ylem).
 
 ```html
 <!doctype html>
@@ -1028,7 +1025,7 @@ ecosystem bundle hosted at `https://unpkg.com/can@5/core.mjs` includes every Can
     <my-app></my-app>
 
     <script type="module">
-    import { Component, stache, stacheConverters } from "//unpkg.com/can@5/ecosystem.mjs";
+    import { Component, stache, stacheConverters } from "//unpkg.com/can@5/everything.mjs";
 
     stache.addConverter(stacheConverters);
 
@@ -1050,7 +1047,7 @@ ecosystem bundle hosted at `https://unpkg.com/can@5/core.mjs` includes every Can
 </html>
 ```
 
-The ecosystem bundle does not include:
+The everything bundle does not include:
 
 - [can-zone](https://github.com/canjs/can-zone)
 - [ylem](https://github.com/bitovi/ylem)
