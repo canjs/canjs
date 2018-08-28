@@ -1,4 +1,4 @@
-@page guides/recipes/search-list-details Search, List, Details (Simple)
+@page guides/recipes/search-list-details Search, List, Details (Advanced)
 @parent guides/recipes
 
 @description This guide walks through building a Search, List, Details flow with lazy-loaded routes.
@@ -38,7 +38,7 @@ __START THIS TUTORIAL BY CLONING THE FOLLOWING CodePen__:
 
 <p data-height="316" data-theme-id="dark" data-slug-hash="aaNrwO" data-default-tab="js,result" data-user="bitovi" data-embed-version="2" data-pen-title="CanJS 5.0 - Search / List / Details - Setup" class="codepen">See the Pen <a href="https://codepen.io/bitovi/pen/aaNrwO/">CanJS 5.0 - Search / List / Details - Setup</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 
-## Configure Routing ##
+## Configure routing ##
 
 ### The problem
 
@@ -95,9 +95,9 @@ You should be able to update properties on the viewModel and see the URL update.
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-set-up-routing.js
-@highlight 1,15-29
+@highlight 1,13-27
 
-## Lazy Load Route Components ##
+## Lazy load components ##
 
 ### The problem
 
@@ -146,9 +146,9 @@ Changing the `routeData.page` property will cause the code for the new route to 
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-lazy-load-components.js
-@highlight 13,33-38
+@highlight 11,31-36
 
-## Instantiate Components ##
+## Display components ##
 
 ### The problem
 
@@ -157,7 +157,7 @@ Now that the code is loaded for each route, we can create an instance of the loa
 ### What you need to know
 
 - `import()` returns a [promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
-- Promises can be [can-reflect-promise used directla]y in the view.
+- Promises can be [can-reflect-promise used directly] in the view.
 
 ```js
 ViewModel: {
@@ -188,18 +188,18 @@ view: `
 
 You can check the devtools Elements Panel for the correct component on each page:
 
-- `/search` -> `<character-search-app>`
-- `/list` -> `<character-list-app>`
-- `/details` -> `<character-details-app>`
+- `/search` -> `<character-search-page>`
+- `/list` -> `<character-list-page>`
+- `/details` -> `<character-details-page>`
 
 ### The solution
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-instantiate-components.js
-@highlight 13-19,43-46
+@highlight 11-17,41-44
 
-## Bind Observable Properties Between ViewModels ##
+## Pass data to components ##
 
 ### The problem
 
@@ -225,6 +225,6 @@ The app should be fully functional:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-bind-properties.js
-@highlight 1,39-55,64
+@highlight 1,37-53,62
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>

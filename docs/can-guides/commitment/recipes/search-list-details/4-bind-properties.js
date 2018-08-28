@@ -8,8 +8,6 @@ Component.extend({
       <img src="https://image.ibb.co/nzProU/rick_morty.png" width="400" height="151">
     </div>
 
-    <h1>Character Search</h1>
-
     {{# if(routeComponent.isPending) }}
       Loading...
     {{/ if }}
