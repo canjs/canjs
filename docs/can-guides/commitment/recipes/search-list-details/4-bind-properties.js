@@ -53,7 +53,9 @@ Component.extend({
     },
 
     get routeComponent() {
-      const componentURL = `//unpkg.com/character-search-components@5/character-${this.routeData.page}.mjs`;
+      const componentURL =
+        "//unpkg.com/character-search-components@5/character-" +
+        this.routeData.page + ".mjs";
 
       return import(componentURL).then((module) => {
         const ComponentConstructor = module.default;

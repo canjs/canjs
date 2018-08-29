@@ -146,7 +146,7 @@ Changing the `routeData.page` property will cause the code for the new route to 
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-lazy-load-components.js
-@highlight 11,31-36
+@highlight 11,31-38
 
 ## Display components ##
 
@@ -197,7 +197,7 @@ You can check the devtools Elements Panel for the correct component on each page
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-instantiate-components.js
-@highlight 11-17,41-44
+@highlight 11-17,42-46
 
 ## Pass data to components ##
 
@@ -225,6 +225,6 @@ The app should be fully functional:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-bind-properties.js
-@highlight 1,37-53,62
+@highlight 1,37-53,64
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
