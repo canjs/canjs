@@ -8,8 +8,6 @@ Component.extend({
       <img src="https://image.ibb.co/nzProU/rick_morty.png" width="400" height="151">
     </div>
 
-    <h1>Character Search</h1>
-
     {{# if(routeComponent.isPending) }}
       Loading...
     {{/ if }}
@@ -37,7 +35,9 @@ Component.extend({
     },
 
     get routeComponent() {
-      const componentURL = `//unpkg.com/character-search-components@5/character-${this.routeData.page}.mjs`;
+      const componentURL =
+        "//unpkg.com/character-search-components@5/character-" +
+        this.routeData.page + ".mjs";
 
       return import(componentURL).then((module) => {
         const ComponentConstructor = module.default;
