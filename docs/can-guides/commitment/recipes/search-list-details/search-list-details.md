@@ -49,9 +49,10 @@ In this section, we will:
 - Set up "pretty" routing rules.
 
 We want to support the following URL patterns:
-- `/search`
-- `/list/rick`
-- `/details/rick/1`
+- `#!`
+- `#!search`
+- `#!list/rick`
+- `#!details/rick/1`
 
 ### What you need to know
 
@@ -183,14 +184,15 @@ view: `
 ```
 
 - `import()` resolves with a module object - `module.default` is the component constructor.
+- Components can be [can-component#Programmaticallyinstantiatingacomponent instantiated programmatically] using `new ComponentConstructor()`.
 
 ### How to verify it works
 
 You can check the devtools Elements Panel for the correct component on each page:
 
-- `/search` -> `<character-search-page>`
-- `/list` -> `<character-list-page>`
-- `/details` -> `<character-details-page>`
+- `#!search` -> `<character-search-page>`
+- `#!list` -> `<character-list-page>`
+- `#!details` -> `<character-details-page>`
 
 ### The solution
 
@@ -209,6 +211,17 @@ After the last step, the correct component is displayed for each route, but the 
 
 - You can pass a `viewModel` property when instantiating components to pass values to the component’s viewModel and set up bindings.
 - [can-value] can be used to programmatically create observables that are bound to another object.
+
+```js
+const componentInstance = new ComponentConstructor({
+  viewModel: {
+    givenName: value.from(this, "name.first"),
+    familyName: value.bind(this, "name.last"),
+    fullName: value.to(this, "name.full")
+  }
+});
+```
+
 - The component for all three pages need a `query` property. The `<character-details-page>` also needs an `id` property.
 
 ### How to verify it works
@@ -225,6 +238,6 @@ The app should be fully functional:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-bind-properties.js
-@highlight 1,37-53,64
+@highlight 1,37-47,58
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
