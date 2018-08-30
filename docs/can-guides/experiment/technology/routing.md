@@ -234,13 +234,13 @@ Component.extend({
     tag: "my-app",
     view: `
         The current page is {{page}}.
-        <a href="{{ routeURL(page='home') }}">Home</a>
-        <a href="{{ routeURL(page='tasks') }}">Tasks</a>
+        <a href="{{ routeUrl(page='home') }}">Home</a>
+        <a href="{{ routeUrl(page='tasks') }}">Tasks</a>
     `,
     ViewModel: {
         page: "string"
     }
-})
+});
 ```
 
 > __NOTE:__ Your html needs a `<my-app></my-app>` element to be able to see the
@@ -248,15 +248,35 @@ Component.extend({
 
 To connect the component’s VM to the url, we:
 
-- set [can-route.data] to the custom element.
-- call and [can-route.start] to begin sending URL values to the component.
+- create an observable key-value object on the ViewModel.
+- set [can-route.data route.data] to this object.
+- call and [can-route.start route.start] to bind the observable key-value object to the URL.
 
 ```js
-route.data = document.querySelector("my-app");
-route.start();
-```
+import { Component, DefineMap, route, stacheRouteHelpers } from "can";
 
-At this point, changes in the URL will cause changes in the `page`
+Component.extend({
+    tag: "my-app",
+    view: `
+        The current page is {{routeData.page}}.
+        <a href="{{ routeUrl(page='home') }}">Home</a>
+        <a href="{{ routeUrl(page='tasks') }}">Tasks</a>
+    `,
+    ViewModel: {
+		routeData: {
+			default() {
+				const observableRouteData = new DefineMap();
+				route.data = observableRouteData;
+				route.start();
+				return observableRouteData;
+			}
+		}
+    }
+});
+```
+@highlight 1,6,11-18
+
+At this point, changes in the URL will cause changes in the `routeData.page`
 property. See this by clicking the links and the back/refresh buttons below:
 
 @demo demos/technology-overview/route-mini-app-start.html
@@ -315,17 +335,19 @@ Component.extend({
     tag: "my-app",
     // ...
     ViewModel: {
-        // Properties that come from the url
-        page: "string",
-        taskId: "string",
+        routeData: {
+            default() {
+                const observableRouteData = new DefineMap();
+                route.data = observableRouteData;
+                route.start();
+                return observableRouteData;
+            }
+        },
 
         // A property indicating whether the user has logged in.
-        // `serialize: false` keeps `isLoggedIn` from
-        // affecting the `url` and vice-versa.
         isLoggedIn: {
             default: false,
-            type: "boolean",
-            serialize: false
+            type: "boolean"
         },
 
         // We show the login page if someone
@@ -335,7 +357,7 @@ Component.extend({
             if(!this.isLoggedIn) {
                 return "login";
             }
-            return this.page;
+            return this.routeData.page;
         },
 
         // A function we pass to sub-components
@@ -346,14 +368,6 @@ Component.extend({
     }
 });
 ```
-
-> NOTE: The [can-define.types.serialize] property behavior controls the
-> [can-define/map/map.prototype.serialize serializable] properties of
-> a [can-define/map/map DefineMap]. Only
-> serializable properties of the map are used by [can-route] to
-> update the url. `serialize: false` keeps `isLoggedIn` from
-> affecting the `url` and vice-versa. Getters like `componentToShow`
-> are automatically configured with `serialize: false`.
 
 Finally, our component works, but the URLs aren’t easy to
 remember (ex: `#!&page=home`). We will clean that up in the
@@ -437,22 +451,19 @@ Component.extend({
             switch(this.page) {
                 case "home":
                     return new PageHome({ });
-                    break;
                 case "tasks":
                     return new TaskEditor({ });
-                    break;
                 default:
                     var page404 = document.createElement("h2");
                     page404.innerHTML = "Page Missing";
                     return page404;
-                    break;
             }
         },
 		// ...
     }
 });
 ```
-@highlight 8-26
+@highlight 8-23
 
 Now the correct components will be displayed; however, the data-bindings (like `isLoggedIn:from="isLoggedIn"`) are not set up, so the application will not be fully functional yet. [can-value] can be used to set up one-way and two-way bindings between the root component and each page’s sub-component. This is done by passing the `viewModel` option to the component constructor:
 
@@ -480,26 +491,23 @@ Component.extend({
                             isLoggedIn: value.from(this, "isLoggedIn")
                         }
                     });
-                    break;
                 case "tasks":
                     return new TaskEditor({
                         viewModel: {
                             id: value.from(this, "taskId")
                         }
                     });
-                    break;
                 default:
                     var page404 = document.createElement("h2");
                     page404.innerHTML = "Page Missing";
                     return page404;
-                    break;
             }
         },
 		// ...
     }
 });
 ```
-@highlight 11-13,20-22,27-29
+@highlight 11-13,20-22,26-28
 
 The `logout` function also needs to be passed to the `PageHome` and `TaskEditor` components. Since this is a function and is not observable, it can be passed directly to these components without using [can-value].
 
@@ -530,7 +538,6 @@ Component.extend({
                             logout: this.logout.bind(this)
                         }
                     });
-                    break;
                 case "tasks":
                     return new TaskEditor({
                         viewModel: {
@@ -538,22 +545,20 @@ Component.extend({
                             logout: this.logout.bind(this)
                         }
                     });
-                    break;
                 default:
                     var page404 = document.createElement("h2");
                     page404.innerHTML = "Page Missing";
                     return page404;
-                    break;
             }
         },
 		// ...
     }
 });
 ```
-@highlight 22,30
+@highlight 22,29
 
 With these changes in place, the application is now working with the routing logic handled entirely by the view-model:
-@demo demos/technology-overview/route-mini-app-programmatic.html
+@demo demos/technology-overview/route-mini-app.html
 @codepen
 
 ## Progressively load the sub-components
@@ -611,7 +616,6 @@ Component.extend({
                                     logout: this.logout.bind(this)
                                 }
                             });
-                            break;
                         case "tasks":
                             return new module.default({
                                 viewModel: {
@@ -619,12 +623,10 @@ Component.extend({
                                     logout: this.logout.bind(this)
                                 }
                             });
-                            break;
                         default:
                             var page404 = document.createElement("h2");
                             page404.innerHTML = "Page Missing";
                             return page404;
-                            break;
                     }
                 });
         },
@@ -632,10 +634,10 @@ Component.extend({
     }
 });
 ```
-@highlight 8-10,15,18-19,22,30,43
+@highlight 8-10,15,18-19,22,29,40
 
 The application is now progressively loading the code for each route:
-@demo demos/technology-overview/route-mini-app-programmatic-progressive.html
+@demo demos/technology-overview/route-mini-app-progressive.html
 @codepen
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>

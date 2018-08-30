@@ -2,23 +2,27 @@
 <mock-url></mock-url>
 <my-app></my-app>
 <script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" dev-bundle>
-import { Component, route, stacheRouteHelpers } from "can";
+import { Component, DefineMap, route, stacheRouteHelpers } from "can";
 import "can/demos/technology-overview/mock-url";
 
 Component.extend({
     tag: "my-app",
     view: `
-        The current page is {{page}}.
+        The current page is {{routeData.page}}.
         <a href="{{ routeUrl(page='home') }}">Home</a>
         <a href="{{ routeUrl(page='tasks') }}">Tasks</a>
     `,
     ViewModel: {
-        page: "string",
+		routeData: {
+			default() {
+				const observableRouteData = new DefineMap();
+				route.data = observableRouteData;
+				route.start();
+				return observableRouteData;
+			}
+		}
     }
 });
-
-route.data = document.querySelector("my-app");
-route.start();
 </script>
 <style>
 .slider {
