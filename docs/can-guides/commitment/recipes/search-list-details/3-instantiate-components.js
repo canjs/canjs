@@ -20,8 +20,8 @@ Component.extend({
   ViewModel: {
     routeData: {
       default() {
-        const routeData = new observe.Object();
-        route.data = routeData;
+        const observableRouteData = new observe.Object();
+        route.data = observableRouteData;
 
         route.register("", { page: "search" });
         route.register("{page}");
@@ -30,7 +30,7 @@ Component.extend({
 
         route.start();
 
-        return routeData;
+        return observableRouteData;
       }
     },
 

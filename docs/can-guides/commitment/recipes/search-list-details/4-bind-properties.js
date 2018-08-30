@@ -20,8 +20,8 @@ Component.extend({
   ViewModel: {
     routeData: {
       default() {
-        const routeData = new observe.Object();
-        route.data = routeData;
+        const observableRouteData = new observe.Object();
+        route.data = observableRouteData;
 
         route.register("", { page: "search" });
         route.register("{page}");
@@ -30,26 +30,20 @@ Component.extend({
 
         route.start();
 
-        return routeData;
+        return observableRouteData;
       }
     },
 
     get routeComponentData() {
-      switch(this.routeData.page) {
-        case "search":
-          return {
-            query: value.from(this.routeData, "query")
-          };
-        case "list":
-          return {
-            query: value.from(this.routeData, "query")
-          };
-        case "details":
-          return {
-            query: value.from(this.routeData, "query"),
-            id: value.from(this.routeData, "characterId")
-          };
+      const viewModelData = {
+        query: value.from(this.routeData, "query")
+      };
+
+      if(this.routeData.page === "details") {
+        viewModelData.id = value.from(this.routeData, "characterId");
       }
+
+      return viewModelData;
     },
 
     get routeComponent() {
