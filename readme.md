@@ -7,12 +7,6 @@
 [![Build Status](https://travis-ci.org/canjs/canjs.svg?branch=master)](https://travis-ci.org/canjs/canjs)
 [![Greenkeeper badge](https://badges.greenkeeper.io/canjs/canjs.svg)](https://greenkeeper.io/)
 
-> WARNING: This npm package is for the [CanJS client-side MV* libraries](https://canjs.com). It was formerly
-the [node-can project](https://github.com/sebi2k1/node-can) which has been moved 
-to [socketcan](https://www.npmjs.com/package/socketcan). A HUGE thanks to Sebastian Haas for 
-letting us use the `can` name!
-
-> NOTE: The `canjs` NPM package name is deprecated. Use `can` instead.
 
 CanJS is a collection of the following client-side JavaScript architectural libraries:
 
