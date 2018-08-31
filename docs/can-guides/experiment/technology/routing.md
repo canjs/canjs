@@ -116,7 +116,7 @@ route.start();
 @highlight 19-20
 @codepen
 
-This will add `#!&count=0` to the [location](https://developer.mozilla.org/en-US/docs/Web/API/Location) hash.  
+This will add `#!&count=0` to the [location](https://developer.mozilla.org/en-US/docs/Web/API/Location) hash.
 
 ```js
 myCounter.increment()
@@ -164,7 +164,7 @@ This results in the following translation between observable data and URL hashes
 { count: 1, type: "counter" } //-> "#!1&type=counter"
 ```
 
-You can add data when the URL is matched.  The following registers
+You can add data when the URL is matched. The following registers
 data for when the URL is matched:
 
 ```js
@@ -192,16 +192,16 @@ route.register("", { count: 0 });
 ## Routing and the root component
 
 Understanding how to use [can-route] within an application comprised of [can-component]s
-and their [can-stache] views and observable view-models can be tricky.  
+and their [can-stache] views and observable view-models can be tricky.
 
 We’ll use the following example to help make sense of it:
 
 @demo demos/technology-overview/route-mini-app.html
 @codepen
 
-This example shows the `<page-login>` component until someone has logged in.  Once they have
+This example shows the `<page-login>` component until someone has logged in. Once they have
 done that, it shows a particular component based upon the hash. If the hash is empty (`""` or `"#!"`),
-the `<page-home>` component is shown.  If the hash is like `tasks/{taskId}` it will show the `<task-editor>` component we created previously. (_NOTE: We will show how to persist changes
+the `<page-home>` component is shown. If the hash is like `tasks/{taskId}` it will show the `<task-editor>` component we created previously. (_NOTE: We will show how to persist changes
 to tasks in a upcoming service layer section._)
 
 Switching between different components is managed by a `<my-app>` component. The topology of
@@ -211,21 +211,21 @@ the application looks like:
   alt="The my-app component on top. The page-home, page-login, task-editor nodes are children of my-app. percent-slider component is a child of task-editor."
   class="bit-docs-screenshot"/>
 
-In most applications, [can-route] is connected to the top-level component’s
+In most applications, [can-route] is connected to a property on the top-level component’s
 [can-component.prototype.ViewModel]. We are going to go through the process of
 building `<my-app>` and connecting it
-to [can-route]. This is usually done in four steps:
+to [can-route]. This is usually done in five steps:
 
-1. Connect the top-level component’s view-model to the routing [can-route.data].
-2. Have the top-level component’s [can-component.prototype.view] display the corrent sub-components based on the view-model state.
-3. Define the top-level component’s view-model (sometimes called _application view-model_).
-4. Register routes that translate between the URL and the application view-model.
+1. Define the top-level component’s view-model (sometimes called _application view-model_).
+2. Create an observable key-value object on the view-model to represent the state of [can-route].
+3. Connect this observable to the routing [can-route.data].
+4. Have the top-level component’s [can-component.prototype.view] display the corrent sub-components based on the view-model state.
+5. Register routes that translate between the URL and the application view-model.
 
 ## Connect a component’s view-model to can-route
 
 To connect a component’s view-model to can-route, we first need to create a basic
-component. The following creates a `<my-app>` component that displays its `page` property and
-includes links that will change the page property:
+component. The following creates a `<my-app>` component that includes links that will change the route’s page property:
 
 ```js
 import { Component, stacheRouteHelpers } from "can";
@@ -233,24 +233,24 @@ import { Component, stacheRouteHelpers } from "can";
 Component.extend({
     tag: "my-app",
     view: `
-        The current page is {{page}}.
         <a href="{{ routeUrl(page='home') }}">Home</a>
         <a href="{{ routeUrl(page='tasks') }}">Tasks</a>
     `,
     ViewModel: {
-        page: "string"
     }
 });
 ```
 
 > __NOTE:__ Your html needs a `<my-app></my-app>` element to be able to see the
-> component’s content.  It should say "The current page is .".
+> component’s content. It should say "The current page is .".
 
 To connect the component’s VM to the url, we:
 
 - create an observable key-value object on the ViewModel.
 - set [can-route.data route.data] to this object.
 - call and [can-route.start route.start] to bind the observable key-value object to the URL.
+
+We also display the `routeData.page` property.
 
 ```js
 import { Component, DefineMap, route, stacheRouteHelpers } from "can";
@@ -284,166 +284,78 @@ property. See this by clicking the links and the back/refresh buttons below:
 
 ## Display the right sub-components
 
-When building components, we suggest designing the [can-component.prototype.view]
-before the [can-component.prototype.ViewModel].  This helps you figure out what logic
-the [can-component.prototype.ViewModel] needs to provide an easily understood
-[can-component.prototype.view].
-
-We’ll use [can-stache.helpers.switch] to switch between different components
-based on a `componentToShow` property on the view-model. The result looks like the following:
+[can-component#Programmaticallyinstantiatingacomponent Programmatically instatiated components] can be used to create an instance of the component that should be displayed for each route. We’ll use an [can-stache.tags.escaped] to display a `componentToShow` property that we will implement in the [can-component.prototype.ViewModel]:
 
 ```js
-Component.extend({
-    tag: "my-app",
-    view: `
-        {{# switch(componentToShow) }}
-            {{# case("home") }}
-                <page-home isLoggedIn:from="isLoggedIn" logout:from="logout"/>
-            {{/ case }}
-            {{# case("tasks") }}
-                <task-editor id:from="taskId" logout:from="logout"/>
-            {{/ case }}
-            {{# case("login") }}
-                <page-login isLoggedIn:bind="isLoggedIn" />
-            {{/ case }}
-            {{# default }}
-                <h2>Page Missing</h2>
-            {{/ default }}
-        {{/ switch }}
-    `,
-    // ...
-})
-```
+import { Component, DefineMap, route, stacheRouteHelpers } from "can";
 
-Notice that the view-model will need the following properties:
-
-- __isLoggedIn__ - If the user is logged in.
-- __logout__ - A function that when called logs the user out.
-- __taskId__ - A taskId in the hash.
-
-We will implement these properties and `componentToShow` in the
-[can-component.prototype.ViewModel].
-
-## Define the view-model
-
-Now that we’ve designed the _view_, it’s time to code the observable view-model
-with the logic that will make the view behave correctly. We implement the
-`ViewModel` as follows:
-
-```js
-Component.extend({
-    tag: "my-app",
-    // ...
-    ViewModel: {
-        routeData: {
-            default() {
-                const observableRouteData = new DefineMap();
-                route.data = observableRouteData;
-                route.start();
-                return observableRouteData;
-            }
-        },
-
-        // A property indicating whether the user has logged in.
-        isLoggedIn: {
-            default: false,
-            type: "boolean"
-        },
-
-        // We show the login page if someone
-        // isn’t logged in; otherwise, we
-        // show the page the URL points to.
-        get componentToShow(){
-            if(!this.isLoggedIn) {
-                return "login";
-            }
-            return this.routeData.page;
-        },
-
-        // A function we pass to sub-components
-        // so they can log out.
-        logout() {
-            this.isLoggedIn = false;
-        }
-    }
-});
-```
-
-Finally, our component works, but the URLs aren’t easy to
-remember (ex: `#!&page=home`). We will clean that up in the
-next section.
-
-## Register routes
-
-Currently, after the user logs in, the application will show `<h2>Page Missing</h2>` because if the URL hash is empty, `page` property will be undefined. To have `page`
-be `"home"`, one would have to navigate to `"#!&page=home"` ... yuck!  
-
-We want the `page` property to be `"home"` when the hash is empty.  Furthermore,
-we want URLs like `#!tasks` to set the `page` property.  We can do that
-by registering the following route:
-
-```js
-route.register("{page}", { page: "home" });
-```
-
-Finally, we want `#!tasks/5` to set `page` to `"tasks"` and `taskId`
-to `"5"`.  Registering the following route does that:
-
-```js
-route.register("tasks/{taskId}", { page: "tasks" });
-```
-
-Now the mini application is able to translate changes in the URL to
-properties on the component’s view-model.  When the component’s view-model
-changes, the view updates the page.
-
-## Create the sub-components programmatically
-
-The [display the right sub-components](#Displaytherightsub_components) section showed how to use a [can-stache.helpers.switch] in the view to display the correct component for each route. As your application grows, the view for handling this routing logic can become very large and very difficult to test.
-
-[can-component#Programmaticallyinstantiatingacomponent Programmatically instatiating can-component]s can be used to move this logic out of the view and into the view-model. Using this technique can greatly increase the maintainability and testability of the routing logic of your application.
-
-To get started with this technique, replace the [can-stache.helpers.switch] with a simple [can-stache.tags.escaped]:
-
-```js
 Component.extend({
     tag: "my-app",
     view: `
 		{{componentToShow}}
     `,
-    // ...
-})
+    ViewModel: {
+		routeData: {
+			default() {
+				const observableRouteData = new DefineMap();
+				route.data = observableRouteData;
+				route.start();
+				return observableRouteData;
+			}
+		}
+    }
+});
 ```
-@highlight 4
+@highlight 6,only
 
-Instead of returning a string, the `componentToShow` getter will return an instance of the component that should be shown.
+The `componentToShow` getter will return an instance of the component that should be shown.
 
-The first step toward making this possible is to import the constructors for the [can-component]s that will be displayed:
+The first step toward making this possible is to import the constructors for each [can-component]:
 
 ```js
+import { Component, DefineMap, route, stacheRouteHelpers } from "can";
 import { PageHome, PageLogin, TaskEditor } from "can/demos/technology-overview/route-mini-app-components";
 
 Component.extend({
     tag: "my-app",
-    // ...
+    view: `
+		{{componentToShow}}
+    `,
     ViewModel: {
-		// ...
+		routeData: {
+			default() {
+				const observableRouteData = new DefineMap();
+				route.data = observableRouteData;
+				route.start();
+				return observableRouteData;
+			}
+		}
     }
 });
 ```
-@highlight 1
+@highlight 2,only
 
 Once the component constructors are imported, they can be used to create an instance of the correct component in the `componentToShow` getter:
 
 ```js
+import { Component, DefineMap, route, stacheRouteHelpers } from "can";
 import { PageHome, PageLogin, TaskEditor } from "can/demos/technology-overview/route-mini-app-components";
 
 Component.extend({
     tag: "my-app",
-    // ...
+    view: `
+		{{componentToShow}}
+    `,
     ViewModel: {
-		// ...
-        get componentToShow(){
+		routeData: {
+			default() {
+				const observableRouteData = new DefineMap();
+				route.data = observableRouteData;
+				route.start();
+				return observableRouteData;
+			}
+		},
+        get componentToShow() {
             if(!this.isLoggedIn) {
                 return new PageLogin({ });
             }
@@ -458,23 +370,39 @@ Component.extend({
                     page404.innerHTML = "Page Missing";
                     return page404;
             }
-        },
-		// ...
+        }
     }
 });
 ```
-@highlight 8-23
+@highlight 18-33,only
 
-Now the correct components will be displayed; however, the data-bindings (like `isLoggedIn:from="isLoggedIn"`) are not set up, so the application will not be fully functional yet. [can-value] can be used to set up one-way and two-way bindings between the root component and each page’s sub-component. This is done by passing the `viewModel` option to the component constructor:
+## Pass data to sub-components
+
+Now the correct components will be displayed; however, the application will not be fully functional yet because these components do not have the state values they need in order to function correctly. [can-value] can be used to set up one-way and two-way bindings between the root component and each sub-component.
+
+The Login page needs a property `isLoggedIn` that represents whether the user is logged in. Since the login page handles logging in, it will need to be able to update this value, so we use [can-value.bind value.bind] to two-way bind this property.
+
+To hook this up, we implement the `isLoggedIn` property on the ViewModel and pass it to the Login page through the `viewModel` option of the component constructor:
 
 ```js
+import { Component, DefineMap, route, stacheRouteHelpers, value } from "can";
 import { PageHome, PageLogin, TaskEditor } from "can/demos/technology-overview/route-mini-app-components";
+import "can/demos/technology-overview/mock-url";
 
 Component.extend({
     tag: "my-app",
-    // ...
+    view: `
+        {{componentToShow}}
+    `,
     ViewModel: {
-		// ...
+        routeData: {
+            default() {
+                const observableRouteData = new DefineMap();
+                route.data = observableRouteData;
+                route.start();
+                return observableRouteData;
+            }
+        },
         get componentToShow(){
             if(!this.isLoggedIn) {
                 return new PageLogin({
@@ -484,43 +412,45 @@ Component.extend({
                 });
             }
 
-            switch(this.page) {
+            switch(this.routeData.page) {
                 case "home":
-                    return new PageHome({
-                        viewModel: {
-                            isLoggedIn: value.from(this, "isLoggedIn")
-                        }
-                    });
+                    return new PageHome({ });
                 case "tasks":
-                    return new TaskEditor({
-                        viewModel: {
-                            id: value.from(this, "taskId")
-                        }
-                    });
+                    return new TaskEditor({ });
                 default:
                     var page404 = document.createElement("h2");
                     page404.innerHTML = "Page Missing";
                     return page404;
             }
         },
-		// ...
+        isLoggedIn: { default: false, type: "boolean" }
     }
 });
+
 ```
-@highlight 11-13,20-22,26-28
+@highlight 1,22-24,39,only
 
-The `logout` function also needs to be passed to the `PageHome` and `TaskEditor` components. Since this is a function and is not observable, it can be passed directly to these components without using [can-value].
-
-> Note: make sure to use [Function.prototype.bind()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind) so that the `this` will correctly be the root component, even when called from a child component.
+The `TaskEditor` page also needs to know the id of the task that is being edited. This property can be bound directly to the `routeData` object:
 
 ```js
+import { Component, DefineMap, route, stacheRouteHelpers, value } from "can";
 import { PageHome, PageLogin, TaskEditor } from "can/demos/technology-overview/route-mini-app-components";
+import "can/demos/technology-overview/mock-url";
 
 Component.extend({
     tag: "my-app",
-    // ...
+    view: `
+        {{componentToShow}}
+    `,
     ViewModel: {
-		// ...
+        routeData: {
+            default() {
+                const observableRouteData = new DefineMap();
+                route.data = observableRouteData;
+                route.start();
+                return observableRouteData;
+            }
+        },
         get componentToShow(){
             if(!this.isLoggedIn) {
                 return new PageLogin({
@@ -530,48 +460,187 @@ Component.extend({
                 });
             }
 
-            switch(this.page) {
+            switch(this.routeData.page) {
                 case "home":
-                    return new PageHome({
-                        viewModel: {
-                            isLoggedIn: value.from(this, "isLoggedIn"),
-                            logout: this.logout.bind(this)
-                        }
-                    });
+                    return new PageHome({ });
                 case "tasks":
                     return new TaskEditor({
-                        viewModel: {
-                            id: value.from(this, "taskId"),
-                            logout: this.logout.bind(this)
-                        }
-                    });
+						viewModel: {
+							id: value.bind(this.routeData, "taskId")
+						}
+					});
                 default:
                     var page404 = document.createElement("h2");
                     page404.innerHTML = "Page Missing";
                     return page404;
             }
         },
-		// ...
+        isLoggedIn: { default: false, type: "boolean" }
     }
 });
-```
-@highlight 22,29
 
-With these changes in place, the application is now working with the routing logic handled entirely by the view-model:
+```
+@highlight 33-35,only
+
+Lastly, a `logout` function needs to be passed to the `PageHome` and `TaskEditor` components. Since this is a function and is not observable, it can be passed directly to these components without using [can-value].
+
+> Note: make sure to use [Function.prototype.bind()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind) so that the `this` will correctly be the ViewModel, even when called from a child component.
+
+```js
+import { Component, DefineMap, route, stacheRouteHelpers, value } from "can";
+import { PageHome, PageLogin, TaskEditor } from "can/demos/technology-overview/route-mini-app-components";
+import "can/demos/technology-overview/mock-url";
+
+Component.extend({
+    tag: "my-app",
+    view: `
+        {{componentToShow}}
+    `,
+    ViewModel: {
+        routeData: {
+            default() {
+                const observableRouteData = new DefineMap();
+                route.data = observableRouteData;
+                route.start();
+                return observableRouteData;
+            }
+        },
+        get componentToShow(){
+            if(!this.isLoggedIn) {
+                return new PageLogin({
+                    viewModel: {
+                        isLoggedIn: value.bind(this, "isLoggedIn"),
+						logout: this.logout.bind(this)
+                    }
+                });
+            }
+
+            switch(this.routeData.page) {
+                case "home":
+                    return new PageHome({ });
+                case "tasks":
+                    return new TaskEditor({
+						viewModel: {
+							id: value.bind(this.routeData, "taskId"),
+							logout: this.logout.bind(this)
+						}
+					});
+                default:
+                    var page404 = document.createElement("h2");
+                    page404.innerHTML = "Page Missing";
+                    return page404;
+            }
+        },
+        isLoggedIn: { default: false, type: "boolean" },
+        logout() {
+            this.isLoggedIn = false;
+        }
+    }
+});
+
+```
+@highlight 24,36,46-48,only
+
+## Register routes
+
+Currently, after the user logs in, the application will show `<h2>Page Missing</h2>` because if the URL hash is empty, `page` property will be undefined. To have `page`
+be `"home"`, one would have to navigate to `"#!&page=home"` ... yuck!
+
+We want the `page` property to be `"home"` when the hash is empty. Furthermore,
+we want URLs like `#!tasks` to set the `page` property. We can do that
+by registering the following route:
+
+```js
+route.register("{page}", { page: "home" });
+```
+
+Finally, we want `#!tasks/5` to set `page` to `"tasks"` and `taskId`
+to `"5"`. Registering the following route does that:
+
+```js
+route.register("tasks/{taskId}", { page: "tasks" });
+```
+
+Register these routes just before calling `route.start`:
+
+```js
+import { Component, DefineMap, route, stacheRouteHelpers, value } from "can";
+import { PageHome, PageLogin, TaskEditor } from "can/demos/technology-overview/route-mini-app-components";
+import "can/demos/technology-overview/mock-url";
+
+Component.extend({
+    tag: "my-app",
+    view: `
+        {{componentToShow}}
+    `,
+    ViewModel: {
+        routeData: {
+            default() {
+                const observableRouteData = new DefineMap();
+                route.data = observableRouteData;
+                route.register("{page}", { page: "home" });
+                route.register("tasks/{taskId}", { page: "tasks" });
+                route.start();
+                return observableRouteData;
+            }
+        },
+        get componentToShow(){
+            if(!this.isLoggedIn) {
+                return new PageLogin({
+                    viewModel: {
+                        isLoggedIn: value.bind(this, "isLoggedIn"),
+						logout: this.logout.bind(this)
+                    }
+                });
+            }
+
+            switch(this.routeData.page) {
+                case "home":
+                    return new PageHome({ });
+                case "tasks":
+                    return new TaskEditor({
+						viewModel: {
+							id: value.bind(this.routeData, "taskId"),
+							logout: this.logout.bind(this)
+						}
+					});
+                default:
+                    var page404 = document.createElement("h2");
+                    page404.innerHTML = "Page Missing";
+                    return page404;
+            }
+        },
+        isLoggedIn: { default: false, type: "boolean" },
+        logout() {
+            this.isLoggedIn = false;
+        }
+    }
+});
+
+```
+@highlight 15-16,only
+
+Now the mini application is able to translate changes in the URL to
+properties on the `routeData` property of the component’s view-model. When the component’s view-model
+changes, the view updates the page.
+
 @demo demos/technology-overview/route-mini-app.html
 @codepen
 
 ## Progressively load the sub-components
 
-Another benefit of moving the routing logic to the view-model is that it makes it much easier to progressively load the components for each route. With progressive loading, the application will only load the code for the each route when the route is displayed. This prevents loading code for pages the user may never visit.
+Progressive loading is a technique that allows the application to only load the code for the each route when the route is displayed. This prevents loading code for pages the user may never visit.
 
-To make this possible, the code for each route will be imported using a [dynamic import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#Dynamic_Imports) instead of the static `import { Page... } from "...components"` syntax.
+When using progressive loading, the code for each route will be imported using a [dynamic import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#Dynamic_Imports) instead of the static `import { Page... } from "...components"` syntax.
 
 > Note: dynamic imports may not be natively supported in every browser, but similar functionality is available in [StealJS](https://stealjs.com/docs/steal.import.html) and [webpack](https://webpack.js.org/api/module-methods/#import-).
 
 Dynamic imports return a promise that will resolve once the code is loaded, so the `componentToShow` property will become a promise. The [can-reflect-promise] package makes it easy to use promises directly in [can-stache]. The view can be updated to display the `value` of the promise once it is resolved:
 
 ```js
+import { Component, DefineMap, route, stacheRouteHelpers, value } from "can";
+import "can/demos/technology-overview/mock-url";
+
 Component.extend({
     tag: "my-app",
     view: `
@@ -579,21 +648,79 @@ Component.extend({
 			{{componentToShow.value}}
 		{{/ if }}
     `,
-    // ...
-})
+    ViewModel: {
+        routeData: {
+            default() {
+                const observableRouteData = new DefineMap();
+                route.data = observableRouteData;
+                route.register("{page}", { page: "home" });
+                route.register("tasks/{taskId}", { page: "tasks" });
+                route.start();
+                return observableRouteData;
+            }
+        },
+        get componentToShow(){
+            if(!this.isLoggedIn) {
+                return new PageLogin({
+                    viewModel: {
+                        isLoggedIn: value.bind(this, "isLoggedIn"),
+						logout: this.logout.bind(this)
+                    }
+                });
+            }
+
+            switch(this.routeData.page) {
+                case "home":
+                    return new PageHome({ });
+                case "tasks":
+                    return new TaskEditor({
+						viewModel: {
+							id: value.bind(this.routeData, "taskId"),
+							logout: this.logout.bind(this)
+						}
+					});
+                default:
+                    var page404 = document.createElement("h2");
+                    page404.innerHTML = "Page Missing";
+                    return page404;
+            }
+        },
+        isLoggedIn: { default: false, type: "boolean" },
+        logout() {
+            this.isLoggedIn = false;
+        }
+    }
+});
+
 ```
-@highlight 4-6
+@highlight 7-9,only
 
 > Note, [can-reflect-promise] also adds `isPending` and `isRejected` properties to promises so that the view can handle these states as well.
 
 Then update the `componentToShow` getter to import the correct module. The value passed to the promise’s [then](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then) method will be a module object with a property for each of the module’s exports. In this example, the component constructor is the default export, so an instance of the component can be created using `new module.default({ ... })`. Returning the instances from the `then` method will set `componentToShow.value` to the component instance:
 
 ```js
+import { Component, DefineMap, route, stacheRouteHelpers, value } from "can";
+import "can/demos/technology-overview/mock-url";
+
 Component.extend({
     tag: "my-app",
-    // ...
+    view: `
+		{{# if(componentToShow.isResolved) }}
+			{{componentToShow.value}}
+		{{/ if }}
+    `,
     ViewModel: {
-		// ...
+        routeData: {
+            default() {
+                const observableRouteData = new DefineMap();
+                route.data = observableRouteData;
+                route.register("{page}", { page: "home" });
+                route.register("tasks/{taskId}", { page: "tasks" });
+                route.start();
+                return observableRouteData;
+            }
+        },
         get componentToShow(){
 			if(!this.isLoggedIn) {
                 return import("can/demos/technology-overview/page-login")
@@ -630,11 +757,15 @@ Component.extend({
                     }
                 });
         },
-		// ...
+        isLoggedIn: { default: false, type: "boolean" },
+        logout() {
+            this.isLoggedIn = false;
+        }
     }
 });
+
 ```
-@highlight 8-10,15,18-19,22,29,40
+@highlight 24-25,26,30,34-35,38,45,56,only
 
 The application is now progressively loading the code for each route:
 @demo demos/technology-overview/route-mini-app-progressive.html

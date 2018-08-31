@@ -35,7 +35,6 @@ Component.extend({
                 case "home":
                     return new PageHome({
                         viewModel: {
-                            isLoggedIn: value.from(this, "isLoggedIn"),
                             logout: this.logout.bind(this)
                         }
                     });
