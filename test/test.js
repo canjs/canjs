@@ -1,5 +1,6 @@
 // Core tests
 require('can-component/test/tests');
+/*
 require('can-define/test/test');
 // require('can-route/test/test'); in dev-only
 // require('can-route-pushstate/can-route-pushstate_test'); in dev-only
@@ -84,3 +85,4 @@ require('can-define-validate-validatejs/test');
 // require('can-jquery/test/test');
 // require('can-vdom/test/test');
 require('can-view-autorender/test/test');
+*/
