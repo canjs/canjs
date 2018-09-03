@@ -1,4 +1,6 @@
-can.Component.extend({
+import { Component } from "//unpkg.com/can@5/core.mjs";
+
+Component.extend({
 	tag: "chat-app",
 	view: `
 		<div class="container">
@@ -11,10 +13,12 @@ can.Component.extend({
 		  </div>
 		</div>`,
 	ViewModel: {
+		// Properties
 		message: {
 			type: "string",
 			default: "Chat Home"
 		},
+		// Methods
 		addExcitement(){
 			this.message = this.message + "!";
 		}

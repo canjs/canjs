@@ -1,25 +1,26 @@
-var Message = can.DefineMap.extend({
+import { Component, route, DefineMap, DefineList, realtimeRestModel } from "//unpkg.com/can@5/core.mjs";
+
+const Message = DefineMap.extend("Message",{
 	id: "number",
 	name: "string",
 	body: "string",
 	created_at: "date"
 });
 
-Message.List = can.DefineList.extend({
+Message.List = DefineList.extend("MessageList",{
 	"#": Message
 });
 
-Message.connection = can.connect.superMap({
+Message.connection = realtimeRestModel({
 	url: {
 		resource: 'https://chat.donejs.com/api/messages',
 		contentType: 'application/x-www-form-urlencoded'
 	},
 	Map: Message,
-	List: Message.List,
-	name: 'message'
+	List: Message.List
 });
 
-var socket = io('https://chat.donejs.com');
+const socket = io('https://chat.donejs.com');
 
 socket.on('messages created', function(message){
 	Message.connection.createInstance(message);
@@ -31,7 +32,7 @@ socket.on('messages removed', function(message){
 	Message.connection.destroyInstance(message);
 });
 
-can.Component.extend({
+Component.extend({
 	tag: "chat-messages",
 	view: `
 		<h1 class="page-header text-center">
@@ -77,33 +78,36 @@ can.Component.extend({
 		    </div>
 		</form>`,
 	ViewModel: {
+		// Properties
 		messagesPromise: {
-			default: function(){
+			default(){
 				return Message.getList({});
 			}
 		},
-	    name: "string",
-	    body: "string",
-	    send: function(event) {
-	        event.preventDefault();
+		name: "string",
+		body: "string",
 
-	        new Message({
-	            name: this.name,
-	            body: this.body
-	        }).save().then(function(){
-	            this.body = "";
-	        }.bind(this));
-	    }
+		// Methods
+		send(event) {
+			event.preventDefault();
+
+			new Message({
+				name: this.name,
+				body: this.body
+			}).save().then(() => {
+				this.body = "";
+			});
+		}
 	}
 });
 
-can.Component.extend({
+Component.extend({
 	tag: "chat-app",
 	view: `
 		<div class="container">
 		  <div class="row">
 			<div class="col-sm-8 col-sm-offset-2">
-			  {{#eq(page, 'home')}}
+			  {{#eq(routeData.page, 'home')}}
 				  <h1 class="page-header text-center" on:click="addExcitement()">
 					{{message}}
 				  </h1>
@@ -118,18 +122,20 @@ can.Component.extend({
 		  </div>
 		</div>`,
 	ViewModel: {
-		init(){
-			can.route.register("{page}",{page: "home"});
-			can.route.data = this;
-			can.route.start();
-		},
-		page: "string",
+		// Properties
 		message: {
 			type: "string",
-			default: "Chat Home",
-			serialize: false
+			default: "Chat Home"
 		},
-		addExcitement: function(){
+		routeData: {
+			default(){
+				route.register("{page}",{page: "home"});
+				route.start();
+				return route.data;
+			}
+		},
+		// Methods
+		addExcitement(){
 			this.message = this.message + "!";
 		}
 	}

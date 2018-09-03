@@ -1,19 +1,21 @@
-can.Component.extend({
+import { Component, route } from "//unpkg.com/can@5/core.mjs";
+
+Component.extend({
 	tag: "chat-messages",
 	view: `
 		<h1 class="page-header text-center">
-		   Chat Messages
+			Chat Messages
 		</h1>
 		<h5><a href="{{routeUrl(page='home')}}">Home</a></h5>`
 });
 
-can.Component.extend({
+Component.extend({
 	tag: "chat-app",
 	view: `
 		<div class="container">
 		  <div class="row">
 			<div class="col-sm-8 col-sm-offset-2">
-			  {{#eq(page, 'home')}}
+			  {{#eq(routeData.page, 'home')}}
 				  <h1 class="page-header text-center" on:click="addExcitement()">
 					{{message}}
 				  </h1>
@@ -28,17 +30,19 @@ can.Component.extend({
 		  </div>
 		</div>`,
 	ViewModel: {
-		init(){
-			can.route.register("{page}",{page: "home"});
-			can.route.data = this;
-			can.route.start();
-		},
-		page: "string",
+		// Properties
 		message: {
 			type: "string",
-			default: "Chat Home",
-			serialize: false
+			default: "Chat Home"
 		},
+		routeData: {
+			default(){
+				route.register("{page}",{page: "home"});
+				route.start();
+				return route.data;
+			}
+		},
+		// Methods
 		addExcitement(){
 			this.message = this.message + "!";
 		}

@@ -7,35 +7,28 @@
 
 @body
 
+## The Goal
+
+We are building the following functionality:
+
+<p data-height="312" data-theme-id="0" data-slug-hash="BORwEo" data-default-tab="js,result" data-user="justinbmeyer" data-pen-title="CanJS 5.0 Chat - Final" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/BORwEo/">CanJS 5.0 Chat - Final</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+
+
+
 ## Setup
 
-The easiest way to get started is to clone the following JS&nbsp;Bin by clicking the __JS&nbsp;Bin__ button on the top left:
+The easiest way to get started is to _Fork_ the following CodePen by clicking the __Edit On CodePen__ button on the top right:
 
-<a class="jsbin-embed" href="https://jsbin.com/gilemur/1/edit?html,output">JS Bin on jsbin.com</a>
+<p data-height="265" data-theme-id="0" data-slug-hash="xadpBg" data-default-tab="js,result" data-user="justinbmeyer" data-pen-title="CanJS 5.0 Chat - Start" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/xadpBg/">CanJS 5.0 Chat - Start</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 
-The JS Bin loads [https://getbootstrap.com/ Bootstrap] for its styles and [https://socket.io/ socket.io] for a socket
+The CodePen is configured to load [https://getbootstrap.com/ Bootstrap] for its styles and [https://socket.io/ socket.io] for a socket
 library.  It will be connecting to a RESTful and real-time service layer at [https://chat.donejs.com/api/messages].
 
-The JS Bin also loads [can.js](https://unpkg.com/can@3/dist/global/can.js), which is a script that includes all of CanJS core under a
-single global `can` namespace.
-
-Generally speaking, you should not use the global `can` script, but instead you
-should import things directly with a module loader like [StealJS](https://stealjs.com),
-WebPack or Browserify.  In a real app, your code will look like:
+The CodePen also importing [guides/setup##ImportingthecoreESmodulebundle core.mjs], which exports all of CanJS's [can-core] APIs as named exports. The following is how
+you can import different APIs into your app:
 
 ```js
-import DefineMap from 'can-define/map/map';
-import DefineList from 'can-define/list/list';
-
-let Message = DefineMap.extend({ ... });
-Message.List = DefineList.extend({ ... });
-```
-
-Not:
-
-```js
-let Message = can.DefineMap.extend({ ... });
-Message.List = can.DefineList.extend({ ... });
+import {DefineMap, Component} from "//unpkg.com/can@5/core.mjs"
 ```
 
 Read [guides/setup] for instructions on how to set up CanJS in a real app.
@@ -50,15 +43,15 @@ In this section, we will:
  - Show a big “Chat Home” title within a Bootstrap container.
  - Make it so when “Chat Home” is clicked, an exclamation mark (“!”) is added to the end of the title.
 
-In your JS Bin, update the __HTML__ tab to:
+In your CodePen, update the `HTML` panel to:
 
- - Use the `<chat-app>` element we will define in the `JS` tab.
+ - Use the `<chat-app>` element we will define in the `JS` panel.
 
 
 @sourceref ./1-hello-world/html.html
-@highlight 12,only
+@highlight 1
 
-Update the `JavaScript` tab to:
+Update the `JavaScript` panel to:
 
  - Define an application component (`chat-app`) by extending [can-component]. Its definition includes:
    - A `tag` that is the name of the custom element being defined.
@@ -71,7 +64,7 @@ Update the `JavaScript` tab to:
      - An `addExcitement` method that adds `"!"` to the end of the `message` property.
 
 @sourceref ./1-hello-world/js.js
-@highlight 1-22,only
+@highlight 1,3-26
 
 When complete, you should see a large “Chat Home” title in the `Output` panel.  Click on it and
 things will get really exciting!
@@ -109,27 +102,26 @@ In this section we will:
  - Create a __home page__ and __chat messages page__ that the user can navigate between
    with links and the browser’s back and forward button.
 
-Update the `JavaScript` tab to:
+Update the `JavaScript` panel to:
 
 - Update the `chat-app` component's `view` to:
-  - Check if the `ViewModel`’s `page` property is `"home"`.  If it is, render the __home
+  - Check if the `ViewModel`’s `routeData.page` property is `"home"`.  If it is, render the __home
     page__’s content.  If it’s not, it will render the __chat messages page__’s content with the   [can-stache.helpers.else] helper.
   - Use [can-stache-route-helpers.routeUrl] to create the right link URLs so that `page`
-    will be set on `appVM` to either `"home"` or `"chat"`.
+    will be set on [can-route.data route.data] to either `"home"` or `"chat"`.
 - Update the `chat-app` component's `ViewModel` to:
-  - Setup a connection between the `ViewModel` and the route state in the `ViewModel`’s `init` by:
+  - Setup a connection between the [can-route.data route.data] state and the `ViewModel`’s `routeData` property by:
+    - Defining a `routeData` property with a [can-define.types.default] value
+	  that returns the [can-route.data route.data].
     - Create a pretty routing rule so if the URL looks like `"#!chat"`, the `page` property of
-      `appVM` will be set to `chat` with [can-route.register].  If there is nothing in the hash, `page`
+      [can-route.data route.data] will be set to `chat` with [can-route.register].  If there is nothing in the hash, `page`
       will be set to `"home"`.
-    - Connect changes in the URL to changes in the `<chat-app>`’s `ViewModel` with [can-route.data].
-    - Initialize the url’s values on the `ViewModel` and set up the two-way connection with
+    - Initialize the url’s values on [can-route.data route.data] and set up the two-way connection with
       [can-route.start].
-  - Include a `page` property that will be updated when the browser’s URL changes.
-  - Prevent the `message` property from becoming part of the URL changes by using `serialize: false`.
 
 
 @sourceref ./2-routing/js.js
-@highlight 7-20,25-30,36-38,only
+@highlight 1,9-22,32-38,only
 
 When complete, you should be able to toggle between the two pages.  If you type:
 
@@ -137,22 +129,22 @@ When complete, you should be able to toggle between the two pages.  If you type:
 window.location.hash
 ```
 
-in JS Bin’s console tab after clicking a new page, you will be able to see the hash change between `!#` and `#!chat`.
+in CodePen’s console tab after clicking a new page, you will be able to see the hash change between `!#` and `#!chat`.
 
 
 This step sets up basic routing between different “pages” in an application.
-CanJS’s routing is based on the properties in the application view model.  When
+CanJS’s routing is based on the values accessible to the application ViewModel.  When
 those properties change, different content is shown.  
 
-We connected the application view model to the routing system with [can-route.data can-route.data]
-and initialized that connection with [can-route.start can-route.start].
+We connected the application ViewModel to the routing system by having the
+ViewModel's `routeData` property return [can-route.data can-route.data].
+We initialized that connection between [can-route.data can-route.data] and the url with [can-route.start can-route.start].
 
-This makes it so if the `page` property changes, the browser’s URL will change.  If the
-browser’s URL changes, the `page` property changes.  
+This makes it so if the `routeData.page` property changes, the browser’s URL will change.  If the browser’s URL changes, the `routeData.page` property changes.  
 
 > __Key take-away:__  [can-route] two-way binds changes in the browser’s URL to
-the application view model and vice versa.  Use changes in
-the application view model to control which content is shown.
+the application ViewModel and vice versa.  Use changes in
+the application ViewModel to control which content is shown.
 
 
 ## Chat Messages Component
@@ -161,14 +153,14 @@ In this section, we will:
 
 - Define and use a custom `<chat-messages>` element that contains the behavior of the __chat messages page__.
 
-Update the `JavaScript` tab to:
+Update the `JavaScript` panel to:
 
 - Define a `<chat-messages>` custom element with [can-component].  It's `view` will
   contain the content of the __chat messages page__.
 - Update `<chat-app>`’s `view` to create a `<chat-messages>` element.
 
 @sourceref ./3-chat-messages/js.js
-@highlight 1-8,25,only
+@highlight 3-10,27,only
 
 When complete, you should see the same behavior as the previous step. You should
 be able to click back and forth between the two different pages.
@@ -219,13 +211,13 @@ In this section, we will:
  - Show an error if those messages fail to load (`messagesPromise.isRejected`).
 
 
-Update the `JavaScript` tab to:
+Update the `JavaScript` panel to:
 
  - Define a `Message` type with [can-define/map/map].
  - Define a `Message.List` type that contains `Message` items.
  - Connect the `Message` and `Message.List` type to
    the RESTful messages service at `https://chat.donejs.com/api/messages`
-   using [can-connect/can/super-map/super-map].
+   using [can-realtime-rest-model].
  - Update the `<chat-messages>`’s `view` to:
    - Check if the messages are in the process of loading and show a loading indicator.
    - Check if the messages failed to load and display the reason for the failure.
@@ -237,7 +229,7 @@ Update the `JavaScript` tab to:
      that represents the loading of all messages using [can-connect/can/map/map.getList].
 
 @sourceref ./4-list-messages/js.js
-@highlight 1-20,30-52,53-59,only
+@highlight 1,3-21,30-60,only
 
 When complete, you should see a list of messages in the __chat messages page__.
 
@@ -246,7 +238,7 @@ and then connecting it to a messages service at `https://chat.donejs.com/api/mes
 
 ### Explanation
 
-The [can-connect/can/super-map/super-map super-map module] adds [can-connect/can/map/map methods] to the `Message` type that let you:
+The [can-realtime-rest-model] mixin adds [can-connect/can/map/map methods] to the `Message` type that let you:
 
  - Get a list of messages:
    ```js
@@ -302,13 +294,13 @@ Update the `<chat-messages>` __ViewModel__ to:
 - Define a `send` method on `ChatMessagesVM` that creates a new `Message` and sends it to the server.
 
 @sourceref ./5-create-messages/js.js
-@highlight 54-66,73-84,only
+@highlight 55-67,75-88,only
 
 When complete, you will be able to create messages and have them appear in the list.
 
 This step sets up a form to create a `Message` on the server.
 Notice that the new `Message` automatically appears in the list of messages. This
-is because [can-connect/can/super-map/super-map] adds the [can-connect/real-time/real-time] behavior.  The
+is because [can-realtime-rest-model] adds the [can-connect/real-time/real-time] behavior.  The
 [can-connect/real-time/real-time] behavior automatically inserts newly created messages into
 lists that they belong within.  This is one of CanJS’s best features — automatic list management.
 
@@ -320,17 +312,17 @@ In this section, we will:
 
  - Listen to messages created by other users and add them to the list of messages.
 
-Update the `JavaScript` tab to:
+Update the `JavaScript` panel to:
 
 - Create a [https://socket.io/] connection (`socket`).
 - Listen for when messages are created, updated, and destroyed, and call the
   corresponding [can-connect/real-time/real-time] methods.
 
 @sourceref ./6-real-time/js.js
-@highlight 22-32,only
+@highlight 23-33,only
 
-When complete, you can open up the same JS&nbsp;Bin in another window, create a
-message, and it will appear in the first JS&nbsp;Bin’s messages list.
+When complete, you can open up the same CodePen in another window, create a
+message, and it will appear in the first CodePen’s messages list.
 
 This step connects to a [https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API WebSocket API]
 that pushes messages when `Message`s are created, updated or destroyed. By calling the
@@ -342,8 +334,8 @@ awesome!
 
 ## Result
 
-When finished, you should see something like the following JS&nbsp;Bin:
+When finished, you should see something like the following CodePen:
 
-<a class="jsbin-embed" href="https://jsbin.com/goqijet/4/embed?html,js,output">JS Bin on jsbin.com</a>
+<p data-height="312" data-theme-id="0" data-slug-hash="BORwEo" data-default-tab="js,result" data-user="justinbmeyer" data-pen-title="CanJS 5.0 Chat - Final" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/BORwEo/">CanJS 5.0 Chat - Final</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.0.1"></script>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
