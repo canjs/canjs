@@ -11,7 +11,7 @@
 <script src="../../node_modules/steal/steal.js"  dev-bundle></script>
 
 <script type="steal-module" id="demo-source">
-import {realtimeRestModel, DefineMap, DefineList, Component, fixture, stache, Reflect} from "can";
+import {realtimeRestModel, DefineMap, DefineList, Component, fixture} from "can";
 
 const Todo = DefineMap.extend("Todo",{
     id: { type: "number", identity: true },
@@ -33,24 +33,7 @@ const todoConnection = realtimeRestModel({
     url: "/api/todos/{id}"
 });
 
-var terms = ["can you","please","","","",""],
-    verbs = ["clean","walk","do","vaccum","organize","fold","wash","dust","pay","cook","get","take out"],
-    subjects = ["dog","laundry","diapers","clothes","car","windows","carpet","taxes","food","gas","trash"];
-
-var dayInMS = 24*60*60*1000;
-var lastWeek = new Date() - (7*dayInMS);
-var fourWeeks = new Date().getTime() + (4*7*dayInMS);
-
-var todoStore = fixture.store(100, function(){
-    return {
-        complete: fixture.rand([true, false],1)[0],
-        dueDate: new Date( fixture.rand(lastWeek, fourWeeks) ).toString(),
-        name: (fixture.rand(terms,1)[0]+" "+fixture.rand(verbs,1)[0]+" "+fixture.rand(subjects,1)[0]).trim()
-    }
-}, Todo);
-
-fixture("/api/todos/{id}", todoStore);
-fixture.delay = 500;
+mockService();
 
 Component.extend({
     tag: "todo-list",
@@ -180,12 +163,30 @@ Component.extend({
     }
 });
 
+function mockService(){
+	var terms = ["can you","please","","","",""],
+	    verbs = ["clean","walk","do","vaccum","organize","fold","wash","dust","pay","cook","get","take out"],
+	    subjects = ["dog","laundry","diapers","clothes","car","windows","carpet","taxes","food","gas","trash"];
+
+	var dayInMS = 24*60*60*1000;
+	var lastWeek = new Date() - (7*dayInMS);
+	var fourWeeks = new Date().getTime() + (4*7*dayInMS);
+
+	var todoStore = fixture.store(100, function(){
+	    return {
+	        complete: fixture.rand([true, false],1)[0],
+	        dueDate: new Date( fixture.rand(lastWeek, fourWeeks) ).toString(),
+	        name: (fixture.rand(terms,1)[0]+" "+fixture.rand(verbs,1)[0]+" "+fixture.rand(subjects,1)[0]).trim()
+	    }
+	}, Todo);
+
+	fixture("/api/todos/{id}", todoStore);
+	fixture.delay = 500;
+}
+
 </script>
 
-<script type="steal-module">
 
-
-</script>
 
 </body>
 </html>
