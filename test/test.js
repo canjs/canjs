@@ -1,7 +1,6 @@
 // Core tests
 require('can-component/test/tests');
 require('can-define/test/test');
-/*
 // require('can-route/test/test'); in dev-only
 // require('can-route-pushstate/can-route-pushstate_test'); in dev-only
 // require('can-stache/test/stache-test'); in dev-only
@@ -60,7 +59,6 @@ require('can-map-define/can-map-define_test');
 //require('can-map-backup/can-map-backup_test');
 //require('can-validate-legacy/can-validate-test');
 
-
 // Ecosystem tests
 require('can-fixture/test/fixture_test');
 require('can-fixture-socket/test/test');
@@ -74,7 +72,7 @@ require('can-ndjson-stream/can-ndjson-stream-test');
 // require('can-vdom/test/test'); uses mocha
 //require('can-connect-ndjson/test/can-connect-ndjson-test');
 //if(typeof Proxy === "function"){
-//	require('can-observe/test/test');
+//  require('can-observe/test/test');
 //}
 require('can-define-backup/can-define-backup_test');
 require('can-define-stream/can-define-stream_test');
@@ -82,7 +80,7 @@ require('can-define-stream-kefir/can-define-stream-kefir_test');
 require('can-validate/test');
 require('can-validate-validatejs/test');
 require('can-define-validate-validatejs/test');
+
 // require('can-jquery/test/test');
 // require('can-vdom/test/test');
 require('can-view-autorender/test/test');
-*/

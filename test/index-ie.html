@@ -6,9 +6,13 @@
 <script src="../node_modules/weakset/weakset.js"></script>
 <script>
   steal = {
-    map: {
-      "can-component/test/component-viewmodel-observe-test": "@empty"
-    }
+    map: 
+      [
+        "can-component/test/component-viewmodel-observe-test", // uses proxy
+        "can-query-logic/src/types/make-maybe-test", // uses class
+        "can-view-autorender/test/test", // iframe needs polyfills
+        "can-route-pushstate/test/test"
+      ].reduce(function(obj, key) { obj[key] = "@empty"; return obj }, {})
   }
 </script>
 <script src="../node_modules/steal/steal.js" main="can/test/test-all" env="canjs-test"></script>
