@@ -73,7 +73,7 @@ To make a release:
    ```
    git checkout master
    git fetch --all && git rebase
-   npm cache clean
+   npm cache verify
    rm -rf node_modules
    npm install
    ```
