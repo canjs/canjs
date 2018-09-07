@@ -1,7 +1,7 @@
 import { Component } from "can";
 
 function width(el) {
-    var cs = window.getComputedStyle(el,null)
+    const cs = window.getComputedStyle(el,null)
     return el.clientWidth - parseFloat( cs.getPropertyValue("padding-left") )
         - parseFloat( cs.getPropertyValue("padding-left") );
 }
@@ -23,7 +23,7 @@ const PercentSlider = Component.extend({
         },
         width: {type: "number", default: 0},
         get left(){
-            var left = this.currentValue / this.end * this.width;
+            const left = this.currentValue / this.end * this.width;
             return Math.min( Math.max(0, left), this.width) || 0;
         },
         connectedCallback(el) {
@@ -35,7 +35,7 @@ const PercentSlider = Component.extend({
 
             // Produce dragmove and dragup events on the view-model
             this.listenTo("startClientX", () => {
-                var startLeft = this.left;
+                const startLeft = this.left;
                 this.listenTo(document,"mousemove", (event)=>{
                     this.dispatch("dragmove", [event.clientX - this.startClientX + startLeft]);
                 });
@@ -46,7 +46,7 @@ const PercentSlider = Component.extend({
             });
             // Update the slider position when currentValue changes
             this.listenTo("dragmove", (ev, left) => {
-                var value = (left / this.width) * (this.end - this.start);
+                const value = (left / this.width) * (this.end - this.start);
                 this.currentValue = Math.max( 0, Math.min(this.end, value));
             },"notify");
 
@@ -57,7 +57,7 @@ const PercentSlider = Component.extend({
 
             // Update the value on a dragmove
             this.listenTo("dragup", (ev, left) => {
-                var value = (left / this.width) * (this.end - this.start);
+                const value = (left / this.width) * (this.end - this.start);
                 this.value = Math.max( 0, Math.min(this.end, value));
             },"notify");
 
