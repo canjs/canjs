@@ -1,6 +1,6 @@
 import { Component, DefineMap, stache } from "can";
 
-var style = document.createElement("style");
+const style = document.createElement("style");
 style.innerHTML = `
 mock-url {display: block;}
 mock-url .location {
