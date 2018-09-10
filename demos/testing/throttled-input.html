@@ -1,0 +1,31 @@
+<throttled-input></throttled-input>
+<script id="demo-source" src="../../node_modules/steal/steal.js" dev-bundle>
+import { Component } from "can";
+
+Component.extend({
+  tag: "throttled-input",
+  
+  view: `
+    <input value:from="text" on:input:value:to="text" placeholder="Type Here, Then Wait">
+    <p>value: {{text}}</p>
+  `,
+  
+  ViewModel: {
+    text: {
+      value({ listenTo, lastSet, resolve }) {
+        let latest = "",
+            timeoutId = null;
+        
+        listenTo(lastSet, (val) => {
+          latest = val;
+          timeoutId = clearTimeout(timeoutId);
+          
+          timeoutId = setTimeout(() => {
+            resolve(latest);
+          }, 500);
+        });
+      }
+    }
+  }
+});
+</script>
