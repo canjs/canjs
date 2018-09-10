@@ -174,7 +174,7 @@
     "steal-tools": "2.0.4",
     "test-saucelabs": "0.0.6",
     "testee": "^0.8.1",
-    "webpack": "^4.12.0",
+    "webpack": "^4.17.3",
     "webpack-cli": "^3.0.7"
   },
   "demos": [
