@@ -57,14 +57,14 @@ Component.extend({
     view: `
     <ul>
         {{# if(todosPromise.isResolved) }}
-            {{# each(todosPromise.value) }}
+            {{# for(todo of todosPromise.value) }}
                 <li>
-                    <input type='checkbox' checked:bind='complete' disabled/>
-                    <label>{{name}}</label>
-                    <input type='date' valueAsDate:bind='dueDate' disabled/>
-                    <button on:click="destroy()">delete</button>
+                    <input type='checkbox' checked:bind='todo.complete' disabled/>
+                    <label>{{todo.name}}</label>
+                    <input type='date' valueAsDate:bind='todo.dueDate' disabled/>
+                    <button on:click="todo.destroy()">delete</button>
                 </li>
-            {{/ each }}
+            {{/ for }}
         {{/ if}}
         {{# if(todosPromise.isPending) }}
             <li>Loading</li>

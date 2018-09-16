@@ -150,21 +150,21 @@ are the most commonly used tags:
 
 - [can-stache.tags.escaped] - Inserts the result of `expression` in the page.
   ```html
-  Count: <span>{{count}}</span>
+  Count: <span>{{ count }}</span>
   ```
 - [can-stache.helpers.if] - Render the _block_ content if the expression evaluates
   to a _truthy_ value; otherwise, render the _inverse_ content.
   ```html
-  {{#if(count)}} Count not 0 {{else}} Count is 0 {{/if}}
+  {{# if(count) }} Count not 0 {{ else }} Count is 0 {{/ if }}
   ```
 - [can-stache.helpers.is] - Render the _block_ content if all comma seperated expressions
   evaluate to the same value; otherwise, render the _inverse_ content.
   ```html
-  {{#is(count, 1)}} Count is 1 {{else}} Count is not 1 {{/if}}
+  {{# is(count, 1) }} Count is 1 {{ else }} Count is not 1 {{/ if }}
   ```
-- [can-stache.helpers.each] - Render the _block_ content for each item in the list the expression evaluates to.
+- [can-stache.helpers.for-of] - Render the _block_ content for each item in the list the expression evaluates to.
   ```html
-  {{#each(items)}} {{name}} {{/each}}
+  {{# for(item of items) }} {{item.name}} {{/ for }}
   ```
 
 [can-stache-bindings] are used to pass values between the DOM and observables and call methods on
@@ -276,7 +276,7 @@ observables. Use it to:
 
 The following demo:
 
-- Loops through a list of todos with [can-stache.helpers.each] - `{{#each( todos )}} ... {{/each}}`.
+- Loops through a list of todos with [can-stache.helpers.each] - `{{# for( todo of todos ) }} ... {{/ for }}`.
 - Writes out if all todos are complete with [can-stache.helpers.is] - `{{#is( completeCount, todos.length )}}`.
 - Updates the `complete` state of a todo when a _checkbox_ is checked and vice-versa with [can-stache-bindings.twoWay] - `checked:bind='complete'`.
 - Completes every todo with [can-stache-bindings.event] - `on:click='completeAll()'`.

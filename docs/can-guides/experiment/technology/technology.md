@@ -459,7 +459,7 @@ that:
 
 - Gets a promise that resolves to a list of all todos with `Todo.getList({})`.
 - Loops through the list of todos and creates an `<li>` for each one with
-  `{{# each(todosPromise.value, todo=value) }}`.
+  `{{# for(todo of todosPromise.value) }}`.
 
 ```html
 <todo-list></todo-list>
@@ -495,13 +495,13 @@ Component.extend({
     tag: "todo-list",
     view: `
         <ul>
-            {{# each(todosPromise.value, todo=value) }}
+            {{# for(todo of todosPromise.value) }}
                 <li>
-                    <input type='checkbox' checked:from='complete' disabled/>
-                    <label>{{name}}</label>
-                    <input type='date' valueAsDate:from='dueDate' disabled/>
+                    <input type='checkbox' checked:from='todo.complete' disabled/>
+                    <label>{{todo.name}}</label>
+                    <input type='date' valueAsDate:from='todo.dueDate' disabled/>
                 </li>
-            {{/ each }}
+            {{/ for }}
         </ul>
     `,
     ViewModel: {

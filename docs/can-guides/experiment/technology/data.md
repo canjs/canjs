@@ -209,13 +209,13 @@ Component.extend({
     view: `
     <ul>
         {{# if(todosPromise.isResolved) }}
-            {{# each(todosPromise.value) }}
+            {{# for(todo of todosPromise.value) }}
                 <li>
-                    <input type='checkbox' checked:bind='complete' disabled/>
+                    <input type='checkbox' checked:bind='todo.complete' disabled/>
                     <label>{{name}}</label>
-                    <input type='date' valueAsDate:bind='dueDate' disabled/>
+                    <input type='date' valueAsDate:bind='todo.dueDate' disabled/>
                 </li>
-            {{/ each }}
+            {{/ for }}
         {{/ if}}
         {{# if(todosPromise.isPending) }}
             <li>Loading</li>
@@ -277,13 +277,13 @@ Component.extend({
 
     <ul>
         {{# if(todosPromise.isResolved) }}
-            {{# each(todosPromise.value) }}
+            {{# for( todo of todosPromise.value) }}
                 <li>
-                    <input type='checkbox' checked:bind='complete' disabled/>
+                    <input type='checkbox' checked:bind='todo.complete' disabled/>
                     <label>{{name}}</label>
-                    <input type='date' valueAsDate:bind='dueDate' disabled/>
+                    <input type='date' valueAsDate:bind='todo.dueDate' disabled/>
                 </li>
-            {{/ each }}
+            {{/ for }}
         {{/ if}}
         {{# if(todosPromise.isPending) }}
             <li>Loading</li>
@@ -488,16 +488,16 @@ Component.extend({
                 <th>id</th><th>complete</th>
                 <th>name</th><th>due date</th>
             </tr>
-            {{# each(todos) }}
+            {{# for(todo of todos) }}
                 <tr>
-                    <td>{{id}}</td>
-                    <td><input type='checkbox' checked:bind='complete' disabled/></td>
-                    <td>{{name}}</td>
-                    <td><input type='date' valueAsDate:bind='dueDate' disabled/></td>
+                    <td>{{todo.id}}</td>
+                    <td><input type='checkbox' checked:bind='todo.complete' disabled/></td>
+                    <td>{{todo.name}}</td>
+                    <td><input type='date' valueAsDate:bind='todo.dueDate' disabled/></td>
                 </tr>
             {{ else }}
                 <tr><td colspan='4'><i>The todos you create will be listed here</i></td></tr>
-            {{/ each }}
+            {{/ for }}
         </table>
     `,
     ViewModel: {
@@ -706,14 +706,14 @@ Component.extend({
     view: `
     <ul>
         {{# if(todosPromise.isResolved) }}
-            {{# each(todosPromise.value) }}
+            {{# for(todo of todosPromise.value) }}
                 <li>
-                    <input type='checkbox' checked:bind='complete' disabled/>
-                    <label>{{name}}</label>
-                    <input type='date' valueAsDate:bind='dueDate' disabled/>
-                    <button on:click="destroy()">delete</button>
+                    <input type='checkbox' checked:bind='todo.complete' disabled/>
+                    <label>{{todo.name}}</label>
+                    <input type='date' valueAsDate:bind='todo.dueDate' disabled/>
+                    <button on:click="todo.destroy()">delete</button>
                 </li>
-            {{/ each }}
+            {{/ for }}
         {{/ if}}
         {{# if(todosPromise.isPending) }}
             <li>Loading</li>
