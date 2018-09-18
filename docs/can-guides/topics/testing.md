@@ -53,27 +53,27 @@ let ViewModel = DefineMap.extend({
 	}
 });
 
-describe("ViewModel", () => {
+describe("NameForm ViewModel", () => {
 	it("name", () => {
-		// #1
+		// 1. Create an instance of the ViewModel
 		let vm = new ViewModel({ });
 
-		// #2
+		// 2. Test values of the ViewModel’s default values
 		assert.equal(vm.name, "", "default `name` is correct");
 
-		// #3
+		// 3. Set ViewModel properties (or call ViewModel functions)
 		vm.first = "Kevin"
-		// #4
+		// 4. Test values of the ViewModel’s properties
 		assert.equal(vm.name, "Kevin", "setting `first` updates `name` correctly");
 
-		// #3
+		// 3. Set ViewModel properties (or call ViewModel functions)
 		vm.last = "McCallister";
-		// #4
+		// 4. Test values of the ViewModel’s properties
 		assert.equal(vm.name, "Kevin McCallister", "setting `first` updates `name` correctly");
 
-		// #3
+		// 3. Set ViewModel properties (or call ViewModel functions)
 		vm.setName("Marv Merchants");
-		// #4
+		// 4. Test values of the ViewModel’s properties
 		assert.equal(vm.first, "Marv", "`setName` updates `first` correctly");
 		assert.equal(vm.last, "Merchants", "`setName` updates `last` correctly");
 	});
@@ -147,7 +147,7 @@ let ViewModel = DefineMap.extend({
 	}
 });
 
-describe("ViewModel", () => {
+describe("ThrottledText ViewModel", () => {
 	it("text", (done) => {
 		let vm = new ViewModel({ });
 
@@ -279,7 +279,7 @@ let ViewModel = DefineMap.extend({
 	}
 });
 
-describe("ViewModel", () => {
+describe("Todos ViewModel", () => {
 	it("todoCount", (done) => {
 		let todoResponse = {
 			metadata: {	count: 150 },
@@ -355,7 +355,7 @@ let ViewModel = DefineMap.extend({
 	}
 });
 
-describe("ViewModel", () => {
+describe("Todos ViewModel", () => {
 	it("todoCount", () => {
 		let todoResponse = {
 			metadata: {	count: 150 },
@@ -464,7 +464,7 @@ let ViewModel = DefineMap.extend({
 	}
 });
 
-describe("ViewModel", () => {
+describe("Todos ViewModel", () => {
 	it("todoCountPromise", () => {
 		let testPromise = new Promise((res, rej) => {});
 		let getListOptions = null;
@@ -500,3 +500,466 @@ mocha.run();
 @highlight 13-17,28,38-43,46,51-57,only
 
 This technique is useful for testing code using models, but it can be used to test any code that uses a function or property _exported directly_ from another module.
+
+## Components
+
+Components are the glue that holds CanJS applications together &mdash; connecting observable ViewModels to the DOM, handling events triggered by user interaction, interfacing with third-party libraries, and many other things.
+
+There are different challenges to testing each of these responsibilities. These are discussed in the sections below.
+
+### ViewModel
+
+All of the techniques described in [guides/testing#ViewModels Testing ViewModels] can be used for testing a Component’s ViewModel by creating an instance of the Component constructor’s `ViewModel` property:
+
+```html
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@5.2.0/mocha.css">
+<script src="//unpkg.com/mocha@5.2.0/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4.1.2/chai.js" type="text/javascript"></script>
+<script type="module">
+import { Component } from "can";
+
+// Mocha / Chai Setup
+mocha.setup("bdd")
+var assert = chai.assert;
+
+const NameForm = Component.extend({
+  tag: "name-form",
+
+  ViewModel: {
+    first: "string",
+    last: "string",
+    get name() {
+        return `${this.first || ""} ${this.last || ""}`.trim();
+    },
+    setName(val) {
+        const parts = val.split(" ");
+        this.first = parts[0];
+        this.last = parts[1];
+    }
+  },
+
+  view: `
+    <div>
+      <label>
+        First: <input value:bind="first">
+      </label>
+      <label>
+        Last: <input value:bind="last">
+      </label>
+
+      <p>
+        <button on:click="setName('Kevin McCallister')">Pick Random Name</button>
+      </p>
+
+      <p>Name: {{name}}</p>
+    </div>
+  `
+});
+
+describe("NameForm Component ViewModel", () => {
+	it("name", () => {
+		// 1. Create an instance of the ViewModel
+		let vm = new NameForm.ViewModel({ });
+
+		// 2. Test values of the ViewModel’s default values
+		assert.equal(vm.name, "", "default `name` is correct");
+
+		// 3. Set ViewModel properties (or call ViewModel functions)
+		vm.first = "Kevin"
+		// 4. Test values of the ViewModel’s properties
+		assert.equal(vm.name, "Kevin", "setting `first` updates `name` correctly");
+
+		// 3. Set ViewModel properties (or call ViewModel functions)
+		vm.last = "McCallister";
+		// 4. Test values of the ViewModel’s properties
+		assert.equal(vm.name, "Kevin McCallister", "setting `first` updates `name` correctly");
+
+		// 3. Set ViewModel properties (or call ViewModel functions)
+		vm.setName("Marv Merchants");
+		// 4. Test values of the ViewModel’s properties
+		assert.equal(vm.first, "Marv", "`setName` updates `first` correctly");
+		assert.equal(vm.last, "Merchants", "`setName` updates `last` correctly");
+	});
+});
+
+// start Mocha
+mocha.run();
+</script>
+```
+@highlight 12,15-26,44,49,only
+@codepen
+
+### DOM Events
+
+DOM events handled through [can-stache-bindings], like `value:bind="first"`, can be tested through the viewModel directly as shown in [guides/testing#Basicsetup Testing ViewModels]. However, they can also be tested by:
+
+1. Creating an instance of the Component
+2. Finding the event target through the Component’s `element` property
+3. Using [can-dom-events.dispatch domEvents.dispatch] to dispatch the event
+
+> NOTE: Tests like this will work even if the component is not in the document.
+
+```html
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@5.2.0/mocha.css">
+<script src="//unpkg.com/mocha@5.2.0/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4.1.2/chai.js" type="text/javascript"></script>
+<script type="module">
+import { Component, domEvents } from "can";
+
+// Mocha / Chai Setup
+mocha.setup("bdd")
+var assert = chai.assert;
+
+const NameForm = Component.extend({
+  tag: "name-form",
+
+  ViewModel: {
+    first: "string",
+    last: "string",
+    get name() {
+        return `${this.first || ""} ${this.last || ""}`.trim();
+    },
+    setName(val) {
+        const parts = val.split(" ");
+        this.first = parts[0];
+        this.last = parts[1];
+    }
+  },
+
+  view: `
+    <div>
+      <label>
+        First: <input class="first" value:bind="first">
+      </label>
+      <label>
+        Last: <input class="last" value:bind="last">
+      </label>
+
+      <p>
+        <button on:click="setName('Kevin McCallister')">Pick Random Name</button>
+      </p>
+
+      <p>Name: {{name}}</p>
+    </div>
+  `
+});
+
+describe("NameForm Component Events", () => {
+    it("first name updated when user types in <input>", () => {
+      // 1. Creating an instance of the Component
+      const nameForm = new NameForm();
+
+      // 2. Finding the event target through the Component’s `element` property
+      const input = nameForm.element.querySelector("input.first");
+
+      // 3. Using domEvents.dispatch to dispatch the event
+      input.value = "Marv";
+      domEvents.dispatch(input, "change"); // bindings are updated on "change" by default
+
+      assert.equal(nameForm.viewModel.first, "Marv", "first set correctly");
+    });
+});
+
+// start Mocha
+mocha.run();
+</script>
+```
+@highlight 47-59,only
+@codepen
+
+This strategy can also be used to test events using `listenTo` in a [can-define.types.value] behavior (or a Map’s [can-event-queue/map/map.listenTo] method):
+
+```html
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@5.2.0/mocha.css">
+<script src="//unpkg.com/mocha@5.2.0/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4.1.2/chai.js" type="text/javascript"></script>
+<script type="module">
+import { Component, domEvents } from "can";
+
+// Mocha / Chai Setup
+mocha.setup("bdd")
+var assert = chai.assert;
+
+const Modal = Component.extend({
+  tag: "my-modal",
+
+  ViewModel: {
+    showing: {
+      value({ listenTo, lastSet, resolve }) {
+        listenTo(lastSet, resolve);
+
+        listenTo(window, "click", () => {
+          resolve(false);
+        });
+      }
+    }
+  },
+
+  view: `
+    {{# if(showing) }}
+      <div class="modal">
+        This is the modal
+      </div>
+    {{/ if }}
+  `
+});
+
+describe("MyModal Component Events", () => {
+    it("clicking on the window should close the modal", () => {
+      const modal = new Modal();
+
+      modal.viewModel.showing = true;
+
+      domEvents.dispatch(window, "click");
+
+      assert.equal(modal.viewModel.showing, false, "modal hidden when user clicks on the window");
+    });
+});
+
+// start Mocha
+mocha.run();
+</script>
+```
+@highlight 20-22,37-45,only
+@codepen
+
+Another place you might use `listenTo` is in the `connectedCallback`. The same testing procedure can be used in this scenario, but you need to make sure the `connectedCallback` is called, which is discussed in the next section.
+
+### connectedCallback
+
+The [can-component/connectedCallback] is a good place to put code that is expected to run once a component is in the document. To test this code, obviously the `connectedCallback` needs to be called. One way to do this is to call it manually, passing the component instance’s `element` property:
+
+```html
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@5.2.0/mocha.css">
+<script src="//unpkg.com/mocha@5.2.0/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4.1.2/chai.js" type="text/javascript"></script>
+<script type="module">
+import { Component } from "can";
+
+// Mocha / Chai Setup
+mocha.setup("bdd")
+var assert = chai.assert;
+
+function DatePicker(el) {
+  this.el = el;
+  el.classList.add("date-picker");
+};
+
+DatePicker.prototype.teardown = function() {
+  this.el.classList.remove("date-picker");
+};
+
+const DateRange = Component.extend({
+  tag: "date-range",
+
+  ViewModel: {
+    connectedCallback(el) {
+      const startDate = new DatePicker( el.querySelector(".start-date") );
+
+      return () => {
+        startDate.teardown();
+      };
+    }
+  },
+
+  view: `
+    <p class="start-date">This is the Date Picker</p>
+  `
+});
+
+describe("DateRange Component connectedCallback", () => {
+  it("should set up DatePicker", () => {
+    const dateRange = new DateRange();
+
+    dateRange.viewModel.connectedCallback(dateRange.element);
+
+    const startDate = dateRange.element.querySelector(".start-date");
+
+    assert.ok(
+      startDate.classList.contains("date-picker"),
+      "start date DatePicker set up"
+    );
+  });
+});
+
+// start Mocha
+mocha.run();
+</script>
+```
+@highlight 43,only
+@codepen
+
+If the code relies on the element actually being in the document, things get a little more complicated.
+
+You can add the element to the page using [appendChild](https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild) like this:
+
+```js
+document.body.appendChild(dateRange.element);
+```
+
+> NOTE: Some test frameworks like [QUnit](https://qunitjs.com/cookbook/#keeping-tests-atomic) have special test areas that you insert elements into for your tests.
+>These are automatically cleaned up after each test, so you do not have to worry about a test causing problems for other tests.
+>If the framework you’re using doesn’t have this, make sure to clean up after the test yourself.
+
+This code works, but if you run the assertion immediately after calling `appendChild`, the test will fail:
+
+```html
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@5.2.0/mocha.css">
+<script src="//unpkg.com/mocha@5.2.0/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4.1.2/chai.js" type="text/javascript"></script>
+<script type="module">
+import { Component } from "can";
+
+// Mocha / Chai Setup
+mocha.setup("bdd")
+var assert = chai.assert;
+
+function DatePicker(el) {
+  this.el = el;
+  el.classList.add("date-picker");
+};
+
+DatePicker.prototype.teardown = function() {
+  this.el.classList.remove("date-picker");
+};
+
+const DateRange = Component.extend({
+  tag: "date-range",
+
+  ViewModel: {
+    connectedCallback(el) {
+      const startDate = new DatePicker( el.querySelector(".start-date") );
+
+      return () => {
+        startDate.teardown();
+      };
+    }
+  },
+
+  view: `
+    <p class="start-date">This is the Date Picker</p>
+  `
+});
+
+describe("DateRange Component connectedCallback", () => {
+  it("should set up DatePicker", () => {
+    const dateRange = new DateRange();
+
+    document.body.appendChild(dateRange.element);
+
+    const startDate = dateRange.element.querySelector(".start-date");
+
+    assert.ok(
+      startDate.classList.contains("date-picker"),
+      "start date DatePicker set up"
+    );
+
+	// clean up element
+	document.body.removeChild(
+	  document.querySelector("date-range")
+	);
+  });
+});
+
+// start Mocha
+mocha.run();
+</script>
+```
+@highlight 43-50,only
+@codepen
+
+The problem here is that a [MutationObserver](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver) is used to listen for elements being added to the document. `MutationObserver`s are asynchronous, so the `connectedCallback` is not called immediately when the element is inserted.
+
+To get around this issue [can-dom-mutate.onNodeInsertion] can be used to know when the element has been inserted and the `connectedCallback` has been called. Using this technique, the process becomes:
+
+1. Create an `onNodeInsertion` listener
+2. Insert the element
+
+Once the `onNodeInsertion` callback is called:
+
+3. Run assertions
+4. Clean up the element
+5. Clean up the `onNodeInsertion` listener
+6. Mark the asynchronous test as complete
+
+```html
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@5.2.0/mocha.css">
+<script src="//unpkg.com/mocha@5.2.0/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4.1.2/chai.js" type="text/javascript"></script>
+<script type="module">
+import { Component, domMutate } from "can";
+
+// Mocha / Chai Setup
+mocha.setup("bdd")
+var assert = chai.assert;
+
+function DatePicker(el) {
+  this.el = el;
+  el.classList.add("date-picker");
+};
+
+DatePicker.prototype.teardown = function() {
+  this.el.classList.remove("date-picker");
+};
+
+const DateRange = Component.extend({
+  tag: "date-range",
+
+  ViewModel: {
+    connectedCallback(el) {
+      const startDate = new DatePicker( el.querySelector(".start-date") );
+
+      return () => {
+        startDate.teardown();
+      };
+    }
+  },
+
+  view: `
+    <p class="start-date">This is the Date Picker</p>
+  `
+});
+
+describe("DateRange Component connectedCallback", () => {
+  it("should set up DatePicker", (done) => {
+    const dateRange = new DateRange();
+
+	// 1. Create an `onNodeInsertion` listener
+    const offNodeInsertion = domMutate.onNodeInsertion(dateRange.element, () => {
+      const startDate = dateRange.element.querySelector(".start-date");
+
+	  // 3. Run assertions
+      assert.ok(
+        startDate.classList.contains("date-picker"),
+        "start date DatePicker set up"
+      );
+
+	  // 4. Clean up the element
+      document.body.removeChild(dateRange.element);
+
+	  // 5. Clean up the `onNodeInsertion` listener
+      offNodeInsertion();
+
+	  // 6. Mark the asynchronous test as complete
+      done();
+    });
+
+	// 2. Insert the element
+    document.body.appendChild(dateRange.element);
+  });
+});
+
+// start Mocha
+mocha.run();
+</script>
+```
+@highlight 6,43-64,only
+@codepen
+
+Obviously this is much more complicated than just calling the `connectedCallback` manually, so only use this process if absolutely necessary.
