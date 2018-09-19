@@ -5,13 +5,13 @@ import { Component, stache, DefineMap } from "can";
 
 const demoHtml = `<header>
   <my-greeting>
-    {{site}}
+    {{ site }}
   </my-greeting>
 </header>`;
 
 Component.extend({
 	tag: "my-greeting",
-	view: stache("<h1><content/> - {{title}}</h1>"),
+	view: stache("<h1><content/> - {{ title }}</h1>"),
 	ViewModel: DefineMap.extend({
 		title: {
 			default: "can-component"

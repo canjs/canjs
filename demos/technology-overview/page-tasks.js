@@ -4,28 +4,28 @@ import "./percent-slider";
 const TaskEditor = Component.extend({
     tag: "task-editor",
     view: `
-        {{#if logout}}
+        {{# if logout }}
             <h1><code>&lt;task-editor&gt;</code></h1>
             <p>
                 This content is provided by the <code>&lt;task-editor&gt;</code> component.
-                Click <a href="{{routeUrl(page='home')}}">Home</a> to return to the homepage, or
+                Click <a href="{{ routeUrl(page='home') }}">Home</a> to return to the homepage, or
                 <button on:click="logout()">Logout</button> to log out. Edit the task below:
 
             </p>
-        {{/else}}
+        {{/ else }}
             <h2>Task Editor</h2>
-        {{/if}}
+        {{/ if }}
         <form on:submit="save(scope.event)">
-            Name: {{name}}
+            Name: {{ name }}
             <p>
                 <input value:bind="name"/>
             </p>
-            Progress: {{progress}}
+            Progress: {{ progress }}
             <p>
                 <percent-slider value:bind="progress"/>
             </p>
             <button disabled:from="isSaving">
-                {{#if(isSaving)}}Saving{{else}}Save{{/if}}
+                {{# if(isSaving) }}Saving{{ else }}Save{{/ if }}
             </button>
         </form>
     `,

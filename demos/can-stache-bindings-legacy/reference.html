@@ -5,11 +5,11 @@
 </script>
 <script id='drivers-stache' type='text/stache'>
 <ul>
-  {{#each drivers}}
+  {{# each drivers }}
     <li ($click)="select(.)">
-      {{title}} {{first}} {{last}} - {{licensePlate}}
+      {{ title }} {{ first }} {{ last }} - {{ licensePlate }}
     </li>
-  {{/each}}
+  {{/ each }}
 </ul>
 </script>
 </div>
@@ -40,7 +40,7 @@ Component.extend({
 
 Component.extend({
 	tag: "edit-plate",
-	template: stache("<input value='{{plateName}}' ($input)='update($element.value)'/>"),
+	template: stache("<input value='{{ plateName }}' ($input)='update($element.value)'/>"),
 	ViewModel: DefineMap.extend({
 		plateName: "string",
 		update: function(value){

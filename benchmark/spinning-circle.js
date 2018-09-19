@@ -21,13 +21,13 @@ suite.add( "can-stache spinning circles", function() {
 }, {
 	setup: function() {
 		var template = stache(
-			"{{#each(boxes)}}" +
+			"{{#for(box of boxes)}}" +
 			"<div class='box-view'>" +
-			"<div class='box' id='box-{{number}}'  style='{{style}}'>" +
-			"{{content}}" +
+			"<div class='box' id='box-{{box.number}}'  style='{{box.style}}'>" +
+			"{{box.content}}" +
 			"</div>" +
 			"</div>" +
-			"{{/each}}" );
+			"{{/for}}" );
 
 		var boxes = new DefineList();
 

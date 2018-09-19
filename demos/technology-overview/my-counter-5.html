@@ -10,7 +10,7 @@ Component.extend({
     tag: "my-counter",
     view: `
         <button on:click='increment()'>+1</button>
-        Count: <span>{{count}}</span>
+        Count: <span>{{ count }}</span>
     `,
     ViewModel: {
         count: {default: 0},

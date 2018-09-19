@@ -83,7 +83,7 @@ Component.extend({
                         name='dueDate' valueAsDate:from='todo.dueDate'/>
                 </p>
                 <button disabled:from="todo.preventSave()">
-                    {{# if(todo.isSaving()) }}Updating{{else}}Update{{/ if}}Todo
+                    {{# if(todo.isSaving()) }}Updating{{ else }}Update{{/ if }}Todo
                 </button>
                 <button disabled:from="todo.preventSave()"
                     on:click="cancelEdit()">Cancel</button>
@@ -116,15 +116,15 @@ Component.extend({
         {{# if(todosPromise.isResolved) }}
             {{# for(todo of todosPromise.value) }}
                 <li on:click="this.select(todo)"
-                    class="{{# eq(todo,this.selected) }}selected{{/ eq}}">
+                    class="{{# eq(todo,this.selected) }}selected{{/ eq }}">
                     <input type='checkbox' checked:bind='todo.complete' disabled/>
-                    <label>{{todo.name}}</label>
+                    <label>{{ todo.name }}</label>
                 </li>
             {{/ for }}
         {{/ if }}
         {{# if(todosPromise.isPending) }}
             <li>Loading</li>
-        {{/ if}}
+        {{/ if }}
     </ul>
     `,
     ViewModel: {

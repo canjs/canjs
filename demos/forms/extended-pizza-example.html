@@ -20,12 +20,12 @@ Component.extend({
 
 	view: `
 		<div>
-			<p>Select {{listName}}:</p>
+			<p>Select {{ listName }}:</p>
 
 			<select value:from="default" on:change="scope.root.update(scope.root.listName, 'toggle', scope.element.value)">
-				{{#each(options)}}
-					<option>{{this}}</option>
-				{{/each}}
+				{{# each(options) }}
+					<option>{{ this }}</option>
+				{{/ each }}
 			</select>
 		</div>
 	`,
@@ -42,16 +42,16 @@ Component.extend({
 
 	view: `
 		<div>
-			<p>Select {{listName}}:</p>
+			<p>Select {{ listName }}:</p>
 
-			{{#each(options)}}
+			{{# each(options) }}
 				<label>
-					{{this}}
+					{{ this }}
 					<input
 						on:change="scope.root.update(scope.root.listName, 'toggle', this)"
 						type="checkbox">
 				</label>
-			{{/each}}
+			{{/ each }}
 		</div>
 	`,
 
@@ -69,25 +69,25 @@ Component.extend({
 		<div>
 			<label>
 				Vegetarian
-				{{#if(scope.vars.showOptions}}
+				{{# if(scope.vars.showOptions }}
 					<input
 						checked:bind="not( scope.vars.showOptions )"
 						on:change="update('meats', 'clear')"
 						type="checkbox">
-				{{else}}
+				{{ else }}
 					<input
 						checked:bind="not( scope.vars.showOptions )"
 						type="checkbox">
-				{{/if}}
+				{{/ if }}
 			</label>
 
-			{{#if(scope.vars.showOptions)}}
+			{{# if(scope.vars.showOptions) }}
 				<select-many
 					update:from="update"
 					listName:from="'meats'"
 					options:from="options">
 				</select-many>
-			{{/if}}
+			{{/ if }}
 		</div>
 	`,
 
@@ -100,17 +100,17 @@ Component.extend({
 	view: `
 		<p>
 			Selected Ingredients:
-			{{#each(selectedMeats)}}
-				{{this}},
-			{{/each}}
+			{{# each(selectedMeats) }}
+				{{ this }},
+			{{/ each }}
 
-			{{#each(selectedVegetables)}}
-				{{this}},
-			{{/each}}
+			{{# each(selectedVegetables) }}
+				{{ this }},
+			{{/ each }}
 
-			{{#if(selectedCheese)}}
-				{{selectedCheese}} cheese
-			{{/if}}
+			{{# if(selectedCheese) }}
+				{{ selectedCheese }} cheese
+			{{/ if }}
 		</p>
 
 		<div>

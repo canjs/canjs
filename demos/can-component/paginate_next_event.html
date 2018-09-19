@@ -8,19 +8,15 @@
 import { Component, stache, DefineMap, DefineList} from "can";
 
 const playerList = `<ul>
-	{{#each(players, player=value)}}
-		<li {{#scope.vm.isEditing(player)}}class="editing"{{/isEditing}}
-			on:click='scope.vm.editPlayer(player)'>{{player.name}}</li>
-	{{/each}}
+	{{# each(players, player=value) }}
+		<li {{# scope.vm.isEditing(player) }}class="editing"{{/ isEditing }}
+			on:click='scope.vm.editPlayer(player)'>{{ player.name }}</li>
+	{{/ each }}
 </ul>
 <player-edit
   	on:close="removeEdit()"
 	player:from="editingPlayer"/>`;
 
-const playerEditStache = `{{#if(player)}}
-	<input value:bind="player.name"/>
-	<button on:click="close()">X</button>
-{{/if}}`;
 
 const Player = DefineMap.extend({
 	name: "string"
@@ -55,7 +51,10 @@ Component.extend({
 
 Component.extend({
 	tag: "player-edit",
-	view: stache(playerEditStache),
+	view: `{{# if(player) }}
+		<input value:bind="player.name"/>
+		<button on:click="close()">X</button>
+	{{/ if }}`,
 	ViewModel: DefineMap.extend({
 		player: Player,
 		close: function(){

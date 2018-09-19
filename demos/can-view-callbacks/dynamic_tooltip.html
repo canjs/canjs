@@ -12,25 +12,25 @@
 		<td></td><td>Name</td><td>Email</td>
 	</thead>
 	<tbody>
-		{{#each(users)}}
+		{{# each(users) }}
 		<tr>
 			<td><input on:change="scope.root.toggle(this)" type="checkbox"/></td>
-			<td>{{name}}</td>
-			<td>{{email}}</td>
+			<td>{{ name }}</td>
+			<td>{{ email }}</td>
 		</tr>
-		{{/each}}
+		{{/ each }}
 	</tbody>
 	<tfoot>
 		<tr>
 			<td colspan="3">
-				<button tooltip="{{deleteTooltip()}}"
-						{{^if(selected.length)}}class="disabled"{{/if}}
+				<button tooltip="{{ deleteTooltip() }}"
+						{{^ if(selected.length) }}class="disabled"{{/ if }}
 						on:click="notImplemented()">
 					Delete
 				</button>
 				<button
-					tooltip="{{archiveTooltip()}}"
-					{{^if(selected.length)}}class="disabled"{{/if}}
+					tooltip="{{ archiveTooltip() }}"
+					{{^ if(selected.length) }}class="disabled"{{/ if }}
 					on:click="notImplemented()">
 					Archive
 				</button>

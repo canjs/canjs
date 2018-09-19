@@ -37,9 +37,9 @@ import { Component, DefineList, DefineMap, queues, stache, viewModel } from "can
 
 const demoHtml = `<p><button on:click="addVegies()">Add Vegetables</button></p>
 <my-tabs>
-  {{#each(foodTypes)}}
-    <my-panel title:from='title'>{{content}}</my-panel>
-  {{/each}}
+  {{# each(foodTypes) }}
+    <my-panel title:from='title'>{{ content }}</my-panel>
+  {{/ each }}
 </my-tabs>`;
 
 const Panel = DefineMap.extend("Panel", {
@@ -118,19 +118,19 @@ Component.extend({
 	view:
 		stache("<ul>"+
 			// Create an LI for each item in the panel's viewModel object
-    		"{{#each(panels, panel=value)}}"+
-    			"<li {{#scope.vm.isActive(panel)}}class='active'{{/isActive}} "+
+    		"{{# each(panels, panel=value) }}"+
+    			"<li {{# scope.vm.isActive(panel) }}class='active'{{/ isActive }} "+
     			    "on:click='scope.vm.makeActive(panel)'>"+
-    			  "{{panel.title}}"+
+    			  "{{ panel.title }}"+
     			"</li>"+
-    		"{{/each}}"+
+    		"{{/ each }}"+
     	"</ul>"+
     	"<content></content>"),
 	ViewModel: ViewModel
 });
 
 Component.extend({
-	view: stache("{{#if(active)}}<content></content>{{/if}}"),
+	view: stache("{{# if(active) }}<content></content>{{/ if }}"),
 	tag:"my-panel",
 	ViewModel: Panel
 });

@@ -6,11 +6,11 @@ Component.extend({
 	tag: "my-drivers",
 	view: `
 		<ul>
-			{{#each(drivers)}}
+			{{# each(drivers) }}
 				<li on:click="scope.root.select(this)">
-					{{title}} {{first}} {{last}} - {{licensePlate}}
+					{{ title }} {{ first }} {{ last }} - {{ licensePlate }}
 				</li>
-			{{/each}}
+			{{/ each }}
 		</ul>
 	`,
 	ViewModel: DefineMap.extend({
@@ -31,7 +31,7 @@ Component.extend({
 
 Component.extend({
 	tag: "edit-plate",
-	view: `<input value='{{plateName}}' on:input='update(scope.element.value)'/>`,
+	view: `<input value='{{ plateName }}' on:input='update(scope.element.value)'/>`,
 	ViewModel: DefineMap.extend({
 		plateName: "string",
 		update: function(value){

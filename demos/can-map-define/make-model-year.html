@@ -1,53 +1,53 @@
 <div id='out'></div>
 <script id="demo-html" type="text/stache">
-{{#if(makes.isResolved)}}
+{{# if(makes.isResolved) }}
 	<select value:bind="string-to-any(~makeId)">
-	  {{^makeId}}
+	  {{^ makeId }}
 	    <option value='undefined'>Select a Make</option>
-	  {{/makeId}}
-	  {{#each(makes.value)}}
-		<option value="{{id}}">{{name}}</option>
-	  {{/each}}
+	  {{/ makeId }}
+	  {{# each(makes.value) }}
+		<option value="{{ id }}">{{ name }}</option>
+	  {{/ each }}
 	</select>
-{{else}}
+{{ else }}
 	<select disabled><option>Loading...</option></select>
-{{/if}}
+{{/ if }}
 
-{{#if(modelsPromise)}}
-	{{#if(models)}}
+{{# if(modelsPromise) }}
+	{{# if(models) }}
 		<select value:bind="string-to-any(~modelId)">
-			{{^modelId}}
+			{{^ modelId }}
 				<option value='undefined'>Select a Model</option>
-			{{/modelId}}
-			{{#each(models)}}
-				<option value="{{id}}">{{name}}</option>
-			{{/each}}
+			{{/ modelId }}
+			{{# each(models) }}
+				<option value="{{ id }}">{{ name }}</option>
+			{{/ each }}
 		</select>
-	{{else}}
+	{{ else }}
 		<select disabled><option>Loading Models</option></select>
-	{{/if}}
-{{else}}
+	{{/ if }}
+{{ else }}
 	<select disabled><option>Models</option></select>
-{{/if}}
+{{/ if }}
 
-{{#if(years)}}
+{{# if(years) }}
 	<select value:bind="string-to-any(~year)">
-		{{^year}}
+		{{^ year }}
 			<option value='undefined'>Select a Year</option>
-		{{/year}}
-		{{#each(years)}}
-			<option value="{{this}}">{{this}}</option>
-		{{/each}}
+		{{/ year }}
+		{{# each(years) }}
+			<option value="{{ this }}">{{ this }}</option>
+		{{/ each }}
 	</select>
-{{else}}
+{{ else }}
 	<select disabled><option>Years</option></select>
-{{/if}}
+{{/ if }}
 
 <div>
-	{{#each(vehicles)}}
-		<h2>{{name}}</h2>
-		<img src="{{thumb}}" width="200px"/>
-	{{/each}}
+	{{# each(vehicles) }}
+		<h2>{{ name }}</h2>
+		<img src="{{ thumb }}" width="200px"/>
+	{{/ each }}
 </div>
 </script>
 

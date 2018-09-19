@@ -5,9 +5,9 @@ import { Component } from "can";
 Component.extend({
 	tag: 'my-items',
 	view: `
-		{{#each(items)}}
-			<li on:click='../items.splice(scope.index,1)'>{{name}}</li>
-		{{/each}}
+		{{# each(items) }}
+			<li on:click='../items.splice(scope.index,1)'>{{ name }}</li>
+		{{/ each }}
 	`,
 	ViewModel: {
 		items: {

@@ -13,12 +13,12 @@
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
 import { Component, DefineList, DefineMap, stache } from "can";
 
-const demoHtml = `{{#items}}
-  <div {{#isSelected()}}class='selected'{{/isSelected}}
+const demoHtml = `{{# items }}
+  <div {{# isSelected() }}class='selected'{{/ isSelected }}
        on:click='scope.vm.toggle(this)'>
-    {{title}}
+    {{ title }}
   </div>
-{{/items}}`;
+{{/ items }}`;
 
 const SelectViewModel = DefineMap.extend("SelectViewModel", {
 	selected: {

@@ -70,7 +70,7 @@ Component.extend({
                         checked:bind='todo.complete'
                         on:change="todo.save()"
                         disabled:from="todo.preventSave()"/>
-                    <label>{{todo.name}}</label>
+                    <label>{{ todo.name }}</label>
                     <input type='date'
                         valueAsDate:bind='todo.dueDate'
                         on:change="todo.save()"
@@ -79,10 +79,10 @@ Component.extend({
                         disabled:from="todo.preventSave()">delete</button>
                 </li>
             {{/ each }}
-        {{/ if}}
+        {{/ if }}
         {{# if(todosPromise.isPending) }}
             <li>Loading</li>
-        {{/ if}}
+        {{/ if }}
     </ul>
     `,
     ViewModel: {
@@ -92,7 +92,7 @@ Component.extend({
         count: {type:"string", default: "10"},
         todosPromise: {
             get(){
-                var query = {filter: {}};
+                var query = {filter: { }};
                 if(this.sort) {
                     query.sort =  this.sort;
                 }
@@ -147,7 +147,7 @@ Component.extend({
                 <input type='date' valueAsDate:bind='todo.dueDate'/>
             </p>
             <button disabled:from="todo.preventSave()">Create Todo</button>
-            {{# if(todo.isSaving()) }}Creating ....{{/ if}}
+            {{# if(todo.isSaving()) }}Creating ....{{/ if }}
         </form>
     `,
     ViewModel: {

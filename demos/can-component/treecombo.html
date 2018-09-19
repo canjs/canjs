@@ -41,22 +41,22 @@ import { Component, DefineList, DefineMap, stache } from "can";
 
 const demoHtml = `<div><tree-combo items:from='locations' title:from='"Locations"'/></div>`;
 const treeComboStash = `  <ul class='breadcrumb'>
-    <li on:click='./emptyBreadcrumb()'>{{title}}</li>
-    {{#each(breadcrumb)}}
-      <li on:click='../updateBreadcrumb(this)'>{{title}}</li>
-    {{/each}}
+    <li on:click='./emptyBreadcrumb()'>{{ title }}</li>
+    {{# each(breadcrumb) }}
+      <li on:click='../updateBreadcrumb(this)'>{{ title }}</li>
+    {{/ each }}
   </ul>
   <ul class='options'>
     <content>
-      {{#selectableItems}}
-        <li {{#scope.vm.isSelected(this)}}class='active'{{/isSelected}} on:click='../toggle(this)'>
-          <input type='checkbox' {{#scope.vm.isSelected(this)}}checked{{/isSelected}}/>
-            {{title}}
-          {{#if(children.length)}}
+      {{# selectableItems }}
+        <li {{# scope.vm.isSelected(this) }}class='active'{{/ isSelected }} on:click='../toggle(this)'>
+          <input type='checkbox' {{# scope.vm.isSelected(this) }}checked{{/ isSelected }}/>
+            {{ title }}
+          {{# if(children.length) }}
             <button class='showChildren' on:click='../showChildren(.,scope.event)'>+</button>
-          {{/if}}
+          {{/ if }}
         </li>
-      {{/selectableItems}}
+      {{/ selectableItems }}
     </content>
   </ul>`;
 

@@ -16,12 +16,12 @@ Component.extend({
 	template:
 		stache("<ul>"+
 			// Create an LI for each item in the panel's viewModel object
-    		"{{#panels}}"+
-    			"<li {{#isActive}}class='active'{{/isActive}} "+
+    		"{{# panels }}"+
+    			"<li {{# isActive }}class='active'{{/ isActive }} "+
     			    "($click)='makeActive(.)'>"+
-    			  "{{title}}"+
+    			  "{{ title }}"+
     			"</li>"+
-    		"{{/panels}}"+
+    		"{{/ panels }}"+
     	"</ul>"+
     	"<content></content>"),
 	ViewModel: DefineMap.extend({
@@ -74,7 +74,7 @@ Component.extend({
 });
 
 Component.extend({
-	template: stache("{{#if active}}<content></content>{{/if}}"),
+	template: stache("{{# if active }}<content></content>{{/ if }}"),
 	tag:"my-panel",
 	ViewModel: DefineMap.extend({
 		active: { default: false },

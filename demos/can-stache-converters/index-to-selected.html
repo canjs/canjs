@@ -6,14 +6,14 @@
 <script type="text/stache" id="demo-html">
 <select value:bind="index-to-selected(person, people)">
 
-{{#each(people)}}
-  <option value="{{scope.index}}">{{this}}</option>
-{{/each}}
+{{# each(people) }}
+  <option value="{{ scope.index }}">{{ this }}</option>
+{{/ each }}
 
 </select>
 
 <div>
-  <h2>{{person}}</h2>
+  <h2>{{ person }}</h2>
 </div>
 </script>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">

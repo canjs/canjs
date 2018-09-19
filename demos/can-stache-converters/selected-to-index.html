@@ -5,9 +5,9 @@
 <body>
 <script type="text/stache" id="demo-html">
 <select value:bind="index">
-  {{#each(people)}}
-    <option value="{{scope.index}}">{{scope.index}}</option>
-  {{/each}}
+  {{# each(people) }}
+    <option value="{{ scope.index }}">{{ scope.index }}</option>
+  {{/ each }}
 </select>
 
 <input value:bind="selected-to-index(index, people)">

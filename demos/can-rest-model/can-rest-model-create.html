@@ -70,7 +70,7 @@ Component.extend({
                 <input type='date' valueAsDate:bind='todo.dueDate'/>
             </p>
             <button disabled:from="todo.preventSave()">Create Todo</button>
-            {{# if(todo.isSaving()) }}Creating ....{{/ if}}
+            {{# if(todo.isSaving()) }}Creating ....{{/ if }}
         </form>
     `,
     ViewModel: {
@@ -97,9 +97,9 @@ Component.extend({
             </tr>
             {{# for(todo of todos) }}
                 <tr>
-                    <td>{{todo.id}}</td>
+                    <td>{{ todo.id }}</td>
                     <td><input type='checkbox' checked:bind='todo.complete' disabled/></td>
-                    <td>{{todo.name}}</td>
+                    <td>{{ todo.name }}</td>
                     <td><input type='date' valueAsDate:bind='todo.dueDate' disabled/></td>
                 </tr>
             {{ else }}

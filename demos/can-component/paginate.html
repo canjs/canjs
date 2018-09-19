@@ -202,7 +202,7 @@ const Paginate = DefineMap.extend({
 Component.extend({
 	tag: "my-grid",
 	view: `<table>
-		<tbody {{#if(waiting)}}class='waiting'{{/if}}>
+		<tbody {{# if(waiting) }}class='waiting'{{/ if }}>
 			<content></content>
 		</tbody>
 	</table>`,
@@ -232,28 +232,28 @@ Component.extend({
 	tag: "next-prev",
 	view:
 		`<a href="javascript://"
-		    class="prev {{#paginate.canPrev()}}enabled{{/paginate.canPrev}}"
+		    class="prev {{# paginate.canPrev() }}enabled{{/ paginate.canPrev }}"
 			on:click="paginate.prev()">Prev</a>
 		<a href="javascript://"
-		   class="next {{#paginate.canNext()}}enabled{{/paginate.canNext}}"
+		   class="next {{# paginate.canNext() }}enabled{{/ paginate.canNext }}"
 		   on:click="paginate.next()">Next</a>`
 });
 
 Component.extend({
 	tag: "page-count",
-	view: `Page <span>{{page}}</span> of <span>{{count}}</span>.`
+	view: `Page <span>{{ page }}</span> of <span>{{ count }}</span>.`
 });
 
 Component.extend({
 	tag: "my-app",
 	view: `
 	  <my-grid promiseData:from='websitesPromise'>
-	    {{#each(items)}}
+	    {{# each(items) }}
 	      <tr>
-	        <td width='40%'>{{name}}</td>
-	        <td width='70%'>{{url}}</td>
+	        <td width='40%'>{{ name }}</td>
+	        <td width='70%'>{{ url }}</td>
 	      </tr>
-	    {{/each}}
+	    {{/ each }}
 	  </my-grid>
 	  <next-prev paginate:from='paginate'></next-prev>
 	  <page-count page:from='paginate.page' count:from='paginate.pageCount'></page-count>`,

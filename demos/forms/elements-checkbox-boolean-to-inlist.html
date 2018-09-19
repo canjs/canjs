@@ -13,14 +13,14 @@ Component.extend({
 	tag: "checkbox-inlist",
 
 	view: `
-		{{#each(availableNumbers}}
+		{{# each(availableNumbers }}
 		<label>
 			<input type="checkbox" checked:bind="boolean-to-inList(this, scope.root.selectedNumbers)">
-			checked:bind="boolean-to-inList({{this}}, numbers)"
+			checked:bind="boolean-to-inList({{ this }}, numbers)"
 		</label>
-		{{/each}}
+		{{/ each }}
 		<p>
-			selected numbers: {{#each(selectedNumbers)}}{{this}} {{/each}}
+			selected numbers: {{# each(selectedNumbers) }}{{ this }} {{/ each }}
 		</p>
 	`,
 

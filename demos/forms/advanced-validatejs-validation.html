@@ -38,14 +38,14 @@ Component.extend({
 
 	view: `
 		<form>
-			{{#if(formatErrors(this, "phoneNumber").length)}}
-				<p class="error">{{formatErrors(this, "phoneNumber").join(", ")}}</p>
-			{{/if}}
+			{{# if(formatErrors(this, "phoneNumber").length) }}
+				<p class="error">{{ formatErrors(this, "phoneNumber").join(", ") }}</p>
+			{{/ if }}
 
 			<p>
 				<label>
 					Phone Number:
-					<input type="text" value:bind="phoneNumber" {{#if(formatErrors(this, "phoneNumber").length)}}class="error"{{/if}}>
+					<input type="text" value:bind="phoneNumber" {{# if(formatErrors(this, "phoneNumber").length) }}class="error"{{/ if }}>
 				</label>
 			</p>
 

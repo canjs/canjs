@@ -2,8 +2,8 @@
 <div id='out'></div>
 <script type='text/stache' id="demo-html">
 <p>
-<input type="radio" name="number" checked:bind="one" /> One? {{one}}<br>
-<input type="radio" name="number" checked:bind="two" /> Two? {{two}}
+<input type="radio" name="number" checked:bind="one" /> One? {{ one }}<br>
+<input type="radio" name="number" checked:bind="two" /> Two? {{ two }}
 </p>
 <br>
 <p>Attending?
@@ -11,7 +11,7 @@
   <input type='radio' checked:bind="equal(attending, 'no')" /> No,
   <input type='radio' checked:bind="equal(attending, 'maybe')" /> Maybe
 </p>
-<p>You {{attendence()}}.</p>
+<p>You {{ attendence() }}.</p>
 </script>
 </div>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">

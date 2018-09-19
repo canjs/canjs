@@ -5,7 +5,7 @@
 <todo-app>
 	<todo-list todos="listOfTodos">
 		<input type='checkbox' can-value="completed"/>
-		{{name}}
+		{{ name }}
 	</todo-list>
 </todo-app>
 </script>
@@ -16,13 +16,13 @@
 </style>
 <script type='text/mustache' id='todo-list-template'>
 	<ul>
-	{{#todos}}
-		<li class="{{#completed}}completed{{/completed}}">
+	{{# todos }}
+		<li class="{{# completed }}completed{{/ completed }}">
 			<content></content>
 		</li>
-	{{/todos}}
+	{{/ todos }}
 	</ul>
-	You’ve completed {{completedTodos}} {{plural "todo" completedTodos}}.
+	You’ve completed {{ completedTodos }} {{ plural "todo" completedTodos }}.
 </script>
 <script type='text/javascript'> 
 steal("can/component", function() {

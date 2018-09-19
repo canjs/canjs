@@ -22,7 +22,7 @@ Score.List = DefineList.extend("ScoreList", {
 Component.extend({
 	tag: "player-scores",
 	view: `
-		{{#each(scores)}} {{points}} {{/each}} = {{scores.sum()}}
+		{{# each(scores) }} {{ points }} {{/ each }} = {{ scores.sum() }}
 	`,
 	ViewModel: {
 		scores: { Type: Score.List }

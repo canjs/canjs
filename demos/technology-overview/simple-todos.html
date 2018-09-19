@@ -1,25 +1,20 @@
-<todos-list></todo-list>
-
-<script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" dev-bundle>
-import { Component } from "can";
-
 Component.extend({
     tag: "todos-list",
     view: `
       <ul>
-        {{#each(todos)}}
+        {{# each(todos) }}
             <li>
               <input type='checkbox' checked:bind='complete'/>
-              {{name}}
+              {{ name }}
             </li>
-        {{/each}}
+        {{/ each }}
       </ul>
-      There are {{completeCount}} completed todo(s).
-      {{#is(completeCount, todos.length)}}
+      There are {{ completeCount }} completed todo(s).
+      {{# is(completeCount, todos.length) }}
         You completed all the todos!
-      {{else}}
+      {{ else }}
         Some todos remain. <button on:click='completeAll()'>Complete All</button>
-      {{/is}}
+      {{/ is }}
     `,
     ViewModel: {
         todos: {
@@ -39,4 +34,3 @@ Component.extend({
         }
     }
 });
-</script>
