@@ -959,7 +959,532 @@ describe("DateRange Component connectedCallback", () => {
 mocha.run();
 </script>
 ```
-@highlight 6,43-64,only
+@highlight 43-64,only
 @codepen
 
 Obviously this is much more complicated than just calling the `connectedCallback` manually, so only use this process if absolutely necessary.
+
+## Routing
+
+Routing in CanJS applications has three primary responsibilities:
+
+1. Connecting a component's view-model to can-route
+2. Displaying the right component based on the route
+3. Passing data to the displayed component's view-model
+
+Separating these into three separate properties on the ViewModel means that they can each be tested independently. This will be shown in the following sections.
+
+### Route data
+
+CanJS’s router uses the observable key-value object [can-route.data can-route.data] to bind the URL to a Component’s ViewModel. To make this observable available to the ViewModel, you can make a property on the ViewModel that returns `route.data` its [can-define.types.default default value]:
+
+```js
+ViewModel: {
+	routeData: {
+		default() {
+			return route.data;
+		}
+	}
+}
+```
+
+Most applications also set up [guides/routing#Registerroutes "pretty" routes] by calling [can-route.register route.register]. This can also be done in the default value definition before calling [can-route.start]:
+
+```js
+ViewModel: {
+	routeData: {
+		default() {
+			route.register("{page}", { page: "home" });
+			route.register("list/{id}", { page: "list" });
+			route.start();
+			return route.data;
+		}
+	}
+}
+```
+
+Testing this can be difficult because changes to `routeData` will also cause changes to the URL. This can cause big problems; if the URL suddenly changes to `/list/5` in the middle of running tests, the test page is no longer going to be functional. To avoid this, CanJS provides [can-route-mock RouteMock] so that you can interact with `route.data` without actually changing the URL.
+
+To use `RouteMock`, set [can-route.urlData] to an instance of `RouteMock`. Now you can make changes to the `value` of the `RouteMock` instance to simulate changes to the URL and then verify that the ViewModel’s `routeData` property updates correctly:
+
+```html
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@5.2.0/mocha.css">
+<script src="//unpkg.com/mocha@5.2.0/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4.1.2/chai.js" type="text/javascript"></script>
+<script type="module">
+import { Component, route, RouteMock } from "can/everything";
+
+// Mocha / Chai Setup
+mocha.setup("bdd")
+var assert = chai.assert;
+
+
+const Application = Component.extend({
+    tag: "app-component",
+
+    ViewModel: {
+		routeData: {
+			default() {
+				route.register("{page}", { page: "home" });
+				route.register("list/{id}", { page: "list" });
+				route.start();
+				return route.data;
+			}
+        }
+    },
+
+    view: `
+		{{pageComponent}}
+	`
+});
+
+describe("Application", () => {
+    it("routeData updates when URL changes", () => {
+        const routeMock = new RouteMock();
+        route.urlData = routeMock;
+
+        const vm = new Application.ViewModel();
+
+        assert.equal(vm.routeData.page, "home", "`page` defaults to 'home'");
+
+        routeMock.value = "#!list/5";
+
+        assert.equal(vm.routeData.page, "list", "#!list/5 sets `page` to 'list'");
+        assert.equal(vm.routeData.id, 5, "#!list/5 sets `id` to 5");
+    });
+});
+
+// start Mocha
+mocha.run();
+</script>
+```
+@highlight 17-24,33-45,only
+@codepen
+
+You can also make changes to the `routeData` and check that the URL is updated correctly by verifying the `value` of the `RouteMock` instance. In CanJS, the URL is changed asynchronously, so you will need to use an asynchronous test that uses `routeMock.on` to determine when to run assertions:
+
+```html
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@5.2.0/mocha.css">
+<script src="//unpkg.com/mocha@5.2.0/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4.1.2/chai.js" type="text/javascript"></script>
+<script type="module">
+import { Component, route, RouteMock } from "can/everything";
+
+// Mocha / Chai Setup
+mocha.setup("bdd")
+var assert = chai.assert;
+
+
+const Application = Component.extend({
+    tag: "app-component",
+
+    ViewModel: {
+		routeData: {
+			default() {
+				route.register("{page}", { page: "home" });
+				route.register("list/{id}", { page: "list" });
+				route.start();
+				return route.data;
+			}
+        }
+    },
+
+    view: `
+		{{pageComponent}}
+	`
+});
+
+describe("Application", () => {
+    it("routeData updates when URL changes", () => {
+        const routeMock = new RouteMock();
+        route.urlData = routeMock;
+
+        const vm = new Application.ViewModel();
+
+        assert.equal(vm.routeData.page, "home", "`page` defaults to 'home'");
+
+        routeMock.value = "#!list/5";
+
+        assert.equal(vm.routeData.page, "list", "#!list/5 sets `page` to 'list'");
+        assert.equal(vm.routeData.id, 5, "#!list/5 sets `id` to 5");
+    });
+
+    it("URL updates when routeData changes", (done) => {
+        const routeMock = new RouteMock();
+        route.urlData = routeMock;
+        const vm = new Application.ViewModel();
+
+		assert.equal(routeMock.value, "");
+
+		routeMock.on(() => {
+			assert.equal(routeMock.value, "list/10");
+			done();
+		});
+
+        vm.routeData.update({
+			page: "list",
+			id: 10
+		});
+    });
+});
+
+// start Mocha
+mocha.run();
+</script>
+```
+@highlight 47-64,only
+@codepen
+
+### Route component
+
+Testing that the correct component is displayed based on the `routeData` can be done completely independently from `can-route` when `routeData` is defined as a [can-define.types.default default value] as shown above.
+
+The component can be defined using a [can-define.types.get getter] that reads `routeData` and creates an instance of the correct type of component:
+
+```js
+get pageComponent() {
+	if (this.routeData.page === "home") {
+		return new HomePage();
+	} else if (this.routeData.page === "list") {
+		return new ListPage();
+	}
+}
+```
+
+In order to test this, create an observable and pass it to the ViewModel constructor as the `routeData` property:
+
+```js
+const routeData = new DefineMap({
+	page: "home",
+	id: null
+});
+
+const vm = new Application.ViewModel({
+	routeData: routeData
+});
+```
+
+This will override what is set up in the `default() {}` and allow you to make changes to the `routeData` object and verify that the correct type of component is created:
+
+```html
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@5.2.0/mocha.css">
+<script src="//unpkg.com/mocha@5.2.0/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4.1.2/chai.js" type="text/javascript"></script>
+<script type="module">
+import { Component, route, DefineMap } from "can";
+
+// Mocha / Chai Setup
+mocha.setup("bdd")
+var assert = chai.assert;
+
+const HomePage = Component.extend({
+	tag: "home-page",
+
+	view: `
+		<h2>Home Page</h2>
+	`,
+
+	ViewModel: {}
+});
+
+const ListPage = Component.extend({
+	tag: "list-page",
+
+	view: `
+		<h2>List Page</h2>
+	`,
+
+	ViewModel: {}
+});
+
+const Application = Component.extend({
+    tag: "app-component",
+
+    ViewModel: {
+		routeData: {
+			default() {
+				route.register("{page}", { page: "home" });
+				route.register("list/{id}", { page: "list" });
+				route.start();
+				return route.data;
+			}
+        },
+
+        get pageComponent() {
+			if (this.routeData.page === "home") {
+				return new HomePage();
+			} else if (this.routeData.page === "list") {
+				return new ListPage();
+			}
+		}
+    },
+
+    view: `
+		{{pageComponent}}
+	`
+});
+
+describe("Application", () => {
+    it("pageComponent", () => {
+        const routeData = new DefineMap({
+            page: "home",
+            id: null
+        });
+
+        const vm = new Application.ViewModel({
+            routeData: routeData
+		});
+
+        assert.ok(vm.pageComponent instanceof HomePage, "ListPage shown when routeData.page === 'home'");
+
+		routeData.page = "list";
+
+		assert.ok(vm.pageComponent instanceof ListPage, "ListPage shown when routeData.page === 'list'");
+    });
+});
+
+// start Mocha
+mocha.run();
+</script>
+```
+@highlight 60-75,only
+@codepen
+
+### Route component viewModel
+
+Data that needs to be passed to the component being displayed can also be tested independently if it is created as a separate property on the ViewModel that is derived from the `routeData` property:
+
+```js
+get pageComponentViewModel() {
+	const vmData = {};
+
+	if (this.routeData.page === "list") {
+		vmData.id = value.bind(this.routeData, "id");
+	}
+
+	return vmData;
+}
+```
+
+With the viewModel data set up like this, you can make changes to `routeData` and verify that the child component will get the correct values by using [can-reflect.getValue Reflect.getValue] to verify the value of the observable passed through the `pageComponentViewModel`:
+
+```html
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@5.2.0/mocha.css">
+<script src="//unpkg.com/mocha@5.2.0/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4.1.2/chai.js" type="text/javascript"></script>
+<script type="module">
+import { Component, route, value, DefineMap, Reflect } from "can";
+
+// Mocha / Chai Setup
+mocha.setup("bdd")
+var assert = chai.assert;
+
+const HomePage = Component.extend({
+	tag: "home-page",
+
+	view: `
+		<h2>Home Page</h2>
+	`,
+
+	ViewModel: {}
+});
+
+const ListPage = Component.extend({
+	tag: "list-page",
+
+	view: `
+		<h2>List Page</h2>
+		<p>{{id}}</p>
+	`,
+
+	ViewModel: {
+		id: "number"
+	}
+});
+
+const Application = Component.extend({
+    tag: "app-component",
+
+    ViewModel: {
+		routeData: {
+			default() {
+				route.register("{page}", { page: "home" });
+				route.register("list/{id}", { page: "list" });
+				route.start();
+				return route.data;
+			}
+        },
+
+        get pageComponentViewModel() {
+			const vmData = {};
+
+			if (this.routeData.page === "list") {
+				vmData.id = value.bind(this.routeData, "id");
+			}
+
+			return vmData;
+		},
+
+        get pageComponent() {
+			if (this.routeData.page === "home") {
+				return new HomePage();
+			} else if (this.routeData.page === "list") {
+				return new ListPage({
+					viewModel: this.pageComponentViewModel
+				});
+			}
+		}
+    },
+
+    view: `
+		{{pageComponent}}
+	`
+});
+
+describe("Application", () => {
+    it("pageComponent viewModel", () => {
+        const routeData = new DefineMap({
+            page: "home",
+            id: null
+        });
+
+        const vm = new Application.ViewModel({
+            routeData: routeData
+		});
+
+		assert.deepEqual(vm.pageComponentViewModel, {}, "viewModelData defaults to empty object");
+
+		routeData.update({
+			page: "list",
+			id: 10
+		});
+
+		let viewModelId = Reflect.getValue(vm.pageComponentViewModel.id);
+		assert.equal(viewModelId, 10, "routeData.id is passed to pageComponent viewModel");
+    });
+});
+
+// start Mocha
+mocha.run();
+</script>
+```
+@highlight 87-93,only
+@codepen
+
+You can also use [can-reflect.getValue Reflect.setValue] to update the properties of `pageComponentViewModel` and verify that the `routeData` is updated correctly:
+
+```html
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@5.2.0/mocha.css">
+<script src="//unpkg.com/mocha@5.2.0/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4.1.2/chai.js" type="text/javascript"></script>
+<script type="module">
+import { Component, route, value, DefineMap, Reflect } from "can";
+
+// Mocha / Chai Setup
+mocha.setup("bdd")
+var assert = chai.assert;
+
+const HomePage = Component.extend({
+	tag: "home-page",
+
+	view: `
+		<h2>Home Page</h2>
+	`,
+
+	ViewModel: {}
+});
+
+const ListPage = Component.extend({
+	tag: "list-page",
+
+	view: `
+		<h2>List Page</h2>
+		<p>{{id}}</p>
+	`,
+
+	ViewModel: {
+		id: "number"
+	}
+});
+
+const Application = Component.extend({
+    tag: "app-component",
+
+    ViewModel: {
+		routeData: {
+			default() {
+				route.register("{page}", { page: "home" });
+				route.register("list/{id}", { page: "list" });
+				route.start();
+				return route.data;
+			}
+        },
+
+        get pageComponentViewModel() {
+			const vmData = {};
+
+			if (this.routeData.page === "list") {
+				vmData.id = value.bind(this.routeData, "id");
+			}
+
+			return vmData;
+		},
+
+        get pageComponent() {
+			if (this.routeData.page === "home") {
+				return new HomePage();
+			} else if (this.routeData.page === "list") {
+				return new ListPage({
+					viewModel: this.pageComponentViewModel
+				});
+			}
+		}
+    },
+
+    view: `
+		{{pageComponent}}
+	`
+});
+
+describe("Application", () => {
+    it("pageComponent viewModel", () => {
+        const routeData = new DefineMap({
+            page: "home",
+            id: null
+        });
+
+        const vm = new Application.ViewModel({
+            routeData: routeData
+		});
+
+		assert.deepEqual(vm.pageComponentViewModel, {}, "viewModelData defaults to empty object");
+
+		routeData.update({
+			page: "list",
+			id: 10
+		});
+
+		let viewModelId = Reflect.getValue(vm.pageComponentViewModel.id);
+		assert.equal(viewModelId, 10, "routeData.id is passed to pageComponent viewModel");
+
+		routeData.id = 20;
+
+		viewModelId = Reflect.getValue(vm.pageComponentViewModel.id);
+		assert.equal(viewModelId, 20, "setting routeData.id updates the pageComponentViewModel.id");
+
+		Reflect.setValue(vm.pageComponentViewModel.id, 30);
+		assert.equal(routeData.id, 30, "setting pageComponentViewModel.id updates routeData.id");
+    });
+});
+
+// start Mocha
+mocha.run();
+</script>
+```
+@highlight 97-101,only
+@codepen
