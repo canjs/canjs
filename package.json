@@ -141,7 +141,7 @@
     "can-view-model": "4.0.1",
     "can-view-nodelist": "4.3.2",
     "can-view-parser": "4.1.0",
-    "can-view-scope": "4.8.2",
+    "can-view-scope": "4.9.0",
     "can-view-target": "4.1.0"
   },
   "devDependencies": {
