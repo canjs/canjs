@@ -64,19 +64,19 @@ Component.extend({
 
     <ul>
         {{# if(todosPromise.isResolved) }}
-            {{# each(todosPromise.value) }}
+            {{# for(todo of todosPromise.value) }}
                 <li>
                     <input type='checkbox'
-                        checked:bind='complete'
-                        on:change="save()"
-                        disabled:from="preventSave()"/>
-                    <label>{{name}}</label>
+                        checked:bind='todo.complete'
+                        on:change="todo.save()"
+                        disabled:from="todo.preventSave()"/>
+                    <label>{{todo.name}}</label>
                     <input type='date'
-                        valueAsDate:bind='dueDate'
-                        on:change="save()"
-                        disabled:from="preventSave()"/>
-                    <button on:click="destroy()"
-                        disabled:from="preventSave()">delete</button>
+                        valueAsDate:bind='todo.dueDate'
+                        on:change="todo.save()"
+                        disabled:from="todo.preventSave()"/>
+                    <button on:click="todo.destroy()"
+                        disabled:from="todo.preventSave()">delete</button>
                 </li>
             {{/ each }}
         {{/ if}}

@@ -180,14 +180,14 @@ For example, an application’s template might assemble many custom elements
 to work together like:
 
 ```html
-{{#if(session)}}
+{{# if(session) }}
   <app-toolbar selectedFiles:bind="selectedFiles"/>
   <app-directory selectedFiles:bind="selectedFiles"/>
   <app-files selectedFiles:bind="selectedFiles"/>
   <app-file-details selectedFiles:bind="selectedFiles"/>
-{{else}}
+{{ else }}
   <app-login/>
-{{/if}}
+{{/ if }}
 ```
 
 Breaking down an application into many isolated and potentially reusable components
