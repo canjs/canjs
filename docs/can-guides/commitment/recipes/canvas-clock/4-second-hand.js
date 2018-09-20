@@ -52,7 +52,7 @@ can.Component.extend({
 
 can.Component.extend({
   tag: "digital-clock",
-  view: "{{hh()}}:{{mm()}}:{{ss()}}",
+  view: "{{ hh() }}:{{ mm() }}:{{ ss() }}",
   ViewModel: {
     time: Date,
     hh() {
@@ -84,7 +84,7 @@ can.Component.extend({
     }
   },
   view: `
-    <p>{{time}}</p>
+    <p>{{ time }}</p>
     <digital-clock time:from="time"/>
     <analog-clock time:from="time"/>
   `

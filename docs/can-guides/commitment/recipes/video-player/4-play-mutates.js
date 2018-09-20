@@ -8,14 +8,14 @@ Component.extend({
       on:pause="pause()"
       on:timeupdate="updateTimes(scope.element)"
       on:loadedmetadata="updateTimes(scope.element)">
-      <source src="{{src}}"/>
+      <source src="{{ src }}"/>
     </video>
     <div>
       <button on:click="togglePlay()">
-        {{#if(playing)}} Pause {{else}} Play {{/if}}
+        {{# if(playing) }} Pause {{ else }} Play {{/ if }}
       </button>
-      <span>{{formatTime(currentTime)}}</span> /
-      <span>{{formatTime(duration)}} </span>
+      <span>{{ formatTime(currentTime) }}</span> /
+      <span>{{ formatTime(duration) }} </span>
     </div>
   `,
   ViewModel: {

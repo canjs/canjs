@@ -95,10 +95,10 @@ Component.extend({
 		{{# for(componentData of componentsToShow) }}
 			{{# if(componentData.last) }}
 				<div class='background'></div>
-			{{/ if}}
+			{{/ if }}
 			<div class='modal-container'
-				style="margin-top: {{componentData.position}}px; margin-left: {{componentData.position}}px">
-				{{componentData.component}}
+				style="margin-top: {{ componentData.position }}px; margin-left: {{ componentData.position }}px">
+				{{ componentData.component }}
 			</div>
 		{{/ for }}
 	`,
@@ -125,11 +125,11 @@ Component.extend({
 	view: `
 		<my-modals components:from="visibleQuestions"></my-modals>
 
-		<p>isDiva: {{isDiva}}</p>
-		<p>isProgrammer: {{isProgrammer}}</p>
-		<p>diva expenses: {{divaExpenses.join(', ')}}</p>
-		<p>programmingLanguage: {{programmingLanguage}}</p>
-		<p>paymentType: {{paymentType}}</p>
+		<p>isDiva: {{ isDiva }}</p>
+		<p>isProgrammer: {{ isProgrammer }}</p>
+		<p>diva expenses: {{ divaExpenses.join(', ') }}</p>
+		<p>programmingLanguage: {{ programmingLanguage }}</p>
+		<p>paymentType: {{ paymentType }}</p>
    `,
 	ViewModel: {
 		// Stateful properties
