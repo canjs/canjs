@@ -18,15 +18,14 @@
 
     {{#if(searchResultsPromise.isResolved)}}
       <ul class='source'>
-      {{#each(searchResultsPromise.value)}}
-        <li on:draginit="../videoDrag(scope.arguments[1])"
-            {{domData("dragData")}}>
-          <a draggable="false" href="https://www.youtube.com/watch?v={{id.videoId}}" target='_blank'>
-            <img draggable="false" src="{{snippet.thumbnails.default.url}}" width="50px" />
+      {{#for(result of searchResultsPromise.value)}}
+        <li>
+          <a href="https://www.youtube.com/watch?v={{result.id.videoId}}" target='_blank'>
+            <img src="{{result.snippet.thumbnails.default.url}}" width="50px" />
           </a>
           {{snippet.title}}
         </li>
-      {{/each}}
+      {{/for}}
       </ul>
 
       {{#if(searchResultsPromise.value.length)}}
@@ -36,17 +35,17 @@
             on:sortableinsertat="addVideo(scope.event.index, scope.event.dragData)"
             on:dropout="clearDropPlaceholder()">
 
-            {{#each(videosWithDropPlaceholder)}}
-              <li class="{{#if(isPlaceholder)}}placeholder{{/if}}">
-                <a href="https://www.youtube.com/watch?v={{video.id.videoId}}" target='_blank'>
-                  <img src="{{video.snippet.thumbnails.default.url}}" width="50px" />
+            {{#for(videoData of videosWithDropPlaceholder)}}
+              <li class="{{#if(videoData.isPlaceholder)}}placeholder{{/if}}">
+                <a href="https://www.youtube.com/watch?v={{videoData.video.id.videoId}}" target='_blank'>
+                  <img src="{{videoData.video.snippet.thumbnails.default.url}}" width="50px" />
                 </a>
 
-                {{video.snippet.title}}
+                {{videoData.video.snippet.title}}
               </li>
             {{else}}
               <div class="content">Drag video here</div>
-            {{/each}}
+            {{/for}}
           </ul>
           {{#if(playlistVideos.length)}}
             <button on:click="createPlaylist()"

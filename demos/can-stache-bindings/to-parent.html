@@ -1,25 +1,25 @@
 <my-demo></my-demo>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id='demo-source'>
-import { Component, DefineList, DefineMap } from "can";
+import { Component } from "can";
 
 Component.extend({
 	tag: "drivers-list",
 	view:`
 		<ul>
-			{{# each(drivers) }}
-				<li on:click="scope.vm.select(this)">
-					{{ title }} {{ first }} {{ last }} - {{ licensePlate }}
+			{{# for(driver of this.drivers) }}
+				<li on:click="this.select(driver)">
+					{{ driver.title }} {{ driver.first }} {{ driver.last }} - {{ driver.licensePlate }}
 				</li>
-			{{/ each }}
+			{{/ for }}
 		</ul>
 	`,
-	ViewModel: DefineMap.extend({
+	ViewModel: {
 		drivers: {
-			default: () => new DefineList([
-					{ title: "Dr.", first: "Cosmo", last: "Kramer", licensePlate: "ASSMAN" },
+			default: () =>[
+					{ title: "Dr.", first: "Cosmo", last: "Kramer", licensePlate: "ASMAN" },
 					{ title: "Ms.", first: "Elaine", last: "Benes", licensePlate: "621433" }
-			])
-			
+			]
+
 		},
 		selected: {
 			default: false
@@ -27,15 +27,14 @@ Component.extend({
 		select: function(driver){
 			this.selected = driver;
 		}
-	}),
-	leakScope: true
+	}
 });
 
 
 Component.extend({
 	tag: "edit-plate",
 	view: `
-		<input value='{{ plateName }}' on:input='update(scope.element.value)'/>
+		<input value:from='this.plateName' on:input='update(scope.element.value)'/>
 	`,
 	ViewModel: {
 		plateName: "string",
@@ -48,9 +47,9 @@ Component.extend({
 Component.extend({
 	tag: 'my-demo',
 	view: `
-		<drivers-list selected:to="scope.vars.editing" select:to="scope.vars.select">
-		</drivers-list>
-		<edit-plate plateName:bind="scope.vars.editing.licensePlate"/>
+		{{let editing=null}}
+		<drivers-list selected:to="editing"></drivers-list>
+		<edit-plate plateName:bind="editing.licensePlate"/>
 	`
 })
 </script>

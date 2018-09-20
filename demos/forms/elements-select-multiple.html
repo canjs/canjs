@@ -9,7 +9,7 @@ Component.extend({
 	view: `
 		<label>
 			What pizza toppings do you like?
-			<select values:bind="toppings" multiple>
+			<select values:bind="this.toppings" multiple>
 				<option>Pepperoni</option>
 				<option>Mushrooms</option>
 				<option>Onions</option>
@@ -25,9 +25,9 @@ Component.extend({
 
 		<p>
 			Selected toppings:
-			{{# each(toppings) }}
-				{{ this }}
-			{{/ each }}
+			{{# for( topping of this.toppings) }}
+				{{ topping }}
+			{{/ for }}
 		</p>
 	`,
 

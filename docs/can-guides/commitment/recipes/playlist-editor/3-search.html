@@ -18,14 +18,14 @@
 
     {{#if(searchResultsPromise.isResolved)}}
       <ul class='source'>
-      {{#each(searchResultsPromise.value)}}
+      {{#for(result of searchResultsPromise.value)}}
         <li>
-          <a href="https://www.youtube.com/watch?v={{id.videoId}}" target='_blank'>
-            <img src="{{snippet.thumbnails.default.url}}" width="50px" />
+          <a href="https://www.youtube.com/watch?v={{result.id.videoId}}" target='_blank'>
+            <img src="{{result.snippet.thumbnails.default.url}}" width="50px" />
           </a>
           {{snippet.title}}
         </li>
-      {{/each}}
+      {{/for}}
       </ul>
 
     {{/if}}

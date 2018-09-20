@@ -3,30 +3,30 @@
 	<title>selected-to-index demo</title>
 </head>
 <body>
-<script type="text/stache" id="demo-html">
-<select value:bind="index">
-  {{# each(people) }}
-    <option value="{{ scope.index }}">{{ scope.index }}</option>
-  {{/ each }}
-</select>
-
-<input value:bind="selected-to-index(index, people)">
-</script>
+<my-demo></my-demo>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
-import { DefineList, DefineMap, stache, stacheConverters } from "can";
+import { Component, stacheConverters } from "can/everything";
 
-var template = stache.from("demo-html");
+Component.extend({
+	tag: "my-demo",
+	view: `
+		<select value:bind="this.index">
+		  {{# for(person of this.people) }}
+		    <option value="{{ scope.index }}">{{ scope.index }}</option>
+		  {{/ for }}
+		</select>
 
-var map = new DefineMap({
-	index: 0,
-	people: [
-		"Matthew",
-		"Anne",
-		"Wilbur"
-	]
+		<input value:bind="selected-to-index(this.index, this.people)">
+	`,
+	ViewModel: {
+
+		index: {default: 0},
+		people: {default: ()=> [
+			"Matthew", "Anne", "Wilbur"
+		]}
+
+	}
 });
-
-document.body.appendChild(template(map));
 </script>
 </body>
 </html>

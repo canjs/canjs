@@ -366,7 +366,7 @@ Update _models/todo.js_ to the following:
     {{something.name}}
   ```
 - Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
-- Use [can-stache.helpers.each {{#each(value)}}] to do looping in `can-stache`.
+- Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in `can-stache`.
 
 ### The solution
 

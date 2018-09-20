@@ -8,8 +8,7 @@ const Score = DefineMap.extend("Score", {
 });
 
 Score.List = DefineList.extend("ScoreList", {
-	"#": Score
-}, {
+	"#": Score,
 	sum: function(){
 		let sum = 0;
 		this.forEach(function(score){
@@ -22,10 +21,13 @@ Score.List = DefineList.extend("ScoreList", {
 Component.extend({
 	tag: "player-scores",
 	view: `
-		{{# each(scores) }} {{ points }} {{/ each }} = {{ scores.sum() }}
+		{{# for(score of this.scores) }}
+			{{ score.points }}
+		{{/ for }}
+		= {{ this.scores.sum() }}
 	`,
 	ViewModel: {
-		scores: { Type: Score.List }
+		scores: Score.List
 	}
 });
 
@@ -34,17 +36,15 @@ const Game = DefineMap.extend({
 		Type: Score.List
 	},
 	scoresForPlayer: function(name){
-		return this.scores.filter(function(score){
-			return score.player === name;
-		});
+		return this.scores.filter({player: name});
 	}
 });
 
 Component.extend({
 	tag: "demo-html",
 	view: `
-		<p>Alison: <player-scores scores:from="game.scoresForPlayer('Alison')"/></p>
-		<p>Jeff: <player-scores scores:from="game.scoresForPlayer('Jeff')"/></p>
+		<p>Alison: <player-scores scores:from="this.game.scoresForPlayer('Alison')"/></p>
+		<p>Jeff: <player-scores scores:from="this.game.scoresForPlayer('Jeff')"/></p>
 	`,
 	ViewModel: {
 		game: {

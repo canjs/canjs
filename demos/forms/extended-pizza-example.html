@@ -20,12 +20,13 @@ Component.extend({
 
 	view: `
 		<div>
-			<p>Select {{ listName }}:</p>
+			<p>Select {{ this.listName }}:</p>
 
-			<select value:from="default" on:change="scope.root.update(scope.root.listName, 'toggle', scope.element.value)">
-				{{# each(options) }}
-					<option>{{ this }}</option>
-				{{/ each }}
+			<select value:from="default"
+				on:change="this.update(this.listName, 'toggle', scope.element.value)">
+				{{# for(option of options) }}
+					<option>{{ option }}</option>
+				{{/ for }}
 			</select>
 		</div>
 	`,
@@ -33,7 +34,8 @@ Component.extend({
 	ViewModel: {
 		listName: { type: "string", default: "one" },
 		options: { Type: DefineList },
-		default: { type: "string" }
+		default: { type: "string" },
+		update: "any" // function
 	}
 });
 
@@ -42,23 +44,23 @@ Component.extend({
 
 	view: `
 		<div>
-			<p>Select {{ listName }}:</p>
+			<p>Select {{ this.listName }}:</p>
 
-			{{# each(options) }}
+			{{# for(option of this.options) }}
 				<label>
-					{{ this }}
+					{{ option }}
 					<input
-						on:change="scope.root.update(scope.root.listName, 'toggle', this)"
+						on:change="this.update(this.listName, 'toggle', option)"
 						type="checkbox">
 				</label>
-			{{/ each }}
+			{{/ for }}
 		</div>
 	`,
 
 	ViewModel: {
 		listName: { type: "string", default: "many" },
 		options: { Type: DefineList },
-		update: { type: "any" }
+		update: { type: "any" } // function
 	}
 });
 
@@ -66,22 +68,23 @@ Component.extend({
 	tag: "meat-picker",
 
 	view: `
+		{{let showOptions=null}}
 		<div>
 			<label>
 				Vegetarian
-				{{# if(scope.vars.showOptions }}
+				{{# if(showOptions) }}
 					<input
-						checked:bind="not( scope.vars.showOptions )"
-						on:change="update('meats', 'clear')"
+						checked:bind="not( showOptions )"
+						on:change="this.update('meats', 'clear')"
 						type="checkbox">
 				{{ else }}
 					<input
-						checked:bind="not( scope.vars.showOptions )"
+						checked:bind="not( showOptions )"
 						type="checkbox">
 				{{/ if }}
 			</label>
 
-			{{# if(scope.vars.showOptions) }}
+			{{# if(showOptions) }}
 				<select-many
 					update:from="update"
 					listName:from="'meats'"
@@ -91,7 +94,9 @@ Component.extend({
 		</div>
 	`,
 
-	ViewModel: {}
+	ViewModel: {
+		update: "any" // function
+	}
 });
 
 Component.extend({
@@ -100,40 +105,40 @@ Component.extend({
 	view: `
 		<p>
 			Selected Ingredients:
-			{{# each(selectedMeats) }}
-				{{ this }},
-			{{/ each }}
+			{{# for(meat of this.selectedMeats) }}
+				{{ meat }},
+			{{/ for }}
 
-			{{# each(selectedVegetables) }}
-				{{ this }},
-			{{/ each }}
+			{{# for(veggie of this.selectedVegetables) }}
+				{{ veggie }},
+			{{/ for }}
 
-			{{# if(selectedCheese) }}
-				{{ selectedCheese }} cheese
+			{{# if(this.selectedCheese) }}
+				{{ this.selectedCheese }} cheese
 			{{/ if }}
 		</p>
 
 		<div>
 			<select-one
 				listName:from="'cheese'"
-				update:from="updateIngredients"
-				default:from="selectedCheese"
-				options:from="availableCheeses">
+				update:from="this.updateIngredients"
+				default:from="this.selectedCheese"
+				options:from="this.availableCheeses">
 			</select-one>
 		</div>
 
 		<div>
 			<meat-picker
-				update:from="updateIngredients"
-				options:from="availableMeats">
+				update:from="this.updateIngredients"
+				options:from="this.availableMeats">
 			</meat-picker>
 		</div>
 
 		<div>
 			<select-many
 				listName:from="'vegetables'"
-				update:from="updateIngredients"
-				options:from="availableVegetables">
+				update:from="this.updateIngredients"
+				options:from="this.availableVegetables">
 			</select-many>
 		</div>
 	`,

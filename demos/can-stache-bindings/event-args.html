@@ -5,14 +5,13 @@ import { Component } from "can";
 Component.extend({
 	tag: 'my-items',
 	view: `
-		{{# each(items) }}
-			<li on:click='../items.splice(scope.index,1)'>{{ name }}</li>
-		{{/ each }}
+		{{# for(item of this.items) }}
+			<li on:click='this.items.splice(scope.index,1)'>{{ item.name }}</li>
+		{{/ for }}
 	`,
 	ViewModel: {
 		items: {
 			default: () => [{name: "first"}, {name: "second"}]
-			
 		}
 	}
 })

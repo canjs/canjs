@@ -37,10 +37,10 @@ const DivaQuestions = Component.extend({
 			</p>
 			<p><button on:click="next()">Next</button></p>
 		</div>
-    `,
-    ViewModel: {
-        divaExpenses: "any"
-    }
+	`,
+	ViewModel: {
+		divaExpenses: "any"
+	}
 });
 
 const ProgrammerQuestions = Component.extend({
@@ -92,15 +92,15 @@ const IncomeQuestions = Component.extend({
 Component.extend({
 	tag: "my-modals",
 	view: `
-		{{# each(componentsToShow)}}
-            {{# if(last)}}
-                <div class='background'></div>
-            {{/ if}}
+		{{# for(componentData of componentsToShow) }}
+			{{# if(componentData.last) }}
+				<div class='background'></div>
+			{{/ if}}
 			<div class='modal-container'
-                style="margin-top: {{position}}px; margin-left: {{position}}px">
-                {{component}}
-            </div>
-		{{/ each}}
+				style="margin-top: {{componentData.position}}px; margin-left: {{componentData.position}}px">
+				{{componentData.component}}
+			</div>
+		{{/ for }}
 	`,
 	ViewModel: {
 		get componentsToShow() {

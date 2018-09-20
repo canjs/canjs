@@ -202,12 +202,12 @@ const Paginate = DefineMap.extend({
 Component.extend({
 	tag: "my-grid",
 	view: `<table>
-		<tbody {{# if(waiting) }}class='waiting'{{/ if }}>
+		<tbody {{# if(this.waiting) }}class='waiting'{{/ if }}>
 			<content></content>
 		</tbody>
 	</table>`,
 	ViewModel: {
-		promiseData: "*",
+		promiseData: "any",
 		items: {
 			get: function(lastSet, resolve) {
 				this.promiseData.then(resolve);
@@ -232,61 +232,59 @@ Component.extend({
 	tag: "next-prev",
 	view:
 		`<a href="javascript://"
-		    class="prev {{# paginate.canPrev() }}enabled{{/ paginate.canPrev }}"
+		    class="prev {{# this.paginate.canPrev() }}enabled{{/}}"
 			on:click="paginate.prev()">Prev</a>
 		<a href="javascript://"
-		   class="next {{# paginate.canNext() }}enabled{{/ paginate.canNext }}"
+		   class="next {{# this.paginate.canNext() }}enabled{{/}}"
 		   on:click="paginate.next()">Next</a>`
 });
 
 Component.extend({
 	tag: "page-count",
-	view: `Page <span>{{ page }}</span> of <span>{{ count }}</span>.`
+	view: `Page <span>{{ this.page }}</span> of <span>{{ this.count }}</span>.`
 });
 
 Component.extend({
 	tag: "my-app",
 	view: `
 	  <my-grid promiseData:from='websitesPromise'>
-	    {{# each(items) }}
+	    {{# for( item of this.items) }}
 	      <tr>
-	        <td width='40%'>{{ name }}</td>
-	        <td width='70%'>{{ url }}</td>
+	        <td width='40%'>{{ item.name }}</td>
+	        <td width='70%'>{{ item.url }}</td>
 	      </tr>
-	    {{/ each }}
+	    {{/ for }}
 	  </my-grid>
-	  <next-prev paginate:from='paginate'></next-prev>
-	  <page-count page:from='paginate.page' count:from='paginate.pageCount'></page-count>`,
+	  <next-prev paginate:from='this.paginate'></next-prev>
+	  <page-count page:from='this.paginate.page' count:from='this.paginate.pageCount'></page-count>`,
 	ViewModel: {
-		connectedCallback: function() {
-			this.listenTo('websitesCount', function(event, count) {
-				this.paginate.count = count;
-			});
-			return this.stopListening.bind(this);
-		},
 		paginate: {
-			default: function() {
+			default() {
 				return new Paginate({
 					limit: 5
 				});
 			}
 		},
 		websitesCount: {
-			get: function(lastValue, setValue) {
+			get(lastValue, setValue) {
 				this.websitesPromise.then(function(websites) {
 					setValue(websites.count);
 				});
 			}
 		},
-		websitesPromise: {
-			get: function() {
-				return Website.getList({
-					page: {
-						start: this.paginate.start,
-						end: this.paginate.end
-					}
-				});
-			}
+		get websitesPromise() {
+			return Website.getList({
+				page: {
+					start: this.paginate.start,
+					end: this.paginate.end
+				}
+			});
+		},
+		connectedCallback() {
+			this.listenTo('websitesCount', function(event, count) {
+				this.paginate.count = count;
+			});
+			return this.stopListening.bind(this);
 		}
 	}
 });

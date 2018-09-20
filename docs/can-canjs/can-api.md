@@ -67,8 +67,8 @@ Component.extend({
     //  - `on:click` is a `stache` event binding.
 	// Read the VIEWS section below for more details. 👀
     view: `
-        Count: <span>{{count}}</span>
-        <button on:click='increment()'>+1</button>
+        Count: <span>{{this.count}}</span>
+        <button on:click='this.increment()'>+1</button>
     `,
 
     // Defines a DefineMap used to control the
@@ -351,7 +351,7 @@ import {stache} from "can";
 import Todo from "//canjs.com/demos/api/todo.mjs";
 
 // Create a template / view
-let view = stache(`<p>I need to {{name}}</p>`);
+let view = stache(`<p>I need to {{this.name}}</p>`);
 
 const todo = new Todo({name: "learn views"});
 
@@ -378,7 +378,7 @@ Common [can-stache] tags and built in helpers:
 <td>
 
 ```html
-<p>{{value}}</p>
+<p>{{this.value}}</p>
 ```
 
 </td>
@@ -401,7 +401,7 @@ Common [can-stache] tags and built in helpers:
 <tr>
 <td>
 
-<div class="code-toolbar"><pre class=" line-numbers language-html"><code class=" language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>&#123;{{value}}}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><div class="toolbar"><div class="toolbar-item"><a>Copy</a></div></div></div>
+<div class="code-toolbar"><pre class=" line-numbers language-html"><code class=" language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>&#123;{{this.value}}}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><div class="toolbar"><div class="toolbar-item"><a>Copy</a></div></div></div>
 
 </td>
 <td>
@@ -425,7 +425,7 @@ Common [can-stache] tags and built in helpers:
 
 ```html
 <p>
-  {{# if( value ) }}
+  {{# if( this.value ) }}
     Hi
   {{else}}
     Bye
@@ -469,13 +469,13 @@ Common [can-stache] tags and built in helpers:
 
 ```html
 <p>
-  {{# if( promise.isPending ) }}
+  {{# if( this.promise.isPending ) }}
     Pending
   {{/ if }}
-  {{# if( promise.isRejected ) }}
+  {{# if( this.promise.isRejected ) }}
     Rejected {{promise.reason}}
   {{/ if }}
-  {{# if( promise.isResolved ) }}
+  {{# if( this.promise.isResolved ) }}
     Resolved {{promise.value}}
   {{/ if }}
 </p>
@@ -526,11 +526,11 @@ Common [can-stache] tags and built in helpers:
 
 ```html
 <ul>
-  {{# each( todos, todo=value ) }}
+  {{# for( todo of this.todos ) }}
     <li>
-      {{todo.name}}-{{../owner}}
+      {{todo.name}}-{{this.owner}}
     </li>
-  {{/ each }}
+  {{/ for }}
 </ul>
 
 
@@ -573,7 +573,7 @@ Common [can-stache] tags and built in helpers:
 
 ```html
 <ul>
-  {{# each( todos, todo=value ) }}
+  {{# for( todo of todos ) }}
     <li> ... </li>
   {{else}}
     <li>No todos</li>
@@ -617,7 +617,7 @@ Common [can-stache] tags and built in helpers:
 
 ```html
 <p>
-  {{# eq(value,22) }}
+  {{# eq(this.value,22) }}
     YES
   {{else}}
     NO
@@ -662,10 +662,10 @@ Common [can-stache] tags and built in helpers:
 
 ```html
 <p>
-  {{# with(value) }}
-    {{first}} {{last}}
-  {{/ with }}
+  {{let first=this.value.first}}
+  {{first}} {{this.value.last}}
 </p>
+
 
 
 ```
@@ -712,44 +712,43 @@ import { Component } from "can";
 Component.extend({
     tag: "stache-examples",
     view: `
-        <p>{{escapeValue}}</p>
-        <p>{{{unescapeValue}}}</p>
+        <p>{{this.escapeValue}}</p>
+        <p>{{{this.unescapeValue}}}</p>
         <p>
-          {{# if( truthyValue ) }}
+          {{# if( this.truthyValue ) }}
             Hi
           {{else}}
             Bye
           {{/ if }}
         </p>
         <p>
-          {{# if( promise.isPending ) }}
+          {{# if( this.promise.isPending ) }}
             Pending
           {{/ if }}
-          {{# if( promise.isRejected ) }}
-            Rejected {{promise.reason}}
+          {{# if( this.promise.isRejected ) }}
+            Rejected {{this.promise.reason}}
           {{/ if }}
-          {{# if( promise.isResolved ) }}
-            Resolved {{promise.value}}
+          {{# if( this.promise.isResolved ) }}
+            Resolved {{this.promise.value}}
           {{/ if }}
         </p>
         <ul>
-          {{# each( todos, todo=value ) }}
+          {{# for(todo of this.todos) }}
             <li>
-              {{todo.name}}-{{../owner.first}}
+              {{todo.name}}-{{this.owner.first}}
             </li>
-          {{/ each }}
+          {{/ for }}
         </ul>
         <p>
-          {{# eq(eqValue,22) }}
+          {{# eq(this.eqValue,22) }}
             YES
           {{else}}
             NO
           {{/ eq }}
         </p>
         <p>
-          {{# with(owner) }}
-            {{first}} {{last}}
-          {{/ with }}
+          {{let first=this.owner.first}}
+          {{first}} {{this.owner.last}}
         </p>
     `,
     ViewModel: {
@@ -788,47 +787,6 @@ Common [can-stache] expressions:
     <th>Data</th>
     <th>Result</th>
 </tr>
-<tr>
-<td>
-
-```html
-<p>
-  {{# with(name) }}
-    {{first}} {{../age}}
-  {{/ with}}
-</p>
-
-
-```
-
-</td>
-<td>
-
-```js
-{
-  name: {
-    first: "Ramiya"
-  },
-  age: 3
-}
-```
-
-</td>
-<td>
-
-```html
-<p>
-
-     Ramiya 3  
-
-</p>
-
-
-```
-
-</td>
-</tr>
-
 <tr>
 <td>
 
@@ -963,19 +921,11 @@ import { Component } from "can";
 Component.extend({
     tag: "stache-examples",
     view: `
-        <p>
-          {{# with(name) }}
-            {{first}} {{../age}}
-          {{/ with}}
-        </p>
         <p>{{ [key] }}</p>
         <p>{{ addArgs(age, 2) }}</p>
         <p>{{ addProps(v1=age v2=2) }}</p>
     `,
     ViewModel: {
-		name: {
-			default() { return {first: "Ramiya"}; }
-		},
 		age: {default: 3},
 		key: {default: "age"},
 		addArgs(v1, v2) {
@@ -1171,25 +1121,26 @@ Component.extend({
 	tag: "stache-examples",
 	view: `
 	    <p>Updates when the todo's name changes:
-			<input value:from='todo.name'/>
+			<input value:from='this.todo.name'/>
 		</p>
 		<p>Updates the todo's name when the input's <code>change</code> event fires:
-			<input value:to='todo.name'/>
+			<input value:to='this.todo.name'/>
 		</p>
 		<p>Updates the todo's name when the input's <code>input</code> event fires:
-			<input on:input:value:to='todo.name'/>
+			<input on:input:value:to='this.todo.name'/>
 		</p>
 		<p>Updates when the todo's name changes and update the
 			todo's name when the input's <code>change</code> event fires:
-			<input value:bind='todo.name'/>
+			<input value:bind='this.todo.name'/>
 		</p>
 		<p>Calls the todo's <code>sayHi</code> method when the button
 		   is clicked:
-			<button on:click="todo.sayHi()">Say Hi</button>
+			<button on:click="this.todo.sayHi()">Say Hi</button>
 		</p>
 		<p>Animate the div when the todo's <code>name</code> event fires:
-			<div on:name:by:todo='shake(scope.element)'
-				on:animationend='removeShake(scope.element)'>{{todo.name}}
+			<div on:name:by:todo='this.shake(scope.element)'
+				on:animationend='this.removeShake(scope.element)'>
+				{{this.todo.name}}
 			</div>
 		</p>
 	`,
@@ -1259,8 +1210,8 @@ import { Component } from "can";
 Component.extend({
 	tag: "my-counter",
 	view: `
-		Count: <span>{{count}}</span>
-		<button on:click='increment()'>+1</button>`,
+		Count: <span>{{this.count}}</span>
+		<button on:click='this.increment()'>+1</button>`,
 	ViewModel: {
 		count: {default: 0},
 		increment() {
@@ -1273,19 +1224,19 @@ Component.extend({
 	tag: "my-app",
 	view: `
 		<p>Calls <code>sayHi</code> when <code>count</code> changes.
-			<my-counter on:count="sayHi(scope.viewModel.count)"></my-counter>
+			<my-counter on:count="this.sayHi(scope.viewModel.count)"></my-counter>
 		</p>
 		<p>Start counting at 3.
 			<my-counter count:from="3"></my-counter>
 		</p>
-		<p>Start counting at <code>startCount</code> ({{startCount}}).
-			<my-counter count:from="startCount"></my-counter>
+		<p>Start counting at <code>startCount</code> ({{this.startCount}}).
+			<my-counter count:from="this.startCount"></my-counter>
 		</p>
-		<p>Update <code>parentCount</code> ({{parentCount}}) with the value of count.
-			<my-counter count:to="parentCount"></my-counter>
+		<p>Update <code>parentCount</code> ({{this.parentCount}}) with the value of count.
+			<my-counter count:to="this.parentCount"></my-counter>
 		</p>
-		<p>Update <code>bindCount</code> ({{bindCount}}) with the value of count.
-			<my-counter count:bind="bindCount"></my-counter>
+		<p>Update <code>bindCount</code> ({{this.bindCount}}) with the value of count.
+			<my-counter count:bind="this.bindCount"></my-counter>
 		</p>
 	`,
 	ViewModel: {
@@ -1324,11 +1275,11 @@ Component.extend({
 	tag: "my-counter",
 	view: `
 		<can-slot name="incrementButton"
-			add:from="add">
+			add:from="this.add">
 			<button on:click="add(1)">+1</button>
 		</can-slot>
 		<can-slot name="countDisplay"
-			count:from="count">
+			count:from="this.count">
 			{{count}}
 		</can-slot>
 	`,

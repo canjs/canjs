@@ -31,126 +31,125 @@ my-panel {
 my-tabs ul:after  { content: "."; display: block; height: 1px; clear: both; visibility: hidden; }
 my-tabs ul { display: inline-block; }
 </style>
-<div id="out"></div>
+<my-app id="out"></my-app>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component, DefineList, DefineMap, queues, stache, viewModel } from "can";
+import { Component, queues } from "can";
 
-const demoHtml = `<p><button on:click="addVegies()">Add Vegetables</button></p>
-<my-tabs>
-  {{# each(foodTypes) }}
-    <my-panel title:from='title'>{{ content }}</my-panel>
-  {{/ each }}
-</my-tabs>`;
-
-const Panel = DefineMap.extend("Panel", {
-	active: {
-		type: "boolean",
-		default: false
-	},
-	connectedCallback: function(element) {
-		const panel = this;
-		const parentViewModel = element.parentNode.viewModel;
-		parentViewModel.addPanel(panel);
-		return function() {
-			parentViewModel.removePanel(panel);
-		};
-	}
-});
-
-const PanelList = DefineList.extend({
-	"#": Panel
-});
-
-const ViewModel = DefineMap.extend({
-	// Contains a list of all panel scopes within the
-	// tabs element.
-	panels: {
-		Default: PanelList.extend({})
-	},
-	active: {
-		Type: Panel
-	},
-
-	// When a `<my-panel>` element is inserted into the document,
-	// it calls this method to add the panel's viewModel to the
-	// panels array.
-	addPanel: function(panel){
-		// If this is the first panel, activate it.
-		if( this.panels.length === 0 ) {
-			this.makeActive(panel)
-		}
-		this.panels.push(panel);
-	},
-	// When a `<my-panel>` element is removed from the document,
-	// it calls this method to remove the panel's viewModel from
-	// the panels array.
-	removePanel: function(panel){
-		const panels = this.panels;
-		queues.batch.start();
-		panels.splice(panels.indexOf(panel),1);
-		// if the panel was active, make the first item active
-		if(panel === this.active){
-			if(panels.length){
-				this.makeActive(panels[0]);
-			} else {
-				this.active = undefined;
-			}
-		}
-		queues.batch.stop()
-	},
-	makeActive: function(panel){
-	this.active = panel;
-		this.panels.forEach(function(panel){
-			panel.active = false;
-		});
-		panel.active = true;
-
-	},
-	// this is viewModel, not mustache
-	// consider removing viewModel as arg
-	isActive: function( panel ) {
-		return this.active === panel;
-	}
-});
 
 Component.extend({
 	tag: "my-tabs",
-	view:
-		stache("<ul>"+
-			// Create an LI for each item in the panel's viewModel object
-    		"{{# each(panels, panel=value) }}"+
-    			"<li {{# scope.vm.isActive(panel) }}class='active'{{/ isActive }} "+
-    			    "on:click='scope.vm.makeActive(panel)'>"+
-    			  "{{ panel.title }}"+
-    			"</li>"+
-    		"{{/ each }}"+
-    	"</ul>"+
-    	"<content></content>"),
-	ViewModel: ViewModel
+	view:`
+		<ul>
+			{{# for(panel of this.panels) }}
+				<li {{# this.isActive(panel) }}class='active'{{/}}
+					on:click='this.makeActive(panel)'>
+					{{ panel.title }}
+				</li>
+			{{/ for }}
+		</ul>
+    	<content></content>`,
+	ViewModel: {
+		// Contains a list of all panel scopes within the
+		// tabs element.
+		panels: {
+			default: () => []
+		},
+		active: "any",
+
+		// When a `<my-panel>` element is inserted into the document,
+		// it calls this method to add the panel's viewModel to the
+		// panels array.
+		addPanel: function(panel){
+			// If this is the first panel, activate it.
+			if( this.panels.length === 0 ) {
+				this.makeActive(panel)
+			}
+			this.panels.push(panel);
+		},
+		// When a `<my-panel>` element is removed from the document,
+		// it calls this method to remove the panel's viewModel from
+		// the panels array.
+		removePanel: function(panel){
+			const panels = this.panels;
+			queues.batch.start();
+			panels.splice(panels.indexOf(panel),1);
+			// if the panel was active, make the first item active
+			if(panel === this.active){
+				if(panels.length){
+					this.makeActive(panels[0]);
+				} else {
+					this.active = undefined;
+				}
+			}
+			queues.batch.stop()
+		},
+		makeActive: function(panel){
+		this.active = panel;
+			this.panels.forEach(function(panel){
+				panel.active = false;
+			});
+			panel.active = true;
+
+		},
+		// this is viewModel, not mustache
+		// consider removing viewModel as arg
+		isActive: function( panel ) {
+			return this.active === panel;
+		}
+	}
 });
 
 Component.extend({
-	view: stache("{{# if(active) }}<content></content>{{/ if }}"),
+	view: "{{# if(this.active) }}<content></content>{{/ if }}",
 	tag:"my-panel",
-	ViewModel: Panel
-});
-
-const foodTypes = new DefineList([
-	{title: "Fruits", content: "oranges, apples"},
-	{title: "Breads", content: "pasta, cereal"},
-	{title: "Sweets", content: "ice cream, candy"}
-]);
-window.foodTypes = foodTypes;
-
-const template = stache(demoHtml);
-const fragment = template({
-	foodTypes: foodTypes,
-	addVegies: function(){
-		foodTypes.push({
-			title: "Vegetables",
-			content: "Carrots, peas, kale"
-		});
+	ViewModel: {
+		active: {
+			type: "boolean",
+			default: false
+		},
+		connectedCallback: function(element) {
+			const panel = this;
+			const parentViewModel = element.parentNode.viewModel;
+			parentViewModel.addPanel(panel);
+			return () => {
+				this.stopListening();
+				parentViewModel.removePanel(panel);
+			};
+		}
 	}
 });
-document.getElementById("out").appendChild(fragment);
+
+
+Component.extend({
+	tag: "my-app",
+	view: `
+		<p>
+			<button on:click="this.addVegies()">Add Vegetables</button>
+		</p>
+		<my-tabs>
+			{{# for(foodType of this.foodTypes) }}
+				<my-panel title:from='foodType.title'>
+					{{ foodType.content }}
+				</my-panel>
+			{{/ for }}
+		</my-tabs>
+	`,
+	ViewModel: {
+		foodTypes: {
+			default(){
+				return [
+					{title: "Fruits", content: "oranges, apples"},
+					{title: "Breads", content: "pasta, cereal"},
+					{title: "Sweets", content: "ice cream, candy"}
+				];
+			}
+		},
+		addVegies(){
+			this.foodTypes.push({
+				title: "Vegetables",
+				content: "Carrots, peas, kale"
+			});
+		}
+	}
+});
 </script>

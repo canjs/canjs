@@ -105,13 +105,13 @@ const template = can.stache(`
     {{#if(vehiclesPromise.isPending)}}<p>Loading vehicles…</p>{{/if}}
   </div>
   <ul class="routes-list">
-    {{#each(routesPromise.value)}}
-      <li on:click="../pickRoute(this)" {{#eq(this, ../route)}}class="active"{{/eq}}>
-        <span class="route-number">{{this.rt}}</span>
-        <span class="route-name">{{this.rtnm}}</span>
-        <span class="check>✔</span>
+    {{#for(route of routesPromise.value)}}
+      <li>
+        <span class="route-number">{{route.rt}}</span>
+        <span class="route-name">{{route.rtnm}}</span>
+        <span class="check">✔</span>
       </li>
-    {{/each}}
+    {{/for}}
   </ul>
 </div>
 <div class="bottom">

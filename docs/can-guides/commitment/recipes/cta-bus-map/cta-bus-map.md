@@ -300,10 +300,10 @@ We will do this by:
   ```
 
 - Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
-- Use [can-stache.helpers.each {{#each(value)}}] to do looping in `can-stache`.
+- Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in `can-stache`.
 - `Promise`s are observable in [can-stache].  Given a promise `somePromise`, you can:
   - Check if the promise is loading like: `{{#if(somePromise.isPending)}}`.
-  - Loop through the resolved value of the promise like: `{{#each(somePromise.value)}}`.
+  - Loop through the resolved value of the promise like: `{{#for(item of somePromise.value)}}`.
 
 ### The solution
 
