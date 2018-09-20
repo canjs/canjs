@@ -5,25 +5,25 @@
 	<header id="header">
 		<todo-create></todo-create>
 	</header>
-	<section id="main" class="{{^todos}}hidden{{/todos}}">
-		<input id="toggle-all" type="checkbox" {{#todos.allComplete}}checked="checked"{{/todos.allComplete}}>
+	<section id="main" class="{{^ todos }}hidden{{/ todos }}">
+		<input id="toggle-all" type="checkbox" {{# todos.allComplete }}checked="checked"{{/ todos.allComplete }}>
 		<label for="toggle-all">Mark all as complete</label>
 		<todo-list></todo-list>
 	</section>
 
-	<footer id="footer" class="{{^todos}}hidden{{/todos}}">
+	<footer id="footer" class="{{^ todos }}hidden{{/ todos }}">
 		<span id="todo-count">
-			<strong>{{todos.remaining}}</strong> {{plural "item" todos.remaining}} left
+			<strong>{{ todos.remaining }}</strong> {{ plural "item" todos.remaining }} left
 		</span>
 		<ul id="filters">
-			<li>{{{link "All" undefined}}}</li>
-			<li>{{{link "Active" "active"}}}</li>
-			{{#todos.completed}}
-			<li>{{{link "Completed" "completed"}}}</li>
-			{{/todos.completed}}
+			<li>{{{ link "All" undefined }}}</li>
+			<li>{{{ link "Active" "active" }}}</li>
+			{{# todos.completed }}
+			<li>{{{ link "Completed" "completed" }}}</li>
+			{{/ todos.completed }}
 		</ul>
-		<button id="clear-completed" class="{{^todos.completed}}hidden{{/todos.completed}}">
-			Clear completed ({{todos.completed}})
+		<button id="clear-completed" class="{{^ todos.completed }}hidden{{/ todos.completed }}">
+			Clear completed ({{ todos.completed }})
 		</button>
 	</footer>
 </todo-app>
@@ -34,21 +34,21 @@
 </script>
 <script type='text/stache' id='todo-list-template'>
 <ul id="todo-list">
-	{{#each(todos)}}
-		<li class="todo {{^matches}}hidden{{/matches}} {{#complete}}completed{{/complete}} {{#editing}}editing{{/editing}}"
+	{{# each(todos) }}
+		<li class="todo {{^ matches }}hidden{{/ matches }} {{# complete }}completed{{/ complete }} {{# editing }}editing{{/ editing }}"
 			can-dblclick="edit">
 			<div class="view">
 				<input class="toggle" type="checkbox" can-value="complete"/>
-				<label>{{text}}</label>
+				<label>{{ text }}</label>
 				<button class="destroy" can-click="destroy"></button>
 			</div>
 			<input class="edit"
 			       type="text"
-			       value="{{text}}"
+			       value="{{ text }}"
 			       can-blur="updateTodo"
 			       can-enter="updateTodo"/>
 		</li>
-	{{/todos}}
+	{{/ todos }}
 </ul>
 
 </script>

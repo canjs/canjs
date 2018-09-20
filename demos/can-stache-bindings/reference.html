@@ -43,7 +43,7 @@ Component.extend({
 Component.extend({
 	tag: 'my-demo',
 	view: `
-		{{let editing=null}}
+		{{ let editing=null }}
 		<my-drivers selected:to="editing"/>
 		<edit-plate plateName:bind="editing.licensePlate"/>
 	`

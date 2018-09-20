@@ -34,13 +34,13 @@ import 'can/model/model';
 		tag: "todos-list",
 		template:
 			"<ul>"+
-			  "{{#each(todos)}}"+
+			  "{{# each(todos) }}"+
 				"<li>"+
 			      "<input type='checkbox' can-value='complete'>"+
-			      "<span {{todoClass}} can-click='select'>{{name}}</span> "+
+			      "<span {{ todoClass }} can-click='select'>{{ name }}</span> "+
 				  "<a href='javascript://' can-click='destroy'>X</a>"+
 			    "</li>"+
-			  "{{/each}}"+
+			  "{{/ each }}"+
 			"</ul>",
 		scope: {
 			todos: new Todo.List({}),

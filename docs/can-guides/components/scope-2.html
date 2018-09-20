@@ -4,16 +4,16 @@ import $ from 'jquery';
 import can from 'can';
 import 'can/model/model';
 
-var template = can.view.stache("<h1>Todo: {{mytodo.name}}</h1>"+
+var template = can.view.stache("<h1>Todo: {{ mytodo.name }}</h1>"+
                    "<todos-editor todo='{mytodo}'></todos-editor>")
 
 var mytodo = new can.Map({name: "Do the dishes"})
 
 can.Component.extend({
   tag: "todos-editor",
-  template: "{{#if(todo)}}"+
+  template: "{{# if(todo) }}"+
               "<input type='text' can-value='{todo.name}'/>"+
-            "{{/if}}",
+            "{{/ if }}",
   scope: {}
 })
 

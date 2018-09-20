@@ -1,56 +1,56 @@
 <script id="app-template" type="text/stache">
-  {{#if(googleApiLoadedPromise.isPending)}}
+  {{# if(googleApiLoadedPromise.isPending) }}
     <div>Loading Google API…</div>
-  {{else}}
-    {{#if(signedIn)}}
-      Welcome {{givenName}}! <button on:click="googleAuth.signOut()">Sign Out</button>
-    {{else}}
+  {{ else }}
+    {{# if(signedIn) }}
+      Welcome {{ givenName }}! <button on:click="googleAuth.signOut()">Sign Out</button>
+    {{ else }}
       <button on:click="googleAuth.signIn()">Sign In</button>
-    {{/if}}
+    {{/ if }}
 
     <div>
       <input value:bind="searchQuery" placeholder="Search for videos" />
     </div>
 
-    {{#if(searchResultsPromise.isPending)}}
+    {{# if(searchResultsPromise.isPending) }}
       <div class="loading">Loading videos…</div>
-    {{/if}}
+    {{/ if }}
 
-    {{#if(searchResultsPromise.isResolved)}}
+    {{# if(searchResultsPromise.isResolved) }}
       <ul class='source'>
-      {{#for(result of searchResultsPromise.value)}}
+      {{# for(result of searchResultsPromise.value) }}
         <li>
-          <a href="https://www.youtube.com/watch?v={{result.id.videoId}}" target='_blank'>
-            <img src="{{result.snippet.thumbnails.default.url}}" width="50px" />
+          <a href="https://www.youtube.com/watch?v={{ result.id.videoId }}" target='_blank'>
+            <img src="{{ result.snippet.thumbnails.default.url }}" width="50px" />
           </a>
-          {{snippet.title}}
+          {{ snippet.title }}
         </li>
-      {{/for}}
+      {{/ for }}
       </ul>
 
-      {{#if(searchResultsPromise.value.length)}}
+      {{# if(searchResultsPromise.value.length) }}
         <div class='new-playlist'>
           <ul sortable
             on:sortableplaceholderat="addDropPlaceholder(scope.event.index, scope.event.dragData)"
             on:sortableinsertat="addVideo(scope.event.index, scope.event.dragData)"
             on:dropout="clearDropPlaceholder()">
 
-            {{#for(videoData of videosWithDropPlaceholder)}}
-              <li class="{{#if(videoData.isPlaceholder)}}placeholder{{/if}}">
-                <a href="https://www.youtube.com/watch?v={{videoData.video.id.videoId}}" target='_blank'>
-                  <img src="{{videoData.video.snippet.thumbnails.default.url}}" width="50px" />
+            {{# for(videoData of videosWithDropPlaceholder) }}
+              <li class="{{# if(videoData.isPlaceholder) }}placeholder{{/ if }}">
+                <a href="https://www.youtube.com/watch?v={{ videoData.video.id.videoId }}" target='_blank'>
+                  <img src="{{ videoData.video.snippet.thumbnails.default.url }}" width="50px" />
                 </a>
 
-                {{videoData.video.snippet.title}}
+                {{ videoData.video.snippet.title }}
               </li>
-            {{else}}
+            {{ else }}
               <div class="content">Drag video here</div>
-            {{/for}}
+            {{/ for }}
           </ul>
         </div>
-      {{/if}}
+      {{/ if }}
 
-    {{/if}}
+    {{/ if }}
 
-  {{/if}}
+  {{/ if }}
 </script>

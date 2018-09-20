@@ -15,37 +15,37 @@
 <div class="container">
   <div class="row">
     <div class="col-sm-8 col-sm-offset-2">
-	  {{#eq(page, 'home')}}
+	  {{# eq(page, 'home') }}
 		  <h1 class="page-header text-center">
 	        <img src="https://donejs.com/static/img/donejs-logo-white.svg"
 	            alt="DoneJS logo" style="width: 100%;" />
 	        <br>Chat
 	      </h1>
-		  <a href="{{routeUrl(page='chat')}}"
+		  <a href="{{ routeUrl(page='chat') }}"
        		class="btn btn-primary btn-block btn-lg">
       			Start chat
 		  </a>
-	  {{else}}
+	  {{ else }}
 	  	<chat-messages/>
-	  {{/eq}}
+	  {{/ eq }}
     </div>
   </div>
 </div>
 </script>
 
 <script type='text/stache' id='chat-messages-template'>
-<h5><a href="{{routeUrl(page='home')}}">Home</a></h5>
+<h5><a href="{{ routeUrl(page='home') }}">Home</a></h5>
 
-{{#each(messagesPromise.value)}}
+{{# each(messagesPromise.value) }}
   <div class="list-group-item">
-	<h4 class="list-group-item-heading">{{name}}</h4>
-	<p class="list-group-item-text">{{body}}</p>
+	<h4 class="list-group-item-heading">{{ name }}</h4>
+	<p class="list-group-item-text">{{ body }}</p>
   </div>
-{{else}}
+{{ else }}
   <div class="list-group-item">
 	<h4 class="list-group-item-heading">No messages</h4>
   </div>
-{{/each}}
+{{/ each }}
 
 <form class="row" on:submit="send(%event)">
 	<div class="col-sm-3">

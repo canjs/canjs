@@ -232,10 +232,10 @@ Component.extend({
 	tag: "next-prev",
 	view:
 		`<a href="javascript://"
-		    class="prev {{# this.paginate.canPrev() }}enabled{{/}}"
+		    class="prev {{# this.paginate.canPrev() }}enabled{{/ }}"
 			on:click="paginate.prev()">Prev</a>
 		<a href="javascript://"
-		   class="next {{# this.paginate.canNext() }}enabled{{/}}"
+		   class="next {{# this.paginate.canNext() }}enabled{{/ }}"
 		   on:click="paginate.next()">Next</a>`
 });
 

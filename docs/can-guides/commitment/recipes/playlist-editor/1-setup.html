@@ -8,11 +8,11 @@
 <body>
 
 <script id="app-template" type="text/stache">
-  {{#if(googleApiLoadedPromise.isPending)}}
+  {{# if(googleApiLoadedPromise.isPending) }}
     <div>Loading Google API…</div>
-  {{else}}
+  {{ else }}
     <div>Loaded Google API</div>
-  {{/if}}
+  {{/ if }}
 </script>
 
 <script src="https://code.jquery.com/jquery-2.2.4.js"></script>

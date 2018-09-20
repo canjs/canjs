@@ -1,7 +1,7 @@
 <script type="text/stache" id="app-view">
 <form>
 
-  <div class="message">{{cardError.value}}</div>
+  <div class="message">{{ cardError.value }}</div>
 
   <input type="text" name="number" placeholder="Card Number"
     on:input:value:to="userCardNumber.value"/>
@@ -10,7 +10,7 @@
 
   <input type="text" name="cvc" placeholder="CVC"/>
 
-  <button>Pay ${{amount.value}}</button>
+  <button>Pay ${{ amount.value }}</button>
 
 </form>
 </script>

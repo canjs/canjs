@@ -9,44 +9,44 @@
 			   autofocus=""
 			   can-enter="createTodo">
 	</header>
-	<section id="main" class="{{^todos}}hidden{{/todos}}">
+	<section id="main" class="{{^ todos }}hidden{{/ todos }}">
 		<input id="toggle-all"
 			   type="checkbox"
-			   {{#todos.allComplete}}checked="checked"{{/todos.allComplete}}
+			   {{# todos.allComplete }}checked="checked"{{/ todos.allComplete }}
 			   can-click="toggleAll">
 		<label for="toggle-all">Mark all as complete</label>
 		<ul>
-			{{#each(todos)}}
-				<li class="todo {{^matches}}hidden{{/matches}} {{#complete}}completed{{/complete}} {{#editing}}editing{{/editing}}"
+			{{# each(todos) }}
+				<li class="todo {{^ matches }}hidden{{/ matches }} {{# complete }}completed{{/ complete }} {{# editing }}editing{{/ editing }}"
 					can-dblclick="edit">
 					<div class="view">
 						<input class="toggle" type="checkbox" can-value="complete"/>
-						<label>{{text}}</label>
+						<label>{{ text }}</label>
 						<button class="destroy" can-click="destroy"></button>
 					</div>
 					<input class="edit"
 					       type="text"
-					       value="{{text}}"
+					       value="{{ text }}"
 					       can-blur="updateTodo"
 					       can-enter="updateTodo"/>
 				</li>
-			{{/todos}}
+			{{/ todos }}
 		</ul>
 	</section>
 
-	<footer id="footer" class="{{^todos}}hidden{{/todos}}">
+	<footer id="footer" class="{{^ todos }}hidden{{/ todos }}">
 		<span id="todo-count">
-			<strong>{{todos.remaining}}</strong> {{plural "item" todos.remaining}} left
+			<strong>{{ todos.remaining }}</strong> {{ plural "item" todos.remaining }} left
 		</span>
 		<ul id="filters">
-			<li>{{{link "All" undefined}}}</li>
-			<li>{{{link "Active" "active"}}}</li>
-			<li>{{{link "Completed" "completed"}}}</li>
+			<li>{{{ link "All" undefined }}}</li>
+			<li>{{{ link "Active" "active" }}}</li>
+			<li>{{{ link "Completed" "completed" }}}</li>
 		</ul>
 		<button id="clear-completed"
-		        class="{{^todos.completed}}hidden{{/todos.completed}}"
+		        class="{{^ todos.completed }}hidden{{/ todos.completed }}"
 		        can-click="clearAll">
-			Clear completed ({{todos.completed}})
+			Clear completed ({{ todos.completed }})
 		</button>
 	</footer>
 </todo-app>

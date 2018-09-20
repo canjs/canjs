@@ -10,7 +10,7 @@ Component.extend({
 	view: `
 		<ul>
 			{{# for(panel of this.panels) }}
-				<li {{# if(this.isActive(panel) }}class='active'{{/}}
+				<li {{# if(this.isActive(panel) }}class='active'{{/ }}
 						on:click='this.makeActive(panel)'>
 					{{ panel.title }}
 				</li>
@@ -84,7 +84,7 @@ Component.extend({
 Component.extend({
 	tag: 'my-demo',
 	view: `
-		{{let addPanel=null}}
+		{{ let addPanel=null }}
 		<my-tabs addPanel:to="addPanel">
 			<my-panel addPanel:from="addPanel" title:from="'CanJS'">CanJS Content</my-panel>
 			<my-panel addPanel:from="addPanel" title:from="'StealJS'">StealJS Content</my-panel>

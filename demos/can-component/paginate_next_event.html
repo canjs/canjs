@@ -30,7 +30,7 @@ Component.extend({
 	tag: "player-list",
 	view: `<ul>
 		{{# for(player of this.players) }}
-			<li {{# this.isEditing(player) }}class="editing"{{/}}
+			<li {{# this.isEditing(player) }}class="editing"{{/ }}
 				on:click='this.editPlayer(player)'>{{ player.name }}</li>
 		{{/ for }}
 	</ul>

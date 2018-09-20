@@ -14,20 +14,20 @@
 	</section>
 	<footer id="footer" class="">
 		<span id="todo-count">
-			<strong>{{todos.remainingCount}}</strong> {{plural "item" todos.remainingCount}} left
+			<strong>{{ todos.remainingCount }}</strong> {{ plural "item" todos.remainingCount }} left
 		</span>
 		<ul id="filters">
 
-			<li>{{{link "All" undefined}}}</li>
-			<li>{{{link "Active" "active"}}}</li>
-			{{#todos.completedCount}}
-			<li>{{{link "Completed" "completed"}}}</li>
-			{{/todos.completedCount}}
+			<li>{{{ link "All" undefined }}}</li>
+			<li>{{{ link "Active" "active" }}}</li>
+			{{# todos.completedCount }}
+			<li>{{{ link "Completed" "completed" }}}</li>
+			{{/ todos.completedCount }}
 		</ul>
 		<button id="clear-completed"
-				class="{{^todos.completedCount}}hidden{{/todos.completedCount}}",
+				class="{{^ todos.completedCount }}hidden{{/ todos.completedCount }}",
 				can-click="todos.destroyCompleted">
-			Clear completed ({{todos.completedCount}})
+			Clear completed ({{ todos.completedCount }})
 		</button>
 	</footer>
 </section>
@@ -35,25 +35,25 @@
 </script>
 <script type='text/stache' id='todos-list-template'>
 <ul id="todo-list">
-	{{#todos}}
-		<li class="todo {{#completed}}completed{{/completed}} {{#editing}}editing{{/editing}}"
+	{{# todos }}
+		<li class="todo {{# completed }}completed{{/ completed }} {{# editing }}editing{{/ editing }}"
 			can-dblclick='edit'>
 			<div class="view">
 				<input
 					class="toggle"
 					type="checkbox"
 					can-value='{completed}'/>
-				<label>{{name}}</label>
+				<label>{{ name }}</label>
 				<button class="destroy"
 						can-click="destroy"></button>
 			</div>
 			<input class="edit"
 			       type="text"
-			       value="{{name}}"
+			       value="{{ name }}"
 			       can-blur='updateTodo'
 			       can-enter='updateTodo'>
 		</li>
-	{{/each}}
+	{{/ each }}
 </ul>
 </script>
 <div id='app'></div>

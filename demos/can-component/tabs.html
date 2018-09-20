@@ -41,7 +41,7 @@ Component.extend({
 	view:`
 		<ul>
 			{{# for(panel of this.panels) }}
-				<li {{# this.isActive(panel) }}class='active'{{/}}
+				<li {{# this.isActive(panel) }}class='active'{{/ }}
 					on:click='this.makeActive(panel)'>
 					{{ panel.title }}
 				</li>

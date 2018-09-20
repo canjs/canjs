@@ -5,7 +5,7 @@ import can from 'can';
 import 'can/model/model';
 
 var template = can.view.stache(
-                   "<h1>Todo: {{mytodo.name}}</h1>"+
+                   "<h1>Todo: {{ mytodo.name }}</h1>"+
                    "<todos-editor todo='{mytodo}' "+
                                   "placeholder='{name}'>"+
                   "</todos-editor>")
@@ -14,11 +14,11 @@ var mytodo = new can.Map({name: "Do the dishes"})
 
 can.Component.extend({
   tag: "todos-editor",
-  template: "{{#if(todo)}}"+
+  template: "{{# if(todo) }}"+
               "<input type='text' "+
-                     "placeholder='{{placeholder}}' "+
+                     "placeholder='{{ placeholder }}' "+
                      "can-value='{todo.name}'/>"+
-            "{{/if}}",
+            "{{/ if }}",
   scope: {
   	placeholder: "@"
   }
