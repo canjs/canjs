@@ -1487,3 +1487,194 @@ mocha.run();
 ```
 @highlight 97-100,only
 @codepen
+
+## Models
+
+CanJS models like [can-rest-model] and [can-realtime-rest-model] allow you to connect an observable to a service layer. They also provide caching and real-time behavior using [can-query-logic]. The following sections will show how to test that these models are set up correctly to work with the application’s service layer.
+
+### Connections
+
+CanJS models work as mixins to add methods like [can-connect/can/map/map.get] and [can-connect/can/map/map.getList] to CanJS observables. You can use [can-fixture] to test these methods without making real requests to your service layer; `can-fixture` will intercept the [request](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) made by the connection and simulate a response using the data given by the fixture.
+
+A basic test setup using this approach looks like:
+
+1. Create sample data
+2. Create a fixture to return sample data for a specific URL
+3. Call model function to request data from that URL
+4. Verify the model returned the sample data
+
+Here is an example:
+
+```html
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@5.2.0/mocha.css">
+<script src="//unpkg.com/mocha@5.2.0/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4.1.2/chai.js" type="text/javascript"></script>
+<script type="module">
+import { restModel, DefineMap, DefineList, fixture } from "//unpkg.com/can@5/core.mjs";
+
+// Mocha / Chai Setup
+mocha.setup("bdd")
+var assert = chai.assert;
+
+const Todo = DefineMap.extend({
+  id: "number",
+  complete: "boolean",
+  name: "string"
+});
+
+Todo.List = DefineList.extend({
+  "#": Todo
+});
+
+Todo.connection = restModel({
+  Map: Todo,
+  List: Todo.List,
+  url: "/api/todos/{id}"
+});
+
+describe("TodoModel", () => {
+  it("getList", (done) => {
+    // 1. Create sample data
+    const todos = [
+      { id: 1, complete: false, name: "do dishes" }
+    ];
+
+    // 2. Create a fixture to return sample data for a specific URL
+    fixture( { url: "/api/todos" }, todos);
+
+    // 3. Call model function to request data from that URL
+    Todo.getList().then(todosList => {
+      // 4. Verify the model returned the sample data
+      assert.deepEqual(todosList.serialize(), todos);
+      done();
+    });
+  });
+});
+
+// start Mocha
+mocha.run();
+</script>
+```
+@highlight 30-43,only
+@codepen
+
+### QueryLogic
+
+CanJS model mixins internally use [can-query-logic] to perform queries of your service layer data and compare different queries against each other. It uses the logic of these queries to understand how to cache data and provide real-time behavior.
+
+It can be useful to test this logic to ensure that it will work correctly when used for these other behaviors. It is also very useful to add tests like this when you run into an issue with your model not working as expected.
+
+One useful way to do this is to use [can-query-logic.prototype.filterMembers] to verify that a specific query will correctly filter an array of data:
+
+```html
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@5.2.0/mocha.css">
+<script src="//unpkg.com/mocha@5.2.0/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4.1.2/chai.js" type="text/javascript"></script>
+<script type="module">
+import { restModel, DefineMap, DefineList, QueryLogic } from "//unpkg.com/can@5/core.mjs";
+
+// Mocha / Chai Setup
+mocha.setup("bdd")
+var assert = chai.assert;
+
+const Todo = DefineMap.extend({
+  id: "number",
+  complete: "boolean",
+  name: "string"
+});
+
+Todo.List = DefineList.extend({
+  "#": Todo
+});
+
+Todo.connection = restModel({
+  Map: Todo,
+  List: Todo.List,
+  url: "/api/todos/{id}"
+});
+
+describe("TodoModel query logic", () => {
+  it("filterMembers", () => {
+     var todoQueryLogic = new QueryLogic(Todo);
+
+    const completeTodos = [
+      { id: 2, name: "mow lawn", complete: true }
+    ];
+
+    const incompleteTodos = [
+      { id: 1, name: "do dishes", complete: false }
+    ];
+
+	const allTodos = [ ...completeTodos, ...incompleteTodos ];
+
+	const completeTodosFilter = { filter: { complete: false } };
+
+    const queryLogicIncompleteTodos = todoQueryLogic.filterMembers(
+      completeTodosFilter,
+      allTodos
+    );
+
+    assert.deepEqual(queryLogicIncompleteTodos, incompleteTodos);
+  });
+});
+
+// start Mocha
+mocha.run();
+</script>
+```
+@highlight 30-49,only
+@codepen
+
+It can also be useful to use [can-query-logic.prototype.isMember] to verify that a specific record is contained within the results of a query:
+
+```html
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@5.2.0/mocha.css">
+<script src="//unpkg.com/mocha@5.2.0/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4.1.2/chai.js" type="text/javascript"></script>
+<script type="module">
+import { restModel, DefineMap, DefineList, QueryLogic } from "//unpkg.com/can@5/core.mjs";
+
+// Mocha / Chai Setup
+mocha.setup("bdd")
+var assert = chai.assert;
+
+const Todo = DefineMap.extend({
+  id: "number",
+  complete: "boolean",
+  name: "string"
+});
+
+Todo.List = DefineList.extend({
+  "#": Todo
+});
+
+Todo.connection = restModel({
+  Map: Todo,
+  List: Todo.List,
+  url: "/api/todos/{id}"
+});
+
+describe("TodoModel query logic", () => {
+  it("isMember", () => {
+     var todoQueryLogic = new QueryLogic(Todo);
+
+	const completeTodosFilter = { filter: { complete: false } };
+
+    const becomingAnAstronautIsIncomplete = todoQueryLogic.isMember(
+      completeTodosFilter,
+      { id: 5, name: "become an astronaut", complete: false }
+    );
+
+    assert.ok(becomingAnAstronautIsIncomplete);
+  });
+});
+
+// start Mocha
+mocha.run();
+</script>
+```
+@highlight 30-39,only
+@codepen
