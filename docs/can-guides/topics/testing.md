@@ -552,7 +552,7 @@ const NameForm = Component.extend({
         <button on:click="setName('Kevin McCallister')">Pick Random Name</button>
       </p>
 
-      <p>Name: {{name}}</p>
+      <p>Name: {{ name }}</p>
     </div>
   `
 });
@@ -641,7 +641,7 @@ const NameForm = Component.extend({
         <button on:click="setName('Kevin McCallister')">Pick Random Name</button>
       </p>
 
-      <p>Name: {{name}}</p>
+      <p>Name: {{ name }}</p>
     </div>
   `
 });
@@ -968,9 +968,9 @@ Obviously this is much more complicated than just calling the `connectedCallback
 
 Routing in CanJS applications has three primary responsibilities:
 
-1. Connecting a component's view-model to can-route
+1. Connecting a component’s view-model to can-route
 2. Displaying the right component based on the route
-3. Passing data to the displayed component's view-model
+3. Passing data to the displayed component’s view-model
 
 Separating these into three separate properties on the ViewModel means that they can each be tested independently. This will be shown in the following sections.
 
@@ -1035,7 +1035,7 @@ const Application = Component.extend({
     },
 
     view: `
-		{{pageComponent}}
+		{{ pageComponent }}
 	`
 });
 
@@ -1092,7 +1092,7 @@ const Application = Component.extend({
     },
 
     view: `
-		{{pageComponent}}
+		{{ pageComponent }}
 	`
 });
 
@@ -1223,7 +1223,7 @@ const Application = Component.extend({
     },
 
     view: `
-		{{pageComponent}}
+		{{ pageComponent }}
 	`
 });
 
@@ -1269,7 +1269,7 @@ get pageComponentViewModel() {
 }
 ```
 
-With the viewModel data set up like this, you can make changes to `routeData` and verify that the child component will get the correct values by using [can-reflect.getValue Reflect.getValue] to verify the value of the observable passed through the `pageComponentViewModel`:
+With the viewModel data set up like this, you can make changes to `routeData` and confirm that the child component will get the correct values by verifying the `value` of the observable passed through the `pageComponentViewModel`:
 
 ```html
 <div id="mocha"></div>
@@ -1277,7 +1277,7 @@ With the viewModel data set up like this, you can make changes to `routeData` an
 <script src="//unpkg.com/mocha@5.2.0/mocha.js" type="text/javascript"></script>
 <script src="//unpkg.com/chai@4.1.2/chai.js" type="text/javascript"></script>
 <script type="module">
-import { Component, route, value, DefineMap, Reflect } from "can";
+import { Component, route, value, DefineMap } from "can";
 
 // Mocha / Chai Setup
 mocha.setup("bdd")
@@ -1298,7 +1298,7 @@ const ListPage = Component.extend({
 
 	view: `
 		<h2>List Page</h2>
-		<p>{{id}}</p>
+		<p>{{ id }}</p>
 	`,
 
 	ViewModel: {
@@ -1341,7 +1341,7 @@ const Application = Component.extend({
     },
 
     view: `
-		{{pageComponent}}
+		{{ pageComponent }}
 	`
 });
 
@@ -1363,8 +1363,8 @@ describe("Application", () => {
 			id: 10
 		});
 
-		let viewModelId = Reflect.getValue(vm.pageComponentViewModel.id);
-		assert.equal(viewModelId, 10, "routeData.id is passed to pageComponent viewModel");
+		const viewModelId = vm.pageComponentViewModel.id;
+		assert.equal(viewModelId.value, 10, "routeData.id is passed to pageComponent viewModel");
     });
 });
 
@@ -1375,7 +1375,7 @@ mocha.run();
 @highlight 87-93,only
 @codepen
 
-You can also use [can-reflect.getValue Reflect.setValue] to update the properties of `pageComponentViewModel` and verify that the `routeData` is updated correctly:
+You can also set the `value` of the properties of `pageComponentViewModel` and verify that the `routeData` is updated correctly:
 
 ```html
 <div id="mocha"></div>
@@ -1383,7 +1383,7 @@ You can also use [can-reflect.getValue Reflect.setValue] to update the propertie
 <script src="//unpkg.com/mocha@5.2.0/mocha.js" type="text/javascript"></script>
 <script src="//unpkg.com/chai@4.1.2/chai.js" type="text/javascript"></script>
 <script type="module">
-import { Component, route, value, DefineMap, Reflect } from "can";
+import { Component, route, value, DefineMap } from "can";
 
 // Mocha / Chai Setup
 mocha.setup("bdd")
@@ -1404,7 +1404,7 @@ const ListPage = Component.extend({
 
 	view: `
 		<h2>List Page</h2>
-		<p>{{id}}</p>
+		<p>{{ id }}</p>
 	`,
 
 	ViewModel: {
@@ -1447,7 +1447,7 @@ const Application = Component.extend({
     },
 
     view: `
-		{{pageComponent}}
+		{{ pageComponent }}
 	`
 });
 
@@ -1469,15 +1469,14 @@ describe("Application", () => {
 			id: 10
 		});
 
-		let viewModelId = Reflect.getValue(vm.pageComponentViewModel.id);
-		assert.equal(viewModelId, 10, "routeData.id is passed to pageComponent viewModel");
+		const viewModelId = vm.pageComponentViewModel.id;
+		assert.equal(viewModelId.value, 10, "routeData.id is passed to pageComponent viewModel");
 
 		routeData.id = 20;
 
-		viewModelId = Reflect.getValue(vm.pageComponentViewModel.id);
-		assert.equal(viewModelId, 20, "setting routeData.id updates the pageComponentViewModel.id");
+		assert.equal(viewModelId.value, 20, "setting routeData.id updates the pageComponentViewModel.id");
 
-		Reflect.setValue(vm.pageComponentViewModel.id, 30);
+		viewModelId.value = 30;
 		assert.equal(routeData.id, 30, "setting pageComponentViewModel.id updates routeData.id");
     });
 });
@@ -1486,5 +1485,5 @@ describe("Application", () => {
 mocha.run();
 </script>
 ```
-@highlight 97-101,only
+@highlight 97-100,only
 @codepen
