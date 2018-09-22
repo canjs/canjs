@@ -71,9 +71,9 @@
 						</div>
 					{{ else }}
 						<ul>
-							{{# each(accountsPromise.value) }}
-								<li on:click="../chooseAccount(this)">{{ name }} - ${{ balance }}</li>
-							{{/ each }}
+							{{# for(account of accountsPromise.value) }}
+								<li on:click="this.chooseAccount(account)">{{ account.name }} - ${{ account.balance }}</li>
+							{{/ for }}
 						</ul>
 					{{/ if }}
 				{{/ case }}
@@ -149,18 +149,18 @@
 					<h3>Transactions</h3>
 					<ul>
 						{{# if(transactions.length) }}
-							{{# each(transactions) }}
-								<li>{{ ../actionName(this) }} ${{ amount }} {{ ../actionPrep(this) }} {{ account.name }}</li>
-							{{/ each }}
+							{{# for(transaction of transactions) }}
+								<li>{{ this.actionName(transaction) }} ${{ transaction.amount }} {{ this.actionPrep(transaction) }} {{ transaction.account.name }}</li>
+							{{/ for }}
 						{{ else }}
 							<li>None</li>
 						{{/ if }}
 					</ul>
 					<h3>Accounts</h3>
 					<ul>
-						{{# each(accountsPromise.value) }}
-							<li on:click="../chooseAccount(this)">{{ name }} - ${{ balance }}</li>
-						{{/ each }}
+						{{# for(account of accountsPromise.value) }}
+							<li on:click="this.chooseAccount(account)">{{ account.name }} - ${{ account.balance }}</li>
+						{{/ for }}
 					</ul>
 					<div class='warn'>
 						<p>

@@ -71,9 +71,9 @@
 						</div>
 					{{ else }}
 						<ul>
-							{{# each(accountsPromise.value) }}
-								<li on:click="../chooseAccount(this)">{{ name }} - ${{ balance }}</li>
-							{{/ each }}
+							{{# for(account of accountsPromise.value) }}
+								<li on:click="this.chooseAccount(account)">{{ account.name }} - ${{ account.balance }}</li>
+							{{/ for }}
 						</ul>
 					{{/ if }}
 				{{/ case }}

@@ -18,17 +18,17 @@
 		<input id="toggle-all" type="checkbox">
 		<label for="toggle-all">Mark all as complete</label>
 		<ul id="todo-list">
-          {{# each(todosPromise.value) }}
-			<li class="todo {{# if(complete) }}completed{{/ if }}
-                    {{# if( isDestroying() ) }}destroying{{/ if }}">
-				<div class="view">
-					<input class="toggle" type="checkbox" checked:bind="complete">
-					<label>{{ name }}</label>
-					<button class="destroy" on:click="destroy()"></button>
-				</div>
-				<input class="edit" type="text" value="{{ name }}"/>
-			</li>
-          {{/ each }}
+			{{# for(todo of todosPromise.value) }}
+				<li class="todo {{# if(todo.complete) }}completed{{/ if }}
+					{{# if( todo.isDestroying() ) }}destroying{{/ if }}">
+					<div class="view">
+						<input class="toggle" type="checkbox" checked:bind="todo.complete">
+						<label>{{ todo.name }}</label>
+						<button class="destroy" on:click="todo.destroy()"></button>
+					</div>
+					<input class="edit" type="text" value="{{ todo.name }}"/>
+				</li>
+			{{/ for }}
 		</ul>
 	</section>
 	<footer id="footer" class="">

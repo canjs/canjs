@@ -27,22 +27,23 @@
 
 <script type='text/stache' id='todo-list-template'>
 <ul id="todo-list">
-  {{# each(todos) }}
-    <li class="todo {{# if(./complete) }}completed{{/ if }}
-      {{# if( isDestroying() ) }}destroying{{/ if }}
-      {{# if( ../isEditing(this) ) }}editing{{/ if }}">
-      <div class="view">
-        <input class="toggle" type="checkbox" checked:bind="complete">
-        <label on:dblclick="../edit(this)">{{ name }}</label>
-        <button class="destroy" on:click="destroy()"></button>
-      </div>
-      <input class="edit" type="text"
-        default:bind="name"
-        on:enter="../updateName()"
-        focused:from="../isEditing(this)"
-        on:blur="../cancelEdit()"/>
-    </li>
-  {{/ each }}
+	{{# for(todo of todos) }}
+		<li class="todo {{# if(todo.complete) }}completed{{/ if }}
+			{{# if(todo.isDestroying()) }}destroying{{/ if }}
+			{{# if(this.isEditing(todo)) }}editing{{/ if }}">
+			<div class="view">
+			<input class="toggle" type="checkbox"
+				 checked:bind="todo.complete" on:change="todo.save()">
+				<label on:dblclick="this.edit(todo)">{{ todo.name }}</label>
+				<button class="destroy" on:click="todo.destroy()"></button>
+			</div>
+			<input class="edit" type="text"
+				value:bind="name"
+				on:enter="this.updateName()"
+				focused:from="this.isEditing(this)"
+				on:blur="this.cancelEdit()"/>
+		</li>
+	{{/ for }}
 </ul>
 </script>
 

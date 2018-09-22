@@ -37,16 +37,16 @@
 		<script type='text/stache' id='chat-messages-template'>
 			<h5><a href="{{ routeUrl(page='home') }}">Home</a></h5>
 
-			{{# each(messagesPromise.value) }}
+			{{# for(message of messagesPromise.value) }}
 				<div class="list-group-item">
-				<h4 class="list-group-item-heading">{{ name }}</h4>
-				<p class="list-group-item-text">{{ body }}</p>
+				<h4 class="list-group-item-heading">{{ message.name }}</h4>
+				<p class="list-group-item-text">{{ message.body }}</p>
 				</div>
 			{{ else }}
 				<div class="list-group-item">
 				<h4 class="list-group-item-heading">No messages</h4>
 				</div>
-			{{/ each }}
+			{{/ for }}
 
 			<form class="row" on:submit="send(scope.event)">
 				<div class="col-sm-3">

@@ -136,9 +136,12 @@ const Todo = DefineMap.extend({
 });
 
 // In stache
-{{#each(todos)}}
-<label><input type="checkbox" checked:bind="completed" />{{ name }}</label>
-{{/each}}
+{{#for(todo of todos)}}
+	<label>
+		<input type="checkbox" checked:bind="todo.completed" />
+		{{ todo.name }}
+	</label>
+{{/for}}
 ```
 
 **React** has a dedication to the one-way data flow. This leads to a lot of boilerplate, hooking up event handlers just to change the state, over and over everywhere. **Flux** and **React-Redux** follow this same principle and ends up with even more code: `actions`, which get sent to a `dispatcher`, which pass the `action` to a `store`, to finally set the `state`. More code to write, more places for bugs to hide.

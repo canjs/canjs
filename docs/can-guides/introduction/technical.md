@@ -92,36 +92,34 @@ There are a bunch of other ways that CanJS makes it easy to develop outside the 
  - The [can-infrastructure] collection has a number of utility libraries that
    can help jump-start development.
 
-## Cool Computes
+## Cool Computed Values
 
 CanJS has two powerful observable systems that are the foundation for many of the other
 core libraries:
 
- - [can-compute] - Observable values and derived observable values.
+ - [can-value] - Observable values and derived observable values.
  - [can-define] - Observable objects.
 
-This section is about the technical highlights of [can-compute].  However,
-as [can-define] uses computes internally for [computed getter properties](#Computedgetterproperties)
+This section shows examples using [can-value.returnedBy value.returnedBy()].  However,
+as [can-define] uses `returnedBy()` internally for [computed getter properties](#Computedgetterproperties)
 and [asynchronous computed getter properties](##Asynccomputedgetterproperties), the benefits
 of computes extend to [can-define]. In a few examples cases, we’ll use [computed getter properties](#Computedgetterproperties) to
 show the advantages of computes.
 
-[can-compute] is used in similar situations as event streams libraries like RXJS and Bacon.js. Computes
-are used to transform a set of observable values into another observable value.  While event stream libraries are able to set up more complex transformations, computes can set up simple but common transformations more easily.
+[can-value.returnedBy value.returnedBy()] is used in similar situations as event streams libraries like RXJS and Bacon.js. It is
+used to transform a set of observable values into another observable value.  While event stream libraries are able to set up more complex transformations, [can-value.returnedBy value.returnedBy()] can set up simple but common transformations more easily.
 
 For example, the following compute keeps the completed count of todos in a list:
 
 ```js
-import DefineList from 'can-define/list/list';
-import DefineMap from 'can-define/map/map';
-import compute from 'can-compute';
+import {DefineMap, DefineList, value} from "can";
 
 let todoList = new DefineList([
     {name: "dishes",  complete: true},
     {name: "laundry", complete: false}
 ]);
 
-let completedCount = compute(function(){
+let completedCount = value.returnedBy(function(){
     return todoList.filter(function(todo){
         return todo.complete;
     });
@@ -141,7 +139,7 @@ todoList.push({name: "learn about computes", complete: true})
 ```
 
 `completedCount` automatically listens to all of these changes because
-[can-compute] infers dependencies.  Computes also:
+it infers dependencies. These observables also:
 
  - [Cache their value](#Cachedvalues) for faster reads.
  - [Dispatch events synchronously](#Synchronous) for easier testing and debugging.
@@ -166,11 +164,16 @@ fullName: Ember.computed('firstName', 'lastName', function() {
 });
 ```
 
-[can-compute] infers its own dependencies without needing to explicitly declare them, therefore requiring less boilerplate code. This means you can write `fullName` like:
+[can-value.returnedBy value.returnedBy()] infers its own dependencies without needing to explicitly declare them, therefore requiring less boilerplate code. This means you can write `fullName` like:
 
 ```js
-let fullName = compute(function(){
-    return firstName() + " " + lastName();
+import {value} from "can";
+
+let firstName = value.with("Payal");
+let lastName = value.with("Meyer");
+
+let fullName = value.returnedBy(function(){
+    return firstName.value + " " + lastName.value;
 });
 ```
 
@@ -196,7 +199,7 @@ let todoList = new DefineList([
     {name: "laundry", complete: false}
 ]);
 
-let completedCount = compute(function(){
+let completedCount = value.returnedBy(function(){
     return todoList.filter(function(todo){
         return todo.complete;
     });
@@ -217,59 +220,60 @@ In the following example, before `fullName` is bound,
 its value is recalculated only when a dependent value changes.
 
 ```js
-import compute from 'can-compute';
-let firstName = compute("Payal");
-let lastName = compute("Meyer");
+import {value} from "can";
 
-let fullName = compute(function(){
+let firstName = value.with("Payal");
+let lastName = value.with("Meyer");
+
+let fullName = value.returnedBy(function(){
     console.log("Calculating fullName.");
-    return firstName()+" "+lastName();
+    return firstName.value+" "+lastName.value;
 });
 
-fullName() // console.logs "Calculating fullName."
-           //-> "Payal Meyer"
+fullName.value // console.logs "Calculating fullName."
+               //-> "Payal Meyer"
 
-fullName() // console.logs "Calculating fullName."
-           //-> "Payal Meyer"
+fullName.value // console.logs "Calculating fullName."
+               //-> "Payal Meyer"
 
-fullName.on("change", function(){}) // console.logs "Calculating fullName."
+fullName.on(function(){}) // console.logs "Calculating fullName."
 
-fullName() //-> "Payal Meyer"
-fullName() //-> "Payal Meyer"
+fullName.value //-> "Payal Meyer"
+fullName.value //-> "Payal Meyer"
 
-firstName("Ramiya") // console.logs "Calculating fullName."
+firstName.value = "Ramiya" // console.logs "Calculating fullName."
 
-fullName() //-> "Ramiya Meyer"
+fullName.value //-> "Ramiya Meyer"
 ```
+@codepen
 
 Using cached values improves performance in situations where a computed value is frequently read by multiple parts of the application.  
 
 ### Synchronous
 
 CanJS observables synchronously notify any event listeners. This makes testing
-and debugging quite easier.
+and debugging easier.
 
 The following example shows how you can
 change the `firstName` value and immediately check the consequences of that change:
 
 ```js
-import stache from 'can-stache';
-import compute from 'can-compute';
+import {stache, value} from 'can';
 
-let template = stache("<h1>Welcome {{fullName}}</h1>");
+let template = stache("<h1>Welcome {{ fullName }}</h1>");
 
-let firstName = compute("Justin");
-let lastName = compute("Meyer");
+let firstName = value.with("Justin");
+let lastName = value.with("Meyer");
 
-let fullName = compute(function(){
-    return firstName()+" "+lastName();
+let fullName = value.returnedBy(function(){
+    return firstName.value+" "+lastName.value;
 });
 
 let fragment = template({fullName: fullName});
 
 assert.equal(fragment.firstChild.innerHTML, "Welcome Payal Meyer");
 
-firstName("Ramiya");
+firstName.value = "Ramiya";
 
 assert.equal(fragment.firstChild.innerHTML, "Welcome Ramiya Meyer");
 ```
@@ -279,27 +283,27 @@ assert.equal(fragment.firstChild.innerHTML, "Welcome Ramiya Meyer");
 The previous section highlighted that synchronous event
 [can-event/batch/batch.dispatch dispatching] and DOM updates are ideal for many scenarios. But, there are times where this can cause performance problems. To prevent unnecessary updates, events can be batched using [can-event/batch/batch.start batch.start] and [can-event/batch/batch.stop batch.stop]. Computes and the DOM will only be updated once for all changes within the batch.
 
-In the previous example, `{{fullName}}` would be updated twice
+In the previous example, `{{ fullName }}` would be updated twice
 if `firstName` and `lastName` are changed:
 
 ```js
-firstName("Payal");
-lastName("Shah");
+firstName.value = "Payal";
+lastName.value = "Shah";
 ```
 
-Wrapping this in a batch makes `{{fullName}}` update only once:
+Wrapping this in a batch makes `{{ fullName }}` update only once:
 
 
 ```js
-import batch from 'can-event/batch/batch';
+import {queues} from 'can';
 
-batch.start();
-firstName("Payal");
-lastName("Shah");
-batch.stop();
+queue.batch.start();
+firstName.value = "Payal";
+lastName.value = "Shah";
+queue.batch.stop();
 ```
 
-Using [can-event/batch/batch.start batch.start] and [can-event/batch/batch.stop batch.stop]
+Using [can-queues.batch.start batch.start] and [can-queues.batch.stop batch.stop]
 can even make quadratic updates (`O(n^2)`) become linear (`O(n)`).
 
 Consider the performance of a `completeAll` method that completes every todo in a list
@@ -379,7 +383,7 @@ can improve performance by preventing compute recalculations.
 [can-define] is used to create observable [Models](#MalleableModels) and [ViewModels](#VeraciousViewModels) like:
 
 ```js
-import DefineMap from 'can-define/map/map';
+import {DefineMap} from 'can';
 
 const Person = DefineMap.extend({
     first: "string",
@@ -390,7 +394,7 @@ const Person = DefineMap.extend({
 })
 ```
 
-[can-define] uses [can-compute] internally to support [computed getter properties](##Computedgetterproperties) like the previous example’s `fullName`, so make sure to read about the benefits of [cool computes](#CoolComputes).
+[can-define] uses [can-value] internally to support [computed getter properties](##Computedgetterproperties) like the previous example’s `fullName`, so make sure to read about the benefits of [cool computes](#CoolComputedValues).
 
 As [can-define] powers almost everything in a CanJS application, it has grown to be
 quite powerful, performant and flexible.  Read on to explore some of its best characteristics.
@@ -427,8 +431,8 @@ DefineMap.extend({
     propertyB: String      -> {type: String}
     propertyC: Constructor -> {Type: Constructor}
     propertyD: [PropDefs]  -> {Type: DefineList.extend({"#": PropDefs})>}
-    get propertyE(){...}   -> {get: propertyE(){...}}
-    set propertyF(){...}   -> {get: propertyF(){...}}
+    get propertyE(){...}   -> {get: propertyE(){... }}
+    set propertyF(){...}   -> {get: propertyF(){... }}
     method: Function
 })
 ```
@@ -497,9 +501,9 @@ saltShaker.empty   //-> true
 To satisfy this API, `SaltShaker` could be implemented as follows:
 
 ```js
-import DefineMap from 'can-define/map/map';
+import {DefineMap} from "can";
 
-SaltShaker = DefineMap.extend({
+const SaltShaker = DefineMap.extend({
     saltCount: {type: "number", default: 0},
     fill: function(){
         this.saltCount = 2;
@@ -513,11 +517,70 @@ SaltShaker = DefineMap.extend({
         return ! this.saltCount;
     }
 });
+
+const saltShaker = new SaltShaker();
+
+saltShaker.fill();  
+
+console.log( saltShaker.shake() ) //-> "salt"
+console.log( saltShaker.shake() ) //-> "salt"  
+console.log( saltShaker.shake() ) //-> null   
+
+console.log( saltShaker.empty )   //-> true
 ```
+@codepen
 
 While `empty` is implemented [declaratively](https://en.wikipedia.org/wiki/Declarative_programming),
 notice how both `fill` and `shake` mutate the state of `saltCount`.  In a more complex type,
-this can easily lead to bugs.  Instead, the following uses [can-define-stream] and
+this can easily lead to bugs. Instead, the [can-define.types.value] property behavior can
+derive property values from changes in other property values.  For example, the following
+uses [can-define.types.value] to make `saltCount` a function of the calls to `fill` and `shake`.
+
+```js
+import {DefineMap} from "can";
+
+const SaltShaker = DefineMap.extend({
+	saltCount: {
+		value({listenTo, resolve}){
+			var saltCount = resolve(0);
+			listenTo("fill", ()=>{
+				resolve(saltCount = 2);
+			});
+			listenTo("shake", ()=>{
+				resolve(--saltCount);
+			});
+		}
+	},
+	fill: function(){
+		this.dispatch("fill");
+	},
+	shake: function(){
+		let hadSalt = this.saltCount;
+		this.dispatch("shake");
+		return hadSalt ? "salt" : null;
+	},
+	get empty() {
+		return ! this.saltCount;
+	}
+});
+
+const saltShaker = new SaltShaker();
+
+// Bind on saltCount or any property that reads saltCount
+saltShaker.on("saltCount",()=>{});
+
+saltShaker.fill();  
+
+console.log( saltShaker.shake() ) //-> "salt"
+console.log( saltShaker.shake() ) //-> "salt"  
+console.log( saltShaker.shake() ) //-> null   
+
+console.log( saltShaker.empty )   //-> true
+```
+@codepen
+
+If you want even more expressive APIs that help derive one values from other values,
+the following uses [can-define-stream] and
 [functional reactive programming](https://en.wikipedia.org/wiki/Functional_reactive_programming)
 to make `saltCount` a function of the calls to `fill` and `shake`:
 
@@ -554,7 +617,7 @@ CanJS provides three powerful functional helpers on [can-define/map/map] and [ca
 
  - [can-define.types.get computed getter properties]
  - [can-define.types.get async computed getter properties]
- - [can-define-stream.stream streamed properties]
+ - [can-define-stream-kefir streamed properties]
 
 ### Computed getter properties
 
@@ -564,10 +627,10 @@ property on instances of the `TodoList` type:
 
 ```js
 const TodoList = DefineList.extend({
-    "#": Todo,
-    get completedCount(){
-        return this.filter({complete: true}).length
-    }
+	"#": Todo,
+	get completedCount(){
+		return this.filter({complete: true}).length
+	}
 });
 
 let todos = new TodoList([{complete: true}, {complete:false}]);
@@ -724,14 +787,11 @@ into individual and independent modules and files that look like:
 The __Model__, in _models/todo.js_, looks like:
 
 ```js
-import DefineMap from 'can-define/map/map';
-import DefineList from 'can-define/list/list';
-import set from 'can-set';
-import superMap from 'can-connect/can/super-map/super-map';
+import {DefineMap, DefineList, realtimeRestModel} from "can";
 
 // Defines the type of data we get back from the server.
 const Todo = DefineMap.extend({
-  id: "number",
+  id: {type: "number", identity: true},
   name: "string",
   complete: {type: "boolean", default: false}
 });
@@ -748,21 +808,11 @@ Todo.List = DefineList.extend({
   }
 });
 
-// Defines the behavior of the "get list"
-// API endpoint.
-Todo.algebra = new set.Algebra(
-  can.set.props.boolean("complete"),
-  can.set.props.id("id"),
-  can.set.props.sort("sort")
-);
-
 // Connects the types above to a RESTful url.
-Todo.connection = superMap({
+Todo.connection = realtimeRestModel({
   url: "/api/todos",
   Map: Todo,
-  List: Todo.List,
-  name: "todo",
-  algebra: Todo.algebra
+  List: Todo.List
 });
 
 export default Todo;
@@ -772,7 +822,7 @@ This model can independently make requests to a RESTful service layer.
 
 - [can-connect/can/map/map.getList Get a list] of Todos
   ```js
-  Todo.getList({complete: true}).then(function(todos){})
+  Todo.getList({ filter: {complete: true} }).then(function(todos){})
   ```
 - [can-connect/can/map/map.get Get] a single Todo
   ```js
@@ -796,8 +846,8 @@ This model can independently make requests to a RESTful service layer.
 The __ViewModel__, in _components/todo-list/view-model.js_, looks like:
 
 ```js
-const DefineMap = "can-define/map/map";
-const Todo = "../models/todo";
+import {DefineMap} from "can";
+import Todo from "../models/todo";
 
 export default DefineMap.extend({
   todos: Todo.List,
@@ -805,18 +855,18 @@ export default DefineMap.extend({
   backupName: "string",
 
   // Returns true if the current todo is being edited.
-  isEditing: function(todo){
+  isEditing(todo){
     return todo === this.editing;
   },
 
   // Marks a todo as being edited.
-  edit: function(todo){
+  edit(todo){
     this.backupName = todo.name;
     this.editing = todo;
   },
 
   // Cancels that todo as being edited.
-  cancelEdit: function(){
+  cancelEdit(){
     if(this.editing) {
       this.editing.name = this.backupName;
     }
@@ -825,7 +875,7 @@ export default DefineMap.extend({
 
   // Updates the todo being edited on
   // the server.
-  updateName: function() {
+  updateName() {
     this.editing.save();
     this.editing = null;
   }
@@ -840,35 +890,35 @@ The __View__, in _components/todo-list/view.stache_, looks like:
 ```html
 <ul id="todo-list">
   <!-- Loop through every todo -->
-  {{#each(todos)}}
+  {{# for(todo of this.todos) }}
 
     <!-- Create an li with the right class names -->
-    <li class="todo {{#if(complete)}}completed{{/if}}
-      {{#if( isDestroying() )}}destroying{{/if}}
-      {{#if(../isEditing(this))}}editing{{/if}}">
+    <li class="todo {{# if(todo.complete) }}completed{{/ if }}
+      {{# if( todo.isDestroying() ) }}destroying{{/ if }}
+      {{# if( this.isEditing(this) ) }}editing{{/ if }}">
 
       <div class="view">
         <!-- Connect this checkbox to the `complete` property
              of the current todo -->
         <input class="toggle" type="checkbox"
-               checked:bind="complete"
-               on:change="save()">
+               checked:bind="todo.complete"
+               on:change="todo.save()">
 
         <!-- Edit this todo on double click -->
-        <label on:dblclick="../edit(this)">{{name}}</label>
+        <label on:dblclick="this.edit(todo)">{{ todo.name }}</label>
 
         <!-- Delete this todo on the server when clicked -->
-        <button class="destroy" on:click="destroy()"></button>
+        <button class="destroy" on:click="todo.destroy()"></button>
       </div>
 
       <!-- Handle editing this todo with this input element -->
       <input class="edit" type="text"
-        value:bind="name"
-        on:enter="../updateName()"
-        focused:from="../isEditing(this)"
-        on:blur="../cancelEdit()"/>
+        value:bind="todo.name"
+        on:enter="this.updateName()"
+        focused:from="this.isEditing(todo)"
+        on:blur="this.cancelEdit()"/>
     </li>
-  {{/each}}
+  {{/ for }}
 </ul>
 ```
 
@@ -879,14 +929,14 @@ Finally, the component file in _components/todo-list/todo-list.js_ puts
 everything together:
 
 ```js
-import Component from 'can-component';
+import {Component} from "can";
 import ViewModel from './view-model';
 import view from './view.stache!';
 
 Component.extend({
-    tag: 'todo-list',
-    ViewModel: ViewModel,
-    view: view
+  tag: 'todo-list',
+  ViewModel: ViewModel,
+  view: view
 });
 ```
 
@@ -968,7 +1018,6 @@ test("<todo-list> can update todo name", function(done){
 });
 ```
 
-Check out these tests running in [this JS&nbsp;Bin](https://jsbin.com/lulucuboni/1/edit?html,js,output).
 
 ### Flexible
 
@@ -1084,17 +1133,19 @@ and view bindings like [can-stache-bindings.twoWay] in the template. For example
 </header>
 
 <ul id="todo-list">
-	{{#each(todos)}}
-		<li class="todo {{#if(complete)}}completed{{/if}}">
+	{{# for(todo of todos) }}
+		<li class="todo {{# if(todo.complete) }}completed{{/ if }}">
 				<div class="view">
-						<input class="toggle" type="checkbox" checked:bind="complete">
-						<label>{{name}}</label>
-						<button class="destroy" on:click="destroy()"></button>
+						<input class="toggle" type="checkbox"
+							checked:bind="todo.complete">
+						<label>{{ todo.name }}</label>
+						<button class="destroy"
+							on:click="todo.destroy()"></button>
 				</div>
 
-				<input class="edit" type="text" value="{{name}}"/>
+				<input class="edit" type="text" value="{{ todo.name }}"/>
 		</li>
-	{{/each}}
+	{{/ for }}
 </ul>
 ```
 
@@ -1127,28 +1178,29 @@ a very limited subset of syntax.  Most of Mustache is just:
 A simple template might look like:
 
 ```html
-<p>Hello {{name}}</p>
-<p>You have just won {{value}} dollars!</p>
-{{#in_ca}}
-<p>Well, {{taxed.ca.value}} dollars, after taxes.</p>
-{{/in_ca}}
+<p>Hello {{ this.name }}</p>
+<p>You have just won {{ this.value }} dollars!</p>
+{{# this.in_ca }}
+<p>Well, {{ this.taxed.ca.value }} dollars, after taxes.</p>
+{{/}}
 ```
 
 This is not enough to translate every ViewModel into HTML, so [can-stache] supports
-Handlebars helpers like [can-stache.helpers.each] and
-the ability to [can-stache/expressions/call call methods].
+additional JavaScript-like syntaxes such as the
+ability to [can-stache/expressions/call call methods] and use [can-stache.helpers.for-of for(of)]
+loops.
 
 A template that uses those features looks like:
 
 ```html
-{{#players}}
-    <h2>{{name}}</h2>
-    {{#each(stats.forPlayerId(id))}}
+{{# for(player of players) }}
+    <h2>{{ player.name }}</h2>
+    {{# for( stat of this.stats.forPlayerId(player.id) ) }}
 		<span>
-			{{type}}
+			{{ stat.type }}
 		</span>
-	{{/each}}
-{{/players}}
+	{{/ for }}
+{{/ for }}
 ```
 
 
@@ -1237,7 +1289,7 @@ following shows inspecting the [guides/todomvc]’s _“What needs to be done?�
 if the data passed to the following template changes, the DOM is automatically updated.
 
 ```html
-<h1 class="{{#if(user.admin)}}admin{{/if}}">Hello {{user.name}}</h1>
+<h1 class="{{# if(user.admin) }}admin{{/ if }}">Hello {{ user.name }}</h1>
 ```
 
 In addition to the default Mustache data bindings, the [can-stache-bindings] module
@@ -1274,9 +1326,9 @@ To understand how these strategies are used, consider a template like:
 
 ```html
 <ul>
-{{#each(completeTodos())}}
-	<div>{{name}}</div>
-{{/each}}
+{{# each(completeTodos()) }}
+	<div>{{ name }}</div>
+{{/ each }}
 </ul>
 ```
 
@@ -1301,7 +1353,7 @@ const viewModel = new ViewModel({
 __Observation__
 
 CanJS directly observes what’s happening in each magic tag
-like `{{name}}` so it can localize changes as much as possible. This means
+like `{{ name }}` so it can localize changes as much as possible. This means
 that when the first todo’s name is changed like:
 
 ```js
@@ -1314,7 +1366,7 @@ change happens and we know directly what is impacted.
 
 __Data diffing__
 
-The [can-stache.helpers.each {{#each}} helper] provides data diffing.  It is able
+The [can-stache.helpers.for-of {{# for(of) }} helper] provides data diffing.  It is able
 to do a difference between two arrays and calculate a minimal set of mutations to
 make one array match another.  This means that if a new task is added to the
 list of `tasks` like:
@@ -1324,7 +1376,7 @@ viewModel.tasks.push({name: "Understand diffing", complete: true})
 ```
 
 This change will be observed, and a new array will be returned from
-`completeTodos()`.  The `#each` helper will [can-util/js/diff/diff] this new array to the
+`completeTodos()`.  The `#for` helper will [can-diff/list/list diff] this new array to the
 original array, and only create a single new `<div>` for the new todo.  
 
 
@@ -1344,15 +1396,15 @@ When the build is run, this import statement will tell StealJS that "todos.stach
 
 ### In-template dependency declarations
 
-[can-view-import](../../can-view-import.html) allows templates to import their dependencies like
+[can-view-import] allows templates to import their dependencies like
 other modules. You can import custom elements, helpers, and other modules straight from a template module like:
 
 ```html
 <can-import from="components/my_tabs"/>
 <can-import from="helpers/prettyDate"/>
 <my-tabs>
-  <my-panel title="{{prettyDate start}}">...</my-panel>
-  <my-panel title="{{prettyDate end}}">...</my-panel>
+  <my-panel title="{{ prettyDate start }}">...</my-panel>
+  <my-panel title="{{ prettyDate end }}">...</my-panel>
 </my-tabs>
 ```
 
@@ -1363,16 +1415,16 @@ A template may load or conditionally load a module after the initial page load. 
 This feature, when used with [steal-stache](../../steal-stache.html), signals to the build that the enclosed section’s dependencies should be dynamically loaded at runtime.
 
 ```html
-{{#eq(location, 'home')}}
+{{# eq(location, 'home') }}
 <can-import from="components/home">
   <my-home/>
 </can-import>
-{{/eq}}
-{{#eq(location, 'away')}}
+{{/ eq }}
+{{# eq(location, 'away') }}
 <can-import from="components/chat">
   <my-chat/>
 </can-import>
-{{/eq}}
+{{/ eq }}
 ```
 
 ## Malleable Models
@@ -1405,10 +1457,10 @@ This separation of concerns and powerful mixin behavior is accomplished by encap
 Let’s look at an example of how we would define a `Todo` type and a list of todos:
 
 ```js
-import DefineList from 'can-define/list/list';
-import DefineMap from 'can-define/map/map';
+import {DefineList, DefineMap} from 'can';
 
 const Todo = DefineMap.extend({
+	id: {identity: true, type: "number"}
 	complete: "boolean",
 	name: "string"
 });
@@ -1425,15 +1477,12 @@ This example uses [can-define/map/map] to create a type definition for a `Todo`;
 
 This example also uses [can-define/list/list] to define a type for an array of `Todo` instances; the list has a `completeCount` method for easily determining how many todos in the list have been completed.
 
-Using [can-connect], we’ll create a connection between a RESTful `/api/todos` service and our `Todo` instances and `TodoList` lists:
+Using [can-rest-model], we’ll create a connection between a RESTful `/api/todos` service and our `Todo` instances and `TodoList` lists:
 
 ```js
-import connect from 'can-connect';
-import canMap from 'can-connect/can/map/map';
-import constructor from 'can-connect/constructor/constructor';
-import dataUrl from 'can-connect/data/url/url';
+import {restModel} from "can";
 
-Todo.connection = connect([canMap, constructor, dataUrl], {
+Todo.connection = restModel({
 	url: "/api/todos",
 	Map: Todo,
 	List: TodoList
@@ -1455,7 +1504,7 @@ Let’s continue with our todo app example and imagine that we want to show two 
 First, let’s fetch the incomplete todos:
 
 ```js
-Todo.getList({completed: false}).then(function(incompleteTodos) {});
+Todo.getList({filter: {completed: false}}).then(function(incompleteTodos) {});
 ```
 
 `incompleteTodos` might look like this:
@@ -1468,7 +1517,7 @@ Todo.getList({completed: false}).then(function(incompleteTodos) {});
 Next, let’s fetch a list of high-priority todos:
 
 ```js
-Todo.getList({priority: "high"}).then(function(urgentTodos) {});
+Todo.getList({filter: {priority: "high"}}).then(function(urgentTodos) {});
 ```
 
 `urgentTodos` might look like this:
@@ -1480,7 +1529,7 @@ Todo.getList({priority: "high"}).then(function(urgentTodos) {});
 
 Note that the “Finish docs” todo appears in both lists. If we make a change to the todo (e.g. changing its name), we want that change to appear in both lists.
 
-[can-connect]’s [can-connect/constructor/store/store.instanceStore instance store] keeps a reference to every model object by `id` (but you can [can-set.props.id change] which property is used). It does two things:
+[can-realtime-rest-model]’s [can-connect/constructor/store/store.instanceStore instance store] keeps a reference to every model object by `id` (but you can [can-set.props.id change] which property is used). It does two things:
 
 1. Prevents duplicate instances of a model object from being created.
 2. Cleans up unused instances to release memory when they’re no longer referenced.
@@ -1489,7 +1538,7 @@ Let’s look at both of these points in more detail.
 
 #### Duplicate instances
 
-The instance store prevents duplicate instances from being created by storing each model object by its [can-set.props.id id]. When a model object is fetched from the server, CanJS checks its `id` to see if it’s already in the instance store; if it is, then CanJS will reuse the same object.
+The instance store prevents duplicate instances from being created by storing each model object by its [can-define.types.identity]. When a model object is fetched from the server, CanJS checks its `identity` to see if it’s already in the instance store; if it is, then CanJS will reuse the same object.
 
 In our example, CanJS puts the “Finish docs” todo in the instance store when `incompleteTodos` is fetched. When `urgentTodos` is retrieved, CanJS sees the “Finish docs” todo with the same `id`, so it reuses the instance of “Finish docs” that is already in the instance store.
 
@@ -1505,7 +1554,7 @@ The reference count for each object increases in two ways:
 
 - __Explicitly:__ if you use [can-connect/constructor/store/store.addInstanceReference] or call `.on()` on an instance (e.g. `todo.on('name', function(){})`)
 
-- __Implicitly:__ if properties of the instance are bound to via live-binding in a view, e.g. `Name: {{name}}` in a [can-stache] template
+- __Implicitly:__ if properties of the instance are bound to via live-binding in a view, e.g. `Name: {{ name }}` in a [can-stache] template
 
 Similarly, the reference count is decreased in two ways:
 
@@ -1552,7 +1601,7 @@ This is made possible by two things:
 
 - The [can-connect/constructor/store/store.listStore list store] contains all of the lists loaded from the server. It’s memory safe so it won’t leak.
 
-- [can-set] understands what your parameters mean so it can insert, remove, and replace objects within your lists. This is discussed in the following _"Parameter awareness"_ section.
+- [can-query-logic] understands what your parameters mean so it can insert, remove, and replace objects within your lists. This is discussed in the following _"Parameter awareness"_ section.
 
 CanJS’s real-time list updates work great with "push notification" systems like [socket.io](https://socket.io/) and SignalR.  To add realtime behavior to a CanJS app, you
 just have to call the [can-connect/real-time/real-time.createInstance],
@@ -1578,34 +1627,13 @@ socket.on('todo removed', function(todo){
 When you make a request for `incompleteTodos` like the one below:
 
 ```js
-Todo.getList({completed: false}).then(function(incompleteTodos) {});
+Todo.getList({filter: {completed: false}}).then(function(incompleteTodos) {});
 ```
 
-The `{completed: false}` object is passed to the server as parameters and represents all incomplete todos. You can configure a connection with [can-set.Algebra] that understands these parameters.
+The `{filter: {completed: false}}` object is passed to the server as parameters and represents all incomplete todos.
+If your server expects a different format, it can be configured with [can-query-logic].
 
-Here’s an example of [can-connect/base/base.algebra setting up the algebra] for the `Todo.connection`:
-
-```js
-import connect from 'can-connect';
-import set from 'can-set';
-import canMap from'can-connect/can/map/map';
-import constructor from 'can-connect/constructor/constructor';
-import dataUrl from 'can-connect/data/url/url';
-
-Todo.algebra = new set.Algebra(
-	set.props.boolean("completed")
-);
-
-Todo.connection = connect([canMap, constructor, dataUrl], {
-	url: "/api/todos",
-	Map: Todo,
-	List: Todo.List,
-	algebra: Todo.algebra
-});
-```
-@highlight 4-6,16-16
-
-The `{completed: false}` parameters are associated with `incompleteTodos` so `can-connect` knows that `incompleteTodos` should contain _any_ todo with a `false` `completed` property. By understanding what
+The `{filter: {completed: false}}` parameters are associated with `incompleteTodos` so `can-connect` knows that `incompleteTodos` should contain _any_ todo with a `false` `completed` property. By understanding what
 the parameters used to request data mean, all sorts of interesting behaviors and performance optimizations
 can happen, including:
 
@@ -1613,7 +1641,7 @@ can happen, including:
  - Fall-through caching, request caching, and combining requests behaviors as described in the
  following sections.
 
-Parameter awareness is provided by [can-set].  Read more about the magic of `can-set` in its [can-set API docs].
+Parameter awareness is provided by [can-query-logic].  Read more about the magic of `can-query-logic` in its [can-query-logic API docs].
 
 ### Caching and minimal data requests
 
@@ -1647,7 +1675,7 @@ In most other frameworks, you would probably decide to have some parent componen
 
 With CanJS, you don’t have to choose between maintainability and performance. You can decide to have each component fetch its data independently and [can-connect] will intelligently combine the two requests into one.
 
-This is made possible by the [can-set] algebra we discussed earlier. [can-connect] sees the outgoing requests, can determine that requests for `Todo.getList({completed: true, sort: 'completedDate'})` and `Todo.getList({completed: false, sort: 'priority'})` are equivalent to just one `Todo.getList({})` request, then make that single request and return the correct sorted data to each call.
+This is made possible by the [can-set] algebra we discussed earlier. [can-connect] sees the outgoing requests, can determine that requests for `Todo.getList({filter: {completed: true}, sort: 'completedDate'})` and `Todo.getList({filter: {completed: false}, sort: 'priority'})` are equivalent to just one `Todo.getList({})` request, then make that single request and return the correct sorted data to each call.
 
 This [can-connect/data/combine-requests/combine-requests configurable behavior] is extremely powerful because it abstracts network request complexity away from how you create and compose your application.
 
@@ -1709,25 +1737,31 @@ Todo.get({id: 2, populate: "projectRef"}).then(function(todo){
 Or, it can be lazy loaded if it’s used in a template. For example, with this template:
 
 ```html
-{{#each(todos, todo=value)}}
-  Name: {{todo.name}}
-  Project: {{todo.projectRef.value.name}}
-{{/each}}
+{{# each(todos, todo=value) }}
+  Name: {{ todo.name }}
+  Project: {{ todo.projectRef.value.name }}
+{{/ each }}
 ```
 
 If `todo.projectRef.value` hasn’t been loaded by some other means, CanJS will fetch it from the server so it can be displayed in the template. This is handled automatically without you having to write any additional code to fetch the project data.
 
 Additionally, if multiple todos have the same project, only one request will be made to the server (if the data isn’t already cached), thanks to the [can-connect/data/combine-requests/combine-requests] behavior.
 
+
+
 ## jQuery integration
 
-By default, CanJS’s [can-core] works without jQuery.  However, the [can-jquery]
-module integrates jQuery’s and CanJS’s event system.  This allows you to listen to
-jQuery custom events like `draginit` directly in [can-stache-bindings.event can-stache event bindings]
-or using [can-control].
+By default, CanJS’s [can-core] works without jQuery.  However, the [can-dom-events/helpers/add-jquery-events]
+module integrates jQuery’s events into CanJS's events.  This allows you to listen to
+jQuery custom events like `draginit` directly in [can-stache] like:
 
-[This JS Bin](https://jsbin.com/yifopus/3/edit?html,css,js,output) lets a user drag an item
-into a trashcan using custom jQuery drag/drop events.
+```html
+<li on:draginit="doSomething()">...</li>
+```
+
+The [guides/recipes/playlist-editor] recipe shows using this feature to implement a drag-drop playlist.
+
+
 
 ## Server Side Rendering
 

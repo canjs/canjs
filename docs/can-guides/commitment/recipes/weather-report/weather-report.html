@@ -17,10 +17,10 @@
       <div class="location-options">
         <label>Pick your place:</label>
         <ul>
-          {{# each(placesPromise.value) }}
-            <li on:click="../pickPlace(this)">{{ name }}, {{ admin1.content }},
-			    {{ country.code }} ({{ placeTypeName.content }})</li>
-          {{/ each }}
+          {{# for(place of placesPromise.value) }}
+            <li on:click="this.pickPlace(place)">{{ place.name }}, {{ place.admin1.content }},
+                {{ place.country.code }} ({{ place.placeTypeName.content }})</li>
+          {{/ for }}
         </ul>
       </div>
 	{{/ if }}
@@ -29,14 +29,14 @@
       <div class="forecast">
         <h1>10 day {{ place.name }} Weather Forecast</h1>
         <ul>
-          {{# each(forecastPromise.value) }}
+          {{# for(forecast of forecastPromise.value) }}
             <li>
-              <span class="date">{{ date }}</span>
-              <span class="description {{ toClassName(text) }}">{{ text }}</span>
-              <span class="high-temp">{{ high }}<sup>&deg;</sup></span>
-              <span class="low-temp">{{ low }}<sup>&deg;</sup></span>
+              <span class="date">{{ forecast.date }}</span>
+              <span class="description {{ toClassName(forecast.text) }}">{{ forecast.text }}</span>
+              <span class="high-temp">{{ forecast.high }}<sup>&deg;</sup></span>
+              <span class="low-temp">{{ forecast.low }}<sup>&deg;</sup></span>
             </li>
-          {{/ each }}
+          {{/ for }}
         </ul>
       </div>
     {{/ if }}
