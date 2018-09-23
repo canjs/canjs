@@ -1326,9 +1326,9 @@ To understand how these strategies are used, consider a template like:
 
 ```html
 <ul>
-{{# each(completeTodos()) }}
-	<div>{{ name }}</div>
-{{/ each }}
+{{# for( todo of completeTodos() ) }}
+	<div>{{ todo.name }}</div>
+{{/ for }}
 </ul>
 ```
 
@@ -1737,10 +1737,10 @@ Todo.get({id: 2, populate: "projectRef"}).then(function(todo){
 Or, it can be lazy loaded if it’s used in a template. For example, with this template:
 
 ```html
-{{# each(todos, todo=value) }}
+{{# for(todo of todos) }}
   Name: {{ todo.name }}
   Project: {{ todo.projectRef.value.name }}
-{{/ each }}
+{{/ for }}
 ```
 
 If `todo.projectRef.value` hasn’t been loaded by some other means, CanJS will fetch it from the server so it can be displayed in the template. This is handled automatically without you having to write any additional code to fetch the project data.

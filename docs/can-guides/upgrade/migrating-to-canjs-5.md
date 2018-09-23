@@ -650,3 +650,75 @@ Also, the following regular expression can help you find helper expressions like
 update them to call expressions like `{{ foo(bar) }}`:
 
 - `\{\{\s*([#\/\^])\s*\w+\s+[\w\.]+`
+
+### Use for(of), let, and this
+
+In short, CanJS is migrating away from "context" lookup and to variable
+lookup. This section talks about what this means and how to migrate your code.
+
+[can-stache] was originally based off [Mustache](http://mustache.github.io/) and [Handlebars](http://handlebarsjs.com/).  As CanJS evolved, we recognized that their
+implicit scope walking was a source of numerous bugs. For example, the following
+might look up `name` on a `todo` or on the `ViewModel`:
+
+```js
+Component.extend({
+	view: `
+		{{#each todosPromise.value}}
+			<li on:click="edit(this)">{{name}}</li>
+		{{/each}}
+	`,
+	ViewModel: {
+		get todosPromise(){ return Todo.getList(); },
+		name: { type: "string", default: "ViewModel" },
+		edit(todo) { ... }
+	}
+})
+```
+
+For CanJS 4.0, we made scope walking explicit.  If `edit` should be read on the
+`ViewModel`, it must be looked up with `../` as follows:
+
+```js
+Component.extend({
+	view: `
+		{{#each todosPromise.value}}
+			<li on:click="../edit(this)">{{name}}</li>
+		{{/each}}
+	`,
+	ViewModel: {
+		get todosPromise(){ return Todo.getList(); },
+		name: { type: "string", default: "ViewModel" },
+		edit(todo) { ... }
+	}
+})
+```
+
+While this explicitness prevents errors, it confusing to users. In fact,
+context-based lookup is confusing to users altogether.  Values seem to come from
+nowhere. It works more like JavaScript's [with](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/with). Instead,
+we are migrating towards a variable-based lookup approach. Thus, we've:
+
+- Created two new helpers ([can-stache.helpers.for-of] and [can-stache.helpers.let]) that
+  create variables.
+- Started using `{{this.key}}` to refer to values on the ViewModel instead of `{{key}}`.
+
+The component above should be updated to:
+
+```js
+Component.extend({
+	view: `
+		{{#for todo of this.todosPromise.value}}
+			<li on:click="this.edit(todo)">{{todo.name}}</li>
+		{{/for}}
+	`,
+	ViewModel: {
+		get todosPromise(){ return Todo.getList(); },
+		name: { type: "string", default: "ViewModel" },
+		edit(todo) { ... }
+	}
+})
+```
+
+Notice that `this` remains the `ViewModel` because [can-stache.helpers.for-of] doesn't
+change the context, it only creates a `todo` variable.  Writing stache templates like this
+makes what's going on immediately clear. 
