@@ -6,11 +6,11 @@ Component.extend({
     <video controls
       on:play="play()"
       on:pause="pause()">
-      <source src="{{src}}"/>
+      <source src="{{ src }}"/>
     </video>
     <div>
       <button>
-        {{#if(playing)}} Pause {{else}} Play {{/if}}
+        {{# if(playing) }} Pause {{ else }} Play {{/ if }}
       </button>
     </div>
   `,

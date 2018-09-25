@@ -4,7 +4,7 @@ Component.extend({
   tag: "video-player",
   view: `
     <video controls>
-      <source src="{{src}}"/>
+      <source src="{{ src }}"/>
     </video>
   `,
   ViewModel: {

@@ -1,22 +1,22 @@
 <!-- components/todo-list/todo-list.stache -->
 <ul id="todo-list">
-	{{#each(todos)}}
-    <li class="todo {{#if(./complete)}}completed{{/if}}
-		{{#if( ./isDestroying() )}}destroying{{/if}}
-		{{#if(../isEditing(this))}}editing{{/if}}">
+	{{# for(todo of todos) }}
+    <li class="todo {{# if(todo.complete) }}completed{{/ if }}
+		{{# if( todo.isDestroying() ) }}destroying{{/ if }}
+		{{# if(this.isEditing(todo)) }}editing{{/ if }}">
 		<div class="view">
 			<input class="toggle" type="checkbox"
-				checked:bind="complete"
-				on:change="save()"
-				disabled:from="isSaving()" />
-        	<label on:dblclick="../edit(this)">{{name}}</label>
-        	<button class="destroy" on:click="./destroy()"></button>
+				checked:bind="todo.complete"
+				on:change="todo.save()"
+				disabled:from="todo.isSaving()" />
+        	<label on:dblclick="this.edit(todo)">{{ todo.name }}</label>
+        	<button class="destroy" on:click="todo.destroy()"></button>
 		</div>
 		<input class="edit" type="text"
-	        value:bind="name"
-	        on:enter="../updateName()"
-	        focused:from="../isEditing(this)"
-	        on:blur="../cancelEdit()" />
+	        value:bind="todo.name"
+	        on:enter="this.updateName()"
+	        focused:from="this.isEditing(todo)"
+	        on:blur="this.cancelEdit()" />
     </li>
-	{{/each}}
+	{{/ for }}
 </ul>

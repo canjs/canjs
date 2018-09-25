@@ -9,8 +9,8 @@ const PageHome = Component.extend({
             or click <i>Logout</i> to log out.
         </p>
         <ul>
-            <li><a href="{{routeUrl(page='tasks' taskId='0')}}">Task 0</a></li>
-            <li><a href="{{routeUrl(page='tasks' taskId='1')}}">Task 1</a></li>
+            <li><a href="{{ routeUrl(page='tasks' taskId='0') }}">Task 0</a></li>
+            <li><a href="{{ routeUrl(page='tasks' taskId='1') }}">Task 1</a></li>
         </ul>
         <button on:click="logout()">Logout</button>
     `,

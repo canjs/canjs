@@ -2,7 +2,7 @@
 @parent guides/recipes
 
 @description This guide walks you through building a file navigation
-widget that requests data with fetch. It takes about 45 minutes to complete. 
+widget that requests data with fetch. It takes about 45 minutes to complete.
 
 
 @body
@@ -275,11 +275,11 @@ In this section, we’ll list the files and folders within the root folder.
 ### Things to know
 
 - Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
-- Use [can-stache.helpers.each {{#each(value)}}] to do looping in `can-stache`.
+- Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in `can-stache`.
 - Use [can-stache.helpers.is {{#eq(value1, value2)}}] to test equality in `can-stache`.
 - `Promise`s are observable in `can-stache`.  Given a promise `somePromise`, you can:
   - Check if the promise is loading like: `{{#if(somePromise.isPending)}}`.
-  - Loop through the resolved value of the promise like: `{{#each(somePromise.value)}}`.
+  - Loop through the resolved value of the promise like: `{{#for(item of somePromise.value)}}`.
 - Write `<div class="loading">Loading</div>` when files are loading.
 - Write a `<ul>` to contain all the files.  Within the `<ul>` there should be:
   - An `<li>` with a class attribute that includes `file` or `folder` and `hasChildren` if the folder has children.
@@ -297,15 +297,15 @@ the promise is pending, and then writes out an `<li>` for each entity in the res
     <div class="loading">Loading</div>
   {{else}}
     <ul>
-      {{#each(entitiesPromise.value)}}
-        <li class="{{type}} {{#if(hasChildren)}}hasChildren{{/if}}">
-          {{#eq(type, 'file')}}
-            📝 <span>{{name}}</span>
+      {{#for(entity of entitiesPromise.value)}}
+        <li class="{{entity.type}} {{#if(entity.hasChildren)}}hasChildren{{/if}}">
+          {{#eq(entity.type, 'file')}}
+            📝 <span>{{entity.name}}</span>
           {{else}}
-            📁 <span>{{name}}</span>
+            📁 <span>{{entity.name}}</span>
           {{/eq}}
         </li>
-      {{/each}}
+      {{/for}}
     </ul>
   {{/if}}
 </script>
@@ -400,15 +400,15 @@ The following wraps the listing of child entities with a `{{#if(isOpen)}} {{/if}
     <div class="loading">Loading</div>
   {{else}}
     <ul>
-      {{#each(entitiesPromise.value)}}
-        <li class="{{type}} {{#if(hasChildren)}}hasChildren{{/if}}">
-          {{#eq(type, 'file')}}
-            📝 <span>{{name}}</span>
+      {{#for(entity of entitiesPromise.value)}}
+        <li class="{{entity.type}} {{#if(entity.hasChildren)}}hasChildren{{/if}}">
+          {{#eq(entity.type, 'file')}}
+            📝 <span>{{entity.name}}</span>
           {{else}}
-            📁 <span>{{name}}</span>
+            📁 <span>{{entity.name}}</span>
           {{/eq}}
         </li>
-      {{/each}}
+      {{/for}}
     </ul>
   {{/if}}
   {{/if}}
@@ -474,14 +474,6 @@ Now we want to make all the folders able to open and close.  This means creating
   template(context);
   ```
 
-  Or, when looping through a list of items, `this` refers to each item:
-
-  ```html
-  {{#each(items)}}
-    <li>{{this.name}}</li> <!-- this is each item in items -->
-  {{/each}}
-  ```
-
 
 ### The solution
 
@@ -506,15 +498,15 @@ The following:
     <div class="loading">Loading</div>
   {{else}}
     <ul>
-      {{#each(entitiesPromise.value)}}
-        <li class="{{type}} {{#if(hasChildren)}}hasChildren{{/if}}">
-          {{#eq(type, 'file')}}
-            📝 <span>{{name}}</span>
+      {{#for(entity of entitiesPromise.value)}}
+        <li class="{{entity.type}} {{#if(entity.hasChildren)}}hasChildren{{/if}}">
+          {{#eq(entity.type, 'file')}}
+            📝 <span>{{entity.name}}</span>
           {{else}}
             📁 <a-folder folder:from="this" />            <!-- CHANGED -->
           {{/eq}}
         </li>
-      {{/each}}
+      {{/for}}
     </ul>
   {{/if}}
   {{/if}}

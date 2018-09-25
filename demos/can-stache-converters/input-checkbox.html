@@ -1,37 +1,34 @@
 <div id="out"></div>
-<script type="text/stache" id="demo-html">
-{{#each(items)}}
-	<label>
-		<input type='checkbox' checked:bind='boolean-to-inList(this, ../person.owns)' />
-		{{upper(this)}}
-	</label>
-{{/each}}
-<p>You own: {{ownership()}}</p>
-</script>
+<my-demo></my-demo>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
-import { DefineList, DefineMap, stache, stacheConverters } from "can";
+import { Component, stacheConverters } from "can";
 
-var template = stache.from("demo-html");
-
-var person = new DefineMap({
-  owns: ["bike"]
-});
-
-var viewModel = new DefineMap({
-	items: ["bike", "car", "sled"],
-	person: person
-});
-
-var fragment = template(viewModel, {
-  ownership: function(){
-		var list = person.owns;
-		return list.length ? list.join(" and ") : "nothing";
-  },
-	upper: function(item) {
-		var first = item[0].toUpperCase();
-		return first + item.substr(1);
+Component.extend({
+	tag: "my-demo",
+	view: `
+		{{# for(item of this.items) }}
+			<label>
+				<input type='checkbox' checked:bind='boolean-to-inList(item, this.person.owns)' />
+				{{ upper(item) }}
+			</label>
+		{{/ for }}
+		<p>You own: {{ this.ownership() }}</p>
+	`,
+	ViewModel: {
+		person: {
+			default: function(){
+				return { owns: ["bike"] };
+			}
+		},
+		items: {default: () => ["bike", "car", "sled"]},
+		ownership: function(){
+			var list = this.person.owns;
+			return list.length ? list.join(" and ") : "nothing";
+		},
+		upper: function(item) {
+			var first = item[0].toUpperCase();
+			return first + item.substr(1);
+		}
 	}
 });
-
-out.appendChild(fragment);
 </script>

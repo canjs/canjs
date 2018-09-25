@@ -77,17 +77,17 @@ Component.extend({
 
     <ul>
         {{# if(todosPromise.isResolved) }}
-            {{# each(todosPromise.value) }}
+            {{# for(todo of todosPromise.value) }}
                 <li>
-                    <input type='checkbox' checked:bind='complete' disabled/>
-                    <label>{{name}}</label>
-                    <input type='date' valueAsDate:bind='dueDate' disabled/>
+                    <input type='checkbox' checked:bind='todo.complete' disabled/>
+                    <label>{{ todo.name }}</label>
+                    <input type='date' valueAsDate:bind='todo.dueDate' disabled/>
                 </li>
-            {{/ each }}
-        {{/ if}}
+            {{/ for }}
+        {{/ if }}
         {{# if(todosPromise.isPending) }}
             <li>Loading</li>
-        {{/ if}}
+        {{/ if }}
     </ul>
     `,
     ViewModel: {
@@ -97,7 +97,7 @@ Component.extend({
 
         todosPromise: {
             get(){
-                let query = {filter: {}};
+                let query = {filter: { }};
                 if(this.sort) {
                     query.sort =  this.sort;
                 }

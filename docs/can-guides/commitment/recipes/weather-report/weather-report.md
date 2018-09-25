@@ -282,10 +282,10 @@ on the page.
   ```  
 
 - Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
-- Use [can-stache.helpers.each {{#each(value)}}] to do looping in `can-stache`.
+- Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in `can-stache`.
 - `Promise`s are observable in [can-stache].  Given a promise `somePromise`, you can:
   - Check if the promise is loading like: `{{#if(somePromise.isPending)}}`.
-  - Loop through the resolved value of the promise like: `{{#each(somePromise.value)}}`.
+  - Loop through the resolved value of the promise like: `{{#for(item of somePromise.value)}}`.
 
 
 ### The solution
@@ -313,11 +313,11 @@ Update the template in the __HTML__ tab to:
       <div class="location-options">
         <label>Pick your place:</label>
         <ul>
-          {{#each(placesPromise.value)}}
-            <li>
-              {{name}}, {{admin1.content}}, {{country.code}} ({{placeTypeName.content}})
+          {{# for(place of placesPromise.value) }}
+            <li on:click="this.pickPlace(place)">
+              {{ place.name }}, {{ place.admin1.content }}, {{ place.country.code }} ({{ place.placeTypeName.content }})
             </li>
-          {{/each}}
+          {{/ for }}
         </ul>
       </div>
     {{/if}}
@@ -404,14 +404,6 @@ When a user clicks on a place, we need to indicate their selection.
   template(context);
   ```
 
-  Or, when looping through a list of items, `this` refers to each item:
-
-  ```html
-  {{#each(items)}}
-    <li>{{this.name}}</li> <!-- this is each item in items -->
-  {{/each}}
-  ```
-
 
 - The [can-define.types “any” type] can be used to define a property as
   accepting any data type like:
@@ -460,11 +452,11 @@ Update the template in the __HTML__ tab to:
       <div class="location-options">
         <label>Pick your place:</label>
         <ul>
-          {{#each(placesPromise.value)}}
-            <li on:click="../pickPlace(this)">
-              {{name}}, {{admin1.content}}, {{country.code}} ({{placeTypeName.content}})
+          {{# for(place of placesPromise.value) }}
+            <li on:click="this.pickPlace(place)">
+              {{ place.name }}, {{ place.admin1.content }}, {{ place.country.code }} ({{ place.placeTypeName.content }})
             </li>
-          {{/each}}
+          {{/ for }}
         </ul>
       </div>
     {{/if}}
@@ -584,11 +576,11 @@ Update the template in the __HTML__ tab to:
        <div class="location-options">
          <label>Pick your place:</label>
          <ul>
-           {{#each(placesPromise.value)}}
-             <li on:click="../pickPlace(this)">
-               {{name}}, {{admin1.content}}, {{country.code}} ({{placeTypeName.content}})
+           {{# for(place of placesPromise.value) }}
+             <li on:click="this.pickPlace(place)">
+               {{ place.name }}, {{ place.admin1.content }}, {{ place.country.code }} ({{ place.placeTypeName.content }})
              </li>
-           {{/each}}
+           {{/ for }}
          </ul>
        </div>
      {{/if}}
@@ -597,14 +589,14 @@ Update the template in the __HTML__ tab to:
        <div class="forecast">
          <h1>10-day {{place.name}} Weather Forecast</h1>
          <ul>
-           {{#each(forecastPromise.value)}}
+           {{# for(forecast of forecastPromise.value) }}
              <li>
-               <span class="date">{{date}}</span>
-               <span class="description {{toClassName(text)}}">{{text}}</span>
-               <span class="high-temp">{{high}}<sup>&deg;</sup></span>
-               <span class="low-temp">{{low}}<sup>&deg;</sup></span>
+               <span class="date">{{ forecast.date }}</span>
+               <span class="description {{ toClassName(forecast.text) }}">{{ forecast.text }}</span>
+               <span class="high-temp">{{ forecast.high }}<sup>&deg;</sup></span>
+               <span class="low-temp">{{ forecast.low }}<sup>&deg;</sup></span>
              </li>
-           {{/each}}
+           {{/ for }}
          </ul>
        </div>
      {{/if}}
@@ -842,11 +834,11 @@ Update the template in the __HTML__ tab to use a `showPlacePicker` property to d
         <div class="location-options">
           <label>Pick your place:</label>
           <ul>
-            {{#each(placesPromise.value)}}
-              <li on:click="../pickPlace(this)">
-                {{name}}, {{admin1.content}}, {{country.code}} ({{placeTypeName.content}})
+            {{# for(place of placesPromise.value) }}
+              <li on:click="this.pickPlace(place)">
+                {{ place.name }}, {{ place.admin1.content }}, {{ place.country.code }} ({{ place.placeTypeName.content }})
               </li>
-            {{/each}}
+            {{/ for }}
           </ul>
         </div>
       {{/if}}
@@ -856,14 +848,14 @@ Update the template in the __HTML__ tab to use a `showPlacePicker` property to d
       <div class="forecast">
         <h1>10-day {{place.name}} Weather Forecast</h1>
         <ul>
-          {{#each(forecastPromise.value)}}
+          {{# for(forecast of forecastPromise.value) }}
             <li>
-              <span class="date">{{date}}</span>
-              <span class="description {{toClassName(text)}}">{{text}}</span>
-              <span class="high-temp">{{high}}<sup>&deg;</sup></span>
-              <span class="low-temp">{{low}}<sup>&deg;</sup></span>
+              <span class="date">{{ forecast.date }}</span>
+              <span class="description {{ toClassName(forecast.text) }}">{{ forecast.text }}</span>
+              <span class="high-temp">{{ forecast.high }}<sup>&deg;</sup></span>
+              <span class="low-temp">{{ forecast.low }}<sup>&deg;</sup></span>
             </li>
-          {{/each}}
+          {{/ for }}
         </ul>
       </div>
     {{/if}}

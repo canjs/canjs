@@ -20,10 +20,10 @@ Component.extend({
 	tag: "select-files",
 
 	view: `
-		<input type="file" on:change="handleFiles(scope.element.files)" multiple>
+		<input type="file" on:change="this.handleFiles(scope.element.files)" multiple>
 		<div>
 			Selected files:
-			{{#if(selectedFiles.length}}
+			{{# if(this.selectedFiles.length }}
 				<table>
 					<thead>
 						<th>File name</th>
@@ -31,16 +31,16 @@ Component.extend({
 						<th>File type</th>
 					</thead>
 					<tbody>
-						{{#each(selectedFiles, file=value)}}
+						{{# for(file of this.selectedFiles) }}
 							<tr>
-								<td>{{file.name}}</td>
-								<td>{{file.size}}</td>
-								<td>{{file.type}}</td>
+								<td>{{ file.name }}</td>
+								<td>{{ file.size }}</td>
+								<td>{{ file.type }}</td>
 							</tr>
-						{{/each}}
+						{{/ for }}
 					</tbody>
 				</table>
-			{{/if}}
+			{{/ if }}
 		</div>
 	`,
 

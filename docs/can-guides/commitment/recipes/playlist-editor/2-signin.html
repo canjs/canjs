@@ -1,11 +1,11 @@
 <script id="app-template" type="text/stache">
-  {{#if(googleApiLoadedPromise.isPending)}}
+  {{# if(googleApiLoadedPromise.isPending) }}
     <div>Loading Google API…</div>
-  {{else}}
-    {{#if(signedIn)}}
-	  Welcome {{givenName}}! <button on:click="googleAuth.signOut()">Sign Out</button>
-    {{else}}
+  {{ else }}
+    {{# if(signedIn) }}
+	  Welcome {{ givenName }}! <button on:click="googleAuth.signOut()">Sign Out</button>
+    {{ else }}
 	  <button on:click="googleAuth.signIn()">Sign In</button>
-    {{/if}}
-  {{/if}}
+    {{/ if }}
+  {{/ if }}
 </script>

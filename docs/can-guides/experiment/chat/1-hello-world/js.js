@@ -4,13 +4,13 @@ Component.extend({
 	tag: "chat-app",
 	view: `
 		<div class="container">
-		  <div class="row">
-		    <div class="col-sm-8 col-sm-offset-2">
-			  <h1 class="page-header text-center" on:click="addExcitement()">
-		        {{message}}
-		      </h1>
-		    </div>
-		  </div>
+			<div class="row">
+				<div class="col-sm-8 col-sm-offset-2">
+					<h1 class="page-header text-center" on:click="this.addExcitement()">
+						{{ this.message }}
+					</h1>
+				</div>
+			</div>
 		</div>`,
 	ViewModel: {
 		// Properties

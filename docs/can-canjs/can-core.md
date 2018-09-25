@@ -265,17 +265,17 @@ promise loaded from `Todo.getList` like:
 import stache from 'can-stache';
 
 // Creates a template
-let template = stache(
-	"<ul>"+
-		"{{#if(todos.isPending)}}<li>Loading…</li>{{/if}}"+
-		"{{#if(todos.isResolved)}}"+
-			"{{#each(todos.value)}}"+
-				"<li class='{{#complete}}complete{{/complete}}'>{{name}}</li>"+
-			"{{else}}"+
-				"<li>No todos</li>"+
-			"{{/each}}"+
-		"{{/if}}"+
-	"</ul>");
+let template = stache(`
+	<ul>
+		{{#if(todos.isPending)}}<li>Loading…</li>{{/if}}
+		{{#if(todos.isResolved)}}
+			{{#for(todo of todos.value)}}
+				"<li class='{{#todo.complete}}complete{{/}}'>{{todo.name}}</li>
+			{{else}}
+				<li>No todos</li>
+			{{/for}}
+		{{/if}}
+	</ul>`);
 
 // Calls the template with some data
 let fragment = template({
@@ -326,18 +326,17 @@ let TodosListVM = DefineMap.extend({
 Component.extend({
 	tag: "todos-list",
 	ViewModel: TodosVM,
-	view: stache(
-		"<ul>"+
-			"{{#if(todos.isPending)}}<li>Loading…</li>{{/if}}"+
-			"{{#if(todos.isResolved)}}"+
-				"{{#each(todos.value)}}"+
-					"<li on:click='toggleComplete(.)'"+
-					     "class='{{#complete}}complete{{/complete}}'>{{name}}</li>"+
-				"{{else}}"+
-					"<li>No todos</li>"+
-				"{{/each}}"+
-			"{{/if}}"+
-		"</ul>");
+	view: `
+		<ul>
+			{{#if(todos.isPending)}}<li>Loading…</li>{{/if}}
+			{{#if(todos.isResolved)}}
+				{{#for(todo of todos.value)}}
+					"<li class='{{#todo.complete}}complete{{/}}'>{{todo.name}}</li>
+				{{else}}
+					<li>No todos</li>
+				{{/for}}
+			{{/if}}
+		</ul>`
 });
 ```
 

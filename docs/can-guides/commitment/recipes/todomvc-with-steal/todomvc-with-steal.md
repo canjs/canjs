@@ -366,7 +366,7 @@ Update _models/todo.js_ to the following:
     {{something.name}}
   ```
 - Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
-- Use [can-stache.helpers.each {{#each(value)}}] to do looping in `can-stache`.
+- Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in `can-stache`.
 
 ### The solution
 
@@ -411,10 +411,10 @@ Update _index.stache_ to the following:
 ### What you need to know
 
 - [The can-stache-bindings Presentation’s](https://drive.google.com/open?id=0Bx-kNqf-wxZeYUJ3ZVRxUlU2MjQ) _DOM Data Bindings_
-- Use [can-stache-bindings.twoWay value:bind] to setup a two-way binding in `can-stache`.  For example, the following keeps `name` and the input’s `value` in sync:
+- Use [can-stache-bindings.twoWay value:bind] to setup a two-way binding in `can-stache`.  For example, the following keeps `todo.name` and the input’s `value` in sync:
 
    ```html
-   <input  value:bind="name" />
+   <input  value:bind="todo.name" />
    ```
 
 ### The solution

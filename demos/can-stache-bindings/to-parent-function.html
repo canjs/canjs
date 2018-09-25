@@ -3,27 +3,27 @@
 </style>
 <my-demo></my-demo>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
-import { Component, DefineList, DefineMap, queues, stache } from "can";
+import { Component, stache } from "can";
 
 Component.extend({
 	tag: "my-tabs",
 	view: `
 		<ul>
-			{{#each(panels, panel=value)}}
-				<li {{#scope.root.isActive(panel)}}class='active'{{/isActive}} 
-						on:click='scope.root.makeActive(panel)'>
-					{{panel.title}}
+			{{# for(panel of this.panels) }}
+				<li {{# if(this.isActive(panel) }}class='active'{{/ }}
+						on:click='this.makeActive(panel)'>
+					{{ panel.title }}
 				</li>
-			{{/each}}
+			{{/ for }}
 		</ul>
 		<content></content>
 	`,
-	ViewModel: DefineMap.extend({
+	ViewModel: {
 		// Contains a list of all panel scopes within the
 		// tabs element.
 		panels: {
 			default: function() {
-				return new DefineList([]);
+				return [];
 			}
 		},
 		active: "any",
@@ -66,27 +66,28 @@ Component.extend({
 		isActive: function( panel ) {
 			return this.active === panel;
 		}
-	})
+	}
 });
 
 Component.extend({
-	view: `{{#if(active)}}<content></content>{{/if}}`,
+	view: `{{# if(this.active) }}<content></content>{{/ if }}`,
 	tag:"my-panel",
-	ViewModel: DefineMap.extend({
+	ViewModel: {
 		active: { default: false },
 		addPanel: "any",
 		init: function(){
 			this.addPanel(this);
 		}
-	})
+	}
 });
 
 Component.extend({
 	tag: 'my-demo',
 	view: `
-		<my-tabs addPanel:to="scope.vars.addPanel">
-			<my-panel addPanel:from="scope.vars.addPanel" title:from="'CanJS'">CanJS Content</my-panel>
-			<my-panel addPanel:from="scope.vars.addPanel" title:from="'StealJS'">StealJS Content</my-panel>
+		{{ let addPanel=null }}
+		<my-tabs addPanel:to="addPanel">
+			<my-panel addPanel:from="addPanel" title:from="'CanJS'">CanJS Content</my-panel>
+			<my-panel addPanel:from="addPanel" title:from="'StealJS'">StealJS Content</my-panel>
 		</my-tabs>
 	`
 })

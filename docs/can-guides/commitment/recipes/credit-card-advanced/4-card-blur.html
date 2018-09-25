@@ -1,20 +1,20 @@
 <script type="text/stache" id="app-view">
 <form>
 
-  {{#if(showCardError.value)}}
-    <div class="message">{{cardError.value}}</div>
-  {{/if}}
+  {{# if(showCardError.value) }}
+    <div class="message">{{ cardError.value }}</div>
+  {{/ if }}
 
   <input type="text" name="number" placeholder="Card Number"
     on:input:value:to="userCardNumber.value"
     on:blur="userCardNumberBlurred.emitter.value(true)"
-    {{#if(showCardError.value)}}class="is-error"{{/if}}/>
+    {{# if(showCardError.value) }}class="is-error"{{/ if }}/>
 
   <input type="text" name="expiry" placeholder="MM-YY"/>
 
   <input type="text" name="cvc" placeholder="CVC"/>
 
-  <button>Pay ${{amount.value}}</button>
+  <button>Pay ${{ amount.value }}</button>
 
 </form>
 </script>

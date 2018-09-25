@@ -3,7 +3,7 @@
 <can-import from="~/components/todo-list/" />
 <section id="todoapp">
     <header id="header">
-        <h1>{{appName}}</h1>
+        <h1>{{ appName }}</h1>
         <todo-create/>
     </header>
     <section id="main" class="">
@@ -15,7 +15,7 @@
     </section>
     <footer id="footer" class="">
         <span id="todo-count">
-            <strong>{{todosList.active.length}}</strong> items left
+            <strong>{{ todosList.active.length }}</strong> items left
         </span>
         <ul id="filters">
             <li>
@@ -30,7 +30,7 @@
         </ul>
         <button id="clear-completed"
             on:click="allTodos.destroyComplete()">
-            Clear completed ({{allTodos.complete.length}})
+            Clear completed ({{ allTodos.complete.length }})
         </button>
     </footer>
 </section>

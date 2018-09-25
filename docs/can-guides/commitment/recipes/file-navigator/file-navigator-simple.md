@@ -167,7 +167,7 @@ Let’s render `rootEntityData` in the page with its immediate children.
   ```
 
 - Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
-- Use [can-stache.helpers.each {{#each(value)}}] to do looping in `can-stache`.
+- Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in `can-stache`.
 - Use [can-stache.helpers.is {{#eq(value1, value2)}}] to test equality in `can-stache`.
 - [can-stache/keys/current {{./key}}] only returns the value in the current scope.
 - Write a `<ul>` to contain all the files.  Within the `<ul>` there should be:
@@ -182,15 +182,15 @@ Update the __HTML__ tab to:
 <script type="text/stache" id="entities-template">
   <span>{{name}}</span>
   <ul>
-    {{#each(./children)}}
-      <li class="{{type}} {{#if(hasChildren)}}hasChildren{{/if}}">
-        {{#eq(type, 'file')}}
-          📝 <span>{{name}}</span>
+    {{#for(child of children)}}
+      <li class="{{child.type}} {{#if(child.hasChildren)}}hasChildren{{/if}}">
+        {{#eq(child.type, 'file')}}
+          📝 <span>{{child.name}}</span>
         {{else}}
-          📁 <span>{{name}}</span>
+          📁 <span>{{child.name}}</span>
         {{/eq}}
       </li>
-    {{/each}}
+    {{/for}}
   </ul>
 </script>
 ```
@@ -239,15 +239,15 @@ Update the __HTML__ tab to:
 <script type="text/stache" id="entities-template">
   <span>{{name}}</span>
   <ul>
-    {{#each(./children)}}
-      <li class="{{type}} {{#if(hasChildren)}}hasChildren{{/if}}">
-        {{#eq(type, 'file')}}
-          📝 <span>{{name}}</span>
+    {{#for(child of children)}}
+      <li class="{{child.type}} {{#if(child.hasChildren)}}hasChildren{{/if}}">
+        {{#eq(child.type, 'file')}}
+          📝 <span>{{child.name}}</span>
         {{else}}
-          📁 {{>entities}}
+          📁 <span>{{child.name}}</span>
         {{/eq}}
       </li>
-    {{/each}}
+    {{/for}}
   </ul>
 </script>
 ```
@@ -453,15 +453,15 @@ Update the __HTML__ tab to:
   <span on:click="toggleOpen()">{{name}}</span>
   {{#if(isOpen)}}
   <ul>
-    {{#each(./children)}}
-      <li class="{{type}} {{#if(hasChildren)}}hasChildren{{/if}}">
-        {{#eq(type, 'file')}}
-          📝 <span>{{name}}</span>
+    {{#for(child of children)}}
+      <li class="{{child.type}} {{#if(child.hasChildren)}}hasChildren{{/if}}">
+        {{#eq(child.type, 'file')}}
+          📝 <span>{{child.name}}</span>
         {{else}}
-          📁 {{>entities}}
+          📁 <span>{{child.name}}</span>
         {{/eq}}
       </li>
-    {{/each}}
+    {{/for}}
   </ul>
   {{/if}}
 </script>

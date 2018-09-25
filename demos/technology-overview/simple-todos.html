@@ -7,19 +7,19 @@ Component.extend({
     tag: "todos-list",
     view: `
       <ul>
-        {{#each(todos)}}
+        {{# for(todo of this.todos) }}
             <li>
-              <input type='checkbox' checked:bind='complete'/>
-              {{name}}
+              <input type='checkbox' checked:bind='todo.complete'/>
+              {{ todo.name }}
             </li>
-        {{/each}}
+        {{/ for }}
       </ul>
-      There are {{completeCount}} completed todo(s).
-      {{#is(completeCount, todos.length)}}
+      There are {{ this.completeCount }} completed todo(s).
+      {{# is(this.completeCount, this.todos.length) }}
         You completed all the todos!
-      {{else}}
-        Some todos remain. <button on:click='completeAll()'>Complete All</button>
-      {{/is}}
+      {{ else }}
+        Some todos remain. <button on:click='this.completeAll()'>Complete All</button>
+      {{/ is }}
     `,
     ViewModel: {
         todos: {

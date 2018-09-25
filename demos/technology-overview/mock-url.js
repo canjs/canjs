@@ -38,7 +38,7 @@ Component.extend({
             <span class='back' on:click='back()'>&#x21E6;</span>
             <span class='forward' on:click='forward()'>&#x21E8;</span>
             <span class='reload' on:click='reload()'>&#8635;</span>
-            <div class="url">URL: {{page}}<input value:bind="url"/></div>
+            <div class="url">URL: {{ page }}<input value:bind="url"/></div>
         </div>`,
 
     ViewModel: DefineMap.extend("MockUrl",{

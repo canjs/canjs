@@ -1,12 +1,12 @@
 <script type="text/stache" id="app-view">
-  {{#if(sessionPromise.value)}}
+  {{# if(sessionPromise.value) }}
 
     <p class="welcome-message">
-      Welcome {{sessionPromise.value.user.email}}.
+      Welcome {{ sessionPromise.value.user.email }}.
       <a href="javascript://">log out</a>
     </p>
 
-  {{else}}
+  {{ else }}
 
     <form on:submit="signUp(scope.event)">
       <h2>Sign Up</h2>
@@ -24,5 +24,5 @@
       </aside>
     </form>
 
-  {{/if}}
+  {{/ if }}
 </script>
