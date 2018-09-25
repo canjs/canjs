@@ -45,12 +45,13 @@ Component.extend({
           <label for="toggle-all">Mark all as complete</label>
           <ul id="todo-list">
             {{# for(todo of todosPromise) }}
-              <li class="todo {{# if(todo.complete) }}completed{{/ if }}">
+              <li class="todo {{# if(todo.complete) }}completed{{/ if }}
+                {{# if(todo.isDestroying()) }}destroying{{/ if }}">
                 <div class="view">
                   <input class="toggle" type="checkbox"
                      checked:bind="todo.complete">
                   <label>{{ todo.name }}</label>
-                  <button class="destroy"></button>
+                  <button class="destroy" on:click="todo.destroy()"></button>
                 </div>
                 <input class="edit" type="text"
                   value="{{todo.name}}"/>

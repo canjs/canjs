@@ -1,9 +1,10 @@
-import { DefineMap, DefineList, fixture, realtimeRestModel, Component, route, domEvents, enterEvent } from "//unpkg.com/can@5/everything.mjs";
+import { Component, DefineMap, DefineList, fixture, realtimeRestModel,
+  domEvents, enterEvent } from "//unpkg.com/can@5/everything.mjs";
 
 domEvents.addEvent(enterEvent);
 
 const Todo = DefineMap.extend("Todo",{
-  id: "number",
+  id: {type: "number", identity: true},
   name: "string",
   complete: { type: "boolean", default: false }
 });
@@ -122,7 +123,7 @@ Component.extend({
   view: `
       <section id="todoapp">
         <header id="header">
-          <h1>todos</h1>
+          <h1>{{this.appName}}</h1>
           <todo-create/>
         </header>
         <section id="main" class="">
