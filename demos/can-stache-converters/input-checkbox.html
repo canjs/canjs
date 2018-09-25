@@ -11,7 +11,7 @@ Component.extend({
 				<input type='checkbox' checked:bind='boolean-to-inList(item, this.person.owns)' />
 				{{ upper(item) }}
 			</label>
-		{{/ each }}
+		{{/ for }}
 		<p>You own: {{ this.ownership() }}</p>
 	`,
 	ViewModel: {

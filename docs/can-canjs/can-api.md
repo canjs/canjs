@@ -577,7 +577,7 @@ Common [can-stache] tags and built in helpers:
     <li> ... </li>
   {{else}}
     <li>No todos</li>
-  {{/ each }}
+  {{/ for }}
 </ul>
 ```
 

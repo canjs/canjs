@@ -28,9 +28,9 @@
 				<button class="destroy" on:click="todo.destroy()"></button>
 			</div>
 			<input class="edit" type="text"
-				value:bind="name"
+				value:bind="todo.name"
 				on:enter="this.updateName()"
-				focused:from="this.isEditing(this)"
+				focused:from="this.isEditing(todo)"
 				on:blur="this.cancelEdit()"/>
 		</li>
 	{{/ for }}

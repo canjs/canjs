@@ -78,7 +78,7 @@ Component.extend({
                     <button on:click="todo.destroy()"
                         disabled:from="todo.preventSave()">delete</button>
                 </li>
-            {{/ each }}
+            {{/ for }}
         {{/ if }}
         {{# if(todosPromise.isPending) }}
             <li>Loading</li>

@@ -707,9 +707,9 @@ The component above should be updated to:
 ```js
 Component.extend({
 	view: `
-		{{#for todo of this.todosPromise.value}}
-			<li on:click="this.edit(todo)">{{todo.name}}</li>
-		{{/for}}
+		{{# for todo of this.todosPromise.value }}
+			<li on:click="this.edit(todo)">{{ todo.name }}</li>
+		{{/ for }}
 	`,
 	ViewModel: {
 		get todosPromise(){ return Todo.getList(); },
@@ -721,4 +721,4 @@ Component.extend({
 
 Notice that `this` remains the `ViewModel` because [can-stache.helpers.for-of] doesn't
 change the context, it only creates a `todo` variable.  Writing stache templates like this
-makes what's going on immediately clear. 
+makes what's going on immediately clear.
