@@ -5,7 +5,7 @@ Component.extend({
   view: `
       <section id="todoapp">
         <header id="header">
-          <h1>{{this.appName}}</h1>
+          <h1>{{ this.appName }}</h1>
           <input id="new-todo"
             placeholder="What needs to be done?"/>
         </header>
@@ -45,7 +45,7 @@ Component.extend({
           </span>
           <ul id="filters">
             <li>
-              <a href="#!"class="selected">All</a>
+              <a href="#!" class="selected">All</a>
             </li>
             <li>
               <a href="#!active">Active</a>

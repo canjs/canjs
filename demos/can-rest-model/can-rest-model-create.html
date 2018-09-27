@@ -95,7 +95,7 @@ Component.extend({
                 <th>id</th><th>complete</th>
                 <th>name</th><th>due date</th>
             </tr>
-            {{# for(todo of todos) }}
+            {{# for(todo of this.todos) }}
                 <tr>
                     <td>{{ todo.id }}</td>
                     <td><input type='checkbox' checked:bind='todo.complete' disabled/></td>

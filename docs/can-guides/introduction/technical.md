@@ -1133,7 +1133,7 @@ and view bindings like [can-stache-bindings.twoWay] in the template. For example
 </header>
 
 <ul id="todo-list">
-	{{# for(todo of todos) }}
+	{{# for(todo of this.todos) }}
 		<li class="todo {{# if(todo.complete) }}completed{{/ if }}">
 				<div class="view">
 						<input class="toggle" type="checkbox"
@@ -1737,7 +1737,7 @@ Todo.get({id: 2, populate: "projectRef"}).then(function(todo){
 Or, it can be lazy loaded if it’s used in a template. For example, with this template:
 
 ```html
-{{# for(todo of todos) }}
+{{# for(todo of this.todos) }}
   Name: {{ todo.name }}
   Project: {{ todo.projectRef.value.name }}
 {{/ for }}

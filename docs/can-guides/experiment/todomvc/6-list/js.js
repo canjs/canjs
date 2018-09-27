@@ -56,7 +56,7 @@ Component.extend({
   tag: "todo-list",
   view: `
     <ul id="todo-list">
-      {{# for(todo of todos) }}
+      {{# for(todo of this.todos) }}
         <li class="todo {{# if(todo.complete) }}completed{{/ if }}
           {{# if(todo.isDestroying()) }}destroying{{/ if }}">
           <div class="view">
@@ -81,21 +81,21 @@ Component.extend({
   view: `
       <section id="todoapp">
         <header id="header">
-          <h1>{{this.appName}}</h1>
+          <h1>{{ this.appName }}</h1>
           <todo-create/>
         </header>
         <section id="main" class="">
           <input id="toggle-all" type="checkbox"/>
           <label for="toggle-all">Mark all as complete</label>
-          <todo-list todos:from="todosPromise.value"/>
+          <todo-list todos:from="this.todosPromise.value"/>
         </section>
         <footer id="footer" class="">
           <span id="todo-count">
-            <strong>{{todosPromise.value.active.length}}</strong> items left
+            <strong>{{ this.todosPromise.value.active.length }}</strong> items left
           </span>
           <ul id="filters">
             <li>
-              <a href="#!"class="selected">All</a>
+              <a href="#!" class="selected">All</a>
             </li>
             <li>
               <a href="#!active">Active</a>
@@ -105,7 +105,7 @@ Component.extend({
             </li>
           </ul>
           <button id="clear-completed">
-            Clear completed ({{todosPromise.value.complete.length}})
+            Clear completed ({{ this.todosPromise.value.complete.length }})
           </button>
         </footer>
       </section>

@@ -21,7 +21,7 @@ Component.extend({
   view: `
       <section id="todoapp">
         <header id="header">
-          <h1>{{this.appName}}</h1>
+          <h1>{{ this.appName }}</h1>
           <input id="new-todo"
             placeholder="What needs to be done?"/>
         </header>
@@ -29,7 +29,7 @@ Component.extend({
           <input id="toggle-all" type="checkbox"/>
           <label for="toggle-all">Mark all as complete</label>
           <ul id="todo-list">
-            {{# for(todo of todos) }}
+            {{# for(todo of this.todos) }}
               <li class="todo {{# if(todo.complete) }}completed{{/ if }}">
                 <div class="view">
                   <input class="toggle" type="checkbox"
@@ -45,11 +45,11 @@ Component.extend({
         </section>
         <footer id="footer" class="">
           <span id="todo-count">
-            <strong>{{todos.active.length}}</strong> items left
+            <strong>{{ this.todos.active.length }}</strong> items left
           </span>
           <ul id="filters">
             <li>
-              <a href="#!"class="selected">All</a>
+              <a href="#!" class="selected">All</a>
             </li>
             <li>
               <a href="#!active">Active</a>
@@ -59,7 +59,7 @@ Component.extend({
             </li>
           </ul>
           <button id="clear-completed">
-            Clear completed ({{todos.complete.length}})
+            Clear completed ({{ this.todos.complete.length }})
           </button>
         </footer>
       </section>

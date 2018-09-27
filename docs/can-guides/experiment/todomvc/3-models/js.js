@@ -36,7 +36,7 @@ Component.extend({
   view: `
       <section id="todoapp">
         <header id="header">
-          <h1>{{this.appName}}</h1>
+          <h1>{{ this.appName }}</h1>
           <input id="new-todo"
             placeholder="What needs to be done?"/>
         </header>
@@ -60,11 +60,11 @@ Component.extend({
         </section>
         <footer id="footer" class="">
           <span id="todo-count">
-            <strong>{{todosPromise.value.active.length}}</strong> items left
+            <strong>{{ this.todosPromise.value.active.length }}</strong> items left
           </span>
           <ul id="filters">
             <li>
-              <a href="#!"class="selected">All</a>
+              <a href="#!" class="selected">All</a>
             </li>
             <li>
               <a href="#!active">Active</a>
@@ -74,7 +74,7 @@ Component.extend({
             </li>
           </ul>
           <button id="clear-completed">
-            Clear completed ({{todosPromise.value.complete.length}})
+            Clear completed ({{ this.todosPromise.value.complete.length }})
           </button>
         </footer>
       </section>
