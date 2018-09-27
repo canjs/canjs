@@ -241,3 +241,10 @@ Update the __JavaScript__ tab to:
 @highlight 1,37-47,58
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+
+## Result
+
+When complete, you should have a working Search, List, Details flow like the following CodePen:
+
+
+<p data-height="426" data-theme-id="dark" data-slug-hash="yxJwwJ" data-default-tab="result" data-user="bitovi" data-embed-version="2" data-pen-title="CanJS 5.0 - Search / List / Details - Final" class="codepen">See the Pen <a href="https://codepen.io/bitovi/pen/yxJwwJ/">CanJS 5.0 - Search / List / Details - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>) on <a href="https://codepen.io">CodePen</a>.</p>
