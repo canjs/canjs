@@ -155,6 +155,7 @@ Update the __HTML__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
+@highlight 1-12
 
 
 

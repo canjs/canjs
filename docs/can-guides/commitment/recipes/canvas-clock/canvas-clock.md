@@ -143,7 +143,7 @@ In this section, we will:
   which will be passed to [can-define/map/map.extend DefineMap.extend]
   (hint:`ViewModel: {}`).
 - A viewModel’s [can-component/connectedCallback] will be called when the
-  component is inserted into the page; it will be passed the `element` like:
+  component is inserted into the page; it will pass the `element` like:
   ```js
   can.Component.extend({
     tag: "my-element",

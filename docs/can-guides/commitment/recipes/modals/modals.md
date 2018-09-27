@@ -262,3 +262,10 @@ new ProgrammerQuestions({
 @highlight 148,158,168,178,184,200,204-206,only
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+
+
+## Result
+
+When complete, you should have a working multiple modal form like the following CodePen:
+
+<p data-height="426" data-theme-id="dark" data-slug-hash="mjyjQN" data-default-tab="result" data-user="justinbmeyer" data-embed-version="2" data-pen-title="CanJS 5.0 - Multiple Modals - Final" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/mjyjQN/">CanJS 5.0 - Multiple Modals - Final</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
