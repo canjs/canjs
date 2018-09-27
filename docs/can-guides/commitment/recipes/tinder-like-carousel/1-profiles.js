@@ -7,10 +7,10 @@ Component.extend({
 
       <div class="images">
         <div class="current">
-          <img src="{{currentProfile.img}}"/>
+          <img src="{{ currentProfile.img }}"/>
         </div>
         <div class="next">
-          <img src="{{nextProfile.img}}"/>
+          <img src="{{ nextProfile.img }}"/>
         </div>
       </div>
 

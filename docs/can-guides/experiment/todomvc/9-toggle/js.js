@@ -1,25 +1,14 @@
-const todoAlgebra = new can.set.Algebra(
-  can.set.props.boolean("complete"),
-  can.set.props.id("id"),
-  can.set.props.sort("sort")
-);
+import { DefineMap, DefineList, fixture, realtimeRestModel, Component, route, domEvents, enterEvent } from "//unpkg.com/can@5/everything.mjs";
 
-const todoStore = can.fixture.store([
-  { name: "mow lawn", complete: false, id: 5 },
-  { name: "dishes", complete: true, id: 6 },
-  { name: "learn canjs", complete: false, id: 7 }
-], todoAlgebra);
+domEvents.addEvent(enterEvent);
 
-can.fixture("/api/todos", todoStore);
-can.fixture.delay = 1000;
-
-const Todo = can.DefineMap.extend({
+const Todo = DefineMap.extend("Todo",{
   id: "number",
   name: "string",
   complete: { type: "boolean", default: false }
 });
 
-Todo.List = can.DefineList.extend({
+Todo.List = DefineList.extend({
   "#": Todo,
   get active() {
     return this.filter({ complete: false });
@@ -48,85 +37,152 @@ Todo.List = can.DefineList.extend({
   }
 });
 
-can.connect.superMap({
+const todoStore = fixture.store([
+  { name: "mow lawn", complete: false, id: 5 },
+  { name: "dishes", complete: true, id: 6 },
+  { name: "learn canjs", complete: false, id: 7 }
+], Todo);
+
+fixture("/api/todos", todoStore);
+fixture.delay = 200;
+
+realtimeRestModel({
   url: "/api/todos",
   Map: Todo,
-  List: Todo.List,
-  name: "todo",
-  algebra: todoAlgebra
+  List: Todo.List
 });
 
-const TodoCreateVM = can.DefineMap.extend({
+Component.extend({
+  tag: "todo-create",
+  view: `
+    <input id="new-todo"
+      placeholder="What needs to be done?"
+      value:bind="todo.name"
+      on:enter="createTodo()"/>
+  `,
+  ViewModel: {
     todo: { Default: Todo },
     createTodo: function() {
-    this.todo.save().then(() => {
-      this.todo = new Todo();
-    });
-  }
-});
-
-can.Component.extend({
-  tag: "todo-create",
-  view: can.stache.from("todo-create-template"),
-  ViewModel: TodoCreateVM
-});
-
-const TodoListVM = can.DefineMap.extend({
-  todos: Todo.List,
-  editing: Todo,
-  backupName: "string",
-  isEditing: function(todo) {
-    return todo === this.editing;
-  },
-  edit: function(todo) {
-    this.backupName = todo.name;
-    this.editing = todo;
-  },
-  cancelEdit: function() {
-    if(this.editing) {
-      this.editing.name = this.backupName;
+      this.todo.save().then(function(){
+        this.todo = new Todo();
+      }.bind(this));
     }
-    this.editing = null;
-  },
-  updateName: function() {
-    this.editing.save();
-    this.editing = null;
   }
 });
 
-can.Component.extend({
+Component.extend({
   tag: "todo-list",
-  view: can.stache.from("todo-list-template"),
-  ViewModel: TodoListVM
-});
-
-const AppVM = can.DefineMap.extend({
-  filter: "string",
-  get todosPromise() {
-    if(!this.filter) {
-      return Todo.getList({});
-    } else {
-      return Todo.getList({ complete: this.filter === "complete" });
+  view: `
+    <ul id="todo-list">
+      {{# for(todo of todos) }}
+        <li class="todo {{# if(todo.complete) }}completed{{/ if }}
+          {{# if(todo.isDestroying()) }}destroying{{/ if }}
+          {{# if(this.isEditing(todo)) }}editing{{/ if }}">
+          <div class="view">
+            <input class="toggle" type="checkbox"
+               checked:bind="todo.complete" on:change="todo.save()">
+            <label on:dblclick="this.edit(todo)">{{ todo.name }}</label>
+            <button class="destroy" on:click="todo.destroy()"></button>
+          </div>
+          <input class="edit" type="text"
+            value:bind="todo.name"
+            on:enter="this.updateName()"
+            focused:from="this.isEditing(todo)"
+            on:blur="this.cancelEdit()"/>
+        </li>
+      {{/ for }}
+    </ul>
+  `,
+  ViewModel: {
+    todos: Todo.List,
+    editing: Todo,
+    backupName: "string",
+    isEditing: function(todo) {
+      return todo === this.editing;
+    },
+    edit: function(todo) {
+      this.backupName = todo.name;
+      this.editing = todo;
+    },
+    cancelEdit: function() {
+      if(this.editing) {
+        this.editing.name = this.backupName;
+      }
+      this.editing = null;
+    },
+    updateName: function() {
+      this.editing.save();
+      this.editing = null;
     }
-  },
-  todosList: {
-    get: function(lastSetValue, resolve) {
-      this.todosPromise.then(resolve);
-    }
-  },
-  get allChecked() {
-    return this.todosList && this.todosList.allComplete;
-  },
-  set allChecked(newVal) {
-    this.todosList && this.todosList.updateCompleteTo(newVal);
   }
 });
 
-const appVM = new AppVM();
-can.route.data = appVM;
-can.route.register("{filter}");
-can.route.start();
-
-const template = can.stache.from("todomvc-template");
-const fragment = template(appVM);
-document.body.appendChild(fragment);
+Component.extend({
+  tag: "todo-mvc",
+  view: `
+      <section id="todoapp">
+        <header id="header">
+          <h1>todos</h1>
+          <todo-create/>
+        </header>
+        <section id="main" class="">
+          <input id="toggle-all" type="checkbox"
+            checked:bind="allChecked"
+            disabled:from="todosList.saving.length"/>
+          <label for="toggle-all">Mark all as complete</label>
+          <todo-list todos:from="todosPromise.value"/>
+        </section>
+        <footer id="footer" class="">
+          <span id="todo-count">
+            <strong>{{todosPromise.value.active.length}}</strong> items left
+          </span>
+          <ul id="filters">
+            <li>
+              <a href="{{routeUrl(filter=undefined)}}"
+                {{#routeCurrent(filter=undefined)}}class="selected"{{/routeCurrent}}>All</a>
+            </li>
+            <li>
+              <a href="{{routeUrl(filter='active')}}"
+                {{#routeCurrent(filter='active')}}class="selected"{{/routeCurrent}}>Active</a>
+            </li>
+            <li>
+              <a href="{{routeUrl(filter='complete')}}"
+                {{#routeCurrent(filter='complete')}}class="selected"{{/routeCurrent}}>Completed</a>
+            </li>
+          </ul>
+          <button id="clear-completed"
+            on:click="todosList.destroyComplete()">
+            Clear completed ({{todosPromise.value.complete.length}})
+          </button>
+        </footer>
+      </section>
+  `,
+  ViewModel: {
+    appName: {default: "TodoMVC"},
+    routeData: {
+      default(){
+        route.register("{filter}");
+        route.start();
+        return route.data;
+      }
+    },
+    get todosPromise() {
+      if(!this.routeData.filter) {
+        return Todo.getList({});
+      } else {
+        return Todo.getList({filter: { complete: this.routeData.filter === "complete" }});
+      }
+    },
+    todosList: {
+      get: function(lastSet, resolve) {
+        this.todosPromise.then(resolve);
+      }
+    },
+    get allChecked() {
+      return this.todosList && this.todosList.allComplete;
+    },
+    set allChecked(newVal) {
+      this.todosList && this.todosList.updateCompleteTo(newVal);
+    }
+  }
+});

@@ -18,13 +18,13 @@ Component.extend({
 
 	view: `
 		<form>
-			{{#if(phoneNumberError)}}
-				<p class="error">{{phoneNumberError}}</p>
-			{{/if}}
+			{{# if(phoneNumberError) }}
+				<p class="error">{{ phoneNumberError }}</p>
+			{{/ if }}
 
 			<p>
 				Phone Number:
-				<input type="text" value:bind="userPhoneNumber" {{#if(phoneNumberError)}}class="error"{{/if}}>
+				<input type="text" value:bind="userPhoneNumber" {{# if(phoneNumberError) }}class="error"{{/ if }}>
 			</p>
 
 			<input type="submit" disabled:from="phoneNumberIsInvalid">

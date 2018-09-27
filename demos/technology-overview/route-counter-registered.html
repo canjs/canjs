@@ -19,7 +19,7 @@ route.start();
 
 const view = stache(`
   <button on:click='increment()'>+1</button>
-  Count: <span>{{count}}</span>
+  Count: <span>{{ count }}</span>
 `);
 
 document.body.appendChild( view(myCounter) );

@@ -12,16 +12,16 @@ Component.extend({
     view: `
         <h2>Task Editor</h2>
         <form on:submit='save(scope.event)'>
-            Name: {{name}}
+            Name: {{ name }}
             <p>
                 <input bind='name'/>
             </p>
-            Progress: {{progress}}
+            Progress: {{ progress }}
             <p>
                 <percent-slider value:bind='progress'/>
             </p>
             <button disabled:from="isSaving">
-                {{#if(isSaving)}}Saving{{else}}Save{{/if}}
+                {{# if(isSaving) }}Saving{{ else }}Save{{/ if }}
             </button>
         </form>
     `,

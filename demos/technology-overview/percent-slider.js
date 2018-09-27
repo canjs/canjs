@@ -10,7 +10,7 @@ const PercentSlider = Component.extend({
     tag: "percent-slider",
     view: `
         <div class="slider"
-        style="left: {{left}}px"
+        style="left: {{ left }}px"
         on:mousedown="startDrag(scope.event.clientX)"/>
     `,
     ViewModel: {

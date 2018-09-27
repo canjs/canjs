@@ -94,7 +94,7 @@ Component.extend({
 	view: `
 		<div class='background'></div>
 		<div class='modal-container'>
-			{{component}}
+			{{ component }}
 		</div>
 	`
 });
@@ -103,19 +103,19 @@ Component.extend({
 	tag: "my-app",
 	view: `
 		<occupation-questions isDiva:bind="isDiva" isProgrammer:bind="isProgrammer"/>
-		<p>isDiva: {{isDiva}}</p>
-		<p>isProgrammer: {{isProgrammer}}</p>
+		<p>isDiva: {{ isDiva }}</p>
+		<p>isProgrammer: {{ isProgrammer }}</p>
 
 		{{# if(isDiva) }}
 			<my-modals component:from="divaQuestions"></my-modals>
 		{{/ if }}
-		<p>diva expenses: {{divaExpenses.join(', ')}}</p>
+		<p>diva expenses: {{ divaExpenses.join(', ') }}</p>
 
 		<programmer-questions programmingLanguage:bind="programmingLanguage"/>
-		<p>programmingLanguage: {{programmingLanguage}}</p>
+		<p>programmingLanguage: {{ programmingLanguage }}</p>
 
 		<income-questions paymentType:bind="paymentType"/>
-		<p>paymentType: {{paymentType}}</p>
+		<p>paymentType: {{ paymentType }}</p>
    `,
 	ViewModel: {
 		// Stateful properties

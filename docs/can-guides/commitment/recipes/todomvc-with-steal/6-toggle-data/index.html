@@ -1,29 +1,29 @@
 <!-- index.stache -->
 <section id="todoapp">
     <header id="header">
-        <h1>{{appName}}</h1>
+        <h1>{{ appName }}</h1>
         <input id="new-todo" placeholder="What needs to be done?">
     </header>
     <section id="main" class="">
         <input id="toggle-all" type="checkbox">
         <label for="toggle-all">Mark all as complete</label>
         <ul id="todo-list">
-            {{#each(todosList)}}
-            <li class="todo {{#if(complete)}}completed{{/if}}">
+            {{# for(todo of todosList) }}
+            <li class="todo {{# if(todo.complete) }}completed{{/ if }}">
                 <div class="view">
                     <input class="toggle" type="checkbox"
-                        checked:bind="complete" />
-                    <label>{{name}}</label>
+                        checked:bind="todo.complete" />
+                    <label>{{ todo.name }}</label>
                     <button class="destroy"></button>
                 </div>
-                <input class="edit" type="text" value="{{name}}" />
+                <input class="edit" type="text" value="{{ todo.name }}" />
             </li>
-            {{/each}}
+            {{/ for }}
         </ul>
     </section>
     <footer id="footer" class="">
         <span id="todo-count">
-            <strong>{{todosList.active.length}}</strong> items left
+            <strong>{{ todosList.active.length }}</strong> items left
         </span>
         <ul id="filters">
             <li>
@@ -37,7 +37,7 @@
             </li>
         </ul>
         <button id="clear-completed">
-            Clear completed ({{todosList.complete.length}})
+            Clear completed ({{ todosList.complete.length }})
         </button>
     </footer>
 </section>

@@ -9,11 +9,11 @@ Component.extend({
 	view: `
 		<input type="checkbox" checked:to="isItChecked">
 		<p>
-		{{#if(isItChecked)}}
+		{{# if(isItChecked) }}
 			checkbox is checked
-		{{else}}
+		{{ else }}
 			checkbox is unchecked
-		{{/if}}
+		{{/ if }}
 		</p>
 	`,
 

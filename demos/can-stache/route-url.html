@@ -4,19 +4,19 @@
 
 <a	{{^ routeCurrent(page='home') }}
 		href="{{ routeUrl(page='home') }}"
-	{{/routeCurrent}}
+	{{/ routeCurrent }}
 	>home</a>
 
-<a  {{^routeCurrent page='restaurants'}}
-		href="{{routeUrl(page='restaurants')}}"
-	{{/routeCurrent}}
+<a  {{^ routeCurrent page='restaurants' }}
+		href="{{ routeUrl(page='restaurants') }}"
+	{{/ routeCurrent }}
 	>restaurants</a>
 
-{{#eq(page, 'home')}}
+{{# eq(page, 'home') }}
 	<h1>Home page</h1>
-{{else}}
+{{ else }}
 	<h1>Restaurants page</h1>
-{{/eq}}
+{{/ eq }}
 </script>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id='demo-source'>

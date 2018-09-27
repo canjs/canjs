@@ -130,7 +130,7 @@ var updatePage = function(){
 	var complete = window.location.hash !== "#incomplete";
 
 	$("#list").children().remove().triggerHandler("remove");
-	var ul = todoList({filter: {complete: complete}});
+	var ul = todoList({filter: {complete: complete }});
 	$("#list").html(ul);
 };
 $(window).bind("hashchange", updatePage);

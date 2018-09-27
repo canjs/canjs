@@ -27,22 +27,23 @@
 
 <script type='text/stache' id='todo-list-template'>
 <ul id="todo-list">
-  {{#each(todos)}}
-    <li class="todo {{#if(./complete)}}completed{{/if}}
-      {{#if( isDestroying() )}}destroying{{/if}}
-      {{#if( ../isEditing(this) )}}editing{{/if}}">
-      <div class="view">
-        <input class="toggle" type="checkbox" checked:bind="complete">
-        <label on:dblclick="../edit(this)">{{name}}</label>
-        <button class="destroy" on:click="destroy()"></button>
-      </div>
-      <input class="edit" type="text"
-        default:bind="name"
-        on:enter="../updateName()"
-        focused:from="../isEditing(this)"
-        on:blur="../cancelEdit()"/>
-    </li>
-  {{/each}}
+	{{# for(todo of todos) }}
+		<li class="todo {{# if(todo.complete) }}completed{{/ if }}
+			{{# if(todo.isDestroying()) }}destroying{{/ if }}
+			{{# if(this.isEditing(todo)) }}editing{{/ if }}">
+			<div class="view">
+			<input class="toggle" type="checkbox"
+				 checked:bind="todo.complete" on:change="todo.save()">
+				<label on:dblclick="this.edit(todo)">{{ todo.name }}</label>
+				<button class="destroy" on:click="todo.destroy()"></button>
+			</div>
+			<input class="edit" type="text"
+				value:bind="todo.name"
+				on:enter="this.updateName()"
+				focused:from="this.isEditing(todo)"
+				on:blur="this.cancelEdit()"/>
+		</li>
+	{{/ for }}
 </ul>
 </script>
 
@@ -61,25 +62,25 @@
 	</section>
 	<footer id="footer" class="">
 		<span id="todo-count">
-			<strong>{{todosPromise.value.active.length}}</strong> items left
+			<strong>{{ todosPromise.value.active.length }}</strong> items left
 		</span>
 		<ul id="filters">
 			<li>
-				<a href="{{routeUrl(filter=undefined)}}"
-					{{#routeCurrent(filter=undefined)}}class='selected'{{/routeCurrent}}>All</a>
+				<a href="{{ routeUrl(filter=undefined) }}"
+					{{# routeCurrent(filter=undefined) }}class='selected'{{/ routeCurrent }}>All</a>
 			</li>
 			<li>
-				<a href="{{routeUrl(filter='active')}}"
-					{{#routeCurrent(filter='active')}}class='selected'{{/routeCurrent}}>Active</a>
+				<a href="{{ routeUrl(filter='active') }}"
+					{{# routeCurrent(filter='active') }}class='selected'{{/ routeCurrent }}>Active</a>
 			</li>
 			<li>
-				<a href="{{routeUrl(filter='complete')}}"
-					{{#routeCurrent(filter='complete')}}class='selected'{{/routeCurrent}}>Completed</a>
+				<a href="{{ routeUrl(filter='complete') }}"
+					{{# routeCurrent(filter='complete') }}class='selected'{{/ routeCurrent }}>Completed</a>
 			</li>
 		</ul>
 		<button id="clear-completed"
             on:click="todosList.destroyComplete()">
-			Clear completed ({{todosPromise.value.complete.length}})
+			Clear completed ({{ todosPromise.value.complete.length }})
 		</button>
 	</footer>
 </section>
@@ -188,7 +189,7 @@ var AppVM = can.DefineMap.extend({seal: false},{
     if(!this.filter) {
       return Todo.getList({});
     } else {
-      return Todo.getList({filter: {complete: this.filter === "complete"}});
+      return Todo.getList({filter: {complete: this.filter === "complete" }});
     }
   },
   todosList: {

@@ -13,11 +13,11 @@ Component.extend({
 		</label>
 		<p>
 			Number (type:"number"):
-			 {{#eq(typeof(favoriteNumber), "string"}}
-				 "{{favoriteNumber}}"
-			 {{else}}
-				 {{favoriteNumber}}
-			 {{/eq}}
+			 {{# eq(typeof(favoriteNumber), "string" }}
+				 "{{ favoriteNumber }}"
+			 {{ else }}
+				 {{ favoriteNumber }}
+			 {{/ eq }}
 		</p>
 		<label>
 			Number (type: "any"):
@@ -25,11 +25,11 @@ Component.extend({
 		</label>
 		<p>
 			Number (type:"any"):
-			 {{#eq(typeof(favoriteNumberAnyType), "string"}}
-				 "{{favoriteNumberAnyType}}"
-			 {{else}}
-				 {{favoriteNumberAnyType}}
-			 {{/eq}}
+			 {{# eq(typeof(favoriteNumberAnyType), "string" }}
+				 "{{ favoriteNumberAnyType }}"
+			 {{ else }}
+				 {{ favoriteNumberAnyType }}
+			 {{/ eq }}
 		</p>
 	`,
 

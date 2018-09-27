@@ -143,9 +143,9 @@ document.querySelector("evil-tinder").viewModel.profiles.shift()
   Component.extend({
     tag: "evil-tinder",
     view: `
-      {{# each(profiles) }}
-          <img src="{{img}}"/>
-      {{/ each}}
+      {{# for(profile of profiles) }}
+          <img src="{{profile.img}}"/>
+      {{/ for }}
     `,
     ViewModel: {
       profiles: {

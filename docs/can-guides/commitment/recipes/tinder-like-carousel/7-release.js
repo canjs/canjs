@@ -4,16 +4,16 @@ Component.extend({
   tag: "evil-tinder",
   view: `
       <div class="header"></div>
-      <div class="result {{#if(liking)}}liking{{/if}}
-                         {{#if(noping)}}noping{{/if}}"></div>
+      <div class="result {{# if(liking) }}liking{{/ if }}
+                         {{# if(noping) }}noping{{/ if }}"></div>
       <div class="images">
-        <div class="current" style="left: {{howFarWeHaveMoved}}px">
-          <img src="{{currentProfile.img}}"
+        <div class="current" style="left: {{ howFarWeHaveMoved }}px">
+          <img src="{{ currentProfile.img }}"
                draggable="false"
                touch-action="none"/>
         </div>
         <div class="next">
-          <img src="{{nextProfile.img}}"/>
+          <img src="{{ nextProfile.img }}"/>
         </div>
       </div>
 

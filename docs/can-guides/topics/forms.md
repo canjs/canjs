@@ -151,7 +151,7 @@ This converter allows you to pass a scope property and two values—the value th
 
 @demo demos/forms/elements-checkbox-either-or.html
 
-Notice that the `{{bestTypeOfPet}}` property is initially set to `"Cats"` because <del>that is obviously the correct answer</del> the checkbox is unchecked.
+Notice that the `{{ bestTypeOfPet }}` property is initially set to `"Cats"` because <del>that is obviously the correct answer</del> the checkbox is unchecked.
 
 If you would like to choose `"Dogs"` by default, you can set the [https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-checked checked attribute].
 
@@ -242,11 +242,11 @@ To use this converter, pass it the property in the scope you want to bind and th
 
 The HTML for this example is intentionally verbose to make it easier to understand. Normally you would use stache to generate the `<option>`s directly from the `months` list like:
 
-```handlebars
+```html
 <select value:bind="index-to-selected(selectedMonth, months)">
-	{{#each(months, index=index month=value)}}
-		<option value:from="index">{{month}}</option>
-	{{/each}}
+	{{# for(months, index=index month=value) }}
+		<option value:from="index">{{ month }}</option>
+	{{/ for }}
 </select>
 ```
 
@@ -312,7 +312,7 @@ The following sections show how to do form validation manually, as well as how t
 
 For forms with a small number of fields, validating input values can be as simple as creating [can-define.types.get#Virtualproperties virtual properties] that represent the validity of each user input.
 
-When the user input is invalid, errors can be displayed using a CSS class: `{{#if(error)}}class="error"{{/if}}`.
+When the user input is invalid, errors can be displayed using a CSS class: `{{# if(error) }}class="error"{{/ if }}`.
 
 Also, in this example the submit button is disabled using the `disabled:from="error"` binding.
 
@@ -400,41 +400,40 @@ The following example has a top-level `<pizza-form>` component that keeps the li
 ```html
 <p>
 	Selected Ingredients:
-	{{#each(selectedMeats)}}
-		{{this}},
-	{{/each}}
+	{{# for(meat of this.selectedMeats) }}
+		{{ meat }},
+	{{/ for }}
 
-	{{#each(selectedVegetables)}}
-		{{this}},
-	{{/each}}
+	{{# for(veggie of this.selectedVegetables) }}
+		{{ veggie }},
+	{{/ for }}
 
-	{{#if(selectedCheese)}}
-		{{selectedCheese}} cheese
-	{{/if}}
+	{{# if(this.selectedCheese) }}
+		{{ this.selectedCheese }} cheese
+	{{/ if }}
 </p>
 
 <div>
 	<select-one
 		listName:from="'cheese'"
-		update:from="updateIngredients"
-		default:from="selectedCheese"
-		options:from="availableCheeses">
+		update:from="this.updateIngredients"
+		default:from="this.selectedCheese"
+		options:from="this.availableCheeses">
 	</select-one>
 </div>
 
 <div>
 	<meat-picker
-		listName:from="'meats'"
-		update:from="updateIngredients"
-		options:from="availableMeats">
+		update:from="this.updateIngredients"
+		options:from="this.availableMeats">
 	</meat-picker>
 </div>
 
 <div>
 	<select-many
 		listName:from="'vegetables'"
-		update:from="updateIngredients"
-		options:from="availableVegetables">
+		update:from="this.updateIngredients"
+		options:from="this.availableVegetables">
 	</select-many>
 </div>
 ```
@@ -446,25 +445,25 @@ The child `<meat-picker>` component uses this function to clear the “meats” 
 <div>
 	<label>
 		Vegetarian?
-		{{#if(scope.vars.showOptions}}
+		{{# if(scope.vars.showOptions }}
 			<input
 				checked:bind="not( scope.vars.showOptions )"
 				on:change="scope.root.update('meats', 'clear')"
 				type="checkbox">
-		{{else}}
+		{{ else }}
 			<input
 				checked:bind="not( scope.vars.showOptions )"
 				type="checkbox">
-		{{/if}}
+		{{/ if }}
 	</label>
 
-	{{#if(scope.vars.showOptions)}}
+	{{# if(scope.vars.showOptions) }}
 		<select-many
 			update:from="update"
 			listName:from="'meats'"
 			options:from="options">
 		</select-many>
-	{{/if}}
+	{{/ if }}
 </div>
 ```
 @highlight 7,18,only
@@ -583,56 +582,56 @@ ViewModel: {
 
 This `default` value is initialized the first time the `makes` property is used in the view:
 
-```handlebars
+```html
 <select value:bind="makeId"
-	{{#if(makes.isPending)}}disabled{{/if}}>
-	{{#if(makes.isPending)}}
-	  <option value=''>Loading…</option>
-	{{else}}
-	  {{^makeId}}
+	{{# if(makes.isPending) }}disabled{{/ if }}>
+	{{# if(makes.isPending) }}
+	  <option value=''>Loading...</option>
+	{{ else }}
+	  {{^ makeId }}
 		<option value=''>Select a Make</option>
-	  {{/makeId}}
-	  {{#each(makes.value)}}
-		<option value:from="id">{{name}}</option>
-	  {{/each}}
-	{{/if}}
+	  {{/ makeId }}
+	  {{# for( make of makes.value) }}
+		<option value:from="make.id">{{ make.name }}</option>
+	  {{/ for }}
+	{{/ if }}
 </select>
 
-{{#if(modelsPromise)}}
-	{{#if(models)}}
+{{# if(modelsPromise) }}
+	{{# if(models) }}
 		<select value:bind="modelId">
-			{{^modelId}}
+			{{^ modelId }}
 				<option value=''>Select a Model</option>
-			{{/modelId}}
-			{{#each(models)}}
-				<option value:from="id">{{name}}</option>
-			{{/each}}
+			{{/ modelId }}
+			{{# for(model of models) }}
+				<option value:from="model.id">{{ model.name }}</option>
+			{{/ for }}
 		</select>
-	{{else}}
+	{{ else }}
 		<select disabled><option>Loading Models</option></select>
-	{{/if}}
-{{else}}
+	{{/ if }}
+{{ else }}
 	<select disabled><option>Models</option></select>
-{{/if}}
+{{/ if }}
 
-{{#if(years)}}
+{{# if(years) }}
 	<select value:bind="year">
-		{{^year}}
+		{{^ year }}
 			<option value=''>Select a Year</option>
-		{{/year}}
-		{{#each years}}
-			<option value:from="this">{{this}}</option>
-		{{/each}}
+		{{/ year }}
+		{{# for(year of years ) }}
+			<option value:from="year">{{ year }}</option>
+		{{/ for }}
 	</select>
-{{else}}
+{{ else }}
 	<select disabled><option>Years</option></select>
-{{/if}}
+{{/ if }}
 
 <div>
-	{{#each(vehicles)}}
-		<h2>{{name}}</h2>
-		<img src:from="thumb" width="200px"/>
-	{{/each}}
+	{{# for(vehicle of vehicles) }}
+		<h2>{{ vehicle.name }}</h2>
+		<img src:from="vehicle.thumb" width="200px"/>
+	{{/ for }}
 </div>
 ```
 @highlight 2,only
@@ -666,56 +665,56 @@ This promise is decorated by [can-reflect-promise] so that in the view you can e
 
 This also means that in order to get the `makes` data, we need to use the `value` of the promise:
 
-```handlebars
+```html
 <select value:bind="makeId"
-	{{#if(makes.isPending)}}disabled{{/if}}>
-	{{#if(makes.isPending)}}
-	  <option value=''>Loading…</option>
-	{{else}}
-	  {{^makeId}}
+	{{# if(makes.isPending) }}disabled{{/ if }}>
+	{{# if(makes.isPending) }}
+	  <option value=''>Loading...</option>
+	{{ else }}
+	  {{^ makeId }}
 		<option value=''>Select a Make</option>
-	  {{/makeId}}
-	  {{#each(makes.value)}}
-		<option value:from="id">{{name}}</option>
-	  {{/each}}
-	{{/if}}
+	  {{/ makeId }}
+	  {{# for( make of makes.value) }}
+		<option value:from="make.id">{{ make.name }}</option>
+	  {{/ for }}
+	{{/ if }}
 </select>
 
-{{#if(modelsPromise)}}
-	{{#if(models)}}
+{{# if(modelsPromise) }}
+	{{# if(models) }}
 		<select value:bind="modelId">
-			{{^modelId}}
+			{{^ modelId }}
 				<option value=''>Select a Model</option>
-			{{/modelId}}
-			{{#each(models)}}
-				<option value:from="id">{{name}}</option>
-			{{/each}}
+			{{/ modelId }}
+			{{# for(model of models) }}
+				<option value:from="model.id">{{ model.name }}</option>
+			{{/ for }}
 		</select>
-	{{else}}
+	{{ else }}
 		<select disabled><option>Loading Models</option></select>
-	{{/if}}
-{{else}}
+	{{/ if }}
+{{ else }}
 	<select disabled><option>Models</option></select>
-{{/if}}
+{{/ if }}
 
-{{#if(years)}}
+{{# if(years) }}
 	<select value:bind="year">
-		{{^year}}
+		{{^ year }}
 			<option value=''>Select a Year</option>
-		{{/year}}
-		{{#each years}}
-			<option value:from="this">{{this}}</option>
-		{{/each}}
+		{{/ year }}
+		{{# for(year of years ) }}
+			<option value:from="year">{{ year }}</option>
+		{{/ for }}
 	</select>
-{{else}}
+{{ else }}
 	<select disabled><option>Years</option></select>
-{{/if}}
+{{/ if }}
 
 <div>
-	{{#each(vehicles)}}
-		<h2>{{name}}</h2>
-		<img src:from="thumb" width="200px"/>
-	{{/each}}
+	{{# for(vehicle of vehicles) }}
+		<h2>{{ vehicle.name }}</h2>
+		<img src:from="vehicle.thumb" width="200px"/>
+	{{/ for }}
 </div>
 ```
 @highlight 9,only
@@ -756,56 +755,56 @@ this.makesPromise.then(function(makes) {
 
 In order to load the correct `models` for a make, a request to the `/models` API must be made whenever a make is selected. In order to do this, the make `<select>` element is bound to the `makeId` property:
 
-```handlebars
+```html
 <select value:bind="makeId"
-	{{#if(makes.isPending)}}disabled{{/if}}>
-	{{#if(makes.isPending)}}
-	  <option value=''>Loading…</option>
-	{{else}}
-	  {{^makeId}}
+	{{# if(makes.isPending) }}disabled{{/ if }}>
+	{{# if(makes.isPending) }}
+	  <option value=''>Loading...</option>
+	{{ else }}
+	  {{^ makeId }}
 		<option value=''>Select a Make</option>
-	  {{/makeId}}
-	  {{#each(makes.value)}}
-		<option value:from="id">{{name}}</option>
-	  {{/each}}
-	{{/if}}
+	  {{/ makeId }}
+	  {{# for( make of makes.value) }}
+		<option value:from="make.id">{{ make.name }}</option>
+	  {{/ for }}
+	{{/ if }}
 </select>
 
-{{#if(modelsPromise)}}
-	{{#if(models)}}
+{{# if(modelsPromise) }}
+	{{# if(models) }}
 		<select value:bind="modelId">
-			{{^modelId}}
+			{{^ modelId }}
 				<option value=''>Select a Model</option>
-			{{/modelId}}
-			{{#each(models)}}
-				<option value:from="id">{{name}}</option>
-			{{/each}}
+			{{/ modelId }}
+			{{# for(model of models) }}
+				<option value:from="model.id">{{ model.name }}</option>
+			{{/ for }}
 		</select>
-	{{else}}
+	{{ else }}
 		<select disabled><option>Loading Models</option></select>
-	{{/if}}
-{{else}}
+	{{/ if }}
+{{ else }}
 	<select disabled><option>Models</option></select>
-{{/if}}
+{{/ if }}
 
-{{#if(years)}}
+{{# if(years) }}
 	<select value:bind="year">
-		{{^year}}
+		{{^ year }}
 			<option value=''>Select a Year</option>
-		{{/year}}
-		{{#each years}}
-			<option value:from="this">{{this}}</option>
-		{{/each}}
+		{{/ year }}
+		{{# for(year of years ) }}
+			<option value:from="year">{{ year }}</option>
+		{{/ for }}
 	</select>
-{{else}}
+{{ else }}
 	<select disabled><option>Years</option></select>
-{{/if}}
+{{/ if }}
 
 <div>
-	{{#each(vehicles)}}
-		<h2>{{name}}</h2>
-		<img src:from="thumb" width="200px"/>
-	{{/each}}
+	{{# for(vehicle of vehicles) }}
+		<h2>{{ vehicle.name }}</h2>
+		<img src:from="vehicle.thumb" width="200px"/>
+	{{/ for }}
 </div>
 ```
 @highlight 1,only
@@ -915,56 +914,56 @@ If the `makeId` property changes, the getter will be called again and a new requ
 
 Similar to the `makeId`, the `<select>` for models is bound to the `modelId` property:
 
-```handlebars
+```html
 <select value:bind="makeId"
-	{{#if(makes.isPending)}}disabled{{/if}}>
-	{{#if(makes.isPending)}}
-	  <option value=''>Loading…</option>
-	{{else}}
-	  {{^makeId}}
+	{{# if(makes.isPending) }}disabled{{/ if }}>
+	{{# if(makes.isPending) }}
+	  <option value=''>Loading...</option>
+	{{ else }}
+	  {{^ makeId }}
 		<option value=''>Select a Make</option>
-	  {{/makeId}}
-	  {{#each(makes.value)}}
-		<option value:from="id">{{name}}</option>
-	  {{/each}}
-	{{/if}}
+	  {{/ makeId }}
+	  {{# for( make of makes.value) }}
+		<option value:from="make.id">{{ make.name }}</option>
+	  {{/ for }}
+	{{/ if }}
 </select>
 
-{{#if(modelsPromise)}}
-	{{#if(models)}}
+{{# if(modelsPromise) }}
+	{{# if(models) }}
 		<select value:bind="modelId">
-			{{^modelId}}
+			{{^ modelId }}
 				<option value=''>Select a Model</option>
-			{{/modelId}}
-			{{#each(models)}}
-				<option value:from="id">{{name}}</option>
-			{{/each}}
+			{{/ modelId }}
+			{{# for(model of models) }}
+				<option value:from="model.id">{{ model.name }}</option>
+			{{/ for }}
 		</select>
-	{{else}}
+	{{ else }}
 		<select disabled><option>Loading Models</option></select>
-	{{/if}}
-{{else}}
+	{{/ if }}
+{{ else }}
 	<select disabled><option>Models</option></select>
-{{/if}}
+{{/ if }}
 
-{{#if(years)}}
+{{# if(years) }}
 	<select value:bind="year">
-		{{^year}}
+		{{^ year }}
 			<option value=''>Select a Year</option>
-		{{/year}}
-		{{#each years}}
-			<option value:from="this">{{this}}</option>
-		{{/each}}
+		{{/ year }}
+		{{# for(year of years ) }}
+			<option value:from="year">{{ year }}</option>
+		{{/ for }}
 	</select>
-{{else}}
+{{ else }}
 	<select disabled><option>Years</option></select>
-{{/if}}
+{{/ if }}
 
 <div>
-	{{#each(vehicles)}}
-		<h2>{{name}}</h2>
-		<img src:from="thumb" width="200px"/>
-	{{/each}}
+	{{# for(vehicle of vehicles) }}
+		<h2>{{ vehicle.name }}</h2>
+		<img src:from="vehicle.thumb" width="200px"/>
+	{{/ for }}
 </div>
 ```
 @highlight 17,only

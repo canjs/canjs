@@ -46,19 +46,19 @@
 <div id='next-prev'></div>
 
 <script id="sites" type="text/mustache">
-  {{#websites}}
+  {{# websites }}
     <tr>
-      <td width='40%'>{{name}}</td>
-	  <td width='70%'>{{url}}</td>
+      <td width='40%'>{{ name }}</td>
+	  <td width='70%'>{{ url }}</td>
 	</tr>
-  {{/websites}}
+  {{/ websites }}
 </script>
 
 <script id="next-prev-stache" type="text/mustache">
   <a href="javascript://"
-     class="prev {{#paginate.canPrev()}}enabled{{/paginate.canPrev}}">Prev</a>
+     class="prev {{# paginate.canPrev() }}enabled{{/ paginate.canPrev }}">Prev</a>
   <a href="javascript://"
-     class="next {{#paginate.canNext()}}enabled{{/paginate.canNext}}">Next</a>
+     class="next {{# paginate.canNext() }}enabled{{/ paginate.canNext }}">Next</a>
 </script>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty"></script>

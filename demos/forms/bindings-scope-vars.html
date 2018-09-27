@@ -14,7 +14,7 @@ Component.extend({
 
 	view: `
 		<label>
-			<span {{#if(scope.vars.focusedOnName}}class="focused"{{/if}}>
+			<span {{# if(scope.vars.focusedOnName }}class="focused"{{/ if }}>
 				Name:
 			</span>
 			<input type="text" value:bind="name" focused:to="scope.vars.focusedOnName">

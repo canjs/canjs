@@ -1,27 +1,27 @@
 <div class="top">
   <div class="header">
-    <h1>{{title}}</h1>
-    {{#if(routesPromise.isPending)}}<p>Loading routes…</p>{{/if}}
-    {{#if(vehiclesPromise.isPending)}}<p>Loading vehicles…</p>{{/if}}
+    <h1>{{ title }}</h1>
+    {{# if(routesPromise.isPending) }}<p>Loading routes…</p>{{/ if }}
+    {{# if(vehiclesPromise.isPending) }}<p>Loading vehicles…</p>{{/ if }}
   </div>
   <ul class="routes-list">
-    {{#each(routesPromise.value)}}
-      <li on:click="../pickRoute(this)" {{#eq(this, ../route)}}class="active"{{/eq}}>
-        <span class="route-number">{{this.rt}}</span>
-        <span class="route-name">{{this.rtnm}}</span>
+    {{# for(route of routesPromise.value) }}
+      <li>
+        <span class="route-number">{{ route.rt }}</span>
+        <span class="route-name">{{ route.rtnm }}</span>
         <span class="check">✔</span>
       </li>
-    {{/each}}
+    {{/ for }}
   </ul>
 </div>
 <div class="bottom">
-  {{#if(route)}}
+  {{# if(route) }}
     <div class="route-selected">
-      <small>Route {{route.rt}}:</small> {{route.rtnm}}
-      {{#if(vehiclesPromise.isRejected)}}
+      <small>Route {{ route.rt }}:</small> {{ route.rtnm }}
+      {{# if(vehiclesPromise.isRejected) }}
         <div class="error-message">No vehicles available for this route</div>
-      {{/if}}
+      {{/ if }}
     </div>
-  {{/if}}
-  <div class="gmap">Bus count: {{vehiclesPromise.value.length}}</div>
+  {{/ if }}
+  <div class="gmap">Bus count: {{ vehiclesPromise.value.length }}</div>
 </div>

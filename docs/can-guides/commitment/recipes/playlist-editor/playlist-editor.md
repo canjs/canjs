@@ -135,7 +135,7 @@ In this section, we will:
 - Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
 - `Promise`s are observable in `can-stache`.  Given a promise `somePromise`, you can:
   - Check if the promise is loading like: `{{#if(somePromise.isPending)}}`.
-  - Loop through the resolved value of the promise like: `{{#each(somePromise.value)}}`.
+  - Loop through the resolved value of the promise like: `{{#for(item of somePromise.value)}}`.
 
 
 - [can-define/map/map can.DefineMap] can be used to define the behavior of observable objects like:

@@ -35,44 +35,49 @@
 	  padding-left: 10px;
 	}
 </style>
-<div id="out"></div>
+<my-app id="out"></my-app>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
-import { Component, DefineList, DefineMap, stache } from "can";
+import { Component, DefineList } from "can";
 
-const demoHtml = `<div><tree-combo items:from='locations' title:from='"Locations"'/></div>`;
-const treeComboStash = `  <ul class='breadcrumb'>
-    <li on:click='./emptyBreadcrumb()'>{{title}}</li>
-    {{#each(breadcrumb)}}
-      <li on:click='../updateBreadcrumb(this)'>{{title}}</li>
-    {{/each}}
-  </ul>
-  <ul class='options'>
-    <content>
-      {{#selectableItems}}
-        <li {{#scope.vm.isSelected(this)}}class='active'{{/isSelected}} on:click='../toggle(this)'>
-          <input type='checkbox' {{#scope.vm.isSelected(this)}}checked{{/isSelected}}/>
-            {{title}}
-          {{#if(children.length)}}
-            <button class='showChildren' on:click='../showChildren(.,scope.event)'>+</button>
-          {{/if}}
-        </li>
-      {{/selectableItems}}
-    </content>
-  </ul>`;
-
-const ViewModel = DefineMap.extend({
-	items: {
-		Default: DefineList
-	},
-	breadcrumb: {
-		Default: DefineList
-	},
-	selected: {
-		Default: DefineList
-	},
-	title: "*",
-	selectableItems: {
-		get: function(){
+Component.extend({
+	tag: "tree-combo",
+	view: `
+	<ul class='breadcrumb'>
+		<li on:click='this.emptyBreadcrumb()'>{{ this.title }}</li>
+		{{# for(crumb of this.breadcrumb) }}
+			<li on:click='this.updateBreadcrumb(crumb)'>{{ crumb.title }}</li>
+		{{/ for }}
+	</ul>
+	<ul class='options'>
+		<content>
+			{{# for(selectableItem of selectableItems) }}
+				<li {{# if( this.isSelected(this) ) }}class='active'{{/ if }}
+				    on:click='this.toggle(selectableItem)'>
+					<input type='checkbox'
+						checked:from="this.isSelected(selectableItem)"/>
+					{{ selectableItem.title }}
+					{{# if(selectableItem.children.length) }}
+						<button class='showChildren'
+							on:click='this.showChildren(selectableItem,scope.event)'>
+							+
+						</button>
+					{{/ if }}
+				</li>
+			{{/ for }}
+		</content>
+	</ul>`,
+	ViewModel: {
+		items: {
+			Default: DefineList
+		},
+		breadcrumb: {
+			Default: DefineList
+		},
+		selected: {
+			Default: DefineList
+		},
+		title: "any",
+		get selectableItems(){
 			const breadcrumb = this.breadcrumb;
 
 			// if there's an item in the breadcrumb
@@ -84,94 +89,94 @@ const ViewModel = DefineMap.extend({
 				// return the top list of items
 				return this.items;
 			}
+		},
+		showChildren: function(item, ev) {
+			ev.stopPropagation();
+			this.breadcrumb.push(item);
+		},
+		emptyBreadcrumb: function( ) {
+			this.breadcrumb = [];
+		},
+		updateBreadcrumb: function( item ){
+			const breadcrumb = this.breadcrumb,
+				index = breadcrumb.indexOf(item);
+			breadcrumb.splice(index + 1, breadcrumb.length - index - 1);
+		},
+		toggle: function(item){
+			const selected = this.selected,
+				index = selected.indexOf(item);
+			if(index === -1 ){
+				selected.push(item);
+			} else {
+				selected.splice(index, 1);
+			}
+		},
+		isSelected: function(item){
+			return this.selected.indexOf(item) > -1;
 		}
-	},
-	showChildren: function(item, ev) {
-		ev.stopPropagation();
-		this.breadcrumb.push(item);
-	},
-	emptyBreadcrumb: function( ) {
-		this.breadcrumb = [];
-	},
-	updateBreadcrumb: function( item ){
-		const breadcrumb = this.breadcrumb,
-			index = breadcrumb.indexOf(item);
-		breadcrumb.splice(index + 1, breadcrumb.length - index - 1);
-	},
-	toggle: function(item){
-		const selected = this.selected,
-			index = selected.indexOf(item);
-		if(index === -1 ){
-			selected.push(item);
-		} else {
-			selected.splice(index, 1);
-		}
-	},
-	isSelected: function(item){
-		return this.selected.indexOf(item) > -1;
 	}
 });
 
 Component.extend({
-	tag: "tree-combo",
-	view: stache(treeComboStash),
-	ViewModel: ViewModel
-});
-
-
-const base = new DefineMap({
-	locations: [
-	  { id: 1, title: "Midwest", children: [
-	    { id: 5, title: "Illinois", children: [
-	      { id: 23423, title: "Chicago"}, { id: 4563, title: "Springfield"},
-	      { id: 4564, title: "Naperville"}
-	      ]
-	    },
-	    { id: 6, title: "Wisconsin", children: [
-	      { id: 232423, title: "Milwaulkee"}, { id: 45463, title: "Green Bay"},
-	      { id: 45464, title: "Madison"}
-	      ]
-	    }]
-	  },
-	  { id: 2, title: "East Coast", children: [
-	    { id: 25, title: "New York", children: [
-	      { id: 3413, title: "New York"}, { id: 4613, title: "Rochester"},
-	      { id: 4516, title: "Syracuse"}
-	      ]
-	    },
-	    { id: 6, title: "Pennsylvania", children: [
-	      { id: 2362423, title: "Philadelphia"}, { id: 454663, title: "Harrisburg"},
-	      { id: 454664, title: "Scranton"}
-	      ]
-	    }]
-	  },
-	  { id: 3, title: "West Coast", children: [
-	    { id: 75, title: "California", children: [
-	      { id: 347813, title: "Los Angeles"}, { id: 463213, title: "Sunnyvale"},
-	      { id: 457516, title: "San Diego"}
-	      ]
-	    },
-	    { id: 66, title: "Oregon", children: [
-	      { id: 23621, title: "Bend"}, { id: 1111, title: "Salem"},
-	      { id: 45461, title: "Eugene"}
-	      ]
-	    }]
-	  },
-	  { id: 4, title: "South", children: [
-	    { id: 65, title: "Texas", children: [
-	      { id: 343413, title: "Austin"}, { id: 463413, title: "Dalas"},
-	      { id: 498516, title: "El Paso"}
-	      ]
-	    },
-	    { id: 6, title: "Florida", children: [
-	      { id: 2360, title: "Orlando"}, { id: 4540, title: "Tampa"},
-	      { id: 4064, title: "Miami"}
-	      ]
-	    }]
-	  }]
-});
-
-const template = stache(demoHtml);
-const fragment = template(base);
-document.getElementById("out").appendChild(fragment);
+	tag: "my-app",
+	view: `
+	<div>
+		<tree-combo items:from='this.locations' title:from='"Locations"'/>
+	</div>`,
+	ViewModel: {
+		locations: {
+			default(){
+				return [
+					{ id: 1, title: "Midwest", children: [
+						{ id: 5, title: "Illinois", children: [
+							{ id: 23423, title: "Chicago"}, { id: 4563, title: "Springfield"},
+							{ id: 4564, title: "Naperville"}
+							]
+						},
+						{ id: 6, title: "Wisconsin", children: [
+							{ id: 232423, title: "Milwaulkee"}, { id: 45463, title: "Green Bay"},
+							{ id: 45464, title: "Madison"}
+							]
+						}]
+					},
+					{ id: 2, title: "East Coast", children: [
+						{ id: 25, title: "New York", children: [
+							{ id: 3413, title: "New York"}, { id: 4613, title: "Rochester"},
+							{ id: 4516, title: "Syracuse"}
+							]
+						},
+						{ id: 6, title: "Pennsylvania", children: [
+							{ id: 2362423, title: "Philadelphia"}, { id: 454663, title: "Harrisburg"},
+							{ id: 454664, title: "Scranton"}
+							]
+						}]
+					},
+					{ id: 3, title: "West Coast", children: [
+						{ id: 75, title: "California", children: [
+							{ id: 347813, title: "Los Angeles"}, { id: 463213, title: "Sunnyvale"},
+							{ id: 457516, title: "San Diego"}
+							]
+						},
+						{ id: 66, title: "Oregon", children: [
+							{ id: 23621, title: "Bend"}, { id: 1111, title: "Salem"},
+							{ id: 45461, title: "Eugene"}
+							]
+						}]
+					},
+					{ id: 4, title: "South", children: [
+						{ id: 65, title: "Texas", children: [
+							{ id: 343413, title: "Austin"}, { id: 463413, title: "Dalas"},
+							{ id: 498516, title: "El Paso"}
+							]
+						},
+						{ id: 6, title: "Florida", children: [
+							{ id: 2360, title: "Orlando"}, { id: 4540, title: "Tampa"},
+							{ id: 4064, title: "Miami"}
+							]
+						}]
+					}];
+			}
+		}
+	}
+})
 </script>
