@@ -18,7 +18,7 @@
 
 <script type='text/stache' id='todo-list-template'>
 <ul id="todo-list">
-  {{# for(todo of todos) }}
+  {{# for(todo of this.todos) }}
     <li class="todo {{# if(todo.complete) }}completed{{/ if }}
       {{# if(todo.isDestroying) }}destroying{{/ if }}
       {{# if(this.isEditing(this)) }}editing{{/ if }}">

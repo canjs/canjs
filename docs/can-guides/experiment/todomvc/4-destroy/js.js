@@ -1,7 +1,7 @@
-import { Component, DefineMap, DefineList } from "//unpkg.com/can@5/core.mjs";
+import { Component, DefineMap, DefineList, fixture, realtimeRestModel } from "//unpkg.com/can@5/core.mjs";
 
 const Todo = DefineMap.extend("Todo",{
-  id: "number",
+  id: {type: "number", identity: true},
   name: "string",
   complete: { type: "boolean", default: false }
 });
@@ -14,6 +14,21 @@ Todo.List = DefineList.extend("TodoList",{
   get complete() {
     return this.filter({ complete: true });
   }
+});
+
+const todoStore = fixture.store([
+  { name: "mow lawn", complete: false, id: 5 },
+  { name: "dishes", complete: true, id: 6 },
+  { name: "learn canjs", complete: false, id: 7 }
+], Todo);
+
+fixture("/api/todos", todoStore);
+fixture.delay = 200;
+
+realtimeRestModel({
+  url: "/api/todos",
+  Map: Todo,
+  List: Todo.List
 });
 
 Component.extend({
@@ -29,13 +44,14 @@ Component.extend({
           <input id="toggle-all" type="checkbox"/>
           <label for="toggle-all">Mark all as complete</label>
           <ul id="todo-list">
-            {{# for(todo of this.todos) }}
-              <li class="todo {{# if(todo.complete) }}completed{{/ if }}">
+            {{# for(todo of todosPromise) }}
+              <li class="todo {{# if(todo.complete) }}completed{{/ if }}
+                {{# if(todo.isDestroying()) }}destroying{{/ if }}">
                 <div class="view">
                   <input class="toggle" type="checkbox"
                      checked:bind="todo.complete">
                   <label>{{ todo.name }}</label>
-                  <button class="destroy"></button>
+                  <button class="destroy" on:click="todo.destroy()"></button>
                 </div>
                 <input class="edit" type="text"
                   value="{{todo.name}}"/>
@@ -45,7 +61,7 @@ Component.extend({
         </section>
         <footer id="footer" class="">
           <span id="todo-count">
-            <strong>{{ this.todos.active.length }}</strong> items left
+            <strong>{{ this.todosPromise.value.active.length }}</strong> items left
           </span>
           <ul id="filters">
             <li>
@@ -59,21 +75,15 @@ Component.extend({
             </li>
           </ul>
           <button id="clear-completed">
-            Clear completed ({{ this.todos.complete.length }})
+            Clear completed ({{ this.todosPromise.value.complete.length }})
           </button>
         </footer>
       </section>
   `,
   ViewModel: {
     appName: {default: "TodoMVC"},
-    todos: {
-      default(){
-        return new Todo.List([
-          { id: 5, name: "mow lawn", complete: false },
-          { id: 6, name: "dishes", complete: true },
-          { id: 7, name: "learn canjs", complete: false }
-        ]);
-      }
+    get todosPromise() {
+      return Todo.getList({});
     }
   }
 });

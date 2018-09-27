@@ -18,7 +18,7 @@
 		<input id="toggle-all" type="checkbox">
 		<label for="toggle-all">Mark all as complete</label>
 		<ul id="todo-list">
-			{{# for(todo of todos) }}
+			{{# for(todo of this.todos) }}
 				<li class="todo {{# if(todo.complete) }}completed{{/ if }}">
 					<div class="view">
 						<input class="toggle" type="checkbox" checked:bind="todo.complete">
