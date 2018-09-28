@@ -863,7 +863,7 @@ donejs add app hello-world --yes
 Then go into that application directory:
 
 ```
-cd donejs-chat
+cd hello-world
 ```
 
 And start development by running:
