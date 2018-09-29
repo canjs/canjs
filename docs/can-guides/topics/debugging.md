@@ -67,7 +67,26 @@ debug();
 
 #### Conditional loading
 
-Conditional loading makes it possible to load a module only when another module’s export evaluates to `true`. To start, we’ll create an `is-dev` module:
+StealJS's [conditional loading](https://stealjs.com/docs/steal-conditional.html) makes it possible to load a module only when another module’s export evaluates to `true`. 
+
+
+First, install [steal-conditional](https://stealjs.com/docs/steal-conditional.html):
+
+```
+npm install steal-conditional --save-dev
+```
+
+And update the `steal` part of your `package.json` to include the following:
+
+```
+"steal": {
+  "configDependencies": [
+    "./node_modules/steal-conditional/conditional"
+  ]
+}
+```
+
+Next, create an `is-dev` module:
 
 ```js
 // is-dev.js
@@ -77,7 +96,7 @@ export default !steal.isEnv("production");
 Then we can conditionally load modules like:
 
 ```js
-import debug from "can-debug#?~is-dev";
+import debug from "can-debug#?is-dev";
 if (debug) {
 	debug();
 }
