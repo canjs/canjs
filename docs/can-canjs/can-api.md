@@ -1065,6 +1065,27 @@ input.onchange = todo.method;
 
 </td>
 </tr>
+<tr>
+<td>
+
+```js
+<button on:click='todo.priority = 1'>
+  Critical
+</button>
+```
+
+</td>
+
+<td>
+
+```js
+button.addEventListener("click",()=>{
+  todo.priority = 1;
+});
+```
+
+</td>
+</tr>
 
 <tr>
 <td>
