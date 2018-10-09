@@ -80,7 +80,7 @@
     "can-dom-mutate": "1.2.1",
     "can-event-dom-enter": "2.2.0",
     "can-event-dom-radiochange": "2.2.0",
-    "can-event-queue": "1.1.0",
+    "can-event-queue": "1.1.1",
     "can-fixture": "3.0.0",
     "can-fixture-socket": "2.0.0",
     "can-fragment": "1.3.0",
