@@ -246,9 +246,8 @@ Component.extend({
 
 To connect the component’s VM to the url, we:
 
-- create an observable key-value object on the ViewModel.
-- set [can-route.data route.data] to this object.
-- call and [can-route.start route.start] to bind the observable key-value object to the URL.
+- create a property on the ViewModel to hold the [can-route.data route.data] key-value observable.
+- call [can-route.start route.start] to bind the observable key-value object to the URL.
 
 We also display the `routeData.page` property.
 
@@ -265,16 +264,14 @@ Component.extend({
     ViewModel: {
 		routeData: {
 			default() {
-				const observableRouteData = new DefineMap();
-				route.data = observableRouteData;
 				route.start();
-				return observableRouteData;
+				return route.data;
 			}
 		}
     }
 });
 ```
-@highlight 1,6,11-18
+@highlight 1,6,11-16
 
 At this point, changes in the URL will cause changes in the `routeData.page`
 property. See this by clicking the links and the back/refresh buttons below:
@@ -576,12 +573,10 @@ Component.extend({
     ViewModel: {
         routeData: {
             default() {
-                const observableRouteData = new DefineMap();
-                route.data = observableRouteData;
                 route.register("{page}", { page: "home" });
                 route.register("tasks/{taskId}", { page: "tasks" });
                 route.start();
-                return observableRouteData;
+                return route.data;
             }
         },
         get componentToShow(){
@@ -618,7 +613,7 @@ Component.extend({
 });
 
 ```
-@highlight 15-16,only
+@highlight 13-14,only
 
 Now the mini application is able to translate changes in the URL to
 properties on the `routeData` property of the component’s view-model. When the component’s view-model
