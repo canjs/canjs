@@ -6,9 +6,19 @@
 
 @body
 
+This guide will show you many techniques for writing the logic of a Component’s ViewModel so that it is easy to test and easy to maintain. It will show how to organize a ViewModel so that there is a clear purpose for each property and method, how to use derived properties to handle complex logic, how to write methods that are focused on doing a single thing, how to isolate side effects so they do not affect other logic and unit tests, and how to clean up event listeners to prevent memory leaks.
+
 ## Organize ViewModel properties
 
-The organization of a Component’s ViewModel should convey which properties the ViewModel should change and where those changes should happen. This is how we suggest ViewModels be organized:
+The organization of a Component’s ViewModel should convey which properties the ViewModel should change and where those changes should happen. We suggest organizing a ViewModel using the following sections:
+
+* External stateful properties - Properties passed in to the component through [can-stache-bindings bindings].
+* Internal stateful properties - Stateful properties "owned" by this component.
+* Derived properties - Properties derived from stateful properties.
+* Methods - Methods that change stateful properties and dispatch events that can be used in derived properties and side effects.
+* Side effects - Side effects that depend on the [DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction#What_is_the_DOM) should be done in the `connectedCallback`.
+
+Here is an example (click the "Run in your browser" button to see them in action):
 
 ```html
 <viewmodel-organization heading:raw="ViewModel Organization Example"></viewmodel-organization>
@@ -148,36 +158,26 @@ p.hidden {
 @highlight 74-107,only
 @codepen
 
-Here is a breakdown of the different sections:
-
-**External stateful properties** - Properties passed in to the component through [can-stache-bindings bindings].
-
-**Internal stateful properties** - Stateful properties "owned" by this component. These can be changed.
-
-**Derived properties** - Properties derived from stateful properties. This is where most of the logic of this ViewModel should happen.
-
-**Methods** - These methods can change stateful properties and dispatch events that can be used in derived properties and side effects.
-
-**Side effects** - The `connectedCallback` is where side effects should be handled. This will prevent them from happening during unit tests of the ViewModel.
-
 ## Derived properties
 
-As mentioned above, most of the logic of a ViewModel should be handled by derived properties.
+A derived property is a property whose value is not set by any other function; derived properties calculate their own value based on the values of other properties, changes to other properties, and other events.
 
-The sections below show different techniques for using derived properties in a maintainable, testable way.
+Since the logic of a derived property is isolated to that property’s definition, it is much easier to understand and debug than a property that can be changed directly by other functions. Beacuse of this, **most of the logic of a ViewModel should be handled by derived properties**.
+
+CanJS has two ways to create derived properties:
+
+* [guides/logic#Derivepropertiesfromotherproperties get property behaviors] can derive their value from the value of other properties and the value they were last set to.
+* [guides/logic#Derivepropertiesfromchangestoanotherproperty value property behaviors] can derive their value from more complex logic such as changes to other properties, dispatched events, and their own previously derived values.
+
+The sections below show how to use these property behaviors to build maintainable, testable ViewModels.
 
 ### Derive properties from other properties
 
-Getters in CanJS can be used to derive the value of a property based on the _current_ value of other properties read by the getter.
+Getters in CanJS can be used to derive a value based on the _current_ value of the properties read by the getter, each time the getter runs.
 
-> Getters will derive a value based on the _current_ value of the properties read by the getter, each time the getter runs.
+> Getters will run when the property is read, and automatically re-run whenever one of the properties read by the getter changes (if the property defined by the getter is bound).
 
-To understand this, it is important to understand _when_ getters will run:
-
-- if a property is unbound, its getter will run every time that property is read
-- if a property is bound, its getter will run whenever one of the properties it reads changes
-
-Here is a simple example of using a getter to create a derived property:
+Getters can be used to replace imperative logic like this:
 
 ```html
 <a-pp></a-pp>
@@ -188,6 +188,47 @@ Component.extend({
   tag: "a-pp",
 
   view: `
+	<p>First: <input value:from="first" on:change="setFirst(scope.element.value)"></p>
+	<p>Last: <input value:from="last" on:change="setLast(scope.element.value)"></p>
+    <p>{{ name }}</p>
+  `,
+
+  ViewModel: {
+    // INTERNAL STATEFUL PROPERTIES
+    first: { default: "Kevin" },
+    last: { default: "McCallister" },
+	name: { default: "Kevin McCallister" },
+
+    // METHODS
+    setFirst(first) {
+        this.first = first;
+        this.name = `${first} ${this.last}`;
+    },
+
+    setLast(last) {
+        this.last = last;
+        this.name = `${this.first} ${last}`;
+    }
+  }
+});
+</script>
+```
+@highlight 21-29,only
+@codepen
+
+Using a derived property removes a lot of this boilerplate, and more importantly, isolates the logic for `name` to `name`’s property definiton.
+
+```html
+<a-pp></a-pp>
+<script type="module">
+import { Component } from "can";
+
+Component.extend({
+  tag: "a-pp",
+
+  view: `
+    <p>First: <input value:bind="first"></p>
+    <p>Last: <input value:bind="last"></p>
     <p>{{ name }}</p>
   `,
 
@@ -204,7 +245,7 @@ Component.extend({
 });
 </script>
 ```
-@highlight 18-20,only
+@highlight 20-22,only
 @codepen
 
 ### Side effects when derived properties change
@@ -300,19 +341,9 @@ The next section will show how to handle situations like this where you need to 
 
 ### Derive properties from _changes_ to another property
 
-[can-define.types.get Getter property behaviors] are very powerful for deriving values from the value of other properties; however, they cannot derive values from
+The [can-define.types.value value property behavior] is available for defining complex derived values that cannot be created using getters.
 
-* changes to other values over time
-* previous values returned by the getter
-
-The [can-define.types.value value property behavior] is available to make these more complex derived values possible.
-
-> The `value` property behavior defines a property by **listening to** changes in other properties (and its own **last set** value) and calling **resolve** with new values.
-
-The value function will run:
-
-- each time the property is read, if unbound
-- once, if bound
+The `value` property behavior defines a property by **listening to** changes in other properties (and its own **last set** value) and calling **resolve** with new values.
 
 Here is an example of using `value` to keep a list of all of the values of a derived `name` property over time:
 
