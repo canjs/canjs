@@ -34,7 +34,7 @@ matrix:
       env: TEST_SUITE=builders
       addons:
         firefox: latest
-    - node_js: 6
+    - node_js: 10
       env: TEST_SUITE=global-build
       addons:
         firefox: latest
