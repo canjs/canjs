@@ -8,42 +8,153 @@
 
 ## Organize ViewModel properties
 
-The organization of a ViewModel should convey which properties the ViewModel should change and where those changes should happen. This is how we suggest ViewModels be organized:
+The organization of a Component’s ViewModel should convey which properties the ViewModel should change and where those changes should happen. This is how we suggest ViewModels be organized:
 
-```js
-ViewModel: {
-  // EXTERNAL STATEFUL PROPERTIES
-  todoId: "number",
+```html
+<viewmodel-organization heading:raw="ViewModel Organization Example"></viewmodel-organization>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script type="module">
+import { Component } from "can";
 
-  // INTERNAL STATEFUL PROPERTIES
-  isEditing: { type: "boolean", default: false },
+Component.extend({
+  tag: "viewmodel-organization",
 
-  // DERIVED PROPERTIES
-  get something () {
-    // ...
-  },
+  view: `
+    {{# if(heading) }}
+      <h2>{{ heading }}</h2>
+    {{/ if }}
 
-  // METHODS
-  updateTodo() {
-    this.dispatch("update-todo");
-  },
+    <p>
+      {{# if(showExternalStatefulProperties) }}
+        <span on:click="showExternalStatefulProperties = false">-</span>
+      {{ else }}
+        <span on:click="showExternalStatefulProperties = true">+</span>
+      {{/ if }}
+      External stateful properties
+    </p>
+    <p {{# unless(showExternalStatefulProperties) }}class="hidden"{{/ unless }}>
+      Properties passed in to the component through <a href="//canjs.com/doc/can-stache-bindings.html">bindings</a>.
+    </p>
 
-  // SIDE EFFECTS
-  connectedCallback() {
-    this.listenTo("update-todo", () => {
-      new Todo().save();
-    });
+    <p>
+      {{# if(showInternalStatefulProperties) }}
+        <span on:click="showInternalStatefulProperties = false">-</span>
+      {{ else }}
+        <span on:click="showInternalStatefulProperties = true">+</span>
+      {{/ if }}
+      Internal stateful properties
+    </p>
+    <p {{# unless(showInternalStatefulProperties) }}class="hidden"{{/ unless }}>
+      Stateful properties "owned" by this component.
+    </p>
+
+    <p>
+      {{# if(showDerivedProperties) }}
+        <span on:click="hideDerivedProperties = true">-</span>
+      {{ else }}
+        <span on:click="hideDerivedProperties = false">+</span>
+      {{/ if }}
+      Derived properties
+    </p>
+    <p {{# unless(showDerivedProperties) }}class="hidden"{{/ unless }}>
+      Properties derived from stateful properties. This is where most of the logic of this ViewModel should happen.
+    </p>
+
+    <p>
+      <button on:click="toggleShowMethods()">
+        {{# if(showMethods) }}Hide {{/ if }} Methods
+      </button>
+    </p>
+    <p {{# unless(showMethods) }}class="hidden"{{/ unless }}>
+      Methods can change stateful properties and dispatch events that can be used in derived properties and side effects.
+    </p>
+
+    <p><button on:click="showSideEffects()">Side Effects</button></p>
+    <div class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <p>The connectedCallback is where side effects should be handled. This will prevent them from happening during unit tests of the ViewModel.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+
+  ViewModel: {
+    // EXTERNAL STATEFUL PROPERTIES
+    heading: "string",
+
+    // INTERNAL STATEFUL PROPERTIES
+    showExternalStatefulProperties: { default: false },
+    showInternalStatefulProperties: { default: false },
+    hideDerivedProperties: { default: true },
+    showMethods: { default: false },
+
+    // DERIVED PROPERTIES
+    get showDerivedProperties () {
+      return !this.hideDerivedProperties;
+    },
+
+    // METHODS
+    toggleShowMethods() {
+      this.showMethods = !this.showMethods;
+    },
+    showSideEffects() {
+      this.dispatch("show-side-effects");
+    },
+
+    // SIDE EFFECTS
+    connectedCallback(element) {
+      const $modal = $(element).find(".modal");
+
+      this.listenTo("show-side-effects", () => {
+        $modal.show();
+      });
+
+      this.listenTo(window, "click", () => {
+        $modal.hide();
+      });
+    }
   }
+});
+</script>
+<style>
+viewmodel-organization {
+  display: block;
 }
+
+span {
+  cursor: pointer;
+  font-weight: 700;
+  padding: 4px;
+}
+
+span.right-arrow:after {
+ content: "►";
+}
+
+span.down-arrow:after {
+  content: "▼";
+}
+
+p.hidden {
+  display: none;
+}
+</style>
 ```
+@highlight 74-107,only
+@codepen
 
 Here is a breakdown of the different sections:
 
-**External stateful properties** - Properties passed in to the component through [can-stache-bindings bindings]. These should not be changed by this ViewModel.
+**External stateful properties** - Properties passed in to the component through [can-stache-bindings bindings].
 
 **Internal stateful properties** - Stateful properties "owned" by this component. These can be changed.
 
-**Dervied properties** - Properties derived from stateful properties. This is where most of the logic of this ViewModel should happen.
+**Derived properties** - Properties derived from stateful properties. This is where most of the logic of this ViewModel should happen.
 
 **Methods** - These methods can change stateful properties and dispatch events that can be used in derived properties and side effects.
 
@@ -57,7 +168,7 @@ The sections below show different techniques for using derived properties in a m
 
 ### Derive properties from other properties
 
-Getters in CanJS can be used to derive the value of a property based on the _current_ value of any other properties read by the getter.
+Getters in CanJS can be used to derive the value of a property based on the _current_ value of other properties read by the getter.
 
 > Getters will derive a value based on the _current_ value of the properties read by the getter, each time the getter runs.
 
@@ -81,8 +192,11 @@ Component.extend({
   `,
 
   ViewModel: {
+    // INTERNAL STATEFUL PROPERTIES
     first: { default: "Kevin" },
     last: { default: "McCallister" },
+
+    // DERIVED PROPERTIES
     get name() {
       return `${this.first} ${this.last}`;
     }
@@ -90,7 +204,7 @@ Component.extend({
 });
 </script>
 ```
-@highlight 15-17,only
+@highlight 18-20,only
 @codepen
 
 ### Side effects when derived properties change
@@ -99,9 +213,12 @@ When using derived properties like this, it can be tempting to add side effects 
 
 ```js
   ViewModel: {
+    // INTERNAL STATEFUL PROPERTIES
     first: { default: "Kevin" },
     last: { default: "McCallister" },
     names: { Default: DefineList },
+
+    // DERIVED PROPERTIES
     get name() {
       const name = `${this.first} ${this.last}`;
       this.names.push( name );
@@ -109,11 +226,13 @@ When using derived properties like this, it can be tempting to add side effects 
     }
   }
 ```
-@highlight 5-9
+@highlight 8-12
 
 Doing mutations like this can cause lots of problems, including inifinite loops and stack overflows.
 
-**Mutations should not be done in a getter.**
+<div class="deprecated warning">
+Mutations should not be done in a getter.
+</div>
 
 Here is an example demonstrating the issues that can be caused by doing mutations in a getter:
 
@@ -146,8 +265,10 @@ Component.extend({
   `,
 
   ViewModel: {
+    // INTERNAL STATEFUL PROPERTIES
     id: { default: 0 },
 
+    // DERIVED PROPERTIES
     data: {
       get(lastSet, resolve) {
         ajax({
@@ -168,7 +289,7 @@ Component.extend({
 });
 </script>
 ```
-@highlight 33-39,only
+@highlight 35-41,only
 @codepen
 
 This example uses an async getter to make an [can-ajax ajax] call to retrieve data for the current `id`. Once the response is received, the getter uses `resolve` to set the value of the property then increments `id`. Since this getter also reads `id` to create the URL for the ajax request, the getter immediately re-runs when `id` changes. This means that the getter will continue making ajax requests in an infinite loop.
@@ -179,14 +300,14 @@ The next section will show how to handle situations like this where you need to 
 
 ### Derive properties from _changes_ to another property
 
-Getters are very powerful for deriving values from the value of other properties; however, they cannot derive values from
+[can-define.types.get Getter property behaviors] are very powerful for deriving values from the value of other properties; however, they cannot derive values from
 
 * changes to other values over time
 * previous values returned by the getter
 
-The [can-define.types.value value behavior] is available to make these more complex derived values possible.
+The [can-define.types.value value property behavior] is available to make these more complex derived values possible.
 
-> The `value` behavior defines a property by **listening to** changes in other properties (and its own **last set** value) and calling **resolve** with new values.
+> The `value` property behavior defines a property by **listening to** changes in other properties (and its own **last set** value) and calling **resolve** with new values.
 
 The value function will run:
 
@@ -213,8 +334,11 @@ Component.extend({
   `,
 
   ViewModel: {
+    // INTERNAL STATEFUL PROPERTIES
     first: { default: "Kevin" },
     last: { default: "McCallister" },
+
+    // DERIVED PROPERTIES
     get name() {
       return `${this.first} ${this.last}`;
     },
@@ -231,14 +355,14 @@ Component.extend({
 });
 </script>
 ```
-@highlight 20-31,only
+@highlight 23-34,only
 @codepen
 
 Using a `value` defition, allows `names` to update when `name` _changes_ and eliminates having the need for the side effect in the `name` getter. This makes it much easier to debug the `names` property and makes this code much easier to maintain.
 
 ### Derive properties from _changes_ to multiple other properties
 
-The `value` behavior can also be quite useful when a property needs to derive its value from changes to _multiple_ other properties. The `value` function can listen to changes in all of the necessary properties and resolve with the new value accordingly.
+The `value` property behavior can also be quite useful when a property needs to derive its value from changes to _multiple_ other properties. The `value` function can listen to changes in all of the necessary properties and resolve with the new value accordingly.
 
 The following example has a slider for selecting a value within a range. The value should be updated:
 
@@ -249,6 +373,7 @@ The following example has a slider for selecting a value within a range. The val
 This could be accomplished using a series of setters like in the code below. However, this scatters the mutations for `selectedValue` throughout the ViewModel:
 
 ```js
+    // INTERNAL STATEFUL PROPERTIES
     selectedValue: {
       default: 100,
       set(val) {
@@ -275,7 +400,7 @@ This could be accomplished using a series of setters like in the code below. How
       }
     }
 ```
-@highlight 4-5,12,21
+@highlight 5-6,13,22
 
 Code like this becomes very hard to maintain as you cannot look at a the [can-define.types.propDefinition property definition] for `selectedValue` to understand how it works.
 
@@ -306,8 +431,11 @@ const RangeSlider = Component.extend({
   `,
 
   ViewModel: {
+    // INTERNAL STATEFUL PROPERTIES
     minimum: { default: 50 },
     maximum: { default: 150 },
+
+    // DERIVED PROPERTIES
     selectedValue: {
       value({ listenTo, lastSet, resolve }) {
         let latest = resolve(100);
@@ -343,7 +471,7 @@ const RangeSlider = Component.extend({
 });
 </script>
 ```
-@highlight 25-55,only
+@highlight 28-58,only
 @codepen
 
 ## Methods
@@ -363,35 +491,36 @@ Component.extend({
   tag: "a-pp",
 
   view: `
-    <p>{{ foo }}</p>
-    <button on:click="setFooToBar()">
-      set foo to "bar"
-    </button>
+    <p>{{ day }}</p>
+
+    <button on:click="resetDay()">Reset Day</button>
   `,
 
   ViewModel: {
-    foo: { default: "abc" },
-    setFooToBar() {
-      this.foo = "bar";
+    // INTERNAL STATEFUL PROPERTIES
+    day: { default: "Sun" },
+
+    // METHODS
+    resetDay() {
+      this.day = "Sun";
     }
   }
 });
 </script>
 ```
-@highlight 10,17-19,only
+@highlight 11,19-21,only
 @codepen
 
 You can also do this using a "simple setter" directly in the view:
 
 ```js
   view: `
-    <p>{{ foo }}</p>
-    <button on:click="foo = 'bar'">
-      set foo to "bar"
-    </button>
+    <p>{{ day }}</p>
+
+    <button on:click="day = 'Sun'">Reset Day</button>
   `
 ```
-@highlight 3
+@highlight 4
 
 To simplify debugging and make documentation easier, using methods may still be useful for your application.
 
@@ -401,30 +530,35 @@ If you need to do update more than one stateful property when an event occurs, i
 
 ```js
   view: `
-    <p>{{ foo }}</p>
-    <p>{{ baz }}</p>
-    <button on:click="handleClick()">
-      set foo to "bar" and baz to "quz"
-    </button>
+    {{# if(editing) }}
+      <input value:bind="day">
+    {{ else }}
+      <p>{{ day }}</p>
+    {{/ if }}
+
+    <button on:click="resetDay()">Reset Day</button>
   `,
 
   ViewModel: {
-    foo: { default: "abc" },
-    baz: { default: "xyz" },
-    handleClick() {
-      this.foo = "bar";
-      this.baz = "quz";
+    // INTERNAL STATEFUL PROPERTIES
+    day: { default: "Sun" },
+    editing: { default: true },
+
+    // METHODS
+    resetDay() {
+      this.day = "Sun";
+      this.editing = false;
     }
   }
 ```
-@highlight 4,12-15
+@highlight 2-6,17-20
 
 Functions like this become very hard to maintain as an application continues to grow because it is difficult to understand everything that will happen when the function is called.
 
 Instead of using a single function to update multiple properties, [can-event-queue/map/map.dispatch] can be used to dispatch an event that other properties can then derive their values from:
 
 ```html
-<a-pp></a-pp>
+<a-pp day:raw="Wed" editing:raw="true"></a-pp>
 <script type="module">
 import { Component } from "can";
 
@@ -432,40 +566,59 @@ Component.extend({
   tag: "a-pp",
 
   view: `
-    <p>{{ foo }}</p>
-    <p>{{ baz }}</p>
-    <button on:click="handleButtonClick()">
-      set foo to "bar" and baz to "quz"
-    </button>
+    {{# if(editing) }}
+      <input value:bind="day">
+    {{ else }}
+      <p>{{ day }}</p>
+    {{/ if }}
+
+    <button on:click="resetDay()">Reset Day</button>
   `,
 
   ViewModel: {
-    foo: {
-      value({ listenTo, resolve }) {
-        resolve("abc");
+    // DERIVED PROPERTIES
+    day: {
+      default: "Sun",
+      value({ lastSet, listenTo, resolve }) {
+        resolve( lastSet.value );
 
-        listenTo("button-click", () => {
-          resolve("bar");
+        listenTo("reset-day", () => {
+          resolve("Sun");
         });
       }
     },
-    baz: {
-      value({ listenTo, resolve }) {
-        resolve("xyz");
 
-        listenTo("button-click", () => {
-          resolve("quz");
+    editing: {
+      default: false,
+      value({ lastSet, listenTo, resolve }) {
+        resolve( lastSet.value );
+
+        listenTo("reset-day", () => {
+          resolve(false);
         });
       }
     },
-    handleButtonClick() {
-      this.dispatch("button-click");
+
+    // METHODS
+    resetDay() {
+      this.dispatch("reset-day");
     }
   }
 });
 </script>
+<style>
+input {
+  width: 100px;
+}
+
+p {
+  width: 100px;
+  margin: 0;
+  display: inline-block;
+}
+</style>
 ```
-@highlight 21-23,30-32,36,only
+@highlight 25-27,36-38,43-45,only
 @codepen
 
 Using this technique, it is possible to read each property definition and know exactly how it will behave when this event occurs.
@@ -492,6 +645,7 @@ Component.extend({
   `,
 
   ViewModel: {
+    // EXTERNAL STATEFUL PROPERTIES
     color: "string"
   }
 });
@@ -549,6 +703,7 @@ const Simon = Component.extend({
   `,
 
   ViewModel: {
+    // DERIVED PROPERTIES
     pattern: {
       value({ listenTo, resolve }) {
         const list = new DefineList();
@@ -561,10 +716,12 @@ const Simon = Component.extend({
       }
     },
 
+    // METHODS
     selectColor(color) {
       this.dispatch("color-change", [ color ]);
     },
 
+    // SIDE EFFECTS
     connectedCallback(el) {
       let playingSound = Promise.resolve(true);
 
@@ -610,7 +767,7 @@ color-picker button {
 }
 </style>
 ```
-@highlight 85-87,104-113,only
+@highlight 88-90,108-117,only
 @codepen
 
 ## Clean up event listeners
@@ -623,6 +780,7 @@ Any listeners set up using [can-event-queue/map/map.listenTo] in the `connectedC
 
 ```js
 ViewModel: {
+  // SIDE EFFECTS
   connectedCallback() {
     // this will be cleaned up automatically
     listenTo("name", () => {
@@ -636,6 +794,7 @@ This clean up is done by [can-event-queue/map/map.stopListening], which is the d
 
 ```js
 ViewModel: {
+  // SIDE EFFECTS
   connectedCallback() {
     listenTo("aProperty", () => {
       // ...
@@ -655,6 +814,7 @@ Event listeners set up with anything other than `listenTo`, as well as timers an
 
 ```js
 ViewModel: {
+  // SIDE EFFECTS
   connectedCallback(el) {
     listenTo("aProperty", () => {
       // ...
@@ -700,6 +860,7 @@ The same technique can be used to clean up listeners set up in a [can-define.typ
 Here is an example:
 
 ```js
+    // DERIVED PROPERTIES
     namedCounter: {
       value({ listenTo, resolve }) {
         let count = 0;
