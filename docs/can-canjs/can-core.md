@@ -12,7 +12,7 @@ Each module is part of an independent package, so you
 should install the ones you use directly:
 
 ```
-npm install cna-value can-component can-realtime-rest-model can-define can-route can-route-pushstate --save
+npm install can-value can-component can-realtime-rest-model can-define can-route can-route-pushstate --save
 ```
 
 
