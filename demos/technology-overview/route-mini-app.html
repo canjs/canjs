@@ -14,12 +14,10 @@ Component.extend({
     ViewModel: {
         routeData: {
             default() {
-                const observableRouteData = new DefineMap();
-                route.data = observableRouteData;
                 route.register("{page}", { page: "home" });
                 route.register("tasks/{taskId}", { page: "tasks" });
                 route.start();
-                return observableRouteData;
+                return route.data;
             }
         },
         get componentToShow(){
