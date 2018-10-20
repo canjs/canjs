@@ -506,15 +506,18 @@ Component.extend({
             if(!this.isLoggedIn) {
                 return new PageLogin({
                     viewModel: {
-                        isLoggedIn: value.bind(this, "isLoggedIn"),
-						logout: this.logout.bind(this)
+                        isLoggedIn: value.bind(this, "isLoggedIn")
                     }
                 });
             }
 
             switch(this.routeData.page) {
                 case "home":
-                    return new PageHome({ });
+                    return new PageHome({
+						viewModel: {
+							logout: this.logout.bind(this)
+						}
+		    });
                 case "tasks":
                     return new TaskEditor({
 						viewModel: {
