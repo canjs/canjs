@@ -743,7 +743,6 @@ Component.extend({
                         case "home":
                             return new module.default({
                                 viewModel: {
-                                    isLoggedIn: value.from(this, "isLoggedIn"),
                                     logout: this.logout.bind(this)
                                 }
                             });
