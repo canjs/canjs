@@ -728,9 +728,9 @@ Component.extend({
                     });
             }
 
-            return import(`can/demos/technology-overview/page-${this.page}`)
+            return import(`can/demos/technology-overview/page-${this.routeData.page}`)
                 .then((module) => {
-                    switch(this.page) {
+                    switch(this.routeData.page) {
                         case "home":
                             return new module.default({
                                 viewModel: {
@@ -741,7 +741,7 @@ Component.extend({
                         case "tasks":
                             return new module.default({
                                 viewModel: {
-                                    id: value.from(this, "taskId"),
+                                    id: value.from(this.routeData, "taskId"),
                                     logout: this.logout.bind(this)
                                 }
                             });
