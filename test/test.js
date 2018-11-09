@@ -1,5 +1,5 @@
 // Core tests
-require('can-component/test/tests');
+require('can-component/test/test');
 require('can-define/test/test');
 // require('can-route/test/test'); in dev-only
 // require('can-route-pushstate/can-route-pushstate_test'); in dev-only
