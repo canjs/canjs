@@ -57,7 +57,7 @@
     "can-cid": "1.3.0",
     "can-component": "4.4.4",
     "can-compute": "4.1.0",
-    "can-connect": "3.0.3",
+    "can-connect": "3.0.5",
     "can-connect-feathers": "5.0.0",
     "can-connect-ndjson": "1.0.0",
     "can-connect-tag": "1.0.0",
