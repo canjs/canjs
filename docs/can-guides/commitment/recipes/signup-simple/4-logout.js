@@ -44,63 +44,63 @@ Component.extend({
 	view: `
 		{{# if(this.sessionPromise.value) }}
 
-		  <p class="welcome-message">
-		    Welcome {{ this.sessionPromise.value.user.email }}.
-		    <a href="javascript://" on:click="this.logOut()">Log out</a>
-		  </p>
+			<p class="welcome-message">
+				Welcome {{ this.sessionPromise.value.user.email }}.
+				<a href="javascript://" on:click="this.logOut()">Log out</a>
+			</p>
 
 		{{ else }}
 
-		  <form on:submit="this.signUp(scope.event)">
-		    <h2>Sign Up</h2>
+			<form on:submit="this.signUp(scope.event)">
+				<h2>Sign Up</h2>
 
-		    <input placeholder="email" value:to="this.email" />
+				<input placeholder="email" value:to="this.email" />
 
-		    <input type="password"
-		         placeholder="password" value:to="this.password" />
+				<input type="password"
+						 placeholder="password" value:to="this.password" />
 
-		    <button>Sign Up</button>
+				<button>Sign Up</button>
 
-		    <aside>
-		      Have an account?
-		      <a href="javascript://">Log in</a>
-		    </aside>
-		  </form>
+				<aside>
+					Have an account?
+					<a href="javascript://">Log in</a>
+				</aside>
+			</form>
 
 		{{/ if }}
 	`,
 	ViewModel: {
-    sessionPromise: {
-      default: function() {
-        return ajax({
-          url: "/api/session"
-        });
-      }
-    },
+		sessionPromise: {
+			default: function() {
+				return ajax({
+					url: "/api/session"
+				});
+			}
+		},
 
-    email: "string",
-    password: "string",
-    signUp: function(event) {
-      event.preventDefault();
-      this.sessionPromise = ajax({
-        url: "/api/users",
-        type: "post",
-        data: {
-          email: this.email,
-          password: this.password
-        }
-      }).then(function(user) {
-        return {user: user};
-      });
-    },
+		email: "string",
+		password: "string",
+		signUp: function(event) {
+			event.preventDefault();
+			this.sessionPromise = ajax({
+				url: "/api/users",
+				type: "post",
+				data: {
+					email: this.email,
+					password: this.password
+				}
+			}).then(function(user) {
+				return {user: user};
+			});
+		},
 
-    logOut: function() {
-      this.sessionPromise = ajax({
-        url: "/api/session",
-        type: "delete"
-      }).then(function() {
-        return Promise.reject({message: "Unauthorized"});
-      });
-    }
-  }
+		logOut: function() {
+			this.sessionPromise = ajax({
+				url: "/api/session",
+				type: "delete"
+			}).then(function() {
+				return Promise.reject({message: "Unauthorized"});
+			});
+		}
+	}
 });

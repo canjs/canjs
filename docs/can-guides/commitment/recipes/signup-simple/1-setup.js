@@ -43,42 +43,42 @@ Component.extend({
 	tag: "signup-login",
 	view: `
 		<p class="welcome-message">
-		  Welcome Someone.
-		  <a href="javascript://">Log out</a>
+			Welcome Someone.
+			<a href="javascript://">Log out</a>
 		</p>
 
 		<form>
-		  <h2>Sign Up</h2>
+			<h2>Sign Up</h2>
 
-		  <input placeholder="email" />
+			<input placeholder="email" />
 
-		  <input type="password"
-		       placeholder="password" />
+			<input type="password"
+					 placeholder="password" />
 
-		  <button>Sign Up</button>
+			<button>Sign Up</button>
 
-		  <aside>
-		    Have an account?
-		    <a href="javascript://">Log in</a>
-		  </aside>
+			<aside>
+				Have an account?
+				<a href="javascript://">Log in</a>
+			</aside>
 		</form>
 
 		<form>
-		  <h2>Log In</h2>
+			<h2>Log In</h2>
 
-		  <input placeholder="email" />
+			<input placeholder="email" />
 
-		  <input type="password"
-		     placeholder="password" />
+			<input type="password"
+				 placeholder="password" />
 
-		  <button>Log In</button>
+			<button>Log In</button>
 
-		  <div class="error">error message</div>
+			<div class="error">error message</div>
 
-		  <aside>
-		    Don’t have an account?
-		    <a href="javascript://">Sign up</a>
-		  </aside>
+			<aside>
+				Don’t have an account?
+				<a href="javascript://">Sign up</a>
+			</aside>
 		</form>
 	`,
 	ViewModel: {}

@@ -42,32 +42,32 @@ fixture("POST /api/session", function(request, response) {
 Component.extend({
 	tag: "signup-login",
 	view: `
-	  {{# if(this.sessionPromise.value) }}
+		{{# if(this.sessionPromise.value) }}
 
-	    <p class="welcome-message">
-	      Welcome {{ this.sessionPromise.value.user.email }}.
-	      <a href="javascript://">Log out</a>
-	    </p>
+			<p class="welcome-message">
+				Welcome {{ this.sessionPromise.value.user.email }}.
+				<a href="javascript://">Log out</a>
+			</p>
 
-	  {{ else }}
+		{{ else }}
 
-	    <form>
-	      <h2>Sign Up</h2>
+			<form>
+				<h2>Sign Up</h2>
 
-	      <input placeholder="email" />
+				<input placeholder="email" />
 
-	      <input type="password"
-	           placeholder="password" />
+				<input type="password"
+						 placeholder="password" />
 
-	      <button>Sign Up</button>
+				<button>Sign Up</button>
 
-	      <aside>
-	        Have an account?
-	        <a href="javascript://">Log in</a>
-	      </aside>
-	    </form>
+				<aside>
+					Have an account?
+					<a href="javascript://">Log in</a>
+				</aside>
+			</form>
 
-	  {{/ if }}
+		{{/ if }}
 	`,
 	ViewModel: {
 		sessionPromise: {

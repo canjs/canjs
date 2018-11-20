@@ -42,101 +42,101 @@ fixture("POST /api/session", function(request, response) {
 Component.extend({
 	tag: "signup-login",
 	view: `
-	  {{# if(this.sessionPromise.value) }}
+		{{# if(this.sessionPromise.value) }}
 
-	    <p class="welcome-message">
-	      Welcome {{ this.sessionPromise.value.user.email }}.
-	      <a href="javascript://" on:click="this.logOut()">Log out</a>
-	    </p>
+			<p class="welcome-message">
+				Welcome {{ this.sessionPromise.value.user.email }}.
+				<a href="javascript://" on:click="this.logOut()">Log out</a>
+			</p>
 
-	  {{ else }}
-	    {{# eq(this.page, "signup") }}
+		{{ else }}
+			{{# eq(this.page, "signup") }}
 
-	      <form on:submit="this.signUp(scope.event)">
-	        <h2>Sign Up</h2>
+				<form on:submit="this.signUp(scope.event)">
+					<h2>Sign Up</h2>
 
-	        <input placeholder="email" value:to="this.email" />
+					<input placeholder="email" value:to="this.email" />
 
-	        <input type="password"
-	             placeholder="password" value:to="this.password" />
+					<input type="password"
+							 placeholder="password" value:to="this.password" />
 
-	        <button>Sign Up</button>
+					<button>Sign Up</button>
 
-	        <aside>
-	          Have an account?
-	          <a href="javascript://" on:click="this.page = 'login'">Log in</a>
-	        </aside>
-	      </form>
+					<aside>
+						Have an account?
+						<a href="javascript://" on:click="this.page = 'login'">Log in</a>
+					</aside>
+				</form>
 
-	    {{ else }}
+			{{ else }}
 
-	      <form on:submit="this.logIn(scope.event)">
-	        <h2>Log In</h2>
+				<form on:submit="this.logIn(scope.event)">
+					<h2>Log In</h2>
 
-	        <input placeholder="email" value:to="this.email" />
+					<input placeholder="email" value:to="this.email" />
 
-	        <input type="password"
-	           placeholder="password" value:to="this.password" />
+					<input type="password"
+						 placeholder="password" value:to="this.password" />
 
-	        <button>Log In</button>
+					<button>Log In</button>
 
-	        <aside>
-	          Don’t have an account?
-	          <a href="javascript://" on:click="this.page = 'signup'">Sign up</a>
-	        </aside>
-	      </form>
+					<aside>
+						Don’t have an account?
+						<a href="javascript://" on:click="this.page = 'signup'">Sign up</a>
+					</aside>
+				</form>
 
-	    {{/ eq }}
+			{{/ eq }}
 
-	  {{/ if }}
+		{{/ if }}
 	`,
 	ViewModel: {
-    sessionPromise: {
-      default: function() {
-        return ajax({
-          url: "/api/session"
-        });
-      }
-    },
+		sessionPromise: {
+			default: function() {
+				return ajax({
+					url: "/api/session"
+				});
+			}
+		},
 
-    email: "string",
-    password: "string",
-    signUp: function(event) {
-      event.preventDefault();
-      this.sessionPromise = ajax({
-        url: "/api/users",
-        type: "post",
-        data: {
-          email: this.email,
-          password: this.password
-        }
-      }).then(function(user) {
-        return {user: user};
-      });
-    },
+		email: "string",
+		password: "string",
+		signUp: function(event) {
+			event.preventDefault();
+			this.sessionPromise = ajax({
+				url: "/api/users",
+				type: "post",
+				data: {
+					email: this.email,
+					password: this.password
+				}
+			}).then(function(user) {
+				return {user: user};
+			});
+		},
 
-    logOut: function() {
-      this.sessionPromise = ajax({
-        url: "/api/session",
-        type: "delete"
-      }).then(function() {
-        return Promise.reject({message: "Unauthorized"});
-      });
-    },
+		logOut: function() {
+			this.sessionPromise = ajax({
+				url: "/api/session",
+				type: "delete"
+			}).then(function() {
+				return Promise.reject({message: "Unauthorized"});
+			});
+		},
 
-    page: {default: "login"},
-    logIn: function(event) {
-      event.preventDefault();
-      this.sessionPromise = ajax({
-        url: "/api/session",
-        type: "post",
-        data: {
-          user: {
-            email: this.email,
-            password: this.password
-          }
-        }
-      });
-    }
-  }
+		page: {default: "login"},
+		logIn: function(event) {
+			event.preventDefault();
+			this.sessionPromise = ajax({
+				url: "/api/session",
+				type: "post",
+				data: {
+					user: {
+						email: this.email,
+						password: this.password
+					}
+				}
+			});
+		}
+	}
 });
