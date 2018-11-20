@@ -4,8 +4,6 @@
 
 @description Learn how to install CanJS in your environment.
 
-
-
 @body
 
 <style>
@@ -1187,3 +1185,17 @@ Next, you can choose to use [StealJS](#StealJS), [webpack](#Webpack), or
 [Browserify](#Browserify) to load your project.
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+
+## IE11 Support
+
+CanJS 4+ is compatible with Internet Explorer 11 with a few caveats that are discussed below.
+
+CanJS uses [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), which are not supported in IE11. A Promise polyfill such as the one in [core-js](https://www.npmjs.com/package/core-js#ecmascript-6-promise) or the many others available on [NPM](https://www.npmjs.com/search?q=promise%20polyfill) can be used to enable Promise support in any environment or setup.
+
+If using StealJS 1.x, a promise polyfill is included by default. With StealJS 2.x, a promise polyfill can be added by using the `steal-with-promises.js` or the `bundlePromisePolyfill` [build option](https://stealjs.com/docs/steal-tools.BuildOptions.html).
+
+The ecosystem packages [can-define-backup] and [can-observe] use other features that are not fully supported by IE11.
+
+[can-define-backup] uses [WeakMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap), and although `WeakMap` is supported in IE11, there are issues with using [sealed](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal) objects as keys in WeakMaps. [can-define-backup] can be used in IE11 as long as the DefineMap being backed up is not [can-define/map/map.seal sealed], or a polyfill such as the one in [core-js](https://github.com/zloirock/core-js/#weakmap) is used.
+
+[can-observe] is based on the [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) object, which is not supported in IE11 and cannot be polfyilled.
