@@ -58,20 +58,20 @@ if (platformFilter) {
 
 testSauceLabs({
 	urls: [{
-// 		name: "canjs",
-// 		url : 'http://canjs.test:3000/test/index-ie.html?hidepassed',
-// 		platforms: [{
-// 			browserName: 'internet explorer',
-// 			platform: 'Windows 10',
-// 			version: '11.0',
-// 			maxDuration: maxDuration,
-// 			commandTimeout: commandTimeout,
-// 			idleTimeout: idleTimeout
-// 		}]
-// 	}, {
 		name: "canjs",
-		url : 'http://canjs.test:3000/test/index.html?hidepassed',
-		platforms: platforms
+		url : 'http://canjs.test:3000/test/index-ie.html?hidepassed',
+		platforms: [{
+			browserName: 'internet explorer',
+			platform: 'Windows 10',
+			version: '11.0',
+			maxDuration: maxDuration,
+			commandTimeout: commandTimeout,
+			idleTimeout: idleTimeout
+		}]
+// 	}, {
+// 		name: "canjs",
+// 		url : 'http://canjs.test:3000/test/index.html?hidepassed',
+// 		platforms: platforms
 	}],
 	runInSeries: true,
 	zeroAssertionsPass: false
