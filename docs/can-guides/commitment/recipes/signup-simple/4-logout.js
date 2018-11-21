@@ -1,8 +1,8 @@
 import { ajax, Component, fixture } from "//unpkg.com/can@5/core.mjs";
 
-fixture("GET /api/session", function(req, response) {
+fixture("GET /api/session", function(request, response) {
 	const session = localStorage.getItem("session");
-	if (localStorage.getItem("session")) {
+	if (session) {
 		response(JSON.parse(session));
 	} else {
 		response(404, { message: "No session" }, {}, "unauthorized");

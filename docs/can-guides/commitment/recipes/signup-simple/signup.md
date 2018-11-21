@@ -170,24 +170,6 @@ to show up:
     <a href="javascript://">Log in</a>
   </aside>
 </form>
-
-<form>
-  <h2>Log In</h2>
-
-  <input placeholder="email" />
-
-  <input type="password"
-     placeholder="password" />
-
-  <button>Log In</button>
-
-  <div class="error">error message</div>
-
-  <aside>
-    Don’t have an account?
-    <a href="javascript://">Sign up</a>
-  </aside>
-</form>
 ```
 
 ### What you need to know
@@ -228,7 +210,7 @@ Component.extend({
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
-@highlight 42-86,only
+@highlight 42-67,only
 
 Update the __HTML__ tab to:
 
@@ -254,14 +236,19 @@ viewModel.sessionPromise = Promise.resolve({user: {email: "someone@email.com"}})
 
 - The [can-define.types.default] property definition can return the initial value of a property like:
   ```js
-  const AppViewModel = DefineMap.extend({
-    myProperty: {
-      default: function() {
-        return "This string"
+  Component.extend({
+    tag: "signup-login",
+    view: `
+      {{this.myProperty}} <!-- renders “This string” -->
+    `,
+    ViewModel: {
+      myProperty: {
+        default: function() {
+          return "This string"
+        }
       }
     }
   });
-  new AppViewModel().myProperty //-> "This string"
   ```
 - [can-ajax] can make requests to a URL like:
   ```js
@@ -274,6 +261,13 @@ viewModel.sessionPromise = Promise.resolve({user: {email: "someone@email.com"}})
   }) //-> Promise
   ```
 - Use [can-stache.helpers.if {{# if(value) }}] to do `if/else` branching in [can-stache].
+  ```html
+  {{# if(this.myProperty) }}
+    Value is truth-y
+  {{ else }}
+    Value is false-y
+  {{/ if }}
+  ```
 - [can-stache#Readingpromises Promises are observable in can-stache.] For the promise `myPromise`:
   - `myPromise.value` is the resolved value of the promise
   - `myPromise.isPending` is true if the promise has not been resolved or rejected
@@ -332,6 +326,19 @@ A promise with a _session-like_ object looks like:
 
 - To prevent a form from submitting, call [event.preventDefault()](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault).
 
+- [can-ajax] can make `POST` requests to a URL like:
+```js
+ajax({
+  url: "http://query.yahooapis.com/v1/public/yql",
+  type: "post",
+  data: {
+    format: "json",
+    q: 'select * from geo.places where text="sunnyvale, ca"'
+  }
+}) //-> Promise
+```
+@highlight 3
+
 - Use the [then()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then) method on a promise to map the source promise to another promise value.
 
   ```js
@@ -341,6 +348,7 @@ A promise with a _session-like_ object looks like:
     return {user: userData}
   });
   ```
+  @highlight 3-5
 
 ### The solution
 
@@ -375,6 +383,7 @@ property to have a rejected value.
 	  reason.message //-> "Unauthorized";
   });
   ```
+  @highlight 3-5
 
 
 ### The solution
@@ -390,7 +399,29 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-Let’s allow the user to go back and forth between the _Sign Up_ page and the _Log In_
+Let’s add a _Log In_ form for the user:
+
+```html
+<form>
+  <h2>Log In</h2>
+
+  <input placeholder="email" />
+
+  <input type="password"
+     placeholder="password" />
+
+  <button>Log In</button>
+
+  <div class="error">error message</div>
+
+  <aside>
+    Don’t have an account?
+    <a href="javascript://">Sign up</a>
+  </aside>
+</form>
+```
+
+The user should be able to go back and forth between the _Sign Up_ page and the _Log In_
 page. We’ll do this by changing a `page` property to `"signup"` or `"login"`.
 
 We’ll also implement the _Log In_ form’s functionality.  When a session is created,
@@ -399,6 +430,13 @@ we’ll want to `POST` session data to `/api/session` and update `this.sessionPr
 ### What you need to know
 
 - Use [can-stache.helpers.is {{# eq(value1, value2) }}] to test equality in [can-stache].
+  ```html
+  {{# eq(this.value1, "value 2") }}
+    Values are equal
+  {{ else }}
+    Values are not equal
+  {{/ if }}
+  ```
 - You can [can-stache-bindings.event#on_VIEW_MODEL_OR_DOM_EVENT__KEY_VALUE_ set a property value within an event binding] like:
   ```html
   <a on:click="this.aProperty = 'a value'">Link</a>
@@ -418,8 +456,14 @@ Update the __JavaScript__ tab to:
 ### The problem
 
 If the user tried to login, but the server responded with an error message, let’s
-display that error message.  We’ll do this by `catch`ing the create-session request. If
-the request failed we will set a `logInError` property with the server’s response data.
+display that error message.
+
+```html
+<div class="error">An error message</div>
+```
+
+We’ll do this by `catch`ing the create-session request. If
+the request fails, we will set a `logInError` property with the server’s response data.
 
 ### What you need to know
 
@@ -430,6 +474,8 @@ the request failed we will set a `logInError` property with the server’s respo
 	  reason //-> {message: "foo"}
   })
   ```
+  @highlight 2
+
 - Use the `"any"` [can-define.types type] to define a property of indeterminate type:
   ```js
   const AppViewModel = DefineMap.extend({
@@ -438,7 +484,7 @@ the request failed we will set a `logInError` property with the server’s respo
   const viewModel = new AppViewModel({});
   viewModel.myProperty = ANYTHING;
   ```
-
+  @highlight 2
 
 ### The solution
 
