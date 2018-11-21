@@ -1,8 +1,8 @@
 import { ajax, Component, fixture } from "//unpkg.com/can@5/core.mjs";
 
-fixture("GET /api/session", function(req, response) {
+fixture("GET /api/session", function(request, response) {
 	const session = localStorage.getItem("session");
-	if (localStorage.getItem("session")) {
+	if (session) {
 		response(JSON.parse(session));
 	} else {
 		response(404, { message: "No session" }, {}, "unauthorized");
@@ -60,24 +60,6 @@ Component.extend({
 			<aside>
 				Have an account?
 				<a href="javascript://">Log in</a>
-			</aside>
-		</form>
-
-		<form>
-			<h2>Log In</h2>
-
-			<input placeholder="email" />
-
-			<input type="password"
-				 placeholder="password" />
-
-			<button>Log In</button>
-
-			<div class="error">error message</div>
-
-			<aside>
-				Don’t have an account?
-				<a href="javascript://">Sign up</a>
 			</aside>
 		</form>
 	`,
