@@ -62,7 +62,7 @@ require('can-map-define/can-map-define_test');
 
 // Ecosystem tests
 require('can-fixture/test/fixture_test');
-require('can-fixture-socket/test/test');
+// require('can-fixture-socket/test/test'); // depends on feathers-hooks which does not support IE11
 //require('can-connect-signalr/test');
 //require('can-connect-cloneable/test/test');
 //require('can-connect-feathers/test/test'); depends on babel-polyfill
