@@ -86,6 +86,11 @@ To make a release:
 
 This will run the tests, build, bump the version number accordingly and publish the module to [npm](https://www.npmjs.com/).
 
+#### Naming the release
+
+After you have released the project you will need to update the release on github. Make sure that newly created tag has been pushed to github. 
+
+Then go to `https://github.com/canjs/<project>/releases` and edit the most recent tag and git it a title and add any notes or links to issues and then `Update release`.
 
 ### Releasing the CanJS main project
 
