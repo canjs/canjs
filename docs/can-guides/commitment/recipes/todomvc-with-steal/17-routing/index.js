@@ -15,7 +15,6 @@ Component.extend({
 		appName: {default: "TodoMVC"},
 		routeData: {
 			default(){
-				route.data = new DefineMap();
 				route.start();
 				return route.data;
 			}

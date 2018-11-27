@@ -27,7 +27,7 @@ covering CanJS core libraries.
 
   ```
   npm init -y
-  npm install steal steal-tools steal-css --save-dev
+  npm install steal@2 steal-tools@2 steal-css@1 --save-dev
   ```
 
 - To host static files, install `http-server` and run it like:
@@ -171,8 +171,8 @@ npm init -y
 Install `steal`, `steal-tools`, and CanJS’s core modules:
 
 ```cmd
-npm install steal steal-tools steal-css --save-dev
-npm install can steal-stache --save
+npm install steal@2 steal-tools@2 steal-css@1 --save-dev
+npm install can@5 steal-stache@4 --save
 ```
 
 
@@ -823,7 +823,7 @@ can be simulated like:
 Update _models/todo.js_ to the following:
 
 @sourceref ./15-setter-toggle/todo.js
-@highlight 36-41,only
+@highlight 31-41,only
 
 Update _index.js_ to the following:
 
@@ -924,7 +924,7 @@ be added if they represent the current page.
 Update _index.js_ to the following:
 
 @sourceref ./17-routing/index.js
-@highlight 2,9,16-38,only
+@highlight 2,9,16-37,only
 
 Update _index.stache_ to the following:
 
