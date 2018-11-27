@@ -7,8 +7,6 @@ covering CanJS core libraries.
 
 @body
 
-> NOTICE: This guide is under maintenance.  It's currently being upgraded to CanJS 5.0.
-
 ## Setup (Framework Overview)
 
 ### The problem
