@@ -273,7 +273,7 @@ Component.extend({
 
 It will also transform stache bindings inside:
 
-* ```` ```html ```` and ```` ```js ```` blocks in `.md` files
+* ```` ```html ````, ```` ```js ````, and ```` ```javascript ```` blocks in `.md` files
 * `<view>`, `<template>`, `<view-model>`, and `<script type="view-model">` blocks in `.component` files
 * `<script type="text/stache">` and `<script src="...steal/steal.js">` blocks in `.html` files
 
