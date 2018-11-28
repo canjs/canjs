@@ -165,7 +165,7 @@
     "prop-types": "^15.5.10",
     "qunitjs": "^2.4.0",
     "semver": "^5.5.0",
-    "socket.io-client": "^1.7.2",
+    "socket.io-client": "^2.2.0",
     "steal": "^2.0.0-pre.13",
     "steal-conditional": "^0.4.0",
     "steal-css": "^1.2.4",
