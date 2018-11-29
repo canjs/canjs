@@ -258,6 +258,16 @@ In the following example, the `<select>` element is using `value:bind="selectedI
 
 @demo demos/forms/elements-select-selected-to-index.html
 
+#### Binding options to non-string values
+
+There are times when you want to two-way bind the value selected and convert the string value into its primitive value (e.g. object, string). You can use the [can-stache-converters.string-to-any] converter to do so.
+
+In the following example, the selector is converting the value selected to a primitive and then two-way binding to the variable `primitiveValue`. When presenting the [https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof `typeof primitiveValue`], you can see that the string stored in the value has been converted.
+
+@demo demos/forms/elements-select-string-to-any.html
+
+> **Note:** you need to import the `can-stache-converters` package in order to use the `string-to-any` converter.
+
 ### Select multiple
 
 ```html

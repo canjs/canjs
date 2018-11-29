@@ -644,7 +644,7 @@ In this section, we will:
   });
   ```
 
-- Access the event object in a [can-stache-bindings.event] with `scope.event`, like:
+- Access the event object in a [can-stache-bindings.event] with [can-stache/keys/scope#scope_event scope.event], like:
 
   ```html
   on:sortableinsertat="addVideo(scope.event.index, scope.event.dragData)"

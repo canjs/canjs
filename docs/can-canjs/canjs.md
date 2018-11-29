@@ -42,13 +42,13 @@ The code for that <u>entire</u> page looks like this:
 <my-counter></my-counter>
 
 <script type="module">
-import { Component } from "//unpkg.com/can/core.mjs";
+import { Component } from "//unpkg.com/can@5/core.mjs";
 
 Component.extend({
     tag: "my-counter",
     view: `
-        Count: <span>{{count}}</span>
-        <button on:click='increment()'>+1</button>
+        Count: <span>{{this.count}}</span>
+        <button on:click="this.increment()">+1</button>
     `,
     ViewModel: {
         count: {default: 0},
@@ -77,7 +77,7 @@ for alternative ways to load CanJS.
 
 ```html
 <script type="module">
-import { Component } from "//unpkg.com/can/core.mjs";
+import { Component } from "//unpkg.com/can@5/core.mjs";
 ...
 </script>
 ```
@@ -95,8 +95,8 @@ by extending [can-component Component] with:
 Component.extend({
     tag: "my-counter",
     view: `
-        Count: <span>{{count}}</span>
-        <button on:click='increment()'>+1</button>
+        Count: <span>{{this.count}}</span>
+        <button on:click="this.increment()">+1</button>
     `,
     ViewModel: {
         count: {default: 0},
@@ -115,8 +115,8 @@ const Component = require("can-component");
 Component.extend({
     tag: "my-counter",
     view: `
-        Count: <span>{{count}}</span>
-        <button on:click='increment()'>+1</button>
+        Count: <span>{{this.count}}</span>
+        <button on:click="this.increment()">+1</button>
     `,
     ViewModel: {
         count: {default: 0},

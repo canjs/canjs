@@ -14,21 +14,23 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/roroko/3/embed?js,output">JS Bin on jsbin.com</a>
+<p data-height="265" data-theme-id="0" data-slug-hash="OaOxEW" data-default-tab="js,result" data-user="bitovi" data-pen-title="Signup and Login (Simple) [Finished]" class="codepen">See the Pen <a href="https://codepen.io/bitovi/pen/OaOxEW/">Signup and Login (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 
 To use the widget:
 
 1. __Click__ the _Sign up_ link.
 2. __Enter__ an _email_ and _password_ and __Click__ _SIGN UP_.  You will be logged in.
-3. __Click__ the _log out_ link. You will be presented with the _Sign Up_ form.
+3. __Click__ the _Log out_ link. You will be presented with the _Sign Up_ form.
 4. __Click__ the _Log in_ link.  __Enter__ the same _email_ and _password_ you used to sign up.  __Click__ the _LOG IN_ button.  You will be logged in.
 
-__START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
+__START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED__:
 
-<a class="jsbin-embed" href="https://jsbin.com/roroko/1/embed?js,output">JS Bin on jsbin.com</a>
+<p data-height="265" data-theme-id="0" data-slug-hash="eQeGrL" data-default-tab="css,js,result" data-user="bitovi" data-pen-title="Signup and Login (Simple) [Starter]" class="codepen">See the Pen <a href="https://codepen.io/bitovi/pen/eQeGrL/">Signup and Login (Simple) [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 
-This JS Bin has initial prototype HTML and CSS which is useful for
-getting the application to look right.
+This CodePen includes:
+
+- CanJS (`import { ajax, Component, fixture } from "//unpkg.com/can@5/core.mjs"` imports [can-ajax], [can-component], and [can-fixture]).
+- Pre-made styles so the app looks pretty. 😍
 
 The following sections are broken down into:
 
@@ -38,80 +40,104 @@ The following sections are broken down into:
 
 ## Understanding the service API
 
-This JSBin comes with a mock service layer provided
-by [can-fixture can.fixture].  It supplies:
+This CodePen comes with a mock service layer provided
+by [can-fixture].  It supplies:
 
 - `POST /api/session` for creating sessions (log in).
-- `GET /api/session` for returning if there is a session.
+- `GET /api/session` for getting if there is a session.
 - `DELETE /api/session` for deleting a session (log out).
 - `POST /api/users` for creating users.
 
 To tell if the current client is logged in:
 
-```
-=>
-GET /api/session
+```http
+Request:
 
-<=
+GET /api/session
+```
+
+```http
+Response:
+
 STATUS: 200
 {user: {email: "someone@email.com"}}
 ```
 
 If someone is logged out:
 
-```
-=>
-GET /api/session
+```http
+Request:
 
-<=
+GET /api/session
+```
+
+```http
+Response:
+
 STATUS: 404
 {message: "No session"}
 ```
 
 To log someone in:
 
-```
-=>
+```http
+Request:
+
 POST /api/session
 {user: {email: "someone@email.com", password: "123"}}
+```
 
-<=
+```http
+Response:
+
 STATUS: 200
 {user: {email: "someone@email.com"}}
 ```
 
 If someone logs in with invalid credentials:
 
-```
-=>
+```http
+Request:
+
 POST /api/session
 {user: {email: "WRONG", password: "WRONG"}}
+```
 
-<=
+```http
+Response:
+
 STATUS: 401 unauthorized
 { message: "Unauthorized"}
 ```
 
 To log someone out:
 
-```
-=>
-DELETE /api/session
+```http
+Request:
 
-<=
+DELETE /api/session
+```
+
+```http
+Response:
+
 STATUS: 200
 {}
 ```
 
 To create a user:
 
-```
-=>
+```http
+Request:
+
 POST /api/users
 
 {email: "someone@email.com", password: "123"}
+```
 
-<=
+```http
+Response:
+
 STATUS: 200
 {email: "someone@email.com"}
 ```
@@ -120,87 +146,76 @@ STATUS: 200
 
 ### The problem
 
-Let’s create a `app-view` template with all the HTML content and render it with
-a ViewModel called `AppViewModel`.
+When someone adds `<signup-login></signup-login>` to their HTML, we want the following HTML
+to show up:
 
+```html
+<p class="welcome-message">
+  Welcome Someone.
+  <a href="javascript://">Log out</a>
+</p>
+
+<form>
+  <h2>Sign Up</h2>
+
+  <input placeholder="email" />
+
+  <input type="password"
+       placeholder="password" />
+
+  <button>Sign Up</button>
+
+  <aside>
+    Have an account?
+    <a href="javascript://">Log in</a>
+  </aside>
+</form>
+```
 
 ### What you need to know
 
-- CanJS uses [can-stache] to render data in a template
-  and keep it live.  Templates can be authored in `<script>` tags like:
+To set up a basic CanJS application, you define a custom element in JavaScript and
+use the custom element in your page’s `HTML`.
 
-  ```html
-  <script type="text/stache" id="app-view">
-    TEMPLATE CONTENT
-  </script>
-  ```
+To define a custom element, extend [can-component] with a [can-component.prototype.tag]
+that matches the name of your custom element.
 
-  A [can-stache] template uses
-  [can-stache.tags.escaped {{key}}] magic tags to insert data into
-  the HTML output like:
+For example, we will use `<signup-login>` as our custom tag:
 
-  ```html
-  <script type="text/stache" id="app-view">
-    {{something.name}}
-  </script>
-  ```
+```js
+Component.extend({
+  tag: "signup-login"
+});
+```
 
-- Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
-  ```js
-  const view = can.stache.from(SCRIPT_ID);
-  ```
+But this doesn’t do anything.  Components add their own HTML through their [can-component.prototype.view]
+property like this:
 
-- Render the template with data into a documentFragment like:
+```js
+Component.extend({
+  tag: "signup-login",
+  view: `
+    <h2>Sign Up or Log In</h2>
+  `,
+  ViewModel: {
+  }
+});
+```
 
-  ```js
-  const fragment = view({
-    something: {name: "Derek Brunson"}
-  });
-  ```
+> **NOTE:** We’ll make use of the `ViewModel` property later.
 
-- Insert a fragment into the page with:
-
-  ```js
-  document.body.appendChild(fragment);
-  ```
-
-- [can-define/map/map.extend DefineMap.extend] allows you to define a property with a default value like:
-
-  ```js
-  AppViewModel = can.DefineMap.extend("AppViewModel",{
-    isLoggedIn: {default: false}
-  })
-  ```
-
-  This lets you create instances of that type, get and set those properties and listen to changes like:
-
-  ```js
-  const viewModel = new AppViewModel({});
-
-  viewModel.isLoggedIn //-> false
-
-  viewModel.on("isLoggedIn", function(ev, newValue){
-    console.log("isLoggedIn changed to ", newValue);
-  });
-
-  viewModel.isLoggedIn = true //-> logs "isLoggedIn changed to true"
-  ```
 
 ### The solution
-
-Wrap the __HTML__ content in the body with the following script tags:
-
-@sourceref ./1-setup.html
-@highlight 1,40
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
+@highlight 42-67,only
 
+Update the __HTML__ tab to:
 
-
-
-
+@sourceref ./1-setup.html
+@highlight 1,only
 
 ## Check if the user is logged in
 
@@ -221,16 +236,21 @@ viewModel.sessionPromise = Promise.resolve({user: {email: "someone@email.com"}})
 
 - The [can-define.types.default] property definition can return the initial value of a property like:
   ```js
-  const AppViewModel = can.DefineMap.extend({
-	myProperty: {
-	  default: function(){
-		return "This string"
-	  }
-	}  
+  Component.extend({
+    tag: "signup-login",
+    view: `
+      {{this.myProperty}} <!-- renders “This string” -->
+    `,
+    ViewModel: {
+      myProperty: {
+        default: function() {
+          return "This string"
+        }
+      }
+    }
   });
-  new AppViewModel().myProperty //-> "This string"
   ```
-- [can-util/dom/ajax/ajax can.ajax] can make requests to a URL like:
+- [can-ajax] can make requests to a URL like:
   ```js
   ajax({
     url: "http://query.yahooapis.com/v1/public/yql",
@@ -240,25 +260,27 @@ viewModel.sessionPromise = Promise.resolve({user: {email: "someone@email.com"}})
     }
   }) //-> Promise
   ```
-- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in [can-stache].
-- Promises are observable in `can-stache`. For a promise `myPromise`:
-    - `myPromise.value` is the resolved value of the promise
-	- `myPromise.isPending` is true if the promise has not resolved
-	- `myPromise.isResolved` is true if the promise has resolved
-	- `myPromise.isRejected` is true if the promise was rejected
-	- `myPromise.reason` is the rejected value of the promise
+- Use [can-stache.helpers.if {{# if(value) }}] to do `if/else` branching in [can-stache].
+  ```html
+  {{# if(this.myProperty) }}
+    Value is truth-y
+  {{ else }}
+    Value is false-y
+  {{/ if }}
+  ```
+- [can-stache#Readingpromises Promises are observable in can-stache.] For the promise `myPromise`:
+  - `myPromise.value` is the resolved value of the promise
+  - `myPromise.isPending` is true if the promise has not been resolved or rejected
+  - `myPromise.isResolved` is true if the promise has resolved
+  - `myPromise.isRejected` is true if the promise was rejected
+  - `myPromise.reason` is the rejected value of the promise
 
 ### The solution
-
-Update the template in the __HTML__ tab to:
-
-@sourceref ./2-check-login.html
-@highlight 2,5,9,27,only
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-check-login.js
-@highlight 2-8,only
+@highlight 45,52,70,73-79,only
 
 
 
@@ -267,7 +289,7 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-Let’s allow the user to enter an _email_ and _password_ and click _Sign Up_.  When this happens
+Let’s allow the user to enter an _email_ and _password_ and click _Sign Up_.  When this happens,
 we’ll `POST` this data to `/api/users`.  Once the user is created, we’ll want to update the `sessionPromise`
 property to have a promise with a _session-like_ object.
 
@@ -279,52 +301,61 @@ A promise with a _session-like_ object looks like:
 
 ### What you need to know
 
-- [can-define/map/map.extend DefineMap.extend] allows you to define a property by defining its type like so:
+- A ViewModel allows you to define a property with its [can-define.types type] like so:
 
   ```js
-  AppViewModel = can.DefineMap.extend("AppViewModel",{
+  ViewModel: {
     name: "string",
     password: "number"
-  });
+  }
   ```
 
-- The [can-stache-bindings.toParent] can set an input’s `value` to
+- The [can-stache-bindings.toParent] binding can set an input’s `value` to
   a ViewModel property like:
   ```html
-  <input value:to="name"/>
+  <input value:to="this.name" />
   ```
 
-- Use [can-stache-bindings.event ($EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked:
+- Use [can-stache-bindings.event] to listen to an event on an element and call a method in [can-stache].  For example, the following calls `doSomething()` when the `<div>` is clicked:
 
    ```html
-   <div on:click="doSomething(scope.event)"> ... </div>
+   <div on:click="this.doSomething(scope.event)"> ... </div>
    ```
 
-   Notice that it also passed the event object with `scope.event`.
+   Notice that it also passed the event object with [can-stache/keys/scope#scope_event scope.event].
 
 - To prevent a form from submitting, call [event.preventDefault()](https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault).
 
-- Use `.then` on a promise to map the source promise to another promise value.
+- [can-ajax] can make `POST` requests to a URL like:
+```js
+ajax({
+  url: "http://query.yahooapis.com/v1/public/yql",
+  type: "post",
+  data: {
+    format: "json",
+    q: 'select * from geo.places where text="sunnyvale, ca"'
+  }
+}) //-> Promise
+```
+@highlight 3
+
+- Use the [then()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then) method on a promise to map the source promise to another promise value.
 
   ```js
   const source = Promise.resolve({email: "justin@bitovi.com"})
 
-  const result = source.then(function(userData){
-	return {user: userData}
+  const result = source.then(function(userData) {
+    return {user: userData}
   });
   ```
+  @highlight 3-5
 
 ### The solution
-
-Update the template in the __HTML__ tab to:
-
-@sourceref ./3-signup.html
-@highlight 11,14,17,only
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-signup.js
-@highlight 10-24,only
+@highlight 54,57,60,81-95,only
 
 
 
@@ -333,38 +364,34 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-Let’s update the app to log the user out when the _log out_ button is clicked.  We can
+Let’s update the app to log the user out when the _Log out_ button is clicked.  We can
 do this by making a `DELETE` request to `/api/session` and updating the `sessionPromise`
 property to have a rejected value.
 
 ### What you need to know
 
-- Use `.then` and `Promise.reject` to map a source promise to a rejected promise.
+- Use [then()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then) and [Promise.reject()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/reject) to map a source promise to a rejected promise.
 
   ```js
-  const source = Promise.resolve({})
+  const source = Promise.resolve({});
 
-  const result = source.then(function(userData){
-	return Promise.reject({message: "Unauthorized"});
+  const result = source.then(function(userData) {
+    return Promise.reject({message: "Unauthorized"});
   });
 
-  result.catch(function(reason){
+  result.catch(function(reason) {
 	  reason.message //-> "Unauthorized";
   });
   ```
+  @highlight 3-5
 
 
 ### The solution
 
-Update the template in the __HTML__ tab to:
-
-@sourceref ./4-logout.html
-@highlight 6,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-logout.js
-@highlight 26-33,only
+@highlight 49,97-104,only
 
 
 
@@ -372,27 +399,55 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-Let’s allow the user to go back and forth between the _Sign Up_ page and the _Log In_
+Let’s add a _Log In_ form for the user:
+
+```html
+<form>
+  <h2>Log In</h2>
+
+  <input placeholder="email" />
+
+  <input type="password"
+     placeholder="password" />
+
+  <button>Log In</button>
+
+  <div class="error">error message</div>
+
+  <aside>
+    Don’t have an account?
+    <a href="javascript://">Sign up</a>
+  </aside>
+</form>
+```
+
+The user should be able to go back and forth between the _Sign Up_ page and the _Log In_
 page. We’ll do this by changing a `page` property to `"signup"` or `"login"`.
 
 We’ll also implement the _Log In_ form’s functionality.  When a session is created,
-we’ll want to `POST` session data to `/api/session` and update `sessionPromise` accordingly.
+we’ll want to `POST` session data to `/api/session` and update `this.sessionPromise` accordingly.
 
 ### What you need to know
 
-- Use [can-stache.helpers.is {{#eq(value1, value2)}}] to test equality in `can-stache`.
+- Use [can-stache.helpers.is {{# eq(value1, value2) }}] to test equality in [can-stache].
+  ```html
+  {{# eq(this.value1, "value 2") }}
+    Values are equal
+  {{ else }}
+    Values are not equal
+  {{/ if }}
+  ```
+- You can [can-stache-bindings.event#on_VIEW_MODEL_OR_DOM_EVENT__KEY_VALUE_ set a property value within an event binding] like:
+  ```html
+  <a on:click="this.aProperty = 'a value'">Link</a>
+  ```
 
 ### The solution
-
-Update the template in the __HTML__ tab to:
-
-@sourceref ./5-login.html
-@highlight 10,24,28-46,only
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-login.js
-@highlight 35-54,only
+@highlight 53,67,71-89,127-140,only
 
 
 
@@ -401,48 +456,47 @@ Update the __JavaScript__ tab to:
 ### The problem
 
 If the user tried to login, but the server responded with an error message, let’s
-display that error message.  We’ll do this by `catch`ing the create-session request. If
-the request failed we will set a `logInError` property with the server’s response data.
+display that error message.
+
+```html
+<div class="error">An error message</div>
+```
+
+We’ll do this by `catch`ing the create-session request. If
+the request fails, we will set a `logInError` property with the server’s response data.
 
 ### What you need to know
 
-- Use `.catch` to handle when a promise is rejected:
+- Use [catch()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/catch) to handle when a promise is rejected:
   ```js
-  const source = Promise.reject({responseText: '{"message": "foo"}'})
-  source.catch(function(reason){
-	  reason.responseText //->  '{"message": "foo"}'
+  const source = Promise.reject({message: "foo"})
+  source.catch(function(reason) {
+	  reason //-> {message: "foo"}
   })
   ```
-- Use `JSON.parse` to convert text to JavaScript objects:
+  @highlight 2
+
+- Use the `"any"` [can-define.types type] to define a property of indeterminate type:
   ```js
-  JSON.parse('{"message": "foo"}') //-> {message: "foo"}
-  ```
-- Use the `"any"` type to define a property of indeterminate type:
-  ```js
-  const AppViewModel = can.DefineMap.extend({
-    myProperty: "any"  
+  const AppViewModel = DefineMap.extend({
+    myProperty: "any"
   });
   const viewModel = new AppViewModel({});
   viewModel.myProperty = ANYTHING;
   ```
-
+  @highlight 2
 
 ### The solution
-
-Update the template in the __HTML__ tab to:
-
-@sourceref ./6-login-errors.html
-@highlight 40-42,only
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-login-errors.js
-@highlight 55-60,only
+@highlight 83-85,145-150,only
 
 ## Result
 
-When finished, you should see something like the following JS Bin:
+When finished, you should see something like the following CodePen:
 
-<a class="jsbin-embed" href="https://jsbin.com/roroko/3/embed?js,output">JS Bin on jsbin.com</a>
+<p data-height="265" data-theme-id="0" data-slug-hash="OaOxEW" data-default-tab="js,result" data-user="bitovi" data-pen-title="Signup and Login (Simple) [Finished]" class="codepen">See the Pen <a href="https://codepen.io/bitovi/pen/OaOxEW/">Signup and Login (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.1.2"></script>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>

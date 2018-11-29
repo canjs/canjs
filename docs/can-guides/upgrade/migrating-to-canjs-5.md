@@ -520,6 +520,35 @@ route.start();
 ```
 @highlight 4
 
+### Don’t parse error responses with can-ajax
+
+This is a common pattern with [can-ajax] 1:
+
+```js
+import ajax from 'can-ajax';
+
+ajax().then(function() {
+    // Handle a successful response…
+}, function(xhr) {
+    const error = JSON.parse(xhr.responseText);
+    // Do something with error…
+});
+```
+@highlight 5-6
+
+With [can-ajax] 2, you no longer need to parse the `responseText`:
+
+```js
+import ajax from 'can-ajax';
+
+ajax().then(function() {
+    // Handle a successful response…
+}, function(error) {
+    // Do something with error…
+});
+```
+@highlight 5
+
 ## Recommended Changes
 
 The following are suggested changes to make sure your application is compatible beyond 5.0.

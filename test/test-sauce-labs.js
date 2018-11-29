@@ -8,17 +8,10 @@ var commandTimeout = 600; // seconds, default 300, max 600
 var idleTimeout = 1000; // seconds, default 90, max 1000
 
 // https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities
-var platforms = [/*{
-	browserName: 'internet explorer',
-	platform: 'Windows 10',
-	version: '11.0',
-	maxDuration: maxDuration,
-	commandTimeout: commandTimeout,
-	idleTimeout: idleTimeout
-}, */{
+var platforms = [{
 	browserName: 'safari',
 	platform: 'OS X 10.13',
-	version: 'latest',
+	version: '11',
 	maxDuration: maxDuration,
 	commandTimeout: commandTimeout,
 	idleTimeout: idleTimeout
@@ -53,8 +46,6 @@ var platforms = [/*{
 	idleTimeout: idleTimeout
 }];
 
-var url = 'http://canjs.test:3000/test/index.html?hidepassed';
-
 var platformFilter = process.env.TEST_PLATFORMS;
 
 if (platformFilter) {
@@ -66,8 +57,22 @@ if (platformFilter) {
 }
 
 testSauceLabs({
-	urls: [{ name: "canjs", url : url }],
-	platforms: platforms,
+	urls: [{
+		name: "canjs",
+		url : 'http://canjs.test:3000/test/index-ie.html?hidepassed',
+		platforms: [{
+			browserName: 'internet explorer',
+			platform: 'Windows 10',
+			version: '11.0',
+			maxDuration: maxDuration,
+			commandTimeout: commandTimeout,
+			idleTimeout: idleTimeout
+		}]
+	}, {
+		name: "canjs",
+		url : 'http://canjs.test:3000/test/index.html?hidepassed',
+		platforms: platforms
+	}],
 	runInSeries: true,
 	zeroAssertionsPass: false
 });

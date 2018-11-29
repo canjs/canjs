@@ -1,0 +1,34 @@
+<string-to-any-selector></string-to-any-selector>
+
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
+import { Component, stacheConverters } from "can";
+
+Component.extend({
+	tag: "string-to-any-selector",
+
+	view: `
+		<label>
+			What primitive would you like?
+			<select value:bind="string-to-any(primitiveValue)">
+			  <option value="2">Number</option>
+			  <option value="null">Null</option>
+			  <option value="foo">String</option>
+			  <option value="true">Boolean</option>
+			  <option value="NaN">NaN</option>
+			  <option value="Infinity">Infinity</option>
+			</select>
+		</label>
+
+		<p>Selected primitive: {{ primitiveValueType }}</p>
+	`,
+
+	ViewModel: {
+		primitiveValue: {
+			default: true,
+		 },
+		get primitiveValueType() {
+			return typeof this.primitiveValue;
+		},
+	}
+});
+</script>

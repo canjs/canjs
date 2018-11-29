@@ -15,10 +15,8 @@ Component.extend({
     ViewModel: {
 		routeData: {
 			default() {
-				const observableRouteData = new DefineMap();
-				route.data = observableRouteData;
 				route.start();
-				return observableRouteData;
+				return route.data;
 			}
 		}
     }
