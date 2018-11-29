@@ -374,6 +374,6 @@ awesome!
 
 When finished, you should see something like the following JS&nbsp;Bin:
 
-<a class="jsbin-embed" href="https://jsbin.com/yexezu/5/embed?html,js,output">JS Bin on jsbin.com</a>
+<a class="jsbin-embed" href="https://jsbin.com/yexezu/6/embed?html,js,output">CanJS Chat on jsbin.com</a>
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.0.1"></script>
+<script src="https://static.jsbin.com/js/embed.min.js?4.1.7"></script>
