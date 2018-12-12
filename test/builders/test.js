@@ -20,3 +20,9 @@ QUnit.asyncTest("Able to load an app", function(){
 QUnit.asyncTest("Unabled modules are tree-shaken out", function(){
 	makeIframe(__dirname + "/webpack/treeshake.html?" + Math.random());
 });
+
+QUnit.module("steal-stache");
+
+QUnit.asyncTest("Able to load .stache files", function(){
+	makeIframe(__dirname + "/steal/site.html?" + Math.random());
+});
