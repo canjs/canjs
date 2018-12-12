@@ -381,10 +381,10 @@ __Model Example__
 
 </div>
 
-[After setting up Node.js and npm](#Node_jsandnpm), install `can`, [StealJS](https://stealjs.com) and the [steal-stache] plugin from npm:
+[After setting up Node.js and npm](#Node_jsandnpm), install `can` and [StealJS](https://stealjs.com) from npm:
 
 ```
-npm install can@5 steal@2 steal-stache@4 --save
+npm install can@5 steal@2 --save
 ```
 
 Next, add the following [steal configuration](https://stealjs.com/docs/StealJS.configuration.html)
@@ -401,15 +401,14 @@ to your `package.json`:
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "steal": {
-    "plugins": ["steal-stache"]
+    "plugins": ["can"]
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "can": "^5.0.0",
-    "steal": "^2.0.0",
-    "steal-stache": "^4.1.0"
+    "steal": "^2.0.0"
   },
   "devDependencies": {
     "http-server": "^0.11.0"

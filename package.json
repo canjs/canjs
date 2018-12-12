@@ -142,7 +142,8 @@
     "can-view-nodelist": "4.3.2",
     "can-view-parser": "4.1.2",
     "can-view-scope": "4.13.0",
-    "can-view-target": "4.1.2"
+    "can-view-target": "4.1.2",
+    "steal-stache": "4.1.2"
   },
   "devDependencies": {
     "bit-docs": "0.0.11",
@@ -171,7 +172,6 @@
     "steal-css": "^1.2.4",
     "steal-qunit": "^1.0.1",
     "steal-socket.io": "^4.0.9",
-    "steal-stache": "^4.0.0",
     "steal-tools": "^2.0.6",
     "test-saucelabs": "0.0.6",
     "testee": "^0.8.1",
@@ -209,6 +209,9 @@
     },
     "configDependencies": [
       "./node_modules/steal-conditional/conditional.js"
+    ],
+    "plugins": [
+      "steal-stache"
     ]
   },
   "bit-docs": {

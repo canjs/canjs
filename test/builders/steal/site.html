@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<title>steal-stache smoke test</title>
+
+<my-app></my-app>
+
+<script src="../../../node_modules/steal/steal.js"
+	data-main="~/test/builders/steal/main"></script>
+
+<script>
+(function(){
+	var QUnit = window.parent.QUnit;
+	var removeMyself = window.parent.removeMyself;
+
+	window.DONE = function() {
+		var myApp = document.querySelector('my-app');
+
+		if(QUnit) {
+			QUnit.equal(myApp.textContent.trim(), "Hello world");
+			removeMyself();
+		}
+	};
+})();
+</script>
