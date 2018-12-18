@@ -514,17 +514,17 @@ Component.extend({
             switch(this.routeData.page) {
                 case "home":
                     return new PageHome({
-						viewModel: {
-							logout: this.logout.bind(this)
-						}
+                        viewModel: {
+                            logout: this.logout.bind(this)
+                        }
 		    });
                 case "tasks":
                     return new TaskEditor({
-						viewModel: {
-							id: value.bind(this.routeData, "taskId"),
-							logout: this.logout.bind(this)
-						}
-					});
+                        viewModel: {
+                            id: value.bind(this.routeData, "taskId"),
+                            logout: this.logout.bind(this)
+                        }
+                    });
                 default:
                     var page404 = document.createElement("h2");
                     page404.innerHTML = "Page Missing";
@@ -594,17 +594,17 @@ Component.extend({
             switch(this.routeData.page) {
                 case "home":
                     return new PageHome({
-						viewModel: {
-							logout: this.logout.bind(this)
-						}
+                        viewModel: {
+                            logout: this.logout.bind(this)
+                        }
 		    });
                 case "tasks":
                     return new TaskEditor({
-						viewModel: {
-							id: value.bind(this.routeData, "taskId"),
-							logout: this.logout.bind(this)
-						}
-					});
+                        viewModel: {
+                            id: value.bind(this.routeData, "taskId"),
+                            logout: this.logout.bind(this)
+                        }
+                    });
                 default:
                     var page404 = document.createElement("h2");
                     page404.innerHTML = "Page Missing";
@@ -672,17 +672,17 @@ Component.extend({
             switch(this.routeData.page) {
                 case "home":
                     return new PageHome({
-						viewModel: {
-							logout: this.logout.bind(this)
-						}
+                        viewModel: {
+                            logout: this.logout.bind(this)
+                        }
 		    });
                 case "tasks":
                     return new TaskEditor({
-						viewModel: {
-							id: value.bind(this.routeData, "taskId"),
-							logout: this.logout.bind(this)
-						}
-					});
+                        viewModel: {
+                            id: value.bind(this.routeData, "taskId"),
+                            logout: this.logout.bind(this)
+                        }
+                    });
                 default:
                     var page404 = document.createElement("h2");
                     page404.innerHTML = "Page Missing";
