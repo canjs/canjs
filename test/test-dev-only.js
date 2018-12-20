@@ -11,8 +11,10 @@ require('can-stache/test/stache-test');
 // Infrastructure tests
 require('can-attribute-encoder/can-attribute-encoder-test');
 require('can-observation/can-observation_test');
-require('can-view-callbacks/test/callbacks-test');
+require('can-reflect/can-reflect-test');
 require('can-simple-map/can-simple-map_test');
+require('can-symbol/can-symbol-test');
+require('can-view-callbacks/test/callbacks-test');
 
 //require('can-cid/tests'); // ideally not imported by 4.0
 //require('can-types/test/test'); // should not be imported by 4.0
