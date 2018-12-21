@@ -506,22 +506,25 @@ Component.extend({
             if(!this.isLoggedIn) {
                 return new PageLogin({
                     viewModel: {
-                        isLoggedIn: value.bind(this, "isLoggedIn"),
-						logout: this.logout.bind(this)
+                        isLoggedIn: value.bind(this, "isLoggedIn")
                     }
                 });
             }
 
             switch(this.routeData.page) {
                 case "home":
-                    return new PageHome({ });
+                    return new PageHome({
+                        viewModel: {
+                            logout: this.logout.bind(this)
+                        }
+		    });
                 case "tasks":
                     return new TaskEditor({
-						viewModel: {
-							id: value.bind(this.routeData, "taskId"),
-							logout: this.logout.bind(this)
-						}
-					});
+                        viewModel: {
+                            id: value.bind(this.routeData, "taskId"),
+                            logout: this.logout.bind(this)
+                        }
+                    });
                 default:
                     var page404 = document.createElement("h2");
                     page404.innerHTML = "Page Missing";
@@ -583,22 +586,25 @@ Component.extend({
             if(!this.isLoggedIn) {
                 return new PageLogin({
                     viewModel: {
-                        isLoggedIn: value.bind(this, "isLoggedIn"),
-						logout: this.logout.bind(this)
+                        isLoggedIn: value.bind(this, "isLoggedIn")
                     }
                 });
             }
 
             switch(this.routeData.page) {
                 case "home":
-                    return new PageHome({ });
+                    return new PageHome({
+                        viewModel: {
+                            logout: this.logout.bind(this)
+                        }
+		    });
                 case "tasks":
                     return new TaskEditor({
-						viewModel: {
-							id: value.bind(this.routeData, "taskId"),
-							logout: this.logout.bind(this)
-						}
-					});
+                        viewModel: {
+                            id: value.bind(this.routeData, "taskId"),
+                            logout: this.logout.bind(this)
+                        }
+                    });
                 default:
                     var page404 = document.createElement("h2");
                     page404.innerHTML = "Page Missing";
@@ -658,22 +664,25 @@ Component.extend({
             if(!this.isLoggedIn) {
                 return new PageLogin({
                     viewModel: {
-                        isLoggedIn: value.bind(this, "isLoggedIn"),
-						logout: this.logout.bind(this)
+                        isLoggedIn: value.bind(this, "isLoggedIn")
                     }
                 });
             }
 
             switch(this.routeData.page) {
                 case "home":
-                    return new PageHome({ });
+                    return new PageHome({
+                        viewModel: {
+                            logout: this.logout.bind(this)
+                        }
+		    });
                 case "tasks":
                     return new TaskEditor({
-						viewModel: {
-							id: value.bind(this.routeData, "taskId"),
-							logout: this.logout.bind(this)
-						}
-					});
+                        viewModel: {
+                            id: value.bind(this.routeData, "taskId"),
+                            logout: this.logout.bind(this)
+                        }
+                    });
                 default:
                     var page404 = document.createElement("h2");
                     page404.innerHTML = "Page Missing";
@@ -734,7 +743,6 @@ Component.extend({
                         case "home":
                             return new module.default({
                                 viewModel: {
-                                    isLoggedIn: value.from(this, "isLoggedIn"),
                                     logout: this.logout.bind(this)
                                 }
                             });
