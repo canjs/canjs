@@ -331,7 +331,7 @@ state management and templates:
   - [can-ndjson-stream Streaming NDJSON fetch responses]
 - [can-fixture Service simulation]
 - [can-define-validate-validatejs Validation]
-- [react-view-model React integration]
+- [React integration](https://github.com/bitovi/ylem#readme)
 - [can-control Memory safe declarative event binding]
 
 There are also extensions to state management:
@@ -360,7 +360,7 @@ __Flexible Pieces__
 
 If you can't find what you need, you can build it! CanJS has all of
 its inner workings exposed and documented. Integrating
-other technology (like [react-view-model React] and [can-kefir Kefir] streams)
+other technology (like [React](https://github.com/bitovi/ylem#readme) and [can-kefir Kefir] streams)
 and non-DOM APIs (like [guides/recipes/cta-bus-map Google Map] and [guides/recipes/canvas-clock Canvas])
 straightforward.
 
