@@ -373,13 +373,8 @@ __Model Example__
 
 ## StealJS
 
-<div style="display:none">
-
 > You can skip these instructions by
 > [cloning this example repo on GitHub](https://github.com/canjs/stealjs-example).
-
-
-</div>
 
 [After setting up Node.js and npm](#Node_jsandnpm), install `can` and [StealJS](https://stealjs.com) from npm:
 
