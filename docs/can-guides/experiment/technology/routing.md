@@ -216,7 +216,7 @@ In most applications, [can-route] is connected to a property on the top-level co
 building `<my-app>` and connecting it
 to [can-route]. This is usually done in five steps:
 
-1. Define the top-level component’s view-model (a [can-define/map/map DefineMap] sometimes called _application view-model_).
+1. Define the top-level component’s view-model (sometimes called _application view-model_; typically, this is a [can-define/map/map DefineMap]).
 2. Create an observable key-value object on the view-model to represent the state of [can-route].
 3. Connect this observable to the routing [can-route.data].
 4. Have the top-level component’s [can-component.prototype.view] display the current sub-components based on the view-model state.
