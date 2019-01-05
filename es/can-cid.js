@@ -1,1 +1,1 @@
-export {default} from "can-cid";
+export {default, default as cid } from "can-cid";

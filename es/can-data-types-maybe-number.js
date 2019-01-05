@@ -1,0 +1,1 @@
+export { default, default as MaybeNumber } from "can-data-types/maybe-number/maybe-number";

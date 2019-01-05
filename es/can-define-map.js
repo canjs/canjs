@@ -1,0 +1,1 @@
+export { default, default as DefineMap } from "can-define/map/map";

@@ -1,0 +1,1 @@
+export { default, default as Construct } from "can-construct";

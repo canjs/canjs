@@ -1,0 +1,1 @@
+export { default, default as MaybeString } from "can-data-types/maybe-string/maybe-string";

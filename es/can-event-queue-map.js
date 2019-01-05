@@ -1,0 +1,1 @@
+export { default, default as mapEventBindings} from "can-event-queue/map/map";

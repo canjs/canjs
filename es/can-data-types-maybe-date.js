@@ -1,0 +1,1 @@
+export { default, default as MaybeDate } from "can-data-types/maybe-date/maybe-date";
