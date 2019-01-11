@@ -101,7 +101,7 @@ The difficulty in testing this ViewModel is knowing when to run assertions. One 
 
 This might work initially, but different browsers will not handle this 500ms delay in exactly the same way. Tests using `setTimeout` like this become very brittle and prone to break as browsers and test environments change. It is very frustrating to write a test and have it start failing six months down the road even though nothing in the code has changed.
 
-This brittleness can be avoided by using an [https://canjs.com/doc/can-event-queue/map/map.addEventListener.html event listener] instead of `setTimeout`. Using this technique, the test approach is:
+This brittleness can be avoided by using an [https://canjs.com/doc/can-event-queue/map/map.listenTo.html event listener] instead of `setTimeout`. Using this technique, the test approach is:
 
 * Set the `text` property
 * Wait for the `text` property to change
@@ -149,7 +149,7 @@ describe("ThrottledText ViewModel", () => {
 	it("text", (done) => {
 		let vm = new ViewModel({ });
 
-		vm.addEventListener("text", () => {
+		vm.listenTo("text", () => {
 			assert.equal(vm.text, "Hi there!", "text updated correctly")
 			done();
 		});
@@ -288,7 +288,7 @@ describe("Todos ViewModel", () => {
 			todoCountPromise: Promise.resolve(todoResponse)
 		});
 
-		vm.addEventListener("todoCount", () => {
+		vm.listenTo("todoCount", () => {
 			assert.equal(vm.todoCount, 150, "`todoCount` === 150");
 			done();
 		});
@@ -317,9 +317,9 @@ let vm = new ViewModel({
 });
 ```
 
-With this approach, the assertions can be made outside of the `addEventListener` callback and there is no need to call `done()` since this test is now synchronous.
+With this approach, the assertions can be made outside of the `listenTo` callback and there is no need to call `done()` since this test is now synchronous.
 
-> NOTE: Even with this approach, `addEventListener` still needs to be called; without this, CanJS will not provide the `resolve` function to the asynchronous getter. This is done to prevent memory leaks.
+> NOTE: Even with this approach, `listenTo` still needs to be called; without this, CanJS will not provide the `resolve` function to the asynchronous getter. This is done to prevent memory leaks.
 
 ```html
 <div id="mocha"></div>
@@ -370,7 +370,7 @@ describe("Todos ViewModel", () => {
 			todoCountPromise: testTodoCountPromise
 		});
 
-		vm.addEventListener("todoCount", () => {});
+		vm.listenTo("todoCount", () => {});
 
 		assert.equal(vm.todoCount, 150, "`todoCount` === 150");
 	});
@@ -478,7 +478,7 @@ describe("Todos ViewModel", () => {
 			todoConnection: testTodoConnection
 		});
 
-		vm.addEventListener("todoCountPromise", () => {});
+		vm.listenTo("todoCountPromise", () => {});
 
 		assert.equal(vm.todoCountPromise, testPromise, "todoCountPromise is the promise returned by getList");
 
