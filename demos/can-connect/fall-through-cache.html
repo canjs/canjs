@@ -13,8 +13,7 @@ var DefineMap = require("can-define/map/map");
 var DefineList = require("can-define/list/list");
 var Observation = require("can-observation");
 var QueryLogic = require("can-query-logic");
-var domEvents = require("can-util/dom/events/events");
-require("can-util/dom/events/removed/removed");
+var domEvents = require("can-dom-events");
 
 var Todo = DefineMap.extend({
 	id: {type: "number", identity: true},
@@ -64,7 +63,7 @@ var todoItem = function(todo) {
 
 	var handler = function(){};
 	liUpdate.on(liUpdate)
-	domEvents.addEventListener.call(li[0], "removed", function(){
+	domEvents.addEventListener(li[0], "removed", function(){
 		liUpdate.off(liUpdate);
 	});
 
@@ -117,7 +116,7 @@ var todoList = function(set){
 
 		add({},todos, 0)
 	});
-	domEvents.addEventListener.call(element[0], "removed", function(){
+	domEvents.addEventListener(element[0], "removed", function(){
 		todos.off("add", add).off("remove", remove);
 		remove([],todos,0);
 	});
