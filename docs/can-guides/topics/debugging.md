@@ -1,5 +1,6 @@
 @page guides/debugging Debugging
 @parent guides/essentials 6
+@outline 2
 
 @description Learn how to debug CanJS applications.
 
@@ -280,7 +281,7 @@ can.debug.logWhatIChange(me, "first");
 can.debug.logWhatIChange(document.querySelector("input[name=first]"));
 ```
 
-Finally, [can-debug.drawGraph] can draw these relationships in a graph like the following:
+Finally, [using CanJS Devtools](#UsingtheCanJSDevtoolsBindingsGraph) these relationships can be seen in a graph like the following:
 
 <img src="../../node_modules/can-debug/doc/map-dependency-graph.png"
   class="bit-docs-screenshot"
@@ -371,14 +372,14 @@ Component.extend({
 
 There is a CanJS Devtools Chrome Extension available in the [Chrome Web Store](https://chrome.google.com/webstore/detail/canjs-devtools/hhdfadlgplkpapjfehnjhcebebgmibcb).
 
-Once installed, you will see a CanJS icon next to the address bar:
+Once installed, a CanJS icon will be displayed next to the address bar:
 
 <img src="../../docs/can-guides/images/devtools/canjs-button-disabled.png"
   class="bit-docs-screenshot"
   alt="The CanJS Devtools extension icon - disabled"
   width="600px"/>
 
-Initially, this icon will be disabled. In order to enable the extension, you need to install [can-debug] as explained in [Setup Debugging](#SetUpDebugging). Make sure you have `can-debug@2` or higher. Once this is set up, the icon will be enabled:
+Initially, this icon will be disabled. In order to enable the extension, [can-debug] 2.0.0 or higher must be installed as explained in [Set Up Debugging](#SetUpDebugging). Once this is set up, the icon will be enabled:
 
 <img src="../../docs/can-guides/images/devtools/canjs-button-enabled.png"
   class="bit-docs-screenshot"
@@ -387,72 +388,134 @@ Initially, this icon will be disabled. In order to enable the extension, you nee
 
 The CanJS Devtools extension adds several new pieces of functionality to Chrome's Developer Tools. These are discussed in the sections below.
 
-## Using the CanJS Devtools ViewModel Editor
+## Using the CanJS Devtools Panel
 
-When an element is selected in the Elements panel, a CanJS ViewModel Editor will be added in the sidebar:
+CanJS Devtools adds a top-level "CanJS" panel to Chrome's Developer Tools. This panel is made up of a Component Tree on the left and several sections on the right for handling common tasks.
 
-<img src="../../docs/can-guides/images/devtools/viewmodel-editor.png"
+### Component Tree
+
+The Component Tree is similar to the built-in Elements Panel, but only shows CanJS Components.
+
+<img src="../../docs/can-guides/images/devtools/panel.png"
   class="bit-docs-screenshot"
-  alt="The CanJS Devtools ViewModel Editor"
+  alt="The CanJS Devtools Panel"
   width="600px"/>
 
-In order to find this, select the Elements panel:
+Clicking on a component in the tree will select it:
 
-<img src="../../docs/can-guides/images/devtools/devtools-elements-panel.png"
+<img src="../../docs/can-guides/images/devtools/panel-hover-on-component.png"
   class="bit-docs-screenshot"
-  alt="The Chrome Developer Tools Elements Panel"
+  alt="The CanJS Devtools Panel selecting component"
   width="600px"/>
 
-Then, depending on the size of your Developer Tools window, you may need to click on the overflow menu in order to find the CanJS ViewModel Editor:
+If a component is selected in the Elements Panel, it will automatically be selected in the CanJS Panel. If an element that is not a component is selected, its closest parent component will be selected automatically, if there is one.
 
-<img src="../../docs/can-guides/images/devtools/devtools-sidebar-overflow-menu.png"
+### ViewModel Editor
+
+Once a component is selected, its ViewModel will be displayed in the ViewModel Editor in the sidebar.
+
+<img src="../../docs/can-guides/images/devtools/panel-component-selected.png"
   class="bit-docs-screenshot"
-  alt="The Chrome Developer Tools sidebar overflow menu"
+  alt="The CanJS Devtools Panel ViewModel Editor"
   width="600px"/>
 
-Once selected, the JSON editor can be used to view and edit the ViewModel for the selected element &mdash; or the closest parent element that has a ViewModel:
+Maps and Lists can be expanded in the Editor by clicking on a key that has a dropdown, or by clicking the dropdown directly.
 
 <img src="../../docs/can-guides/images/devtools/viewmodel-editor-zoomed.png"
   class="bit-docs-screenshot"
-  alt="The Chrome Developer Tools sidebar overflow menu"
+  alt="The CanJS Devtools Panel ViewModel Editor Expanding Object"
   width="600px"/>
 
-## Using the CanJS Devtools Bindings Graph
+A property's value can be edited by clicking on it:
 
-Similar to the ViewModel Editor, when an element is selected, a sidebar is added for the CanJS Bindings Graph:
-
-<img src="../../docs/can-guides/images/devtools/bindings-graph.png"
+<img src="../../docs/can-guides/images/devtools/viewmodel-editor-edit-strings.png"
   class="bit-docs-screenshot"
-  alt="The CanJS Devtools Bindings Graph"
+  alt="The CanJS Devtools Panel ViewModel Editor Edit Property Value"
   width="600px"/>
 
-If the element that is selected has a ViewModel, the graph will show the relationships for a property of the ViewModel:
+Boolean values can also be edited using the quick toggle checkbox:
 
-<img src="../../docs/can-guides/images/devtools/bindings-graph-viewmodel.png"
+<img src="../../docs/can-guides/images/devtools/viewmodel-editor-edit-booleans.png"
   class="bit-docs-screenshot"
-  alt="The CanJS Devtools Bindings Graph"
+  alt="The CanJS Devtools Panel ViewModel Editor Edit Boolean Property Value"
   width="600px"/>
 
-By default, the property selected will be the _first_ property on the ViewModel alphabetically. You can select a different property by clicking on the header:
+When hovering over a property, options will be shown on the right. All properties can be removed by clicking the &minus; icon. If the property is an object, new properties can be added by clicking the &plus; icon:
 
-<img src="../../docs/can-guides/images/devtools/bindings-graph-viewmodel-click.png"
+<img src="../../docs/can-guides/images/devtools/viewmodel-editor-add-remove-options.png"
   class="bit-docs-screenshot"
-  alt="The CanJS Devtools Bindings Graph"
+  alt="The CanJS Devtools Panel ViewModel Editor Property Value Options"
   width="600px"/>
 
-This will give you a dropdown showing all of the available properties:
+New properties can also be added to objects by clicking anywhere inside the object:
 
-<img src="../../docs/can-guides/images/devtools/bindings-graph-viewmodel-select-property.png"
+<img src="../../docs/can-guides/images/devtools/viewmodel-editor-new-key-value.png"
   class="bit-docs-screenshot"
-  alt="The CanJS Devtools Bindings Graph"
+  alt="The CanJS Devtools Panel ViewModel Editor New Key Value Editor"
   width="600px"/>
 
-If the element selected does not have a ViewModel, the graph will show the relationships for the element itself:
+Once changes have been made, they can be applied back to the source ViewModel, by clicking the "Apply Changes" button.
 
-<img src="../../docs/can-guides/images/devtools/bindings-graph-element.png"
+<img src="../../docs/can-guides/images/devtools/viewmodel-editor-apply-changes.png"
   class="bit-docs-screenshot"
-  alt="The CanJS Devtools Bindings Graph"
+  alt="The CanJS Devtools Panel ViewModel Editor Apply Changes"
   width="600px"/>
+
+### ViewModel Mutations Breakpoints
+
+The CanJS Devtools Panel also allows you to create breakpoints for when mutations happen to Component ViewModels.
+
+The ViewModel Mutation Breakpoints sidebar can be expanded by clicking on the header:
+
+<img src="../../docs/can-guides/images/devtools/panel-breakpoints-expanded.png"
+  class="bit-docs-screenshot"
+  alt="The CanJS Devtools Panel Breakpoints Editor"
+  width="600px"/>
+
+Once expanded, a breakpoint can be created by typing an expression into the `<input>` element.
+
+These expressions can be property names like `canPlaceOrder`, `order.total`, or `order.items.length`:
+
+<img src="../../docs/can-guides/images/devtools/panel-creating-breakpoint.png"
+  class="bit-docs-screenshot"
+  alt="The CanJS Devtools Panel Breakpoints Editor Change Breakpoint Creation"
+  width="600px"/>
+
+Expressions like this will create breakpoints that will be hit whenever the value of that property changes. When these breakpoints are hit, the [can-queues.logStack] output will be displayed in the console so you can see exactly what caused the mutation to occur:
+
+<img src="../../docs/can-guides/images/devtools/panel-stopped-at-change-breakpoint.png"
+  class="bit-docs-screenshot"
+  alt="The CanJS Devtools Panel Breakpoints Editor Change Breakpoint Debugger"
+  width="600px"/>
+
+Breakpoints like `orders.total !== '0.00'` can also be created using [comparison operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#Comparison_operators):
+
+<img src="../../docs/can-guides/images/devtools/panel-with-breakpoints.png"
+  class="bit-docs-screenshot"
+  alt="The CanJS Devtools Panel Breakpoints Editor Boolean Breakpoint Creation"
+  width="600px"/>
+
+Expressions like this will create breakpoints that will be hit whenever the value of the expression changes from [falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) to [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy):
+
+<img src="../../docs/can-guides/images/devtools/panel-stopped-at-boolean-breakpoint.png"
+  class="bit-docs-screenshot"
+  alt="The CanJS Devtools Panel Breakpoints Editor Boolean Breakpoint Debugger"
+  width="600px"/>
+
+Once created, breakpoints can be disabled by clicking on the checkbox:
+
+<img src="../../docs/can-guides/images/devtools/panel-with-breakpoints-disabled.png"
+  class="bit-docs-screenshot"
+  alt="The CanJS Devtools Panel Breakpoints Editor Breakpoint Disable"
+  width="600px"/>
+
+Breakpoints can also be deleted by clicking on the &minus; icon:
+
+<img src="../../docs/can-guides/images/devtools/panel-with-breakpoints-deleted.png"
+  class="bit-docs-screenshot"
+  alt="The CanJS Devtools Panel Breakpoints Editor Breakpoint Delete"
+  width="600px"/>
+
 
 ## Using the CanJS Devtools Queues Stack
 
@@ -463,16 +526,78 @@ As discussed in [Debug what caused a observable event or update to happen](#Debu
   alt="The CanJS Devtools Queues Stack"
   width="600px"/>
 
-When stopped at a breakpoint in the Chrome Developer Tools, you can see this Queues Stack in the sidebar:
+When stopped at a breakpoint in the Chrome Developer Tools, the Queues Stack is available in the sidebar:
 
 <img src="../../docs/can-guides/images/devtools/queues-stack-zoomed.png"
   class="bit-docs-screenshot"
   alt="The CanJS Devtools Queues Stack"
   width="600px"/>
 
-You can click on any of these functions to go to their definition in the Sources panel:
+Clicking on a function will open its definition in the Sources panel:
 
 <img src="../../docs/can-guides/images/devtools/queues-stack-click-through.png"
   class="bit-docs-screenshot"
   alt="The CanJS Devtools Queues Stack"
   width="600px"/>
+
+## Using the CanJS Devtools Bindings Graph
+
+When an element is selected in the Elements panel, a tab for the CanJS Bindings Graph will be added to the sidebar:
+
+<img src="../../docs/can-guides/images/devtools/bindings-graph-viewmodel.png"
+  class="bit-docs-screenshot"
+  alt="The CanJS Devtools Bindings Graph"
+  width="600px"/>
+
+In order to find this, select the Elements panel:
+
+<img src="../../docs/can-guides/images/devtools/devtools-elements-panel.png"
+  class="bit-docs-screenshot"
+  alt="The Chrome Developer Tools Elements Panel"
+  width="600px"/>
+
+Then, depending on the size of the Developer Tools window, the CanJS Bindings Graph may be in the overflow menu:
+
+<img src="../../docs/can-guides/images/devtools/devtools-sidebar-overflow-menu.png"
+  class="bit-docs-screenshot"
+  alt="The Chrome Developer Tools Sidebar Overflow Menu"
+  width="600px"/>
+
+If the element that is selected has a ViewModel, the graph will show the relationships for a property of the ViewModel:
+
+<img src="../../docs/can-guides/images/devtools/bindings-graph-viewmodel.png"
+  class="bit-docs-screenshot"
+  alt="The CanJS Devtools Bindings Graph"
+  width="600px"/>
+
+By default, the property selected will be the _first_ property on the ViewModel alphabetically. Another property can be selected by clicking on the header:
+
+<img src="../../docs/can-guides/images/devtools/bindings-graph-viewmodel-click.png"
+  class="bit-docs-screenshot"
+  alt="The CanJS Devtools Bindings Graph Property Selection"
+  width="600px"/>
+
+A dropdown of all of the available properties will be displayed:
+
+<img src="../../docs/can-guides/images/devtools/bindings-graph-viewmodel-select-property.png"
+  class="bit-docs-screenshot"
+  alt="The CanJS Devtools Bindings Graph Property Selection Dropdown"
+  width="600px"/>
+
+If the element selected does not have a ViewModel, the graph will show the relationships for the element itself:
+
+<img src="../../docs/can-guides/images/devtools/bindings-graph-element.png"
+  class="bit-docs-screenshot"
+  alt="The CanJS Devtools Bindings Graph for Element"
+  width="600px"/>
+
+## Using the standalone CanJS Devtools ViewModel Editor
+
+Similar to the Bindings Graph, a sidebar is added for the CanJS ViewModel Editor. The ViewModel Editor will be shown for the selected element &mdash; or the closest parent element that has a ViewModel:
+
+<img src="../../docs/can-guides/images/devtools/standalone-viewmodel-editor.png"
+  class="bit-docs-screenshot"
+  alt="The Chrome Developer Tools Standalone ViewModel Editor"
+  width="600px"/>
+
+The standalone ViewModel Editor has the same features as the Editor in the [CanJS Panel](#ViewModelEditor).
