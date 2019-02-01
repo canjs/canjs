@@ -403,21 +403,16 @@ The Component Tree is similar to the built-in Elements Panel, but only shows Can
 
 Clicking on a component in the tree will select it:
 
-<img src="../../docs/can-guides/images/devtools/panel-hover-on-component.png"
+<img src="../../docs/can-guides/images/devtools/panel-component-selected.png"
   class="bit-docs-screenshot"
-  alt="The CanJS Devtools Panel selecting component"
+  alt="The CanJS Devtools Panel ViewModel Editor"
   width="600px"/>
 
 If a component is selected in the Elements Panel, it will automatically be selected in the CanJS Panel. If an element that is not a component is selected, its closest parent component will be selected automatically, if there is one.
 
 ### ViewModel Editor
 
-Once a component is selected, its ViewModel will be displayed in the ViewModel Editor in the sidebar.
-
-<img src="../../docs/can-guides/images/devtools/panel-component-selected.png"
-  class="bit-docs-screenshot"
-  alt="The CanJS Devtools Panel ViewModel Editor"
-  width="600px"/>
+As mentioned above, once a component is selected, its ViewModel will be displayed in the ViewModel Editor in the sidebar.
 
 Maps and Lists can be expanded in the Editor by clicking on a key that has a dropdown, or by clicking the dropdown directly.
 
