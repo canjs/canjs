@@ -416,7 +416,7 @@ As mentioned above, once a component is selected, its ViewModel will be displaye
 
 Maps and Lists can be expanded in the Editor by clicking on a key that has a dropdown, or by clicking the dropdown directly.
 
-<img src="../../docs/can-guides/images/devtools/viewmodel-editor-zoomed.png"
+<img src="../../docs/can-guides/images/devtools/viewmodel-editor.png"
   class="bit-docs-screenshot"
   alt="The CanJS Devtools Panel ViewModel Editor Expanding Object"
   width="600px"/>
@@ -483,7 +483,7 @@ Expressions like this will create breakpoints that will be hit whenever the valu
   alt="The CanJS Devtools Panel Breakpoints Editor Change Breakpoint Debugger"
   width="600px"/>
 
-Breakpoints like `orders.total !== '0.00'` can also be created using [comparison operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#Comparison_operators):
+Breakpoints like `order.items.length > 2` can also be created using [comparison operators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#Comparison_operators):
 
 <img src="../../docs/can-guides/images/devtools/panel-with-breakpoints.png"
   class="bit-docs-screenshot"
