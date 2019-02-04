@@ -10,6 +10,8 @@ CanJS has many utilities that help you understand how an application behaves and
 discover common problems. This guide is a central list for those utilities. It introduces
 those utilities and highlights when they are useful.
 
+For a step-by-step walkthrough and video, check out the [CanJS Debugging tuturial](https://www.bitovi.com/blog/canjs-debugging-tutorial) on [bitovi.com](https://www.bitovi.com/blog/).
+
 ## Set Up Debugging
 
 CanJS does not have a single global export; instead, every module must be imported. While this
