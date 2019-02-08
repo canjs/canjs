@@ -8,6 +8,8 @@
 	}
 </style>
 <link rel="stylesheet" href="../../node_modules/jquery-ui/themes/base/all.css" />
+<script type="text/javascript" src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="app"></div>
 <script type="text/stache" id="demo-html">
 <pre>
@@ -22,8 +24,6 @@ canViewCallbacks.attr(<span tooltip="The attribute name to match.">"tooltip"</sp
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
 import { stache, viewCallbacks } from "can";
-import $ from "jquery";
-import "jquery-ui/ui/widgets/tooltip";
 
 viewCallbacks.attr("tooltip", (el, attrData) => {
 	$(el).tooltip({
