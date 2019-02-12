@@ -128,7 +128,7 @@ myCounter.increment();
 
 
 
-[can-define/list/list DefineList] creates <span class='obs'>observable</span> lists. Observable lists are mostly commonly
+[can-define/list/list DefineList] creates <span class='obs'>observable</span> lists. Observable lists are most commonly
 used with the [service layer](#Observablesandtheservicelayer). The following
 defines a `Counters` list type. Instances of `Counters` will have a `sum` property that returns the sum of
 each `Counter` within the list:
