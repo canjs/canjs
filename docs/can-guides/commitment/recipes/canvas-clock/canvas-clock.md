@@ -14,9 +14,140 @@ In this guide you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/jeligek/3/embed?output">
-  CanJS Canvas Clock on jsbin.com
-</a>
+```html
+<style>
+digital-clock {
+  font-family: monospace;
+  float: left;
+  font-size: 60px;
+  padding: 10px 10px;
+  margin: 0px 20px 0px 0px;
+  border: solid 1px black;
+  float: left;
+  color: green;
+}
+#analog {float: left;}
+.controls {
+  padding: 20px;
+  float: left;
+}
+</style>
+<clock-controls></clock-controls>
+
+<script type="module">
+import { Component } from "can";
+
+// 60 = 2π
+const base60ToRadians = (base60Number) =>
+  2 * Math.PI * base60Number / 60;
+
+Component.extend({
+  tag: "analog-clock",
+  view: `<canvas id="analog" width="255" height="255"></canvas>`,
+  ViewModel: {
+    connectedCallback(element) {
+      const canvas = element.firstChild.getContext("2d");
+      const diameter = 255;
+      const radius = diameter/2 - 5;
+      const center = diameter/2;
+
+      const drawNeedle = (length, base60Distance, styles) => {
+        Object.assign(canvas, styles);
+        const x = center + length * Math.sin(base60ToRadians(base60Distance));
+        const y = center + length * -1 * Math.cos(base60ToRadians(base60Distance));
+        canvas.beginPath();
+        canvas.moveTo(center, center);
+        canvas.lineTo(x, y);
+        canvas.closePath();
+        canvas.stroke();
+      };
+
+      // draw second hand
+      this.listenTo("time", (ev, time) => {
+        canvas.clearRect(0, 0, diameter, diameter);
+
+        // draw circle
+        canvas.lineWidth = 4.0;
+        canvas.strokeStyle = "#567";
+        canvas.beginPath();
+        canvas.arc(center, center, radius, 0, Math.PI * 2, true);
+        canvas.closePath();
+        canvas.stroke();
+
+        // draw second hand
+        const seconds = time.getSeconds() + this.time.getMilliseconds() / 1000;
+        drawNeedle(
+          radius * 0.85,
+          seconds, {
+            lineWidth: 2.0,
+            strokeStyle: "#FF0000",
+            lineCap: "round"
+          }
+        );
+        // draw minute hand
+        const minutes = time.getMinutes() + seconds / 60;
+        drawNeedle(
+          radius * 0.65,
+          minutes,
+          {
+            lineWidth:  3.0,
+            strokeStyle: "#423",
+            lineCap: "round"
+          }
+        );
+        // draw hour hand
+        const hoursInBase60 = time.getHours() * 60 / 12 + minutes / 60;
+        drawNeedle(
+          radius * 0.45,
+          hoursInBase60,
+          {
+            lineWidth:  4.0,
+            strokeStyle: "#42F",
+            lineCap: "round"
+          }
+        );
+      });
+    }
+  }
+});
+
+Component.extend({
+  tag: "digital-clock",
+  view: "{{hh()}}:{{mm()}}:{{ss()}}",
+  ViewModel: {
+    time: Date,
+    hh() {
+      const hr = this.time.getHours() % 12;
+      return hr === 0 ? 12 : hr;
+    },
+    mm() {
+      return this.time.getMinutes().toString().padStart(2, "00");
+    },
+    ss() {
+      return this.time.getSeconds().toString().padStart(2, "00");
+    }
+  }
+});
+
+Component.extend({
+  tag: "clock-controls",
+  ViewModel: {
+    time: {Default: Date, Type: Date},
+    init() {
+      setInterval(() => {
+        this.time = new Date();
+      }, 1000);
+    }
+  },
+  view: `
+    <p>{{time}}</p>
+    <digital-clock time:from="time"/>
+    <analog-clock time:from="time"/>
+  `
+});
+</script>
+```
+@codepen
 
 The following sections are broken down into the following parts:
 
@@ -27,22 +158,61 @@ The following sections are broken down into the following parts:
 
 ## Setup ##
 
-__START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
+__START THIS TUTORIAL BY CLONING THE FOLLOWING CODEPEN__:
 
-> Click the **JS Bin** button.  The JS Bin will open in a new window. In that new window, under `File`, click `Clone`.
+> Click the **codepen** button.  The codepen will open in a new window. In that new window, under `File`, click `Clone`.
 
-<a class="jsbin-embed" href="https://jsbin.com/jeligek/1/embed?html,css,js,output">
-  CanJS Canvas Clock on jsbin.com
-</a>
+```html
+<style>
+digital-clock {
+  font-family: monospace;
+  float: left;
+  font-size: 60px;
+  padding: 10px 10px;
+  margin: 0px 20px 0px 0px;
+  border: solid 1px black;
+  float: left;
+  color: green;
+}
+#analog {float: left;}
+.controls {
+  padding: 20px;
+  float: left;
+}
+</style>
+<clock-controls></clock-controls>
 
-This JS Bin has initial prototype HTML, CSS, and JS to bootstrap a basic CanJS application.
+<script type="module">
+import { Component } from "can";
+
+Component.extend({
+  tag: "clock-controls",
+  ViewModel: {
+    time: {Default: Date, Type: Date},
+    init() {
+      setInterval(() => {
+        this.time = new Date();
+      }, 1000);
+    }
+  },
+  view: `
+    <p>{{time}}</p>
+    <digital-clock time:from="time"/>
+    <analog-clock time:from="time"/>
+  `
+});
+</script>
+```
+@codepen
+
+This codepen has initial prototype HTML, CSS, and JS to bootstrap a basic CanJS application.
 
 
 
 
 ### What you need to know
 
-There’s nothing to do in this step. The JS Bin is already setup with:
+There’s nothing to do in this step. The codepen is already setup with:
 
 - A _basic_ CanJS setup.
 - A `<clock-controls>` custom element that:
@@ -330,10 +500,139 @@ Update the __JavaScript__ tab to:
 
 ## Result
 
-When finished, you should see something like the following JS Bin:
+When finished, you should see something like the following codepen:
 
-<a class="jsbin-embed" href="https://jsbin.com/jeligek/3/embed?output">
-  CanJS Canvas Clock on jsbin.com
-</a>
+```html
+<style>
+digital-clock {
+  font-family: monospace;
+  float: left;
+  font-size: 60px;
+  padding: 10px 10px;
+  margin: 0px 20px 0px 0px;
+  border: solid 1px black;
+  float: left;
+  color: green;
+}
+#analog {float: left;}
+.controls {
+  padding: 20px;
+  float: left;
+}
+</style>
+<clock-controls></clock-controls>
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.1.4"></script>
+<script type="module">
+import { Component } from "can";
+
+// 60 = 2π
+const base60ToRadians = (base60Number) =>
+  2 * Math.PI * base60Number / 60;
+
+Component.extend({
+  tag: "analog-clock",
+  view: `<canvas id="analog" width="255" height="255"></canvas>`,
+  ViewModel: {
+    connectedCallback(element) {
+      const canvas = element.firstChild.getContext("2d");
+      const diameter = 255;
+      const radius = diameter/2 - 5;
+      const center = diameter/2;
+
+      const drawNeedle = (length, base60Distance, styles) => {
+        Object.assign(canvas, styles);
+        const x = center + length * Math.sin(base60ToRadians(base60Distance));
+        const y = center + length * -1 * Math.cos(base60ToRadians(base60Distance));
+        canvas.beginPath();
+        canvas.moveTo(center, center);
+        canvas.lineTo(x, y);
+        canvas.closePath();
+        canvas.stroke();
+      };
+
+      // draw second hand
+      this.listenTo("time", (ev, time) => {
+        canvas.clearRect(0, 0, diameter, diameter);
+
+        // draw circle
+        canvas.lineWidth = 4.0;
+        canvas.strokeStyle = "#567";
+        canvas.beginPath();
+        canvas.arc(center, center, radius, 0, Math.PI * 2, true);
+        canvas.closePath();
+        canvas.stroke();
+
+        // draw second hand
+        const seconds = time.getSeconds() + this.time.getMilliseconds() / 1000;
+        drawNeedle(
+          radius * 0.85,
+          seconds, {
+            lineWidth: 2.0,
+            strokeStyle: "#FF0000",
+            lineCap: "round"
+          }
+        );
+        // draw minute hand
+        const minutes = time.getMinutes() + seconds / 60;
+        drawNeedle(
+          radius * 0.65,
+          minutes,
+          {
+            lineWidth:  3.0,
+            strokeStyle: "#423",
+            lineCap: "round"
+          }
+        );
+        // draw hour hand
+        const hoursInBase60 = time.getHours() * 60 / 12 + minutes / 60;
+        drawNeedle(
+          radius * 0.45,
+          hoursInBase60,
+          {
+            lineWidth:  4.0,
+            strokeStyle: "#42F",
+            lineCap: "round"
+          }
+        );
+      });
+    }
+  }
+});
+
+Component.extend({
+  tag: "digital-clock",
+  view: "{{hh()}}:{{mm()}}:{{ss()}}",
+  ViewModel: {
+    time: Date,
+    hh() {
+      const hr = this.time.getHours() % 12;
+      return hr === 0 ? 12 : hr;
+    },
+    mm() {
+      return this.time.getMinutes().toString().padStart(2, "00");
+    },
+    ss() {
+      return this.time.getSeconds().toString().padStart(2, "00");
+    }
+  }
+});
+
+Component.extend({
+  tag: "clock-controls",
+  ViewModel: {
+    time: {Default: Date, Type: Date},
+    init() {
+      setInterval(() => {
+        this.time = new Date();
+      }, 1000);
+    }
+  },
+  view: `
+    <p>{{time}}</p>
+    <digital-clock time:from="time"/>
+    <analog-clock time:from="time"/>
+  `
+});
+</script>
+```
+@codepen

@@ -1,4 +1,6 @@
-can.Component.extend({
+import { Component } from "can";
+
+Component.extend({
   tag: "analog-clock",
   view: '<canvas id="analog" width="255" height="255"></canvas>',
   ViewModel: {
@@ -18,7 +20,7 @@ can.Component.extend({
   }
 });
 
-can.Component.extend({
+Component.extend({
   tag: "digital-clock",
   view: "{{ hh() }}:{{ mm() }}:{{ ss() }}",
   ViewModel: {
@@ -36,7 +38,7 @@ can.Component.extend({
   }
 });
 
-can.Component.extend({
+Component.extend({
   tag: "clock-controls",
   ViewModel: {
     time: {

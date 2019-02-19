@@ -1,8 +1,10 @@
+import { Component } from "can";
+
 // 60 = 2π
 const base60ToRadians = (base60Number) =>
   2 * Math.PI * base60Number / 60;
 
-can.Component.extend({
+Component.extend({
   tag: "analog-clock",
   view: '<canvas id="analog" width="255" height="255"></canvas>',
   ViewModel: {
@@ -49,7 +51,7 @@ can.Component.extend({
   }
 });
 
-can.Component.extend({
+Component.extend({
   tag: "digital-clock",
   view: "{{ hh() }}:{{ mm() }}:{{ ss() }}",
   ViewModel: {
@@ -67,7 +69,7 @@ can.Component.extend({
   }
 });
 
-can.Component.extend({
+Component.extend({
   tag: "clock-controls",
   ViewModel: {
     time: {
