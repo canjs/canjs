@@ -18,7 +18,8 @@ contributions from all types of contributors are welcome. We’re committed to
 making it as pleasant and rewarding as possible. We’re happy to set up a pairing
 session to show you how to fix a bug or write a feature.
 
-If you have any questions, you can always reach us on [Gitter chat](https://gitter.im/canjs/canjs).
+If you have any questions, you can always
+[join our Slack](https://www.bitovi.com/community/slack) and reach us in the [#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A).
 
 ## Code of Conduct
 
@@ -32,13 +33,14 @@ nationality, personal appearance, race, religion, or sexual identity and orienta
 
 ## Getting Help
 
-[Our forums](https://forums.donejs.com/c/canjs) and [Gitter chat](https://gitter.im/canjs/canjs)
+[Our forums](https://forums.bitovi.com/c/canjs) and
+[Slack](https://www.bitovi.com/community/slack) ([#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A))
 are the best places to ask questions. The core team regularly checks both and
 there are other users who generously help others.
 
 If you’re interested in contributing to CanJS, the core team is happy to pair
-with you to fix a bug or write a new feature! Please either message us on Gitter
-or the forums, or leave a comment on the GitHub issue you’re interested in
+with you to fix a bug or write a new feature! Please either message us on [Slack](https://www.bitovi.com/community/slack)
+or the [forums](https://forums.bitovi.com/c/canjs), or leave a comment on the GitHub issue you’re interested in
 helping with. We will happily walk you through setting up your development
 environment, creating a test and/or writing documentation, and submitting a pull
 request.

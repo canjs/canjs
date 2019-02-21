@@ -297,7 +297,11 @@ get better at using it.
 
 CanJS’s community has lots of people who can offer advice and tips on
 how to build an application the right way. Instead of struggling,
-please ask for advice on [Gitter chat](https://gitter.im/canjs/canjs) or the [forums](https://forums.donejs.com/c/canjs).  Share a screenshot of what you’re building
+please
+[join our Slack](https://www.bitovi.com/community/slack)
+and ask for advice in the
+[#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A)
+or the [forums](https://forums.bitovi.com/c/canjs).  Share a screenshot of what you’re building
 and we’ll tell you what needs to be done.
 
 To stay up on CanJS’s latest news, we suggest:
@@ -339,7 +343,10 @@ to an Open Source project can be an intimidating experience.  We’re
 committed to making the experience as pleasant and rewarding as possible.  We’re happy to set up a
 pairing session to show you how to fix a bug or write a feature.  
 
-If you have any questions, you can always reach us on [Gitter chat](https://gitter.im/canjs/canjs).
+If you have any questions, you can always
+[join our Slack](https://www.bitovi.com/community/slack)
+and reach us in the
+[#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A).
 
 If you want to become a CanJS contributor, you simply have to:
 

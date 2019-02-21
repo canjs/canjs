@@ -9,9 +9,9 @@ Get involved with one of the most inviting communities on the internet!
 
 <ul class="icon-list">
   <li>
-    <a href="https://gitter.im/canjs/canjs" target="_blank">
-      <img src="../docs/images/community/icon-gittr-gray.svg">
-      Chat with us on Gitter
+    <a href="https://www.bitovi.com/community/slack" target="_blank">
+      <img src="../docs/images/community/icon-slack-gray.svg">
+      Chat with us on Slack
     </a>
   </li>
   <li>
@@ -27,7 +27,7 @@ Get involved with one of the most inviting communities on the internet!
     </a>
   </li>
   <li>
-    <a href="https://forums.donejs.com/c/canjs" target="_blank">
+    <a href="https://forums.bitovi.com/c/canjs" target="_blank">
       <img src="../docs/images/community/icon-forums-gray.svg">
       Visit our forums
     </a>
@@ -39,7 +39,7 @@ Get involved with one of the most inviting communities on the internet!
     </a>
   </li>
   <li>
-    <a href="https://www.youtube.com/channel/UCM_xC8UOHt2ay5wz-3gotmg" target="_blank">
+    <a href="https://www.youtube.com/playlist?list=PL--xV5crGpX-yMRQ0zfcKIMDF2zQaMQ5g" target="_blank">
       <img src="../docs/images/community/icon-youtube-gray.svg">
       Watch videos on YouTube
     </a>

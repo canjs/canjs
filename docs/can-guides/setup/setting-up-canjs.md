@@ -28,8 +28,8 @@ the guide(s) that most closely satisfy that scenario.
 - I want to maximize long term flexibility 👉 [Importing individual packages](#Installingindividualpackages)
 
 If this page doesn't have what you need, please
-ask on the [forums](https://forums.donejs.com/c/canjs) or [Gitter chat](https://gitter.im/canjs/canjs).
-
+ask on the [forums](https://forums.bitovi.com/c/canjs) or
+[Slack](https://www.bitovi.com/community/slack) ([#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A)).
 
 ## Explanation of different builds
 
@@ -451,8 +451,9 @@ Finally, create an `index.html` page that loads `steal.js` and includes your
 
 Now you can load that page in your browser at one of the addresses the HTTP
 server showed you earlier (something like [http://localhost:8080/]). You should
-see “Hello World” on the page—if you don’t, join our
-[Gitter chat](https://gitter.im/canjs/canjs) and we can help you figure out what
+see “Hello World” on the page—if you don’t,
+[join our Slack](https://www.bitovi.com/community/slack) ([#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A))
+and we can help you figure out what
 went wrong.
 
 Ready to build an app with CanJS? Check out our [guides/chat] or one of our
@@ -554,8 +555,8 @@ your `<my-app>` component:
 
 Now you can load that page in your browser at one of the addresses the HTTP
 server showed you earlier (something like [http://localhost:8080/]). You should
-see “Hello World” on the page — if you don’t, join our
-[Gitter chat](https://gitter.im/canjs/canjs) and we can help you figure out what
+see “Hello World” on the page — if you don’t, [join our Slack](https://www.bitovi.com/community/slack)
+and we can help you figure out what
 went wrong.
 
 
@@ -606,8 +607,8 @@ Next run webpack in your terminal with the production configuration:
 
 Now you can load that page in your browser at one of the addresses the HTTP
 server showed you earlier (something like [http://localhost:8080/]). You should
-see “Hello World” on the page and the `bundle.js` size should be much smaller. If there's a problem, join our
-[Gitter chat](https://gitter.im/canjs/canjs) and we can help you figure out what
+see “Hello World” on the page and the `bundle.js` size should be much smaller. If there's a problem,
+[join our Slack](https://www.bitovi.com/community/slack) and we can help you figure out what
 went wrong.
 
 </details>
@@ -688,8 +689,8 @@ your `<my-app>` component:
 
 Now you can load that page in your browser at one of the addresses the HTTP
 server showed you earlier (something like [http://localhost:8080/]). You should
-see “Hello World” on the page—if you don’t, join our
-[Gitter chat](https://gitter.im/canjs/canjs) and we can help you figure out what
+see “Hello World” on the page—if you don’t, [join our Slack](https://www.bitovi.com/community/slack)
+and we can help you figure out what
 went wrong.
 
 </details>
@@ -809,8 +810,8 @@ your `<my-app>` component:
 
 Now you can load that page in your browser at one of the addresses the HTTP
 server showed you earlier (something like [http://localhost:8080/]). You should
-see “Hello World” on the page—if you don’t, join our
-[Gitter chat](https://gitter.im/canjs/canjs) and we can help you figure out what
+see “Hello World” on the page—if you don’t, [join our Slack](https://www.bitovi.com/community/slack)
+and we can help you figure out what
 went wrong.
 
 </details>
@@ -936,7 +937,7 @@ can.Component.extend({
 If you want to use [can-ecosystem] modules, you can use `./node_modules/can/dist/global/everything.js`. However,
 this file is quite large and shouldn't be used in production so you will want to make your own custom version of
 `everything.js` containing only the modules you need. Unfortunately, we haven't posted instructions on how to do this yet, even though it’s relatively easy. Please tell us on
-[Gitter chat](https://gitter.im/canjs/canjs) to hurry up and do it already!
+[Slack](https://www.bitovi.com/community/slack) to hurry up and do it already!
 
 
 ## Hosted traditional `<script>` tags setups

@@ -24,13 +24,13 @@ There are three different ways to easily make a connection:
 
 > Note: Each of the above is simply a different combination of behaviors composed together.
 
-## Building your own connection (advanced) 
+## Building your own connection (advanced)
 
 Every connection follows a structure for how a request is processed, each step represents a bahavior:
 
 TODO: diagram of behavior tree
 
-If you want complete control over your connection, it is recommended that you copy the code from [can-super-model](https://github.com/canjs/can-super-model/blob/master/can-super-model.js) into your project and add or remove the functionality you desire. It is important to note that the order of behaviors is crucial, so please [reach out to us on Gitter](https://gitter.im/canjs/canjs) for help creating and integrating custom behaviors.
+If you want complete control over your connection, it is recommended that you copy the code from [can-super-model](https://github.com/canjs/can-super-model/blob/master/can-super-model.js) into your project and add or remove the functionality you desire. It is important to note that the order of behaviors is crucial, so please [reach out to us on Slack](https://www.bitovi.com/community/slack) for help creating and integrating custom behaviors.
 
 
 ### Configuring a connection to instantiate Model data
@@ -41,11 +41,11 @@ In the following example we show how to use a `Todo` class with a connection. Wh
 // Define the Todo model
 class Todo {
   complete = false;
-  
+
   constructor(data) {
     Object.assign(this, data);
   }
-  
+
   toggle() {
     this.complete = !this.complete;
   }
@@ -81,7 +81,7 @@ TODO: Show session management example (Justin)
 
 ### Caching
 
-- different options 
+- different options
 
 ### How to work services for document-based services
 

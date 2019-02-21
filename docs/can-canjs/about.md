@@ -8,7 +8,7 @@ Learn about CanJS’s [guides/mission mission], [guides/technical technical high
 
 CanJS is an evolving and improving set of client-side JavaScript architectural libraries that balances innovation and stability. It targets experienced developers building complex applications with long futures ahead of them.
 
-CanJS is part of the [DoneJS](https://donejs.com/) family of open source projects.  The [DoneJS Team](https://donejs.com/About.html#team) and [Bitovi](https://www.bitovi.com) are responsible for CanJS. They steer its direction, add features, fix bugs, and help you become successful. Feel free to say hello anytime on [Gitter chat](https://gitter.im/canjs/canjs) or the [forums](https://forums.donejs.com/c/canjs).
+CanJS is part of the [DoneJS](https://donejs.com/) family of open source projects.  The [DoneJS Team](https://donejs.com/About.html#team) and [Bitovi](https://www.bitovi.com) are responsible for CanJS. They steer its direction, add features, fix bugs, and help you become successful. Feel free to say hello anytime on [Slack](https://www.bitovi.com/community/slack) ([#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A)) or the [forums](https://forums.bitovi.com/c/canjs).
 
 <div class="hero-images">
     <img

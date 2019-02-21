@@ -2,14 +2,15 @@
 
  [![Sauce Test Status](https://saucelabs.com/browser-matrix/canjs.svg)](https://saucelabs.com/u/canjs)
 
-[![Join the chat at https://gitter.im/canjs/canjs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/canjs/canjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join our Slack](https://img.shields.io/badge/slack-join%20chat-611f69.svg)](https://www.bitovi.com/community/slack?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join our Discourse](https://img.shields.io/discourse/https/forums.bitovi.com/posts.svg)](https://forums.bitovi.com/?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![npm version](https://badge.fury.io/js/can.svg)](https://www.npmjs.com/package/can)
 [![Build Status](https://travis-ci.org/canjs/canjs.svg?branch=master)](https://travis-ci.org/canjs/canjs)
 [![Greenkeeper badge](https://badges.greenkeeper.io/canjs/canjs.svg)](https://greenkeeper.io/)
 
 > WARNING: This npm package is for the [CanJS client-side MV* libraries](https://canjs.com). It was formerly
-the [node-can project](https://github.com/sebi2k1/node-can) which has been moved 
-to [socketcan](https://www.npmjs.com/package/socketcan). A HUGE thanks to Sebastian Haas for 
+the [node-can project](https://github.com/sebi2k1/node-can) which has been moved
+to [socketcan](https://www.npmjs.com/package/socketcan). A HUGE thanks to Sebastian Haas for
 letting us use the `can` name!
 
 > NOTE: The `canjs` NPM package name is deprecated. Use `can` instead.
@@ -91,7 +92,7 @@ _Former libraries that we still accept patches for, but are not under active dev
 
 Before you make an issue, please read our [Contributing](https://canjs.com/doc/guides/contribute.html) guide.
 
-You can find the core team in [Gitter chat](https://gitter.im/canjs/canjs).
+You can find the core team on [Slack](https://www.bitovi.com/community/slack).
 
 ### Release History
 
