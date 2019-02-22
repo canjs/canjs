@@ -1,17 +1,34 @@
+import { Component } from "can";
+
 Stripe.setPublishableKey("pk_test_zCC2JrO3KSMeh7BB5x9OUe2U");
 
-const PaymentVM = can.DefineMap.extend({
-  amount: { default: 9.99 },
+Component.extend({
+	tag: 'cc-payment',
+	view: `
+	<form>
 
-  userCardNumber: "string",
+		<input type="text" name="number" placeholder="Card Number
+			value:bind="userCardNumber"/>
 
-  userExpiry: "string",
+		<input type="text" name="expiry" placeholder="MM-YY"
+			value:bind="userExpiry"/>
 
-  userCVC: "string"
+		<input type="text" name="cvc" placeholder="CVC"
+			value:bind="userCVC"/>
+
+		<button>Pay $\{{ amount }}</button>
+
+		<p>{{ userCardNumber }}, {{ userExpiry }}, {{ userCVC }}</p>
+		
+	</form>
+	`,
+	ViewModel: {
+		amount: { default: 9.99 },
+		
+		userCardNumber: "string",
+
+	 	userExpiry: "string",
+
+		userCVC: "string"
+	}
 });
-
-const viewModel = new PaymentVM();
-
-const paymentView = can.stache.from("payment-view");
-const fragment = paymentView( viewModel );
-document.body.appendChild( fragment );

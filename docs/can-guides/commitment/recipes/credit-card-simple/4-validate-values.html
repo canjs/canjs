@@ -1,22 +1,2 @@
-<script type="text/stache" id="payment-view">
-  <form>
-
-    <input type="text" name="number" placeholder="Card Number"
-	  {{# if(cardError) }}class="is-error"{{/ if }}
-	  value:bind="userCardNumber"/>
-
-    <input type="text" name="expiry" placeholder="MM-YY"
-	  {{# if(expiryError) }}class="is-error"{{/ if }}
-	  value:bind="userExpiry"/>
-
-    <input type="text" name="cvc" placeholder="CVC"
-	  {{# if(cvcError) }}class="is-error"{{/ if }}
-	  value:bind="userCVC"/>
-
-	<button>Pay ${{ amount }}</button>
-
-	<p>{{ userCardNumber }}, {{ userExpiry }}, {{ userCVC }}</p>
-	<p>{{ cardNumber }}, {{ expiryMonth }}-{{ expiryYear }}, {{ cvc }}</p>
-
-  </form>
-</script>
+<cc-payment></cc-payment>	
+<script src="https://js.stripe.com/v2/"></script>

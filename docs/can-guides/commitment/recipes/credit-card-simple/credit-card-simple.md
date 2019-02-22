@@ -18,7 +18,199 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/rosuzit/4/embed?output">JS Bin on jsbin.com</a>
+```html
+<style>
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,500');
+
+body {
+  background-color: rgba(8, 211, 67, 0.3);
+  padding: 2%;
+  font-family: 'Raleway', sans-serif;
+  font-size: 1em;
+}
+input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 1em;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 500;
+  padding: 12px;
+  border: 1px solid #ccc;
+  outline-color: white;
+  transition: background-color 0.5s ease;
+  transition: outline-color 0.5s ease;
+}
+input[name=number] {
+  border-bottom: 0;
+}
+input[name=expiry],
+input[name=cvc] {
+  width: 50%;
+}
+input[name=expiry] {
+  float: left;
+  border-right: 0;
+}
+input::placeholder {
+  color: #999;
+  font-weight: 400;
+}
+input:focus {
+  background-color: rgba(130, 245, 249, 0.1);
+  outline-color: #82f5f9;
+}
+input.is-error {
+  background-color: rgba(250, 55, 55, 0.1);
+}
+input.is-error:focus {
+  outline-color: #ffbdbd;
+}
+button {
+  font-size: 1em;
+  font-family: 'Raleway', sans-serif;
+  background-color: #08d343;
+  border: 0;
+  box-shadow: 0px 1px 3px 1px rgba(51, 51, 51, 0.16);
+  color: white;
+  font-weight: 500;
+  letter-spacing: 1px;
+  margin-top: 30px;
+  padding: 12px;
+  text-transform: uppercase;
+  width: 100%;
+}
+button:disabled {
+  opacity: 0.4;
+  background-color: #999999;
+}
+form {
+  background-color: white;
+  box-shadow: 0px 17px 22px 1px rgba(51, 51, 51, 0.16);
+  padding: 40px;
+  margin: 0 auto;
+  max-width: 500px;
+}
+.message {
+  margin-bottom: 20px;
+  color: #fa3737;
+}
+
+</style>
+<cc-payment></cc-payment>
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+
+<script type="module">
+import { Component } from "can";
+
+Stripe.setPublishableKey("pk_test_zCC2JrO3KSMeh7BB5x9OUe2U");
+
+const CCPayment = Component.extend({
+  tag: "cc-payment",
+  view: `
+    <form on:submit="this.pay(scope.event)">
+      
+      {{#if(errorMessage) }}
+        <div class="message">{{ this.errorMessage }}</div>
+      {{/if}}
+      
+      <input type="text" name="number" placeholder="Card Number"
+        {{#if(cardError)}}class="is-error"{{/if }}
+        value:bind="this.userCardNumber"/>
+
+      <input type="text" name="expiry" placeholder="MM-YY"
+        {{#if(expiryError) }}class="is-error"{{/if}}
+        value:bind="userExpiry"/>
+
+      <input type="text" name="cvc" placeholder="CVC"
+        {{#if(this.cvcError) }}class="is-error"{{/if }}
+        value:bind="userCVC"/>
+
+      <button disabled:from="this.isCardInvalid">Pay \${{this.amount}}</button>
+
+    </form>
+	`,
+  ViewModel: {
+    amount: { default: 9.99 },
+    userCardNumber: "string",
+    userExpiry: "string",
+    userCVC: "string",
+    
+    get cardNumber() {
+      return this.userCardNumber ? this.userCardNumber.replace(/-/g, ""): null;
+    },
+    get cardError() {
+      if( this.cardNumber && !Stripe.card.validateCardNumber(this.cardNumber) ) {
+        return "Invalid card number (ex: 4242-4242-4242).";
+      }
+    },
+    get expiryParts() {
+      if(this.userExpiry) {
+        return this.userExpiry.split("-").map(function(p){
+          return parseInt(p, 10);
+        });
+      }
+    },
+    get expiryMonth() {
+      return this.expiryParts && this.expiryParts[0];
+    },
+    get expiryYear() {
+      return this.expiryParts && this.expiryParts[1];
+    },
+    get expiryError() {
+      if( (this.expiryMonth || this.expiryYear) &&
+         !Stripe.card.validateExpiry(this.expiryMonth, this.expiryYear) ) {
+        return "Invalid expiration date (ex: 01-22).";
+      }
+    },
+    get cvc() {
+      return this.userCVC ?
+        parseInt(this.userCVC, 10) : null;
+    },
+    get cvcError() {
+      if( this.cvc && !Stripe.card.validateCVC(this.cvc) ) {
+        return "Invalid CVC (ex: 123).";
+      }
+    },
+    
+    get isCardValid() {
+      return Stripe.card.validateCardNumber(this.cardNumber) &&
+        Stripe.card.validateExpiry(this.expiryMonth, this.expiryYear) &&
+        Stripe.card.validateCVC(this.cvc);
+    },
+    get isCardInvalid() {
+      return !this.isCardValid;
+    },
+    get errorMessage() {
+      return this.cardError || this.expiryError || this.cvcError;
+    },
+    pay: function(event) {
+      event.preventDefault();
+
+      Stripe.card.createToken({
+        number: this.cardNumber,
+        cvc: this.cvc,
+        exp_month: this.expiryMonth,
+        exp_year: this.expiryYear
+      }, function(status, response){
+        if(status === 200) {
+          alert("Token: "+response.id);
+          // stripe.charges.create({
+          //   amount: this.amount,
+          //   currency: "usd",
+          //   description: "Example charge",
+          //   source: response.id,
+          // })
+        } else {
+          alert("Error: "+response.error.message);
+        }
+      });
+    }
+  }
+});
+</script>
+```
+@codepen
 
 To use the widget:
 
@@ -31,11 +223,106 @@ To use the widget:
    the invalid inputs should be highlighted red, and the _Pay_
    button should become disabled.
 
-__START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
+__START THIS TUTORIAL BY CLONING THE FOLLOWING CODEPEN__:
 
-<a class="jsbin-embed" href="https://jsbin.com/rosuzit/1/embed?output">JS Bin on jsbin.com</a>
+```html
+<style>
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,500');
 
-This JS Bin has initial prototype HTML and CSS which is useful for
+body {
+  background-color: rgba(8, 211, 67, 0.3);
+  padding: 2%;
+  font-family: 'Raleway', sans-serif;
+  font-size: 1em;
+}
+input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 1em;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 500;
+  padding: 12px;
+  border: 1px solid #ccc;
+  outline-color: white;
+  transition: background-color 0.5s ease;
+  transition: outline-color 0.5s ease;
+}
+input[name=number] {
+  border-bottom: 0;
+}
+input[name=expiry],
+input[name=cvc] {
+  width: 50%;
+}
+input[name=expiry] {
+  float: left;
+  border-right: 0;
+}
+input::placeholder {
+  color: #999;
+  font-weight: 400;
+}
+input:focus {
+  background-color: rgba(130, 245, 249, 0.1);
+  outline-color: #82f5f9;
+}
+input.is-error {
+  background-color: rgba(250, 55, 55, 0.1);
+}
+input.is-error:focus {
+  outline-color: #ffbdbd;
+}
+button {
+  font-size: 1em;
+  font-family: 'Raleway', sans-serif;
+  background-color: #08d343;
+  border: 0;
+  box-shadow: 0px 1px 3px 1px rgba(51, 51, 51, 0.16);
+  color: white;
+  font-weight: 500;
+  letter-spacing: 1px;
+  margin-top: 30px;
+  padding: 12px;
+  text-transform: uppercase;
+  width: 100%;
+}
+button:disabled {
+  opacity: 0.4;
+  background-color: #999999;
+}
+form {
+  background-color: white;
+  box-shadow: 0px 17px 22px 1px rgba(51, 51, 51, 0.16);
+  padding: 40px;
+  margin: 0 auto;
+  max-width: 500px;
+}
+.message {
+  margin-bottom: 20px;
+  color: #fa3737;
+}
+</style>
+
+<form>
+
+  <div class="message">Invalid card number (ex: 4242-4242-4242).</div>
+
+  <input type="text" name="number" placeholder="Card Number" class="is-error"/>
+
+  <input type="text" name="expiry" placeholder="MM-YY"/>
+
+  <input type="text" name="cvc" placeholder="CVC"/>
+
+  <button>Pay $9.99</button>
+
+</form>
+
+<script type="module"></script>
+```
+@codepen
+
+This codepen has initial prototype HTML and CSS which is useful for
 getting the application to look right.
 
 The following sections are broken down into:
@@ -50,81 +337,39 @@ The following sections are broken down into:
 
 ### The problem
 
-Let’s create a `payment-view` template and render it with
-a ViewModel called `PaymentVM`, which will have
+Let’s create a `cc-payment` component with a ViewModel, which will have
 an `amount` property that defaults to `9.99`.  When complete, we
-should be able update the displayed “pay amount” by writing the
-following in the console:
-
-```js
-viewModel.amount = 1000;
-```
+should be able update the displayed “pay amount”.
 
 ### What you need to know
 
 
 - To use Stripe, you must call [Stripe.setPublishableKey](https://stripe.com/docs/stripe.js/v2#setting-publishable-key).
 
-- A basic CanJS setup uses instances of a ViewModel to manage the
-  behavior of a View.  A ViewModel type is defined, an instance of it
-  is created and passed to a View as follows:
+- A basic CanJS setup uses instances of a [can-component], which glues a ViewModel 
+ to a View in order to manage it's behavior as follows:
 
   ```js
-  // Define the ViewModel type
-  const MyViewModel = can.DefineMap.extend("MyViewModel",{
-   ...      
-  })
-  // Create an instance of the ViewModel
-  const viewModel = new MyViewModel();
-  // Get a View
-  const view = can.stache.from("my-view");
-  // Render the View with the ViewModel instance
-  const fragment = view(viewModel);
-  document.body.appendChild(fragment);
+	import { Component } from "can";
+  // Define the Component 
+  const CCPayment = Component.extend({
+    tag: "cc-payment",
+    view: "...",
+    ViewModel: {}
+	});
   ```
 
-- CanJS uses [can-stache] to render data in a template
-  and keep it live.  Templates can be authored in `<script>` tags like:
-
+- CanJS component will be mounted in the DOM by adding the the component tag in the HTML page:
   ```html
-  <script type="text/stache" id="app-view">
-    TEMPLATE CONTENT
-  </script>
+  <cc-payment></cc-payment>
   ```
 
-  A [can-stache] template uses
-  [can-stache.tags.escaped {{key}}] magic tags to insert data into
-  the HTML output like:
+- CanJS component uses [can-stache] to render data in a template and keep it live.
 
-  ```html
-  <script type="text/stache" id="app-view">
-    {{something.name}}
-  </script>
-  ```
-
-- Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
-  ```js
-  const template = can.stache.from(SCRIPT_ID);
-  ```
-
-- Render the template with data into a documentFragment like:
+- The ViewModel is an instance of [can-define/map/map] allows you to define a property with a default value like:
 
   ```js
-  const fragment = template({
-    something: {name: "Derek Brunson"}
-  });
-  ```
-
-- Insert a fragment into the page with:
-
-  ```js
-  document.body.appendChild(fragment);
-  ```
-
-- [can-define/map/map.extend DefineMap.extend] allows you to define a property with a default value like:
-
-  ```js
-  ProductVM = can.DefineMap.extend("ProductVM",{
+  ProductVM = DefineMap.extend("ProductVM",{
     age: {default: 34}
   })
   ```
@@ -150,12 +395,12 @@ viewModel.amount = 1000;
 Update the __HTML__ tab to:
 
 @sourceref ./1-setup.html
-@highlight 10,19,22
+@highlight 1
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
-@highlight 1-12
+@highlight 1-23
 
 
 
@@ -199,12 +444,11 @@ Print out the exported values like:
 Update the __HTML__ tab to:
 
 @sourceref ./2-read-form.html
-@highlight 4-11,15,only
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-read-form.js
-@highlight 6-10,only
+@highlight 10-17,21,only
 
 
 ## Format form values
@@ -246,12 +490,11 @@ So that we can print out the values like:
 Update the __HTML__ tab to:
 
 @sourceref ./3-format.html
-@highlight 16,only
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-format.js
-@highlight 7-9,12-24,27-30,only
+@highlight 22,3-32,35-41,42-44,45-47,50-53,only
 
 
 
@@ -286,12 +529,11 @@ their respective form property:
 Update the __HTML__ tab to:
 
 @sourceref ./4-validate-values.html
-@highlight 5,9,13,only
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-validate-values.js
-@highlight 10-14,30-35,42-46,only
+@highlight 11,15,19,36-40,42-46,56-61,only
 
 
 
@@ -344,12 +586,11 @@ After submitting the form, you should see an alert like:
 Update the __HTML__ tab to:
 
 @sourceref ./5-payment.html
-@highlight 2,only
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-payment.js
-@highlight 48-69,only
+@highlight 8,73-94,only
 
 
 ## Validate the form
@@ -380,17 +621,206 @@ To do that, we’ll add the following properties to the ViewModel:
 Update the __HTML__ tab to:
 
 @sourceref ./6-validate-form.html
-@highlight 4-6,20,only
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-validate-form.js
-@highlight 71-81,only
+@highlight 10-12,26,96-106,only
 
 ## Result
 
-When complete, you should have a working credit card payment form like the following JS Bin:
+When complete, you should have a working credit card payment form like the following codepen:
 
-<a class="jsbin-embed" href="https://jsbin.com/rosuzit/4/embed?output">JS Bin on jsbin.com</a>
+```html
+<style>
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,500');
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.1.2"></script>
+body {
+  background-color: rgba(8, 211, 67, 0.3);
+  padding: 2%;
+  font-family: 'Raleway', sans-serif;
+  font-size: 1em;
+}
+input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 1em;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 500;
+  padding: 12px;
+  border: 1px solid #ccc;
+  outline-color: white;
+  transition: background-color 0.5s ease;
+  transition: outline-color 0.5s ease;
+}
+input[name=number] {
+  border-bottom: 0;
+}
+input[name=expiry],
+input[name=cvc] {
+  width: 50%;
+}
+input[name=expiry] {
+  float: left;
+  border-right: 0;
+}
+input::placeholder {
+  color: #999;
+  font-weight: 400;
+}
+input:focus {
+  background-color: rgba(130, 245, 249, 0.1);
+  outline-color: #82f5f9;
+}
+input.is-error {
+  background-color: rgba(250, 55, 55, 0.1);
+}
+input.is-error:focus {
+  outline-color: #ffbdbd;
+}
+button {
+  font-size: 1em;
+  font-family: 'Raleway', sans-serif;
+  background-color: #08d343;
+  border: 0;
+  box-shadow: 0px 1px 3px 1px rgba(51, 51, 51, 0.16);
+  color: white;
+  font-weight: 500;
+  letter-spacing: 1px;
+  margin-top: 30px;
+  padding: 12px;
+  text-transform: uppercase;
+  width: 100%;
+}
+button:disabled {
+  opacity: 0.4;
+  background-color: #999999;
+}
+form {
+  background-color: white;
+  box-shadow: 0px 17px 22px 1px rgba(51, 51, 51, 0.16);
+  padding: 40px;
+  margin: 0 auto;
+  max-width: 500px;
+}
+.message {
+  margin-bottom: 20px;
+  color: #fa3737;
+}
+
+</style>
+<cc-payment></cc-payment>
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+
+<script type="module">
+import { Component } from "can";
+
+Stripe.setPublishableKey("pk_test_zCC2JrO3KSMeh7BB5x9OUe2U");
+
+const CCPayment = Component.extend({
+  tag: "cc-payment",
+  view: `
+    <form on:submit="this.pay(scope.event)">
+      
+      {{#if(errorMessage) }}
+        <div class="message">{{ this.errorMessage }}</div>
+      {{/if}}
+      
+      <input type="text" name="number" placeholder="Card Number"
+        {{#if(cardError)}}class="is-error"{{/if }}
+        value:bind="this.userCardNumber"/>
+
+      <input type="text" name="expiry" placeholder="MM-YY"
+        {{#if(expiryError) }}class="is-error"{{/if}}
+        value:bind="userExpiry"/>
+
+      <input type="text" name="cvc" placeholder="CVC"
+        {{#if(this.cvcError) }}class="is-error"{{/if }}
+        value:bind="userCVC"/>
+
+      <button disabled:from="this.isCardInvalid">Pay \${{this.amount}}</button>
+
+    </form>
+	`,
+  ViewModel: {
+    amount: { default: 9.99 },
+    userCardNumber: "string",
+    userExpiry: "string",
+    userCVC: "string",
+    
+    get cardNumber() {
+      return this.userCardNumber ? this.userCardNumber.replace(/-/g, ""): null;
+    },
+    get cardError() {
+      if( this.cardNumber && !Stripe.card.validateCardNumber(this.cardNumber) ) {
+        return "Invalid card number (ex: 4242-4242-4242).";
+      }
+    },
+    get expiryParts() {
+      if(this.userExpiry) {
+        return this.userExpiry.split("-").map(function(p){
+          return parseInt(p, 10);
+        });
+      }
+    },
+    get expiryMonth() {
+      return this.expiryParts && this.expiryParts[0];
+    },
+    get expiryYear() {
+      return this.expiryParts && this.expiryParts[1];
+    },
+    get expiryError() {
+      if( (this.expiryMonth || this.expiryYear) &&
+         !Stripe.card.validateExpiry(this.expiryMonth, this.expiryYear) ) {
+        return "Invalid expiration date (ex: 01-22).";
+      }
+    },
+    get cvc() {
+      return this.userCVC ?
+        parseInt(this.userCVC, 10) : null;
+    },
+    get cvcError() {
+      if( this.cvc && !Stripe.card.validateCVC(this.cvc) ) {
+        return "Invalid CVC (ex: 123).";
+      }
+    },
+    
+    get isCardValid() {
+      return Stripe.card.validateCardNumber(this.cardNumber) &&
+        Stripe.card.validateExpiry(this.expiryMonth, this.expiryYear) &&
+        Stripe.card.validateCVC(this.cvc);
+    },
+    get isCardInvalid() {
+      return !this.isCardValid;
+    },
+    get errorMessage() {
+      return this.cardError || this.expiryError || this.cvcError;
+    },
+    pay: function(event) {
+      event.preventDefault();
+
+      Stripe.card.createToken({
+        number: this.cardNumber,
+        cvc: this.cvc,
+        exp_month: this.expiryMonth,
+        exp_year: this.expiryYear
+      }, function(status, response){
+        if(status === 200) {
+          alert("Token: "+response.id);
+          // stripe.charges.create({
+          //   amount: this.amount,
+          //   currency: "usd",
+          //   description: "Example charge",
+          //   source: response.id,
+          // })
+        } else {
+          alert("Error: "+response.error.message);
+        }
+      });
+    }
+  }
+});
+</script>
+```
+@codepen
