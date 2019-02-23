@@ -419,7 +419,8 @@ We've kept folks releasing for __10__ years by:
 ## Missing Something?
 
 Is there an itch that CanJS doesn’t scratch?  Let us know
-on [Gitter chat](https://gitter.im/canjs/canjs) or the [forums](https://forums.donejs.com/c/canjs).
+on [Slack](https://www.bitovi.com/community/slack) ([#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A))
+or the [forums](https://forums.bitovi.com/c/canjs).
 We like contributions of all sorts.  Read the [guides/contribute] guide for more details.
 
 ## Love Something?

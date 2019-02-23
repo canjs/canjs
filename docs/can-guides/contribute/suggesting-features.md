@@ -31,5 +31,7 @@ Also, please search for previous feature requests.  If there’s something simil
 give it a 👍.
 
 Finally, if there are any questions, reach out to
-us on the [CanJS forums](https://forums.donejs.com/c/canjs) or talk to us on
-the [Gitter canjs/canjs channel](https://gitter.im/canjs/canjs).
+us on the [CanJS forums](https://forums.bitovi.com/c/canjs) or
+[join our Slack](https://www.bitovi.com/community/slack)
+and talk to us in the
+[#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A).

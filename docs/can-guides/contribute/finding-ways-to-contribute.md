@@ -23,10 +23,10 @@ Triaging [issues that have no labels](https://github.com/search?q=org%3Acanjs+is
 
 ## Getting involved in the community
 
-You can also get involved in our community by posting in our forums, chatting with us on Gitter, and answering questions on Stack Overflow.
+You can also get involved in our community by posting in our forums, chatting with us on Slack, and answering questions on Stack Overflow.
 
-- [Forums](https://forums.donejs.com/c/canjs)
-- [Gitter](https://gitter.im/canjs/canjs)
+- [Forums](https://forums.bitovi.com/c/canjs)
+- [Slack](https://www.bitovi.com/community/slack) ([#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A))
 - [Stack Overflow](http://stackoverflow.com/search?tab=newest&q=canjs+answers:0)
 
 ## Spreading the word
