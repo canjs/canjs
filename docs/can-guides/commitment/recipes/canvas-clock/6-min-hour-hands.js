@@ -1,4 +1,4 @@
-import { Component } from "can";
+import { Component } from "//unpkg.com/can@5/core.mjs";
 
 // 60 = 2π
 const base60ToRadians = (base60Number) =>
