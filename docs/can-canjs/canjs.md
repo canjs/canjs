@@ -48,23 +48,37 @@ Write CRUD apps like this in just a few lines of code.
 
 ## You’re probably wondering what makes CanJS different
 
-### Custom data types
+### CanJS has a model layer
 
-CanJS’s model layer helps you define your app’s data types as object-oriented observables.
-Add custom properties and methods directly on the data returned by your API.
-All the logic for each reusable data type is available on every instance.
+And it has methods for creating, reading, updating, & deleting data:
 
-Additionally, CanJS adds five methods to every instance:
+```js
+import { realtimeRestModel } from "can";
 
-- [can-connect/can/map/map.prototype.isNew isNew()] tells you if it hasn’t been saved in the backend
-- [can-connect/can/map/map.prototype.save save()] when you want to POST new instances or PUT changes
-- [can-connect/can/map/map.prototype.isSaving isSaving()] tells you it’s being saved
-- [can-connect/can/map/map.prototype.destroy destroy()] when you want to DELETE it
-- [can-connect/can/map/map.prototype.isDestroying isDestroying()] tells you it’s being deleted
+const Todo = realtimeRestModel("/api/todos/{id}").Map;
 
-CanJS also provides [can-connect/can/map/map.getList .getList()] and [can-connect/can/map/map.get .get()]
-on every model to fetch a list or single instance, respectively. The raw data returned from your API is
-automatically turned into your custom data types so you don’t have to write that boilerplate code.
+// Get all the todos (GET)
+Todo.getList().then(todos => {
+
+  // Create a new todo
+  const todo = new Todo({name: "Learn CanJS"});
+
+  // Create it on the server (POST)
+  todo.save();
+
+  // Get & set properties
+  todo.completed = true;
+
+  // Save changes (PUT)
+  todo.save();
+
+  // Delete the todo (DELETE)
+  todos[0].destroy();
+});
+
+// Get a single todo (GET)
+Todo.get({ id: 1 });
+```
 
 ### First-class support for Promises in templates
 
