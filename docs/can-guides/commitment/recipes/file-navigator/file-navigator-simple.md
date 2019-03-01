@@ -232,9 +232,9 @@ find a folder, we need to render its contents.
 ```html
 {{<recursiveView}}
   <div>{{name}} <b>Type:</b> {{#if(nodes.length)}}Branch{{else}}Leaf{{/if}}</div>
-  {{#each(nodes)}}
+  {{# for (node of nodes) }}
     {{>recursiveView}}
-  {{/each}}
+  {{/ for }}
 {{/recursiveView}}
 
 {{>recursiveView yayRecursion}}`
@@ -259,14 +259,14 @@ Component.extend({
             {{# eq(child.type, 'file')}}
               📝 <span>{{child.name}}</span>
             {{else}}
-              📁 {{entities child}}
+              📁 {{entities(child)}}
             {{/ eq}}
           </li>
         {{/ for }}
       </ul>
     {{/entities}}
    
-    {{entities rootEntity}}
+    {{entities(rootEntity)}}
   `,
   ViewModel: {
      rootEntity: {
@@ -315,7 +315,7 @@ we change the data, the UI will automatically change.
   person.name = "Kevin" //-> logs "entity name changed to Kevin"
   ```
 
-- `can.DefineMap` supports an [can-define.types.propDefinition#Array Array shorthand] that allows one to specify a [can-define/list/list can.DefineList] of typed instances like:
+- [can-define/map/map DefineMap] supports an [can-define.types.propDefinition#Array Array shorthand] that allows one to specify a [can-define/list/list DefineList] of typed instances like:
 
   ```js
   import { DefineMap } from "can";
@@ -421,18 +421,22 @@ We want to be able to toggle if a folder is open or closed.
 
 ### Things to know
 
-- `can.DefineMap` can specify a default value and a type:
+- [can-define/map/map DefineMap] can specify a default value and a type:
   ```js
-  const Person = can.DefineMap.extend({
+  import { DefineMap } from "can";
+
+  const Person = DefineMap.extend({
     address: Address,
     age: {default: 33, type: "number"}
   });
   ```
 
-- `can.DefineMap` can also have methods:
+- [can-define/map/map DefineMap] can also have methods:
 
   ```js
-  const Person = can.DefineMap.extend({
+	import { DefineMap } from "can";
+
+  const Person = DefineMap.extend({
     address: Address,
     age: {default: 33, type: "number"},
     birthday: function(){
