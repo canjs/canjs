@@ -127,7 +127,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-digital-clock.js
-@highlight 1-19,only
+@highlight 3-19,only
 
 ## Draw a circle in the analog clock component ##
 
@@ -147,44 +147,35 @@ In this section, we will:
   which will be passed to [can-define/map/map.extend DefineMap.extend]
   (hint:`ViewModel: {}`).
 - A viewModel’s [can-component/connectedCallback] will be called when the
-  component is inserted into the page; it will pass the `element` like:
-  ```js
-	import { Component } from "//unpkg.com/can@5/core.mjs";
-
-  Component.extend({
-    tag: "my-element",
-    view: "<h1>first child</h1>",
-    ViewModel: {
-      connectedCallback(element) {
-        element.firstChild //-> <h1>
-      }
-    }
-  });
-  ```
+  component is inserted into the page.
+- [Pass an element reference to the scope](https://canjs.com/doc/can-stache-bindings.html#Passanelementtothescope), like the following:
+```html
+<div this:to="key">...</div>
+```
 - To get the [canvas rendering context](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
   from a `<canvas>` element, use `canvas = canvasElement.getContext("2d")`.
 - To draw a line (or curve), you generally set different style properties of the rendering context like:
   ```js
-  canvas.lineWidth = 4.0
-  canvas.strokeStyle = "#567"
+  this.canvas.lineWidth = 4.0
+  this.canvas.strokeStyle = "#567"
   ```
   Then you start path with:
   ```js
-  canvas.beginPath()
+  this.canvas.beginPath()
   ```
   Then make [arcs](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D) and [lines](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineTo)
   for your path like:
   ```js
-  canvas.arc(125, 125, 125, 0, Math.PI * 2, true)
+  this.canvas.arc(125, 125, 125, 0, Math.PI * 2, true)
   ```
   Then close the path like:
   ```js
-  canvas.closePath()
+  this.canvas.closePath()
   ```
   Finally, use [stroke](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/stroke)
   to actually draw the line:
   ```js
-  canvas.stroke();
+  this.canvas.stroke();
   ```
 - The following variables will be useful for coordinates:
   ```js
@@ -198,7 +189,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-circle.js
-@highlight 1-21,only
+@highlight 3-28,only
 
 ## Draw the second hand ##
 
@@ -216,8 +207,8 @@ In this section, we will:
 - [can-event-queue/map/map.listenTo this.listenTo] can be used in a component’s
   [can-component/connectedCallback] to listen to changes in the `ViewModel` like:
   ```js
-	import { Component } from "//unpkg.com/can@5/core.mjs";
-	
+  import { Component } from "//unpkg.com/can@5/core.mjs";
+  
   Component.extend({
     tag: "analog-clock",
     // ...
@@ -262,9 +253,9 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-second-hand.js
-@highlight 3-5,24-50,only
+@highlight 3-5,31-57,only
 
-## Clear the canvas and create a `drawNeedle` function ##
+## Clear the canvas and create a `drawNeedle` method ##
 ### The problem
 
 In this section, we will:
@@ -293,17 +284,11 @@ In this section, we will:
   access to all the variables created above it like:
   ```js
   ViewModel: {
-    connectedCallback() {
-      const canvas = element.firstChild.getContext("2d");
-      const diameter = 255;
-      const radius = diameter/2 - 5;
-      const center = diameter/2;
-
-      const drawNeedle = (length, base60Distance, styles) => {
-        canvas // -> the canvas element
+    // ...
+    drawNeedle(length, base60Distance, styles, center) {
         // ...
-      };
     }
+    // ...
   }
   ```
 
@@ -312,7 +297,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-refactor.js
-@highlight 17-26,29,31-37,39-48,only
+@highlight 19-28,48-56,only
 
 
 ## Draw the minute and hour hand ##

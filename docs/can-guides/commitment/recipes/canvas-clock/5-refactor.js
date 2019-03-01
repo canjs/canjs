@@ -6,24 +6,31 @@ const base60ToRadians = (base60Number) =>
 
 Component.extend({
   tag: "analog-clock",
-  view: '<canvas id="analog" width="255" height="255"></canvas>',
+  view: '<canvas this:to="canvasElement" id="analog" width="255" height="255"></canvas>',
   ViewModel: {
+    // the canvas element
+    canvasElement: HTMLCanvasElement,
+
+    // the canvas 2d context
+    get canvas() {
+      return this.canvasElement.getContext("2d");
+    },
+
+    drawNeedle(length, base60Distance, styles, center) {
+      Object.assign(this.canvas, styles);
+      const x = center + length * Math.sin(base60ToRadians(base60Distance));
+      const y = center + length * -1 * Math.cos(base60ToRadians(base60Distance));
+      this.canvas.beginPath();
+      this.canvas.moveTo(center, center);
+      this.canvas.lineTo(x, y);
+      this.canvas.closePath();
+      this.canvas.stroke();
+    },
+    
     connectedCallback(element) {
-      const canvas = element.firstChild.getContext("2d");
       const diameter = 255;
       const radius = diameter/2 - 5;
       const center = diameter/2;
-
-      const drawNeedle = (length, base60Distance, styles) => {
-        Object.assign(canvas, styles);
-        const x = center + length * Math.sin(base60ToRadians(base60Distance));
-        const y = center + length * -1 * Math.cos(base60ToRadians(base60Distance));
-        canvas.beginPath();
-        canvas.moveTo(center, center);
-        canvas.lineTo(x, y);
-        canvas.closePath();
-        canvas.stroke();
-      };
 
       this.listenTo("time", (ev, time) => {
         canvas.clearRect(0, 0, diameter, diameter);
@@ -38,13 +45,14 @@ Component.extend({
 
         // draw second hand
         const seconds = time.getSeconds() + this.time.getMilliseconds() / 1000;
-        drawNeedle(
+        this.drawNeedle(
           radius * 0.85,
           seconds, {
             lineWidth: 2.0,
             strokeStyle: "#FF0000",
             lineCap: "round"
-          }
+          },
+          center
         );
       });
     }

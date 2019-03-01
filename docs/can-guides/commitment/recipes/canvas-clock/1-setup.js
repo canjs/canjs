@@ -4,15 +4,15 @@ Component.extend({
   tag: "clock-controls",
   ViewModel: {
     time: {Default: Date, Type: Date},
-    init() {
+    coonectedCallback() {
       setInterval(() => {
         this.time = new Date();
       }, 1000);
     }
   },
   view: `
-    <p>{{time}}</p>
-    <digital-clock time:from="time"/>
-    <analog-clock time:from="time"/>
+    <p>{{ this.time }}</p>
+    <digital-clock time:from="this.time"/>
+    <analog-clock time:from="this.time"/>
   `
 });

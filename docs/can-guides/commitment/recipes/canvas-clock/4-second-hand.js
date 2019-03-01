@@ -6,31 +6,39 @@ const base60ToRadians = (base60Number) =>
 
 Component.extend({
   tag: "analog-clock",
-  view: '<canvas id="analog" width="255" height="255"></canvas>',
+  view: '<canvas this:to="canvasElement" id="analog" width="255" height="255"></canvas>',
   ViewModel: {
+    // the canvas element
+    canvasElement: HTMLCanvasElement,
+
+    // the canvas 2d context
+    get canvas() {
+      return this.canvasElement.getContext("2d");
+    },
+
     connectedCallback(element) {
-      const canvas = element.firstChild.getContext("2d");
       const diameter = 255;
       const radius = diameter/2 - 5;
-      const center = diameter/2;
+			const center = diameter/2;
+			
       // draw circle
-      canvas.lineWidth = 4.0;
-      canvas.strokeStyle = "#567";
-      canvas.beginPath();
-      canvas.arc(center, center, radius, 0, Math.PI * 2, true);
-      canvas.closePath();
-      canvas.stroke();
-
+      this.canvas.lineWidth = 4.0;
+      this.canvas.strokeStyle = "#567";
+      this.canvas.beginPath();
+      this.canvas.arc(center, center, radius, 0, Math.PI * 2, true);
+      this.canvas.closePath();
+      this.canvas.stroke();
+      
       this.listenTo("time", (ev, time) => {
-        canvas.clearRect(0, 0, diameter, diameter);
+        this.canvas.clearRect(0, 0, diameter, diameter);
 
         // draw circle
-        canvas.lineWidth = 4.0;
-        canvas.strokeStyle = "#567";
-        canvas.beginPath();
-        canvas.arc(center, center, radius, 0, Math.PI * 2, true);
-        canvas.closePath();
-        canvas.stroke();
+        this.canvas.lineWidth = 4.0;
+        this.canvas.strokeStyle = "#567";
+        this.canvas.beginPath();
+        this.canvas.arc(center, center, radius, 0, Math.PI * 2, true);
+        this.canvas.closePath();
+        this.canvas.stroke();
 
         Object.assign(canvas, {
           lineWidth:  2.0,
@@ -42,11 +50,11 @@ Component.extend({
         const size = radius * 0.85;
         const x = center + size * Math.sin(base60ToRadians(seconds));
         const y = center + size * -1 * Math.cos(base60ToRadians(seconds));
-        canvas.beginPath();
-        canvas.moveTo(center, center);
-        canvas.lineTo(x, y);
-        canvas.closePath();
-        canvas.stroke();
+        this.canvas.beginPath();
+        this.canvas.moveTo(center, center);
+        this.canvas.lineTo(x, y);
+        this.canvas.closePath();
+        this.canvas.stroke();
       });
     }
   }

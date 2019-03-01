@@ -34,8 +34,8 @@ Component.extend({
     }
   },
   view: `
-    <p>{{ time }}</p>
-    <digital-clock time:from="time"/>
-    <analog-clock time:from="time"/>
+    <p>{{ this.time }}</p>
+    <digital-clock time:from="this.time"/>
+    <analog-clock time:from="this.time"/>
   `
 });
