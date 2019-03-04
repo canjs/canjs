@@ -2,7 +2,7 @@ import { Component } from "//unpkg.com/can@5/core.mjs";
 
 Component.extend({
   tag: "digital-clock",
-  view: "{{ hh() }}:{{ mm() }}:{{ ss() }}",
+  view: `{{ hh() }}:{{ mm() }}:{{ ss() }}`,
   ViewModel: {
     time: Date,
     hh() {

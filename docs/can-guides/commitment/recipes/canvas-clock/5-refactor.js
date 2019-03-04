@@ -6,7 +6,7 @@ const base60ToRadians = (base60Number) =>
 
 Component.extend({
   tag: "analog-clock",
-  view: '<canvas this:to="canvasElement" id="analog" width="255" height="255"></canvas>',
+  view: `<canvas this:to="canvasElement" id="analog" width="255" height="255"></canvas>`,
   ViewModel: {
     // the canvas element
     canvasElement: HTMLCanvasElement,

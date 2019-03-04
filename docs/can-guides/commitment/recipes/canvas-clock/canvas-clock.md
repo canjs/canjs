@@ -253,7 +253,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-second-hand.js
-@highlight 3-5,31-57,only
+@highlight 3-5,31-58,only
 
 ## Clear the canvas and create a `drawNeedle` method ##
 ### The problem
@@ -319,7 +319,7 @@ You know everything at this point.  You got this!
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-min-hour-hands.js
-@highlight 50-71,only
+@highlight 60-79,only
 
 ## Result
 

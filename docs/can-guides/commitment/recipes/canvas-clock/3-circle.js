@@ -2,7 +2,7 @@ import { Component } from "//unpkg.com/can@5/core.mjs";
 
 Component.extend({
   tag: "analog-clock",
-  view: '<canvas this:to="canvasElement" id="analog" width="255" height="255"></canvas>',
+  view: `<canvas this:to="canvasElement" id="analog" width="255" height="255"></canvas>`,
   ViewModel: {
     // the canvas element
     canvasElement: HTMLCanvasElement,

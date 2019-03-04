@@ -4,7 +4,7 @@ Component.extend({
   tag: "clock-controls",
   ViewModel: {
     time: {Default: Date, Type: Date},
-    coonectedCallback() {
+    connectedCallback() {
       setInterval(() => {
         this.time = new Date();
       }, 1000);
