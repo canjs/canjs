@@ -17,6 +17,62 @@ fewer lines of code than other JavaScript frameworks.
 
 @body
 
+## Model layer
+
+CanJS makes it easy to GET data from an API, mutate those objects, and PUT those changes back to the API.
+Creating new instances and deleting old ones is a breeze too.
+Save yourself time by not writing boilerplate XHR/fetch requests.
+
+[We could show just a few lines of the code below, or the whole thing, depending on space:]
+
+```js
+import { realtimeRestModel } from "can";
+
+const Todo = realtimeRestModel("/api/todos/{id}").Map;
+
+Todo.getList().then(todos => {// Get all the todos (GET)
+
+  const todo = new Todo({name: "Learn CanJS"});// Create a new todo
+  todo.save();// Create it on the server (POST)
+
+  todo.completed = true;// Get & set properties
+  todo.save();// Save changes (PUT)
+
+  todos[0].destroy();// Delete the todo (DELETE)
+});
+
+// Get a single todo (GET)
+Todo.get({ id: 1 });
+```
+
+## Promises in templates
+
+CanJS’s stache templating language can directly read the state and values from Promises.
+No async callbacks to get the value from a promise, and no extra code to determine whether
+the Promise is still pending, has been resolved, or resulted in an error.
+
+[We could have an animation showing a loading screen, then an error state, maybe alternate back to loading and then a success state, or the following code:]
+
+```handlebars
+{{#if(promise.isPending)}}
+	Loading…
+{{/if}}
+
+{{#if(promise.isRejected)}}
+	Error: {{promise.reason.message}}
+{{/if}}
+
+{{#if(promise.isResolved)}}
+	Value: {{promise.value}}
+{{/if}}
+```
+
+## Real-time list updating
+
+When you query an API to get a list of objects back, CanJS can understand your query.
+When new objects are created that match that query, any arrays based off that query
+will have the new object added to them. Your UI always stays in sync with the model.
+
 ## Get started with just a few lines of code
 
 <p class="codepen" data-height="512" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 512px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
@@ -46,75 +102,20 @@ Write CRUD apps like this in just a few lines of code.
   <img alt="Tucows" height="32" src="../docs/images/logos/tucows.svg" />
 </div>
 
-## You’re probably wondering what makes CanJS different
+## Our community has your back
 
-### CanJS has a model layer
+CanJS is backed by [Bitovi](https://www.bitovi.com/), a company built on using and publishing open source software.
 
-And it has methods for creating, reading, updating, & deleting data:
+Our community is here to help you get started and answer your questions.
+[Join us on Slack](https://bitovi.com/community/slack) or [our forums](https://forums.bitovi.com/).
 
-```js
-import { realtimeRestModel } from "can";
+<style type="text/css">
+.social-proof img {
+  margin: 1em 1em 0;
+}
+</style>
 
-const Todo = realtimeRestModel("/api/todos/{id}").Map;
-
-// Get all the todos (GET)
-Todo.getList().then(todos => {
-
-  // Create a new todo
-  const todo = new Todo({name: "Learn CanJS"});
-
-  // Create it on the server (POST)
-  todo.save();
-
-  // Get & set properties
-  todo.completed = true;
-
-  // Save changes (PUT)
-  todo.save();
-
-  // Delete the todo (DELETE)
-  todos[0].destroy();
-});
-
-// Get a single todo (GET)
-Todo.get({ id: 1 });
-```
-
-### First-class support for Promises in templates
-
-CanJS’s [can-stache stache templating language] is similar to Handlebars and Mustache.
-When your app’s data changes, its user interface is updated automatically. Likewise,
-if you fetch again from the server and there’s new data, your app’s UI will be updated.
-
-Additionally, stache has first-class support for Promises, with helpers for reading the
-state and value of a Promise:
-
-```handlebars
-{{#if(promise.isPending)}}
-	Loading…
-{{/if}}
-{{#if(promise.isRejected)}}
-	Error: {{promise.reason.message}}
-{{/if}}
-{{#if(promise.isResolved)}}
-	Value: {{promise.value}}
-{{/if}}
-```
-
-Stache’s succinct syntax means you write less code for your templates.
-We promise you’ll love writing your templates this way.
-
-### Automatic list management and real-time updating
-
-Data fetched from APIs is turned into object-oriented observables that are easy to understand and manipulate. When you make a change to one of the observables, your entire interface updates automatically. When you show a list of items, if one of the items should no longer be shown in the list because it doesn’t meet your filtering criteria, it’s automatically removed.
-
-Save yourself time by not writing code that updates your app’s UI.
-
-<br />
-
-> Start building your first app! [guides/todomvc Get started →]
-
-### One-way and two-way binding
+## One-way and two-way binding
 
 Your app’s model data is stored in your custom data types. CanJS’s one-way and two-way
 binding syntax let you bind directly to your model data. Read directly from it and
@@ -129,23 +130,23 @@ it’s easy to read and write.
 
 > Take the tutorial now! [guides/todomvc Get started →]
 
-### CanJS has all the tools you need to build your app
+## CanJS has all the tools you need to build your app
 
 Don’t waste your time hacking together a bunch of libraries that might not work together.
 CanJS has libraries for working with APIs, creating object-oriented observables,
 binding to form elements, building reusable custom elements, routing, and more.
 
-### No build tool or CLI required
+## No build tool or CLI required
 
 Start a CanJS app with just a single import statement. No compiler, no build step,
 no configuration, no special tools required.
 
-### Become an expert quickly with our extensive guides & documentation
+## Become an expert quickly with our extensive guides & documentation
 
 Our guides will teach you the best way to architect your application so you spend less time
 maintaining it and more time building features that make you money.
 
-### Use DevTools to debug your app
+## Use DevTools to debug your app
 
 Use the CanJS DevTools to edit your app’s state at runtime, visualize the dependency graphs
 between elements and state, and debug changes to observables.
@@ -154,25 +155,12 @@ between elements and state, and debug changes to observables.
 
 > Ready to build your app? [guides/todomvc Get started →]
 
-### Browser support
+## Browser support
 
 CanJS supports Internet Explorer 11, Chrome, Edge, Firefox, and Safari.
 
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/canjs.svg)](https://saucelabs.com/u/canjs)
 
-### Small bundle size
+## Small bundle size
 
 At 72 KB gzipped, CanJS provides all the tools you need at a small size.
-
-### Our community has your back
-
-CanJS is backed by [Bitovi](https://www.bitovi.com/), a company built on using and publishing open source software.
-
-Our community is here to help you get started and answer your questions.
-[Join us on Slack](https://bitovi.com/community/slack) or [our forums](https://forums.bitovi.com/).
-
-<style type="text/css">
-.social-proof img {
-  margin: 1em 1em 0;
-}
-</style>
