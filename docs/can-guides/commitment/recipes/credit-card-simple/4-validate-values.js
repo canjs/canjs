@@ -1,30 +1,30 @@
-import { Component } from "can";
+import { Component } from "//unpkg.com/can@5/core.mjs";
 
 Stripe.setPublishableKey("pk_test_zCC2JrO3KSMeh7BB5x9OUe2U");
 
 Component.extend({
 	tag: 'cc-payment',
 	view: `
-	<form>
+		<form>
 
-		<input type="text" name="number" placeholder="Card Number
-			{{# if(cardError) }}class="is-error"{{/ if }}
-			value:bind="userCardNumber"/>
+			<input type="text" name="number" placeholder="Card Number"
+				{{# if(cardError) }}class="is-error"{{/ if }}
+				value:bind="userCardNumber"/>
 
-		<input type="text" name="expiry" placeholder="MM-YY"
-		{{# if(expiryError) }}class="is-error"{{/ if }}
-			value:bind="userExpiry"/>
+			<input type="text" name="expiry" placeholder="MM-YY"
+			{{# if(expiryError) }}class="is-error"{{/ if }}
+				value:bind="userExpiry"/>
 
-		<input type="text" name="cvc" placeholder="CVC"
-			{{# if(cvcError) }}class="is-error"{{/ if }}
-			value:bind="userCVC"/>
+			<input type="text" name="cvc" placeholder="CVC"
+				{{# if(cvcError) }}class="is-error"{{/ if }}
+				value:bind="userCVC"/>
 
-		<button>Pay $\{{ amount }}</button>
+			<button>Pay $\{{ amount }}</button>
 
-		<p>{{ userCardNumber }}, {{ userExpiry }}, {{ userCVC }}</p>
-		<p>{{ cardNumber }}, {{ expiryMonth }}-{{ expiryYear }}, {{ cvc }}</p>
-		
-	</form>
+			<p>{{ userCardNumber }}, {{ userExpiry }}, {{ userCVC }}</p>
+			<p>{{ cardNumber }}, {{ expiryMonth }}-{{ expiryYear }}, {{ cvc }}</p>
+			
+		</form>
 	`,
 	ViewModel: {
 		amount: { default: 9.99 },

@@ -71,13 +71,13 @@ should be able update the displayed “pay amount”.
  to a View in order to manage it's behavior as follows:
 
   ```js
-	import { Component } from "can";
+  import { Component } from "can";
   // Define the Component 
   const CCPayment = Component.extend({
     tag: "cc-payment",
     view: "...",
     ViewModel: {}
-	});
+  });
   ```
 
 - CanJS component will be mounted in the DOM by adding the the component tag in the HTML page:
@@ -112,11 +112,6 @@ should be able update the displayed “pay amount”.
 
 
 ### The solution
-
-Update the __HTML__ tab to:
-
-@sourceref ./1-setup.html
-@highlight 1
 
 Update the __JavaScript__ tab to:
 
@@ -154,7 +149,9 @@ Print out the exported values like:
 - [can-define/map/map.extend DefineMap.extend] allows you to define a property by defining its type like so:
 
   ```js
-  Person = can.DefineMap.extend("Person",{
+	import { DefineMap } from "can";
+	
+  Person = DefineMap.extend("Person",{
     name: "string",
     age: "number"
   })
@@ -162,14 +159,10 @@ Print out the exported values like:
 
 ### The solution
 
-Update the __HTML__ tab to:
-
-@sourceref ./2-read-form.html
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-read-form.js
-@highlight 10-17,21,only
+@highlight 10-17,21,28, 30, 32, only
 
 
 ## Format form values
@@ -208,10 +201,6 @@ So that we can print out the values like:
 
 ### The solution
 
-Update the __HTML__ tab to:
-
-@sourceref ./3-format.html
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-format.js
@@ -247,14 +236,10 @@ their respective form property:
 
 ### The solution
 
-Update the __HTML__ tab to:
-
-@sourceref ./4-validate-values.html
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-validate-values.js
-@highlight 11,15,19,36-40,42-46,56-61,only
+@highlight 11,15,19,36-40,56-61,68-72,only
 
 
 
@@ -304,10 +289,6 @@ After submitting the form, you should see an alert like:
 
 ### The solution
 
-Update the __HTML__ tab to:
-
-@sourceref ./5-payment.html
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-payment.js
@@ -339,14 +320,10 @@ To do that, we’ll add the following properties to the ViewModel:
 
 ### The solution
 
-Update the __HTML__ tab to:
-
-@sourceref ./6-validate-form.html
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-validate-form.js
-@highlight 10-12,26,96-106,only
+@highlight 10-12,26,98-108,only
 
 ## Result
 
