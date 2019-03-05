@@ -166,10 +166,8 @@ Let’s render `rootEntityData` in the page with its immediate children.
 
 Update the __HTML__ tab to:
 
-```html
-<file-navigator></file-navigator>
-```
-@highlight 1
+@sourceref ./file-navigator-simple.html
+@highlight 12
 
 Update the __JavaScript__ tab to:
 
@@ -179,9 +177,9 @@ import { Component } from "//unpkg.com/can@5/core.mjs";
 Component.extend({
   tag: "file-navigator",
   view: `
-    <span>{{this.name}}</span>
+    <span>{{rootEntity.name}}</span>
     <ul>
-      {{# for(child of this.children) }}
+      {{# for(child of rootEntity.children) }}
         <li class="{{child.type}} {{# if(child.hasChildren) }}hasChildren{{/ if}}">
           {{# eq(child.type, 'file')}}
             📝 <span>{{child.name}}</span>
@@ -252,9 +250,9 @@ Component.extend({
   tag: "file-navigator",
   view: `
     {{<entities}}
-      <span>{{this.name}}</span>
+      <span>{{rootEntity.name}}</span>
       <ul>
-        {{# for(child of this.children) }}
+        {{# for(child of rootEntity.children) }}
           <li class="{{child.type}} {{# if(child.hasChildren) }}hasChildren{{/ if}}">
             {{# eq(child.type, 'file')}}
               📝 <span>{{child.name}}</span>
@@ -374,9 +372,9 @@ Component.extend({
   tag: "file-navigator",
   view: `
     {{<entities}}
-      <span>{{this.name}}</span>
+      <span>{{rootEntity.name}}</span>
       <ul>
-        {{# for(child of this.children) }}
+        {{# for(child of rootEntity.name) }}
           <li class="{{child.type}} {{# if(child.hasChildren) }}hasChildren{{/ if}}">
             {{# eq(child.type, 'file')}}
               📝 <span>{{child.name}}</span>
@@ -393,13 +391,13 @@ Component.extend({
   ViewModel: {
      rootEntity: {
       default: () => {
-        return rootEntityData;
+        return rootEntity;
       }
     }
   }
 });
 ```
-@highlight 1,3-14,16
+@highlight 1,3-14,16, 41
 
 ### Test it
 
@@ -434,7 +432,7 @@ We want to be able to toggle if a folder is open or closed.
 - [can-define/map/map DefineMap] can also have methods:
 
   ```js
-	import { DefineMap } from "can";
+  import { DefineMap } from "can";
 
   const Person = DefineMap.extend({
     address: Address,
