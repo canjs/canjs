@@ -3,13 +3,17 @@
 
 @description This guide walks you through building a simple weather report
 widget.  It takes about 25 minutes to complete.  It was written with
-CanJS 4.1.
+CanJS 5.22.0.
 
 @body
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/fudakiz/6/embed?html,js,output">JS Bin on jsbin.com</a>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="css,result" data-user="cherifGsoul" data-slug-hash="OqbZaG" data-pen-title="Weather Report Guide (Simple) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/OqbZaG/">
+  Weather Report Guide (Simple) [Finished]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 To use the widget:
 
@@ -19,7 +23,11 @@ To use the widget:
 
 __Start this tutorial by cloning the following JS Bin__:
 
-<a class="jsbin-embed" href="https://jsbin.com/fudakiz/4/embed?html,output">JS Bin on jsbin.com</a>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="css,result" data-user="cherifGsoul" data-slug-hash="YgpvZg" data-pen-title="Weather Report Guide (Simple) [Starter]">
+  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/YgpvZg/">
+  Weather Report Guide (Simple) [Starter]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 This JS Bin has initial prototype HTML and CSS which is useful for
 getting the application to look right.
@@ -46,7 +54,8 @@ Get the basic setup for a CanJS app (in a JS Bin) setup by:
 
 - A [can-stache] template can be loaded from a `<script>` tag with [can-stache.from can.stache.from] and used to render data into a document fragment:
   ```js
-  const template = can.stache.from(SCRIPT_ID);
+  import { stache } from "can";
+  const template = stache.from(SCRIPT_ID);
   const fragment = template({message: "Hello World"});
   // fragment -> <h1>Hello World</h1>
   ```
@@ -54,8 +63,9 @@ Get the basic setup for a CanJS app (in a JS Bin) setup by:
 - [can-define/map/map can.DefineMap] can be used to define the behavior of observable objects like:
 
   ```js
-  const Type = can.DefineMap.extend({
-	  message: "string"
+  import { DefineMap } from "can";
+  const Type = DefineMap.extend({
+    message: "string"
   });
   ```
 
@@ -64,8 +74,10 @@ Get the basic setup for a CanJS app (in a JS Bin) setup by:
   [can-component]).
 
   ```js
+  import { DefineMap } from "can";
+
   const MessageViewModel = can.DefineMap.extend({
-	  message: "string"
+    message: "string"
   });
 
   const messageVM = new MessageViewModel();
@@ -961,6 +973,10 @@ document.body.appendChild(fragment);
 
 When finished, you should see something like the following JS Bin:
 
-<a class="jsbin-embed" href="https://jsbin.com/fudakiz/6/embed?js,output">JS Bin on jsbin.com</a>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="css,result" data-user="cherifGsoul" data-slug-hash="OqbZaG" data-pen-title="Weather Report Guide (Simple) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/OqbZaG/">
+  Weather Report Guide (Simple) [Finished]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.1.2"></script>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
