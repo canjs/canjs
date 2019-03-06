@@ -43,7 +43,7 @@ __START THIS TUTORIAL BY CLONING THE FOLLOWING CODEPEN__:
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
-This codepen has initial prototype HTML and CSS which is useful for
+This CodePen has initial prototype HTML and CSS which is useful for
 getting the application to look right.
 
 The following sections are broken down into:
@@ -113,6 +113,11 @@ should be able update the displayed “pay amount”.
 
 ### The solution
 
+Update the __HTML__ tab to:
+
+@sourceref ./1-setup.html
+@highlight 12
+
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
@@ -149,8 +154,8 @@ Print out the exported values like:
 - [can-define/map/map.extend DefineMap.extend] allows you to define a property by defining its type like so:
 
   ```js
-	import { DefineMap } from "can";
-	
+  import { DefineMap } from "can";
+  
   Person = DefineMap.extend("Person",{
     name: "string",
     age: "number"
@@ -327,7 +332,7 @@ Update the __JavaScript__ tab to:
 
 ## Result
 
-When complete, you should have a working credit card payment form like the following codepen:
+When complete, you should have a working credit card payment form like the following CodePen:
 
 <p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="LqogVw" data-pen-title="Credit Card Guide (Simple)">
   <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/LqogVw/">
