@@ -374,7 +374,7 @@ Component.extend({
     {{<entities}}
       <span>{{rootEntity.name}}</span>
       <ul>
-        {{# for(child of rootEntity.name) }}
+        {{# for(child of rootEntity.children) }}
           <li class="{{child.type}} {{# if(child.hasChildren) }}hasChildren{{/ if}}">
             {{# eq(child.type, 'file')}}
               📝 <span>{{child.name}}</span>
