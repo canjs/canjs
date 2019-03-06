@@ -40,7 +40,7 @@ Component.extend({
         this.canvas.closePath();
         this.canvas.stroke();
 
-        Object.assign(canvas, {
+        Object.assign(this.canvas, {
           lineWidth:  2.0,
           strokeStyle: "#FF0000",
           lineCap: "round"
