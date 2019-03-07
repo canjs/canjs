@@ -94,7 +94,7 @@ button {
 }
 .three-col-wrapper {
   display: flex;
-  margin: 30px 90px 60px;
+  margin: 30px 60px 60px;
   max-width: 1200px;
 }
 .three-col-wrapper .col-container {
@@ -284,31 +284,70 @@ button {
     </div>
   </div>
 </div>
-<div class="single-col-wrapper">
-  <h2>Get started with just a few lines of code</h2>
-  <p>If you’re like us, you build interactive web apps where users need to <strong>C</strong>reate, <strong>R</strong>ead, <strong>U</strong>pdate, and <strong>D</strong>elete data.</p>
-  <p>CanJS provides all the tools you need to fetch your data, render your user interface, and make it interactive, in fewer lines of code than other JavaScript frameworks.</p>
-  <p class="codepen" data-height="512" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 512px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/omqyMw/">
-  CanJS 5 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
-  on <a href="https://codepen.io">CodePen</a>.</span></p>
-  <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
-  <span class="caption">Define your custom types, connect to a backend API, create a custom element, render a list of data, and make the list editable.
-  Write CRUD apps like this in just a few lines of code.</span>
-  <button name="btn" onclick="/guides/todomvc.html">Learn how to build a CRUD app</button>
-</div>
 <div class="three-col-wrapper">
   <div class="col-container">
     <h3>Model layer</h3>
-    <p>CanJS makes it easy to GET data from an API, mutate those objects, and PUT those changes back to the API. Creating new instances and deleting old ones is a breeze too. Save yourself time by not writing boilerplate XHR/fetch requests.</p>
+    <p>Your components shouldn’t be concerned with how your data is fetched, cached, or sent to the server for updates.</p>
+    <p>CanJS provides the right abstractions for your model code to be cleanly separated from your UI code.</p>
+
+```js
+import { realtimeRestModel } from "can";
+
+const Todo = realtimeRestModel("/api/todos/{id}").Map;
+Todo.getList().then(todos => {// Get all the todos (GET)
+
+  const todo = new Todo({name: "Learn CanJS"});// Create a new todo
+  todo.save();// Create it on the server (POST)
+
+  todo.completed = true;// Get & set properties
+  todo.save();// Save changes (PUT)
+
+  todos[0].destroy();// Delete the todo (DELETE)
+});
+```
   </div>
   <div class="col-container">
     <h3>Promises in templates</h3>
-    <p>CanJS’s stache templating language can directly read the state and values from Promises. No async callbacks to get the value from a promise, and no extra code to determine whether the Promise is still pending, has been resolved, or resulted in an error.</p>
+    <p>CanJS’s [can-stache stache templating language] can directly read the state and values from Promises.</p>
+    <p>No extra code to determine whether the Promise is still pending, has been resolved, or resulted in an error.</p>
+
+```handlebars
+{{#if(promise.isPending)}}
+	Loading…
+{{/if}}
+
+{{#if(promise.isRejected)}}
+	Error:
+	{{promise.reason.message}}
+{{/if}}
+
+{{#if(promise.isResolved)}}
+	Value:
+	{{promise.value}}
+{{/if}}
+```
   </div>
   <div class="col-container">
     <h3>Real-time list updating</h3>
-    <p>When you query an API to get a list of objects back, CanJS can understand your query. When new objects are created that match that query, any arrays based off that query will have the new object added to them. Your UI always stays in sync with the model.</p>
+    <p>After data is created, updated, or destroyed, CanJS automatically updates your lists for you.</p>
+    <p>Filtering and sorting are preserved, so you don’t have to manually update your lists
+or fetch the same data again.</p>
+
+```js
+import { realtimeRestModel } from "can";
+
+const Todo = realtimeRestModel("/api/todos/{id}").Map;
+
+Todo.getList({filter: {completed: true}}).then(todos => {// Get completed todos
+
+  const newTodo = new Todo({completed: false});// Create a not-completed todo
+
+  newTodo.completed = true;// Set it to completed
+
+  // todos now contains newTodo because
+  // it matches {filter: {completed: true}}
+});
+```
   </div>
 </div>
 <div class="gray-callout social">
@@ -322,6 +361,19 @@ button {
       <img alt="Discourse" src="../docs/images/logos/Discourse_icon.svg" />
     </div>
   </div>
+</div>
+<div class="single-col-wrapper">
+  <h2>Get started with just a few lines of code</h2>
+  <p>If you’re like us, you build interactive web apps where users need to <strong>C</strong>reate, <strong>R</strong>ead, <strong>U</strong>pdate, and <strong>D</strong>elete data.</p>
+  <p>CanJS provides all the tools you need to fetch your data, render your user interface, and make it interactive, in fewer lines of code than other JavaScript frameworks.</p>
+  <p class="codepen" data-height="512" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 512px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/omqyMw/">
+  CanJS 5 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span></p>
+  <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+  <span class="caption">Define your custom types, connect to a backend API, create a custom element, render a list of data, and make the list editable.
+  Write CRUD apps like this in just a few lines of code.</span>
+  <button name="btn" onclick="/guides/todomvc.html">Learn how to build a CRUD app</button>
 </div>
 <div class="code-overview">
   <div class="code-proof">
