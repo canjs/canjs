@@ -23,11 +23,16 @@ h3 {
   margin-bottom: 30px;
   color: #282C33;
 }
+code {
+  border-top: 20px solid #327ABB;
+  border-radius: 6px 6px 0 0;
+}
 .description p {
   font-size: 18px;
   padding-bottom: 15px;
 }
-button {
+.btn {
+  display: inline-flex;
   border: 3px solid #0288C9;
   border-radius: 5px;
   background-color: transparent;
@@ -75,7 +80,7 @@ button {
   padding: 90px 0 0 60px;
   max-height: 420px;
 }
-.hero-section button {
+.hero-section .btn {
   margin: 30px 0 45px;
 }
 .hero-logo {
@@ -89,21 +94,22 @@ button {
   margin: 60px 90px;
   max-width: 1200px;
 }
-.single-col-wrapper button {
+.single-col-wrapper .btn {
   margin-top: 45px;
 }
 .three-col-wrapper {
   display: flex;
+  justify-content: space-between;
   margin: 30px 60px 60px;
   max-width: 1200px;
 }
 .three-col-wrapper .col-container {
   display: flex;
   flex-direction: column;
-  margin-right: 5%;
+  width: 30%;
 }
 .three-col-wrapper .col-container:last-of-type {
-  margin-right: 0%;
+  margin-right: 0;
 }
 .social {
   display: flex;
@@ -161,7 +167,7 @@ button {
 .clients {
   display: flex;
   flex-direction: column;
-  padding: 45px 60px;
+  padding: 45px 30px;
 }
 .clients-single-col {
   display: flex;
@@ -176,11 +182,11 @@ button {
 .client-logos {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-around;
 }
 .client-logos img {
-  max-height: 32px;
-  margin: 15px 30px;
+  height: 32px;
+  margin: 15px;
 }
 .two-col-wrapper {
   display: flex;
@@ -196,7 +202,7 @@ button {
 .two-col-wrapper div:last-of-type {
   margin-right: 0;
 }
-.footer button {
+.footer .btn {
   margin: 60px auto 45px;
 }
 .footer-single-col {
@@ -204,6 +210,12 @@ button {
   flex-direction: column;
   max-width: 1200px;
   width: 100%;
+}
+.line-numbers-rows {
+  display: none;
+}
+pre[class*=language-].line-numbers.line-numbers code {
+  padding-left: .5em;
 }
 @@media (max-width: 1229px) {
   .hero-section {
@@ -221,10 +233,15 @@ button {
     width: 40%;
   }
 }
-@@media (max-width: 999px) {
+@@media (max-width: 1099px) {
   .three-col-wrapper {
     flex-wrap: wrap;
   }
+  .three-col-wrapper .col-container {
+    width: 100%
+  }
+}
+@@media (max-width: 999px) {
   .hero-section {
     background-position: 50vw 100%;
   }
@@ -280,7 +297,7 @@ button {
     <div class="left-col">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 365.7 144.4" class="hero-logo"><path d="M265.5 142.6l-7-13.8-1-2 2-1 5.8-3.6c1.6-1 3-2.2 4-3.2s2-2 2.6-3.2c.6-1 1.2-2.3 1.5-3.5l.3-1c0-.6.2-1 .3-1.3.5-2.2.7-4.8.7-7.8V37H298.6v68.2c0 3-.4 5.8-.8 8.6l-.3 1.6c0 .5-.2 1-.4 1.7-.6 3-1.7 5.6-3.2 8.2-1 2-2.4 3.7-4 5.4-1.4 1.6-3.2 3.2-5.3 4.7-.6.5-1.2 1-1.8 1.3l-2 1.2c-3.5 2-7.6 3.8-12.5 5.4l-2 .6-.7-1.6zm64.7-19.8c-2.3 0-4.4 0-6.3-.2-2 0-3.8-.3-5.6-.6l-4.8-1-4.3-1-3.7-1.6c-1.2-.5-2.3-1-3.3-1.6l-1.8-1 .7-2 5.4-13.7.8-2 2 .8c.4 0 .7.2 1 .3l1 .4c1.5.5 3 1 4.5 1.3l3 .7 3.2.4 3.6.3c1.3.2 2.6.2 4 .2 2.2 0 4.2-.2 5.8-.5.4 0 .6 0 .7-.2l3-1c0-.2.3-.4.5-.5.2 0 .3-.3.5-.5.7-.7 1-1.7 1-2.8 0-.7 0-1.3-.4-2l-1.6-1.6-2.8-1.7c-1-.6-2.3-1.2-3.6-1.7l-4.5-1.8c-1.2-.5-2.8-1-4.7-2l-5-2.3-4.5-2.8c-1.6-1-3-2.3-4.3-3.6-1.3-1.3-2.4-2.8-3.4-4.4l-.8-1.5-.7-1.5c-1-2.7-1.5-6-1.6-9.3 0-2.2.3-4 .7-6 .6-2 1.3-3.6 2.2-5.2 1-1.5 2-3 3.2-4.2 1.2-1.3 2.6-2.4 4-3.4 1.6-1 3.2-1.8 4.8-2.5 1.7-.8 3.4-1.4 5.2-1.8 1.8-.5 3.6-.8 5.4-1 1.8-.2 3.7-.3 5.6-.3h6l1 .2c1.3 0 2.7.3 4 .6l1.4.2 1.2.3c2 .4 4 1 5.7 1.6 1.2.3 2.4.8 3.4 1.2 1.2.4 2.3 1 3.3 1.4l2 1-.8 2L356 58l-.8 1.8-2-.6-5.6-1.6-2.8-.7-3-.6-3-.3H335c-1.7 0-3.2.2-4.4.5-1 .2-1.8.6-2.3 1-.2 0-.3.2-.4.3-.2 0-.3.2-.4.4-.4.6-.6 1.2-.6 2v.7c.3.6 1 1.3 2 2 .8.6 1.8 1.2 3 1.8 1 .6 2.3 1.2 3.7 1.8l1.2.5 1.2.6 6.8 3 5 2.5 4.7 3c1.5 1.2 3 2.5 4.3 3.8 1.3 1.4 2.5 3 3.4 4.5 1 1.7 2 3.5 2.4 5.5.5 2 .8 4 .8 6.4v2l-.3 2c-.4 3-1.4 6-3 8.4-1 1.7-2 3.3-3.5 4.7-1.4 1.4-3 2.6-4.7 3.7-1.6 1-3.4 2-5.3 2.7-2 .7-3.8 1.3-6 1.8-2 .5-4 .8-6.2 1-2 .2-4.2.3-6.3.3zM77.7 114c-14.2 3.8-30.2 6.4-45 3.5-5.8-1-11-3.5-16-7-5-3.7-8.8-9-12-16.2-3-7.2-4.7-17-4.7-29 0-12.3 2-22 5.6-29.5 3.4-7.4 7.7-13 13-16.7 5.4-3.6 10.8-6 16.6-7.3C41 10.5 46 10 50.7 10c7 0 22 2 29.2 6.7v23.8c-7.5-3.8-18-5.7-26-6-2.6 0-5 .4-7.4 1-2.4.6-4.6 2-6.6 4-1.8 2.2-3.3 5.4-4.4 9.4-1.4 4-2 9.4-2 16.2 0 6 .5 10.8 1.6 14.5.8 3.8 1.8 7 3.6 9 6.5 7.6 20.8 5 30.5 2.4.8 8 2.8 16.4 8.4 23z"/><path d="M132.3 67.3l-6 .2c-6.4 0-11 1-13.8 3.4-3 2.2-4.3 6.3-4.2 12.4 0 5 1 8.4 2.8 10.3 2 2 4.4 2.7 7.2 2.6 3.5 0 6-1 8.7-2.3v10.3c0 3.4.5 6 1.6 8-4 1.7-6.3 3-10.5 4.2-5 1.5-10 2.5-13.6 2.6-23.8.8-29.8-17-29.8-33.8 0-7.2 1.4-13 4.2-17.7 2.6-4.6 5.8-8 9.7-10.3 4.2-2.5 8.4-4.2 13-5.2 4.4-.7 8.5-1 12.4-1H132v-6.2c0-4-1-6.8-3.2-8-2-1.3-5.6-2-10.3-2-5.8.2-28.2 2.5-33.3 5.8V16c11.6-4.4 31.8-6 38.7-6 12-.2 21.8 2 29.7 6.3 4 2.6 6.8 6.2 9 10.7 2 4.8 3 10.8 3 18l.2 72h-.2v.5h-9.6c-11 0-24 1.2-24-14.3V67.3zM171.6 12h28.6l4.4 10.7c0-.3 3.4-2.5 10-6.4 3-1.8 6.8-3 11-4.4 4-1.3 8.2-2 12.8-2 9-.2 16.2 2 21.7 6.5 5.7 4.7 8.6 13 8.6 24.8v61.5c0 15.5-13 14.3-24 14.3H235V45.4c0-3.5-.5-6-1.8-7-1.2-1.3-3.8-1.8-7.3-1.8-5.2 0-9.7 1-14 3l-7 3.5v74.2H172L171.6 12zM286 0c8.6 0 15.7 7 15.7 15.7 0 8.6-7 15.7-15.7 15.7-8.6 0-15.7-7-15.7-15.7S277.3 0 286 0z"/></svg>
       <h2>Build CRUD apps in fewer lines of code</h2>
-      <button name="btn" onclick="/guides/todomvc.html">Learn how to build a CRUD app</button>
+      <a href="/guides/todomvc.html" class="btn">Learn how to build a CRUD app</a>
     </div>
   </div>
 </div>
@@ -289,6 +306,7 @@ button {
     <h3>Model layer</h3>
     <p>Your components shouldn’t be concerned with how your data is fetched, cached, or sent to the server for updates.</p>
     <p>CanJS provides the right abstractions for your model code to be cleanly separated from your UI code.</p>
+    <img src="docs/images/animations/list-model-anim.svg" />
 
 ```js
 import { realtimeRestModel } from "can";
@@ -310,6 +328,7 @@ Todo.getList().then(todos => {// Get all the todos (GET)
     <h3>Promises in templates</h3>
     <p>CanJS’s [can-stache stache templating language] can directly read the state and values from Promises.</p>
     <p>No extra code to determine whether the Promise is still pending, has been resolved, or resulted in an error.</p>
+    <img src="docs/images/animations/promise-anim.svg" />
 
 ```handlebars
 {{#if(promise.isPending)}}
@@ -332,7 +351,7 @@ Todo.getList().then(todos => {// Get all the todos (GET)
     <p>After data is created, updated, or destroyed, CanJS automatically updates your lists for you.</p>
     <p>Filtering and sorting are preserved, so you don’t have to manually update your lists
 or fetch the same data again.</p>
-
+    <img src="docs/images/animations/list-realtime-anim.svg" />
 ```js
 import { realtimeRestModel } from "can";
 
@@ -373,7 +392,7 @@ Todo.getList({filter: {completed: true}}).then(todos => {// Get completed todos
   <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
   <span class="caption">Define your custom types, connect to a backend API, create a custom element, render a list of data, and make the list editable.
   Write CRUD apps like this in just a few lines of code.</span>
-  <button name="btn" onclick="/guides/todomvc.html">Learn how to build a CRUD app</button>
+  <a href="/guides/todomvc.html" class="btn">Learn how to build a CRUD app</a>
 </div>
 <div class="code-overview">
   <div class="code-proof">
@@ -443,6 +462,6 @@ Todo.getList({filter: {completed: true}}).then(todos => {// Get completed todos
 </div>
 <div class="gray-callout footer">
   <div class="footer-single-col">
-    <button name="btn" onclick="/guides/todomvc.html">Take the CRUD Tutorial</button>
+    <a href="/guides/todomvc.html" class="btn">Take the CRUD Tutorial</a>
   </div>
 </div>

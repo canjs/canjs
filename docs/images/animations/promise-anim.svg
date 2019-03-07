@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Keyshape -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 320 240" text-rendering="geometricPrecision" shape-rendering="geometricPrecision" style="white-space: pre;">
+    <style>
+@keyframes list_o { 0% { opacity: 0; } 24.6914% { opacity: 0; } 25.9259% { opacity: 1; } 49.3827% { opacity: 1; } 50.6173% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes loader_o { 0% { opacity: 1; } 24.6914% { opacity: 1; } 25.9259% { opacity: 0; } 49.3827% { opacity: 0; } 50.6173% { opacity: 1; } 74.0741% { opacity: 1; } 75.3086% { opacity: 0; } 98.7654% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes Oval-2_do { 0% { stroke-dashoffset: 92.46px; } 6.1728% { stroke-dashoffset: 0px; animation-timing-function: cubic-bezier(0,0,1,1); } 11.1111% { stroke-dashoffset: 0px; } 12.3457% { stroke-dashoffset: 92.46px; } 18.5185% { stroke-dashoffset: 0px; } 50.6173% { stroke-dashoffset: 92.46px; } 56.7901% { stroke-dashoffset: 0px; animation-timing-function: cubic-bezier(0,0,1,1); } 61.7284% { stroke-dashoffset: 0px; } 62.963% { stroke-dashoffset: 92.46px; } 69.1358% { stroke-dashoffset: 0px; } 100% { stroke-dashoffset: 0px; } }
+@keyframes Oval-3_do { 0% { stroke-dashoffset: 92.46px; } 6.1728% { stroke-dashoffset: 92.46px; } 12.3457% { stroke-dashoffset: 0px; } 13.5802% { stroke-dashoffset: 92.46px; } 18.5185% { stroke-dashoffset: 92.46px; } 24.6914% { stroke-dashoffset: 0px; } 25.9259% { stroke-dashoffset: 92.46px; } 55.5556% { stroke-dashoffset: 92.46px; } 56.7901% { stroke-dashoffset: 92.46px; } 62.963% { stroke-dashoffset: 0px; } 64.1975% { stroke-dashoffset: 92.46px; } 69.1358% { stroke-dashoffset: 92.46px; } 75.3086% { stroke-dashoffset: 0px; } 100% { stroke-dashoffset: 0px; } }
+@keyframes error-message_o { 0% { opacity: 0; } 74.0741% { opacity: 0; } 75.3086% { opacity: 1; } 98.7654% { opacity: 1; } 100% { opacity: 0; } }
+    </style>
+    <g id="list" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0" transform="translate(22.8658,31)" style="animation: 8.1s linear infinite both list_o;">
+        <g id="Group-2" transform="translate(1,-3)">
+            <g id="Group-13" transform="translate(248.993,0)">
+                <ellipse id="Oval-4" fill="#008AFA" rx="10.5" ry="10.5" transform="translate(0,0) translate(10.663,16.337)"/>
+                <text id="+" font-family="Roboto" font-size="27" font-weight="normal" fill="#FFFFFF">
+                        <tspan x="2.99137803" y="25.4228355">+</tspan>
+                    </text>
+            </g>
+            <rect id="Rectangle" stroke="#DDDDDD" width="241" height="25" transform="translate(0,0) translate(0,4.05456)"/>
+        </g>
+        <g id="Group-3" transform="translate(1,32)">
+            <rect id="Rectangle-2" fill="#B6B6B6" width="200" height="15" rx="7.5" transform="translate(0,0) translate(39,12.0546)"/>
+            <g id="Group-4" transform="translate(263.882,0.0545635) rotate(45)">
+                <ellipse id="Oval-5" stroke="#DDDDDD" rx="10.5" ry="10.5" transform="translate(0,0) translate(10.663,16.337)"/>
+                <text id="+-2" font-family="Roboto" font-size="27" font-weight="normal" fill="#DDDDDD">
+                        <tspan x="2.99137803" y="25.4228355">+</tspan>
+                    </text>
+            </g>
+            <rect id="Rectangle-3" stroke="#777777" stroke-width="2" width="23" height="23" transform="translate(0,0) translate(1,8.05456)"/>
+        </g>
+        <g id="Group-5" transform="translate(1,71)">
+            <rect id="Rectangle-4" fill="#B6B6B6" width="200" height="15" rx="7.5" transform="translate(0,0) translate(39,12.0546)"/>
+            <g id="Group-6" transform="translate(263.882,0.0545635) rotate(45)">
+                <ellipse id="Oval-6" stroke="#DDDDDD" rx="10.5" ry="10.5" transform="translate(0,0) translate(10.663,16.337)"/>
+                <text id="+-3" font-family="Roboto" font-size="27" font-weight="normal" fill="#DDDDDD">
+                        <tspan x="2.99137803" y="25.4228355">+</tspan>
+                    </text>
+            </g>
+            <rect id="Rectangle-5" stroke="#777777" stroke-width="2" width="23" height="23" transform="translate(0,0) translate(1,8.05456)"/>
+        </g>
+        <g id="Group-7" transform="translate(1,110)">
+            <rect id="Rectangle-6" fill="#B6B6B6" width="200" height="15" rx="7.5" transform="translate(0,0) translate(39,12.0546)"/>
+            <g id="Group-8" transform="translate(263.882,0.0545635) rotate(45)">
+                <ellipse id="Oval-7" stroke="#DDDDDD" rx="10.5" ry="10.5" transform="translate(0,0) translate(10.663,16.337)"/>
+                <text id="+-4" font-family="Roboto" font-size="27" font-weight="normal" fill="#DDDDDD">
+                        <tspan x="2.99137803" y="25.4228355">+</tspan>
+                    </text>
+            </g>
+            <rect id="Rectangle-7" stroke="#777777" stroke-width="2" width="23" height="23" transform="translate(0,0) translate(1,8.05456)"/>
+        </g>
+    </g>
+    <g id="loader" opacity="1" transform="translate(160,44.8077) translate(-66.6124,-14.8077)" style="animation: 8.1s linear infinite both loader_o;">
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(-3.3846,-3.3846)">
+            <g id="Group" stroke-width="6" transform="translate(18,18) rotate(180) translate(-15,-15)">
+                <ellipse id="Oval" stroke-opacity="1" stroke="#e6e6e6" rx="14.8077" ry="14.8077" transform="translate(0,0) translate(14.8077,14.8077)"/>
+                <ellipse id="Oval-2" stroke-opacity="1" stroke="#00fff2" rx="14.8077" ry="14.8077" stroke-dashoffset="92.459999999999994" stroke-dasharray="92.459999999999994" transform="translate(0,0) translate(14.8077,14.8077)" style="animation: 8.1s linear infinite both Oval-2_do;"/>
+                <ellipse id="Oval-3" stroke-opacity="1" stroke="#e9e9e9" rx="14.8077" ry="14.8077" stroke-dasharray="92.459999999999994" stroke-dashoffset="92.459999999999994" transform="translate(0,0) translate(14.8077,14.8077)" style="animation: 8.1s linear infinite both Oval-3_do;"/>
+            </g>
+        </g>
+        <text fill="#000000" font-size="21" font-family="Roboto" font-weight="400" letter-spacing="0em" word-spacing="0em" stroke="none" transform="translate(41.6154,21.9854)" style="line-height: 25.2px;">Loading...</text>
+    </g>
+    <g id="error-message" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0" transform="translate(29.1605,21.7222)" style="animation: 8.1s linear infinite both error-message_o;">
+        <rect id="Rectangle-8" stroke="#A80000" stroke-width="2" width="258" height="44" rx="10" transform="translate(-10,-10) translate(11,11)"/>
+        <text id="ERROR:-Valid-error-m" font-family="Roboto" font-size="14" font-weight="normal" fill="#A80000" transform="translate(-10,-10)">
+                <tspan x="35.2495117" y="39">ERROR: Valid error message here.</tspan>
+            </text>
+    </g>
+</svg>
