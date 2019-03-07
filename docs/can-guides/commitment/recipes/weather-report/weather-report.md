@@ -21,7 +21,7 @@ To use the widget:
 2. If the location name isn’t unique, __click__ on the intended location.
 3. See the 10-day forecast for your selected city.
 
-__Start this tutorial by cloning the following JS Bin__:
+__Start this tutorial by cloning the following CodePen__:
 
 <p class="codepen" data-height="265" data-theme-id="0" data-default-tab="css,result" data-user="cherifGsoul" data-slug-hash="YgpvZg" data-pen-title="Weather Report Guide (Simple) [Starter]">
   <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/YgpvZg/">
@@ -29,7 +29,7 @@ __Start this tutorial by cloning the following JS Bin__:
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
-This JS Bin has initial prototype HTML and CSS which is useful for
+This CodePen has initial prototype HTML and CSS which is useful for
 getting the application to look right.
 
 The following sections are broken down into:
@@ -43,7 +43,7 @@ The following sections are broken down into:
 
 ### The problem
 
-Get the basic setup for a CanJS app (in a JS Bin) setup by:
+Get the basic setup for a CanJS app (in a CodePen) setup by:
 
 1.  Creating a template that outputs the pre-constructed HTML.
 2.  Defining a `WeatherViewModel` constructor function.
@@ -86,10 +86,38 @@ Get the basic setup for a CanJS app (in a JS Bin) setup by:
 
 ### The solution
 
-Update the __HTML__ tab to wrap the template in a `script` tag:
+Update the __HTML__ tab to add a `weather-report` tag:
 
 ```html
-<script id="app-template" type="text/stache">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Weather Report</title>
+</head>
+
+<body>
+  <weather-report></weather-report>
+</body>
+</html>
+```
+@highlight 11,only
+
+Update the __JavaScript__ tab to:
+
+
+- Define a Component
+- Write the Component's `view` property
+- Add Component's ViewModel property
+
+```js
+import { Component } from "//unpkg.com/can@5/core.mjs";
+
+Component.extend({
+ tag: "weather-report",
+ view: `
   <div class="weather-widget">
     <div class="location-entry">
       <label for="location">Enter Your location:</label>
@@ -120,30 +148,13 @@ Update the __HTML__ tab to wrap the template in a `script` tag:
       </ul>
     </div>
   </div>
-</script>
-```
-@highlight 1,32,only
+ `,
+ ViewModel: {
 
-Update the __JavaScript__ tab to:
-
-- Define a ViewModel.
-- Create an instance of the ViewModel .
-- Load the `app-template` template.
-- Render the template with the ViewModel instance.
-- Insert the rendered result into the page.
-
-```js
-const WeatherViewModel = can.DefineMap.extend({
-
+ }
 });
-
-const vm = new WeatherViewModel();
-
-const template = can.stache.from("app-template");
-const fragment = template( vm );
-document.body.appendChild(fragment);
 ```
-@highlight 1-9
+@highlight 1-40
 
 ## Allow a user to enter a location
 
@@ -181,28 +192,17 @@ We want an `input` element to:
 
 ### The solution
 
-Update the __JavaScript__ tab to define a `location` property as a string.
+Update the __JavaScript__ tab to:
+1. define a `location` property as a string.
+2. Update `location` on the ViewModel when the input changes in the view.
+3. Show value of the ViewModel’s `location` property in the view.
 
 ```js
-const WeatherViewModel = can.DefineMap.extend({
-  location: "string"
-});
+import { Component } from "//unpkg.com/can@5/core.mjs";
 
-const vm = new WeatherViewModel();
-
-const template = can.stache.from("app-template");
-const fragment = template( vm );
-document.body.appendChild(fragment);
-```
-@highlight 2
-
-Update the template in the __HTML__ tab to:
-
-1. Update `location` on the ViewModel when the input changes.
-2. Show value of the ViewModel’s `location` property.
-
-```html
-<script id="app-template" type="text/stache">
+Component.extend({
+ tag: "weather-report",
+ view: `
   <div class="weather-widget">
     <div class="location-entry">
       <label for="location">Enter Your location:</label>
@@ -233,9 +233,13 @@ Update the template in the __HTML__ tab to:
       </ul>
     </div>
   </div>
-</script>
+ `,
+ ViewModel: {
+   location: "string"
+ }
+});
 ```
-@highlight 5,21,only
+@highlight 9,25,38,only
 
 ## Get and display the places for the user’s location name
 
@@ -254,6 +258,8 @@ on the page.
   the following defines an `excitedMessage` property that always has a `!` after the `message` property:
 
   ```js
+  import { Define } from "can";
+
   DefineMap.extend({
     message: "string",
     get excitedMessage() {
@@ -269,7 +275,7 @@ on the page.
   ```
   https://query.yahooapis.com/v1/public/yql?
     format=json&
-	q=select * from geo.places where text="Paris"
+  q=select * from geo.places where text="Paris"
   ```
 
   The list of matched places will be in the response data’s `data.query.results.place` property.
@@ -280,17 +286,18 @@ on the page.
 
   ```js
   fetch(url).then(function(response) {
-	  return response.json();
+    return response.json();
   }).then(function(data) {
 
   });
   ```
 
-- [can-util/js/param/param can.param] is able to convert an object into a
+- [can-param param] is able to convert an object into a
   query string format like:
 
   ```js
-  can.param({format: "json", q: "select"}) //-> "format=json&q=select"
+  import { param } from "can";
+  param({format: "json", q: "select"}) //-> "format=json&q=select"
   ```  
 
 - Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
@@ -302,37 +309,48 @@ on the page.
 
 ### The solution
 
-1. Show a “Loading places…” message while we wait on data.
-2. Once the places are resolved, list each place’s name, state, country and type.
+Update the __JavaScript__ tab to:
 
-Update the template in the __HTML__ tab to:
+1. Import `param` module
+2. Show a “Loading places…” message while we wait on data.
+3. Once the places are resolved, list each place’s name, state, country and type.
+4. Define a `placesPromise` property that will represent the loading places.
+5. If the user has typed in at least two characters, we fetch the matching places.
+6. If only a single place is returned, we still convert it into an array so the data
+   stays consistent.  
 
-```html
-<script id="app-template" type="text/stache">
+```js
+import { Component, param } from "//unpkg.com/can@5/core.mjs";
+
+const yqlURL = "//query.yahooapis.com/v1/public/yql?";
+
+Component.extend({
+ tag: "weather-report",
+ view: `
   <div class="weather-widget">
     <div class="location-entry">
       <label for="location">Enter Your location:</label>
       <input id="location" value:to="location" type="text" />
     </div>
 
-    {{#if(placesPromise.isPending)}}
+    {{# if(placesPromise.isPending) }}
       <p class="loading-message">
         Loading places…
       </p>
-    {{/if}}
+    {{/ if }}
 
-    {{#if(placesPromise.isResolved)}}
+    {{# if(placesPromise.isResolved) }}
       <div class="location-options">
         <label>Pick your place:</label>
         <ul>
           {{# for(place of placesPromise.value) }}
-            <li on:click="this.pickPlace(place)">
-              {{ place.name }}, {{ place.admin1.content }}, {{ place.country.code }} ({{ place.placeTypeName.content }})
+            <li>
+                {{ place.name }}, {{ place.admin1.content }}, {{ place.country.code }} ({{ place.placeTypeName.content }})
             </li>
           {{/ for }}
         </ul>
       </div>
-    {{/if}}
+    {{/ if }}
 
     <div class="forecast">
       <h1>10-day {{location}} Weather Forecast</h1>
@@ -346,51 +364,33 @@ Update the template in the __HTML__ tab to:
       </ul>
     </div>
   </div>
-</script>
-```
-@highlight 8,12,14,18,19,20,21,22,25,only
-
-Update the __JavaScript__ tab to:
-
-1. Define a `placesPromise` property that will represent the loading places.
-2. If the user has typed in at least two characters, we fetch the matching places.
-3. If only a single place is returned, we still convert it into an array so the data
-   stays consistent.  
-
-```js
-const yqlURL = "//query.yahooapis.com/v1/public/yql?";
-
-const WeatherViewModel = can.DefineMap.extend({
-  location: "string",
-  get placesPromise() {
-    if (this.location && this.location.length > 2) {
-      return fetch(
-        yqlURL +
-        can.param({
-          q: 'select * from geo.places where text="'+this.location+'"',
-          format: "json"
-        })
-      ).then(function(response) {
-        return response.json();
-      }).then(function(data) {
-        console.log(data);
-        if (Array.isArray(data.query.results.place)) {
-          return data.query.results.place;
-        } else {
-          return [data.query.results.place];
-        }
-      });
+ `,
+ ViewModel: {
+    location: "string",
+    get placesPromise() {
+      if (this.location && this.location.length > 2) {
+        return fetch(
+          yqlURL +
+          param({
+            q: 'select * from geo.places where text="'+this.location+'"',
+            format: "json"
+          })
+        ).then(function(response) {
+          return response.json();
+        }).then(function(data) {
+          console.log(data);
+          if (Array.isArray(data.query.results.place)) {
+            return data.query.results.place;
+          } else {
+            return [data.query.results.place];
+          }
+        });
+      }
     }
-  }
+ }
 });
-
-const vm = new WeatherViewModel();
-
-const template = can.stache.from("app-template");
-const fragment = template( vm );
-document.body.appendChild(fragment);
 ```
-@highlight 1,5-24,only
+@highlight 1,3,14,18,20,24-28,31,48-67,only
 
 ## Allow a user to select a place
 
@@ -422,58 +422,68 @@ When a user clicks on a place, we need to indicate their selection.
 
   ```js
   const MessageViewModel = can.DefineMap.extend({
-	  message: "string",
-	  metaData: "any"
+    message: "string",
+    metaData: "any"
   })
   ```
 
-- `can.DefineMap` can also have methods:
+- [can-define/map/map DefineMap] can also have methods:
 
   ```js
-  const MessageViewModel = can.DefineMap.extend({
-	  message: "string",
-	  metaData: "any",
-	  sayHi: function() {
-	    this.message = "Hello";
-	  }
+  import { DefineMap } from "can";
+
+  const MessageViewModel = DefineMap.extend({
+    message: "string",
+    metaData: "any",
+    sayHi: function() {
+      this.message = "Hello";
+    }
   });
   ```
 
 ### The solution
 
-Update the template in the __HTML__ tab to:
+Update the __JavaScript__ tab to:
 
 1. When a `<li>` is clicked on, call `pickPlace` with the corresponding `place`.
 2. When a `place` has been set, write out the forecast header.
+3.  Define a `place` property as taking any data type.
+4.  Define a `pickPlace` method that sets the place property.
 
-```html
-<script id="app-template" type="text/stache">
+```js
+import { Component, param } from "//unpkg.com/can@5/core.mjs";
+
+const yqlURL = "//query.yahooapis.com/v1/public/yql?";
+
+Component.extend({
+ tag: "weather-report",
+ view: `
   <div class="weather-widget">
     <div class="location-entry">
       <label for="location">Enter Your location:</label>
       <input id="location" value:to="location" type="text" />
     </div>
 
-    {{#if(placesPromise.isPending)}}
+    {{# if(placesPromise.isPending) }}
       <p class="loading-message">
         Loading places…
       </p>
-    {{/if}}
+    {{/ if }}
 
-    {{#if(placesPromise.isResolved)}}
+    {{# if(placesPromise.isResolved) }}
       <div class="location-options">
         <label>Pick your place:</label>
         <ul>
           {{# for(place of placesPromise.value) }}
             <li on:click="this.pickPlace(place)">
-              {{ place.name }}, {{ place.admin1.content }}, {{ place.country.code }} ({{ place.placeTypeName.content }})
+                {{ place.name }}, {{ place.admin1.content }}, {{ place.country.code }} ({{ place.placeTypeName.content }})
             </li>
           {{/ for }}
         </ul>
       </div>
-    {{/if}}
+    {{/ if }}
 
-    {{#if(place)}}
+    {{# if(place) }}
       <div class="forecast">
         <h1>10-day {{place.name}} Weather Forecast</h1>
         <ul>
@@ -485,55 +495,39 @@ Update the template in the __HTML__ tab to:
           </li>
         </ul>
       </div>
-    {{/if}}
+    {{/ if }}
   </div>
-</script>
-```
-@highlight 19,27,29,39,only
-
-Update the __JavaScript__ tab to:
-
-1.  Define a `place` property as taking any data type.
-2.  Define a `pickPlace` method that sets the place property.
-
-```js
-const yqlURL = "//query.yahooapis.com/v1/public/yql?";
-
-const WeatherViewModel = can.DefineMap.extend({
-  location: "string",
-  get placesPromise() {
-    if (this.location && this.location.length > 2) {
-	  return fetch(
-		  yqlURL+
-		  can.param({
-	        q: 'select * from geo.places where text="'+this.location+'"',
-	        format: "json"
-	      })
-	  ).then(function(response) {
-		  return response.json();
-	  }).then(function(data) {
-		  console.log(data);
+ `,
+ ViewModel: {
+    location: "string",
+    get placesPromise() {
+      if (this.location && this.location.length > 2) {
+        return fetch(
+          yqlURL +
+          param({
+            q: 'select * from geo.places where text="'+this.location+'"',
+            format: "json"
+          })
+        ).then(function(response) {
+          return response.json();
+        }).then(function(data) {
+          console.log(data);
           if (Array.isArray(data.query.results.place)) {
             return data.query.results.place;
           } else {
             return [data.query.results.place];
           }
-	  });
+        });
+      }
+    },
+    place: "any",
+    pickPlace: function(place) {
+      this.place = place;
     }
-  },
-  place: "any",
-  pickPlace: function(place) {
-    this.place = place;
-  }
+ }
 });
-
-const vm = new WeatherViewModel();
-
-const template = can.stache.from("app-template");
-const fragment = template( vm );
-document.body.appendChild(fragment);
 ```
-@highlight 25-28,only
+@highlight 25,31,35,45,70-73,only
 
 ## Get and display the forecast
 
@@ -557,130 +551,122 @@ selected place.
   ```
   https://query.yahooapis.com/v1/public/yql?
     format=json&
-	q=select * from weather.forecast where woeid=615702
+  q=select * from weather.forecast where woeid=615702
   ```
 
 - The stylesheet includes icons for classNames that match: `sunny`, `mostly-cloudy`, `scattered-thunderstorms`, etc.
 
 ### The solution
 
-Update the template in the __HTML__ tab to:
+Update the __JavaScript__ tab to:
 
 1. Display each forecast day’s details (date, text, high, and low).
 2. Use the `toClassName` method to convert the forecast’s `text` into a `className` value that
    will be matched by the stylesheet.
-
- ```html
- <script id="app-template" type="text/stache">
-   <div class="weather-widget">
-     <div class="location-entry">
-       <label for="location">Enter Your location:</label>
-       <input id="location" value:to="location" type="text" />
-     </div>
-
-     {{#if(placesPromise.isPending)}}
-       <p class="loading-message">
-         Loading places…
-       </p>
-     {{/if}}
-
-     {{#if(placesPromise.isResolved)}}
-       <div class="location-options">
-         <label>Pick your place:</label>
-         <ul>
-           {{# for(place of placesPromise.value) }}
-             <li on:click="this.pickPlace(place)">
-               {{ place.name }}, {{ place.admin1.content }}, {{ place.country.code }} ({{ place.placeTypeName.content }})
-             </li>
-           {{/ for }}
-         </ul>
-       </div>
-     {{/if}}
-
-     {{#if(place)}}
-       <div class="forecast">
-         <h1>10-day {{place.name}} Weather Forecast</h1>
-         <ul>
-           {{# for(forecast of forecastPromise.value) }}
-             <li>
-               <span class="date">{{ forecast.date }}</span>
-               <span class="description {{ toClassName(forecast.text) }}">{{ forecast.text }}</span>
-               <span class="high-temp">{{ forecast.high }}<sup>&deg;</sup></span>
-               <span class="low-temp">{{ forecast.low }}<sup>&deg;</sup></span>
-             </li>
-           {{/ for }}
-         </ul>
-       </div>
-     {{/if}}
-   </div>
- </script>
- ```
- @highlight 31,33,34,35,36,38,only
-
-Update the __JavaScript__ tab to:
-
-1. Define a `forecastPromise` property that gets a list of promises.
-2. Define a `toClassName` method that lowercases and hyphenates any text passed in.
+3. Define a `forecastPromise` property that gets a list of promises.
+4. Define a `toClassName` method that lowercases and hyphenates any text passed in.
 
 ```js
+import { Component, param } from "//unpkg.com/can@5/core.mjs";
+
 const yqlURL = "//query.yahooapis.com/v1/public/yql?";
 
-const WeatherViewModel = can.DefineMap.extend({
-  location: "string",
-  get placesPromise() {
-    if (this.location && this.location.length > 2) {
-	  return fetch(
-		  yqlURL+
-		  can.param({
-	        q: 'select * from geo.places where text="'+this.location+'"',
-	        format: "json"
-	      })
-	  ).then(function(response) {
-		  return response.json();
-	  }).then(function(data) {
-		  console.log(data);
+Component.extend({
+ tag: "weather-report",
+ view: `
+  <div class="weather-widget">
+    <div class="location-entry">
+      <label for="location">Enter Your location:</label>
+      <input id="location" value:to="location" type="text" />
+    </div>
+
+    {{# if(placesPromise.isPending) }}
+      <p class="loading-message">
+        Loading places…
+      </p>
+    {{/ if }}
+
+    {{# if(placesPromise.isResolved) }}
+      <div class="location-options">
+        <label>Pick your place:</label>
+        <ul>
+          {{# for(place of placesPromise.value) }}
+            <li on:click="this.pickPlace(place)">
+                {{ place.name }}, {{ place.admin1.content }}, {{ place.country.code }} ({{ place.placeTypeName.content }})
+            </li>
+          {{/ for }}
+        </ul>
+      </div>
+    {{/ if }}
+
+    {{# if(place) }}
+      <div class="forecast">
+        <h1>10-day {{place.name}} Weather Forecast</h1>
+        <ul>
+          {{# for(forecast of forecastPromise.value) }}
+            <li>
+              <span class="date">{{ forecast.date }}</span>
+              <span class="description {{ toClassName(forecast.text) }}">{{ forecast.text }}</span>
+              <span class="high-temp">{{ forecast.high }}<sup>&deg;</sup></span>
+              <span class="low-temp">{{ forecast.low }}<sup>&deg;</sup></span>
+            </li>
+          {{/ for }}
+        </ul>
+      </div>
+    {{/ if }}
+  </div>
+ `,
+ ViewModel: {
+    location: "string",
+    get placesPromise() {
+      if (this.location && this.location.length > 2) {
+        return fetch(
+          yqlURL +
+          param({
+            q: 'select * from geo.places where text="'+this.location+'"',
+            format: "json"
+          })
+        ).then(function(response) {
+          return response.json();
+        }).then(function(data) {
+          console.log(data);
           if (Array.isArray(data.query.results.place)) {
             return data.query.results.place;
           } else {
             return [data.query.results.place];
           }
-	  });
-    }
-  },
-  place: "any",
-  pickPlace: function(place) {
-    this.place = place;
-  },
-  get forecastPromise() {
-    if ( this.place ) {
-	  return fetch(
-  		  yqlURL+
-  		  can.param({
-  	        q: 'select * from weather.forecast where woeid='+this.place.woeid,
-  	        format: "json"
-  	      })
-  	  ).then(function(response) {
-  		  return response.json();
-  	  }).then(function(data) {
-        console.log("forecast data", data);
-        const forecast = data.query.results.channel.item.forecast;
+        });
+      }
+    },
+    place: "any",
+    pickPlace: function(place) {
+      this.place = place;
+    },
+    get forecastPromise() {
+      if ( this.place ) {
+        return fetch(
+            yqlURL+
+            param({
+                q: 'select * from weather.forecast where woeid='+this.place.woeid,
+                format: "json"
+              })
+          ).then(function(response) {
+            return response.json();
+          }).then(function(data) {
+            console.log("forecast data", data);
+            const forecast = data.query.results.channel.item.forecast;
 
-        return forecast;
-      });
-    }
+            return forecast;
+          });
+      }
   },
   toClassName: function(text) {
-	return text.toLowerCase().replace(/ /g, "-");
+    return text.toLowerCase().replace(/ /g, "-");
   }
+ }
 });
-
-const vm = new WeatherViewModel();
-
-const template = can.stache.from("app-template");
-const fragment = template( vm );
-document.body.appendChild(fragment);
 ```
-@highlight 29-49,only
+@highlight 37,39-42,76-96,only
 
 ## Hide the forecast if the user changes the entered location
 
@@ -691,16 +677,18 @@ other city is still visible.  Let’s hide it!
 
 ### Things to know
 
-- `DefineMap` [can-define.types.set setter]’s can be used to add behavior when a property is set like:
+- [can-define/map/map DefineMap] [can-define.types.set setter]’s can be used to add behavior when a property is set like:
 
   ```js
-  const MessageViewModel = can.DefineMap.extend({
+  import { DefineMap } from "can";
+
+  const MessageViewModel = DefineMap.extend({
     message: {
-	  type: "string",
-	  set: function() {
-	    this.metaData = null;
-	  }
-	},
+    type: "string",
+    set: function() {
+      this.metaData = null;
+    }
+  },
     metaData: "any",
   });
   ```
@@ -710,69 +698,111 @@ other city is still visible.  Let’s hide it!
 Update the __JavaScript__ tab to set the `place` property to null when the `location` changes.
 
 ```js
+import { Component, param } from "//unpkg.com/can@5/core.mjs";
+
 const yqlURL = "//query.yahooapis.com/v1/public/yql?";
 
-const WeatherViewModel = can.DefineMap.extend({
-  location: {
-    type: "string",
-    set: function() {
-      this.place = null;
-    }
-  },
-  get placesPromise() {
-    if (this.location && this.location.length > 2) {
-	  return fetch(
-		  yqlURL+
-		  can.param({
-	        q: 'select * from geo.places where text="'+this.location+'"',
-	        format: "json"
-	      })
-	  ).then(function(response) {
-		  return response.json();
-	  }).then(function(data) {
-		  console.log(data);
+Component.extend({
+ tag: "weather-report",
+ view: `
+  <div class="weather-widget">
+    <div class="location-entry">
+      <label for="location">Enter Your location:</label>
+      <input id="location" value:to="location" type="text" />
+    </div>
+
+    {{# if(placesPromise.isPending) }}
+      <p class="loading-message">
+        Loading places…
+      </p>
+    {{/ if }}
+
+    {{# if(placesPromise.isResolved) }}
+      <div class="location-options">
+        <label>Pick your place:</label>
+        <ul>
+          {{# for(place of placesPromise.value) }}
+            <li on:click="this.pickPlace(place)">
+                {{ place.name }}, {{ place.admin1.content }}, {{ place.country.code }} ({{ place.placeTypeName.content }})
+            </li>
+          {{/ for }}
+        </ul>
+      </div>
+    {{/ if }}
+
+    {{# if(place) }}
+      <div class="forecast">
+        <h1>10-day {{place.name}} Weather Forecast</h1>
+        <ul>
+          {{# for(forecast of forecastPromise.value) }}
+            <li>
+              <span class="date">{{ forecast.date }}</span>
+              <span class="description {{ toClassName(forecast.text) }}">{{ forecast.text }}</span>
+              <span class="high-temp">{{ forecast.high }}<sup>&deg;</sup></span>
+              <span class="low-temp">{{ forecast.low }}<sup>&deg;</sup></span>
+            </li>
+          {{/ for }}
+        </ul>
+      </div>
+    {{/ if }}
+  </div>
+ `,
+ ViewModel: {
+    location: {
+      type: "string",
+      set: function() {
+        this.place = null;
+      }
+    },
+    get placesPromise() {
+      if (this.location && this.location.length > 2) {
+        return fetch(
+          yqlURL +
+          param({
+            q: 'select * from geo.places where text="'+this.location+'"',
+            format: "json"
+          })
+        ).then(function(response) {
+          return response.json();
+        }).then(function(data) {
+          console.log(data);
           if (Array.isArray(data.query.results.place)) {
             return data.query.results.place;
           } else {
             return [data.query.results.place];
           }
-	  });
-    }
-  },
-  place: "any",
-  pickPlace: function(place) {
-    this.place = place;
-  },
-  get forecastPromise() {
-    if ( this.place ) {
-	  return fetch(
-  		  yqlURL+
-  		  can.param({
-  	        q: 'select * from weather.forecast where woeid='+this.place.woeid,
-  	        format: "json"
-  	      })
-  	  ).then(function(response) {
-  		  return response.json();
-  	  }).then(function(data) {
-        console.log("forecast data", data);
-        const forecast = data.query.results.channel.item.forecast;
+        });
+      }
+    },
+    place: "any",
+    pickPlace: function(place) {
+      this.place = place;
+    },
+    get forecastPromise() {
+      if ( this.place ) {
+        return fetch(
+            yqlURL+
+            param({
+                q: 'select * from weather.forecast where woeid='+this.place.woeid,
+                format: "json"
+              })
+          ).then(function(response) {
+            return response.json();
+          }).then(function(data) {
+            console.log("forecast data", data);
+            const forecast = data.query.results.channel.item.forecast;
 
-        return forecast;
-      });
-    }
+            return forecast;
+          });
+      }
   },
   toClassName: function(text) {
-	return text.toLowerCase().replace(/ /g, "-");
+    return text.toLowerCase().replace(/ /g, "-");
   }
+ }
 });
-
-const vm = new WeatherViewModel();
-
-const template = can.stache.from("app-template");
-const fragment = template( vm );
-document.body.appendChild(fragment);
 ```
-@highlight 4-9,only
+@highlight 51-56,only
 
 ## Skip selecting a place if only one place matches the entered location
 
@@ -783,11 +813,13 @@ user to select their place; instead, we should show the forecast immediately.
 
 ### Things to know
 
-- `can.DefineMap` [can-define.types.get getters] are passed their last set value.  This way, the
+- [can-define/map/map DefineMap] [can-define.types.get getters] are passed their last set value.  This way, the
   property can be derived from either the set value or other properties.
 
   ```js
-  const MessageVM = can.DefineMap.extend({
+  import { DefineMap } from "can";
+
+  const MessageVM = DefineMap.extend({
     username: "string",
     message: {
       get: function(lastSet) {
@@ -810,7 +842,9 @@ user to select their place; instead, we should show the forecast immediately.
 - Use [can-define.types.get asynchronous getters] to derive data from asynchronous sources.  For example:
 
   ```js
-  const MessageVM = can.DefineMap.extend({
+  import { DefineMap } from "can";
+
+  const MessageVM = DefineMap.extend({
     messageId: "string",
     message: {
       get: function(lastSet, resolve) {
@@ -825,38 +859,50 @@ user to select their place; instead, we should show the forecast immediately.
 
 ### The solution
 
-Update the template in the __HTML__ tab to use a `showPlacePicker` property to determine if we should show the `place` picker list.
+Update the __JavaScript__ tab to:
 
-```html
-<script id="app-template" type="text/stache">
+1. Use a `showPlacePicker` property to determine if we should show the `place` picker list.
+2. Define a `places` property that will have the places list returned by the `YQL` service.
+3. Define a `showPlacePicker` property that is true if there’s more than one place in `places` and
+   the `place` property hasn’t been set yet.
+4. Update the `place` property to default to the first item in `places` if there is only one item.
+
+```js
+import { Component, param } from "//unpkg.com/can@5/core.mjs";
+
+const yqlURL = "//query.yahooapis.com/v1/public/yql?";
+
+Component.extend({
+ tag: "weather-report",
+ view: `
   <div class="weather-widget">
     <div class="location-entry">
       <label for="location">Enter Your location:</label>
       <input id="location" value:to="location" type="text" />
     </div>
 
-    {{#if(placesPromise.isPending)}}
+    {{# if(placesPromise.isPending) }}
       <p class="loading-message">
         Loading places…
       </p>
-    {{/if}}
+    {{/ if }}
 
-    {{#if(placesPromise.isResolved)}}
-      {{#if(showPlacePicker)}}
+    {{# if(placesPromise.isResolved) }}
+      {{# if(showPlacePicker) }}
         <div class="location-options">
           <label>Pick your place:</label>
           <ul>
             {{# for(place of placesPromise.value) }}
               <li on:click="this.pickPlace(place)">
-                {{ place.name }}, {{ place.admin1.content }}, {{ place.country.code }} ({{ place.placeTypeName.content }})
+                  {{ place.name }}, {{ place.admin1.content }}, {{ place.country.code }} ({{ place.placeTypeName.content }})
               </li>
             {{/ for }}
           </ul>
         </div>
-      {{/if}}
-    {{/if}}
+      {{/ if }}
+    {{/ if }}
 
-    {{#if(place)}}
+    {{# if(place) }}
       <div class="forecast">
         <h1>10-day {{place.name}} Weather Forecast</h1>
         <ul>
@@ -870,108 +916,90 @@ Update the template in the __HTML__ tab to use a `showPlacePicker` property to d
           {{/ for }}
         </ul>
       </div>
-    {{/if}}
+    {{/ if }}
   </div>
-</script>
-```
-@highlight 15,26,only
-
-Update the __JavaScript__ tab to:
-
-1. Define a `places` property that will have the places list returned by the `YQL` service.
-2. Define a `showPlacePicker` property that is true if there’s more than one place in `places` and
-   the `place` property hasn’t been set yet.
-3. Update the `place` property to default to the first item in `places` if there is only one item.
-
-```js
-const yqlURL = "//query.yahooapis.com/v1/public/yql?";
-
-const WeatherViewModel = can.DefineMap.extend({
-  location: {
-    type: "string",
-    set: function() {
-      this.place = null;
-    }
-  },
-  get placesPromise() {
-    if (this.location && this.location.length > 2) {
-	  return fetch(
-		  yqlURL+
-		  can.param({
-	        q: 'select * from geo.places where text="'+this.location+'"',
-	        format: "json"
-	      })
-	  ).then(function(response) {
-		  return response.json();
-	  }).then(function(data) {
-		  console.log(data);
+ `,
+ ViewModel: {
+    location: {
+      type: "string",
+      set: function() {
+        this.place = null;
+      }
+    },
+    get placesPromise() {
+      if (this.location && this.location.length > 2) {
+        return fetch(
+          yqlURL +
+          param({
+            q: 'select * from geo.places where text="'+this.location+'"',
+            format: "json"
+          })
+        ).then(function(response) {
+          return response.json();
+        }).then(function(data) {
+          console.log(data);
           if (Array.isArray(data.query.results.place)) {
             return data.query.results.place;
           } else {
             return [data.query.results.place];
           }
-	  });
-    }
-  },
-  places: {
-    get: function(lastSet, resolve) {
-      if (this.placesPromise) {
-        this.placesPromise.then(resolve)
+        });
       }
-    }
-  },
-  get showPlacePicker() {
-    return !this.place && this.places && this.places.length > 1;
-  },
-  place: {
-    type: "any",
-    get: function(lastSet) {
-      if (lastSet) {
-        return lastSet;
-      } else {
-        if (this.places && this.places.length === 1) {
-          return this.places[0];
+    },
+    places: {
+      get: function(lastSet, resolve) {
+        if (this.placesPromise) {
+          this.placesPromise.then(resolve)
         }
       }
-    }
-  },
-  pickPlace: function(place) {
-    this.place = place;
-  },
-  get forecastPromise() {
-    if ( this.place ) {
-	  return fetch(
-  		  yqlURL+
-  		  can.param({
-  	        q: 'select * from weather.forecast where woeid='+this.place.woeid,
-  	        format: "json"
-  	      })
-  	  ).then(function(response) {
-  		  return response.json();
-  	  }).then(function(data) {
-        console.log("forecast data", data);
-        const forecast = data.query.results.channel.item.forecast;
+    },
+    get showPlacePicker() {
+      return !this.place && this.places && this.places.length > 1;
+    },
+    place: {
+      type: "any",
+      get: function(lastSet) {
+        if (lastSet) {
+          return lastSet;
+        } else {
+          if (this.places && this.places.length === 1) {
+            return this.places[0];
+          }
+        }
+      }
+    },
+    pickPlace: function(place) {
+      this.place = place;
+    },
+    get forecastPromise() {
+      if ( this.place ) {
+        return fetch(
+            yqlURL+
+            param({
+                q: 'select * from weather.forecast where woeid='+this.place.woeid,
+                format: "json"
+              })
+          ).then(function(response) {
+            return response.json();
+          }).then(function(data) {
+            console.log("forecast data", data);
+            const forecast = data.query.results.channel.item.forecast;
 
-        return forecast;
-      });
-    }
+            return forecast;
+          });
+      }
   },
   toClassName: function(text) {
-		return text.toLowerCase().replace(/ /g, "-");
+    return text.toLowerCase().replace(/ /g, "-");
   }
+ }
 });
-
-const vm = new WeatherViewModel();
-
-const template = can.stache.from("app-template");
-const fragment = template( vm );
-document.body.appendChild(fragment);
 ```
-@highlight 30-51,only
+@highlight 21,32,79-100,only
 
 ## Result
 
-When finished, you should see something like the following JS Bin:
+When finished, you should see something like the following CodePen:
 
 <p class="codepen" data-height="265" data-theme-id="0" data-default-tab="css,result" data-user="cherifGsoul" data-slug-hash="OqbZaG" data-pen-title="Weather Report Guide (Simple) [Finished]">
   <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/OqbZaG/">
