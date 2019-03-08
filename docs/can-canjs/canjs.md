@@ -74,6 +74,8 @@ code {
   max-height: 400px;
   overflow: hidden;
   width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
 }
 .hero-section .left-col {
   padding: 30px 0 0 60px;
@@ -96,7 +98,7 @@ code {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 60px 90px;
+  margin: 60px;
 }
 .single-col-wrapper .btn {
   margin-top: 45px;
@@ -135,11 +137,21 @@ code {
 .social-two-col .right-col {
   display: flex;
 }
-.social-two-col .right-col img {
+.social-two-col p {
+  padding-bottom: 0;
+}
+.social-two-col .right-col {
+  display: flex;
+}
+.social-two-col .right-col a {
   margin-right: 30px;
   max-width: 50%;
 }
-.social-two-col .right-col img:last-of-type {
+.social-two-col img {
+  width: 100%;
+  height: 100%;
+}
+.social-two-col .right-col a:last-of-type {
   margin-right: 0;
 }
 .code-overview {
@@ -190,7 +202,7 @@ code {
 }
 .two-col-wrapper {
   display: flex;
-  margin: 90px;
+  margin: 60px;
 }
 .two-col-wrapper div {
   width: 50%;
@@ -260,6 +272,9 @@ pre[class*=language-].line-numbers.line-numbers code {
   }
   .social .social-two-col {
     flex-wrap: wrap;
+  }
+  .social-two-col p {
+    padding-bottom: 15px;
   }
   .social .social-two-col .left-col {
     flex-wrap: wrap;
@@ -340,7 +355,7 @@ or fetch the same data again.</p>
       <p>CanJS is backed by Bitovi, a company built on using and publishing open source software. Our community is here to help you get started and answer your questions. <a href="https://bitovi.com/community/slack">Join us on Slack</a> or <a href="https://forums.bitovi.com/">our Discourse forums</a>.</p>
     </div>
     <div class="right-col">
-      <a href="https://bitovi.com/community/slack"><img alt="Slack" src="../docs/images/logos/Slack RGB.svg" /></a>
+      <a href="https://bitovi.com/community/slack"><img alt="Slack" src="../docs/images/logos/Slack_RGB.svg" /></a>
       <a href="https://forums.bitovi.com/"><img alt="Discourse" src="../docs/images/logos/Discourse_icon.svg" /></a>
     </div>
   </div>
