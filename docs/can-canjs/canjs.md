@@ -69,16 +69,21 @@ code {
   margin-bottom: 0;
 }
 .hero-section {
-  background-image: url('docs/images/checkbox-placeholder.png');
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: 100% 100%;
-  max-width: 1200px;
+  display: flex;
+  align-items: center;
+  max-height: 400px;
+  overflow: hidden;
   width: 100%;
 }
 .hero-section .left-col {
-  padding: 90px 0 0 60px;
-  max-height: 420px;
+  padding: 30px 0 0 60px;
+}
+.hero-section .right-col {
+  flex: 1;
+}
+.hero-section .right-col img {
+  margin-top: 30px;
+  max-height: 370px;
 }
 .hero-section .btn {
   margin: 30px 0 45px;
@@ -92,7 +97,6 @@ code {
   flex-direction: column;
   justify-content: center;
   margin: 60px 90px;
-  max-width: 1200px;
 }
 .single-col-wrapper .btn {
   margin-top: 45px;
@@ -101,7 +105,6 @@ code {
   display: flex;
   justify-content: space-between;
   margin: 30px 60px 60px;
-  max-width: 1200px;
 }
 .three-col-wrapper .col-container {
   display: flex;
@@ -123,7 +126,6 @@ code {
   display: flex;
   align-items: center;
   flex-direction: row;
-  max-width: 1200px;
 }
 .social-two-col .left-col {
   display: flex;
@@ -144,7 +146,6 @@ code {
   display: flex;
   flex-direction: column;
   margin: 90px 90px 60px;
-  max-width: 1200px;
 }
 .code-overview h3 {
   font-weight: 600;
@@ -172,7 +173,6 @@ code {
 .clients-single-col {
   display: flex;
   flex-direction: column;
-  max-width: 1200px;
   width: 100%;
 }
 .clients h2 {
@@ -208,8 +208,12 @@ code {
 .footer-single-col {
   display: flex;
   flex-direction: column;
-  max-width: 1200px;
   width: 100%;
+}
+img.package {
+    float: right;
+    height: 60px;
+    margin-left: 15px;
 }
 .line-numbers-rows {
   display: none;
@@ -288,7 +292,11 @@ pre[class*=language-].line-numbers.line-numbers code {
   }
   .hero-section .left-col {
     width: 100%;
+    padding: 30px 30px 0 30px;
     height: unset;
+  }
+  .hero-section .right-col {
+    display: none;
   }
 }
 </style>
@@ -299,6 +307,9 @@ pre[class*=language-].line-numbers.line-numbers code {
       <h2>Build CRUD apps in fewer lines of code</h2>
       <a href="/guides/todomvc.html" class="btn">Learn how to build a CRUD app</a>
     </div>
+    <div class="right-col">
+      <img src="docs/images/hero-image.svg" />
+    </div>
   </div>
 </div>
 <div class="three-col-wrapper">
@@ -306,67 +317,20 @@ pre[class*=language-].line-numbers.line-numbers code {
     <h3>Model layer</h3>
     <p>Your components shouldn’t be concerned with how your data is fetched, cached, or sent to the server for updates.</p>
     <p>CanJS provides the right abstractions for your model code to be cleanly separated from your UI code.</p>
-    <img src="docs/images/animations/list-model-anim.svg" />
-
-```js
-import { realtimeRestModel } from "can";
-
-const Todo = realtimeRestModel("/api/todos/{id}").Map;
-Todo.getList().then(todos => {// Get all the todos (GET)
-
-  const todo = new Todo({name: "Learn CanJS"});// Create a new todo
-  todo.save();// Create it on the server (POST)
-
-  todo.completed = true;// Get & set properties
-  todo.save();// Save changes (PUT)
-
-  todos[0].destroy();// Delete the todo (DELETE)
-});
-```
+    <!-- <img src="docs/images/landing/real-time-step1.jpg" /> -->
   </div>
   <div class="col-container">
     <h3>Promises in templates</h3>
     <p>CanJS’s [can-stache stache templating language] can directly read the state and values from Promises.</p>
     <p>No extra code to determine whether the Promise is still pending, has been resolved, or resulted in an error.</p>
-    <img src="docs/images/animations/promise-anim.svg" />
-
-```handlebars
-{{#if(promise.isPending)}}
-	Loading…
-{{/if}}
-
-{{#if(promise.isRejected)}}
-	Error:
-	{{promise.reason.message}}
-{{/if}}
-
-{{#if(promise.isResolved)}}
-	Value:
-	{{promise.value}}
-{{/if}}
-```
+    <!-- <img src="docs/images/landing/promises.jpg" /> -->
   </div>
   <div class="col-container">
     <h3>Real-time list updating</h3>
     <p>After data is created, updated, or destroyed, CanJS automatically updates your lists for you.</p>
     <p>Filtering and sorting are preserved, so you don’t have to manually update your lists
 or fetch the same data again.</p>
-    <img src="docs/images/animations/list-realtime-anim.svg" />
-```js
-import { realtimeRestModel } from "can";
-
-const Todo = realtimeRestModel("/api/todos/{id}").Map;
-
-Todo.getList({filter: {completed: true}}).then(todos => {// Get completed todos
-
-  const newTodo = new Todo({completed: false});// Create a not-completed todo
-
-  newTodo.completed = true;// Set it to completed
-
-  // todos now contains newTodo because
-  // it matches {filter: {completed: true}}
-});
-```
+    <!-- <img src="docs/images/landing/model-layer.jpg" /> -->
   </div>
 </div>
 <div class="gray-callout social">
@@ -452,6 +416,7 @@ Todo.getList({filter: {completed: true}}).then(todos => {// Get completed todos
     <h3>Use DevTools to debug your app</h3>
     <p>Use the CanJS DevTools to edit your app’s state at runtime, visualize the dependency graphs between elements and state, and debug changes to observables.</p>
     <h3>Small bundle size</h3>
+    <img class="package" src="docs/images/box-1299001_640.png" />
     <p>At 72 KB gzipped, CanJS provides all the tools you need at a small size.</p>
   </div>
   <div class="">
