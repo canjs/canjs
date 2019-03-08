@@ -337,11 +337,11 @@ or fetch the same data again.</p>
   <h2>Our community has your back</h2>
   <div class="social-two-col">
     <div class="left-col">
-      <p>CanJS is backed by Bitovi, a company built on using and publishing open source software. Our community is here to help you get started and answer your questions. Join us on Slack or our Discourse forums.</p>
+      <p>CanJS is backed by Bitovi, a company built on using and publishing open source software. Our community is here to help you get started and answer your questions. <a href="https://bitovi.com/community/slack">Join us on Slack</a> or <a href="https://forums.bitovi.com/">our Discourse forums</a>.</p>
     </div>
     <div class="right-col">
-      <img alt="Slack" src="../docs/images/logos/Slack RGB.svg" />
-      <img alt="Discourse" src="../docs/images/logos/Discourse_icon.svg" />
+      <a href="https://bitovi.com/community/slack"><img alt="Slack" src="../docs/images/logos/Slack RGB.svg" /></a>
+      <a href="https://forums.bitovi.com/"><img alt="Discourse" src="../docs/images/logos/Discourse_icon.svg" /></a>
     </div>
   </div>
 </div>
