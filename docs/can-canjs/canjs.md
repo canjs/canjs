@@ -62,7 +62,7 @@ Component.extend({
 ```
 
 Yes, you do __not__ need a build system to get started with CanJS! Copy the code above into your favorite HTML page or
-[play with it in a CodePen](https://codepen.io/justinbmeyer/pen/VdJVbe?editors=1010).
+[play with it in a CodePen](https://codepen.io/bitovi/pen/WmObmK?editors=1000).
 
 This page has 3 main parts.
 
