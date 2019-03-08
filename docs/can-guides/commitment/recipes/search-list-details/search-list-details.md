@@ -7,7 +7,11 @@
 
 The final widget looks like:
 
-<p data-height="426" data-theme-id="dark" data-slug-hash="yxJwwJ" data-default-tab="result" data-user="bitovi" data-embed-version="2" data-pen-title="CanJS 5.0 - Search / List / Details - Final" class="codepen">See the Pen <a href="https://codepen.io/bitovi/pen/yxJwwJ/">CanJS 5.0 - Search / List / Details - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p class="codepen" data-height="426" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="yxJwwJ" style="height: 426px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Search / List / Details - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/yxJwwJ/">
+  Search / List / Details - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 The following sections are broken down into the following parts:
 
@@ -20,7 +24,7 @@ The following sections are broken down into the following parts:
 
 ### The problem
 
-In this section, we will fork [this CodePen](https://codepen.io/bitovi/pen/aaNrwO) that contains some starting code that we will modify to have a Search, List, Details flow with lazy-loaded routes.
+In this section, we will fork [this CodePen](https://codepen.io/bitovi/pen/aaNrwO?editors=1000) that contains some starting code that we will modify to have a Search, List, Details flow with lazy-loaded routes.
 
 ### What you need to know
 
@@ -36,7 +40,11 @@ __START THIS TUTORIAL BY CLONING THE FOLLOWING CodePen__:
 
 > Click the `EDIT ON CODEPEN` button.  The CodePen will open in a new window. In that new window,  click `FORK`.
 
-<p data-height="316" data-theme-id="dark" data-slug-hash="aaNrwO" data-default-tab="js,result" data-user="bitovi" data-embed-version="2" data-pen-title="CanJS 5.0 - Search / List / Details - Setup" class="codepen">See the Pen <a href="https://codepen.io/bitovi/pen/aaNrwO/">CanJS 5.0 - Search / List / Details - Setup</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p class="codepen" data-height="316" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="aaNrwO" style="height: 316px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Search / List / Details - Setup">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/aaNrwO/">
+  Search / List / Details - Setup</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 ## Configure routing ##
 
@@ -240,11 +248,14 @@ Update the __JavaScript__ tab to:
 @sourceref ./4-bind-properties.js
 @highlight 1,37-47,58
 
-<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
-
 ## Result
 
 When complete, you should have a working Search, List, Details flow like the following CodePen:
 
+<p class="codepen" data-height="426" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="yxJwwJ" style="height: 426px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Search / List / Details - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/yxJwwJ/">
+  Search / List / Details - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
-<p data-height="426" data-theme-id="dark" data-slug-hash="yxJwwJ" data-default-tab="result" data-user="bitovi" data-embed-version="2" data-pen-title="CanJS 5.0 - Search / List / Details - Final" class="codepen">See the Pen <a href="https://codepen.io/bitovi/pen/yxJwwJ/">CanJS 5.0 - Search / List / Details - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
