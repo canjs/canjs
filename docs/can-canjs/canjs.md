@@ -17,11 +17,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 h2 {
   font-size: 32px;
+  line-height: 1;
+  margin-bottom: 15px;
 }
 h3 {
   font-size: 28px;
-  margin-bottom: 30px;
+  line-height: 1;
   color: #282C33;
+  margin-bottom: 10px;
 }
 code {
   border-top: 20px solid #327ABB;
@@ -106,15 +109,31 @@ code {
 .three-col-wrapper {
   display: flex;
   justify-content: space-between;
-  margin: 30px 60px 60px;
+  margin: 60px 30px 60px;
 }
 .three-col-wrapper .col-container {
   display: flex;
   flex-direction: column;
-  width: 30%;
+  padding: 30px 30px 0 30px;
+  border-radius: 10px;
+}
+.three-col-wrapper .col-container h3 {
+  border-bottom: 1px dotted #0288C9;
+  transition: all .3s ease-in-out;
 }
 .three-col-wrapper .col-container:last-of-type {
   margin-right: 0;
+}
+.three-col-wrapper a.col-container {
+    border: 3px solid transparent;
+    transition: all .3s ease-in-out;
+}
+.three-col-wrapper a.col-container:hover {
+    text-decoration: none;
+    border: 3px solid #0288C9;
+}
+.three-col-wrapper a.col-container:hover h3 {
+  border-bottom: 1px solid #0288C9;
 }
 .social {
   display: flex;
@@ -131,7 +150,7 @@ code {
 }
 .social-two-col .left-col {
   display: flex;
-  width: 65%;
+  flex-direction: column;
   margin-right: 60px;
 }
 .social-two-col .right-col {
@@ -142,40 +161,46 @@ code {
 }
 .social-two-col .right-col {
   display: flex;
+  flex-direction: row;
 }
 .social-two-col .right-col a {
+  display: block;
   margin-right: 30px;
-  max-width: 50%;
-}
-.social-two-col img {
-  width: 100%;
-  height: 100%;
 }
 .social-two-col .right-col a:last-of-type {
   margin-right: 0;
 }
+.social-two-col img {
+  height: 100%;
+  max-height: 60px;
+  min-height: 50px;
+}
 .code-overview {
   display: flex;
   flex-direction: column;
-  margin: 90px 90px 60px;
+  margin: 30px 30px 60px;
 }
 .code-overview h3 {
   font-weight: 600;
-  line-height: 1.25;
 }
 .code-proof {
   display: flex;
+  flex-wrap: wrap;
+  margin-top: 60px;
 }
 .code-proof .left-col {
+  display: flex;
+  flex-direction: column;
+  flex: 2;
   margin-right: 60px;
-  width: 50%;
 }
-.code-proof .right-col img {
-  max-width: 100%;
-  margin-bottom: 60px;
+.code-proof .right-col {
+  display: flex;
+  flex: 3;
+  min-width: 67%;
 }
-.code-proof .right-col.last-item img {
-  margin-bottom: 0;
+.code-toolbar {
+  width: 100%;
 }
 .clients {
   display: flex;
@@ -198,7 +223,7 @@ code {
 }
 .client-logos img {
   height: 32px;
-  margin: 15px;
+  margin: 10px;
 }
 .two-col-wrapper {
   display: flex;
@@ -233,6 +258,16 @@ img.package {
 pre[class*=language-].line-numbers.line-numbers code {
   padding-left: .5em;
 }
+@@media (max-width: 1359px) {
+  .code-proof .left-col {
+    width: 100%;
+    flex: none;
+  }
+  .code-proof .right-col {
+    width: 100%;
+    flex: none;
+  }
+}
 @@media (max-width: 1229px) {
   .hero-section {
     background-position: 110%;
@@ -245,8 +280,16 @@ pre[class*=language-].line-numbers.line-numbers code {
     margin-right: 30px;
     margin-left: 30px;
   }
-  .code-proof .left-col {
-    width: 40%;
+  .social-two-col .right-col {
+    flex-direction: column;
+  }
+  .social-two-col .right-col a {
+    margin-right: 0;
+    margin-bottom: 30px;
+  }
+  .social-two-col .right-col a:last-of-type {
+    margin-right: 0;
+    margin-bottom: 0;
   }
 }
 @@media (max-width: 1099px) {
@@ -283,8 +326,18 @@ pre[class*=language-].line-numbers.line-numbers code {
   }
   .social .social-two-col .right-col {
     justify-content: space-between;
+    align-items: baseline;
+    flex-direction: row;
     width: 100%;
-    max-height: 70px;
+    margin-top: 30px;
+  }
+  .social-two-col .right-col a {
+    margin-right: 30px;
+    margin-bottom: 30px;
+  }
+  .social-two-col .right-col a:last-of-type {
+    margin-right: 0;
+    margin-bottom: 0;
   }
   .code-proof {
     flex-wrap: wrap;
@@ -313,6 +366,17 @@ pre[class*=language-].line-numbers.line-numbers code {
   .hero-section .right-col {
     display: none;
   }
+  .social {
+    padding-right: 30px;
+    padding-left: 30px;
+  }
+  .social-two-col .right-col {
+    flex-wrap: wrap;
+  }
+  .caption {
+    margin-right: 15px;
+    margin-left: 15px;
+  }
 }
 </style>
 <div class="gray-callout max-container">
@@ -328,42 +392,26 @@ pre[class*=language-].line-numbers.line-numbers code {
   </div>
 </div>
 <div class="three-col-wrapper">
-  <div class="col-container">
-
-### Model layer
-
-Your components shouldn’t be concerned with how your data is fetched, cached, or sent to the server for updates.
-
-CanJS provides the right abstractions for your model code to be cleanly separated from your UI code.
-
-<!-- <img src="docs/images/landing/real-time-step1.jpg" /> -->
-  </div>
-  <div class="col-container">
-
-### Promises in templates
-
-CanJS’s [can-stache stache templating language] can directly read the state and values from Promises.
-
-No extra code to determine whether the Promise is still pending, has been resolved, or resulted in an error.
-
-<!-- <img src="docs/images/landing/promises.jpg" /> -->
-  </div>
-  <div class="col-container">
-
-### Real-time list updating
-
-After data is created, updated, or destroyed, CanJS automatically updates your lists for you.
-
-Filtering and sorting are preserved, so you don’t have to manually update your lists
-or fetch the same data again.
-
-<!-- <img src="docs/images/landing/model-layer.jpg" /> -->
-  </div>
+  <a href="#" class="col-container">
+    <h3>Model layer</h3>
+    <p>Your components shouldn’t be concerned with how your data is fetched, cached, or sent to the server for updates.</p>
+    <p>CanJS provides the right abstractions for your model code to be cleanly separated from your UI code.</p>
+  </a>
+  <a href="#" class="col-container">
+    <h3>Promises in templates</h3>
+    <p>CanJS’s can-stache stache templating language can directly read the state and values from Promises.</p>
+    <p>No extra code to determine whether the Promise is still pending, has been resolved, or resulted in an error.</p>
+  </a>
+  <a href="#" class="col-container">
+    <h3>Real-time list updating</h3>
+    <p>After data is created, updated, or destroyed, CanJS automatically updates your lists for you.</p>
+    <p>Filtering and sorting are preserved, so you don’t have to manually update your lists or fetch the same data again.</p>
+  </a>
 </div>
 <div class="gray-callout social">
-  <h2>Our community has your back</h2>
   <div class="social-two-col">
     <div class="left-col">
+      <h2>Our community has your back</h2>
       <p>CanJS is backed by Bitovi, a company built on using and publishing open source software. Our community is here to help you get started and answer your questions. <a href="https://bitovi.com/community/slack">Join us on Slack</a> or <a href="https://forums.bitovi.com/">our Discourse forums</a>.</p>
     </div>
     <div class="right-col">
@@ -475,12 +523,12 @@ Todo.getList({filter: {completed: true}}).then(todos => {// Get completed todos
   <div class="clients-single-col">
     <h2>Trusted by Enterprise Companies</h2>
     <div class="client-logos">
-      <img alt="Apple" src="../docs/images/logos/apple.svg" />
-      <img alt="Bitovi" src="../docs/images/logos/bitovi.svg" />
       <img alt="Chase" src="../docs/images/logos/chase.svg" />
+      <img alt="Bitovi" src="../docs/images/logos/bitovi.svg" />
+      <img alt="Apple" src="../docs/images/logos/apple.svg" />
       <img alt="Delta" src="../docs/images/logos/delta.svg" />
-      <img alt="FedEx" src="../docs/images/logos/fedex.svg" />
       <img alt="HP" src="../docs/images/logos/hp.svg" />
+      <img alt="FedEx" src="../docs/images/logos/fedex.svg" />
       <img alt="Tucows" src="../docs/images/logos/tucows.svg" />
     </div>
   </div>
