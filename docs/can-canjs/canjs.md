@@ -30,6 +30,9 @@ code {
   border-top: 20px solid #327ABB;
   border-radius: 6px 6px 0 0;
 }
+p:last-of-type {
+  margin-bottom: 0;
+}
 .description p {
   font-size: 18px;
   padding-bottom: 15px;
@@ -101,7 +104,7 @@ code {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 60px;
+  margin: 60px 30px;
 }
 .single-col-wrapper .btn {
   margin-top: 45px;
@@ -114,7 +117,7 @@ code {
 .three-col-wrapper .col-container {
   display: flex;
   flex-direction: column;
-  padding: 30px 30px 0 30px;
+  padding: 15px 15px 0;
   border-radius: 10px;
 }
 .three-col-wrapper .col-container h3 {
@@ -123,6 +126,7 @@ code {
 }
 .three-col-wrapper .col-container:last-of-type {
   margin-right: 0;
+  margin-bottom: 0;
 }
 .three-col-wrapper a.col-container {
     border: 3px solid transparent;
@@ -186,7 +190,10 @@ code {
 .code-proof {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 60px;
+  margin-bottom: 30px;
+}
+.code-proof:last-of-type {
+  margin-bottom: 0;
 }
 .code-proof .left-col {
   display: flex;
@@ -240,7 +247,7 @@ code {
   margin-right: 0;
 }
 .footer .btn {
-  margin: 60px auto 45px;
+  margin: 45px auto;
 }
 .footer-single-col {
   display: flex;
@@ -276,9 +283,13 @@ pre[class*=language-].line-numbers.line-numbers code {
     width: 40%;
     padding-top: 60px;
   }
-  .single-col-wrapper, .three-col-wrapper, .code-overview, .two-col-wrapper {
+  .single-col-wrapper .code-overview, .two-col-wrapper {
     margin-right: 30px;
     margin-left: 30px;
+  }
+  .three-col-wrapper {
+    margin-right: 10px;
+    margin-left: 10px;
   }
   .social-two-col .right-col {
     flex-direction: column;
@@ -295,6 +306,7 @@ pre[class*=language-].line-numbers.line-numbers code {
 @@media (max-width: 1099px) {
   .three-col-wrapper {
     flex-wrap: wrap;
+    margin-bottom: 30px;
   }
   .three-col-wrapper .col-container {
     width: 100%
