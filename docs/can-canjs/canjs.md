@@ -329,23 +329,35 @@ pre[class*=language-].line-numbers.line-numbers code {
 </div>
 <div class="three-col-wrapper">
   <div class="col-container">
-    <h3>Model layer</h3>
-    <p>Your components shouldn’t be concerned with how your data is fetched, cached, or sent to the server for updates.</p>
-    <p>CanJS provides the right abstractions for your model code to be cleanly separated from your UI code.</p>
-    <!-- <img src="docs/images/landing/real-time-step1.jpg" /> -->
+
+### Model layer
+
+Your components shouldn’t be concerned with how your data is fetched, cached, or sent to the server for updates.
+
+CanJS provides the right abstractions for your model code to be cleanly separated from your UI code.
+
+<!-- <img src="docs/images/landing/real-time-step1.jpg" /> -->
   </div>
   <div class="col-container">
-    <h3>Promises in templates</h3>
-    <p>CanJS’s [can-stache stache templating language] can directly read the state and values from Promises.</p>
-    <p>No extra code to determine whether the Promise is still pending, has been resolved, or resulted in an error.</p>
-    <!-- <img src="docs/images/landing/promises.jpg" /> -->
+
+### Promises in templates
+
+CanJS’s [can-stache stache templating language] can directly read the state and values from Promises.
+
+No extra code to determine whether the Promise is still pending, has been resolved, or resulted in an error.
+
+<!-- <img src="docs/images/landing/promises.jpg" /> -->
   </div>
   <div class="col-container">
-    <h3>Real-time list updating</h3>
-    <p>After data is created, updated, or destroyed, CanJS automatically updates your lists for you.</p>
-    <p>Filtering and sorting are preserved, so you don’t have to manually update your lists
-or fetch the same data again.</p>
-    <!-- <img src="docs/images/landing/model-layer.jpg" /> -->
+
+### Real-time list updating
+
+After data is created, updated, or destroyed, CanJS automatically updates your lists for you.
+
+Filtering and sorting are preserved, so you don’t have to manually update your lists
+or fetch the same data again.
+
+<!-- <img src="docs/images/landing/model-layer.jpg" /> -->
   </div>
 </div>
 <div class="gray-callout social">
@@ -361,56 +373,103 @@ or fetch the same data again.</p>
   </div>
 </div>
 <div class="single-col-wrapper">
-  <h2>Get started with just a few lines of code</h2>
-  <p>If you’re like us, you build interactive web apps where users need to <strong>C</strong>reate, <strong>R</strong>ead, <strong>U</strong>pdate, and <strong>D</strong>elete data.</p>
-  <p>CanJS provides all the tools you need to fetch your data, render your user interface, and make it interactive, in fewer lines of code than other JavaScript frameworks.</p>
-  <p class="codepen" data-height="512" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 512px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
+
+## Get started with just a few lines of code
+
+Below is an entire CanJS app. It uses [can-realtime-rest-model realtimeRestModel] to connect to a backend API, then [can-component Component] is used to define a custom element. The component is inserted anywhere the custom element is used in HTML.
+
+  <p class="codepen" data-height="512" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 512px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
   <span>See the Pen <a href="https://codepen.io/bitovi/pen/omqyMw/">
   CanJS 5 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span></p>
   <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
-  <span class="caption">Define your custom types, connect to a backend API, create a custom element, render a list of data, and make the list editable.
-  Write CRUD apps like this in just a few lines of code.</span>
+  <span class="caption">Type in a new to-do and click “Add” to see it appear in the list. Notice that new to-dos are inserted in alphabetical order, without any code that explicitly inserts the new one in the right place!</span>
   <a href="/guides/todomvc.html" class="btn">Learn how to build a CRUD app</a>
 </div>
 <div class="code-overview">
   <div class="code-proof">
     <div class="left-col">
-      <h3>One-way and two-way binding</h3>
-      <p>Your app’s model data is stored in your custom data types. CanJS’s one-way and two-way binding syntax let you bind directly to your model data. Read directly from it and write directly to it without additional helper functions.</p>
-      <p>Additionally, the binding syntax makes it easy to pass data down to child components, extract data from child components, and two-way bind to form elements. Listening to any DOM (or custom) event is easy too. The syntax is clear and succinct, which means it’s easy to read and write.</p>
-    </div>
-    <div class="right-col">
-      <img src="https://via.placeholder.com/880x350" />
-    </div>
-  </div>
+
+### Model layer
+
+Your components shouldn’t be concerned with how your data is fetched, cached, or sent to the server for updates.
+
+CanJS provides the right abstractions for your model code to be cleanly separated from your UI code.
+
+</div>
+<div class="right-col">
+
+```js
+import { Component, realtimeRestModel } from "//unpkg.com/can@5/core.mjs";
+
+const Todo = realtimeRestModel("/api/todos/{id}").Map;
+```
+
+</div>
+</div>
+<div class="code-proof">
+<div class="left-col">
+
+### Promises in templates
+
+CanJS’s [can-stache stache templating language] can directly read the state and values from Promises.
+
+No extra code to determine whether the Promise is still pending, has been resolved, or resulted in an error.
+
+</div>
+<div class="right-col">
+
+```handlebars
+{{#if(this.todosPromise.isPending)}}
+	Loading todos…
+{{/if}}
+{{#if(this.todosPromise.isRejected)}}
+	<p>Couldn’t load todos; {{this.todosPromise.reason.message}}</p>
+{{/if}}
+{{#if(this.todosPromise.isResolved)}}
+	<ul>
+		{{#for(todo of this.todosPromise.value)}}
+			<li>
+				{{todo.name}}
+			</li>
+		{{/for}}
+	</ul>
+{{/if}}
+```
+
+</div>
+</div>
   <div class="code-proof">
     <div class="left-col">
-      <h3>CanJS has all the tools you need to build your app</h3>
-      <p>Don’t waste your time hacking together a bunch of libraries that might not work together. CanJS has libraries for working with APIs, creating object-oriented observables, binding to form elements, building reusable custom elements, routing, and more.</p>
-    </div>
-    <div class="right-col">
-      <img src="https://via.placeholder.com/880x350" />
-    </div>
-  </div>
-  <div class="code-proof">
-    <div class="left-col">
-      <h3>No build tool or CLI required</h3>
-      <p>Start a CanJS app with just a single import statement. No compiler, no build step, no configuration, no special tools required.</p>
-    </div>
-    <div class="right-col">
-      <img src="https://via.placeholder.com/880x350" />
-    </div>
-  </div>
-  <div class="code-proof">
-    <div class="left-col">
-      <h3>Become an expert quickly with our extensive guides & documentation</h3>
-      <p>Our guides will teach you the best way to architect your application so you spend less time maintaining it and more time building features that make you money.</p>
-    </div>
-    <div class="right-col last-item">
-      <img src="https://via.placeholder.com/880x350" />
-    </div>
-  </div>
+
+### Real-time list updating
+
+After data is created, updated, or destroyed, CanJS automatically updates your lists for you.
+
+Filtering and sorting are preserved, so you don’t have to manually update your lists
+or fetch the same data again.
+
+</div>
+<div class="right-col">
+
+```js
+import { realtimeRestModel } from "can";
+
+const Todo = realtimeRestModel("/api/todos/{id}").Map;
+
+Todo.getList({filter: {completed: true}}).then(todos => {// Get completed todos
+
+  const newTodo = new Todo({completed: false});// Create a not-completed todo
+
+  newTodo.completed = true;// Set it to completed
+
+  // todos now contains newTodo because
+  // it matches {filter: {completed: true}}
+});
+```
+
+</div>
+</div>
 </div>
 <div class="gray-callout clients">
   <div class="clients-single-col">
