@@ -163,19 +163,13 @@ p:last-of-type {
 .social-two-col p {
   padding-bottom: 0;
 }
-.social-two-col .right-col {
-  display: flex;
-  flex-direction: row;
-}
 .social-two-col .right-col a {
-  display: block;
   margin-right: 30px;
 }
 .social-two-col .right-col a:last-of-type {
   margin-right: 0;
 }
 .social-two-col img {
-  height: 100%;
   max-height: 60px;
   min-height: 50px;
 }
@@ -427,8 +421,12 @@ pre[class*=language-].line-numbers.line-numbers code {
       <p>CanJS is backed by Bitovi, a company built on using and publishing open source software. Our community is here to help you get started and answer your questions. <a href="https://bitovi.com/community/slack">Join us on Slack</a> or <a href="https://forums.bitovi.com/">our Discourse forums</a>.</p>
     </div>
     <div class="right-col">
-      <a href="https://bitovi.com/community/slack"><img alt="Slack" src="../docs/images/logos/Slack_RGB.svg" /></a>
-      <a href="https://forums.bitovi.com/"><img alt="Discourse" src="../docs/images/logos/Discourse_icon.svg" /></a>
+      <a href="https://bitovi.com/community/slack">
+        <img alt="Slack" src="../docs/images/logos/Slack_RGB.svg" />
+      </a>
+      <a href="https://forums.bitovi.com/">
+        <img alt="Discourse" src="../docs/images/logos/Discourse_icon.svg" />
+      </a>
     </div>
   </div>
 </div>
