@@ -18,9 +18,9 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="LqogVw" data-pen-title="Credit Card Guide (Simple)">
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="cherifGsoul" data-slug-hash="LqogVw" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Simple) [Finished]">
   <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/LqogVw/">
-  Credit Card Guide (Simple)</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+  Credit Card Guide (Simple) [Finished]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
@@ -334,10 +334,12 @@ Update the __JavaScript__ tab to:
 
 When complete, you should have a working credit card payment form like the following CodePen:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="LqogVw" data-pen-title="Credit Card Guide (Simple)">
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="cherifGsoul" data-slug-hash="LqogVw" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Simple) [Finished]">
   <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/LqogVw/">
-  Credit Card Guide (Simple)</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+  Credit Card Guide (Simple) [Finished]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
+
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
