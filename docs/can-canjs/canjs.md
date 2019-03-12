@@ -30,12 +30,11 @@ code {
   border-top: 20px solid #327ABB;
   border-radius: 6px 6px 0 0;
 }
-p:last-of-type {
-  margin-bottom: 0;
+p + ul {
+  margin-top: 0;
 }
 .description p {
   font-size: 18px;
-  padding-bottom: 15px;
 }
 .btn {
   display: inline-flex;
@@ -251,6 +250,7 @@ p:last-of-type {
 img.package {
     float: right;
     height: 60px;
+    margin-top: -15px;
     margin-left: 15px;
 }
 .line-numbers-rows {
