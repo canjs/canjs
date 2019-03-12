@@ -196,9 +196,9 @@ p:last-of-type {
   margin-right: 60px;
 }
 .code-proof .right-col {
+  align-items: center;
   display: flex;
-  flex: 3;
-  min-width: 67%;
+  flex: 2;
 }
 .code-toolbar {
   width: 100%;
@@ -385,12 +385,15 @@ pre[class*=language-].line-numbers.line-numbers code {
   }
 }
 </style>
+
+@body
+
 <div class="gray-callout max-container">
   <div class="hero-section">
     <div class="left-col">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 365.7 144.4" class="hero-logo"><path d="M265.5 142.6l-7-13.8-1-2 2-1 5.8-3.6c1.6-1 3-2.2 4-3.2s2-2 2.6-3.2c.6-1 1.2-2.3 1.5-3.5l.3-1c0-.6.2-1 .3-1.3.5-2.2.7-4.8.7-7.8V37H298.6v68.2c0 3-.4 5.8-.8 8.6l-.3 1.6c0 .5-.2 1-.4 1.7-.6 3-1.7 5.6-3.2 8.2-1 2-2.4 3.7-4 5.4-1.4 1.6-3.2 3.2-5.3 4.7-.6.5-1.2 1-1.8 1.3l-2 1.2c-3.5 2-7.6 3.8-12.5 5.4l-2 .6-.7-1.6zm64.7-19.8c-2.3 0-4.4 0-6.3-.2-2 0-3.8-.3-5.6-.6l-4.8-1-4.3-1-3.7-1.6c-1.2-.5-2.3-1-3.3-1.6l-1.8-1 .7-2 5.4-13.7.8-2 2 .8c.4 0 .7.2 1 .3l1 .4c1.5.5 3 1 4.5 1.3l3 .7 3.2.4 3.6.3c1.3.2 2.6.2 4 .2 2.2 0 4.2-.2 5.8-.5.4 0 .6 0 .7-.2l3-1c0-.2.3-.4.5-.5.2 0 .3-.3.5-.5.7-.7 1-1.7 1-2.8 0-.7 0-1.3-.4-2l-1.6-1.6-2.8-1.7c-1-.6-2.3-1.2-3.6-1.7l-4.5-1.8c-1.2-.5-2.8-1-4.7-2l-5-2.3-4.5-2.8c-1.6-1-3-2.3-4.3-3.6-1.3-1.3-2.4-2.8-3.4-4.4l-.8-1.5-.7-1.5c-1-2.7-1.5-6-1.6-9.3 0-2.2.3-4 .7-6 .6-2 1.3-3.6 2.2-5.2 1-1.5 2-3 3.2-4.2 1.2-1.3 2.6-2.4 4-3.4 1.6-1 3.2-1.8 4.8-2.5 1.7-.8 3.4-1.4 5.2-1.8 1.8-.5 3.6-.8 5.4-1 1.8-.2 3.7-.3 5.6-.3h6l1 .2c1.3 0 2.7.3 4 .6l1.4.2 1.2.3c2 .4 4 1 5.7 1.6 1.2.3 2.4.8 3.4 1.2 1.2.4 2.3 1 3.3 1.4l2 1-.8 2L356 58l-.8 1.8-2-.6-5.6-1.6-2.8-.7-3-.6-3-.3H335c-1.7 0-3.2.2-4.4.5-1 .2-1.8.6-2.3 1-.2 0-.3.2-.4.3-.2 0-.3.2-.4.4-.4.6-.6 1.2-.6 2v.7c.3.6 1 1.3 2 2 .8.6 1.8 1.2 3 1.8 1 .6 2.3 1.2 3.7 1.8l1.2.5 1.2.6 6.8 3 5 2.5 4.7 3c1.5 1.2 3 2.5 4.3 3.8 1.3 1.4 2.5 3 3.4 4.5 1 1.7 2 3.5 2.4 5.5.5 2 .8 4 .8 6.4v2l-.3 2c-.4 3-1.4 6-3 8.4-1 1.7-2 3.3-3.5 4.7-1.4 1.4-3 2.6-4.7 3.7-1.6 1-3.4 2-5.3 2.7-2 .7-3.8 1.3-6 1.8-2 .5-4 .8-6.2 1-2 .2-4.2.3-6.3.3zM77.7 114c-14.2 3.8-30.2 6.4-45 3.5-5.8-1-11-3.5-16-7-5-3.7-8.8-9-12-16.2-3-7.2-4.7-17-4.7-29 0-12.3 2-22 5.6-29.5 3.4-7.4 7.7-13 13-16.7 5.4-3.6 10.8-6 16.6-7.3C41 10.5 46 10 50.7 10c7 0 22 2 29.2 6.7v23.8c-7.5-3.8-18-5.7-26-6-2.6 0-5 .4-7.4 1-2.4.6-4.6 2-6.6 4-1.8 2.2-3.3 5.4-4.4 9.4-1.4 4-2 9.4-2 16.2 0 6 .5 10.8 1.6 14.5.8 3.8 1.8 7 3.6 9 6.5 7.6 20.8 5 30.5 2.4.8 8 2.8 16.4 8.4 23z"/><path d="M132.3 67.3l-6 .2c-6.4 0-11 1-13.8 3.4-3 2.2-4.3 6.3-4.2 12.4 0 5 1 8.4 2.8 10.3 2 2 4.4 2.7 7.2 2.6 3.5 0 6-1 8.7-2.3v10.3c0 3.4.5 6 1.6 8-4 1.7-6.3 3-10.5 4.2-5 1.5-10 2.5-13.6 2.6-23.8.8-29.8-17-29.8-33.8 0-7.2 1.4-13 4.2-17.7 2.6-4.6 5.8-8 9.7-10.3 4.2-2.5 8.4-4.2 13-5.2 4.4-.7 8.5-1 12.4-1H132v-6.2c0-4-1-6.8-3.2-8-2-1.3-5.6-2-10.3-2-5.8.2-28.2 2.5-33.3 5.8V16c11.6-4.4 31.8-6 38.7-6 12-.2 21.8 2 29.7 6.3 4 2.6 6.8 6.2 9 10.7 2 4.8 3 10.8 3 18l.2 72h-.2v.5h-9.6c-11 0-24 1.2-24-14.3V67.3zM171.6 12h28.6l4.4 10.7c0-.3 3.4-2.5 10-6.4 3-1.8 6.8-3 11-4.4 4-1.3 8.2-2 12.8-2 9-.2 16.2 2 21.7 6.5 5.7 4.7 8.6 13 8.6 24.8v61.5c0 15.5-13 14.3-24 14.3H235V45.4c0-3.5-.5-6-1.8-7-1.2-1.3-3.8-1.8-7.3-1.8-5.2 0-9.7 1-14 3l-7 3.5v74.2H172L171.6 12zM286 0c8.6 0 15.7 7 15.7 15.7 0 8.6-7 15.7-15.7 15.7-8.6 0-15.7-7-15.7-15.7S277.3 0 286 0z"/></svg>
       <h2>Build CRUD apps in fewer lines of code</h2>
-      <a href="/guides/todomvc.html" class="btn">Learn how to build a CRUD app</a>
+      <a href="/doc/guides/todomvc.html" class="btn">Learn how to build a CRUD app</a>
     </div>
     <div class="right-col">
       <img src="docs/images/hero-image.svg" />
@@ -398,17 +401,17 @@ pre[class*=language-].line-numbers.line-numbers code {
   </div>
 </div>
 <div class="three-col-wrapper">
-  <a href="#" class="col-container">
+  <a href="#model-layer" class="col-container">
     <h3>Model layer</h3>
     <p>Your components shouldn’t be concerned with how your data is fetched, cached, or sent to the server for updates.</p>
     <p>CanJS provides the right abstractions for your model code to be cleanly separated from your UI code.</p>
   </a>
-  <a href="#" class="col-container">
+  <a href="#promises-in-templates" class="col-container">
     <h3>Promises in templates</h3>
     <p>CanJS’s can-stache stache templating language can directly read the state and values from Promises.</p>
     <p>No extra code to determine whether the Promise is still pending, has been resolved, or resulted in an error.</p>
   </a>
-  <a href="#" class="col-container">
+  <a href="#real-time-list-updating" class="col-container">
     <h3>Real-time list updating</h3>
     <p>After data is created, updated, or destroyed, CanJS automatically updates your lists for you.</p>
     <p>Filtering and sorting are preserved, so you don’t have to manually update your lists or fetch the same data again.</p>
@@ -434,7 +437,14 @@ pre[class*=language-].line-numbers.line-numbers code {
 
 ## Get started with just a few lines of code
 
-Below is an entire CanJS app. It uses [can-realtime-rest-model realtimeRestModel] to connect to a backend API, then [can-component Component] is used to define a custom element. The component is inserted anywhere the custom element is used in HTML.
+Below is an entire CanJS app. It shows off some of the best features of CanJS:
+
+- One line of code to create a model from the data returned by a backend API (with [can-realtime-rest-model realtimeRestModel]).
+- `isPending`, `isRejected`, `isResolved`, and `value` helpers for directly reading the state of a Promise.
+- When you add a to-do, it automatically gets inserted into the list _in the right position_.
+
+Go ahead, play with it. We fetch all the to-dos sorted by name with `Todo.getList({sort: "name"})`,
+so when you add a new to-do, it’s inserted into the list in the right place alphabetically.
 
   <p class="codepen" data-height="512" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 512px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
   <span>See the Pen <a href="https://codepen.io/bitovi/pen/omqyMw/">
@@ -442,23 +452,30 @@ Below is an entire CanJS app. It uses [can-realtime-rest-model realtimeRestModel
   on <a href="https://codepen.io">CodePen</a>.</span></p>
   <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
   <span class="caption">Type in a new to-do and click “Add” to see it appear in the list. Notice that new to-dos are inserted in alphabetical order, without any code that explicitly inserts the new one in the right place!</span>
-  <a href="/guides/todomvc.html" class="btn">Learn how to build a CRUD app</a>
+  <a href="/doc/guides/todomvc.html" class="btn">Learn how to build a CRUD app</a>
 </div>
 <div class="code-overview">
   <div class="code-proof">
-    <div class="left-col">
+    <div class="left-col" id="model-layer">
 
 ### Model layer
 
-Your components shouldn’t be concerned with how your data is fetched, cached, or sent to the server for updates.
+With a single line of code, CanJS creates a model that represents the objects returned by a backend API.
+See how `Todo` is created by passing a URL to [can-realtime-rest-model realtimeRestModel()].
 
-CanJS provides the right abstractions for your model code to be cleanly separated from your UI code.
+The model layer is responsible for making GET, POST, PUT, and DELETE requests to your backend.
+With your component UI code using the model’s standard interface to make requests, if the API changes,
+you only have to change the model code and not every component that uses that API.
+
+Additionally, CanJS starts off by assuming your API is RESTful, which is _a lot_ of code for each model
+that you don’t have to write. If the backend API you’re dealing with isn’t RESTful, that’s ok,
+CanJS has configuration options for you to control how it makes requests, parses data, and more.
 
 </div>
 <div class="right-col">
 
 ```js
-import { Component, realtimeRestModel } from "//unpkg.com/can@5/core.mjs";
+import { realtimeRestModel } from "can";
 
 const Todo = realtimeRestModel("/api/todos/{id}").Map;
 ```
@@ -466,23 +483,33 @@ const Todo = realtimeRestModel("/api/todos/{id}").Map;
 </div>
 </div>
 <div class="code-proof">
-<div class="left-col">
+<div class="left-col" id="promises-in-templates">
 
 ### Promises in templates
 
-CanJS’s [can-stache stache templating language] can directly read the state and values from Promises.
+CanJS’s [can-stache stache templating language] is similar to Handlebars and Mustache.
+Wherever you see `{{}}` in a template, CanJS evaluates the expression inside to either
+print a value or perform some basic logic, like [can-stache.helpers.if #if] and
+[can-stache.helpers.for-of #for(of)].
 
-No extra code to determine whether the Promise is still pending, has been resolved, or resulted in an error.
+Stache is able to read the state and value of Promises. See `isPending`, `isRejected`,
+and `isResolved` being read on `this.todosPromise` in the example code? Those return
+true depending on the current state of the Promise. `reason` is provided if the
+Promise is rejected with an error, and `value` contains the resolved value if
+the promise succeeds.
+
+These helpers make it much easier to include loading and error states in your app.
+We promise you’ll love writing your templates this way.
 
 </div>
 <div class="right-col">
 
-```handlebars
+```html
 {{#if(this.todosPromise.isPending)}}
 	Loading todos…
 {{/if}}
 {{#if(this.todosPromise.isRejected)}}
-	<p>Couldn’t load todos; {{this.todosPromise.reason.message}}</p>
+	Error: {{this.todosPromise.reason.message}}
 {{/if}}
 {{#if(this.todosPromise.isResolved)}}
 	<ul>
@@ -498,14 +525,22 @@ No extra code to determine whether the Promise is still pending, has been resolv
 </div>
 </div>
   <div class="code-proof">
-    <div class="left-col">
+    <div class="left-col" id="real-time-list-updating">
 
 ### Real-time list updating
 
-After data is created, updated, or destroyed, CanJS automatically updates your lists for you.
+Here you can see CanJS’s model layer in action. When `Todo.getList({sort: "name"})` is called,
+CanJS makes a GET request to `/api/todos?sort=name`
 
-Filtering and sorting are preserved, so you don’t have to manually update your lists
-or fetch the same data again.
+When the array of to-dos comes back, CanJS associates that array with the query `{sort: "name"}`.
+When new to-dos are created, they’re added to the list that’s returned _automatically_, and
+in the right spot! You don’t have to write any code to make sure the new to-do gets inserted
+into the right spot in the list.
+
+CanJS does this for filtering as well. If you make a query with a filter (e.g. `{filter: {complete: true}}`),
+when items are added, edited, or deleted that match that filter, those lists will be updated automatically.
+
+Save yourself time by not writing code that updates your app’s UI.
 
 </div>
 <div class="right-col">
@@ -515,14 +550,17 @@ import { realtimeRestModel } from "can";
 
 const Todo = realtimeRestModel("/api/todos/{id}").Map;
 
-Todo.getList({filter: {completed: true}}).then(todos => {// Get completed todos
+// Get completed todos
+Todo.getList({sort: "name"}).then(todos => {
+  // Let’s assume the API came back with
+  // todos = [ {name: "a"}, {name: "c"} ]
 
-  const newTodo = new Todo({completed: false});// Create a not-completed todo
+  // Create a new todo client-side
+  const newTodo = new Todo({name: "b"});
 
-  newTodo.completed = true;// Set it to completed
-
-  // todos now contains newTodo because
-  // it matches {filter: {completed: true}}
+  // The todos list is immediately updated with the
+  // new to-do in the right place, alphabetically:
+  // todos = [ {name: "a"}, {name: "b"}, {name: "d"} ]
 });
 ```
 
@@ -559,6 +597,6 @@ Todo.getList({filter: {completed: true}}).then(todos => {// Get completed todos
 </div>
 <div class="gray-callout footer">
   <div class="footer-single-col">
-    <a href="/guides/todomvc.html" class="btn">Take the CRUD Tutorial</a>
+    <a href="/doc/guides/todomvc.html" class="btn">Take the CRUD Tutorial</a>
   </div>
 </div>
