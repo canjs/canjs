@@ -18,8 +18,11 @@ custom video player will:
 
 The final player looks like:
 
-<p data-height="350" data-theme-id="dark" data-slug-hash="qyRqMx" data-default-tab="js,result" data-user="justinbmeyer" data-embed-version="2" data-pen-title="CanJS 5.0 Video Player - Final" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/qyRqMx/">CanJS 5.0 Video Player - Final</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
-
+<p class="codepen" data-height="366" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="ZPyGLE" style="height: 366px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 Video Player - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/ZPyGLE/">
+  CanJS 5.0 Video Player - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 The following sections are broken down into the following parts:
 
@@ -34,7 +37,11 @@ __START THIS TUTORIAL BY Forking THE FOLLOWING CodePen__:
 
 > Click the `Edit in CodePen` button.  The CodePen will open in a new window. Click the `Fork` button.
 
-<p data-height="320" data-theme-id="dark" data-slug-hash="LBxbam" data-default-tab="js,result" data-user="justinbmeyer" data-embed-version="2" data-pen-title="CanJS 5.0 Video Player - Start" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/LBxbam/">CanJS 5.0 Video Player - Start</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="gERpgz" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 Video Player - Start">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/gERpgz/">
+  CanJS 5.0 Video Player - Start</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 This CodePen:
 
@@ -496,6 +503,10 @@ Update the __JavaScript__ tab to:
 
 When finished, you should see something like the following JS Bin:
 
-<p data-height="360" data-theme-id="dark" data-slug-hash="qyRqMx" data-default-tab="js,result" data-user="justinbmeyer" data-embed-version="2" data-pen-title="CanJS 5.0 Video Player - Final" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/qyRqMx/">CanJS 5.0 Video Player - Final</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p class="codepen" data-height="366" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="ZPyGLE" style="height: 366px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 Video Player - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/ZPyGLE/">
+  CanJS 5.0 Video Player - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>

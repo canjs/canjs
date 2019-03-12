@@ -1085,4 +1085,4 @@ Interested in adding examples for how to create and update data on the server? T
 
 ## Have a question?
 
-Please ask on [our forums](https://forums.donejs.com/c/canjs) or in [Gitter chat](https://gitter.im/canjs/canjs)!
+Please ask on [our forums](https://forums.bitovi.com/c/canjs) or in [Slack](https://www.bitovi.com/community/slack)!
