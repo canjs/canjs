@@ -403,18 +403,18 @@ pre[class*=language-].line-numbers.line-numbers code {
 <div class="three-col-wrapper">
   <a href="#model-layer" class="col-container">
     <h3>Model layer</h3>
-    <p>Your components shouldn’t be concerned with how your data is fetched, cached, or sent to the server for updates.</p>
-    <p>CanJS provides the right abstractions for your model code to be cleanly separated from your UI code.</p>
+    <p>Your components shouldn’t be concerned with how your data is fetched, cached, or sent to the server for updates. CanJS provides the right abstractions for your model code to be cleanly separated from your UI code.</p>
+    <img src="docs/images/animations/model-layer-anim.svg" />
   </a>
   <a href="#promises-in-templates" class="col-container">
     <h3>Promises in templates</h3>
-    <p>CanJS’s can-stache stache templating language can directly read the state and values from Promises.</p>
-    <p>No extra code to determine whether the Promise is still pending, has been resolved, or resulted in an error.</p>
+    <p>CanJS’s can-stache stache templating language can directly read the state and values from Promises. No extra code to determine whether the Promise is still pending, has been resolved, or resulted in an error.</p>
+    <img src="docs/images/animations/promises-anim.svg" />
   </a>
   <a href="#real-time-list-updating" class="col-container">
     <h3>Real-time list updating</h3>
-    <p>After data is created, updated, or destroyed, CanJS automatically updates your lists for you.</p>
-    <p>Filtering and sorting are preserved, so you don’t have to manually update your lists or fetch the same data again.</p>
+    <p>After data is created, updated, or destroyed, CanJS automatically updates your lists for you. Filtering and sorting are preserved, so you don’t have to manually update your lists or fetch the same data again.</p>
+    <img src="docs/images/animations/realtime-amin.svg" />
   </a>
 </div>
 <div class="gray-callout social">
