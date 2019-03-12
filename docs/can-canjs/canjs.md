@@ -471,10 +471,10 @@ pre[class*=language-].line-numbers.line-numbers code {
     </div>
     <div class="right-col">
       <a href="https://bitovi.com/community/slack">
-        <img alt="Slack" src="../docs/images/logos/Slack_RGB.svg" />
+        <img alt="Slack" src="../docs/images/logos/slack.svg" />
       </a>
       <a href="https://forums.bitovi.com/">
-        <img alt="Discourse" src="../docs/images/logos/Discourse_icon.svg" />
+        <img alt="Discourse" src="../docs/images/logos/discourse.svg" />
       </a>
     </div>
   </div>
