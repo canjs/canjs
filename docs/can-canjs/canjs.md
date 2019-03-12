@@ -135,8 +135,8 @@ p + ul {
 .three-col-wrapper .col-container .content img {
   margin-top: 30px;
   margin-left: 10px;
-  max-height: 300px;
-  min-width: 250px;
+  max-height: 240px;
+  min-width: 240px;
 }
 .three-col-wrapper a.col-container {
     border: 3px solid transparent;
