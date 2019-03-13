@@ -492,7 +492,7 @@ Below is an entire CanJS app. It shows off some of the best features of CanJS:
 Go ahead, play with it. We fetch all the to-dos sorted by name with `Todo.getList({sort: "name"})`,
 so when you add a new to-do, it’s inserted into the list in the right place alphabetically.
 
-  <p class="codepen" data-height="512" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 512px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
+  <p class="codepen" data-height="512" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 512px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
   <span>See the Pen <a href="https://codepen.io/bitovi/pen/omqyMw/">
   CanJS 5 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span></p>
