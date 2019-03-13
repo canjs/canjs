@@ -131,7 +131,7 @@ p + ul {
   justify-content: space-around;
   align-items: flex-start;
 }
-.three-col-wrapper .col-container .content img {
+.three-col-wrapper .col-container .content object {
   margin: auto 15px;
   max-height: 240px;
   min-width: 240px;
@@ -272,7 +272,7 @@ pre[class*=language-].line-numbers.line-numbers code {
   .three-col-wrapper .col-container .content {
     flex-direction: column;
   }
-  .three-col-wrapper .col-container .content img {
+  .three-col-wrapper .col-container .content object {
     margin-bottom: 15px;
   }
 }
@@ -325,7 +325,7 @@ pre[class*=language-].line-numbers.line-numbers code {
   .three-col-wrapper .col-container .content {
     flex-direction: row;
   }
-  .three-col-wrapper .col-container .content img {
+  .three-col-wrapper .col-container .content object {
     margin: auto 15px;
   }
 }
@@ -411,7 +411,7 @@ pre[class*=language-].line-numbers.line-numbers code {
   .three-col-wrapper .col-container .content {
     flex-direction: column;
   }
-  .three-col-wrapper .col-container .content img {
+  .three-col-wrapper .col-container .content object {
     margin-bottom: 15px;
   }
 }
@@ -439,7 +439,7 @@ pre[class*=language-].line-numbers.line-numbers code {
         <p>Your components shouldn’t be concerned with how your data is fetched, cached, or sent to the server for updates.</p>
         <p>CanJS provides the right abstractions for your model code to be cleanly separated from your UI code.</p>
       </div>
-      <img src="docs/images/animations/model-layer-anim.svg" />
+      <object type="image/svg+xml" data="docs/images/animations/model-layer-anim.svg"></object>
     </div>
   </a>
   <a href="#promises-in-templates" class="col-container">
@@ -449,7 +449,7 @@ pre[class*=language-].line-numbers.line-numbers code {
         <p>CanJS’s can-stache stache templating language can directly read the state and values from Promises.</p>
         <p>No extra code to determine whether the Promise is still pending, has been resolved, or resulted in an error.</p>
       </div>
-      <img src="docs/images/animations/promises-anim.svg" />
+      <object type="image/svg+xml" data="docs/images/animations/promises-anim.svg"></object>
     </div>
   </a>
   <a href="#real-time-list-updating" class="col-container">
@@ -459,7 +459,7 @@ pre[class*=language-].line-numbers.line-numbers code {
         <p>After data is created, updated, or destroyed, CanJS automatically updates your lists for you.</p>
         <p>Filtering and sorting are preserved, so you don’t have to manually update your lists or fetch the same data again.</p>
       </div>
-      <img src="docs/images/animations/realtime-amin.svg" />
+      <object type="image/svg+xml" data="docs/images/animations/realtime-amin.svg"></object>
     </div>
   </a>
 </div>
