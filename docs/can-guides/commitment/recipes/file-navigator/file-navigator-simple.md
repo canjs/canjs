@@ -177,10 +177,10 @@ import { Component } from "//unpkg.com/can@5/core.mjs";
 Component.extend({
   tag: "file-navigator",
   view: `
-    <span>{{rootEntity.name}}</span>
+    <span>{{this.rootEntity.name}}</span>
     <ul>
-      {{# for(child of rootEntity.children) }}
-        <li class="{{child.type}} {{# if(child.hasChildren) }}hasChildren{{/ if}}">
+      {{# for(child of this.rootEntity.children) }}
+        <li class="{{child.type}} {{# if(child.hasChildren) }}hasChildren{{/ if }}">
           {{# eq(child.type, 'file')}}
             📝 <span>{{child.name}}</span>
           {{else}}
@@ -250,10 +250,10 @@ Component.extend({
   tag: "file-navigator",
   view: `
     {{<entities}}
-      <span>{{rootEntity.name}}</span>
+      <span>{{this.name}}</span>
       <ul>
-        {{# for(child of rootEntity.children) }}
-          <li class="{{child.type}} {{# if(child.hasChildren) }}hasChildren{{/ if}}">
+        {{# for(child of this.children) }}
+          <li class="{{child.type}} {{# if(child.hasChildren) }}hasChildren{{/ if }}">
             {{# eq(child.type, 'file')}}
               📝 <span>{{child.name}}</span>
             {{else}}
@@ -264,7 +264,7 @@ Component.extend({
       </ul>
     {{/entities}}
    
-    {{entities(rootEntity)}}
+    {{entities(this.rootEntity)}}
   `,
   ViewModel: {
      rootEntity: {
@@ -275,7 +275,7 @@ Component.extend({
   }
 });
 ```
-@highlight 6,21,19,only
+@highlight 6-19,21,only
 
 ## Make the data observable
 
@@ -372,21 +372,21 @@ Component.extend({
   tag: "file-navigator",
   view: `
     {{<entities}}
-      <span>{{rootEntity.name}}</span>
+      <span>{{this.name}}</span>
       <ul>
-        {{# for(child of rootEntity.children) }}
-          <li class="{{child.type}} {{# if(child.hasChildren) }}hasChildren{{/ if}}">
-            {{# eq(child.type, 'file')}}
+        {{# for(child of this.children) }}
+          <li class="{{child.type}} {{# if(child.hasChildren) }}hasChildren{{/ if }}">
+            {{# eq(child.type, 'file') }}
               📝 <span>{{child.name}}</span>
             {{else}}
-              📁 {{entities child}}
-            {{/ eq}}
+              📁 {{entities(child)}}
+            {{/ eq }}
           </li>
         {{/ for }}
       </ul>
     {{/entities}}
    
-    {{entities rootEntity}}
+    {{entities(this.rootEntity)}}
   `,
   ViewModel: {
      rootEntity: {
@@ -397,7 +397,7 @@ Component.extend({
   }
 });
 ```
-@highlight 1,3-14,16, 41
+@highlight 1,3-14,16,41
 
 ### Test it
 
@@ -485,31 +485,33 @@ Component.extend({
   view: `
     {{<entities}}
       <span on:click="toggleOpen()">{{this.name}}</span>
-      <ul>
-        {{# for(child of this.children) }}
-          <li class="{{child.type}} {{# if(child.hasChildren) }}hasChildren{{/ if}}">
-            {{# eq(child.type, 'file')}}
-              📝 <span>{{child.name}}</span>
-            {{else}}
-              📁 {{entities child}}
-            {{/ eq}}
-          </li>
-        {{/ for }}
-      </ul>
+      {{# if(isOpen) }}
+        <ul>
+          {{# for(child of this.children) }}
+            <li class="{{child.type}} {{# if(child.hasChildren) }}hasChildren{{/ if }}">
+              {{# eq(child.type, 'file') }}
+                📝 <span>{{child.name}}</span>
+              {{else}}
+                📁 {{entities(child)}}
+              {{/ eq }}
+            </li>
+          {{/ for }}
+        </ul>
+      {{/ if }}
     {{/entities}}
    
-    {{entities rootEntity}}
+    {{entities(this.rootEntity)}}
   `,
   ViewModel: {
      rootEntity: {
       default: () => {
-        return rootEntityData;
+        return rootEntity;
       }
     }
   }
 });
 ```
-@highlight 14,15-17,26,only
+@highlight 14,15-17,26,27,39,only
 
 ## Result
 
