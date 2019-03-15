@@ -11,12 +11,11 @@ for an example that makes AJAX requests for its data and uses [can-component].
 
 The final widget looks like:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="pYvOdG" data-pen-title="File Navigator simple [Finished]">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/pYvOdG/">
-  File Navigator simple [Finished]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="PLRvLw" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator simple [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/PLRvLw/">
+  File Navigator simple [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
-
 
 Click `ROOT/` to see its files and folders.
 
@@ -25,9 +24,9 @@ Click `ROOT/` to see its files and folders.
 
 __Start this tutorial by cloning the following CodePen__:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="css,result" data-user="cherifGsoul" data-slug-hash="gEpqeB" data-pen-title="File Navigator simple [Starter]">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/gEpqeB/">
-  File Navigator simple [Starter]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="pYLmBw" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator simple [Starter]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/pYLmBw/">
+  File Navigator simple [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
@@ -152,8 +151,7 @@ Let’s render `rootEntityData` in the page with its immediate children.
   });
   ```
 
-- Use [can-define/map/map] to model Component data as [can-component.prototype.ViewModel] 
-
+- Use [can-define/map/map] to model Component data as [can-component.prototype.ViewModel].
 - Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
 - Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in `can-stache`.
 - Use [can-stache.helpers.is {{#eq(value1, value2)}}] to test equality in `can-stache`.
@@ -167,7 +165,7 @@ Let’s render `rootEntityData` in the page with its immediate children.
 Update the __HTML__ tab to:
 
 @sourceref ./file-navigator-simple.html
-@highlight 12
+@highlight 1,only
 
 Update the __JavaScript__ tab to:
 
@@ -225,7 +223,7 @@ find a folder, we need to render its contents.
   });
   ```
 
-- The registered inline named partial can be called 
+- The registered inline named partial can be called
   [recursively](https://canjs.com/doc/can-stache.tags.named-partial.html#TooMuchRecursion) like the following:
 ```html
 {{<recursiveView}}
@@ -263,7 +261,7 @@ Component.extend({
         {{/ for }}
       </ul>
     {{/entities}}
-   
+
     {{entities(this.rootEntity)}}
   `,
   ViewModel: {
@@ -291,7 +289,7 @@ we change the data, the UI will automatically change.
 
   ```js
   import { DefineMap } from "can";
-  
+
   Person = DefineMap.extend("Person", {
     name: "string",
     age: "number"
@@ -385,7 +383,7 @@ Component.extend({
         {{/ for }}
       </ul>
     {{/entities}}
-   
+
     {{entities(this.rootEntity)}}
   `,
   ViewModel: {
@@ -499,7 +497,7 @@ Component.extend({
         </ul>
       {{/ if }}
     {{/entities}}
-   
+
     {{entities(this.rootEntity)}}
   `,
   ViewModel: {
@@ -518,9 +516,9 @@ Component.extend({
 When complete, you should have a working file-navigation widget
 like the following CodePen:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="pYvOdG" data-pen-title="File Navigator simple [Finished]">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/pYvOdG/">
-  File Navigator simple [Finished]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="PLRvLw" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator simple [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/PLRvLw/">
+  File Navigator simple [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
