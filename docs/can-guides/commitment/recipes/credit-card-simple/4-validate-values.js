@@ -8,7 +8,7 @@ Component.extend({
 		<form>
 
 			<input type="text" name="number" placeholder="Card Number"
-					{{# if(this.cardError) }}class="is-error"{{/ if }}
+				{{# if(this.cardError) }}class="is-error"{{/ if }}
 				value:bind="this.userCardNumber"/>
 
 			<input type="text" name="expiry" placeholder="MM-YY"
@@ -16,19 +16,19 @@ Component.extend({
 				value:bind="this.userExpiry"/>
 
 			<input type="text" name="cvc" placeholder="CVC"
-			{{# if(this.cvcError) }}class="is-error"{{/ if }}
+				{{# if(this.cvcError) }}class="is-error"{{/ if }}
 				value:bind="this.userCVC"/>
 
 			<button>Pay $\{{ this.amount }}</button>
 
 			<p>{{ this.userCardNumber }}, {{ this.userExpiry }}, {{ this.userCVC }}</p>
 			<p>{{ this.cardNumber }}, {{ this.expiryMonth }}-{{ this.expiryYear }}, {{ this.cvc }}</p>
-			
+
 		</form>
 	`,
 	ViewModel: {
 		amount: { default: 9.99 },
-		
+
 		userCardNumber: "string",
 		get cardNumber() {
 			return this.userCardNumber ? this.userCardNumber.replace(/-/g, ""): null;

@@ -18,9 +18,9 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="cherifGsoul" data-slug-hash="LqogVw" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Simple) [Finished]">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/LqogVw/">
-  Credit Card Guide (Simple) [Finished]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="360" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="GexXdG" style="height: 360px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Simple) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/GexXdG/">
+  Credit Card Guide (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
@@ -37,9 +37,9 @@ To use the widget:
 
 __START THIS TUTORIAL BY CLONING THE FOLLOWING CODEPEN__:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="css,result" data-user="cherifGsoul" data-slug-hash="omrJZy" data-pen-title="Credit Card Guide (Simple) [Starter]">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/omrJZy/">
-  Credit Card Guide (Simple) [Starter]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="pYLOOz" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Simple) [Starter]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/pYLOOz/">
+  Credit Card Guide (Simple) [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
@@ -67,12 +67,12 @@ should be able update the displayed “pay amount”.
 
 - To use Stripe, you must call [Stripe.setPublishableKey](https://stripe.com/docs/stripe.js/v2#setting-publishable-key).
 
-- A basic CanJS setup uses instances of a [can-component], which glues a ViewModel 
+- A basic CanJS setup uses instances of a [can-component], which glues a ViewModel
  to a View in order to manage it's behavior as follows:
 
   ```js
   import { Component } from "can";
-  // Define the Component 
+  // Define the Component
   const CCPayment = Component.extend({
     tag: "cc-payment",
     view: "...",
@@ -90,7 +90,7 @@ should be able update the displayed “pay amount”.
 - The ViewModel is an instance of [can-define/map/map] allows you to define a property with a default value like:
 
   ```js
-  ProductVM = DefineMap.extend("ProductVM",{
+  ProductVM = DefineMap.extend("ProductVM", {
     age: {default: 34}
   })
   ```
@@ -116,7 +116,7 @@ should be able update the displayed “pay amount”.
 Update the __HTML__ tab to:
 
 @sourceref ./1-setup.html
-@highlight 12
+@highlight 1
 
 Update the __JavaScript__ tab to:
 
@@ -155,8 +155,8 @@ Print out the exported values like:
 
   ```js
   import { DefineMap } from "can";
-  
-  Person = DefineMap.extend("Person",{
+
+  Person = DefineMap.extend("Person", {
     name: "string",
     age: "number"
   })
@@ -167,7 +167,7 @@ Print out the exported values like:
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-read-form.js
-@highlight 10-17,21,28, 30, 32, only
+@highlight 10-17,21,30,32,34,only
 
 
 ## Format form values
@@ -334,9 +334,9 @@ Update the __JavaScript__ tab to:
 
 When complete, you should have a working credit card payment form like the following CodePen:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="cherifGsoul" data-slug-hash="LqogVw" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Simple) [Finished]">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/LqogVw/">
-  Credit Card Guide (Simple) [Finished]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="360" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="GexXdG" style="height: 360px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Simple) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/GexXdG/">
+  Credit Card Guide (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
