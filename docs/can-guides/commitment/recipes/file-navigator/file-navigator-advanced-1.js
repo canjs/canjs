@@ -1,3 +1,5 @@
+import { fixture } from "//unpkg.com/can@5/core.mjs";
+
 // Stores the next entity id to use.
 let entityId = 1;
 
@@ -8,7 +10,7 @@ const makeEntities = function(parentId, depth) {
     return [];
   }
   // The number of entities to create.
-  const entitiesCount = can.fixture.rand(10);
+  const entitiesCount = fixture.rand(10);
 
   // The array of entities we will return.
   const entities = [];
