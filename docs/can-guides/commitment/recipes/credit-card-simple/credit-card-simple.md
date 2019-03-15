@@ -262,7 +262,7 @@ alert("Token: " + response.id);
 
 After submitting the form, you should see an alert like:
 
-![Alert](../../../docs/can-guides/commitment/recipes/credit-card-simple/token-alert.png)
+<img alt="Alert" class="bit-docs-screenshot" src="../../../docs/can-guides/commitment/recipes/credit-card-simple/token-alert.png" />
 
 ### What you need to know
 
