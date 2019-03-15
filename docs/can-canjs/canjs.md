@@ -446,7 +446,7 @@ pre[class*=language-].line-numbers.line-numbers code {
     <div class="content">
       <div>
         <h3>Promises in templates</h3>
-        <p>CanJS’s can-stache stache templating language can directly read the state and values from Promises.</p>
+        <p>CanJS’s stache templating language can directly read the state and values from Promises.</p>
         <p>No extra code to determine whether the Promise is still pending, has been resolved, or resulted in an error.</p>
       </div>
       <object type="image/svg+xml" data="docs/images/animations/promises-anim.svg"></object>
