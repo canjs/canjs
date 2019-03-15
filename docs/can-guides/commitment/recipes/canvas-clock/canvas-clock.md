@@ -14,9 +14,9 @@ In this guide you will learn how to:
 
 The final widget looks like:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="PLoWWb" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Canvas Clock (Simple) [Finished]">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/PLoWWb/">
-  Canvas Clock (Simple) [Finished]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="495" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="aMYaOO" style="height: 495px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Canvas Clock (Simple) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/aMYaOO/">
+  Canvas Clock (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
@@ -29,13 +29,11 @@ The following sections are broken down into the following parts:
 
 ## Setup ##
 
-__START THIS TUTORIAL BY CLONING THE FOLLOWING CODEPEN__:
+__START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED__:
 
-> Click the **EDIT CODEPEN** button.  The CodePen will open in a new window. In that new window, under `File`, click `Clone`.
-
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="vPYxWp" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Canvas Clock (Simple) [Starter]">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/vPYxWp/">
-  Canvas Clock (Simple) [Starter]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="VRXGep" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Canvas Clock (Simple) [Starter]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/VRXGep/">
+  Canvas Clock (Simple) [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
@@ -208,7 +206,7 @@ In this section, we will:
   [can-component/connectedCallback] to listen to changes in the `ViewModel` like:
   ```js
   import { Component } from "//unpkg.com/can@5/core.mjs";
-  
+
   Component.extend({
     tag: "analog-clock",
     // ...
@@ -325,9 +323,9 @@ Update the __JavaScript__ tab to:
 
 When finished, you should see something like the following CodePen:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="PLoWWb" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Canvas Clock (Simple) [Finished]">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/PLoWWb/">
-  Canvas Clock (Simple) [Finished]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="495" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="aMYaOO" style="height: 495px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Canvas Clock (Simple) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/aMYaOO/">
+  Canvas Clock (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
