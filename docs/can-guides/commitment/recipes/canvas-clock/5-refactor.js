@@ -33,15 +33,15 @@ Component.extend({
       const center = diameter/2;
 
       this.listenTo("time", (ev, time) => {
-        canvas.clearRect(0, 0, diameter, diameter);
+        this.canvas.clearRect(0, 0, diameter, diameter);
 
         // draw circle
-        canvas.lineWidth = 4.0;
-        canvas.strokeStyle = "#567";
-        canvas.beginPath();
-        canvas.arc(center, center, radius, 0, Math.PI * 2, true);
-        canvas.closePath();
-        canvas.stroke();
+        this.canvas.lineWidth = 4.0;
+        this.canvas.strokeStyle = "#567";
+        this.canvas.beginPath();
+        this.canvas.arc(center, center, radius, 0, Math.PI * 2, true);
+        this.canvas.closePath();
+        this.canvas.stroke();
 
         // draw second hand
         const seconds = time.getSeconds() + this.time.getMilliseconds() / 1000;
