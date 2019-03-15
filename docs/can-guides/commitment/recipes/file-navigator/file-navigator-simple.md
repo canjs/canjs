@@ -3,7 +3,7 @@
 
 @description This guide walks you through building a simple file navigation
 widget.  It takes about 25 minutes to complete.  It was written with
-CanJS 3.10. Check out the [guides/recipes/file-navigator-advanced]
+CanJS 5.22.0. Check out the [guides/recipes/file-navigator-advanced]
 for an example that makes AJAX requests for its data and uses [can-component].
 
 
@@ -11,24 +11,26 @@ for an example that makes AJAX requests for its data and uses [can-component].
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/diqeyoj/22/embed?js,output">
-  Finished version of the CanJS File Navigator Guide (Simple) on jsbin.com
-</a>
-<a href="https://jsfiddle.net/donejs/me0e3g48/">Open in JSFiddle</a>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="PLRvLw" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator simple [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/PLRvLw/">
+  File Navigator simple [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 Click `ROOT/` to see its files and folders.
 
-> Note: If you don’t see any files show up, run the JS Bin again. This
-> JS Bin uses randomly generated files, so it’s possible nothing shows up.
+> Note: If you don’t see any files show up, run the CodePen again. This
+> CodePen uses randomly generated files, so it’s possible nothing shows up.
 
-__Start this tutorial by cloning the following JS Bin__:
+__Start this tutorial by cloning the following CodePen__:
 
-<a class="jsbin-embed" href="https://jsbin.com/diqeyoj/20/embed?html,css,output">
-  Starter version of the CanJS File Navigator Guide (Simple) on jsbin.com
-</a>
-<a href="https://jsfiddle.net/donejs/tmkkL9x1/">Open in JSFiddle</a>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="pYLmBw" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator simple [Starter]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/pYLmBw/">
+  File Navigator simple [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
-This JS Bin has initial prototype HTML and CSS which is useful for
+This CodePen has initial prototype HTML and CSS which is useful for
 getting the application to look right.
 
 The following sections are broken down into:
@@ -128,44 +130,28 @@ Let’s render `rootEntityData` in the page with its immediate children.
 
 ### What you need to know
 
-- CanJS uses [can-stache] to render data in a template
-  and keep it updated.  Templates can be authored in `<script>` tags like:
-
-  ```html
-  <script type="text/stache" id="app-template">
-    TEMPLATE CONTENT
-  </script>
-  ```
-
-- A [can-stache] template uses
-  [can-stache.tags.escaped {{key}}] magic tags to insert data into
-  the HTML output like:
-
-  ```html
-  <script type="text/stache" id="app-template">
-    {{something.name}}
-  </script>
-  ```
-
-- Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
-  ```js
-  const template = can.stache.from(SCRIPT_ID);
-  ```
-
-- Render the template with data into a documentFragment like:
+- CanJS uses [can-component] to render data in a template
+  and keep it updated.  Templates can be authored in the Component `view` property like:
 
   ```js
-  const fragment = template({
-    something: {name: "Derek Brunson"}
+  Component.extend({
+    tag: "my-component",
+    view: `TEMPLATE CONTENT`
   });
   ```
 
-- Insert a fragment into the page with:
+- A Component view is a [can-stache] template that uses
+  [can-stache.tags.escaped {{key}}] magic tags to insert data into
+  the HTML output like:
 
   ```js
-  document.body.appendChild(fragment);
+  Component.extend({
+    tag: "my-component",
+    view: `TEMPLATE CONTENT`
+  });
   ```
 
+- Use [can-define/map/map] to model Component data as [can-component.prototype.ViewModel].
 - Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
 - Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in `can-stache`.
 - Use [can-stache.helpers.is {{#eq(value1, value2)}}] to test equality in `can-stache`.
@@ -178,34 +164,40 @@ Let’s render `rootEntityData` in the page with its immediate children.
 
 Update the __HTML__ tab to:
 
-```html
-<script type="text/stache" id="entities-template">
-  <span>{{name}}</span>
-  <ul>
-    {{#for(child of children)}}
-      <li class="{{child.type}} {{#if(child.hasChildren)}}hasChildren{{/if}}">
-        {{#eq(child.type, 'file')}}
-          📝 <span>{{child.name}}</span>
-        {{else}}
-          📁 <span>{{child.name}}</span>
-        {{/eq}}
-      </li>
-    {{/for}}
-  </ul>
-</script>
-```
-@highlight 2-13
+@sourceref ./file-navigator-simple.html
+@highlight 1,only
 
 Update the __JavaScript__ tab to:
 
 ```js
-const template = can.stache.from("entities-template");
+import { Component } from "//unpkg.com/can@5/core.mjs";
 
-const fragment = template(rootEntityData);
-
-document.body.appendChild( fragment );
+Component.extend({
+  tag: "file-navigator",
+  view: `
+    <span>{{this.rootEntity.name}}</span>
+    <ul>
+      {{# for(child of this.rootEntity.children) }}
+        <li class="{{child.type}} {{# if(child.hasChildren) }}hasChildren{{/ if }}">
+          {{# eq(child.type, 'file')}}
+            📝 <span>{{child.name}}</span>
+          {{else}}
+            📁 <span>{{child.name}}</span>
+          {{/ eq}}
+        </li>
+      {{/ for }}
+    </ul>
+  `,
+  ViewModel: {
+     rootEntity: {
+      default: () => {
+        return rootEntityData;
+      }
+    }
+  }
+});
 ```
-@highlight 1-5
+@highlight 6-17, 20-24, only
 
 ## Render all the files and folders
 
@@ -216,56 +208,72 @@ find a folder, we need to render its contents.
 
 ### Things to know
 
-- A template can call out to another registered _partial_ template with with [can-stache.tags.partial {{>PARTIAL_NAME}}] like the following:
+- A template can call out to another registered _partial_ template with [can-stache.tags.partial {{>PARTIAL_NAME}}] like the following:
 
   ```html
   {{>PARTIAL_NAME}}
   ```
 
-- You can register partial templates with [can-stache.registerPartial can.stache.registerPartial] like the following:
+- You can register an inline named partial within the current template [can-stache.tags.named-partial {{<PARTIAL_NAME}}] like the following:
 
   ```js
-  const template = can.stache.from("TEMPLATE_ID");
-  can.stache.registerPartial("PARTIAL_NAME", template);
+  Component.extend({
+    tag: "my-component",
+    view: `{{<partialView}} BLOCK {{/partialView}}`
+  });
   ```
 
+- The registered inline named partial can be called
+  [recursively](https://canjs.com/doc/can-stache.tags.named-partial.html#TooMuchRecursion) like the following:
+```html
+{{<recursiveView}}
+  <div>{{name}} <b>Type:</b> {{#if(nodes.length)}}Branch{{else}}Leaf{{/if}}</div>
+  {{# for (node of nodes) }}
+    {{>recursiveView}}
+  {{/ for }}
+{{/recursiveView}}
+
+{{>recursiveView yayRecursion}}`
+```
 ### The Solution
 
-Update the __HTML__ tab to:
+Update the __JAVSCRIPT__ tab to:
 
 - Call to an `{{>entities}}` partial.
 
-```html
-<script type="text/stache" id="entities-template">
-  <span>{{name}}</span>
-  <ul>
-    {{#for(child of children)}}
-      <li class="{{child.type}} {{#if(child.hasChildren)}}hasChildren{{/if}}">
-        {{#eq(child.type, 'file')}}
-          📝 <span>{{child.name}}</span>
-        {{else}}
-          📁 <span>{{child.name}}</span>
-        {{/eq}}
-      </li>
-    {{/for}}
-  </ul>
-</script>
-```
-@highlight 9
-
-Update the __JavaScript__ tab to:
-
- - Register the `entities-template` as a partial:
-
 ```js
-const template = can.stache.from("entities-template");
-can.stache.registerPartial("entities", template);
+import { Component } from "//unpkg.com/can@5/core.mjs";
 
-const fragment = template(rootEntityData);
+Component.extend({
+  tag: "file-navigator",
+  view: `
+    {{<entities}}
+      <span>{{this.name}}</span>
+      <ul>
+        {{# for(child of this.children) }}
+          <li class="{{child.type}} {{# if(child.hasChildren) }}hasChildren{{/ if }}">
+            {{# eq(child.type, 'file')}}
+              📝 <span>{{child.name}}</span>
+            {{else}}
+              📁 {{entities(child)}}
+            {{/ eq}}
+          </li>
+        {{/ for }}
+      </ul>
+    {{/entities}}
 
-document.body.appendChild( fragment );
+    {{entities(this.rootEntity)}}
+  `,
+  ViewModel: {
+     rootEntity: {
+      default: () => {
+        return rootEntityData;
+      }
+    }
+  }
+});
 ```
-@highlight 2
+@highlight 6-19,21,only
 
 ## Make the data observable
 
@@ -280,7 +288,9 @@ we change the data, the UI will automatically change.
   properties and the properties’ types like:
 
   ```js
-  Person = can.DefineMap.extend("Person", {
+  import { DefineMap } from "can";
+
+  Person = DefineMap.extend("Person", {
     name: "string",
     age: "number"
   })
@@ -301,10 +311,12 @@ we change the data, the UI will automatically change.
   person.name = "Kevin" //-> logs "entity name changed to Kevin"
   ```
 
-- `can.DefineMap` supports an [can-define.types.propDefinition#Array Array shorthand] that allows one to specify a [can-define/list/list can.DefineList] of typed instances like:
+- [can-define/map/map DefineMap] supports an [can-define.types.propDefinition#Array Array shorthand] that allows one to specify a [can-define/list/list DefineList] of typed instances like:
 
   ```js
-  Person = can.DefineMap.extend("Person", {
+  import { DefineMap } from "can";
+
+  const Person = DefineMap.extend("Person", {
     name: "string",
     age: "number",
     addresses: [Address]
@@ -314,7 +326,9 @@ we change the data, the UI will automatically change.
   However, if `Address` wasn’t immediately available, you could do the same thing like:
 
   ```js
-  Person = can.DefineMap.extend("Person", {
+  import { DefineMap } from "can";
+
+  const Person = DefineMap.extend("Person", {
     name: "string",
     age: "number",
     addresses: [{
@@ -335,7 +349,9 @@ Update the __JavaScript__ tab to:
 - Use `rootEntity` to render the template
 
 ```js
-const Entity = can.DefineMap.extend("Entity", {
+import { Component, DefineMap } from "//unpkg.com/can@5/core.mjs";
+
+const Entity = DefineMap.extend("Entity", {
   id: "string",
   name: "string",
   parentId: "string",
@@ -350,14 +366,36 @@ const Entity = can.DefineMap.extend("Entity", {
 
 const rootEntity = new Entity(rootEntityData);
 
-const template = can.stache.from("entities-template");
-can.stache.registerPartial("entities", template);
+Component.extend({
+  tag: "file-navigator",
+  view: `
+    {{<entities}}
+      <span>{{this.name}}</span>
+      <ul>
+        {{# for(child of this.children) }}
+          <li class="{{child.type}} {{# if(child.hasChildren) }}hasChildren{{/ if }}">
+            {{# eq(child.type, 'file') }}
+              📝 <span>{{child.name}}</span>
+            {{else}}
+              📁 {{entities(child)}}
+            {{/ eq }}
+          </li>
+        {{/ for }}
+      </ul>
+    {{/entities}}
 
-const fragment = template(rootEntity);
-
-document.body.appendChild( fragment );
+    {{entities(this.rootEntity)}}
+  `,
+  ViewModel: {
+     rootEntity: {
+      default: () => {
+        return rootEntity;
+      }
+    }
+  }
+});
 ```
-@highlight 1-14,19
+@highlight 1,3-14,16,41
 
 ### Test it
 
@@ -379,18 +417,22 @@ We want to be able to toggle if a folder is open or closed.
 
 ### Things to know
 
-- `can.DefineMap` can specify a default value and a type:
+- [can-define/map/map DefineMap] can specify a default value and a type:
   ```js
-  const Person = can.DefineMap.extend({
+  import { DefineMap } from "can";
+
+  const Person = DefineMap.extend({
     address: Address,
     age: {default: 33, type: "number"}
   });
   ```
 
-- `can.DefineMap` can also have methods:
+- [can-define/map/map DefineMap] can also have methods:
 
   ```js
-  const Person = can.DefineMap.extend({
+  import { DefineMap } from "can";
+
+  const Person = DefineMap.extend({
     address: Address,
     age: {default: 33, type: "number"},
     birthday: function(){
@@ -415,14 +457,16 @@ Update the __JavaScript__ tab to:
 - Add a `toggleOpen` method to `Entity`.
 
 ```js
-const Entity = can.DefineMap.extend("Entity", {
+import { Component, DefineMap } from "//unpkg.com/can@5/core.mjs";
+
+const Entity = DefineMap.extend("Entity", {
   id: "string",
   name: "string",
   parentId: "string",
   hasChildren: "boolean",
   type: "string",
   children: [{
-    type: function(entity){
+    type: function(entity) {
       return new Entity(entity)
     }
   }],
@@ -434,48 +478,48 @@ const Entity = can.DefineMap.extend("Entity", {
 
 const rootEntity = new Entity(rootEntityData);
 
-const template = can.stache.from("entities-template");
-can.stache.registerPartial("entities", template);
+Component.extend({
+  tag: "file-navigator",
+  view: `
+    {{<entities}}
+      <span on:click="toggleOpen()">{{this.name}}</span>
+      {{# if(isOpen) }}
+        <ul>
+          {{# for(child of this.children) }}
+            <li class="{{child.type}} {{# if(child.hasChildren) }}hasChildren{{/ if }}">
+              {{# eq(child.type, 'file') }}
+                📝 <span>{{child.name}}</span>
+              {{else}}
+                📁 {{entities(child)}}
+              {{/ eq }}
+            </li>
+          {{/ for }}
+        </ul>
+      {{/ if }}
+    {{/entities}}
 
-const fragment = template(rootEntity);              
-
-document.body.appendChild( fragment );
+    {{entities(this.rootEntity)}}
+  `,
+  ViewModel: {
+     rootEntity: {
+      default: () => {
+        return rootEntity;
+      }
+    }
+  }
+});
 ```
-@highlight 12-15
-
-Update the __HTML__ tab to:
-
-- Call `toggleOpen()` when clicked.
-- Only show the children `{{#if(isOpen)}}` is true.
-
-```html
-<script type="text/stache" id="entities-template">
-  <span on:click="toggleOpen()">{{name}}</span>
-  {{#if(isOpen)}}
-  <ul>
-    {{#for(child of children)}}
-      <li class="{{child.type}} {{#if(child.hasChildren)}}hasChildren{{/if}}">
-        {{#eq(child.type, 'file')}}
-          📝 <span>{{child.name}}</span>
-        {{else}}
-          📁 <span>{{child.name}}</span>
-        {{/eq}}
-      </li>
-    {{/for}}
-  </ul>
-  {{/if}}
-</script>
-```
-@highlight 2,3,15
+@highlight 14,15-17,26,27,39,only
 
 ## Result
 
 When complete, you should have a working file-navigation widget
-like the following JS Bin:
+like the following CodePen:
 
-<a class="jsbin-embed" href="https://jsbin.com/diqeyoj/22/embed?js,output">
-  Finished version of the CanJS File Navigator Guide (Simple) on jsbin.com
-</a>
-<a href="https://jsfiddle.net/donejs/Lus3f8kL/">Open in JSFiddle</a>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="PLRvLw" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator simple [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/PLRvLw/">
+  File Navigator simple [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.1.0"></script>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
