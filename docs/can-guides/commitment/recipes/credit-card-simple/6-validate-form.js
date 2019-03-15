@@ -5,27 +5,26 @@ Stripe.setPublishableKey("pk_test_zCC2JrO3KSMeh7BB5x9OUe2U");
 Component.extend({
 	tag: 'cc-payment',
 	view: `
-		<form on:submit="pay(scope.event)">
-
-			{{# if(errorMessage) }}
-				<div class="message">{{ errorMessage }}</div>
+		<form on:submit="this.pay(scope.event)">
+			
+			{{# if(this.errorMessage) }}
+				<div class="message">{{ this.errorMessage }}</div>
 			{{/ if }}
 
 			<input type="text" name="number" placeholder="Card Number"
-				{{# if(cardError) }}class="is-error"{{/ if }}
-				value:bind="userCardNumber"/>
+					{{# if(this.cardError) }}class="is-error"{{/ if }}
+				value:bind="this.userCardNumber"/>
 
 			<input type="text" name="expiry" placeholder="MM-YY"
-			{{# if(expiryError) }}class="is-error"{{/ if }}
-				value:bind="userExpiry"/>
+				{{# if(this.expiryError) }}class="is-error"{{/ if }}
+				value:bind="this.userExpiry"/>
 
 			<input type="text" name="cvc" placeholder="CVC"
-				{{# if(cvcError) }}class="is-error"{{/ if }}
-				value:bind="userCVC"/>
+			{{# if(this.cvcError) }}class="is-error"{{/ if }}
+				value:bind="this.userCVC"/>
 
-			<button disabled:from="isCardInvalid">Pay $\{{ amount }}</button>
-
-			
+			<button disabled:from="this.isCardInvalid">Pay $\{{ this.amount }}</button>
+		
 		</form>
 	`,
 	ViewModel: {

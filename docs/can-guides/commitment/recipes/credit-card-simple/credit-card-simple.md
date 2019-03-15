@@ -209,7 +209,7 @@ So that we can print out the values like:
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-format.js
-@highlight 22,3-32,35-41,42-44,45-47,50-53,only
+@highlight 22,32-34,37-49,52-55,only
 
 
 
@@ -328,7 +328,7 @@ To do that, we’ll add the following properties to the ViewModel:
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-validate-form.js
-@highlight 10-12,26,98-108,only
+@highlight 10-12,26,97-107,only
 
 ## Result
 
@@ -339,7 +339,5 @@ When complete, you should have a working credit card payment form like the follo
   Credit Card Guide (Simple) [Finished]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
-
-<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>

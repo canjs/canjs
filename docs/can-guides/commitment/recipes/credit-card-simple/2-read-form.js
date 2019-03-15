@@ -8,26 +8,28 @@ Component.extend({
 		<form>
 
 			<input type="text" name="number" placeholder="Card Number"
-				value:bind="userCardNumber"/>
+				value:bind="this.userCardNumber"/>
 
 			<input type="text" name="expiry" placeholder="MM-YY"
-				value:bind="userExpiry"/>
+				value:bind="this.userExpiry"/>
 
 			<input type="text" name="cvc" placeholder="CVC"
-				value:bind="userCVC"/>
+				value:bind="this.userCVC"/>
 
-			<button>Pay $\{{ amount }}</button>
+			<button>Pay $\{{ this.amount }}</button>
 
-			<p>{{ userCardNumber }}, {{ userExpiry }}, {{ userCVC }}</p>
+			<p>{{ this.userCardNumber }}, {{ this.userExpiry }}, {{ this.userCVC }}</p>
 			
 		</form>
 	`,
 	ViewModel: {
-		amount: { default: 9.99 },
-		
+		amount: {
+			default: 9.99
+		},
+
 		userCardNumber: "string",
 
-	 	userExpiry: "string",
+		userExpiry: "string",
 
 		userCVC: "string"
 	}

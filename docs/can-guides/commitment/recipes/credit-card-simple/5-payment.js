@@ -5,25 +5,25 @@ Stripe.setPublishableKey("pk_test_zCC2JrO3KSMeh7BB5x9OUe2U");
 Component.extend({
 	tag: 'cc-payment',
 	view: `
-		<form on:submit="pay(scope.event)">
+		<form on:submit="this.pay(scope.event)">
 
 			<input type="text" name="number" placeholder="Card Number"
-				{{# if(cardError) }}class="is-error"{{/ if }}
-				value:bind="userCardNumber"/>
+					{{# if(this.cardError) }}class="is-error"{{/ if }}
+				value:bind="this.userCardNumber"/>
 
 			<input type="text" name="expiry" placeholder="MM-YY"
-			{{# if(expiryError) }}class="is-error"{{/ if }}
-				value:bind="userExpiry"/>
+				{{# if(this.expiryError) }}class="is-error"{{/ if }}
+				value:bind="this.userExpiry"/>
 
 			<input type="text" name="cvc" placeholder="CVC"
-				{{# if(cvcError) }}class="is-error"{{/ if }}
-				value:bind="userCVC"/>
+			{{# if(this.cvcError) }}class="is-error"{{/ if }}
+				value:bind="this.userCVC"/>
 
-			<button>Pay $\{{ amount }}</button>
+			<button>Pay $\{{ this.amount }}</button>
 
-			<p>{{ userCardNumber }}, {{ userExpiry }}, {{ userCVC }}</p>
-			<p>{{ cardNumber }}, {{ expiryMonth }}-{{ expiryYear }}, {{ cvc }}</p>
-			
+			<p>{{ this.userCardNumber }}, {{ this.userExpiry }}, {{ this.userCVC }}</p>
+			<p>{{ this.cardNumber }}, {{ this.expiryMonth }}-{{ this.expiryYear }}, {{ this.cvc }}</p>
+		
 		</form>
 	`,
 	ViewModel: {
