@@ -80,7 +80,7 @@ export { default as ajax } from "./es/can-ajax";
 export { default as attributeEncoder } from "./es/can-attribute-encoder";
 export { default as childNodes } from "./es/can-child-nodes";
 export { default as Control } from "./es/can-control";
-export { default as domEvents } from "./es/can-dom-events";
+export { default as domEvents, addJQueryEvents } from "./es/can-dom-events";
 export { default as domMutate, domMutateNode, domMutateDomEvents } from "./es/can-dom-mutate";
 export { default as fragment } from "./es/can-fragment";
 
