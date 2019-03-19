@@ -149,7 +149,7 @@
     "bit-docs": "0.0.11",
     "can-reflect-tests": "<2.0.0",
     "can-test-helpers": "^1.1.1",
-    "core-js": "^2.5.7",
+    "core-js": "^3.0.0",
     "es6-promise-polyfill": "^1.2.0",
     "feathers": "^2.0.3",
     "feathers-authentication-client": "^0.1.6",
