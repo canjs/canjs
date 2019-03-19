@@ -645,7 +645,7 @@ Below is an entire app that shows off some of the best features of CanJS:
 </div>
 <div class="gray-callout clients">
   <div class="clients-single-col">
-    <h2>Trusted by Companies</h2>
+    <h2>Who Uses CanJS?</h2>
     <div class="client-logos">
       <img alt="Chase" src="../docs/images/logos/chase.svg" />
       <img alt="Bitovi" src="../docs/images/logos/bitovi.svg" />
