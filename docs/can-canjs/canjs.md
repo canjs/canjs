@@ -566,7 +566,7 @@ We promise you’ll love writing your templates this way.
 {{/ if }}
 {{# if(this.todosPromise.isResolved) }}
 	<ul>
-		{{# for(todo of this.todosPromise.value) }}
+		{{# for(todo of this.todosPromise.value) }}   
 			<li>
 				{{ todo.name }}
 			</li>
