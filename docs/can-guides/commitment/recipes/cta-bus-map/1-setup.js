@@ -1,17 +1,49 @@
+import { Component } from "//unpkg.com/can@5/core.mjs";
 const proxyUrl = "https://can-cors.herokuapp.com/";
 const token = "?key=piRYHjJ5D2Am39C9MxduHgRZc&format=json";
 const apiRoot = "http://www.ctabustracker.com/bustime/api/v2/"
 const getRoutesEnpoint = apiRoot + "getroutes" + token;
 const getVehiclesEndpoint = apiRoot + "getvehicles" + token;
 
-const BusTrackerVM = can.DefineMap.extend({
-  title: {
-    default: "Chicago CTA Bus Tracker"
-  }
+window.googleAPI = new Promise(function (resolve) {
+  const script = document.createElement("script");
+  script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyD7POAQA-i16Vws48h4yRFVGBZzIExOAJI";
+  document.body.appendChild(script);
+  script.onload = resolve;
 });
 
-const viewModel = new BusTrackerVM();
-
-const view = can.stache.from("app-view");
-const fragment = view(viewModel);
-document.body.appendChild(fragment);
+Component.extend({
+  tag: "bus-tracker",
+  view: `
+    <div class="top">
+      <div class="header">
+        <h1>{{this.title}}</h1>
+        <p>Loading routes…</p>
+      </div>
+      <ul class="routes-list">
+        <li>
+          <span class="route-number">1</span>
+          <span class="route-name">Bronzeville/Union Station</span>
+          <span class="check">✔</span>
+        </li>
+        <li class="active">
+          <span class="route-number">2</span>
+          <span class="route-name">Hyde Park Express</span>
+          <span class="check">✔</span>
+        </li>
+      </ul>
+    </div>
+    <div class="bottom">
+      <div class="route-selected">
+        <small>Route 2:</small> Hyde Park Express
+        <div class="error-message">No vehicles available for this route</div>
+      </div>
+      <div class='gmap'>Google map will go here.</div>
+    </div>
+  `,
+  ViewModel: {
+    title: {
+      default: "Chicago CTA Bus Tracker"
+    }
+  }
+});
