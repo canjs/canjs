@@ -81,9 +81,9 @@ export { default as attributeEncoder } from "./es/can-attribute-encoder";
 export { default as childNodes } from "./es/can-child-nodes";
 export { default as Control } from "./es/can-control";
 export { default as domEvents, addJQueryEvents } from "./es/can-dom-events";
+export { default as domData } from "./es/can-dom-data";
 export { default as domMutate, domMutateNode, domMutateDomEvents } from "./es/can-dom-mutate";
 export { default as fragment } from "./es/can-fragment";
-export { default as domData } from "./es/can-dom-data";
 
 
 // __ Data Validation
