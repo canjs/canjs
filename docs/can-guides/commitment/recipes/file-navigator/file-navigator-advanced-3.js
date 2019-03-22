@@ -1,4 +1,4 @@
-import { fixture, DefineMap, DefineList, realtimeRestModel } from "//unpkg.com/can@5/core.mjs";
+import { fixture, DefineMap } from "//unpkg.com/can@5/core.mjs";
 
 // Stores the next entity id to use.
 let entityId = 1;
@@ -55,7 +55,7 @@ fixture("/api/entities", entitiesStore);
 fixture.delay = 1000;
 
 const Entity = DefineMap.extend({
-  id: "string",
+	id: {type: "string", identity: true},
   name: "string",
   parentId: "string",
   hasChildren: "boolean",

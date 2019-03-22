@@ -1,4 +1,4 @@
-import { fixture, DefineMap, DefineList, realtimeRestModel, Component } from "//unpkg.com/can@5/core.mjs";
+import { fixture, DefineMap, DefineList, realtimeRestModel, QueryLogic, Component } from "//unpkg.com/can@5/core.mjs";
 
 // Stores the next entity id to use.
 let entityId = 1;
@@ -55,19 +55,21 @@ fixture("/api/entities", entitiesStore);
 fixture.delay = 1000;
 
 const Entity = DefineMap.extend({
-  id: "string",
+  id: {type: "string", identity: true},
   name: "string",
   parentId: "string",
   hasChildren: "boolean",
   type: "string"
 });
 
-Entity.List = DefineList.extend({});
+Entity.List = DefineList.extend({
+  "#": Entity
+});
 
 Entity.connection = realtimeRestModel({
   Map: Entity,
-  List: Entity.List,
-  url: "/api/entities"
+  url: "/api/entities",
+  queryLogic: new QueryLogic(Entity)
 });
 
 const folder = new Entity({
@@ -103,7 +105,7 @@ Component.extend({
     folder: Entity,
     entitiesPromise: {
       default() {
-        return Entity.getList({ parentId: this.folder.id });
+        return Entity.getList({ filter: { parentId: this.folder.id }});
       }
     },
     isOpen: {type: "boolean", default: false},

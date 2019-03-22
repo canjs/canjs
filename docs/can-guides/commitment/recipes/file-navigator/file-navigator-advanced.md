@@ -190,7 +190,7 @@ realtimeRestModel({
 Use `realtimeRestModel` to connect `Entity` to `/api/entities` like:
 
 @sourceref ./file-navigator-advanced-4.js
-@highlight 1,65-71,only
+@highlight 1,65-67,69-73,only
 
 ## Create the ROOT entity and render it
 
@@ -261,7 +261,7 @@ Update the __JavaScript__ tab to:
 3- Write the component `ViewModel` that has `folder` property with `folder` `Entity` instance as value.
 
 @sourceref ./file-navigator-advanced-5.js
-@highlight 1,73-90,only
+@highlight 1,75-80,82-92,only
 
 ## Render the ROOT entities children
 
@@ -293,7 +293,7 @@ the promise is pending, and then writes out an `<li>` for each entity in the res
 will contain the files and folders that are directly within the root folder.
 
 @sourceref ./file-navigator-advanced-6.js
-@highlight 84-98,104-106,only
+@highlight 86-100,106-110,only
 
 ## Create an `<a-folder>` custom element to manage folder behavior
 
@@ -418,7 +418,7 @@ The following:
 
 
 @sourceref ./file-navigator-advanced-7.js
-@highlight 80-114,118,only
+@highlight 82-116,120,only
 
 
 
