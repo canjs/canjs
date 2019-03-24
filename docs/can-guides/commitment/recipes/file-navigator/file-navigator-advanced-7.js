@@ -1,4 +1,4 @@
-import { fixture, DefineMap, DefineList, realtimeRestModel, Component } from "//unpkg.com/can@5/core.mjs";
+import { fixture, DefineMap, restModel, Component } from "//unpkg.com/can@5/core.mjs";
 
 // Stores the next entity id to use.
 let entityId = 1;
@@ -62,37 +62,27 @@ const Entity = DefineMap.extend({
   type: "string"
 });
 
-Entity.List = DefineList.extend({
-  "#": Entity
-});
-
-Entity.connection = realtimeRestModel({
+Entity.connection = restModel({
   Map: Entity,
   url: "/api/entities"
 });
 
-const folder = new Entity({
-  id: "0",
-  name: "ROOT/",
-  hasChildren: true,
-  type: "folder"
-});
-
 Component.extend({
   tag: "a-folder",
-   view: `
-    <span on:click="toggleOpen()">{{folder.name}}</span>
+  view: `
+    <span on:click="toggleOpen()">{{ this.folder.name }}</span>
     {{# if(this.isOpen) }}
       {{# if(this.entitiesPromise.isPending) }}
         <div class="loading">Loading</div>
-      {{else}}
+        {{else}}
         <ul>
           {{# for(entity of this.entitiesPromise.value) }}
-            <li class="{{entity.type}} {{# if(entity.hasChildren) }}hasChildren{{/ if }}">
+            <li class=" {{entity.type}} 
+                        {{# if(entity.hasChildren) }}hasChildren{{/ if }}">
               {{# eq(entity.type, 'file') }}
-                📝 <span>{{entity.name}}</span>
+                📝 <span>{{ entity.name }}</span>
               {{else}}
-                📁 <a-folder folder:from="entity" />            <!-- CHANGED -->
+                📁 <a-folder folder:from="entity" />
               {{/ eq }}
             </li>
           {{/ for }}
@@ -102,24 +92,24 @@ Component.extend({
   `,
   ViewModel: {
     folder: Entity,
-    entitiesPromise: {
-      default() {
+    isOpen: {type: "boolean", default: false},
+    get entitiesPromise() {
+      if (this.folder) {
         return Entity.getList({ filter: { parentId: this.folder.id }});
       }
     },
-    isOpen: {type: "boolean", default: false},
     toggleOpen: function() {
       this.isOpen = !this.isOpen;
     }
   }
 });
 
-Component.extend({
-  tag: "file-navigator",
-  view: `<a-folder folder:from="this.folder" isOpen:from="true" />`,
-  ViewModel: {
-    folder: {
-      default: () => folder
-    }
-  }
+root.viewModel.set({
+  isOpen: true,
+  folder: new Entity({
+    id: "0",
+    name: "ROOT/",
+    hasChildren: true,
+    type: "folder"
+  })
 });

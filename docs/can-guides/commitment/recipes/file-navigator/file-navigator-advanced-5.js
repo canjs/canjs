@@ -1,4 +1,4 @@
-import { fixture, DefineMap, DefineList, realtimeRestModel, Component } from "//unpkg.com/can@5/core.mjs";
+import { fixture, DefineMap, restModel, Component } from "//unpkg.com/can@5/core.mjs";
 
 // Stores the next entity id to use.
 let entityId = 1;
@@ -62,30 +62,26 @@ const Entity = DefineMap.extend({
   type: "string"
 });
 
-Entity.List = DefineList.extend({
-  "#": Entity
-});
-
-Entity.connection = realtimeRestModel({
+Entity.connection = restModel({
   Map: Entity,
   url: "/api/entities"
 });
 
-const folder = new Entity({
-  id: "0",
-  name: "ROOT/",
-  hasChildren: true,
-  type: "folder"
-});
-
 Component.extend({
-  tag: "file-navigator",
+  tag: "a-folder",
   view: `
-    <span>{{this.folder.name}}</span>
+    <span>{{ this.folder.name }}</span>
   `,
   ViewModel: {
-    folder: {
-      default: () => folder
-    }
+    folder: Entity
   }
+});
+
+root.viewModel.set({
+  folder: new Entity({
+    id: "0",
+    name: "ROOT/",
+    hasChildren: true,
+    type: "folder"
+  })
 });

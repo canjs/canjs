@@ -84,7 +84,7 @@ The first level files and folders should have a `parentId` of `"0"`.
 - [can-fixture] is used to trap AJAX requests like:
 
   ```js
-  can.fixture("/api/entities", function(request) {
+  fixture("/api/entities", function(request) {
     // request.data.folderId -> "1"
     return {data: [ ... ]}
   })
@@ -94,14 +94,14 @@ The first level files and folders should have a `parentId` of `"0"`.
 
   ```js
   const entities = [ ... ];
-  const entitiesStore = can.fixture.store( entities );
-  can.fixture("/api/entities", entitiesStore);
+  const entitiesStore = fixture.store( entities );
+  fixture("/api/entities", entitiesStore);
   ```
 
 - [can-fixture.rand] can be used to create a random integer:
   ```
-  can.fixture.rand(10) //-> 10
-  can.fixture.rand(10) //-> 0
+  fixture.rand(10) //-> 10
+  fixture.rand(10) //-> 0
   ```
 
 
@@ -175,11 +175,11 @@ Entity.getList({parentId: "0"}).then(function(entities) {
 
 ### Things to know
 
-[can-realtime-rest-model realtimeRestModel()] can connect a `Map` type to
+[can-rest-model restModel()] can connect a `Map` type to
 a `url` like:
 
 ```js
-realtimeRestModel({
+restModel({
   Map: Entity,
   url: "URL"
 });
@@ -187,10 +187,10 @@ realtimeRestModel({
 
 ### The solution
 
-Use `realtimeRestModel` to connect `Entity` to `/api/entities` like:
+Use `restModel` to connect `Entity` to `/api/entities` like:
 
 @sourceref ./file-navigator-advanced-4.js
-@highlight 1,65-67,69-73,only
+@highlight 1,65-68,only
 
 ## Create the ROOT entity and render it
 
@@ -250,18 +250,20 @@ in the same way it’s expected by the designer.
 Update the __HTML__ tab to render the `folder`’s name.
 
 ```html
-<file-navigator></file-navigator>
+<a-folder id="root"></a-folder>
 ```
 @highlight 2
 
 Update the __JavaScript__ tab to:
 
-1. Create a `folder` `Entity` instance.
+1. Define a component with `a-folder` custom tag
 2. Write the component view template that displays the `folder` `Entity` `name`.
-3- Write the component `ViewModel` that has `folder` property with `folder` `Entity` instance as value.
-
+3. Write the component `ViewModel` that has the following properties:
+  - `folder` which references the folder being displayed.
+  - `entitiesPromise` which will be a promise of all files for that folder.
+6. Set the component `ViewModel` values with [can-view-model can-view-model] `set` function
 @sourceref ./file-navigator-advanced-5.js
-@highlight 1,74-79,81-91,only
+@highlight 1,70-78,80-87,only
 
 ## Render the ROOT entities children
 
@@ -286,71 +288,23 @@ In this section, we’ll list the files and folders within the root folder.
 
 Update the __JavaScript__ tab to:
 
-- Use `entitiesPromise` to write `<div class="loading">Loading</div>` while
-the promise is pending, and then writes out an `<li>` for each entity in the resolved `entitiesPromise`
-
 - Add `entitiesPromise` property to the `ViewModel`.  `entitiesPromise`
 will contain the files and folders that are directly within the root folder.
 
-@sourceref ./file-navigator-advanced-6.js
-@highlight 85-99,105-109,only
+- Use `entitiesPromise` to write `<div class="loading">Loading</div>` while
+the promise is pending, and then writes out an `<li>` for each entity in the resolved `entitiesPromise`
 
-## Create an `<a-folder>` custom element to manage folder behavior
+@sourceref ./file-navigator-advanced-6.js
+@highlight 74-88,92-96,only
+
+## Manage `<a-folder>` custom element behavior
 
 ### The problem
 
-Now we want to make all the folders able to open and close.  This means creating a `FolderVM` for every folder entity.
+Now we want to make all the folders able to open and close.
 
 ### Things to know
 
-- [can-component Component] is used to create custom elements like:
-  ```js
-  import { Component } from "can";
-  Component.extend({
-    tag: "my-component",
-    ViewModel: {
-      message: {default: "Hello There!"}
-    },
-    view: can.stache("<h1>{{message}}</h1>");
-  });
-  ```
-  This component will be created anytime a `<my-component>` element is found in the page.  When the component is created, it creates
-  an instance of its `ViewModel`, in this case `MyComponentVM`.
-
-- You can pass data to a component’s `ViewModel` with [can-stache-bindings.toChild {data-bindings}] like:
-
-  ```html
-  <my-component message:from="'Hi There'" />
-  ```
-
-  This sets `message` on the ViewModel to `'Hi There'`.  You can also send data within stache like:
-
-  ```html
-  <my-component message:from="greeting" />
-  ```
-  This sets `message` on the ViewModel to what `greeting` is in the stache template.
-
-- A component’s [View] is rendered inside the component.  This means that if the following is in a template:
-
-  ```
-  <my-component {message}="'Hi There'" />
-  ```
-
-  The following will be inserted into the page:
-
-  ```
-  <my-component {message}="'Hi There'"><h1>Hi There</h1></my-component>
-  ```
-
-- `this` in a stache template refers to the current context of a template or section.  
-
-  For example, the `this` in `this.name` refers to the `context` object:
-
-  ```javascript
-  const template = stache("{{this.name}}");
-  const context = {name: "Justin"};
-  template(context);
-  ```
 - CanJS uses [guides/technicalViewModels#MaintainableMVVM ViewModels] to manage the behavior
   of views.  ViewModels can have their own state, such as if a folder `isOpen` and should be showing
   its children. `ViewModels` are constructor functions created with [can-define/map/map DefineMap].
@@ -406,19 +360,15 @@ Now we want to make all the folders able to open and close.  This means creating
 
 The following:
 
-1. Moves the content that was in the `<file-navigator>` `view` to the `<a-folder>` `view`.
-2. Changes the `view` in `file-navigator` component to use the `<a-folder>` component to render the root folder. It
-   passes the root folder as `folder` to the `<a-folder>` component’s ViewModel.
-3. Define `<a-folder>` `ViewModel` that will manage the UI state around a folder.  Specifically the `ViewModel` has:
-   - `folder` which references the folder being displayed.
-   - `entitiesPromise` which will be a promise of all files for that folder.
+3. Define `ViewModel` properties that will manage the UI state around a folder.:
    - `isOpen` which tracks if the folder’s children should be displayed.
    - `toggleOpen` which changes `isOpen`.
-4. Recursively renders each child folder with `<a-folder folder:from="this" />`.
+4. Recursively renders each child folder with `<a-folder folder:from="entity" />`.
+5. Set the root folder `isOpen` property to `true` in the `ViewModel` mounting invocation (`root.viewModel.set`).
 
 
 @sourceref ./file-navigator-advanced-7.js
-@highlight 81-115,119,only
+@highlight 73-74,85,91,95,101-103,only
 
 
 

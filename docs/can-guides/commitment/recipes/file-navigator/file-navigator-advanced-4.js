@@ -1,4 +1,4 @@
-import { fixture, DefineMap, DefineList, realtimeRestModel } from "//unpkg.com/can@5/core.mjs";
+import { fixture, DefineMap, restModel } from "//unpkg.com/can@5/core.mjs";
 
 // Stores the next entity id to use.
 let entityId = 1;
@@ -62,11 +62,7 @@ const Entity = DefineMap.extend({
   type: "string"
 });
 
-Entity.List = DefineList.extend({
-  "#": Entity
-});
-
-Entity.connection = realtimeRestModel({
+Entity.connection = restModel({
   Map: Entity,
   url: "/api/entities"
 });

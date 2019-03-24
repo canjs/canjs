@@ -55,7 +55,7 @@ fixture("/api/entities", entitiesStore);
 fixture.delay = 1000;
 
 const Entity = DefineMap.extend({
-	id: {type: "string", identity: true},
+  id: {type: "string", identity: true},
   name: "string",
   parentId: "string",
   hasChildren: "boolean",
