@@ -7,10 +7,6 @@ basic rich text editor.
 
 @body
 
-> A live stream of this recipe was recorded at a [DoneJS Los Angeles](https://www.meetup.com/DoneJS-LA/) [Hack Night on July 9<sup>th</sup>, 2018](https://www.meetup.com/DoneJS-LA/events/251662343/):
-> <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/Hqglk6Fkvyc?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-
-
 <style>
   video.bit-docs-screenshot {max-width: 600px;}
 </style>
@@ -26,8 +22,10 @@ In this guide you will learn how to:
 
 The final widget looks like:
 
-<p data-height="300" data-theme-id="0" data-slug-hash="qKeBeZ" data-default-tab="result" data-user="chasenlehara" data-embed-version="2" data-pen-title="CanJS 5 Text Editor" class="codepen">
-  See the Pen <a href="https://codepen.io/chasenlehara/pen/qKeBeZ/">CanJS 5 Text Editor</a> by Chasen Le Hara (<a href="https://codepen.io/chasenlehara">@chasenlehara</a>) on <a href="https://codepen.io">CodePen</a>.
+<p class="codepen" data-height="332" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="XGgbdb" style="height: 332px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 Text Editor">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/XGgbdb/">
+  CanJS 5 Text Editor</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
 The following sections are broken down into the following parts:
@@ -41,8 +39,10 @@ The following sections are broken down into the following parts:
 
 __START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED__:
 
-<p data-height="265" data-theme-id="0" data-slug-hash="dKxPzz" data-default-tab="js,result" data-user="chasenlehara" data-embed-version="2" data-pen-title="CanJS 5 Text Editor (Starting)" class="codepen">
-  See the Pen <a href="https://codepen.io/chasenlehara/pen/dKxPzz/">CanJS 5 Text Editor (Starting)</a> by Chasen Le Hara (<a href="https://codepen.io/chasenlehara">@chasenlehara</a>) on <a href="https://codepen.io">CodePen</a>.
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="ywXNOd" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 Text Editor">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/ywXNOd/">
+  CanJS 5 Text Editor</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
 This CodePen:
@@ -771,8 +771,10 @@ Update the __JavaScript__ tab to:
 
 When finished, you should see something like the following CodePen:
 
-<p data-height="300" data-theme-id="0" data-slug-hash="qKeBeZ" data-default-tab="result" data-user="chasenlehara" data-embed-version="2" data-pen-title="CanJS 5 Text Editor" class="codepen">
-  See the Pen <a href="https://codepen.io/chasenlehara/pen/qKeBeZ/">CanJS 5 Text Editor</a> by Chasen Le Hara (<a href="https://codepen.io/chasenlehara">@chasenlehara</a>) on <a href="https://codepen.io">CodePen</a>.
+<p class="codepen" data-height="332" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="XGgbdb" style="height: 332px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 Text Editor">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/XGgbdb/">
+  CanJS 5 Text Editor</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>

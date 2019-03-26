@@ -18,7 +18,11 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/rosuzit/4/embed?output">JS Bin on jsbin.com</a>
+<p class="codepen" data-height="360" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="GexXdG" style="height: 360px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Simple) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/GexXdG/">
+  Credit Card Guide (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 To use the widget:
 
@@ -31,11 +35,15 @@ To use the widget:
    the invalid inputs should be highlighted red, and the _Pay_
    button should become disabled.
 
-__START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
+__START THIS TUTORIAL BY CLONING THE FOLLOWING CODEPEN__:
 
-<a class="jsbin-embed" href="https://jsbin.com/rosuzit/1/embed?output">JS Bin on jsbin.com</a>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="pYLOOz" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Simple) [Starter]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/pYLOOz/">
+  Credit Card Guide (Simple) [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
-This JS Bin has initial prototype HTML and CSS which is useful for
+This CodePen has initial prototype HTML and CSS which is useful for
 getting the application to look right.
 
 The following sections are broken down into:
@@ -50,81 +58,39 @@ The following sections are broken down into:
 
 ### The problem
 
-Let’s create a `payment-view` template and render it with
-a ViewModel called `PaymentVM`, which will have
+Let’s create a `cc-payment` component with a ViewModel, which will have
 an `amount` property that defaults to `9.99`.  When complete, we
-should be able update the displayed “pay amount” by writing the
-following in the console:
-
-```js
-viewModel.amount = 1000;
-```
+should be able update the displayed “pay amount”.
 
 ### What you need to know
 
 
 - To use Stripe, you must call [Stripe.setPublishableKey](https://stripe.com/docs/stripe.js/v2#setting-publishable-key).
 
-- A basic CanJS setup uses instances of a ViewModel to manage the
-  behavior of a View.  A ViewModel type is defined, an instance of it
-  is created and passed to a View as follows:
+- A basic CanJS setup uses instances of a [can-component], which glues a ViewModel
+ to a View in order to manage it's behavior as follows:
 
   ```js
-  // Define the ViewModel type
-  const MyViewModel = can.DefineMap.extend("MyViewModel",{
-   ...      
-  })
-  // Create an instance of the ViewModel
-  const viewModel = new MyViewModel();
-  // Get a View
-  const view = can.stache.from("my-view");
-  // Render the View with the ViewModel instance
-  const fragment = view(viewModel);
-  document.body.appendChild(fragment);
-  ```
-
-- CanJS uses [can-stache] to render data in a template
-  and keep it live.  Templates can be authored in `<script>` tags like:
-
-  ```html
-  <script type="text/stache" id="app-view">
-    TEMPLATE CONTENT
-  </script>
-  ```
-
-  A [can-stache] template uses
-  [can-stache.tags.escaped {{key}}] magic tags to insert data into
-  the HTML output like:
-
-  ```html
-  <script type="text/stache" id="app-view">
-    {{something.name}}
-  </script>
-  ```
-
-- Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
-  ```js
-  const template = can.stache.from(SCRIPT_ID);
-  ```
-
-- Render the template with data into a documentFragment like:
-
-  ```js
-  const fragment = template({
-    something: {name: "Derek Brunson"}
+  import { Component } from "can";
+  // Define the Component
+  const CCPayment = Component.extend({
+    tag: "cc-payment",
+    view: "...",
+    ViewModel: {}
   });
   ```
 
-- Insert a fragment into the page with:
-
-  ```js
-  document.body.appendChild(fragment);
+- CanJS component will be mounted in the DOM by adding the the component tag in the HTML page:
+  ```html
+  <cc-payment></cc-payment>
   ```
 
-- [can-define/map/map.extend DefineMap.extend] allows you to define a property with a default value like:
+- CanJS component uses [can-stache] to render data in a template and keep it live.
+
+- The ViewModel is an instance of [can-define/map/map] allows you to define a property with a default value like:
 
   ```js
-  ProductVM = can.DefineMap.extend("ProductVM",{
+  ProductVM = DefineMap.extend("ProductVM", {
     age: {default: 34}
   })
   ```
@@ -150,12 +116,12 @@ viewModel.amount = 1000;
 Update the __HTML__ tab to:
 
 @sourceref ./1-setup.html
-@highlight 10,19,22
+@highlight 1
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
-@highlight 1-12
+@highlight 1-23
 
 
 
@@ -188,7 +154,9 @@ Print out the exported values like:
 - [can-define/map/map.extend DefineMap.extend] allows you to define a property by defining its type like so:
 
   ```js
-  Person = can.DefineMap.extend("Person",{
+  import { DefineMap } from "can";
+
+  Person = DefineMap.extend("Person", {
     name: "string",
     age: "number"
   })
@@ -196,15 +164,10 @@ Print out the exported values like:
 
 ### The solution
 
-Update the __HTML__ tab to:
-
-@sourceref ./2-read-form.html
-@highlight 4-11,15,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-read-form.js
-@highlight 6-10,only
+@highlight 10-17,21,30,32,34,only
 
 
 ## Format form values
@@ -243,15 +206,10 @@ So that we can print out the values like:
 
 ### The solution
 
-Update the __HTML__ tab to:
-
-@sourceref ./3-format.html
-@highlight 16,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-format.js
-@highlight 7-9,12-24,27-30,only
+@highlight 22,32-34,37-49,52-55,only
 
 
 
@@ -283,15 +241,10 @@ their respective form property:
 
 ### The solution
 
-Update the __HTML__ tab to:
-
-@sourceref ./4-validate-values.html
-@highlight 5,9,13,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-validate-values.js
-@highlight 10-14,30-35,42-46,only
+@highlight 11,15,19,36-40,56-61,68-72,only
 
 
 
@@ -309,7 +262,7 @@ alert("Token: " + response.id);
 
 After submitting the form, you should see an alert like:
 
-![Alert](../../../docs/can-guides/commitment/recipes/credit-card-simple/token-alert.png)
+<img alt="Alert" class="bit-docs-screenshot" src="../../../docs/can-guides/commitment/recipes/credit-card-simple/token-alert.png" />
 
 ### What you need to know
 
@@ -341,15 +294,10 @@ After submitting the form, you should see an alert like:
 
 ### The solution
 
-Update the __HTML__ tab to:
-
-@sourceref ./5-payment.html
-@highlight 2,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-payment.js
-@highlight 48-69,only
+@highlight 8,73-94,only
 
 
 ## Validate the form
@@ -377,20 +325,19 @@ To do that, we’ll add the following properties to the ViewModel:
 
 ### The solution
 
-Update the __HTML__ tab to:
-
-@sourceref ./6-validate-form.html
-@highlight 4-6,20,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-validate-form.js
-@highlight 71-81,only
+@highlight 10-12,26,97-107,only
 
 ## Result
 
-When complete, you should have a working credit card payment form like the following JS Bin:
+When complete, you should have a working credit card payment form like the following CodePen:
 
-<a class="jsbin-embed" href="https://jsbin.com/rosuzit/4/embed?output">JS Bin on jsbin.com</a>
+<p class="codepen" data-height="360" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="GexXdG" style="height: 360px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Simple) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/GexXdG/">
+  Credit Card Guide (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.1.2"></script>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>

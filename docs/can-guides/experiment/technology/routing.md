@@ -51,7 +51,11 @@ see the cross-binding in action, try:
 
 3. Click the back button (`⇦`). Notice the observable state updates.
 
-<p data-height="366" data-theme-id="dark" data-slug-hash="QByxyg" data-default-tab="result" data-user="justinbmeyer" data-embed-version="2" data-pen-title="CanJS5 - routing two-way binding" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/QByxyg/">CanJS5 - routing two-way binding</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p class="codepen" data-height="388" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="KEqpqj" style="height: 388px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS5 - routing two-way binding">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/KEqpqj/">
+  CanJS5 - routing two-way binding</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 The binding between the _URL_ and the observable is set by setting [can-route.data route.data] and
 calling [can-route.start route.start()] as follows:

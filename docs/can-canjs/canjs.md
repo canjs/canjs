@@ -3,426 +3,676 @@
 @outline 0
 @package ../../package.json
 @templateRender <% %>
-@description
-
-CanJS is a client-side JavaScript framework used to build rich web interfaces. It provides [state-management](./doc/guides/technology-overview.html#Key_ValueObservables ), [templates](./doc/guides/technology-overview.html#ObservablesandHTMLElements ), [custom elements](./doc/guides/technology-overview.html#Components), and a whole bunch more.  
-
-CanJS makes it easy to to do the common stuff, while helping you build the impossible.
+<style>
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+abbr[title] {
+  text-decoration: underline #c4c4c3;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
+  color: #1A1E1F;
+  border-bottom: none;
+  margin: 0;
+  padding: 0;
+}
+h2 {
+  font-size: 32px;
+  line-height: 1;
+  margin-bottom: 15px;
+}
+h3 {
+  font-size: 28px;
+  line-height: 1;
+  color: #282C33;
+  margin-bottom: 10px;
+}
+code {
+  border-top: 20px solid #327ABB;
+  border-radius: 6px 6px 0 0;
+}
+p + ul {
+  margin-top: 0;
+}
+.description p {
+  font-size: 18px;
+}
+.btn {
+  display: inline-flex;
+  border-radius: 5px;
+  background: linear-gradient(#0288C9, #327ABB);
+  margin: 0 auto;
+  padding: 13px 23px;
+  font-size: 24px;
+  color: #fff;
+  letter-spacing: 0;
+  text-align: center;
+}
+.caption {
+  display: flex;
+  margin: 15px 30px;
+  font-style: italic;
+  line-height: 1.5;
+}
+.title, .description {
+  margin: 0;
+  padding: 0;
+}
+.page-type {
+  display:none;
+  float: none;
+  height: 0;
+  margin: 0;
+  padding: 0;
+}
+.gray-callout {
+  background-color: #E2E1E0;
+  display: flex;
+  flex-wrap: wrap;
+}
+.gray-callout p {
+  margin-bottom: 0;
+}
+.hero-section {
+  display: flex;
+  align-items: center;
+  max-height: 400px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.hero-section .left-col {
+  padding: 30px 0 0 60px;
+}
+.hero-section .right-col {
+  flex: 1;
+}
+.hero-section .right-col img {
+  margin-top: 30px;
+  max-height: 370px;
+}
+.hero-section .btn {
+  margin: 30px 0 45px;
+}
+.hero-logo {
+  fill: #327ABB;
+  width: 300px;
+}
+.single-col-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 60px 30px;
+}
+.single-col-wrapper .btn {
+  margin-top: 45px;
+}
+.three-col-wrapper {
+  display: flex;
+  margin: 60px 30px 60px;
+}
+.three-col-wrapper .col-container {
+  display: flex;
+  flex-direction: column;
+  padding: 15px 15px 0;
+  border-radius: 10px;
+}
+.three-col-wrapper .col-container:last-of-type {
+  margin-right: 0;
+  margin-bottom: 0;
+}
+.three-col-wrapper .col-container h3 {
+  transition: all .3s ease-in-out;
+}
+.three-col-wrapper .col-container .content {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+.three-col-wrapper .col-container .content object {
+  margin: auto 15px;
+  max-height: 240px;
+  min-width: 240px;
+}
+.three-col-wrapper a.col-container {
+  border: 3px solid transparent;
+  transition: all .3s ease-in-out;
+}
+.three-col-wrapper a.col-container:hover {
+  text-decoration: none;
+  border: 3px solid #0288C9;
+}
+.three-col-wrapper a.col-container:hover h3 {
+  border-bottom: 1px solid #0288C9;
+}
+.social {
+  display: flex;
+  flex-direction: column;
+  padding: 45px 60px 30px;
+}
+.social h2 {
+  margin-bottom: 15px;
+}
+.social .social-two-col {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+.social-two-col .left-col {
+  display: flex;
+  flex-direction: column;
+  margin-right: 60px;
+}
+.social-two-col .right-col {
+  display: flex;
+}
+.social-two-col p {
+  padding-bottom: 0;
+}
+.social-two-col .right-col a {
+  margin-right: 30px;
+}
+.social-two-col .right-col a:last-of-type {
+  margin-right: 0;
+}
+.social-two-col img {
+  max-height: 60px;
+  min-height: 50px;
+}
+.code-overview {
+  display: flex;
+  flex-direction: column;
+  margin: 30px 30px 60px;
+}
+.code-overview h3 {
+  font-weight: 600;
+}
+.code-proof {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+.code-proof:last-of-type {
+  margin-bottom: 0;
+}
+.code-proof .left-col {
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+  margin-right: 60px;
+}
+.code-proof .right-col {
+  align-items: center;
+  display: flex;
+  flex: 2;
+}
+.code-toolbar {
+  width: 100%;
+}
+.clients {
+  display: flex;
+  flex-direction: column;
+  padding: 45px 30px;
+}
+.clients-single-col {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.clients h2 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+.client-logos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.client-logos img {
+  height: 32px;
+  margin: 10px;
+}
+.two-col-wrapper {
+  display: flex;
+  margin: 60px;
+}
+.two-col-wrapper div {
+  width: 50%;
+  margin-right: 60px;
+}
+.two-col-wrapper img {
+  max-width: 100%;
+}
+.two-col-wrapper div:last-of-type {
+  margin-right: 0;
+}
+.footer .btn {
+  margin: 45px auto;
+}
+.footer-single-col {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+img.package {
+    float: right;
+    height: 60px;
+    margin-top: -15px;
+    margin-left: 15px;
+}
+.line-numbers-rows {
+  display: none;
+}
+pre[class*=language-].line-numbers.line-numbers code {
+  padding-left: .5em;
+}
+@@media (max-width: 1699px) {
+  .three-col-wrapper .col-container .content {
+    flex-direction: column;
+  }
+  .three-col-wrapper .col-container .content object,
+  .three-col-wrapper .col-container .content .code-toolbar {
+    margin-bottom: 15px;
+  }
+}
+@@media (max-width: 1229px) {
+  .hero-section {
+    background-position: 110%;
+  }
+  .hero-section .left-col {
+    width: 40%;
+    padding-top: 60px;
+  }
+  .single-col-wrapper .code-overview, .two-col-wrapper {
+    margin-right: 30px;
+    margin-left: 30px;
+  }
+  .three-col-wrapper {
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+  .social-two-col .right-col {
+    flex-direction: column;
+  }
+  .social-two-col .right-col a {
+    margin-right: 0;
+    margin-bottom: 30px;
+  }
+  .social-two-col .right-col a:last-of-type {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+}
+@@media (max-width: 1159px) {
+  .code-proof .left-col {
+    width: 100%;
+    flex: none;
+  }
+  .code-proof .right-col {
+    width: 100%;
+    flex: none;
+  }
+}
+@@media (max-width: 1099px) {
+  .three-col-wrapper {
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+  }
+  .three-col-wrapper .col-container {
+    width: 100%
+  }
+  .three-col-wrapper .col-container .content {
+    flex-direction: row;
+  }
+  .three-col-wrapper .col-container .content object {
+    margin: auto 15px;
+  }
+}
+@@media (max-width: 999px) {
+  .hero-section {
+    background-position: 50vw 100%;
+  }
+  .hero-section .left-col {
+    width: 50%;
+    padding-top: 60px;
+  }
+}
+@@media (max-width: 899px) {
+  .hero-section .left-col {
+      padding: 45px 0 0 45px;
+  }
+  .social .social-two-col {
+    flex-wrap: wrap;
+  }
+  .social-two-col p {
+    padding-bottom: 15px;
+  }
+  .social .social-two-col .left-col {
+    flex-wrap: wrap;
+    width: 100%;
+    margin-right: 0;
+  }
+  .social .social-two-col .right-col {
+    justify-content: space-between;
+    align-items: baseline;
+    flex-direction: row;
+    width: 100%;
+    margin-top: 30px;
+  }
+  .social-two-col .right-col a {
+    margin-right: 30px;
+    margin-bottom: 30px;
+  }
+  .social-two-col .right-col a:last-of-type {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+  .code-proof {
+    flex-wrap: wrap;
+  }
+  .code-proof .left-col {
+      width: 100%;
+      margin-right: 0;
+  }
+  .two-col-wrapper {
+    flex-wrap: wrap;
+  }
+  .two-col-wrapper div {
+    width: 100%;
+    margin-right: 0;
+  }
+}
+@@media (max-width: 759px) {
+  .hero-section {
+    background-image: none;
+  }
+  .hero-section .left-col {
+    width: 100%;
+    padding: 30px 30px 0 30px;
+    height: unset;
+  }
+  .hero-section .right-col {
+    display: none;
+  }
+  .social {
+    padding-right: 30px;
+    padding-left: 30px;
+  }
+  .social-two-col .right-col {
+    flex-wrap: wrap;
+  }
+  .caption {
+    margin-right: 15px;
+    margin-left: 15px;
+  }
+}
+@@media (max-width: 529px) {
+  .three-col-wrapper .col-container .content {
+    flex-direction: column;
+  }
+  .three-col-wrapper .col-container .content object,
+  .three-col-wrapper .col-container .content .code-toolbar {
+    margin-bottom: 15px;
+  }
+}
+</style>
 
 @body
 
-<div class="hero-images">
-    <img
-        class="tortoise"
-        srcset="docs/images/home/Home-Tortoise-color.png 1x, docs/images/home/Home-Tortoise-color-x2.png 2x"
-        src="docs/images/home/Home-Tortoise-color.png"
-        style=""/>
-    <img
-        class="hare"
-        srcset="docs/images/home/Home-Hare-color.png 1x, docs/images/home/Home-Hare-color-x2.png 2x"
-        src="docs/images/home/Home-Tortoise-color.png"/>
+<div class="gray-callout max-container">
+  <div class="hero-section">
+    <div class="left-col">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 365.7 144.4" class="hero-logo"><path d="M265.5 142.6l-7-13.8-1-2 2-1 5.8-3.6c1.6-1 3-2.2 4-3.2s2-2 2.6-3.2c.6-1 1.2-2.3 1.5-3.5l.3-1c0-.6.2-1 .3-1.3.5-2.2.7-4.8.7-7.8V37H298.6v68.2c0 3-.4 5.8-.8 8.6l-.3 1.6c0 .5-.2 1-.4 1.7-.6 3-1.7 5.6-3.2 8.2-1 2-2.4 3.7-4 5.4-1.4 1.6-3.2 3.2-5.3 4.7-.6.5-1.2 1-1.8 1.3l-2 1.2c-3.5 2-7.6 3.8-12.5 5.4l-2 .6-.7-1.6zm64.7-19.8c-2.3 0-4.4 0-6.3-.2-2 0-3.8-.3-5.6-.6l-4.8-1-4.3-1-3.7-1.6c-1.2-.5-2.3-1-3.3-1.6l-1.8-1 .7-2 5.4-13.7.8-2 2 .8c.4 0 .7.2 1 .3l1 .4c1.5.5 3 1 4.5 1.3l3 .7 3.2.4 3.6.3c1.3.2 2.6.2 4 .2 2.2 0 4.2-.2 5.8-.5.4 0 .6 0 .7-.2l3-1c0-.2.3-.4.5-.5.2 0 .3-.3.5-.5.7-.7 1-1.7 1-2.8 0-.7 0-1.3-.4-2l-1.6-1.6-2.8-1.7c-1-.6-2.3-1.2-3.6-1.7l-4.5-1.8c-1.2-.5-2.8-1-4.7-2l-5-2.3-4.5-2.8c-1.6-1-3-2.3-4.3-3.6-1.3-1.3-2.4-2.8-3.4-4.4l-.8-1.5-.7-1.5c-1-2.7-1.5-6-1.6-9.3 0-2.2.3-4 .7-6 .6-2 1.3-3.6 2.2-5.2 1-1.5 2-3 3.2-4.2 1.2-1.3 2.6-2.4 4-3.4 1.6-1 3.2-1.8 4.8-2.5 1.7-.8 3.4-1.4 5.2-1.8 1.8-.5 3.6-.8 5.4-1 1.8-.2 3.7-.3 5.6-.3h6l1 .2c1.3 0 2.7.3 4 .6l1.4.2 1.2.3c2 .4 4 1 5.7 1.6 1.2.3 2.4.8 3.4 1.2 1.2.4 2.3 1 3.3 1.4l2 1-.8 2L356 58l-.8 1.8-2-.6-5.6-1.6-2.8-.7-3-.6-3-.3H335c-1.7 0-3.2.2-4.4.5-1 .2-1.8.6-2.3 1-.2 0-.3.2-.4.3-.2 0-.3.2-.4.4-.4.6-.6 1.2-.6 2v.7c.3.6 1 1.3 2 2 .8.6 1.8 1.2 3 1.8 1 .6 2.3 1.2 3.7 1.8l1.2.5 1.2.6 6.8 3 5 2.5 4.7 3c1.5 1.2 3 2.5 4.3 3.8 1.3 1.4 2.5 3 3.4 4.5 1 1.7 2 3.5 2.4 5.5.5 2 .8 4 .8 6.4v2l-.3 2c-.4 3-1.4 6-3 8.4-1 1.7-2 3.3-3.5 4.7-1.4 1.4-3 2.6-4.7 3.7-1.6 1-3.4 2-5.3 2.7-2 .7-3.8 1.3-6 1.8-2 .5-4 .8-6.2 1-2 .2-4.2.3-6.3.3zM77.7 114c-14.2 3.8-30.2 6.4-45 3.5-5.8-1-11-3.5-16-7-5-3.7-8.8-9-12-16.2-3-7.2-4.7-17-4.7-29 0-12.3 2-22 5.6-29.5 3.4-7.4 7.7-13 13-16.7 5.4-3.6 10.8-6 16.6-7.3C41 10.5 46 10 50.7 10c7 0 22 2 29.2 6.7v23.8c-7.5-3.8-18-5.7-26-6-2.6 0-5 .4-7.4 1-2.4.6-4.6 2-6.6 4-1.8 2.2-3.3 5.4-4.4 9.4-1.4 4-2 9.4-2 16.2 0 6 .5 10.8 1.6 14.5.8 3.8 1.8 7 3.6 9 6.5 7.6 20.8 5 30.5 2.4.8 8 2.8 16.4 8.4 23z"/><path d="M132.3 67.3l-6 .2c-6.4 0-11 1-13.8 3.4-3 2.2-4.3 6.3-4.2 12.4 0 5 1 8.4 2.8 10.3 2 2 4.4 2.7 7.2 2.6 3.5 0 6-1 8.7-2.3v10.3c0 3.4.5 6 1.6 8-4 1.7-6.3 3-10.5 4.2-5 1.5-10 2.5-13.6 2.6-23.8.8-29.8-17-29.8-33.8 0-7.2 1.4-13 4.2-17.7 2.6-4.6 5.8-8 9.7-10.3 4.2-2.5 8.4-4.2 13-5.2 4.4-.7 8.5-1 12.4-1H132v-6.2c0-4-1-6.8-3.2-8-2-1.3-5.6-2-10.3-2-5.8.2-28.2 2.5-33.3 5.8V16c11.6-4.4 31.8-6 38.7-6 12-.2 21.8 2 29.7 6.3 4 2.6 6.8 6.2 9 10.7 2 4.8 3 10.8 3 18l.2 72h-.2v.5h-9.6c-11 0-24 1.2-24-14.3V67.3zM171.6 12h28.6l4.4 10.7c0-.3 3.4-2.5 10-6.4 3-1.8 6.8-3 11-4.4 4-1.3 8.2-2 12.8-2 9-.2 16.2 2 21.7 6.5 5.7 4.7 8.6 13 8.6 24.8v61.5c0 15.5-13 14.3-24 14.3H235V45.4c0-3.5-.5-6-1.8-7-1.2-1.3-3.8-1.8-7.3-1.8-5.2 0-9.7 1-14 3l-7 3.5v74.2H172L171.6 12zM286 0c8.6 0 15.7 7 15.7 15.7 0 8.6-7 15.7-15.7 15.7-8.6 0-15.7-7-15.7-15.7S277.3 0 286 0z"/></svg>
+      <h2>Build <abbr title="Create Read Update Delete">CRUD</abbr> apps in fewer lines of code</h2>
+      <a href="/doc/guides/todomvc.html" class="btn">Learn how to build a CRUD app</a>
+    </div>
+    <div class="right-col">
+      <img src="docs/images/hero-image.svg" />
+    </div>
+  </div>
 </div>
-<div style="text-align: center; color: gray">Why is our logo a tortoise? Read the short fable <a href="http://read.gov/aesop/025.html">The Hare & the Tortoise</a> by <a href="https://en.wikipedia.org/wiki/Aesop%27s_Fables">Aesop</a> to find out.</div>
-
-
-
-## Easy to do the common stuff
-
-CanJS starts with a familiar object-oriented approach to making
-custom elements. Let's say you want to create a page that counts clicks like the following: (_click the button_):
-
-<p style="border: 1px solid #ccc; padding: 15px;"><my-counter></my-counter></p>
-
-The code for that <u>entire</u> page looks like this:
+<div class="three-col-wrapper">
+  <div class="col-container">
+    <div class="content">
+      <div>
+        <h3>Model layer</h3>
+        <p>Components shouldn’t be concerned with how data is fetched, updated, or cached.</p>
+        <p>
+          CanJS provides the right abstractions for your model code to be cleanly separated from your UI code.
+          <a href="#model-layer">Learn&nbsp;more…</a>
+        </p>
+      </div>
+      <object type="image/svg+xml" data="docs/images/animations/model-layer-still.svg"></object>
+    </div>
+  </div>
+  <div class="col-container">
+    <div class="content">
+      <div>
+        <h3>Promises in templates</h3>
+        <p>CanJS’s [can-stache stache templating language] can directly read the state and values from <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promises</a>.</p>
+        <p>
+          No need to write any extra code to determine whether a Promise is pending, resolved, or rejected.
+          <a href="#promises-in-templates">Learn&nbsp;more…</a>
+        </p>
+      </div>
 
 ```html
-<!doctype html>
-<html lang="en">
-
-<my-counter></my-counter>
-
-<script type="module">
-import { Component } from "//unpkg.com/can@5/core.mjs";
-
-Component.extend({
-    tag: "my-counter",
-    view: `
-        Count: <span>{{this.count}}</span>
-        <button on:click="this.increment()">+1</button>
-    `,
-    ViewModel: {
-        count: {default: 0},
-        increment() {
-            this.count++;
-        }
-    }
-});
-</script>
-</html>
-```
-
-Yes, you do __not__ need a build system to get started with CanJS! Copy the code above into your favorite HTML page or
-[play with it in a CodePen](https://codepen.io/justinbmeyer/pen/VdJVbe?editors=1010).
-
-This page has 3 main parts.
-
-_First_, it places the `<my-counter>` custom element (which will be defined later) in the page.
-
-```html
-<my-counter></my-counter>
-```
-
-_Next_, the page imports [can-component Component] from the CanJS module.  Read [guides/setup]
-for alternative ways to load CanJS.
-
-```html
-<script type="module">
-import { Component } from "//unpkg.com/can@5/core.mjs";
-...
-</script>
-```
-
-_Finally_, the page defines the `<my-counter>` element
-by extending [can-component Component] with:
-
-- A [can-component.prototype.tag] for the name of the custom element for which you want to define.
-- A [can-component.prototype.view] that provides the HTML content
-  of the custom element. The [can-stache] `view` supports live binding, event bindings, and two-way bindings.
-- A [can-component.prototype.ViewModel] that defines the methods and stateful properties available to
-  the `view`.
-
-```js
-Component.extend({
-    tag: "my-counter",
-    view: `
-        Count: <span>{{this.count}}</span>
-        <button on:click="this.increment()">+1</button>
-    `,
-    ViewModel: {
-        count: {default: 0},
-        increment() {
-            this.count++;
-        }
-    }
-});
-```
-
-<style>
-  my-counter button {margin-left: 15px;}
-</style>
-<script type="text/steal-module">
-const Component = require("can-component");
-Component.extend({
-    tag: "my-counter",
-    view: `
-        Count: <span>{{this.count}}</span>
-        <button on:click="this.increment()">+1</button>
-    `,
-    ViewModel: {
-        count: {default: 0},
-        increment() {
-            this.count = this.count + 1;
-        }
-    }
-});
-</script>
-
-
-
-<style>
-.code-slide pre {
-    display: inline-block;
-}
-.code-slide .article pre code {
-    display: inline-block;
-}
-.code-slide div.code-toolbar {
-    display: inline-block;
-}
-.code-slide .line-numbers-rows {
-    display: none;
-}
-.code-slide pre[class*=language-].line-numbers code {
-    padding: 0 1em;
-}
-.titled-list h3 {
-    margin-top: 0px;
-}
-</style>
-
-<br/><br/>
-Ready to go? Get started with one of the tutorials below:
-
-<div class="getting-started-icons">
-    <div class="titled-list">
-        <h3>Learn more</h3>
-        <ul>
-            <li>
-                <a href="doc/guides/technology-overview.html">
-                    <div>
-                        <img src="docs/images/home/tech-overview.svg">
-                    </div>
-                    Technology Overview
-                </a>
-            </li>
-        </ul>
-    </div>
-    <div class="or-separator">
-        or
-    </div>
-    <div class="titled-list">
-        <h3>Start from scratch</h3>
-        <ul>
-            <li>
-                <a href="doc/guides/setup.html">
-                    <div>
-                        <img src="docs/images/home/gear.svg">
-                    </div>
-                    Setting Up CanJS
-                </a>
-            </li>
-        </ul>
-    </div>
-    <div class="or-separator">
-        or
-    </div>
-    <div class="titled-list">
-        <h3>Build a demo app</h3>
-        <ul>
-            <li>
-                <a href="doc/guides/chat.html" title="Learn how to build a real-time chat app.">
-                    <div>
-                        <img src="docs/images/home/chat-bubble.svg">
-                    </div>
-                    Chat Guide
-                </a>
-            </li>
-        </ul>
-    </div>
-    <div class="clear-both"></div>
-</div>
-
-
-## Build the impossible
-
-For over 10 years, CanJS has been used to build production applications for almost every
-use case — from massive online stores, to small mobile apps. To help you build whatever comes your way, CanJS helps you:
-
-- [become an expert quickly](#expert),
-- [solve difficult problems](#solve-problems), and
-- [maintain your app over years](#maintain).
-
-<h3 id='expert'>Become an expert quickly</h3>
-
-Learning a new framework is hard. Your needs and experiences
-don't fit a one-size-fits-all solution. Our long list of guides are
-organized in a skill tree as follows, so you _level up_ faster by taking the
-guide that meets your needs.
-
-<a href="./doc/guides.html">
-<img src="./docs/can-canjs/skill-tree.png" class='bit-docs-screenshot'/>
-</a>
-
-We add a new guide every 6 weeks. [Let us know](http://twitter.com/canjs) what you want to learn next!
-
-<h3 id='solve-problems'>Solve difficult problems</h3>
-
-CanJS has been used to build everything so it’s both flexible and has a
-wide variety of extensions and plugins that solve all sorts of problems.
-
-__Flexible Programming Styles__
-
-Manage state in the way that fits your needs best. For example,
-you can use __imperative__ object oriented programming and scale up
-to [can-kefir Functional Reactive Programming with streams].
-
-
-<div class="code-slide">
-
-```js
-// Imperative
-DefineMap.extend({
-  name: "string",
-  nameChangeCount: {default: 0},
-  updateName(name){
-    this.name = name;
-    this.nameChangeCount++;
-  }
-});
-
-
-
-
-```
-
-```js
-// Imperative setter
-DefineMap.extend({
-  name: {
-    set(name) {
-      this.nameChangeCount++;
-      return name;
-    }
-  },
-  nameChangeCount: {default: 0}
-});
-
-
-
-```
-
-```js
-// Declarative light-weight streams
-DefineMap.extend({
-    name: "string",
-    nameChangeCount: {
-        value({listenTo, resolve}) {
-            let count = resolve(0);
-            listenTo("name", () => {
-                resolve(++count);
-            });
-        }
-    }
-})
-```
-
-```js
-// Declarative Kefir streaming properties
-DefineMap.extend({
-    name: "string",
-    nameChangeCount: {
-        stream(){
-            return this.stream(".name").scan((prev) => {
-                return prev+1;
-            },0)
-        }
-    }
-})
-```
-
-```js
-// Solo Kefir streams
-const name = Kefir.emitterProperty();
-
-const nameChangeCount = name.scan(function(prev){
-    return prev+1;
-},0);
-
-
-
-
-
-
+{{# if(this.promise.isPending) }}
+  Loading…
+{{/ if }}
+{{# if(this.promise.isRejected) }}
+  Error: {{ this.promise.reason }}
+{{/ if }}
+{{# if(this.promise.isResolved) }}
+  Result: {{ this.promise.value }}
+{{/ if }}
 ```
 
 </div>
+  </div>
+  <div class="col-container">
+    <div class="content">
+      <div>
+        <h3>Real-time list updating</h3>
+        <p>After data is created, updated, or destroyed, CanJS automatically updates your lists for you.</p>
+        <p>
+          Filtering and sorting are preserved, so you don’t have to manually update your lists or fetch the same data again.
+          <a href="#real-time-list-updating">Learn&nbsp;more…</a>
+        </p>
+      </div>
+      <object type="image/svg+xml" data="docs/images/animations/realtime-amin.svg"></object>
+    </div>
+  </div>
+</div>
+<div class="gray-callout social">
+  <div class="social-two-col">
+    <div class="left-col">
+      <h2>Our community has your back</h2>
+      <p>CanJS is backed by <a href="https://www.bitovi.com/">Bitovi</a>, a company built on using and publishing open source software. <a href="https://bitovi.com/community/slack">Chat with us on Slack</a> and <a href="https://forums.bitovi.com/">our Discourse forums</a>. We want to help you get started with CanJS!</p>
+    </div>
+    <div class="right-col">
+      <a href="https://bitovi.com/community/slack">
+        <img alt="Slack" src="../docs/images/logos/slack.svg" />
+      </a>
+      <a href="https://forums.bitovi.com/">
+        <img alt="Discourse" src="../docs/images/logos/discourse.svg" />
+      </a>
+    </div>
+  </div>
+</div>
+<div class="code-overview">
+  <div class="code-proof">
+    <div class="left-col">
+      <h3 id="model-layer">Model layer</h3>
 
-__Extensions and Plugins__
+With a single line of code, CanJS creates a model that represents the objects returned by a backend API.
+See how `Todo` is created by passing a URL to [can-realtime-rest-model realtimeRestModel()].
 
-CanJS has many extensions and plugins that go beyond
-state management and templates:
+The model layer is responsible for making GET, POST, PUT, and DELETE requests to your backend.
+With your component UI code using the model’s standard interface to make requests, if the backend API changes,
+you only have to configure the model and not change every component that uses that backend API.
 
-- [can-route Hashchange] and [can-route-pushstate pushstate] routing
-- A [can-connect service & data modeling ] layer that has plugins for:
-  - [can-connect/real-time/real-time real-time]
-  - [can-connect/data/combine-requests/combine-requests minimizing requests]
-  - [can-connect/cache-requests/cache-requests caching] and [fall-through-caching](can-connect/fall-through-cache/fall-through-cache)
-  - [can-connect/can/ref/ref relationships]
-  - [can-ndjson-stream Streaming NDJSON fetch responses]
-- [can-fixture Service simulation]
-- [can-define-validate-validatejs Validation]
-- [React integration](https://github.com/bitovi/ylem#readme)
-- [can-control Memory safe declarative event binding]
+By default, CanJS assumes your backend API is RESTful. If your backend API isn’t RESTful, that’s ok!
+CanJS has configuration options for you to control how it makes requests, parses data, and more.
 
-There are also extensions to state management:
+</div>
+<div class="right-col">
 
-- [can-observe Proxy-based observables]
-- [can-debug debugging tools]
+```js
+import { realtimeRestModel } from "can";
 
-And to views:
+const Todo = realtimeRestModel("/api/todos/{id}").Map;
 
-- [can-stache-converters Converters that simplify two-way bindings]
-- [can-stache-route-helpers Routing helpers for the view]
+// Get todos sorted by name
+const todosPromise = Todo.getList({sort: "name"});
+todosPromise.then(todos => {
+  // Your backend API might return something like:
+  // todos = [ {name: "a"}, {name: "b"}, {name: "c"} ]
+});
+```
 
-If you need even more 🔥, check out CanJS’s parent framework,
-<a href="http://donejs.com"><img src="https://www.bitovi.com/hubfs/Imported_Blog_Media/donejs-logo-ie.png" style="width: 100px; position: relative; top: 7px;"/></a>,
-which adds:
+</div>
+</div>
+<div class="code-proof">
+<div class="left-col">
+<h3 id="promises-in-templates">Promises in templates</h3>
 
-- iOS, Android, and desktop builds
-- Server-side rendering (Isomorphic / UniversalJS)
-- Progressive loading
-- Continuous Integration (Testing)
-- Continuous Deployment
-- Code generators
+CanJS’s [can-stache stache templating language] is similar to Handlebars and Mustache.
+Wherever you see `{{ }}` in a template, CanJS evaluates the expression inside to either
+print a value or perform some basic logic, like [can-stache.helpers.if #if] and
+[can-stache.helpers.for-of #for(of)].
 
+Stache is able to read the state and value of Promises. See `isPending`, `isRejected`,
+and `isResolved` being read on `this.todosPromise` in the example code? Those return
+true depending on the current state of the Promise. `reason` is provided if the
+Promise is rejected with an error, and `value` contains the resolved value if
+the promise succeeds.
 
-__Flexible Pieces__
+These helpers make it much easier to include loading and error states in your app.
+We promise you’ll love writing your templates this way.
 
-If you can't find what you need, you can build it! CanJS has all of
-its inner workings exposed and documented. Integrating
-other technology (like [React](https://github.com/bitovi/ylem#readme) and [can-kefir Kefir] streams)
-and non-DOM APIs (like [guides/recipes/cta-bus-map Google Map] and [guides/recipes/canvas-clock Canvas])
-straightforward.
+</div>
+<div class="right-col">
 
-Useful low-level APIs:
+```html
+{{# if(this.todosPromise.isPending) }}
+	Loading todos…
+{{/ if }}
+{{# if(this.todosPromise.isRejected) }}
+	Error: {{ this.todosPromise.reason.message }}
+{{/ if }}
+{{# if(this.todosPromise.isResolved) }}
+	<ul>
+		{{# for(todo of this.todosPromise.value) }}   
+			<li>
+				{{ todo.name }}
+			</li>
+		{{/ for }}
+	</ul>
+{{/ if }}
+```
 
-- [can-reflect] - This is the [Lodash](https://lodash.com/) of CanJS.  It lets you perform operations and
-  read information on data.  But unlike Lodash, [can-reflect] is able to work with
-  any data type.  For example, you can
-  assign all key-values from a [can-define/map/map DefineMap] to a [https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map Map]:
-  ```js
-  const meDefineMap = new DefineMap({name: "Justin"});
-  const meMap = canReflect.assign( new Map(), meDefineMap );
-  meMap.get("name") //-> "Justin"
-  ```
-- [can-diff] - Diff objects and arrays.
-- [can-dom-events] - Listen to DOM events, including custom events, using event delegation.
-- [can-dom-mutate] - MutationObserver polyfill.
-- [can-ajax] - jQuery-like XHR helper.
-- [can-globals] - Feature detection and storage of environmental globals.
-- [can-key-tree] - Tree datatype.
-- [can-string] - String helpers.
-- [can-local-store] - localStorage database.
-- [can-key] - get/set/delete nested properties.
+</div>
+</div>
+  <div class="code-proof">
+    <div class="left-col">
+      <h3 id="real-time-list-updating">Real-time list updating</h3>
 
-Useful integration APIs:
+Here you can see CanJS’s model layer in action. When `Todo.getList({sort: "name"})` is called,
+CanJS makes a GET request to `/api/todos?sort=name`
 
-- [can-symbol] - Decorate objects with symbols to make them work with [can-reflect].
-- [can-dom-events] - Create custom events.
-- [can-queues] - Schedule tasks to run in a particular order.
-- [can-observation-recorder] - Track when observables are read.
+When the array of to-dos comes back, CanJS associates that array with the query `{sort: "name"}`.
+When new to-dos are created, they’re added to the list that’s returned _automatically_, and
+in the right spot! You don’t have to write any code to make sure the new to-do gets inserted
+into the right spot in the list.
 
+CanJS does this for filtering as well. If you make a query with a filter (e.g. `{filter: {complete: true}}`),
+when items are added, edited, or deleted that match that filter, those lists will be updated automatically.
 
+Save yourself time by not writing code that updates your app’s UI.
 
-<h3 id='maintain'>Maintain your app over years</h3>
+</div>
+<div class="right-col">
 
-CanJS is dedicated to supporting you and your
-application long term. As technology progresses and
-tastes change, your code evolves too so you aren’t left
-maintaining 💩.
+```js
+import { realtimeRestModel } from "can";
 
-<img src="./docs/can-guides/images/introduction/mission-stability-upgrade-new.png">
+const Todo = realtimeRestModel("/api/todos/{id}").Map;
 
-We've kept folks releasing for __10__ years by:
+// Get completed todos
+Todo.getList({sort: "name"}).then(todos => {
+  // Let’s assume the API came back with
+  // todos = [ {name: "a"}, {name: "c"} ]
 
-- Avoiding breaking changes for as long as possible by maintaining CanJS in [independent repositories](./doc/guides/technical.html#IndependentRepositoriesandPackages).
-- Experimenting with changes (like [can-observe]) before promoting them as the way to
-  build new applications.
-- Making the upgrade process as easy as possible with deprecation warnings, [migrate-4 migration guides],
-  and [guides/upgrade/using-codemods codemods] (scipts that rewrite your code for you).
-- Focusing on what matters to users with a [survey](https://donejs.com/survey.html) every
-  six weeks.
-- Being supported by [Bitovi](http://bitovi.com), whose bottom line _is_ open source,
-  not a side-project.
+  // Create a new todo client-side
+  const newTodo = new Todo({name: "b"});
 
+  // The todos list is immediately updated with the
+  // new to-do in the right place, alphabetically:
+  // todos = [ {name: "a"}, {name: "b"}, {name: "d"} ]
+});
+```
 
-## Missing Something?
+</div>
+</div>
+</div>
+<div class="gray-callout footer">
+  <div class="footer-single-col">
+    <a href="/doc/guides/todomvc.html" class="btn">Take the CRUD Tutorial</a>
+  </div>
+</div>
+<div class="single-col-wrapper">
 
-Is there an itch that CanJS doesn’t scratch?  Let us know
-on [Gitter chat](https://gitter.im/canjs/canjs) or the [forums](https://forums.donejs.com/c/canjs).
-We like contributions of all sorts.  Read the [guides/contribute] guide for more details.
+## Get started with just a few lines of code
 
-## Love Something?
+Below is an entire app that shows off some of the best features of CanJS:
 
-Let us know by giving us a star on [GitHub](https://github.com/canjs/canjs) and following on [Twitter](https://twitter.com/canjs).  If there’s a particular package you like, make sure to star that too. Check out the [guides/contributing/evangelism Evangelism Guide] on
-how to help spread the word!
+- One line of code to create a model from the data returned by a backend API (with [can-realtime-rest-model realtimeRestModel]).
+- `isPending`, `isRejected`, `isResolved`, and `value` helpers for directly reading the state of a Promise.
+- When you add a to-do, it automatically gets inserted into the list in the right position.
+
+<p class="codepen" data-height="530" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 530px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/omqyMw/">
+  CanJS 5 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+  <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+  <span class="caption">Type in a new to-do and click “Add” to see it appear in the list. Notice that new to-dos are inserted in alphabetical order, without any code that explicitly inserts the new one in the right place!</span>
+  <a href="/doc/guides/todomvc.html" class="btn">Learn how to build a CRUD app</a>
+</div>
+<div class="gray-callout clients">
+  <div class="clients-single-col">
+    <h2>Who Uses CanJS?</h2>
+    <div class="client-logos">
+      <img alt="Chase" src="../docs/images/logos/chase.svg" />
+      <img alt="Bitovi" src="../docs/images/logos/bitovi.svg" />
+      <img alt="Apple" src="../docs/images/logos/apple.svg" />
+      <img alt="Delta" src="../docs/images/logos/delta.svg" />
+      <img alt="HP" src="../docs/images/logos/hp.svg" />
+      <img alt="FedEx" src="../docs/images/logos/fedex.svg" />
+      <img alt="Tucows" src="../docs/images/logos/tucows.svg" />
+    </div>
+  </div>
+</div>
+<div class="two-col-wrapper">
+  <div class="">
+    <h3>Use DevTools to debug your app</h3>
+    <p>Use the CanJS DevTools to edit your app’s state at runtime, visualize the dependency graphs between elements and state, and debug changes to observables.</p>
+    <h3>Small bundle size</h3>
+    <img class="package" src="docs/images/box-1299001_640.png" />
+    <p>At 72 KB gzipped, CanJS provides all the tools you need at a small size.</p>
+  </div>
+  <div class="">
+    <h3>Browser support</h3>
+    <p>CanJS supports Internet Explorer 11, Chrome, Edge, Firefox, and Safari.</p>
+    <img src="https://saucelabs.com/browser-matrix/canjs.svg" alt="Sauce Test Status" />
+  </div>
+</div>
+<div class="gray-callout footer">
+  <div class="footer-single-col">
+    <a href="/doc/guides/todomvc.html" class="btn">Take the CRUD Tutorial</a>
+  </div>
+</div>

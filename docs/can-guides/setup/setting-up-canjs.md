@@ -28,8 +28,8 @@ the guide(s) that most closely satisfy that scenario.
 - I want to maximize long term flexibility 👉 [Importing individual packages](#Installingindividualpackages)
 
 If this page doesn't have what you need, please
-ask on the [forums](https://forums.donejs.com/c/canjs) or [Gitter chat](https://gitter.im/canjs/canjs).
-
+ask on the [forums](https://forums.bitovi.com/c/canjs) or
+[Slack](https://www.bitovi.com/community/slack) ([#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A)).
 
 ## Explanation of different builds
 
@@ -357,18 +357,22 @@ The following are CanJS examples in various online code editors.
 
 __Hello World__
 
-<p data-height="267" data-theme-id="dark" data-slug-hash="yEGGoK" data-default-tab="js,result" data-user="justinbmeyer" data-embed-version="2" data-pen-title="CanJS 5.0 Hello World" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/yEGGoK/">CanJS 5.0 Hello World</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="pYwJao" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 - Counter">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/pYwJao/">
+  CanJS 5.0 - Counter</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
-- [CodePen](https://codepen.io/justinbmeyer/pen/yEGGoK/)
+- [CodePen](https://codepen.io/bitovi/pen/pYwJao/?editors=1000)
 - [JSFiddle](https://jsfiddle.net/javascriptmvc/Ldpevngx/5/)
 
 __Routing Example__
 
-- [CodePen](https://codepen.io/justinbmeyer/pen/ejZMEw?editors=1010)
+- [CodePen](https://codepen.io/bitovi/pen/drRodZ?editors=1000)
 
 __Model Example__
 
-- [CodePen](https://codepen.io/justinbmeyer/pen/RBRQom)
+- [CodePen](https://codepen.io/bitovi/pen/gERpvd?editors=1000)
 
 
 ## StealJS
@@ -451,8 +455,9 @@ Finally, create an `index.html` page that loads `steal.js` and includes your
 
 Now you can load that page in your browser at one of the addresses the HTTP
 server showed you earlier (something like [http://localhost:8080/]). You should
-see “Hello World” on the page—if you don’t, join our
-[Gitter chat](https://gitter.im/canjs/canjs) and we can help you figure out what
+see “Hello World” on the page—if you don’t,
+[join our Slack](https://www.bitovi.com/community/slack) ([#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A))
+and we can help you figure out what
 went wrong.
 
 Ready to build an app with CanJS? Check out our [guides/chat] or one of our
@@ -554,8 +559,8 @@ your `<my-app>` component:
 
 Now you can load that page in your browser at one of the addresses the HTTP
 server showed you earlier (something like [http://localhost:8080/]). You should
-see “Hello World” on the page — if you don’t, join our
-[Gitter chat](https://gitter.im/canjs/canjs) and we can help you figure out what
+see “Hello World” on the page — if you don’t, [join our Slack](https://www.bitovi.com/community/slack)
+and we can help you figure out what
 went wrong.
 
 
@@ -606,8 +611,8 @@ Next run webpack in your terminal with the production configuration:
 
 Now you can load that page in your browser at one of the addresses the HTTP
 server showed you earlier (something like [http://localhost:8080/]). You should
-see “Hello World” on the page and the `bundle.js` size should be much smaller. If there's a problem, join our
-[Gitter chat](https://gitter.im/canjs/canjs) and we can help you figure out what
+see “Hello World” on the page and the `bundle.js` size should be much smaller. If there's a problem,
+[join our Slack](https://www.bitovi.com/community/slack) and we can help you figure out what
 went wrong.
 
 </details>
@@ -688,8 +693,8 @@ your `<my-app>` component:
 
 Now you can load that page in your browser at one of the addresses the HTTP
 server showed you earlier (something like [http://localhost:8080/]). You should
-see “Hello World” on the page—if you don’t, join our
-[Gitter chat](https://gitter.im/canjs/canjs) and we can help you figure out what
+see “Hello World” on the page—if you don’t, [join our Slack](https://www.bitovi.com/community/slack)
+and we can help you figure out what
 went wrong.
 
 </details>
@@ -809,8 +814,8 @@ your `<my-app>` component:
 
 Now you can load that page in your browser at one of the addresses the HTTP
 server showed you earlier (something like [http://localhost:8080/]). You should
-see “Hello World” on the page—if you don’t, join our
-[Gitter chat](https://gitter.im/canjs/canjs) and we can help you figure out what
+see “Hello World” on the page—if you don’t, [join our Slack](https://www.bitovi.com/community/slack)
+and we can help you figure out what
 went wrong.
 
 </details>
@@ -936,7 +941,7 @@ can.Component.extend({
 If you want to use [can-ecosystem] modules, you can use `./node_modules/can/dist/global/everything.js`. However,
 this file is quite large and shouldn't be used in production so you will want to make your own custom version of
 `everything.js` containing only the modules you need. Unfortunately, we haven't posted instructions on how to do this yet, even though it’s relatively easy. Please tell us on
-[Gitter chat](https://gitter.im/canjs/canjs) to hurry up and do it already!
+[Slack](https://www.bitovi.com/community/slack) to hurry up and do it already!
 
 
 ## Hosted traditional `<script>` tags setups
@@ -1178,8 +1183,6 @@ browser to see your project. They will be similar to [http://localhost:8080/].
 Next, you can choose to use [StealJS](#StealJS), [webpack](#Webpack), or
 [Browserify](#Browserify) to load your project.
 
-<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
-
 ## IE11 Support
 
 CanJS 4+ is compatible with Internet Explorer 11 with a few caveats that are discussed below.
@@ -1193,3 +1196,5 @@ The ecosystem packages [can-define-backup] and [can-observe] use other features 
 [can-define-backup] uses [WeakMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap), and although `WeakMap` is supported in IE11, there are issues with using [sealed](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal) objects as keys in WeakMaps. [can-define-backup] can be used in IE11 as long as the DefineMap being backed up is not [can-define/map/map.seal sealed], or a polyfill such as the one in [core-js](https://github.com/zloirock/core-js/#weakmap) is used.
 
 [can-observe] is based on the [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) object, which is not supported in IE11 and cannot be polfyilled.
+
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>

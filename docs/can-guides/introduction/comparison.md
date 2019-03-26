@@ -487,6 +487,97 @@ A Dependency Injection system may have a place in other languages, like Java, bu
 
 *See the above code example, and realize that `FriendService`, may in some instances not actually be used in the `FriendComponent`, if some parent module defines a different provider for `FriendComponent`*
 
+### Observables
+
+**CanJS** is centered around it's powerful observable constructs. **Angular 2** provides observables in the form of the officially endorsed third-party library [RxJS](https://github.com/Reactive-Extensions/RxJS). There are similarities between the **observables** provided by **CanJS** and the **Rx Observables**: They are both objects that you subscribe to with a callback to be called when the values change. They both support a declarative style of coding. They are both lazy, to benefit performance, doing work only when necessary. They both allow for easy asynchronous programming, and a reactive data flow.
+
+But they are actually quite different.  
+
+The syntax alone reveals the conceptual difference. **RxJS Observables** embrace a functional reactive paradigm:
+
+```javascript
+var keyup = Rx.Observable.fromEvent($input, 'keyup')
+  .map(function (e) {
+    return e.target.value;
+  })
+  .filter(function (text) {
+    return text.length > 2;
+  })
+  .debounce(750)
+  .distinctUntilChanged();
+```
+
+...where data flows through functions, that convert, filter and transform that data and pass it on to callbacks over time.
+
+**CanJS** supports a more Object Oriented approach:
+
+```javascript
+let Order = DefineMap.extend({
+  name: "string",
+  address: "string",
+  phone: "string",
+  restaurant: "string",
+  status: {
+    value: 'new'
+  },
+  items: {
+    Value: ItemsList
+  },
+  total: {
+    get() {
+      let total = 0.0;
+      this.items.forEach(item =>
+          total += parseFloat(item.price));
+      return total.toFixed(2);
+    }
+  },
+
+  markAs(status) {
+    this.status = status;
+    this.save();
+  }
+});
+```
+...where data is packaged along with behaviors (methods) in objects that represent domain concepts.
+
+While **RxJS** offers a **stream** of events and values, **CanJS** offers instances that can be directly acted upon, stored and serialized.
+
+**RxJS Observables** represent a value that can change over time, much like a [can-compute](../../can-compute.html), but **CanJS** also has more advanced observable structures like [maps](../../can-define/map/map.html) and [lists](../../can-define/list/list.html), which represent familiar constructs: an observable object and an observable array. These [maps](../../can-define/map/map.html) and [lists](../../can-define/list/list.html) notify subscribers whenever properties change or elements are inserted or removed, which allows for a very simplified style of coding.
+
+```javascript
+var Person = DefineMap.extend({
+    first: "string",
+    last: "string",
+    get fullName(){
+        console.log("calculating fullName");
+        return this.first + " " + this.last;
+    }
+});
+
+var hero = new Person({first: "Wonder", last: "Woman"});
+```
+
+**RxJS observables** are essentially containers for values, the values can't be accessed directly, rather they can only access the value through the callbacks provided to the subscribe method. **CanJS observables** in contrast, can be acted on directly, setting new values and reading the current value, which allows for a very natural style of programing. Representing the values in this way, allows **CanJS** observables to also provide a "light typing" system, where classes have an inheritable and extendable interface that you can depend on, and handles conversion to the correct type, even in nested objects.
+
+```javascript
+const Locator = DefineMap.extend({
+  state: {
+    type: "string",
+    set: function(){
+      this.city = null;
+    }
+  },
+  city: "string"
+});
+
+var locator = new Locator({
+  state: "IL",
+  city: "Chicago"
+});
+```
+
+**RxJS Observables** provide powerful [FRP](https://en.wikipedia.org/wiki/Functional_reactive_programming) event-streams, which allow a declarative style of programming that simplifies complex asynchronous code. **CanJS** observables take this even further, with an object oriented data approach, that allows both FRP event-streams with the use of [can-stream](../../can-stream.html) and an even simpler style of programing, where you can act on observable instances directly, and still gain all the power of derived values and reactive updating of the views.
+
 ### Steep Learning curve
 Angular is known for it’s steep learning curve, and Angular 2 doesn’t really break that reputation.
 

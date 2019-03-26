@@ -12,7 +12,8 @@ The [canjs/canjs](https://github.com/canjs/canjs) __framework__ repository works
 differently.  The vast majority of code changes happen in one of the __library__
 repositories.
 
-If you don’t know which repository you need to work on, ask us in [Gitter chat](https://gitter.im/canjs/canjs).
+If you don’t know which repository you need to work on,
+[join our Slack](https://www.bitovi.com/community/slack) and ask us in the [#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A).
 
 ## File organization and responsibilities
 
@@ -75,5 +76,5 @@ There are several ways to influence these priorities:
  - Write a good test.
  - Come to a DoneJS Contributors meeting and make your case.
  - Get others from other organizations to 👍 the issue.
- - Make your case on Gitter with a contributor or in the issue.
+ - Make your case on [Slack](https://www.bitovi.com/community/slack) with a contributor or in the issue.
  - You can always hire [Bitovi](https://www.bitovi.com) or a contributor to make the change.
