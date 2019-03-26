@@ -14,7 +14,11 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<p data-height="265" data-theme-id="0" data-slug-hash="OaOxEW" data-default-tab="js,result" data-user="bitovi" data-pen-title="Signup and Login (Simple) [Finished]" class="codepen">See the Pen <a href="https://codepen.io/bitovi/pen/OaOxEW/">Signup and Login (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p class="codepen" data-height="500" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="OaOxEW" style="height: 500px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Signup and Login (Simple) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/OaOxEW/">
+  Signup and Login (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 To use the widget:
 
@@ -24,8 +28,11 @@ To use the widget:
 4. __Click__ the _Log in_ link.  __Enter__ the same _email_ and _password_ you used to sign up.  __Click__ the _LOG IN_ button.  You will be logged in.
 
 __START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED__:
-
-<p data-height="265" data-theme-id="0" data-slug-hash="eQeGrL" data-default-tab="css,js,result" data-user="bitovi" data-pen-title="Signup and Login (Simple) [Starter]" class="codepen">See the Pen <a href="https://codepen.io/bitovi/pen/eQeGrL/">Signup and Login (Simple) [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="eQeGrL" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Signup and Login (Simple) [Starter]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/eQeGrL/">
+  Signup and Login (Simple) [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 This CodePen includes:
 
@@ -497,6 +504,10 @@ Update the __JavaScript__ tab to:
 
 When finished, you should see something like the following CodePen:
 
-<p data-height="265" data-theme-id="0" data-slug-hash="OaOxEW" data-default-tab="js,result" data-user="bitovi" data-pen-title="Signup and Login (Simple) [Finished]" class="codepen">See the Pen <a href="https://codepen.io/bitovi/pen/OaOxEW/">Signup and Login (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p class="codepen" data-height="500" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="OaOxEW" style="height: 500px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Signup and Login (Simple) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/OaOxEW/">
+  Signup and Login (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>

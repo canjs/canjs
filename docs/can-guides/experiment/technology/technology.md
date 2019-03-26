@@ -530,5 +530,3 @@ Now that you've got a rough idea idea on the major pieces of CanJS, we suggest:
 - [guides/html HTML]
 - [guides/routing Routing]
 - [guides/data Service Layer]
-
-<script async src="https://static.codepen.io/assets/embed/ei.js"></script>

@@ -11,15 +11,21 @@
 
 We are building the following functionality:
 
-<p data-height="312" data-theme-id="0" data-slug-hash="BORwEo" data-default-tab="js,result" data-user="justinbmeyer" data-pen-title="CanJS 5.0 Chat - Final" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/BORwEo/">CanJS 5.0 Chat - Final</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
-
-
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="YgQXZE" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 Chat - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/YgQXZE/">
+  CanJS 5.0 Chat - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 ## Setup
 
 The easiest way to get started is to _Fork_ the following CodePen by clicking the __Edit On CodePen__ button on the top right:
 
-<p data-height="265" data-theme-id="0" data-slug-hash="xadpBg" data-default-tab="js,result" data-user="justinbmeyer" data-pen-title="CanJS 5.0 Chat - Start" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/xadpBg/">CanJS 5.0 Chat - Start</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="VRWLbM" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 Chat - Start">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/VRWLbM/">
+  CanJS 5.0 Chat - Start</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 The CodePen is configured to load [https://getbootstrap.com/ Bootstrap] for its styles and [https://socket.io/ socket.io] for a socket
 library.  It will be connecting to a RESTful and real-time service layer at [https://chat.donejs.com/api/messages].
@@ -336,6 +342,10 @@ awesome!
 
 When finished, you should see something like the following CodePen:
 
-<p data-height="312" data-theme-id="0" data-slug-hash="BORwEo" data-default-tab="js,result" data-user="justinbmeyer" data-pen-title="CanJS 5.0 Chat - Final" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/BORwEo/">CanJS 5.0 Chat - Final</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="YgQXZE" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 Chat - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/YgQXZE/">
+  CanJS 5.0 Chat - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>

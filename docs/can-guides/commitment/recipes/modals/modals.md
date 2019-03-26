@@ -8,8 +8,11 @@
 
 The final widget looks like:
 
-<p data-height="426" data-theme-id="dark" data-slug-hash="mjyjQN" data-default-tab="result" data-user="justinbmeyer" data-embed-version="2" data-pen-title="CanJS 5.0 - Multiple Modals - Final" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/mjyjQN/">CanJS 5.0 - Multiple Modals - Final</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
-
+<p class="codepen" data-height="426" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="oVwgOz" style="height: 426px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 - Multiple Modals - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/oVwgOz/">
+  CanJS 5.0 - Multiple Modals - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 The following sections are broken down the following parts:
 
@@ -23,7 +26,7 @@ The following sections are broken down the following parts:
 
 ### The problem
 
-In this section, we will fork [this CodePen](https://codepen.io/justinbmeyer/pen/pZvKmv) that contains some starting code that we will modify to use modals instead of adding
+In this section, we will fork [this CodePen](https://codepen.io/bitovi/pen/eXRmaw?editors=1000) that contains some starting code that we will modify to use modals instead of adding
 each form directly in the page.
 
 ### What you need to know
@@ -45,14 +48,17 @@ The CodePen creates and several basic components:
 
 ### The solution
 
-__START THIS TUTORIAL BY CLONING THE FOLLOWING CodePen__:
+__START THIS TUTORIAL BY CLONING THE FOLLOWING CODEPEN__:
 
 > Click the `EDIT ON CODEPEN` button.  The CodePen will open in a new window. In that new window,  click `FORK`.
 
-<p data-height="316" data-theme-id="dark" data-slug-hash="pZvKmv" data-default-tab="js,result" data-user="justinbmeyer" data-embed-version="2" data-pen-title="CanJS 5.0 - Multiple Modals - Setup" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/pZvKmv/">CanJS 5.0 - Multiple Modals - Setup</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p class="codepen" data-height="316" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="eXRmaw" style="height: 316px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 - Multiple Modals - Setup">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/eXRmaw/">
+  CanJS 5.0 - Multiple Modals - Setup</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
-
-This JS Bin:
+This CodePen:
 
 - Loads all of CanJS’s packages. Each package is available as a named export.  For example [can-component]
   is available as `import {Component} from "can"`.
@@ -261,11 +267,14 @@ new ProgrammerQuestions({
 @sourceref ./4-next.js
 @highlight 148,158,168,178,184,200,204-206,only
 
-<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
-
-
 ## Result
 
 When complete, you should have a working multiple modal form like the following CodePen:
 
-<p data-height="426" data-theme-id="dark" data-slug-hash="mjyjQN" data-default-tab="result" data-user="justinbmeyer" data-embed-version="2" data-pen-title="CanJS 5.0 - Multiple Modals - Final" class="codepen">See the Pen <a href="https://codepen.io/justinbmeyer/pen/mjyjQN/">CanJS 5.0 - Multiple Modals - Final</a> by Justin Meyer (<a href="https://codepen.io/justinbmeyer">@justinbmeyer</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<p class="codepen" data-height="426" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="oVwgOz" style="height: 426px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 - Multiple Modals - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/oVwgOz/">
+  CanJS 5.0 - Multiple Modals - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>

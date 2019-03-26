@@ -16,8 +16,10 @@ carousel. The custom widget will have:
 
 The final widget looks like:
 
-<p data-height="768" data-theme-id="0" data-slug-hash="pZOpRE" data-default-tab="js,result" data-user="chasenlehara" data-pen-title="CanJS Tinder-Like Carousel" class="codepen">
-  See the Pen <a href="https://codepen.io/chasenlehara/pen/pZOpRE/">CanJS Tinder-Like Carousel</a> by Chasen Le Hara (<a href="https://codepen.io/chasenlehara">@chasenlehara</a>) on <a href="https://codepen.io">CodePen</a>.
+<p class="codepen" data-height="536" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="GeEJjx" style="height: 536px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 Tinder-Like Carousel">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/GeEJjx/">
+  CanJS 5 Tinder-Like Carousel</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
 The following sections are broken down the following parts:
@@ -30,8 +32,10 @@ The following sections are broken down the following parts:
 
 __START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED__:
 
-<p data-height="265" data-theme-id="0" data-slug-hash="djqJMj" data-default-tab="js" data-user="chasenlehara" data-pen-title="CanJS Tinder-Like Carousel" class="codepen">
-  See the Pen <a href="https://codepen.io/chasenlehara/pen/djqJMj/">CanJS Tinder-Like Carousel</a> by Chasen Le Hara (<a href="https://codepen.io/chasenlehara">@chasenlehara</a>) on <a href="https://codepen.io">CodePen</a>.
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="LaLVbW" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 Tinder-Like Carousel">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/LaLVbW/">
+  CanJS 5 Tinder-Like Carousel</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
 This CodePen loads:
@@ -491,8 +495,10 @@ Update the __JavaScript__ tab to:
 
 When finished, you should see something like the following CodePen:
 
-<p data-height="768" data-theme-id="0" data-slug-hash="pZOpRE" data-default-tab="js,result" data-user="chasenlehara" data-pen-title="CanJS Tinder-Like Carousel" class="codepen">
-  See the Pen <a href="https://codepen.io/chasenlehara/pen/pZOpRE/">CanJS Tinder-Like Carousel</a> by Chasen Le Hara (<a href="https://codepen.io/chasenlehara">@chasenlehara</a>) on <a href="https://codepen.io">CodePen</a>.
+<p class="codepen" data-height="536" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="GeEJjx" style="height: 536px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 Tinder-Like Carousel">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/GeEJjx/">
+  CanJS 5 Tinder-Like Carousel</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
