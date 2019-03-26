@@ -7,7 +7,7 @@ import { Component } from "//unpkg.com/can@5/core.mjs";
 Component.extend({
 	tag: "todos-app",
 	view: `
-		<h1>{{this.title}}</h1>
+		<h1>{{ this.title }}</h1>
 	`,
 	ViewModel: {
 		get title() {

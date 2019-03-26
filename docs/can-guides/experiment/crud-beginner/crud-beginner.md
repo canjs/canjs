@@ -15,6 +15,12 @@ In this tutorial, we’ll build a simple to-do app that lets you:
 - Mark to-dos as “completed”
 - Delete to-dos
 
+<p class="codepen" data-height="530" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 530px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/omqyMw/">
+  CanJS 5 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p><br>
+
 This tutorial does not assume any prior knowledge of CanJS and is meant for complete beginners.
 We assume that you have have basic knowledge of HTML and JavaScript. If you don’t, start by
 going through [MDN’s tutorials](https://developer.mozilla.org/en-US/docs/Web/Tutorials).
@@ -31,7 +37,9 @@ To begin, click the “Edit on CodePen” button in the top right of the followi
   <span>See the Pen <a href="https://codepen.io/bitovi/pen/drZgqY/">
   CanJS 5 — CRUD Guide Step 1</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
-</p>
+</p><br>
+
+The next two sections will explain what’s already in the HTML and JS tabs in the CodePen.
 
 ### HTML
 
@@ -75,14 +83,13 @@ We’ll break down what each of these lines does in the next couple sections.
 
 With one line of code, we load CanJS from a CDN and import one of its modules:
 
-```js
-import { Component } from "//unpkg.com/can@5/core.mjs";
-```
+@sourceref ./2.js
+@highlight 5,only
 
 Here’s what the different parts mean:
 
 - `import` is a keyword that [loads modules from files](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import).
-- `Component` is the _named export_ from CanJS that lets us define custom elements.
+- `Component` is the _named export_ from CanJS that lets us [can-component define custom elements].
 - `//unpkg.com/can@5/core.mjs` loads the `core.mjs` file from CanJS 5; this is explained more thoroughly in the [guides/setup#Explanationofdifferentbuilds setup guide].
 - `unpkg.com` is a CDN that hosts packages like CanJS ([can](https://www.npmjs.com/package/can)).
 
@@ -99,9 +106,9 @@ used by the browser.
 
 Calling [can-component.extend Component.extend()] defines a custom element. It takes three arguments:
 
-- `tag` is the name of the custom element.
-- `view` is a [can-stache stache template] that gets parsed by CanJS and inserted into the custom element; more on that later.
-- `ViewModel` is an object with properties and methods that provides the data or the _model_ to the _view_.
+- [can-component.prototype.tag `tag`] is the name of the custom element.
+- [can-component.prototype.view `view`] is a [can-stache stache template] that gets parsed by CanJS and inserted into the custom element; more on that later.
+- [can-component.prototype.ViewModel `ViewModel`] is an object with properties and methods that provides the data or the _model_ to the _view_.
 
 The `view` is pretty boring right now; it just renders `<h1>Today’s to-dos</h1>`. In the next section, we’ll make it more interesting!
 
@@ -131,7 +138,7 @@ The next two sections will more thoroughly explain these lines.
 
 Every time a component’s custom element is used, a new instance of the component’s `ViewModel` is created.
 
-We’ve added a `title` [getter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get)
+We’ve added a `title` [can-define.types.propDefinition#GETTER getter]
 to our `ViewModel`, which returns the string `"Today’s to-dos"`:
 
 @sourceref ./3.js
@@ -139,13 +146,13 @@ to our `ViewModel`, which returns the string `"Today’s to-dos"`:
 
 ### Reading properties in the stache template
 
-Our `view` is a [can-stache stache template]. Whenever stache encounters the [can-stache.tags.escaped double curlies (`{{}}`)],
+Our `view` is a [can-stache stache template]. Whenever stache encounters the [can-stache.tags.escaped double curlies (`{{ }}`)],
 it looks inside them for an _expression_ to evaluate.
 
 @sourceref ./3.js
 @highlight 10,only
 
-`this` inside a stache template refers to the ViewModel instance created for that component, so `{{this.title}}` makes stache
+`this` inside a stache template refers to the ViewModel instance created for that component, so `{{ this.title }}` makes stache
 read the `title` property on the component’s ViewModel instance, which is how `<h1>Today’s to-dos</h1>` gets rendered in the page!
 
 > Find something confusing or need help? [Join our Slack](https://bitovi.com/community/slack) and post a question
@@ -201,13 +208,16 @@ creating, retrieving, updating, and deleting data:
 The `Todo` is a new data type that has these methods for making API calls:
 
 - `Todo.getList()` calls `GET /api/todos`
-- `(new Todo()).save()` calls `POST /api/todos`
+- `new Todo().save()` calls `POST /api/todos`
 - `Todo.get({id: 1})` calls `GET /api/todos/1`
 
 Additionally, once you have an instance of a `todo`, you can call these methods on it:
 
 - `todo.save()` calls `PUT /api/todos/1`
 - `todo.destroy()` calls `DELETE /api/todos/1`
+
+> **Note:** the [api#DataModeling Data Modeling section in the API Docs] has a cheat sheet with
+> each JavaScript call, the HTTP request that’s made, and the expected JSON response.
 
 ### Fetching all the to-dos
 
@@ -242,7 +252,7 @@ This template also shows how we can read the state and value of a Promise:
 
 So first, we check `#if(this.todosPromise.isResolved)` is true. If it is, we loop through all
 the to-dos (`#for(todo of this.todosPromise.value)`) and create a `todo` variable in our template.
-Then we read `{{todo.name}}` to put the to-do’s name in the list.
+Then we read `{{ todo.name }}` to put the to-do’s name in the list.
 
 ## Handling loading and error states
 
@@ -355,7 +365,7 @@ When new to-dos are created, they’re added to the list that’s returned _auto
 in the right spot! You don’t have to write any code to make sure the new to-do gets inserted
 into the right spot in the list.
 
-CanJS does this for filtering as well. If you make a query with a filter (e.g. `{filter: {complete: true}}`),
+CanJS does this for filtering as well. If you make a query with a filter (e.g. `{filter: {complete: true }}`),
 when items are added, edited, or deleted that match that filter, those lists will be updated automatically.
 
 > Find something confusing or need help? [Join our Slack](https://bitovi.com/community/slack) and post a question
@@ -386,29 +396,29 @@ Component.extend({
 	tag: "todos-app",
 	view: `
 		<h1>Today’s to-dos</h1>
-		{{#if(this.todosPromise.isPending)}}
+		{{# if(this.todosPromise.isPending) }}
 			Loading todos…
-		{{/if}}
-		{{#if(this.todosPromise.isRejected)}}
-			<p>Couldn’t load todos; {{this.todosPromise.reason}}</p>
-		{{/if}}
-		{{#if(this.todosPromise.isResolved)}}
+		{{/ if }}
+		{{# if(this.todosPromise.isRejected) }}
+			<p>Couldn’t load todos; {{ this.todosPromise.reason }}</p>
+		{{/ if }}
+		{{# if(this.todosPromise.isResolved) }}
 			<input placeholder="What needs to be done?" value:bind="this.newName" />
 			<button on:click="this.save()" type="button">Add</button>
 			<ul>
-				{{#for(todo of this.todosPromise.value)}}
+				{{# for(todo of this.todosPromise.value) }}
 					<li>
 						<input checked:bind="todo.complete" on:change="todo.save()" type="checkbox" />
-						{{#eq(todo, this.selectedTodo)}}
+						{{# eq(todo, this.selectedTodo) }}
 							<input focused:from="true" on:blur="this.saveTodo(todo)" type="text" value:bind="todo.name" />
-						{{else}}
-							<span class="{{#if(todo.complete)}}done{{/if}}" on:click="this.selectedTodo = todo">{{todo.name}}</span>
-						{{/eq}}
+						{{ else }}
+							<span class="{{# if(todo.complete) }}done{{/ if }}" on:click="this.selectedTodo = todo">{{ todo.name }}</span>
+						{{/ eq }}
 						<button on:click="todo.destroy()" type="button"></button>
 					</li>
-				{{/for}}
+				{{/ for }}
 			</ul>
-		{{/if}}
+		{{/ if }}
 	`,
 	ViewModel: {
 		newName: "string",

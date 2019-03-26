@@ -10,15 +10,15 @@ Component.extend({
 	tag: "todos-app",
 	view: `
 		<h1>Today’s to-dos</h1>
-		{{#if(this.todosPromise.isResolved)}}
+		{{# if(this.todosPromise.isResolved) }}
 			<ul>
-				{{#for(todo of this.todosPromise.value)}}
+				{{# for(todo of this.todosPromise.value) }}
 					<li>
-						{{todo.name}}
+						{{ todo.name }}
 					</li>
-				{{/for}}
+				{{/ for }}
 			</ul>
-		{{/if}}
+		{{/ if }}
 	`,
 	ViewModel: {
 		get todosPromise() {
