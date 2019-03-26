@@ -10,21 +10,21 @@ Component.extend({
 	tag: "todos-app",
 	view: `
 		<h1>Today’s to-dos</h1>
-		{{#if(this.todosPromise.isPending)}}
+		{{# if(this.todosPromise.isPending) }}
 			Loading todos…
-		{{/if}}
-		{{#if(this.todosPromise.isRejected)}}
-			<p>Couldn’t load todos; {{this.todosPromise.reason}}</p>
-		{{/if}}
-		{{#if(this.todosPromise.isResolved)}}
+		{{/ if }}
+		{{# if(this.todosPromise.isRejected) }}
+			<p>Couldn’t load todos; {{ this.todosPromise.reason }}</p>
+		{{/ if }}
+		{{# if(this.todosPromise.isResolved) }}
 			<ul>
-				{{#for(todo of this.todosPromise.value)}}
+				{{# for(todo of this.todosPromise.value) }}
 					<li>
-						{{todo.name}}
+						{{ todo.name }}
 					</li>
-				{{/for}}
+				{{/ for }}
 			</ul>
-		{{/if}}
+		{{/ if }}
 	`,
 	ViewModel: {
 		get todosPromise() {

@@ -10,30 +10,30 @@ Component.extend({
 	tag: "todos-app",
 	view: `
 		<h1>Today’s to-dos</h1>
-		{{#if(this.todosPromise.isPending)}}
+		{{# if(this.todosPromise.isPending) }}
 			Loading todos…
-		{{/if}}
-		{{#if(this.todosPromise.isRejected)}}
-			<p>Couldn’t load todos; {{this.todosPromise.reason}}</p>
-		{{/if}}
-		{{#if(this.todosPromise.isResolved)}}
+		{{/ if }}
+		{{# if(this.todosPromise.isRejected) }}
+			<p>Couldn’t load todos; {{ this.todosPromise.reason }}</p>
+		{{/ if }}
+		{{# if(this.todosPromise.isResolved) }}
 			<input placeholder="What needs to be done?" value:bind="this.newName" />
 			<button on:click="this.save()" type="button">Add</button>
 			<ul>
-				{{#for(todo of this.todosPromise.value)}}
+				{{# for(todo of this.todosPromise.value) }}
 					<li>
 						<input checked:bind="todo.complete" on:change="todo.save()" type="checkbox" />
-						{{#eq(todo, this.selected)}}
+						{{# eq(todo, this.selected) }}
 							<input focused:from="true" on:blur="this.saveTodo(todo)" value:bind="todo.name" />
-						{{else}}
-							<span class="{{#if(todo.complete)}}done{{/if}}" on:click="this.selected = todo">
-								{{todo.name}}
+						{{ else }}
+							<span class="{{# if(todo.complete) }}done{{/ if }}" on:click="this.selected = todo">
+								{{ todo.name }}
 							</span>
-						{{/eq}}
+						{{/ eq }}
 					</li>
-				{{/for}}
+				{{/ for }}
 			</ul>
-		{{/if}}
+		{{/ if }}
 	`,
 	ViewModel: {
 		newName: "string",
