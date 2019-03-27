@@ -1,4 +1,4 @@
-@page guides/crud-beginner CRUD Guide (Beginner)
+@page guides/crud-beginner CRUD Guide
 @parent guides/experiment 0
 @templateRender <% %>
 @description Learn how to build a basic CRUD app with CanJS in 30 minutes.
@@ -108,12 +108,12 @@ Calling [can-component.extend Component.extend()] defines a custom element. It t
 
 - [can-component.prototype.tag `tag`] is the name of the custom element.
 - [can-component.prototype.view `view`] is a [can-stache stache template] that gets parsed by CanJS and inserted into the custom element; more on that later.
-- [can-component.prototype.ViewModel `ViewModel`] is an object with properties and methods that provides the data or the _model_ to the _view_.
+- [can-component.prototype.ViewModel `ViewModel`] is an object (with properties and methods) from which the _view_ gets its _model_ data.
 
 The `view` is pretty boring right now; it just renders `<h1>Today’s to-dos</h1>`. In the next section, we’ll make it more interesting!
 
 > Find something confusing or need help? [Join our Slack](https://bitovi.com/community/slack) and post a question
-> in the [#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A). We’re always happy to help!
+> in the [#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A). We answer every question and we’re eager to help!
 
 ## Rendering a template with a ViewModel
 
@@ -128,7 +128,7 @@ Using this component will insert the following into the page:
 
 ```html
 <todos-app>
-	<h1>Today’s to-dos</h1>
+	<h1>Today’s to-dos!</h1>
 </todos-app>
 ```
 
@@ -139,7 +139,7 @@ The next two sections will more thoroughly explain these lines.
 Every time a component’s custom element is used, a new instance of the component’s `ViewModel` is created.
 
 We’ve added a `title` [can-define.types.propDefinition#GETTER getter]
-to our `ViewModel`, which returns the string `"Today’s to-dos"`:
+to our `ViewModel`, which returns the string `"Today’s to-dos!"`:
 
 @sourceref ./3.js
 @highlight 13-15,only
@@ -153,10 +153,10 @@ it looks inside them for an _expression_ to evaluate.
 @highlight 10,only
 
 `this` inside a stache template refers to the ViewModel instance created for that component, so `{{ this.title }}` makes stache
-read the `title` property on the component’s ViewModel instance, which is how `<h1>Today’s to-dos</h1>` gets rendered in the page!
+read the `title` property on the component’s ViewModel instance, which is how `<h1>Today’s to-dos!</h1>` gets rendered in the page!
 
 > Find something confusing or need help? [Join our Slack](https://bitovi.com/community/slack) and post a question
-> in the [#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A). We’re always happy to help!
+> in the [#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A). We answer every question and we’re eager to help!
 
 ## Connecting to a backend API
 
@@ -171,7 +171,8 @@ CanJS provides abstractions for connecting to backend APIs so you can:
 - Have your UI update whenever the model data changes.
 - Prevent multiple instances of a given object or multiple lists of a given set from being created.
 
-In our app, let’s make a request to get all the to-dos sorted alphabetically by name:
+In our app, let’s make a request to get all the to-dos sorted alphabetically by name. Note that we won’t
+see any to-dos in our app yet; we’ll get to that in just a little bit!
 
 @sourceref ./4.js
 @highlight 5-7,15-17,only
@@ -185,9 +186,9 @@ First, we import [can-realtime-rest-model realtimeRestModel]:
 @sourceref ./4.js
 @highlight 5,only
 
-This module is responsible for creating new connections to APIs and new data types.
+This module is responsible for creating new connections to APIs and new models (data types).
 
-### Creating a new connection
+### Creating a new model
 
 Second, we call `realtimeRestModel()` with a string that represents the URLs that should be called for
 creating, retrieving, updating, and deleting data:
@@ -205,7 +206,7 @@ creating, retrieving, updating, and deleting data:
 
 `realtimeRestModel()` returns what we call a _connection_. It’s just an object that has a `.Map` property.
 
-The `Todo` is a new data type that has these methods for making API calls:
+The `Todo` is a new model that has these methods for making API calls:
 
 - `Todo.getList()` calls `GET /api/todos`
 - `new Todo().save()` calls `POST /api/todos`
@@ -231,7 +232,7 @@ It returns a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/R
 that resolves with the data returned by the API.
 
 > Find something confusing or need help? [Join our Slack](https://bitovi.com/community/slack) and post a question
-> in the [#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A). We’re always happy to help!
+> in the [#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A). We answer every question and we’re eager to help!
 
 ## Rendering a list of items
 
@@ -321,7 +322,7 @@ Again, you might be wondering where we’ve defined the `save()` method in the V
 
 Earlier we said that a:
 
-> `ViewModel` is an object with properties and methods that provides the data or the _model_ to the _view_.
+> [can-component.prototype.ViewModel `ViewModel`] is an object (with properties and methods) from which the _view_ gets its _model_ data.
 
 This is true, although there’s more information to be known. A component’s ViewModel is actually an instance of
 [can-define/map/map DefineMap], which is an observable data type used throughout CanJS.
@@ -342,7 +343,7 @@ CanJS supports many different types, including `boolean`, `date`, `number`, and 
 
 ### Saving new items to the backend API
 
-Now it’s time to define the `save()` method on our ViewModel!
+Now let’s look at the `save()` method on our ViewModel:
 
 @sourceref ./7.js
 @highlight 36-40,only
@@ -358,88 +359,135 @@ component’s ViewModel instance. This is how we can both read and write the Vie
 
 ### New items are added to the right place in the sorted list
 
-When `Todo.getList({sort: "name"})` is called, CanJS makes a GET request to `/api/todos?sort=name`
+When `Todo.getList({sort: "name"})` is called, CanJS makes a GET request to `/api/todos?sort=name`.
 
 When the array of to-dos comes back, CanJS associates that array with the query `{sort: "name"}`.
-When new to-dos are created, they’re added to the list that’s returned _automatically_, and
-in the right spot! You don’t have to write any code to make sure the new to-do gets inserted
+When new to-dos are created, they’re automatically added to the right spot in the list that’s returned.
+Try adding a to-do in your CodePen! You don’t have to write any code to make sure the new to-do gets inserted
 into the right spot in the list.
 
 CanJS does this for filtering as well. If you make a query with a filter (e.g. `{filter: {complete: true }}`),
 when items are added, edited, or deleted that match that filter, those lists will be updated automatically.
 
 > Find something confusing or need help? [Join our Slack](https://bitovi.com/community/slack) and post a question
-> in the [#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A). We’re always happy to help!
+> in the [#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A). We answer every question and we’re eager to help!
 
 ## Updating existing items
 
+CanJS also makes it easy to update existing instances of your model objects and save them to your backend API.
+
+In this section, we’ll add an `<input type="checkbox">` for marking a to-do as complete.
+We’ll also make it possible to click on a to-do to select it and edit its name.
+After either of these changes, we’ll save the to-do to the backend API.
+
 @sourceref ./8.js
-@highlight 25-32,49-52,only
+@highlight 25-32,40,49-52,only
+
+The next four sections will more thoroughly explain the code above.
 
 ### Binding to checkbox form elements
 
+Every [https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox `<input type="checkbox">`]
+has a `checked` property. We [can-stache-bindings.twoWay bind] to it so if `todo.complete` is true or false,
+the checkbox is either checked or unchecked, respectively.
+
+Additionally, when the checkbox is clicked, `todo.complete` is updated to be `true` or `false`.
+
+@sourceref ./8.js
+@highlight 25,only
+
+We also listen for [change](https://developer.mozilla.org/en-US/docs/Web/Events/change) events with the
+[can-stache-bindings.event on:event] syntax. When the input’s value changes, the
+[can-connect/can/map/map.prototype.save `save()`] method on the `todo` is called.
+
 ### Checking for equality in templates
+
+This section uses two stache helpers:
+
+- [can-stache.helpers.eq #eq()] checks whether all the arguments passed to it are `===`
+- [can-stache.helpers.else {{ else }}] will only render if `#eq()` returns `false`
+
+@sourceref ./8.js
+@highlight 26,28,32,only
+
+The code above checks whether `todo` is equal to `this.selected`. We haven’t added `selected`
+to our ViewModel yet, but we will in the next section!
 
 ### Setting the selected to-do
 
+When you listen for events with the [can-stache-bindings.event on:event] syntax, you can
+also [can-stache-bindings.event#on_VIEW_MODEL_OR_DOM_EVENT__KEY_VALUE_ set property values].
+
+Let’s examine this part of the code:
+
+@sourceref ./8.js
+@highlight 29-31,40,only
+
+`on:click="this.selected = todo"` will cause the ViewModel’s `selected` property to be set
+to the `todo` when the `<span>` is clicked.
+
+The template above also changes the span’s class depending on [can-stache.helpers.if if]
+`todo.complete` is true or false.
+
+Additionally, we add [can-define.types.propDefinition#function__ `selected: Todo`]
+to the ViewModel. In our app, we only ever set `selected` to an instance of a `Todo`,
+but if we were to set it to a plain object, a new `Todo` instance would be created with that object.
+
 ### Editing to-do names
 
-### Saving changes to an existing to-do
+After you click on a to-do’s name, we want the `<span>` to be replaced with an `<input>` that has the
+to-do’s name (and immediately give it focus). When the input loses focus, we want the to-do to be saved
+and the input to be replaced with the span again.
+
+@sourceref ./8.js
+@highlight 27,49-52,only
+
+Let’s break down the code above:
+
+- `focused:from="true"` will set the input’s `focused` attribute to `true`, immediately giving the input focus
+- `on:blur="this.saveTodo(todo)"` listens for the [blur event](https://developer.mozilla.org/en-US/docs/Web/API/Element/blur_event) (the input losing focus) so the ViewModel’s `saveTodo()` method is called
+- `value:bind="todo.name"` binds the input’s value to the `name` property on the `todo`
+- `saveTodo(todo)` in the ViewModel will call [can-connect/can/map/map.prototype.save `save()`] on the `todo` and reset the ViewModel’s `selected` property (so the input will disappear and just the to-do’s name is displayed)
 
 > Find something confusing or need help? [Join our Slack](https://bitovi.com/community/slack) and post a question
-> in the [#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A). We’re always happy to help!
+> in the [#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A). We answer every question and we’re eager to help!
 
 ## Deleting items
 
-```js
-Component.extend({
-	tag: "todos-app",
-	view: `
-		<h1>Today’s to-dos</h1>
-		{{# if(this.todosPromise.isPending) }}
-			Loading todos…
-		{{/ if }}
-		{{# if(this.todosPromise.isRejected) }}
-			<p>Couldn’t load todos; {{ this.todosPromise.reason }}</p>
-		{{/ if }}
-		{{# if(this.todosPromise.isResolved) }}
-			<input placeholder="What needs to be done?" value:bind="this.newName" />
-			<button on:click="this.save()" type="button">Add</button>
-			<ul>
-				{{# for(todo of this.todosPromise.value) }}
-					<li>
-						<input checked:bind="todo.complete" on:change="todo.save()" type="checkbox" />
-						{{# eq(todo, this.selectedTodo) }}
-							<input focused:from="true" on:blur="this.saveTodo(todo)" type="text" value:bind="todo.name" />
-						{{ else }}
-							<span class="{{# if(todo.complete) }}done{{/ if }}" on:click="this.selectedTodo = todo">{{ todo.name }}</span>
-						{{/ eq }}
-						<button on:click="todo.destroy()" type="button"></button>
-					</li>
-				{{/ for }}
-			</ul>
-		{{/ if }}
-	`,
-	ViewModel: {
-		newName: "string",
-		selectedTodo: {},
-		get todosPromise() {
-			return Todo.getList({sort: "name"});
-		},
-		save() {
-			const todo = new Todo({name: this.newName});
-			todo.save();
-			this.newName = "";
-		},
-		saveTodo(todo) {
-			todo.save();
-			this.selectedTodo = null;
-		}
-	}
-});
-```
+Now there’s just one more feature we want to add to our app: deleting to-dos!
 
-> Find something confusing or need help? [Join our Slack](https://bitovi.com/community/slack) and post a question
-> in the [#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A). We’re always happy to help!
+@sourceref ./9.js
+@highlight 33,only
+
+When the `<button>` is clicked, the to-do’s [can-connect/can/map/map.prototype.destroy destroy]
+method is called, which will make a `DELETE /api/todos/{id}` call to delete the to-do in the
+backend API.
+
+## Result
+
+Congrats! You’ve built your first app with CanJS and learned all the basics.
+
+Here’s what your finished CodePen will look like:
+
+<p class="codepen" data-height="530" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 530px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/omqyMw/">
+  CanJS 5 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+
+## Next steps
+
+If you’re ready to go through another guide, check out the [guides/chat], which will walk you through
+building a real-time chat app. The [guides/todomvc] is also another great guide to go through if you’re
+not sick of building to-do apps. ☑️
+
+If you’d rather learn about CanJS’s core technologies, the [guides/technology-overview] shows you the
+basics of how CanJS works. From there, the [guides/html], [guides/routing], and [guides/data] guides
+offer more in-depth information on how CanJS works.
+
+If you haven’t already, [join our Slack](https://bitovi.com/community/slack) and come say hello in the
+[#introductions channel](https://bitovi-community.slack.com/messages/CFMMLPNV7). We also have a
+[#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A) for any comments or questions about CanJS.
+We answer every question and we’re eager to help!
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>

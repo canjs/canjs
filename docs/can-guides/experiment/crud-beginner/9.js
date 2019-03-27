@@ -30,6 +30,7 @@ Component.extend({
 								{{ todo.name }}
 							</span>
 						{{/ eq }}
+						<button on:click="todo.destroy()" type="button"></button>
 					</li>
 				{{/ for }}
 			</ul>
