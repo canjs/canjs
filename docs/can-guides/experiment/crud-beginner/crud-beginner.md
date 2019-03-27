@@ -2,7 +2,6 @@
 @parent guides/experiment 0
 @templateRender <% %>
 @description Learn how to build a basic CRUD app with CanJS in 30 minutes.
-@hide
 
 @body
 
