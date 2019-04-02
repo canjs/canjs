@@ -1,17 +1,6 @@
-<script type="text/stache" id="app-view">
-<form>
+<!doctype html>
+<title>Credit Card Guide (Advanced)</title>
+<body>
+<script src="https://js.stripe.com/v2/"></script>
 
-  User Entered: {{ userCardNumber.value }},
-  Card Number: {{ cardNumber.value }}
-
-  <input type="text" name="number" placeholder="Card Number"
-    on:input:value:to="userCardNumber.value"/>
-
-  <input type="text" name="expiry" placeholder="MM-YY"/>
-
-  <input type="text" name="cvc" placeholder="CVC"/>
-
-  <button>Pay ${{ amount.value }}</button>
-
-</form>
-</script>
+<cc-payment></cc-payment>

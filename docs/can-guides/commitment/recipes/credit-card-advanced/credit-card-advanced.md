@@ -16,9 +16,11 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/woxuhu/4/embed?output">
-  Finished Credit Card Guide (Advanced) on jsbin.com
-</a>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="XGZwYq" data-pen-title="Credit Card Guide (Advanced)">
+  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/XGZwYq/">
+  Credit Card Guide (Advanced)</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 To use the widget:
 
@@ -30,13 +32,15 @@ To use the widget:
    the invalid inputs should be highlighted red, and the _Pay_
    button should become disabled.
 
-__START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
+__START THIS TUTORIAL BY CLONING THE FOLLOWING CodePen__:
 
-<a class="jsbin-embed" href="https://jsbin.com/woxuhu/2/embed?html,output">
-  Starter Credit Card Guide (Advanced) on jsbin.com
-</a>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="css,result" data-user="cherifGsoul" data-slug-hash="JVPWoZ" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Starter)">
+  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/JVPWoZ/">
+  Credit Card Guide (Starter)</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
-This JS Bin has initial prototype HTML and CSS which is useful for
+This CodePen has initial prototype HTML and CSS which is useful for
 getting the application to look right.
 
 The following sections are broken down into:
@@ -57,12 +61,12 @@ but most of the same basic info applies:
 ### The problem
 
 We are going to try an alternate form of the basic CanJS setup.  We
-will still have a [can-stache] `payment-view` and render it with a
-`viewModel`.  But the `viewModel` should be a plain JavaScript object
+will have a [can-component component] with `cc-payment` as a custom tag.  
+The component  `ViewModel` should be a plain JavaScript object
 whose properties are all [Kefir.js](https://kefirjs.github.io/kefir/)
 streams.
 
-We will render the static content in a template, but use a
+We will render the static content in the component view, but use a
 constant stream to hold the `amount` value.
 
 
@@ -94,13 +98,13 @@ constant stream to hold the `amount` value.
   templates.  Output the value of a stream like:
 
   ```
-  {{stream.value}}
+  {{ stream.value }}
   ```
 
   Or the error like:
 
   ```
-  {{stream.error}}
+  {{ stream.error }}
   ```
 
 ### The solution
@@ -108,12 +112,12 @@ constant stream to hold the `amount` value.
 Update the __HTML__ tab to:
 
 @sourceref ./1-setup.html
-@highlight 8-20,only
+@highlight 6,only
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
-@highlight 1-7,only
+@highlight 1-21,only
 
 
 
@@ -166,15 +170,10 @@ and also print back the cleaned card number (the entered number with no dashes).
 
 ### The solution
 
-Update the view in the __HTML__ tab to:
-
-@sourceref ./2-read-card.html
-@highlight 4-8,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-read-card.js
-@highlight 4,7-11,only
+@highlight 8-9,12,26-36,only
 
 
 
@@ -208,15 +207,10 @@ if the card number is 16 characters.
 
 ### The solution
 
-Update the view in the __HTML__ tab to:
-
-@sourceref ./3-card-error.html
-@highlight 4,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-card-error.js
-@highlight 12,18-26,only
+@highlight 8,35-46,only
 
 
 
@@ -325,15 +319,10 @@ the input in a `userCardNumberBlurred` `emitterProperty`.
 
 ### The solution
 
-Update the view in the __HTML__ tab to:
-
-@sourceref ./4-card-blur.html
-@highlight 4-11,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-card-blur.js
-@highlight 5,13-14,30-83,only
+@highlight 8-10,14-15,32-34,43-48,58-111,only
 
 
 
@@ -367,15 +356,10 @@ array like `["12","16"]`.  Make sure to:
 
 ### The solution
 
-Update the view in the __HTML__ tab to:
-
-@sourceref ./5-expiry.html
-@highlight 8-10,17-20,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-expiry.js
-@highlight 7-8,19-26,42-49,only
+@highlight 12-14,22-25,43-48,65-77,87-94,only
 
 
 
@@ -409,15 +393,10 @@ element.  Make sure to:
 
 ### The solution
 
-Update the view in the __HTML__ tab to:
-
-@sourceref ./6-cvc.html
-@highlight 12-14,26-29,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-cvc.js
-@highlight 10-11,32-34,59-69,only
+@highlight 16-18,31-33,57-62,94-102,121-131,only
 
 
 
@@ -446,15 +425,10 @@ Let’s disable the __Pay__ button until the card, expiry, and cvc are valid.
 
 ### The solution
 
-Update the view in the __HTML__ tab to:
-
-@sourceref ./7-disable-pay.html
-@highlight 31-33,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./7-disable-pay.js
-@highlight 36-39,only
+@highlight 35-37,106-111,only
 
 
 
@@ -538,15 +512,10 @@ we will change the __Pay__ button to say __Paying__.
 
 ### The solution
 
-Update the view in the __HTML__ tab to:
-
-@sourceref ./8-pay-button.html
-@highlight 2,32,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./8-pay-button.js
-@highlight 13-18,48-90,only
+@highlight 6,36,66-68,117-122,125-136,140-162,165-167,169-172,only
 
 
 
@@ -562,22 +531,19 @@ Let’s prevent the __Pay__ button from being clicked while the payment is proce
 
 ### The solution
 
-Update the view in the __HTML__ tab to:
-
-@sourceref ./9-disable-payments.html
-@highlight 31,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./9-disable-payments.js
-@highlight 92-97,only
+@highlight 35,169-176,only
 
 ## Result
 
-When complete, you should have a working credit card payment form like the following JS Bin:
+When complete, you should have a working credit card payment form like the following CodePen:
 
-<a class="jsbin-embed" href="https://jsbin.com/woxuhu/4/embed?html,js,output">
-  Finished Credit Card Guide (Advanced) on jsbin.com
-</a>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="XGZwYq" data-pen-title="Credit Card Guide (Advanced)">
+  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/XGZwYq/">
+  Credit Card Guide (Advanced)</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.1.4"></script>

@@ -1,26 +1,48 @@
-const viewModel = {
-	amount: Kefir.constant(1000),
+import { Component, kefir as Kefir } from "//unpkg.com/can@5/ecosystem.mjs";
 
-	userCardNumber: Kefir.emitterProperty()
-};
+Component.extend({
+	tag: "cc-payment",
+	view: `
+		<form>
+		
+			<div class="message">{{ this.cardError.value }}</div>
 
-viewModel.cardNumber = viewModel.userCardNumber.map((card) => {
-	if (card) {
-		return card.replace(/[\s-]/g, "");
+			<input type="text" name="number" placeholder="Card Number"
+				on:input:value:to="this.userCardNumber.value"/>
+		
+			<input type="text" name="expiry" placeholder="MM-YY"/>
+		
+			<input type="text" name="cvc" placeholder="CVC"/>
+		
+			<button>Pay \${{ this.amount.value }}</button>
+		</form>
+	`,
+	ViewModel: {
+		amount: {
+			default: () => Kefir.constant(1000)
+		},
+		userCardNumber: {
+			default: () => Kefir.emitterProperty()
+		},
+		
+		get cardNumber() {
+			return this.userCardNumber.map((card) => {
+				if (card) {
+					return card.replace(/[\s-]/g, "");
+				}
+			});
+		},
+		get cardError() {
+			return this.cardNumber.map(this.validateCard);
+		},
+		// HELPER FUNCTIONS
+		validateCard(card) {
+			if (!card) {
+				return "There is no card"
+			}
+			if (card.length !== 16) {
+				return "There should be 16 characters in a card";
+			}
+		}
 	}
 });
-viewModel.cardError = viewModel.cardNumber.map(validateCard);
-
-const view = can.stache.from("app-view");
-
-document.body.appendChild( view(viewModel) );
-
-// HELPER FUNCTIONS
-function validateCard(card) {
-	if (!card) {
-		return "There is no card"
-	}
-	if (card.length !== 16) {
-		return "There should be 16 characters in a card";
-	}
-}

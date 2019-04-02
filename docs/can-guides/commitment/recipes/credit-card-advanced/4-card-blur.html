@@ -1,20 +1,6 @@
-<script type="text/stache" id="app-view">
-<form>
+<!doctype html>
+<title>Credit Card Guide (Advanced)</title>
+<body>
+<script src="https://js.stripe.com/v2/"></script>
 
-  {{# if(showCardError.value) }}
-    <div class="message">{{ cardError.value }}</div>
-  {{/ if }}
-
-  <input type="text" name="number" placeholder="Card Number"
-    on:input:value:to="userCardNumber.value"
-    on:blur="userCardNumberBlurred.emitter.value(true)"
-    {{# if(showCardError.value) }}class="is-error"{{/ if }}/>
-
-  <input type="text" name="expiry" placeholder="MM-YY"/>
-
-  <input type="text" name="cvc" placeholder="CVC"/>
-
-  <button>Pay ${{ amount.value }}</button>
-
-</form>
-</script>
+<cc-payment></cc-payment>
