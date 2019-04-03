@@ -24,7 +24,7 @@ Component.extend({
 					<li>
 						<input checked:bind="todo.complete" on:change="todo.save()" type="checkbox" />
 						{{# eq(todo, this.selected) }}
-							<input focused:from="true" on:blur="this.saveTodo(todo)" type="text" value:bind="todo.name" />
+							<input focused:from="true" on:blur="this.saveTodo(todo)" value:bind="todo.name" />
 						{{ else }}
 							<span class="{{# if(todo.complete) }}done{{/ if }}" on:click="this.selected = todo">
 								{{ todo.name }}

@@ -14,7 +14,7 @@ In this tutorial, we’ll build a simple to-do app that lets you:
 - Mark to-dos as “completed”
 - Delete to-dos
 
-<p class="codepen" data-height="530" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 530px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
+<p class="codepen" data-height="536" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 536px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
   <span>See the Pen <a href="https://codepen.io/bitovi/pen/omqyMw/">
   CanJS 5 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
@@ -131,7 +131,7 @@ Using this component will insert the following into the page:
 </todos-app>
 ```
 
-The next two sections will more thoroughly explain these lines.
+The next two sections will explain these lines.
 
 ### Defining properties on the ViewModel
 
@@ -176,7 +176,7 @@ see any to-dos in our app yet; we’ll get to that in just a little bit!
 @sourceref ./4.js
 @highlight 5-7,15-17,only
 
-The next three sections will more thoroughly explain these lines.
+The next three sections will explain these lines.
 
 ### Importing realtimeRestModel
 
@@ -284,7 +284,7 @@ After a new to-do is created, we’ll reset the input so a new to-do’s name ca
 @sourceref ./7.js
 @highlight 20-21,32,36-40,only
 
-The next four sections will more thoroughly explain these lines.
+The next four sections will explain these lines.
 
 ### Binding to input form elements
 
@@ -362,7 +362,8 @@ When `Todo.getList({sort: "name"})` is called, CanJS makes a GET request to `/ap
 
 When the array of to-dos comes back, CanJS associates that array with the query `{sort: "name"}`.
 When new to-dos are created, they’re automatically added to the right spot in the list that’s returned.
-Try adding a to-do in your CodePen! You don’t have to write any code to make sure the new to-do gets inserted
+
+**Try adding a to-do in your CodePen!** You don’t have to write any code to make sure the new to-do gets inserted
 into the right spot in the list.
 
 CanJS does this for filtering as well. If you make a query with a filter (e.g. `{filter: {complete: true }}`),
@@ -468,7 +469,7 @@ Congrats! You’ve built your first app with CanJS and learned all the basics.
 
 Here’s what your finished CodePen will look like:
 
-<p class="codepen" data-height="530" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 530px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
+<p class="codepen" data-height="536" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 536px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
   <span>See the Pen <a href="https://codepen.io/bitovi/pen/omqyMw/">
   CanJS 5 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
