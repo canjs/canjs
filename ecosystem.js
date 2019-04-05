@@ -3,7 +3,7 @@ export { default as debug } from "./es/can-debug";
 export { default as defineBackup } from "./es/can-define-backup";
 export { default as defineStream } from "./es/can-define-stream";
 export { default as defineStreamKefir } from "./es/can-define-stream-kefir";
-export { default as kefir } from "./es/can-kefir";
+export { default as Kefir } from "./es/can-kefir";
 export { default as observe } from "./es/can-observe";
 export { default as stream } from "./es/can-stream";
 export { default as streamKefir } from "./es/can-stream-kefir";
