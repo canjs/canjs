@@ -70,7 +70,7 @@ Entity.connection = restModel({
 Component.extend({
   tag: "a-folder",
   view: `
-    <span on:click="toggleOpen()">{{ this.folder.name }}</span>
+    <span on:click="this.toggleOpen()">{{ this.folder.name }}</span>
     {{# if(this.isOpen) }}
       {{# if(this.entitiesPromise.isPending) }}
         <div class="loading">Loading</div>
