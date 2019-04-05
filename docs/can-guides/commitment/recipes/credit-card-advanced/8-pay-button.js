@@ -64,7 +64,7 @@ Component.extend({
 		},
 
 		payClicked: {
-			default: 	() => Kefir.emitterProperty()
+			default: () => Kefir.emitterProperty()
 		},
 
 		get cardNumber() {
@@ -185,7 +185,7 @@ Component.extend({
 				return "There is no expiry. Format  MM-YY";
 			}
 			if (expiry.length !== 2 || expiry[0].length !== 2 || expiry[1].length !== 2) {
-				return "Expirty must be formatted like MM-YY";
+				return "Expiry must be formatted like MM-YY";
 			}
 		},
 		validateCVC(cvc) {

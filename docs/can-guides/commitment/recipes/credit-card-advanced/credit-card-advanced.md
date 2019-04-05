@@ -32,9 +32,9 @@ To use the widget:
    the invalid inputs should be highlighted red, and the _Pay_
    button should become disabled.
 
-__START THIS TUTORIAL BY CLONING THE FOLLOWING CodePen__:
+__START THIS TUTORIAL BY CLONING THE FOLLOWING CODEPEN__:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="css,result" data-user="cherifGsoul" data-slug-hash="JVPWoZ" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Starter)">
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="JVPWoZ" data-pen-title="Credit Card Guide (Starter)">
   <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/JVPWoZ/">
   Credit Card Guide (Starter)</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
@@ -347,7 +347,7 @@ array like `["12","16"]`.  Make sure to:
         return "There is no expiry. Format  MM-YY";
     }
     if (expiry.length !== 2 || expiry[0].length !== 2 || expiry[1].length !== 2) {
-        return "Expirty must be formatted like MM-YY";
+        return "Expiry must be formatted like MM-YY";
     }
   }
   ```
