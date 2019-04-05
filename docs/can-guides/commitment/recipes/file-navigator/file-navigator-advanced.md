@@ -21,9 +21,9 @@ The final widget looks like:
 > Note: If you don’t see any files show up, run the CodePen again. This
 > CodePen uses randomly generated files, so it’s possible nothing shows up.
 
-__Start this tutorial by cloning the following CodePen__:
+__Start this tutorial by cloning the following CODEPEN__:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="css,result" data-user="cherifGsoul" data-slug-hash="gEojEK" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator Guide (Advanced) [Starter]">
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="gEojEK" data-pen-title="File Navigator Guide (Advanced) [Starter]">
   <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/gEojEK/">
   File Navigator Guide (Advanced) [Starter]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
@@ -108,16 +108,16 @@ The first level files and folders should have a `parentId` of `"0"`.
 
 ### Solution
 
-First, let’s make a function that generates an array of `entities` that will be
-stored on our fake server. Update the __JavaScript__ tab to:
+Update the __JavaScript__ tab to:
 
-@sourceref ./file-navigator-advanced-1.js
+- Make a function that generates an array of `entities` that will be
+stored on our fake server.
 
-Next, let’s make those entities, create a `store` to house them, and trap AJAX
+- Make those entities, create a `store` to house them, and trap AJAX
 requests to use that `store`:
 
 @sourceref ./file-navigator-advanced-2.js
-@highlight 45-55,only
+@highlight 3-43,45-55,only
 
 ## Create the `Entity` Model
 

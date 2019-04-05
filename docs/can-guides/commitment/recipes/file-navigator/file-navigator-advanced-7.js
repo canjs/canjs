@@ -1,4 +1,4 @@
-import { fixture, DefineMap, restModel, Component } from "//unpkg.com/can@5/core.mjs";
+import { Component, DefineMap, fixture, restModel  } from "//unpkg.com/can@5/core.mjs";
 
 // Stores the next entity id to use.
 let entityId = 1;
