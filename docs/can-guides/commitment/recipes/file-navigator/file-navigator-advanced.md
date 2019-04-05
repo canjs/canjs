@@ -305,7 +305,7 @@ Now we want to make all the folders able to open and close.
 
 ### Things to know
 
-- CanJS uses [guides/technicalViewModels#MaintainableMVVM ViewModels] to manage the behavior
+- CanJS uses [guides/technology-overview#Key_ValueObservables ViewModels] to manage the behavior
   of views.  ViewModels can have their own state, such as if a folder `isOpen` and should be showing
   its children. `ViewModels` are constructor functions created with [can-define/map/map DefineMap].
 
