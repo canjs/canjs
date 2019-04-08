@@ -12,22 +12,24 @@ for an example that doesn't make data requests.
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/diqeyoj/30/embed?js,output">
-  Finished version of the CanJS File Navigator Guide (Advanced) on jsbin.com
-</a>
-<a href="https://jsfiddle.net/donejs/0gxdzLa2/">Open in JSFiddle</a>
+<p class="codepen" data-height="404" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="EJNmyB" style="height: 404px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator advanced [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/EJNmyB/">
+  File Navigator advanced [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
-> Note: If you don’t see any files show up, run the JS Bin again. This
-> JS Bin uses randomly generated files, so it’s possible nothing shows up.
+> **Note:** If you don’t see any files show up, run the CodePen again. This
+> CodePen uses randomly generated files, so it’s possible nothing shows up.
 
-__Start this tutorial by cloning the following JS Bin__:
+__START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED__:
 
-<a class="jsbin-embed" href="https://jsbin.com/diqeyoj/33/embed?html,css,output">
-  Starter version of the CanJS File Navigator Guide (Advanced) on jsbin.com
-</a>
-<a href="https://jsfiddle.net/donejs/t97z1hf9/">Open in JSFiddle</a>
+<p class="codepen" data-height="136" data-theme-id="0" data-default-tab="js" data-user="bitovi" data-slug-hash="Pgbmwp" style="height: 136px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator Guide (Advanced) [Starter]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/Pgbmwp/">
+  File Navigator Guide (Advanced) [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p><br>
 
-This JS Bin has initial prototype HTML and CSS which is useful for
+This CodePen has initial prototype CSS and JS which is useful for
 getting the application to look right.
 
 The following sections are broken down into:
@@ -35,11 +37,6 @@ The following sections are broken down into:
 - Problem - A description of what the section is trying to accomplish.
 - Things to know - Information about CanJS that is useful for solving the problem.
 - Solution - The solution to the problem.
-
-Watch a video of us building this recipe here:
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/_7FJA0PzAgA" frameborder="0" allowfullscreen></iframe>
-
 
 ## Build a service layer with fixtures
 
@@ -82,40 +79,44 @@ The first level files and folders should have a `parentId` of `"0"`.
 - [can-fixture] is used to trap AJAX requests like:
 
   ```js
-  can.fixture("/api/entities", function(request) {
+  fixture("/api/entities", function(request) {
     // request.data.folderId -> "1"
-    return {data: [ ... ]}
+    return {data: [
+      // ...
+    ]}
   })
   ```
 
 - [can-fixture.store] can be used to automatically filter records using the query string:
 
   ```js
-  const entities = [ ... ];
-  const entitiesStore = can.fixture.store( entities );
-  can.fixture("/api/entities", entitiesStore);
+  const entities = [
+    // ...
+  ];
+  const entitiesStore = fixture.store( entities );
+  fixture("/api/entities", entitiesStore);
   ```
 
 - [can-fixture.rand] can be used to create a random integer:
-  ```
-  can.fixture.rand(10) //-> 10
-  can.fixture.rand(10) //-> 0
+  ```js
+  fixture.rand(10) //-> 10
+  fixture.rand(10) //-> 0
   ```
 
 
 
 ### Solution
 
-First, let’s make a function that generates an array of `entities` that will be
-stored on our fake server. Update the __JavaScript__ tab to:
+Update the __JavaScript__ tab to:
 
-@sourceref ./file-navigator-advanced-1.js
+- Make a function that generates an array of `entities` that will be
+stored on our fake server.
 
-Next, let’s make those entities, create a `store` to house them, and trap AJAX
+- Make those entities, create a `store` to house them, and trap AJAX
 requests to use that `store`:
 
 @sourceref ./file-navigator-advanced-2.js
-@highlight 43-53,only
+@highlight 3-55,only
 
 ## Create the `Entity` Model
 
@@ -144,19 +145,20 @@ entity.name = "cats" //-> logs "entity name changed to cats"
 You can create a `DefineMap` type using [can-define/map/map.extend DefineMap.extend] with the type’s properties and the properties’ types like:
 
 ```js
-Type = can.DefineMap.extend({
+import { DefineMap } from "can";
+Type = DefineMap.extend({
   id: "string",
   hasChildren: "boolean",
-  ...
+  // ...
 });
 ```
 
 ### The solution
 
-Extend `can.DefineMap` with each property and its type as follows:
+Extend [can-define/map/map DefineMap] with each property and its type as follows:
 
 @sourceref ./file-navigator-advanced-3.js
-@highlight 55-61,only
+@highlight 1,57-63,only
 
 ## Connect the `Entity` model to the service layer
 
@@ -172,11 +174,11 @@ Entity.getList({parentId: "0"}).then(function(entities) {
 
 ### Things to know
 
-[can-connect/can/base-map/base-map can.connect.baseMap()] can connect a `Map` type to
+[can-rest-model restModel()] can connect a `Map` type to
 a `url` like:
 
 ```js
-can.connect.baseMap({
+restModel({
   Map: Entity,
   url: "URL"
 });
@@ -184,10 +186,10 @@ can.connect.baseMap({
 
 ### The solution
 
-Use `can.connect.baseMap` to connect `Entity` to `/api/entities` like:
+Use `restModel` to connect `Entity` to `/api/entities` like:
 
 @sourceref ./file-navigator-advanced-4.js
-@highlight 63-68,only
+@highlight 1,65-68,only
 
 ## Create the ROOT entity and render it
 
@@ -200,50 +202,45 @@ in the same way it’s expected by the designer.
 
 ### Things to know
 
-- CanJS uses [can-stache] to render data in a template
-  and keep it live.  Templates can be authored in `<script>` tags like:
+- CanJS [can-component Component] uses [can-stache] to render data in a template
+  and keep it live.  Templates can be authored in `view` property like:
 
-  ```html
-  <script type="text/stache" id="app-template">
-    TEMPLATE CONTENT
-  </script>
+  ```js
+  import { Component } from "can";
+
+  Component.extend({
+    tag: 'my-component',
+    view: `TEMPLATE CONTENT`
+    ViewModel: {}
+  });
   ```
 
   A [can-stache] template uses
   [can-stache.tags.escaped {{key}}] magic tags to insert data into
   the HTML output like:
 
-  ```html
-  <script type="text/stache" id="app-template">
-    {{something.name}}
-  </script>
-  ```
-
-- Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
   ```js
-  const template = can.stache.from(SCRIPT_ID);
-  ```
+  import { Component } from "can";
 
-- Render the template with data into a documentFragment like:
-
-  ```js
-  const fragment = template({
-    something: {name: "Derek Brunson"}
+  Component.extend({
+    tag: 'my-component',
+    view: `{{something.name}}`
+    ViewModel: {}
   });
   ```
 
-- Insert a fragment into the page with:
+- Mount the component into the page with it's custom tag:
 
-  ```
-  document.body.appendChild(fragment);
+  ```html
+  <my-component />
   ```
 
 - You can create an `Entity` instance as follows:
   ```js
-  const folder = new Entity({...});
+  const folder = new Entity({/*...*/});
   ```
 
-  Where {...} is an object of the properties you need to create like `{id: "0", name: "ROOT", ...}`.
+  Where `{/*...*/}` is an object of the properties you need to create like `{id: "0", name: "ROOT", ...}`.
   Pass this to the template.
 
 
@@ -252,19 +249,20 @@ in the same way it’s expected by the designer.
 Update the __HTML__ tab to render the `folder`’s name.
 
 ```html
-<script type="text/stache" id="app-template">
-  <span>{{folder.name}}</span>
-</script>
+<a-folder id="root"></a-folder>
 ```
 @highlight 2
 
 Update the __JavaScript__ tab to:
 
-1. Create a `folder` `Entity` instance.
-2. Load the `app-template`.  Renders it with `folder` instance, and inserts the result in the `<body>` element.
-
+1. Define a component with `a-folder` custom tag
+2. Write the component view template that displays the `folder` `Entity` `name`.
+3. Write the component `ViewModel` that has the following properties:
+  - `folder` which references the folder being displayed.
+  - `entitiesPromise` which will be a promise of all files for that folder.
+4. Set the component `ViewModel` values with [can-view-model can-view-model] `set` function
 @sourceref ./file-navigator-advanced-5.js
-@highlight 70-82,only
+@highlight 1,70-78,80-87,only
 
 ## Render the ROOT entities children
 
@@ -287,81 +285,61 @@ In this section, we’ll list the files and folders within the root folder.
 
 ### The solution
 
-The following uses `entitiesPromise` to write `<div class="loading">Loading</div>` while
-the promise is pending, and then writes out an `<li>` for each entity in the resolved `entitiesPromise`:
+Update the __JavaScript__ tab to:
 
-```html
-<script type="text/stache" id="app-template">
-  <span>{{folder.name}}</span>
-  {{#if(entitiesPromise.isPending)}}
-    <div class="loading">Loading</div>
-  {{else}}
-    <ul>
-      {{#for(entity of entitiesPromise.value)}}
-        <li class="{{entity.type}} {{#if(entity.hasChildren)}}hasChildren{{/if}}">
-          {{#eq(entity.type, 'file')}}
-            📝 <span>{{entity.name}}</span>
-          {{else}}
-            📁 <span>{{entity.name}}</span>
-          {{/eq}}
-        </li>
-      {{/for}}
-    </ul>
-  {{/if}}
-</script>
-```
-@highlight 3-17
-
-The following adds an `entitiesPromise` to data passed to the template.  `entitiesPromise`
+- Add `entitiesPromise` property to the `ViewModel`.  `entitiesPromise`
 will contain the files and folders that are directly within the root folder.
 
-@sourceref ./file-navigator-advanced-6.js
-@highlight 79,only
+- Use `entitiesPromise` to write `<div class="loading">Loading</div>` while
+the promise is pending, and then writes out an `<li>` for each entity in the resolved `entitiesPromise`
 
-## Toggle children with a ViewModel
+@sourceref ./file-navigator-advanced-6.js
+@highlight 74-88,92-96,only
+
+## Manage `<a-folder>` custom element behavior
 
 ### The problem
 
-We want to hide the root folder’s children until the root folder is clicked on.  An subsequent
-clicks on the root folder’s name should toggle if the children are displayed.
+Now we want to make all the folders able to open and close.
 
 ### Things to know
 
-- CanJS uses [guides/technicalViewModels#MaintainableMVVM ViewModels] to manage the behavior
+- CanJS uses [guides/technology-overview#Key_ValueObservables ViewModels] to manage the behavior
   of views.  ViewModels can have their own state, such as if a folder `isOpen` and should be showing
-  its children. `ViewModels` are constructor functions created with [can-define/map/map can.DefineMap].
+  its children. `ViewModels` are constructor functions created with [can-define/map/map DefineMap].
 
-- `can.DefineMap` can detail the type of a property with another type like:
+- [can-define/map/map DefineMap] can detail the type of a property with another type like:
   ```js
-  const Address = can.DefineMap.extend({
+  import { DefineMap } from "can";
+  const Address = DefineMap.extend({
     street: "string",
     city: "string"
   });
-  const Person = can.DefineMap.extend({
+  const Person = DefineMap.extend({
     address: Address
   });
   ```
 
-- `can.DefineMap` can also specify default values:
+- [can-define/map/map DefineMap] can also specify default values:
   ```js
-  const Person = can.DefineMap.extend({
+  const Person = DefineMap.extend({
     address: Address,
     age: {default: 33}
   });
   ```
 
-- `can.DefineMap` can also specify a default value and a type:
+- [can-define/map/map DefineMap] can also specify a default value and a type:
   ```js
-  const Person = can.DefineMap.extend({
+  const Person = DefineMap.extend({
     address: Address,
     age: {default: 33, type: "number"}
   });
   ```
 
-- `can.DefineMap` can also have methods:
+- [can-define/map/map DefineMap] can also have methods:
 
   ```js
-  const Person = can.DefineMap.extend({
+  const Person = DefineMap.extend({
     address: Address,
     age: {default: 33, type: "number"},
     birthday: function() {
@@ -376,161 +354,32 @@ clicks on the root folder’s name should toggle if the children are displayed.
    <div on:click="doSomething()"> ... </div>
    ```
 
+
 ### The solution
 
 The following:
 
- - Defines a `FolderVM` type that will manage the UI state around a folder.  Specifically `FolderVM` has:
-   - `folder` which references the folder being displayed.
-   - `entitiesPromise` which will be a promise of all files for that folder.
+3. Define `ViewModel` properties that will manage the UI state around a folder.:
    - `isOpen` which tracks if the folder’s children should be displayed.
    - `toggleOpen` which changes `isOpen`.
- -  Creates an instance of the `FolderVM` and uses it to render the template.
+4. Recursively renders each child folder with `<a-folder folder:from="entity" />`.
+5. Set the root folder `isOpen` property to `true` in the `ViewModel` mounting invocation (`root.viewModel.assign`).
+
 
 @sourceref ./file-navigator-advanced-7.js
-@highlight 77-93,95,only
-
-The following wraps the listing of child entities with a `{{#if(isOpen)}} {{/if}}`:
-
-```html
-<script type="text/stache" id="app-template">
-  <span on:click="toggleOpen()">{{folder.name}}</span>
-  {{#if(isOpen)}}
-  {{#if(entitiesPromise.isPending)}}
-    <div class="loading">Loading</div>
-  {{else}}
-    <ul>
-      {{#for(entity of entitiesPromise.value)}}
-        <li class="{{entity.type}} {{#if(entity.hasChildren)}}hasChildren{{/if}}">
-          {{#eq(entity.type, 'file')}}
-            📝 <span>{{entity.name}}</span>
-          {{else}}
-            📁 <span>{{entity.name}}</span>
-          {{/eq}}
-        </li>
-      {{/for}}
-    </ul>
-  {{/if}}
-  {{/if}}
-</script>
-```
-@highlight 2-3,19
-
-## Create an `<a-folder>` custom element to manage folder behavior
-
-### The problem
-
-Now we want to make all the folders able to open and close.  This means creating a `FolderVM` for every folder entity.
-
-### Things to know
-
-- [can-component can.Component] is used to create custom elements like:
-  ```js
-  const MyComponentVM = DefineMap.extend({
-    message: {default: "Hello There!"}
-  });
-
-  can.Component.extend({
-    tag: "my-component",
-    ViewModel: MyComponentVM,
-    view: can.stache("<h1>{{message}}</h1>");
-  });
-  ```
-  This component will be created anytime a `<my-component>` element is found in the page.  When the component is created, it creates
-  an instance of its `ViewModel`, in this case `MyComponentVM`.
-
-- You can pass data to a component’s `ViewModel` with [can-stache-bindings.toChild {data-bindings}] like:
-
-  ```html
-  <my-component message:from="'Hi There'" />
-  ```
-
-  This sets `message` on the ViewModel to `'Hi There'`.  You can also send data within stache like:
-
-  ```html
-  <my-component message:from="greeting" />
-  ```
-  This sets `message` on the ViewModel to what `greeting` is in the stache template.
-
-- A component’s [View] is rendered inside the component.  This means that if the following is in a template:
-
-  ```
-  <my-component {message}="'Hi There'" />
-  ```
-
-  The following will be inserted into the page:
-
-  ```
-  <my-component {message}="'Hi There'"><h1>Hi There</h1></my-component>
-  ```
-
-- `this` in a stache template refers to the current context of a template or section.  
-
-  For example, the `this` in `this.name` refers to the `context` object:
-
-  ```javascript
-  const template = stache("{{this.name}}");
-  const context = {name: "Justin"};
-  template(context);
-  ```
+@highlight 73-74,85,91,95,101-103,only
 
 
-### The solution
-
-The following:
-
-1. Changes the `app-template` to use the `<a-folder>` component to render the root folder. It
-   passes the root folder as `folder` to the `<a-folder>` component’s ViewModel.  It also sets the
-   `<a-folder>` component’s ViewModel’s `isOpen` property to `true`.
-2. Moves the content that was in `app-template` to the `folder-template` `<script>` tag.
-3. Recursively renders each child folder with `<a-folder {folder}="this" />`.
-
-```html
-<script type="text/stache" id="app-template">
-  <a-folder folder:from="this" isOpen:from="true" />        <!-- CHANGED -->
-</script>
-
-<!-- CONTENT FROM app-template-->
-<script type="text/stache" id="folder-template">
-  <span on:click="toggleOpen()">{{folder.name}}</span>
-  {{#if(isOpen)}}
-  {{#if(entitiesPromise.isPending)}}
-    <div class="loading">Loading</div>
-  {{else}}
-    <ul>
-      {{#for(entity of entitiesPromise.value)}}
-        <li class="{{entity.type}} {{#if(entity.hasChildren)}}hasChildren{{/if}}">
-          {{#eq(entity.type, 'file')}}
-            📝 <span>{{entity.name}}</span>
-          {{else}}
-            📁 <a-folder folder:from="this" />            <!-- CHANGED -->
-          {{/eq}}
-        </li>
-      {{/for}}
-    </ul>
-  {{/if}}
-  {{/if}}
-</script>
-```
-@highlight 2,18
-
-The following:
-
-1. Defines a custom `<a-folder>` element that manages its behavior with `FolderVM` and uses it to render a `folder-template`
-   template.
-2. Renders the `app-template` with the root `parent` folder instead of the `rootFolderVM`.
-
-@sourceref ./file-navigator-advanced-8.js
-@highlight 90-94,97,only
 
 ## Result
 
 When complete, you should have a working file-navigation widget
-like the following JS Bin:
+like the following CodePen:
 
-<a class="jsbin-embed" href="https://jsbin.com/diqeyoj/30/embed?js,output">
-  Finished version of the CanJS File Navigator Guide (Advanced) on jsbin.com
-</a>
-<a href="https://jsfiddle.net/donejs/0gxdzLa2/">Open in JSFiddle</a>
+<p class="codepen" data-height="404" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="EJNmyB" style="height: 404px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator advanced [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/EJNmyB/">
+  File Navigator advanced [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.1.0"></script>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>

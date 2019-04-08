@@ -1,3 +1,5 @@
+import { fixture } from "//unpkg.com/can@5/core.mjs";
+
 // Stores the next entity id to use.
 let entityId = 1;
 
@@ -8,7 +10,7 @@ const makeEntities = function(parentId, depth) {
     return [];
   }
   // The number of entities to create.
-  const entitiesCount = can.fixture.rand(10);
+  const entitiesCount = fixture.rand(10);
 
   // The array of entities we will return.
   const entities = [];
@@ -44,10 +46,10 @@ const makeEntities = function(parentId, depth) {
 const entities = makeEntities("0", 0);
 
 // Add them to a client-like DB store
-const entitiesStore = can.fixture.store(entities);
+const entitiesStore = fixture.store(entities);
 
 // Trap requests to /api/entities to read items from the entities store.
-can.fixture("/api/entities", entitiesStore);
+fixture("/api/entities", entitiesStore);
 
 // Make requests to /api/entities take 1 second
-can.fixture.delay = 1000;
+fixture.delay = 1000;

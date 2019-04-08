@@ -1,3 +1,5 @@
+import { Component, DefineMap, fixture, restModel } from "//unpkg.com/can@5/core.mjs";
+
 // Stores the next entity id to use.
 let entityId = 1;
 
@@ -8,7 +10,7 @@ const makeEntities = function(parentId, depth) {
     return [];
   }
   // The number of entities to create.
-  const entitiesCount = can.fixture.rand(10);
+  const entitiesCount = fixture.rand(10);
 
   // The array of entities we will return.
   const entities = [];
@@ -44,55 +46,70 @@ const makeEntities = function(parentId, depth) {
 const entities = makeEntities("0", 0);
 
 // Add them to a client-like DB store
-const entitiesStore = can.fixture.store(entities);
+const entitiesStore = fixture.store(entities);
 
 // Trap requests to /api/entities to read items from the entities store.
-can.fixture("/api/entities", entitiesStore);
+fixture("/api/entities", entitiesStore);
 
 // Make requests to /api/entities take 1 second
-can.fixture.delay = 1000;
+fixture.delay = 1000;
 
-const Entity = can.DefineMap.extend({
-  id: "string",
+const Entity = DefineMap.extend({
+  id: {type: "string", identity: true},
   name: "string",
   parentId: "string",
   hasChildren: "boolean",
   type: "string"
 });
 
-Entity.List = can.DefineList.extend({});
-
-can.connect.baseMap({
+Entity.connection = restModel({
   Map: Entity,
   url: "/api/entities"
 });
 
-const folder = new Entity({
-  id: "0",
-  name: "ROOT/",
-  hasChildren: true,
-  type: "folder"
-});
-
-const FolderVM = can.DefineMap.extend({
-  folder: Entity,
-  entitiesPromise: {
-    default: function() {
-      return Entity.getList({parentId: this.folder.id});
+Component.extend({
+  tag: "a-folder",
+  view: `
+    <span on:click="this.toggleOpen()">{{ this.folder.name }}</span>
+    {{# if(this.isOpen) }}
+      {{# if(this.entitiesPromise.isPending) }}
+        <div class="loading">Loading</div>
+      {{ else }}
+        <ul>
+          {{# for(entity of this.entitiesPromise.value) }}
+            <li class=" {{entity.type}}
+                        {{# if(entity.hasChildren) }}hasChildren{{/ if }}">
+              {{# eq(entity.type, 'file') }}
+                📝 <span>{{ entity.name }}</span>
+              {{ else }}
+                📁 <a-folder folder:from="entity" />
+              {{/ eq }}
+            </li>
+          {{/ for }}
+        </ul>
+      {{/ if }}
+    {{/ if }}
+  `,
+  ViewModel: {
+    folder: Entity,
+    isOpen: {type: "boolean", default: false},
+    get entitiesPromise() {
+      if (this.folder) {
+        return Entity.getList({ filter: { parentId: this.folder.id }});
+      }
+    },
+    toggleOpen: function() {
+      this.isOpen = !this.isOpen;
     }
-  },
-  isOpen: {type: "boolean", default: false},
-  toggleOpen: function() {
-    this.isOpen = !this.isOpen;
   }
 });
 
-// Create an instance of `FolderVM` with the root folder
-const rootFolderVM = new FolderVM({
-  folder: folder
+root.viewModel.assign({
+  isOpen: true,
+  folder: new Entity({
+    id: "0",
+    name: "ROOT/",
+    hasChildren: true,
+    type: "folder"
+  })
 });
-
-const template = can.stache.from("app-template");
-const fragment = template(rootFolderVM);
-
-document.body.appendChild( fragment );
