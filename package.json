@@ -66,7 +66,7 @@
     "can-control": "4.4.1",
     "can-data-types": "1.2.0",
     "can-debug": "2.0.6",
-    "can-define": "2.7.11",
+    "can-define": "2.7.12",
     "can-define-backup": "2.1.1",
     "can-define-lazy-value": "1.1.0",
     "can-define-stream": "1.1.0",
