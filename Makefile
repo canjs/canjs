@@ -21,7 +21,6 @@ publish-docs:
 	git add -f node_modules/react
 	git add -f node_modules/react-dom
 	git add -f node_modules/react-view-model
-	git add -f node_modules/fbjs
 	git add -f node_modules/loose-envify
 	git add -f node_modules/object-assign
 	git add -f node_modules/prop-types
