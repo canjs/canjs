@@ -12,24 +12,24 @@ for an example that doesn't make data requests.
 
 The final widget looks like:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="zbxLGW" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator advanced [Finished]">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/zbxLGW/">
-  File Navigator advanced [Finished]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="404" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="EJNmyB" style="height: 404px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator advanced [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/EJNmyB/">
+  File Navigator advanced [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
-> Note: If you don’t see any files show up, run the CodePen again. This
+> **Note:** If you don’t see any files show up, run the CodePen again. This
 > CodePen uses randomly generated files, so it’s possible nothing shows up.
 
-__Start this tutorial by cloning the following CODEPEN__:
+__START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED__:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="gEojEK" data-pen-title="File Navigator Guide (Advanced) [Starter]">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/gEojEK/">
-  File Navigator Guide (Advanced) [Starter]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="136" data-theme-id="0" data-default-tab="js" data-user="bitovi" data-slug-hash="Pgbmwp" style="height: 136px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator Guide (Advanced) [Starter]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/Pgbmwp/">
+  File Navigator Guide (Advanced) [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
-</p>
+</p><br>
 
-This CodePen has initial prototype HTML and CSS which is useful for
+This CodePen has initial prototype CSS and JS which is useful for
 getting the application to look right.
 
 The following sections are broken down into:
@@ -37,11 +37,6 @@ The following sections are broken down into:
 - Problem - A description of what the section is trying to accomplish.
 - Things to know - Information about CanJS that is useful for solving the problem.
 - Solution - The solution to the problem.
-
-Watch a video of us building this recipe here:
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/_7FJA0PzAgA" frameborder="0" allowfullscreen></iframe>
-
 
 ## Build a service layer with fixtures
 
@@ -86,20 +81,24 @@ The first level files and folders should have a `parentId` of `"0"`.
   ```js
   fixture("/api/entities", function(request) {
     // request.data.folderId -> "1"
-    return {data: [ ... ]}
+    return {data: [
+      // ...
+    ]}
   })
   ```
 
 - [can-fixture.store] can be used to automatically filter records using the query string:
 
   ```js
-  const entities = [ ... ];
+  const entities = [
+    // ...
+  ];
   const entitiesStore = fixture.store( entities );
   fixture("/api/entities", entitiesStore);
   ```
 
 - [can-fixture.rand] can be used to create a random integer:
-  ```
+  ```js
   fixture.rand(10) //-> 10
   fixture.rand(10) //-> 0
   ```
@@ -117,7 +116,7 @@ stored on our fake server.
 requests to use that `store`:
 
 @sourceref ./file-navigator-advanced-2.js
-@highlight 3-43,45-55,only
+@highlight 3-55,only
 
 ## Create the `Entity` Model
 
@@ -150,7 +149,7 @@ import { DefineMap } from "can";
 Type = DefineMap.extend({
   id: "string",
   hasChildren: "boolean",
-  ...
+  // ...
 });
 ```
 
@@ -222,7 +221,7 @@ in the same way it’s expected by the designer.
 
   ```js
   import { Component } from "can";
-  
+
   Component.extend({
     tag: 'my-component',
     view: `{{something.name}}`
@@ -232,16 +231,16 @@ in the same way it’s expected by the designer.
 
 - Mount the component into the page with it's custom tag:
 
-  ```
+  ```html
   <my-component />
   ```
 
 - You can create an `Entity` instance as follows:
   ```js
-  const folder = new Entity({...});
+  const folder = new Entity({/*...*/});
   ```
 
-  Where {...} is an object of the properties you need to create like `{id: "0", name: "ROOT", ...}`.
+  Where `{/*...*/}` is an object of the properties you need to create like `{id: "0", name: "ROOT", ...}`.
   Pass this to the template.
 
 
@@ -261,7 +260,7 @@ Update the __JavaScript__ tab to:
 3. Write the component `ViewModel` that has the following properties:
   - `folder` which references the folder being displayed.
   - `entitiesPromise` which will be a promise of all files for that folder.
-6. Set the component `ViewModel` values with [can-view-model can-view-model] `set` function
+4. Set the component `ViewModel` values with [can-view-model can-view-model] `set` function
 @sourceref ./file-navigator-advanced-5.js
 @highlight 1,70-78,80-87,only
 
@@ -364,7 +363,7 @@ The following:
    - `isOpen` which tracks if the folder’s children should be displayed.
    - `toggleOpen` which changes `isOpen`.
 4. Recursively renders each child folder with `<a-folder folder:from="entity" />`.
-5. Set the root folder `isOpen` property to `true` in the `ViewModel` mounting invocation (`root.viewModel.set`).
+5. Set the root folder `isOpen` property to `true` in the `ViewModel` mounting invocation (`root.viewModel.assign`).
 
 
 @sourceref ./file-navigator-advanced-7.js
@@ -377,9 +376,9 @@ The following:
 When complete, you should have a working file-navigation widget
 like the following CodePen:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="zbxLGW" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator advanced [Finished]">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/zbxLGW/">
-  File Navigator advanced [Finished]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="404" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="EJNmyB" style="height: 404px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator advanced [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/EJNmyB/">
+  File Navigator advanced [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 

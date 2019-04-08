@@ -1,4 +1,4 @@
-import { Component, DefineMap, fixture, restModel  } from "//unpkg.com/can@5/core.mjs";
+import { Component, DefineMap, fixture, restModel } from "//unpkg.com/can@5/core.mjs";
 
 // Stores the next entity id to use.
 let entityId = 1;
@@ -73,13 +73,13 @@ Component.extend({
     <span>{{ this.folder.name }}</span>
     {{# if(this.entitiesPromise.isPending) }}
       <div class="loading">Loading</div>
-      {{else}}
+    {{ else }}
       <ul>
         {{# for(entity of this.entitiesPromise.value) }}
           <li class="{{entity.type}} {{# if(entity.hasChildren) }}hasChildren{{/ if }}">
             {{# eq(entity.type, 'file') }}
               📝 <span>{{ entity.name }}</span>
-            {{else}}
+            {{ else }}
               📁 <span>{{ entity.name }}</span>
             {{/ eq }}
           </li>
@@ -97,7 +97,7 @@ Component.extend({
   }
 });
 
-root.viewModel.set({
+root.viewModel.assign({
   folder: new Entity({
     id: "0",
     name: "ROOT/",
