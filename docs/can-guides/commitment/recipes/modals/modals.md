@@ -1,7 +1,7 @@
-@page guides/recipes/modals Multiple Modals (Medium)
-@parent guides/recipes
+@page guides/recipes/modals Multiple Modals
+@parent guides/recipes/intermediate
 
-@description This guide shows how to create a multiple modal form.
+@description This intermediate guide shows how to create a multiple modal form.
 
 @body
 

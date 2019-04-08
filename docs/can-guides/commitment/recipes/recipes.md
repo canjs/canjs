@@ -1,5 +1,8 @@
 @page guides/recipes recipes
 @parent guides 3
+@group guides/recipes/beginner 1 beginner
+@group guides/recipes/intermediate 2 intermediate
+@group guides/recipes/advanced 3 advanced
 
 @description A listing of small examples that are useful for
 learning CanJS.

@@ -587,7 +587,7 @@ const CarOwner = Map.extend({
 			type: "string"
 		},
 		age: {
-			default: 18
+			value: 18
 		}
 	}
 });
@@ -604,7 +604,7 @@ const CarOwner = DefineMap.extend({
 	color: "string",
 	age: {
 		type: "number",
-		default: 18
+		value: 18
 	}
 });
 ```
@@ -636,7 +636,7 @@ Here’s the example above updated for `can-define/map/map`:
 import DefineMap from 'can-define/map/map';
 
 const Person = DefineMap.extend({
-  name: {default: "Justin"}
+  name: {value: "Justin"}
 });
 ```
 

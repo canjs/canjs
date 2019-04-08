@@ -1,7 +1,7 @@
-@page guides/recipes/cta-bus-map CTA Bus Map (Medium)
-@parent guides/recipes
+@page guides/recipes/cta-bus-map CTA Bus Map
+@parent guides/recipes/intermediate
 
-@description This guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map.  
+@description This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map.  
 
 
 @body

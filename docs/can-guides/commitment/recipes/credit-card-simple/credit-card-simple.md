@@ -1,7 +1,7 @@
-@page guides/recipes/credit-card-simple Credit Card Guide (Simple)
-@parent guides/recipes
+@page guides/recipes/credit-card-simple Credit Card
+@parent guides/recipes/beginner
 
-@description This guide walks through building a very simple
+@description This beginner guide walks through building a very simple
 credit card payment form.  It uses [Stripe.js v2 API](https://stripe.com/docs/stripe.js/v2) to create a token
 which can be used to create a charge.  It also performs
 simple validation on the payment form values.

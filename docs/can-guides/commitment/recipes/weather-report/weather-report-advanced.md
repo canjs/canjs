@@ -1,7 +1,8 @@
-@page guides/recipes/weather-report-advanced Weather Report Guide (Advanced)
-@parent guides/recipes
+@page guides/recipes/weather-report-advanced Weather Report
+@parent guides/recipes/advanced
+@hide
 
-@description This guides you through extending the [guides/recipes/weather-report-simple Simple Weather Report Guide] to
+@description This advanced guides you through extending the [guides/recipes/weather-report-simple Simple Weather Report Guide] to
 remove imperative code and automatically look up the user’s location using the
 browser’s [geolocation API](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation).  Both of these will be done with event streams.
 

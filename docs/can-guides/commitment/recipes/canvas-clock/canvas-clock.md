@@ -1,7 +1,7 @@
-@page guides/recipes/canvas-clock Canvas Clock (Simple)
-@parent guides/recipes
+@page guides/recipes/canvas-clock Canvas Clock
+@parent guides/recipes/beginner
 
-@description This guide walks you through building a clock with the
+@description This beginner guide walks you through building a clock with the
 [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
 
 

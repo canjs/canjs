@@ -1,5 +1,5 @@
 @page guides/recipes/todomvc-with-steal TodoMVC with StealJS
-@parent guides/recipes
+@parent guides/experiment 3
 
 @description This tutorial walks through building TodoMVC with
 StealJS. It includes KeyNote presentations
