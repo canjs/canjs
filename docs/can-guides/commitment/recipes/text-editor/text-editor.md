@@ -1,7 +1,7 @@
-@page guides/recipes/text-editor Text Editor (Medium)
-@parent guides/recipes
+@page guides/recipes/text-editor Text Editor
+@parent guides/recipes/intermediate
 
-@description This guide walks you through building a
+@description This intermediate guide walks you through building a
 basic rich text editor.
 
 

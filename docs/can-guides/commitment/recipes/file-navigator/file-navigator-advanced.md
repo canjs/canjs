@@ -1,7 +1,7 @@
-@page guides/recipes/file-navigator-advanced File Navigator Guide (Advanced)
-@parent guides/recipes
+@page guides/recipes/file-navigator-advanced File Navigator
+@parent guides/recipes/advanced
 
-@description This guide walks you through building a file navigation
+@description This advanced guide walks you through building a file navigation
 widget that requests data with fetch. It takes about 45 minutes to complete.
 
 

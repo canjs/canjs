@@ -1,7 +1,7 @@
-@page guides/recipes/credit-card-advanced Credit Card Guide (Advanced)
-@parent guides/recipes
+@page guides/recipes/credit-card-advanced Credit Card
+@parent guides/recipes/advanced
 
-@description This guide walks through building a simple
+@description This advanced guide walks through building a simple
 credit card payment form with validations. It doesn’t use
 [can-define]. Instead it uses `Kefir.js` streams to make a ViewModel.
 [can-kefir] is used to make the Kefir streams observable to [can-stache].

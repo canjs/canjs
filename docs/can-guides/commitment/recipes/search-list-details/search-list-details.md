@@ -1,7 +1,7 @@
-@page guides/recipes/search-list-details Search, List, Details (Advanced)
-@parent guides/recipes
+@page guides/recipes/search-list-details Search, List, Details
+@parent guides/recipes/advanced
 
-@description This guide walks through building a Search, List, Details flow with lazy-loaded routes.
+@description This advanced guide walks through building a Search, List, Details flow with lazy-loaded routes.
 
 @body
 

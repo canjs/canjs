@@ -1,7 +1,7 @@
-@page guides/recipes/tinder-carousel Tinder Carousel (Medium)
-@parent guides/recipes
+@page guides/recipes/tinder-carousel Tinder Carousel
+@parent guides/recipes/intermediate
 
-@description This guide walks you through building a [Tinder](https://tinder.com/)-like
+@description This intermediate guide walks you through building a [Tinder](https://tinder.com/)-like
 carousel. Learn how to build apps that use dragging user interactions.
 
 @body

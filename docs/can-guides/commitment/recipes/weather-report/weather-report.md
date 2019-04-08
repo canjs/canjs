@@ -1,8 +1,8 @@
-@page guides/recipes/weather-report-simple Weather Report Guide (Simple)
-@parent guides/recipes
+@page guides/recipes/weather-report-simple Weather Report
+@parent guides/recipes/beginner
 @hide
 
-@description This guide walks you through building a simple weather report
+@description This beginner guide walks you through building a simple weather report
 widget.  It takes about 25 minutes to complete.  It was written with
 CanJS 4.1.
 

@@ -1,7 +1,7 @@
-@page guides/recipes/signup-simple Signup and Login (Simple)
-@parent guides/recipes
+@page guides/recipes/signup-simple Signup and Login
+@parent guides/recipes/beginner
 
-@description This guide walks through building simple signup, login forms and
+@description This beginner guide walks through building simple signup, login forms and
 a logout button.   
 
 @body

@@ -1,7 +1,7 @@
-@page guides/recipes/video-player Video Player (Simple)
-@parent guides/recipes
+@page guides/recipes/video-player Video Player
+@parent guides/recipes/beginner
 
-@description This guide walks you through building custom video
+@description This beginner guide walks you through building custom video
 controls around a video element.
 
 
