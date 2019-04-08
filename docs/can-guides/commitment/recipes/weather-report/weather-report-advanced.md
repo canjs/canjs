@@ -1,5 +1,6 @@
 @page guides/recipes/weather-report-advanced Weather Report Guide (Advanced)
 @parent guides/recipes
+@hide
 
 @description This guides you through extending the [guides/recipes/weather-report-simple Simple Weather Report Guide] to
 remove imperative code and automatically look up the user’s location using the

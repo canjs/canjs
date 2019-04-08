@@ -1,5 +1,6 @@
 @page guides/recipes/weather-report-simple Weather Report Guide (Simple)
 @parent guides/recipes
+@hide
 
 @description This guide walks you through building a simple weather report
 widget.  It takes about 25 minutes to complete.  It was written with
