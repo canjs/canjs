@@ -16,9 +16,9 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="XGZwYq" data-pen-title="Credit Card Guide (Advanced)">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/XGZwYq/">
-  Credit Card Guide (Advanced)</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="416" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="jRVaxP" style="height: 416px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Advanced)">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/jRVaxP/">
+  Credit Card Guide (Advanced)</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
@@ -32,11 +32,11 @@ To use the widget:
    the invalid inputs should be highlighted red, and the _Pay_
    button should become disabled.
 
-__START THIS TUTORIAL BY CLONING THE FOLLOWING CODEPEN__:
+__START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED:__:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="JVPWoZ" data-pen-title="Credit Card Guide (Starter)">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/JVPWoZ/">
-  Credit Card Guide (Starter)</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="164" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="qwqVKp" style="height: 164px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Starter)">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/qwqVKp/">
+  Credit Card Guide (Starter)</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
@@ -112,7 +112,7 @@ constant stream to hold the `amount` value.
 Update the __HTML__ tab to:
 
 @sourceref ./1-setup.html
-@highlight 6,only
+@highlight 1
 
 Update the __JavaScript__ tab to:
 
@@ -135,7 +135,7 @@ and also print back the cleaned card number (the entered number with no dashes).
   Kefir property, but also adds an `emitter` object with with `.value()` and `.error()` methods. The end result is a single object that has methods of a stream and property access to its emitter methods.
 
   ```js
-  import Kefir from 'can-kefir';
+  import { kefir as Kefir } from "//unpkg.com/can@5/ecosystem.mjs";
 
   const age = Kefir.emitterProperty();
 
@@ -540,10 +540,10 @@ Update the __JavaScript__ tab to:
 
 When complete, you should have a working credit card payment form like the following CodePen:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="XGZwYq" data-pen-title="Credit Card Guide (Advanced)">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/XGZwYq/">
-  Credit Card Guide (Advanced)</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="416" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="jRVaxP" style="height: 416px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Advanced)">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/jRVaxP/">
+  Credit Card Guide (Advanced)</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
-<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
 
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
