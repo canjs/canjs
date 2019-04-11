@@ -1,23 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>CanJS Playlist Editor</title>
-</head>
-<body>
-
-<script id="app-template" type="text/stache">
-  {{# if(googleApiLoadedPromise.isPending) }}
-    <div>Loading Google API…</div>
-  {{ else }}
-    <div>Loaded Google API</div>
-  {{/ if }}
-</script>
+<playlist-editor></playlist-editor>
 
 <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
 <script src="https://unpkg.com/jquerypp@2/dist/global/jquerypp.js"></script>
-<script src="https://unpkg.com/can@4/dist/global/can.all.js"></script>
 
 <script>
 window.googleApiLoadedPromise = new Promise(function(resolve) {
@@ -38,6 +22,3 @@ window.googleApiLoadedPromise = new Promise(function(resolve) {
 	onload="this.onload=function(){}; googleScriptLoaded();"
 	onreadystatechange="if (this.readyState === 'complete') this.onload();">
 </script>
-
-</body>
-</html>

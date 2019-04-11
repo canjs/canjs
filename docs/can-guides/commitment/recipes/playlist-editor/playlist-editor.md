@@ -10,9 +10,11 @@ an hour to complete.
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/lixorej/2/embed?output">
-  Finished CanJS Playlist Editor on jsbin.com
-</a>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="result" data-user="cherifGsoul" data-slug-hash="ywpxyy" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Playlist Editor (Advanced) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/ywpxyy/">
+  Playlist Editor (Advanced) [Finished]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 To use the widget:
 
@@ -23,13 +25,15 @@ To use the widget:
 5. _Enter_ a name in the popup.
 6. _Navigate_ to your [YouTube](https://www.youtube.com/) channel to verify the playlist was created.
 
-__Start this tutorial by cloning the following JS Bin__:
+__START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED:__:
 
-<a class="jsbin-embed" href="https://jsbin.com/fovireg/1/embed?html,js,output">
-  Starting CanJS Playlist Editor on jsbin.com
-</a>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="result" data-user="cherifGsoul" data-slug-hash="vMZYMZ" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Playlist Editor (Advanced) [Starter]">
+  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/vMZYMZ/">
+  Playlist Editor (Advanced) [Starter]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
-This JS Bin has initial prototype HTML and CSS which is useful for
+This CodePen has initial prototype HTML and CSS which is useful for
 getting the application to look right.
 
 The following sections are broken down into:
@@ -82,7 +86,7 @@ In this section, we will:
 
   ```js
   gapi.client.init({
-	  apiKey: "AIzaSyAbHbOuFtJRvTX731PQXGSTy59eh5rEiE0",
+    apiKey: "AIzaSyAbHbOuFtJRvTX731PQXGSTy59eh5rEiE0",
     clientId: "764983721035-85cbj35n0kmkmrba10f4jtte8fhpst84.apps.googleusercontent.com",
     discoveryDocs: [ "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest" ],
     scope: "https://www.googleapis.com/auth/youtube"
@@ -110,77 +114,96 @@ In this section, we will:
 
   ```js
   messagePromise.then(function(messageValue) {
-	  messageValue //-> "Hello There"
+    messageValue //-> "Hello There"
   });
   ```
 
   CanJS can use promises in its [can-stache] templates.  More on that below.
 
-- A basic CanJS application is a live-bound template (or view) rendered with a ViewModel.
+- A basic CanJS application is a live-bound template (or view) rendered with a component's ViewModel.
 
 - A [can-stache] template is used to render data into a document fragment:
 
   ```js
-  const template = can.stache("<h1>{{message}}</h1>");
-  const fragment = template({message: "Hello World"});
-  fragment //-> <h1>Hello World</h1>
+  import { Component } from "can";
+
+  Component.extend({
+    tag: "my-app",
+    view: `<h1>{{ message }}</h1>`,
+    ViewModel: {
+      message: {
+        default: () => "Hello World"
+      }
+    }
+  });
   ```
 
-- Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
+- Mount a [can-component] by its [can-component.prototype.tag custom tag] like:
 
-  ```js
-  const template = can.stache.from(SCRIPT_ID);
+  ```html
+  <my-app></my-app>
   ```  
 
-- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
+- Use [can-stache.helpers.if {{# if(value) }}] to do `if/else` branching in `can-stache`.
 - `Promise`s are observable in `can-stache`.  Given a promise `somePromise`, you can:
   - Check if the promise is loading like: `{{#if(somePromise.isPending)}}`.
   - Loop through the resolved value of the promise like: `{{#for(item of somePromise.value)}}`.
 
 
-- [can-define/map/map can.DefineMap] can be used to define the behavior of observable objects like:
+- [can-define/map/map DefineMap] can be used to define the behavior of observable objects like:
 
   ```js
-  const Type = can.DefineMap.extend({
-	  message: "string"
+  import { DefineMap } from "can";
+
+  const Type = DefineMap.extend({
+    message: "string"
   });
   ```
 
-- Instances of these [can-define/map/map can.DefineMap] types are often used
-  as a ViewModel that controls the behavior of a [can-stache] template (or
-  [can-component]).
+- Instances of these [can-define/map/map DefineMap] types are often used
+  as a ViewModel that controls the behavior of a [can-component].
 
   ```js
-  const PlaylistVM = can.DefineMap.extend({
-	  message: "string"
-  });
+  import { Component } from "can";
 
-  const messageVM = new PlaylistVM();
-  const fragment = template(messageVM)
+  Component.extend({
+    tag: "playlist-editor",
+    view: `...`,
+    ViewModel: {
+       message: "string"
+    }
+  });
   ```
 
-- `can.DefineMap` can specify a default value and a type:
+- `DefineMap` can specify a default value and a type:
   ```js
-  const PlaylistVM = can.DefineMap.extend({
-    count: {default: 33}
+  import { Component } from "can";
+
+  Component.extend({
+    tag: "playlist-editor",
+    view: `...`,
+    ViewModel: {
+       message: "string",
+       default: () => "Hello World"
+    }
   });
-  new PlaylistVM().count //-> 33
   ```
 
 
 ### The solution
 
-Update the __HTML__ tab by deleting everything inside the `<body>` and replacing
+Update the __HTML__ tab by deleting everything and replacing
 it with:
 
-> **Note:** use your own `clientId` if you use this code outside this guide and JS Bin.
+> **Note:** use your own `clientId` if you use this code outside this guide and CodePen.
 
 @sourceref ./1-setup.html
-@highlight 10-40,only
+@highlight 1-24,only
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
+@highlight 1-17,only
 
 
 
@@ -206,7 +229,7 @@ In this section, we will:
 
   ```js
   googleApiLoadedPromise.then(function() {
-	  const googleAuth = gapi.auth2.getAuthInstance()
+    const googleAuth = gapi.auth2.getAuthInstance()
   });
   ```
 
@@ -241,8 +264,8 @@ In this section, we will:
     property: {
       get: function(lastSet, resolve) {
         apiLoadedPromise.then(function() {
-			resolve( api.getValue() );
-		})
+      resolve( api.getValue() );
+    })
       }
     }
   });
@@ -253,10 +276,10 @@ In this section, we will:
 
   ```js
   DefineMap.extend({
-	  init: function() {
-		  this.googleApiLoadedPromise = googleApiLoadedPromise;
-	  },
-	  googleApiLoadedPromise: "any"
+    init: function() {
+      this.googleApiLoadedPromise = googleApiLoadedPromise;
+    },
+    googleApiLoadedPromise: "any"
   })
   ```
 
@@ -266,14 +289,14 @@ In this section, we will:
 
   ```js
   DefineMap.extend({
-	  init: function() {
-		  const self = this;
-		  self.on("name", function() {
-		      self.nameChange++;	  
-		  })
-	  },
-	  name: "string",
-	  nameChange: "number"
+    init: function() {
+      const self = this;
+      self.on("name", function() {
+          self.nameChange++;	  
+      })
+    },
+    name: "string",
+    nameChange: "number"
   })
   ```
 
@@ -327,18 +350,18 @@ In this section, we will:
     type: "video"
   }).then(function(response) {
     response //-> {
-	// result: {
-	//   items: [
-	//     {
-	//       id: {videoId: "ajsadfa"},
-	//       snippet: {
-	//         title: "dogs",
-	//         thumbnails: {default: {url: "https://example.com/dog.png"}}
-	//       }
-	//     }
-	//   ]
-	// }	 
-	//}
+  // result: {
+  //   items: [
+  //     {
+  //       id: {videoId: "ajsadfa"},
+  //       snippet: {
+  //         title: "dogs",
+  //         thumbnails: {default: {url: "https://example.com/dog.png"}}
+  //       }
+  //     }
+  //   ]
+  // }	 
+  //}
   });
   ```
 
@@ -420,15 +443,15 @@ In this section, we will:
 
   ```js
   PlaylistVM = DefineMap.extend({
-  	startedDrag: function() {
-  	  console.log("you did it!")
-  	}
+    startedDrag: function() {
+      console.log("you did it!")
+    }
   });
   new PlaylistVM().startedDrag();
   ```
 
 - Certain browsers have default drag behaviors for certain elements like `<a>` and `<img>`
-	that can be prevented with the `draggable="false"` attribute.
+  that can be prevented with the `draggable="false"` attribute.
 
 ### The solution
 
@@ -468,19 +491,19 @@ In this section, we will:
   PlaylistVM = DefineMap.extend({
     // ...
     // {video: video, index: 0}
-	  dropPlaceholderData: "any",
-	  // [video1, video2, ...]
-	  playlistVideos: {
-	     Type: ["any"],
-	     Default: can.DefineList
-	  },
-	  get videosWithDropPlaceholder() {
+    dropPlaceholderData: "any",
+    // [video1, video2, ...]
+    playlistVideos: {
+       Type: ["any"],
+       Default: can.DefineList
+    },
+    get videosWithDropPlaceholder() {
       const copyOfPlaylistVideos = this.placeListVideos.map( /* ... */ );
 
       // insert this.dropPlaceholderData into copyOfPlaylistVideos
 
       return copyOfPlaylistVideos;
-	  }
+    }
   })
   ```
 
@@ -585,7 +608,7 @@ In this section, we will:
 
   ```js
   const Sortable = can.Control.extend({
-	  // Event handlers and methods
+    // Event handlers and methods
   });
   ```
 
@@ -793,10 +816,12 @@ Update the __JavaScript__ tab to:
 
 Congrats! _You now have your very own YouTube Playlist Editor_.
 
-When finished, you should see something like the following JS Bin:
+When finished, you should see something like the following CodePen:
 
-<a class="jsbin-embed" href="https://jsbin.com/lixorej/2/embed?output">
-  Finished CanJS Playlist Editor on jsbin.com
-</a>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="result" data-user="cherifGsoul" data-slug-hash="ywpxyy" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Playlist Editor (Advanced) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/ywpxyy/">
+  Playlist Editor (Advanced) [Finished]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.1.4"></script>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
