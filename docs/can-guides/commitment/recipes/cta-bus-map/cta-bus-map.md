@@ -14,7 +14,11 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<a class="jsbin-embed" href="https://jsbin.com/nojukab/4/embed?output&height=600px">JS Bin on jsbin.com</a>
+<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="GLEoXw" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CTA Bus Map (Medium)">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/GLEoXw/">
+  CTA Bus Map (Medium)</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
 To use the widget:
 
@@ -31,18 +35,20 @@ The following sections are broken down into the following parts:
 
 ## Setup ##
 
-__START THIS TUTORIAL BY CLONING THE FOLLOWING JS BIN__:
+__START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED:__:
 
-> Click the `JS Bin` button.  The JSBin will open in a new window. In that new window, under `File`, click `Clone`.
+<p class="codepen" data-height="268" data-theme-id="0" data-default-tab="js" data-user="bitovi" data-slug-hash="pBwgOJ" style="height: 268px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CTA Bus Map (Medium) [Starter]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/pBwgOJ/">
+  CTA Bus Map (Medium) [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
-<a class="jsbin-embed" href="https://jsbin.com/nojukab/1/embed?html,js,output">CanJS Bus Demo on jsbin.com</a>
-
-This JS Bin has initial prototype HTML and CSS which is useful for
+This CodePen has initial prototype HTML and CSS which is useful for
 getting the application to look right.
 
 ### What you need to know
 
-There's nothing to do in this step. The JSBin is already setup with:
+There's nothing to do in this step. The CodePen is already setup with:
 
 - A _basic_ CanJS setup.
 - A promise that resolves when the Google Maps has loaded.
@@ -52,82 +58,76 @@ Please read on to understand the setup.
 
 __A Basic CanJS Setup__
 
-- A basic CanJS setup uses instances of a ViewModel to manage the
-  behavior of a View.  A ViewModel type is defined, an instance of it
-  is created and passed to a View as follows:
+- A basic CanJS setup uses instances of a ViewModel within a [can-component Component] to manage the
+  behavior of a View as follows:
 
   ```js
-  // Define the ViewModel type
-  const MyViewModel = can.DefineMap.extend("MyViewModel",{
-   ...      
+  import { Component } from "can";
+
+  // Define the Component
+  Component.extend({
+    // The component custom tag
+    tag: "my-component",
+    // The component View
+    view: ``,
+    // The component ViewModel
+    ViewModel: {
+      // ...
+    }
   })
-  // Create an instance of the ViewModel
-  const viewModel = new MyViewModel();
-  // Get a View
-  const view = can.stache.from("my-view");
-  // Render the View with the ViewModel instance
-  const fragment = view(viewModel);
-  document.body.appendChild(fragment);
+  ```
+- The component can be rendered by adding the custom tag to the HTML:
+  ```html
+  <my-component></my-component>
   ```
 
-- CanJS uses [can-stache] to render data in a template
-  and keep it live.  Templates can be authored in `<script>` tags like:
+- CanJS [can-component Component] uses [can-stache] to render data in a template
+  and keep it live.  Templates can be authored in the component's `view` property like:
 
-  ```html
-  <script type="text/stache" id="app-view">
-    TEMPLATE CONTENT
-  </script>
+  ```js
+  import { Component } from "can";
+
+  // Define the Component
+  Component.extend({
+    tag: "my-component",
+    view: `TEMPLATE CONTENT`
+  });
   ```
 
   A [can-stache] template uses
   [can-stache.tags.escaped {{key}}] "magic tags" to insert data into
   the HTML output like:
 
-  ```html
-  <script type="text/stache" id="app-view">
-    {{something.name}}
-  </script>
-  ```
-
-- Load a template from a `<script>` tag with [can-stache.from can.stache.from] like:
   ```js
-  const template = can.stache.from(SCRIPT_ID);
-  ```
+  import { Component } from "can";
 
-- Render the template with data into a documentFragment like:
+  // Define the Component
+  Component.extend({
 
-  ```js
-  const fragment = template({
-    something: {name: "Derek Brunson"}
+    tag: "my-component",
+
+    view: `{{something.name}}`
   });
   ```
 
-- Insert a fragment into the page with:
+- Mount the component in the HTML:
 
-  ```js
-  document.body.appendChild(fragment);
+  ```html
+  <my-component></my-component>
   ```
 
 __Loading Google Maps API__
 
 The following loads [Google Maps API](https://developers.google.com/maps/documentation/javascript/):
 
-```
-<script>
-  window.googleAPI = new Promise(function(resolve){
-    const script = document.createElement("script");
-    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyD7POAQA-i16Vws48h4yRFVGBZzIExOAJI";
-    document.body.appendChild( script );
-    script.onload = resolve;
-  });
-</script>
-```
+@sourceref ./1-setup.html
+@highlight 3-10,only
 
 It creates a global `googleAPI` promise that resolves when Google Maps is ready.  You can use it like:
 
 ```js
-googleAPI.then(function(){
-    new google.maps.Map( ... );
+googleAPI.then(function() {
+    new google.maps.Map( /* ... */ );
 })
 ```
 
@@ -186,20 +186,31 @@ In this section, we will:
   [can-stache.tags.escaped {{key}}] magic tags to insert data into
   the HTML output like:
 
-  ```html
-  {{someValue}}
+  ```js
+  import { Component } from "can";
+
+  Component.extend({
+    tag: "my-component",
+    view: `{{someValue}}`
+  });
   ```
 
   These values come from a ViewModel or Model.
 
-- The [can-define.types.default] property definition can return the initial value of a property like:
+- The ViewModel is an instance of [can-define/map/map] allows you to define a property with a [can-define.types.default default] value like:
+
   ```js
-  const AppViewModel = can.DefineMap.extend({
-	someValue: {
-	  default: "This string"
-	}  
+  import { Component } from "can";
+
+  Component.extend({
+    tag: "my-component",
+    view: `{{someValue}}`,
+    ViewModel: {
+      someValue: {
+        default: "This string"
+      }
+    }
   });
-  new AppViewModel().someValue //-> "This string"
   ```
 
 ### How to verify it works
@@ -207,22 +218,17 @@ In this section, we will:
 Run the following in the `Console` tab:
 
 ```js
-viewModel.title = "TITLE UPDATED"
+document.querySelector('my-component').viewModel.someValue = "TITLE UPDATED";
 ```
 
 You should see the title update.
 
 ### The solution
 
-Update the `view` in the __HTML__ tab to:
-
-@sourceref ./1-setup.html
-@highlight 3,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
-@highlight 8-10,only
+@highlight 14,39-41,only
 
 
 ## List bus routes ##
@@ -249,12 +255,14 @@ We will do this by:
 
 - The [can-define.types.default] property definition can return the initial value of a property like:
   ```js
-  const AppViewModel = can.DefineMap.extend({
-	myProperty: {
-	  default: function(){
-		return new Promise( .... );
-	  }
-	}  
+  import { DefineMap } from "can"
+
+  const AppViewModel = DefineMap.extend({
+    myProperty: {
+      default: function() {
+        return new Promise( /* ... */ );
+      }
+    }  
   });
   new AppViewModel().myProperty //-> Promise
   ```
@@ -262,9 +270,9 @@ We will do this by:
   to a URL and get back JSON.  Use it like:
 
   ```js
-  fetch(url).then(function(response){
-	  return response.json();
-  }).then(function(data){
+  fetch(url).then(function(response) {
+    return response.json();
+  }).then(function(data) {
 
   });
   ```
@@ -274,16 +282,16 @@ We will do this by:
 
   ```js
   {
-	"bustime-response": {
-		"routes": [
-			{
-				"rt": "1",
-				"rtnm": "Bronzeville/Union Station",
-				"rtclr": "#336633",
-				"rtdd": "1"
-			},
-            ...
-        ]
+    "bustime-response": {
+      "routes": [
+        {
+          "rt": "1",
+          "rtnm": "Bronzeville/Union Station",
+          "rtclr": "#336633",
+          "rtdd": "1"
+        },
+        // ...
+      ]
     }
   }
   ```
@@ -294,7 +302,7 @@ We will do this by:
   resolves to `{innerData: {name: "inner"}}`, `resultPromise` will resolve to
   `{name: "inner"}`:
   ```js
-  const resultPromise = outerPromise.then(function(data){
+  const resultPromise = outerPromise.then(function(data) {
       return data.innerData;
   });
   ```
@@ -307,15 +315,10 @@ We will do this by:
 
 ### The solution
 
-Update the `view` in the __HTML__ tab to:
-
-@sourceref ./2-list-routes.html
-@highlight 4,7-13,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-list-routes.js
-@highlight 11-17,only
+@highlight 15,18-24,39-45,only
 
 
 ## Pick a route and log bus locations ##
@@ -344,8 +347,10 @@ We will do this by:
   ```
 - Use the `"any"` type to define a property of indeterminate type:
   ```js
-  const AppViewModel = can.DefineMap.extend({
-	myProperty: "any"  
+  import { DefineMap } from "can";
+
+  const AppViewModel = DefineMap.extend({
+    myProperty: "any"  
   });
   const viewModel = new AppViewModel({});
   viewModel.myProperty = ANYTHING;
@@ -356,25 +361,25 @@ We will do this by:
   back like:
   ```js
   {
-	"bustime-response": {
-		"vehicle": [
-			{
-				"vid": "8026",
-				"tmstmp": "20171004 09:18",
-				"lat": "41.73921241760254",
-				"lon": "-87.66306991577149",
-				"hdg": "359",
-				"pid": 3637,
-				"rt": "9",
-				"des": "74th",
-				"pdist": 6997,
-				"dly": false,
-				"tatripid": "10002232",
-				"tablockid": "X9  -607",
-				"zone": ""
-			},
-            ...
-        ]
+    "bustime-response": {
+      "vehicle": [
+        {
+          "vid": "8026",
+          "tmstmp": "20171004 09:18",
+          "lat": "41.73921241760254",
+          "lon": "-87.66306991577149",
+          "hdg": "359",
+          "pid": 3637,
+          "rt": "9",
+          "des": "74th",
+          "pdist": 6997,
+          "dly": false,
+          "tatripid": "10002232",
+          "tablockid": "X9  -607",
+          "zone": ""
+        },
+        // ...
+      ]
     }
   }
   ```
@@ -383,14 +388,14 @@ We will do this by:
 
   ```js
   {
-	"bustime-response": {
-		"error": [
-			{
-				"rt": "5",
-				"msg": "No data found for parameter"
-			}
-		]
-	}
+    "bustime-response": {
+      "error": [
+        {
+          "rt": "5",
+          "msg": "No data found for parameter"
+        }
+      ]
+    }
   }
   ```
 
@@ -401,15 +406,11 @@ In the `Console` tab, when you click a bus route (like `Cottage Grove`), you sho
 an array of bus routes.
 
 ### The solution
-Update the `view` in the __HTML__ tab to:
-
-@sourceref ./3-pick-route.html
-@highlight 8,17-22,only
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-pick-route.js
-@highlight 18-30,only
+@highlight 19,28-33,48-60,only
 
 
 ## Show when buses are loading and the number of buses ##
@@ -433,7 +434,7 @@ We will do this by:
 
 - In stache, you can check if a promise was rejected like:
   ```html
-  {{#if(somePromise.isRejected)}}<p>...</p>{{/if}}
+  {{# if(somePromise.isRejected) }}<p>...</p>{{/ if }}
   ```
 - The [Promise.reject](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/reject) method returns a rejected promise with the provided `reason`:
   ```js
@@ -443,24 +444,19 @@ We will do this by:
   resolves to `{innerData: {name: "inner"}}`, `resultPromise` will be a rejected promise
   with the `reason` as `{name: "inner"}`:
   ```js
-  const resultPromise = outerPromise.then(function(data){
+  const resultPromise = outerPromise.then(function(data) {
       return Promise.reject(data.innerData);
   });
-  resultPromise.catch(function(reason){
+  resultPromise.catch(function(reason) {
       reason.name //-> "inner"
   });
   ```
 
 ### The solution
-Update the `view` in the __HTML__ tab to:
-
-@sourceref ./3b-bus-loading.html
-@highlight 5,21-23,26,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./3b-bus-loading.js
-@highlight 19,22,26,28,only
+@highlight 16,32-34,37,52,55,59,61,only
 
 
 ## Initialize Google Maps to show Chicago ##
@@ -487,7 +483,9 @@ We will do this by:
   `Component` with the `tag` of the element:
 
   ```js
-  can.Component.extend({
+  import { Component } from "can";
+
+  Component.extend({
     tag: "google-map-view"
   });
   ```
@@ -496,9 +494,11 @@ We will do this by:
   the element.
 
   ```js
-  can.Component.extend({
+  import { Component } from "can";
+
+  Component.extend({
     tag: "google-map-view",
-    view: can.stache(`<div class="gmap"/>`)
+    view: `<div class="gmap"/>`
   });
   ```
 
@@ -507,11 +507,28 @@ We will do this by:
   type.  The following specifies a `map` property that can be any value:
 
   ```js
-  can.Component.extend({
+  import { Component } from "can";
+
+  Component.extend({
     tag: "google-map-view",
-    view: can.stache(`<div class="gmap"/>`),
+    view: `<div class="gmap"/>`,
     ViewModel: {
       map: "any"
+    }
+  });
+  ```
+
+  An element reference [can be passed](https://canjs.com/doc/can-stache-bindings.html#Passanelementtothescope) to the `ViewModel` like the following:
+
+  ```js
+  import { Component } from "can";
+
+  Component.extend({
+    tag: "google-map-view",
+    view: `<div this:to="this.mapElement" class="gmap"/>`,
+    ViewModel: {
+      map: "any"
+      mapElement: HTMLElement
     }
   });
   ```
@@ -519,15 +536,19 @@ We will do this by:
   A ViewModel's [can-component/connectedCallback] can be used to know when the component's element is inserted into the document as follows:
 
   ```js
-  can.Component.extend({
+  import { Component } from "can";
+
+  Component.extend({
     tag: "google-map-view",
-    view: can.stache(`<div class="gmap"/>`),
+    view: `<div this:to="mapElement" class="gmap"/>`,
     ViewModel: {
-      map: "any"
+      map: "any",
+      mapElement: HTMLElement,
       connectedCallback(element) {
-		this // -> the ViewModel instance
-		element // -> the <google-map-view> element
-	  }
+        this // -> the ViewModel instance
+        element // -> the <google-map-view> element
+        this.mapElement // -> the HTML element that renders the map
+      }
     }
   });
   ```
@@ -547,15 +568,10 @@ We will do this by:
 
 
 ### The solution
-Update the `view` in the __HTML__ tab to:
-
-@sourceref ./4-init-gmaps.html
-@highlight 26,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-init-gmaps.js
-@highlight 34-51,only
+@highlight 9-27,57,only
 
 ## Set markers for vehicle locations ##
 
@@ -577,17 +593,22 @@ We will do this by:
   ```js
   <google-map-view viewModelProp:from="scopeValue"/>
   ```
-- A component's [can-component.prototype.events] object can be used to listen to events on the
-  `ViewModel` instance with:
-  `"{viewModel} propertyName"` like:
+- The `ViewModel` can listen to events on the
+  fired by it's properties like:
 
   ```js
-  can.Component.extend({
-    ...
-    events: {
-      "{viewModel} vehicles": function(viewModel, event, newVehicles) {
-          // do stuff with the newVehicles
-      }      
+  import { Component } from "can";
+
+  Component.extend({
+    // ...
+    ViewModel: {
+      // ...
+      vehicles: "any",
+      connectedCallback(element) {
+        this.listenTo("vehicles", (ev, newVehicles) => {
+          // ...
+        });
+      }
     }
   })
   ```
@@ -601,20 +622,15 @@ We will do this by:
       lat: parseFloat(vehicle.lat),
       lng: parseFloat(vehicle.lon)
     },
-    map: this.viewModel.map
+    map: this.map
   });
   ```
 
 ### The solution
-Update the `view` in the __HTML__ tab to:
-
-@sourceref ./5-set-markers.html
-@highlight 26,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-set-markers.js
-@highlight 50,52-66,only
+@highlight 15,26-38,71,only
 
 ## Clean up markers when locations change ##
 
@@ -638,20 +654,20 @@ We will do this by:
 
 
 ### The solution
-Update the `view` in the __HTML__ tab to:
-
-@sourceref ./6-clean-markers.html
-@highlight 19,only
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-clean-markers.js
-@highlight 51,55-60,62,only
+@highlight 28-33,35,71,only
 
 ## Result
 
-When finished, you should see something like the following JS Bin:
+When finished, you should see something like the following CodePen:
 
-<a class="jsbin-embed" href="https://jsbin.com/nojukab/4/embed?output&height=600px">JS Bin on jsbin.com</a>
+<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="GLEoXw" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CTA Bus Map (Medium)">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/GLEoXw/">
+  CTA Bus Map (Medium)</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
 
-<script src="https://static.jsbin.com/js/embed.min.js?4.1.2"></script>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
