@@ -39,7 +39,7 @@ __START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RI
 
 > Click the `EDIT ON CODEPEN` button.  The CodePen will open in a new window. In that new window, in the top toolbar, click `Fork`.
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="result" data-user="cherifGsoul" data-slug-hash="oVpyRg" data-pen-title="CTA Bus Map (Medium) [Starter]">
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js" data-user="cherifGsoul" data-slug-hash="oVpyRg" data-pen-title="CTA Bus Map (Medium) [Starter]">
   <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/oVpyRg/">
   CTA Bus Map (Medium) [Starter]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
@@ -675,7 +675,7 @@ Update the __JavaScript__ tab to:
 
 When finished, you should see something like the following CodePen:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="EMdbJw" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CTA Bus Map (Medium)">
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="result" data-user="cherifGsoul" data-slug-hash="EMdbJw" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CTA Bus Map (Medium)">
   <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/EMdbJw/">
   CTA Bus Map (Medium)</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
