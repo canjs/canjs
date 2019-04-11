@@ -14,9 +14,9 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="result" data-user="cherifGsoul" data-slug-hash="EMdbJw" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CTA Bus Map (Medium)">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/EMdbJw/">
-  CTA Bus Map (Medium)</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="GLEoXw" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CTA Bus Map (Medium)">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/GLEoXw/">
+  CTA Bus Map (Medium)</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
@@ -37,14 +37,11 @@ The following sections are broken down into the following parts:
 
 __START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED:__:
 
-> Click the `EDIT ON CODEPEN` button.  The CodePen will open in a new window. In that new window, in the top toolbar, click `Fork`.
-
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js" data-user="cherifGsoul" data-slug-hash="oVpyRg" data-pen-title="CTA Bus Map (Medium) [Starter]">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/oVpyRg/">
-  CTA Bus Map (Medium) [Starter]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="268" data-theme-id="0" data-default-tab="js" data-user="bitovi" data-slug-hash="pBwgOJ" style="height: 268px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CTA Bus Map (Medium) [Starter]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/pBwgOJ/">
+  CTA Bus Map (Medium) [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
-
 
 This CodePen has initial prototype HTML and CSS which is useful for
 getting the application to look right.
@@ -75,7 +72,7 @@ __A Basic CanJS Setup__
     view: ``,
     // The component ViewModel
     ViewModel: {
-      ...
+      // ...
     }
   })
   ```
@@ -108,7 +105,7 @@ __A Basic CanJS Setup__
   Component.extend({
 
     tag: "my-component",
-    
+
     view: `{{something.name}}`
   });
   ```
@@ -123,22 +120,14 @@ __Loading Google Maps API__
 
 The following loads [Google Maps API](https://developers.google.com/maps/documentation/javascript/):
 
-```
-<script>
-  window.googleAPI = new Promise(function(resolve){
-    const script = document.createElement("script");
-    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyD7POAQA-i16Vws48h4yRFVGBZzIExOAJI";
-    document.body.appendChild( script );
-    script.onload = resolve;
-  });
-</script>
-```
+@sourceref ./1-setup.html
+@highlight 3-10,only
 
 It creates a global `googleAPI` promise that resolves when Google Maps is ready.  You can use it like:
 
 ```js
-googleAPI.then(function(){
-    new google.maps.Map( ... );
+googleAPI.then(function() {
+    new google.maps.Map( /* ... */ );
 })
 ```
 
@@ -199,7 +188,7 @@ In this section, we will:
 
   ```js
   import { Component } from "can";
-  
+
   Component.extend({
     tag: "my-component",
     view: `{{someValue}}`
@@ -212,7 +201,7 @@ In this section, we will:
 
   ```js
   import { Component } from "can";
-  
+
   Component.extend({
     tag: "my-component",
     view: `{{someValue}}`,
@@ -270,8 +259,8 @@ We will do this by:
 
   const AppViewModel = DefineMap.extend({
     myProperty: {
-      default: function(){
-      return new Promise( .... );
+      default: function() {
+        return new Promise( /* ... */ );
       }
     }  
   });
@@ -281,9 +270,9 @@ We will do this by:
   to a URL and get back JSON.  Use it like:
 
   ```js
-  fetch(url).then(function(response){
+  fetch(url).then(function(response) {
     return response.json();
-  }).then(function(data){
+  }).then(function(data) {
 
   });
   ```
@@ -293,16 +282,16 @@ We will do this by:
 
   ```js
   {
-  "bustime-response": {
-    "routes": [
-      {
-        "rt": "1",
-        "rtnm": "Bronzeville/Union Station",
-        "rtclr": "#336633",
-        "rtdd": "1"
-      },
-            ...
-        ]
+    "bustime-response": {
+      "routes": [
+        {
+          "rt": "1",
+          "rtnm": "Bronzeville/Union Station",
+          "rtclr": "#336633",
+          "rtdd": "1"
+        },
+        // ...
+      ]
     }
   }
   ```
@@ -313,7 +302,7 @@ We will do this by:
   resolves to `{innerData: {name: "inner"}}`, `resultPromise` will resolve to
   `{name: "inner"}`:
   ```js
-  const resultPromise = outerPromise.then(function(data){
+  const resultPromise = outerPromise.then(function(data) {
       return data.innerData;
   });
   ```
@@ -359,9 +348,9 @@ We will do this by:
 - Use the `"any"` type to define a property of indeterminate type:
   ```js
   import { DefineMap } from "can";
-  
+
   const AppViewModel = DefineMap.extend({
-  myProperty: "any"  
+    myProperty: "any"  
   });
   const viewModel = new AppViewModel({});
   viewModel.myProperty = ANYTHING;
@@ -372,25 +361,25 @@ We will do this by:
   back like:
   ```js
   {
-  "bustime-response": {
-    "vehicle": [
-      {
-        "vid": "8026",
-        "tmstmp": "20171004 09:18",
-        "lat": "41.73921241760254",
-        "lon": "-87.66306991577149",
-        "hdg": "359",
-        "pid": 3637,
-        "rt": "9",
-        "des": "74th",
-        "pdist": 6997,
-        "dly": false,
-        "tatripid": "10002232",
-        "tablockid": "X9  -607",
-        "zone": ""
-      },
-            ...
-        ]
+    "bustime-response": {
+      "vehicle": [
+        {
+          "vid": "8026",
+          "tmstmp": "20171004 09:18",
+          "lat": "41.73921241760254",
+          "lon": "-87.66306991577149",
+          "hdg": "359",
+          "pid": 3637,
+          "rt": "9",
+          "des": "74th",
+          "pdist": 6997,
+          "dly": false,
+          "tatripid": "10002232",
+          "tablockid": "X9  -607",
+          "zone": ""
+        },
+        // ...
+      ]
     }
   }
   ```
@@ -399,14 +388,14 @@ We will do this by:
 
   ```js
   {
-  "bustime-response": {
-    "error": [
-      {
-        "rt": "5",
-        "msg": "No data found for parameter"
-      }
-    ]
-  }
+    "bustime-response": {
+      "error": [
+        {
+          "rt": "5",
+          "msg": "No data found for parameter"
+        }
+      ]
+    }
   }
   ```
 
@@ -455,10 +444,10 @@ We will do this by:
   resolves to `{innerData: {name: "inner"}}`, `resultPromise` will be a rejected promise
   with the `reason` as `{name: "inner"}`:
   ```js
-  const resultPromise = outerPromise.then(function(data){
+  const resultPromise = outerPromise.then(function(data) {
       return Promise.reject(data.innerData);
   });
-  resultPromise.catch(function(reason){
+  resultPromise.catch(function(reason) {
       reason.name //-> "inner"
   });
   ```
@@ -495,7 +484,7 @@ We will do this by:
 
   ```js
   import { Component } from "can";
-  
+
   Component.extend({
     tag: "google-map-view"
   });
@@ -611,13 +600,13 @@ We will do this by:
   import { Component } from "can";
 
   Component.extend({
-    ...
+    // ...
     ViewModel: {
-      ...
+      // ...
       vehicles: "any",
       connectedCallback(element) {
         this.listenTo("vehicles", (ev, newVehicles) => {
-          ...
+          // ...
         });
       }
     }
@@ -675,9 +664,9 @@ Update the __JavaScript__ tab to:
 
 When finished, you should see something like the following CodePen:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="result" data-user="cherifGsoul" data-slug-hash="EMdbJw" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CTA Bus Map (Medium)">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/EMdbJw/">
-  CTA Bus Map (Medium)</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="GLEoXw" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CTA Bus Map (Medium)">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/GLEoXw/">
+  CTA Bus Map (Medium)</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 

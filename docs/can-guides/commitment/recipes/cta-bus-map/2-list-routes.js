@@ -11,7 +11,7 @@ Component.extend({
   view: `
     <div class="top">
       <div class="header">
-      <h1>{{ this.title }}</h1>
+        <h1>{{ this.title }}</h1>
         {{# if(this.routesPromise.isPending) }}<p>Loading routes…</p>{{/ if }}
       </div>
       <ul class="routes-list">
@@ -29,7 +29,7 @@ Component.extend({
         <small>Route 2:</small> Hyde Park Express
         <div class="error-message">No vehicles available for this route</div>
       </div>
-      <div class='gmap'>Google map will go here.</div>
+      <div class="gmap">Google map will go here.</div>
     </div>
   `,
   ViewModel: {

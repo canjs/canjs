@@ -1,9 +1,10 @@
 <bus-tracker></bus-tracker>
+
 <script>
-    window.googleAPI = new Promise(function(resolve) {
-        const script = document.createElement("script");
-        script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyD7POAQA-i16Vws48h4yRFVGBZzIExOAJI";
-        document.body.appendChild(script);
-        script.onload = resolve;
-    });
+window.googleAPI = new Promise(function(resolve) {
+	const script = document.createElement("script");
+	script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyD7POAQA-i16Vws48h4yRFVGBZzIExOAJI";
+	document.body.appendChild(script);
+	script.onload = resolve;
+});
 </script>
