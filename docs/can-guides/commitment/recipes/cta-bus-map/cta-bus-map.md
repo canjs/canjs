@@ -14,7 +14,7 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="cherifGsoul" data-slug-hash="EMdbJw" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CTA Bus Map (Medium)">
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="result" data-user="cherifGsoul" data-slug-hash="EMdbJw" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CTA Bus Map (Medium)">
   <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/EMdbJw/">
   CTA Bus Map (Medium)</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
@@ -35,11 +35,11 @@ The following sections are broken down into the following parts:
 
 ## Setup ##
 
-__START THIS TUTORIAL BY CLONING THE FOLLOWING CodePen__:
+__START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED:__:
 
 > Click the `EDIT ON CODEPEN` button.  The CodePen will open in a new window. In that new window, in the top toolbar, click `Fork`.
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="css,result" data-user="cherifGsoul" data-slug-hash="oVpyRg" data-pen-title="CTA Bus Map (Medium) [Starter]">
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="result" data-user="cherifGsoul" data-slug-hash="oVpyRg" data-pen-title="CTA Bus Map (Medium) [Starter]">
   <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/oVpyRg/">
   CTA Bus Map (Medium) [Starter]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
@@ -81,7 +81,7 @@ __A Basic CanJS Setup__
   ```
 - The component can be rendered by adding the custom tag to the HTML:
   ```html
-    <my-component></my-component>
+  <my-component></my-component>
   ```
 
 - CanJS [can-component Component] uses [can-stache] to render data in a template
@@ -92,9 +92,7 @@ __A Basic CanJS Setup__
 
   // Define the Component
   Component.extend({
-
     tag: "my-component",
-    
     view: `TEMPLATE CONTENT`
   });
   ```
@@ -241,7 +239,7 @@ You should see the title update.
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
-@highlight 20,45-47,only
+@highlight 14,39-41,only
 
 
 ## List bus routes ##
@@ -331,7 +329,7 @@ We will do this by:
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-list-routes.js
-@highlight 21,24-30,45-51,only
+@highlight 15,18-24,39-45,only
 
 
 ## Pick a route and log bus locations ##
@@ -423,7 +421,7 @@ an array of bus routes.
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-pick-route.js
-@highlight 25,34-39,54-66,only
+@highlight 19,28-33,48-60,only
 
 
 ## Show when buses are loading and the number of buses ##
@@ -469,7 +467,7 @@ We will do this by:
 Update the __JavaScript__ tab to:
 
 @sourceref ./3b-bus-loading.js
-@highlight 22,38-40,43,58,61,65,67,only
+@highlight 16,32-34,37,52,55,59,61,only
 
 
 ## Initialize Google Maps to show Chicago ##
@@ -584,7 +582,7 @@ We will do this by:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-init-gmaps.js
-@highlight 15-33,63,only
+@highlight 9-27,57,only
 
 ## Set markers for vehicle locations ##
 
@@ -643,7 +641,7 @@ We will do this by:
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-set-markers.js
-@highlight 21,32-44,77,only
+@highlight 15,26-38,71,only
 
 ## Clean up markers when locations change ##
 
@@ -671,7 +669,7 @@ We will do this by:
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-clean-markers.js
-@highlight 34-39,41,77,only
+@highlight 28-33,35,71,only
 
 ## Result
 

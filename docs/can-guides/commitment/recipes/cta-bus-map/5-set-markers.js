@@ -1,27 +1,21 @@
 import { Component } from "//unpkg.com/can@5/core.mjs";
+
 const proxyUrl = "https://can-cors.herokuapp.com/";
 const token = "?key=piRYHjJ5D2Am39C9MxduHgRZc&format=json";
 const apiRoot = "http://www.ctabustracker.com/bustime/api/v2/"
 const getRoutesEnpoint = apiRoot + "getroutes" + token;
 const getVehiclesEndpoint = apiRoot + "getvehicles" + token;
 
-window.googleAPI = new Promise(function (resolve) {
-  const script = document.createElement("script");
-  script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyD7POAQA-i16Vws48h4yRFVGBZzIExOAJI";
-  document.body.appendChild(script);
-  script.onload = resolve;
-});
-
 Component.extend({
   tag: "google-map-view",
-  view: `<div this.to="this.mapElement" class="gmap"></div>`,
+  view: `<div class="gmap"></div>`,
   ViewModel: {
     map: "any",
     mapElement: HTMLElement,
     vehicles: "any",
     connectedCallback(element) {
       googleAPI.then(() => {
-        this.map = new google.maps.Map(element.firstChild, {
+        this.map = new google.maps.Map(this.mapElement, {
           zoom: 10,
           center: {
             lat: 41.881,
