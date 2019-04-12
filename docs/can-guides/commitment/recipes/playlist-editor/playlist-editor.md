@@ -33,9 +33,6 @@ __START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RI
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
-This CodePen has initial prototype HTML and CSS which is useful for
-getting the application to look right.
-
 The following sections are broken down into:
 
 - Problem — A description of what the section is trying to accomplish.
@@ -192,8 +189,7 @@ In this section, we will:
 
 ### The solution
 
-Update the __HTML__ tab by deleting everything and replacing
-it with:
+Update the __HTML__ to:
 
 > **Note:** use your own `clientId` if you use this code outside this guide and CodePen.
 
