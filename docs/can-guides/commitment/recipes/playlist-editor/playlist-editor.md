@@ -27,7 +27,7 @@ To use the widget:
 
 __START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED:__:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="result" data-user="cherifGsoul" data-slug-hash="vMZYMZ" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Playlist Editor (Advanced) [Starter]">
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js" data-user="cherifGsoul" data-slug-hash="vMZYMZ" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Playlist Editor (Advanced) [Starter]">
   <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/vMZYMZ/">
   Playlist Editor (Advanced) [Starter]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
@@ -245,14 +245,20 @@ In this section, we will:
 
 
 - [ES5 Getter Syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get) can
-  be used to define a `DefineMap` property that changes when another property changes.  For example,
+  be used to define a [can-component.prototype.ViewModel ViewModel] property that changes when another property changes.  For example,
   the following defines an `signedOut` property that is the opposite of the `signedIn` property:
 
   ```js
-  DefineMap.extend({
-    signedIn: "boolean",
-    get signedOut() {
-      return !this.signedIn;
+  import { Component } from "can";
+
+  Component.extend({
+    tag: "playlist-editor",
+    view: `...`,
+    ViewModel: {
+      signedIn: "boolean",
+      get signedOut() {
+        return !this.signedIn;
+      }
     }
   });
   ```
@@ -260,44 +266,61 @@ In this section, we will:
 - Use [can-define.types.get asynchronous getters] to get data from asynchronous sources.  For example:
 
   ```js
-  const PlaylistVM = can.DefineMap.extend({
-    property: {
-      get: function(lastSet, resolve) {
-        apiLoadedPromise.then(function() {
-      resolve( api.getValue() );
-    })
+  import { Component } from "can";
+
+  Component.extend({
+    tag: "my-app",
+    view: `...`,
+    ViewModel: {
+      property: {
+        get(lastSet, resolve) {
+          apiLoadedPromise.then(function() {
+            resolve( api.getValue() );
+          })
+        }
       }
     }
   });
   ```
 
-- DefineMap’s `init` method can be used to perform initialization behavior.  For example,
+- [can-component] [can-component/connectedCallback connectedCallback] method can be used to perform initialization behavior.  For example,
   the following might initialize `googleApiLoadedPromise`:
 
   ```js
-  DefineMap.extend({
-    init: function() {
-      this.googleApiLoadedPromise = googleApiLoadedPromise;
-    },
-    googleApiLoadedPromise: "any"
-  })
+  import { Component } from "can";
+
+  Component.extend({
+    tag: "playlist-editor",
+    view: `...`,
+    ViewModel: {
+      googleApiLoadedPromise: "any",
+      connectedCallback(element) {
+         this.googleApiLoadedPromise = googleApiLoadedPromise;
+      }
+    }
+  });
   ```
 
-- `DefineMap`’s [can-event-queue/map/map.on] lets you listen on changes in a DefineMap.
+- `DefineMap`’s [can-event-queue/map/map.listenTo] lets you listen on changes in a ViewModel.
   This can be used to change values when other values change.  The following will increment
   `nameChange` everytime the `name` property changes:
 
   ```js
-  DefineMap.extend({
-    init: function() {
-      const self = this;
-      self.on("name", function() {
-          self.nameChange++;	  
-      })
-    },
-    name: "string",
-    nameChange: "number"
-  })
+  import { Component } from "can";
+
+  Component.extend({
+    tag: "my-app",
+    view: `...`,
+    ViewModel: {
+      name: "string",
+      nameChange: "number"
+      connectedCallback: function() {
+        this.listenTo("name", () => {
+            this.nameChange++;	  
+        })
+      }
+    }
+  });
   ```
 
   > NOTE: EventStreams provide a much better way of doing this.  Check out [can-define-stream-kefir].
@@ -310,15 +333,10 @@ In this section, we will:
 
 ### The solution
 
-Update the template in the __HTML__ tab to:
-
-@sourceref ./2-signin.html
-@highlight 5-9,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-signin.js
-@highlight 2-11,15-26,only
+@highlight 9-13,20-39,only
 
 
 
@@ -376,15 +394,10 @@ In this section, we will:
 
 ### The solution
 
-Update the template in the __HTML__ tab to:
-
-@sourceref ./3-search.html
-@highlight 11-31,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-search.js
-@highlight 27-46,only
+@highlight 15-34,53-72,only
 
 
 ## Drag videos ##
@@ -423,11 +436,13 @@ In this section, we will:
   on:draginit="startedDrag(scope.arguments[1])"
   ```
 
-- You can use [can-dom-events/helpers/add-jquery-events can.addJQueryEvents()]
+- You can use [can-dom-events/helpers/add-jquery-events addJQueryEvents()]
   to listen to custom jQuery events (such as jQuery++’s `draginit` above):
 
   ```js
-  can.addJQueryEvents(jQuery);
+  import { addJQueryEvents } from "can";
+
+  addJQueryEvents(jQuery);
   ```
 
 - The `drag.ghost()` method copies the elements being dragged and drags that
@@ -438,32 +453,31 @@ In this section, we will:
   drag.ghost().addClass("ghost");
   ```
 
-- To add a method to a `DefineMap`, just add a function to one of the properties passed
+- To add a method to a `ViewModel`, just add a function to one of the properties passed
   to extend:
 
   ```js
-  PlaylistVM = DefineMap.extend({
-    startedDrag: function() {
-      console.log("you did it!")
+  import { Component } from "can";
+
+  Component.extend({
+    tag: "playlist-editor",
+    view: `...`,
+    ViewModel: {
+      startedDrag: function() {
+        console.log("you did it!")
+      }
     }
   });
-  new PlaylistVM().startedDrag();
   ```
 
 - Certain browsers have default drag behaviors for certain elements like `<a>` and `<img>`
   that can be prevented with the `draggable="false"` attribute.
 
 ### The solution
-
-Update the template in the __HTML__ tab to:
-
-@sourceref ./4-drag.html
-@highlight 22-24,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-drag.js
-@highlight 47-49,52,only
+@highlight 1,3,28-30,75-77,only
 
 
 ## Drop videos
@@ -488,31 +502,37 @@ In this section, we will:
   user.  On a high-level, this might look like:
 
   ```js
-  PlaylistVM = DefineMap.extend({
-    // ...
-    // {video: video, index: 0}
-    dropPlaceholderData: "any",
-    // [video1, video2, ...]
-    playlistVideos: {
-       Type: ["any"],
-       Default: can.DefineList
-    },
-    get videosWithDropPlaceholder() {
-      const copyOfPlaylistVideos = this.placeListVideos.map( /* ... */ );
+  import { Component } from "can";
 
-      // insert this.dropPlaceholderData into copyOfPlaylistVideos
+  Component.extend({
+    tag: "playlist-editor"
+    view: `...`,
+    ViewModel: {
+      // ...
+      // {video: video, index: 0}
+      dropPlaceholderData: "any",
+      // [video1, video2, ...]
+      playlistVideos: {
+        Type: ["any"],
+        Default: can.DefineList
+      },
+      get videosWithDropPlaceholder() {
+        const copyOfPlaylistVideos = this.placeListVideos.map( /* ... */ );
 
-      return copyOfPlaylistVideos;
+        // insert this.dropPlaceholderData into copyOfPlaylistVideos
+
+        return copyOfPlaylistVideos;
+      }
     }
-  })
+  });
   ```
 
 - The methods that add a placeholder (`addDropPlaceholder`) and
   add video to the playlist (`addVideo`) should take an index like:
 
   ```js
-  addDropPlaceholder: function(index, video) { /* ... */ }
-  addVideo: function(index, video) { /* ... */ }
+  addDropPlaceholder(index, video) { /* ... */ }
+  addVideo(index, video) { /* ... */ }
   ```
 
   These functions will be called with `0` as the index for this section.  
@@ -529,7 +549,7 @@ In this section, we will:
   You can bind on them manually with jQuery like:
 
   ```js
-  $(element).on("dropon", function(ev, drop, drag) { /* ... */ });
+  $(element).on("dropon", (ev, drop, drag) => { /* ... */ });
   ```
 
   Notice that `drop` is now the 2nd argument to the event.  You can listen to
@@ -551,27 +571,25 @@ In this section, we will:
     saves the current `context` of the `<li>` as `"dragData"` on the `<li>`:
 
     ```html
-    <li on:draginit="../videoDrag(scope.arguments[1])"
-              {{domData("dragData")}}>
+    <li on:draginit="this.videoDrag(scope.arguments[1])"
+        {{domData("dragData")}}>
     ```
 
   - [can-dom-data.get can.domData.get] can access this data like:
 
     ```js
-    can.domData.get(drag.element[0], "dragData");
+    import { domData } from "can";
+    
+    domData.get(drag.element[0], "dragData");
     ```
 
 ### The solution
 
 Update the template in the __HTML__ tab to:
-
-@sourceref ./5-drop.html
-@highlight 22-23,32-52,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-drop.js
-@highlight 50-89,92,only
+@highlight 29,39-59,103-117,121-140,only
 
 
 
@@ -607,7 +625,9 @@ In this section, we will:
   way.  Use [can-control.extend] to define a `can.Control` type, as follows:
 
   ```js
-  const Sortable = can.Control.extend({
+  import { Control } from "can";
+  
+  const Sortable = Control.extend({
     // Event handlers and methods
   });
   ```
@@ -616,7 +636,9 @@ In this section, we will:
   as follows:
 
   ```js
-  const Sortable = can.Control.extend({
+  import { Control } from "can";
+
+  const Sortable = Control.extend({
     "{element} dropmove": function(el, ev, drop, drag) {
       // do stuff on dropmove like call method:
       this.method();
@@ -638,7 +660,9 @@ In this section, we will:
   found in a [can-stache] template like:
 
   ```js
-  can.view.callbacks.attr("sortable", function(el, attrData) {});
+  import { viewCallbacks } from "can";
+
+  viewCallbacks.attr("sortable", function(el, attrData) {});
   ```
 
   This can be useful to create controls on an element with that attribute.  For example, if a user has:
@@ -652,7 +676,9 @@ In this section, we will:
   The following will create the `Sortable` control on that `<ul>`:
 
   ```js
-  can.view.callbacks.attr("sortable", function(el) {
+  import { viewCallbacks } from "can";
+
+  viewCallbacks.attr("sortable", function(el) {
     new Sortable(el);
   });
   ```
@@ -660,7 +686,9 @@ In this section, we will:
 - Use [can-dom-events.dispatch can.domEvents.dispatch] to fire custom events:
 
   ```js
-  can.domEvents.dispatch(element, {
+  import { domEvents } from "can";
+
+  domEvents.dispatch(element, {
     type: "sortableinsertat",
     index: 0,
     dragData: dragData
@@ -683,15 +711,10 @@ In this section, we will:
 
 ### The solution
 
-Update the template in the __HTML__ tab to:
-
-@sourceref ./6-order.html
-@highlight 34-37,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-order.js
-@highlight 94-137,only
+@highlight 1,5-44,46-48,86-89,only
 
 
 
@@ -714,7 +737,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./7-revert.js
-@highlight 95-97,102,105-109,only
+@highlight 6-9,13,16-20,only
 
 
 
@@ -797,20 +820,15 @@ In this section, we will:
   can be done by listening to `createPlaylistPromise`:
 
   ```js
-  this.on("createPlaylistPromise", function(ev, promise) { /* ... */ })
+  this.listenTo("createPlaylistPromise", function(ev, promise) { /* ... */ })
   ```
 
 ### The solution
 
-Update the template in the __HTML__ tab to:
-
-@sourceref ./8-create-playlist.html
-@highlight 51-56,only
-
 Update the __JavaScript__ tab to:
 
 @sourceref ./8-create-playlist.js
-@highlight 12-19,99-141,only
+@highlight 112-117,147,202-243,251-258,only
 
 ## Result
 

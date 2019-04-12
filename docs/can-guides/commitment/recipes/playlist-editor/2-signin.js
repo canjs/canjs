@@ -1,32 +1,41 @@
-const PlaylistVM = can.DefineMap.extend("PlaylistVM", {
-  init: function() {
-    const self = this;
+import { Component } from "//unpkg.com/can@5/core.mjs";
 
-    self.on("googleAuth", function(ev, googleAuth) {
-      self.signedIn = googleAuth.isSignedIn.get();
-      googleAuth.isSignedIn.listen(function(isSignedIn) {
-        self.signedIn = isSignedIn;
-      });
-    });
-  },
-  googleApiLoadedPromise: {
-    default: googleApiLoadedPromise
-  },
-  googleAuth: {
-    get: function(lastSet, resolve) {
-      this.googleApiLoadedPromise.then(function() {
-        resolve(gapi.auth2.getAuthInstance());
+Component.extend({
+  tag: "playlist-editor",
+  view: `
+    {{# if(this.googleApiLoadedPromise.isPending) }}
+      <div>Loading Google API…</div>
+    {{ else }}
+      {{# if(this.signedIn) }}
+      Welcome {{ this.givenName }}! <button on:click="this.googleAuth.signOut()">Sign Out</button>
+      {{ else }}
+      <button on:click="this.googleAuth.signIn()">Sign In</button>
+      {{/ if }}
+    {{/ if }}
+  `,
+  ViewModel: {
+    googleApiLoadedPromise: {
+      default: () => googleApiLoadedPromise
+    },
+    googleAuth: {
+      get(lastSet, resolve) {
+        this.googleApiLoadedPromise.then(() => {
+          resolve(gapi.auth2.getAuthInstance());
+        });
+      }
+    },
+    signedIn: "boolean",
+    get givenName() {
+      return this.googleAuth &&
+        this.googleAuth.currentUser.get().getBasicProfile().getGivenName();
+    },
+    connectedCallback() {
+      this.listenTo("googleAuth", (ev, googleAuth) => {
+        this.signedIn = googleAuth.isSignedIn.get();
+        googleAuth.isSignedIn.listen((isSignedIn) => {
+          this.signedIn = isSignedIn;
+        });
       });
     }
-  },
-  signedIn: "boolean",
-  get givenName() {
-    return this.googleAuth &&
-      this.googleAuth.currentUser.get().getBasicProfile().getGivenName();
   }
 });
-
-const vm = new PlaylistVM();
-const template = can.stache.from("app-template");
-const fragment = template(vm);
-document.body.appendChild(fragment);
