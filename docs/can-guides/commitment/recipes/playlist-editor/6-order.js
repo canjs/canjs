@@ -54,9 +54,9 @@ Component.extend({
       <div>Loading Google API…</div>
     {{ else }}
       {{# if(this.signedIn) }}
-      Welcome {{ this.givenName }}! <button on:click="this.googleAuth.signOut()">Sign Out</button>
+        Welcome {{ this.givenName }}! <button on:click="this.googleAuth.signOut()">Sign Out</button>
       {{ else }}
-      <button on:click="this.googleAuth.signIn()">Sign In</button>
+        <button on:click="this.googleAuth.signIn()">Sign In</button>
       {{/ if }}
       
       <div>
@@ -68,11 +68,11 @@ Component.extend({
       {{/ if }}
 
       {{# if(this.searchResultsPromise.isResolved) }}
-        <ul class='source'>
+        <ul class="source">
           {{# for(searchResult of this.searchResultsPromise.value) }}
             <li on:draginit="this.videoDrag(scope.arguments[1])"
                 {{domData("dragData", searchResult)}}>
-              <a draggable="false" href="https://www.youtube.com/watch?v={{ searchResult.id.videoId }}" target='_blank'>
+              <a draggable="false" href="https://www.youtube.com/watch?v={{ searchResult.id.videoId }}" target="_blank">
                 <img draggable="false" src="{{ searchResult.snippet.thumbnails.default.url }}" width="50px" />
               </a>
               {{ searchResult.snippet.title }}
@@ -82,7 +82,7 @@ Component.extend({
       {{/ if }}
       
       {{# if(this.searchResultsPromise.value.length) }}
-        <div class='new-playlist'>
+        <div class="new-playlist">
           <ul sortable
             on:sortableplaceholderat="this.addDropPlaceholder(scope.event.index, scope.event.dragData)"
             on:sortableinsertat="this.addVideo(scope.event.index, scope.event.dragData)"
@@ -90,7 +90,7 @@ Component.extend({
 
             {{# for(videoWithDropPlaceholder of this.videosWithDropPlaceholder) }}
               <li class="{{# if(videoWithDropPlaceholder.isPlaceholder) }}placeholder{{/ if }}">
-                <a href="https://www.youtube.com/watch?v={{ videoWithDropPlaceholder.video.id.videoId }}" target='_blank'>
+                <a href="https://www.youtube.com/watch?v={{ videoWithDropPlaceholder.video.id.videoId }}" target="_blank">
                   <img src="{{ videoWithDropPlaceholder.video.snippet.thumbnails.default.url }}" width="50px" />
                 </a>
 
@@ -131,7 +131,6 @@ Component.extend({
     },
     get searchResultsPromise() {
       if (this.searchQuery.length > 2) {
-  
         const results = gapi.client.youtube.search.list({
           q: this.searchQuery,
           part: "snippet",
@@ -140,9 +139,7 @@ Component.extend({
           console.info("Search results:", response.result.items);
           return response.result.items;
         });
-        return new Promise((resolve, reject) => {
-          results.then(resolve, reject);
-        });
+        return results;
       }
     },
     get videosWithDropPlaceholder() {

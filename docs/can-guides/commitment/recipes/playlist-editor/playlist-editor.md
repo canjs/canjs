@@ -368,18 +368,18 @@ In this section, we will:
     type: "video"
   }).then(function(response) {
     response //-> {
-  // result: {
-  //   items: [
-  //     {
-  //       id: {videoId: "ajsadfa"},
-  //       snippet: {
-  //         title: "dogs",
-  //         thumbnails: {default: {url: "https://example.com/dog.png"}}
-  //       }
-  //     }
-  //   ]
-  // }	 
-  //}
+      // result: {
+      //   items: [
+      //     {
+      //       id: {videoId: "ajsadfa"},
+      //       snippet: {
+      //         title: "dogs",
+      //         thumbnails: {default: {url: "https://example.com/dog.png"}}
+      //       }
+      //     }
+      //   ]
+      // }	 
+      //}
   });
   ```
 
@@ -397,7 +397,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-search.js
-@highlight 15-34,53-72,only
+@highlight 15-34,53-69,only
 
 
 ## Drag videos ##
@@ -477,7 +477,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-drag.js
-@highlight 1,3,28-30,75-77,only
+@highlight 1,3,28-30,72-74,only
 
 
 ## Drop videos
@@ -589,7 +589,7 @@ Update the template in the __HTML__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-drop.js
-@highlight 29,39-59,103-117,121-140,only
+@highlight 29,39-59,100-114,118-137,only
 
 
 
@@ -828,7 +828,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./8-create-playlist.js
-@highlight 112-117,147,202-243,251-258,only
+@highlight 112-117,147,199-240,248-255,only
 
 ## Result
 

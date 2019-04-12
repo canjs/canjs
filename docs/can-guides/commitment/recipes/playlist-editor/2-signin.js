@@ -7,9 +7,9 @@ Component.extend({
       <div>Loading Google API…</div>
     {{ else }}
       {{# if(this.signedIn) }}
-      Welcome {{ this.givenName }}! <button on:click="this.googleAuth.signOut()">Sign Out</button>
+        Welcome {{ this.givenName }}! <button on:click="this.googleAuth.signOut()">Sign Out</button>
       {{ else }}
-      <button on:click="this.googleAuth.signIn()">Sign In</button>
+        <button on:click="this.googleAuth.signIn()">Sign In</button>
       {{/ if }}
     {{/ if }}
   `,
