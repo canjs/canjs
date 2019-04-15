@@ -158,7 +158,7 @@
     "feathers-socketio": "^1.4.2",
     "funcunit": "^3.4.2",
     "github": "^11.0.0",
-    "gzip-size": "^4.1.0",
+    "gzip-size": "^5.1.0",
     "http-server": "^0.11.1",
     "jquery": "2.x - 3.x",
     "jquery-ui": "^1.12.0",
