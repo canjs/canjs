@@ -103,7 +103,7 @@
     "can-observe": "2.2.0",
     "can-param": "1.1.1",
     "can-parse-uri": "1.2.0",
-    "can-query-logic": "1.1.9",
+    "can-query-logic": "1.1.10",
     "can-queues": "1.2.1",
     "can-realtime-rest-model": "1.1.0",
     "can-reflect": "1.17.9",
