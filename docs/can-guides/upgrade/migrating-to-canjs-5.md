@@ -135,7 +135,19 @@ CanJS 5.0:
     There's [can-query-logic#Configuration detailed documentation] on how
     to configure a `new QueryLogic()` for any circumstances.
     @highlight 21-38,43,only
-
+- Includes guides on [guides/html], [guides/routing], [guides/data], [guides/testing], [guides/logic], and [guides/data-extreme].
+- Includes hundreds of other bug fixes and new features, including:
+  - New stache helpers for logic: [can-stache.helpers.and and()], [can-stache.helpers.or or()], and [can-stache.helpers.not not()].
+  - [can-stache.helpers.let #let stache helper] for creating block-level variables.
+  - [can-stache.helpers.for-of #for(of) stache helper] for looping through lists without creating new contexts.
+  - [can-stache.portal #portal stache helper] for inserting a section of a template into another element.
+  - [can-stache/keys/scope/key scope/key] syntax for scope walking within a stache template.
+  - [Component elements now have a `.viewModel` property.](https://github.com/canjs/can-component/releases/tag/v4.3.0)
+  - [Slots are able to pass individual values.](https://github.com/canjs/can-component/releases/tag/v4.4.0)
+  - Support for [can-stache-bindings.event#on_VIEW_MODEL_OR_DOM_EVENT__KEY_VALUE_ setting properties within event handlers in stache] (e.g. `on:click="this.prop = value"`).
+  - Security: XSS vulnerability fix in [v5.13.0](https://github.com/canjs/canjs/releases/tag/v5.13.0).
+  - New packages: [can-map-compat] and [can-route-mock].
+  - Internet Explorer 11 support
 
 ## Breaking Changes
 
