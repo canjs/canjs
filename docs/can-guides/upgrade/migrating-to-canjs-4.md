@@ -14,14 +14,17 @@ CanJS 4 is an improvement on much of the core infrastructure in CanJS 3. Keeping
 CanJS 4 is a big step forward in simplifying CanJS and enhancing your understanding of your
 application. Read more details about it [CanJS 4.0's release article](https://www.bitovi.com/blog/canjs-4.0).  The following are some highlights:
 
-- Debugging Tools - CanJS 4.0 makes it easier to discover how your code works (or doesn't)
-  and fix it.  It works with [CanJS’s Chrome Debugger Tools](https://chrome.google.com/webstore/detail/hhdfadlgplkpapjfehnjhcebebgmibcb)
-- Simplified Stache Templates - Most of [can-stache]’s quirks have been eliminated or simplified.
+- Debugging Tools - CanJS 4 makes it easier to discover how your code works (or doesn’t)
+  and fix it.  It works with [CanJS’s Chrome Debugger Tools](https://chrome.google.com/webstore/detail/hhdfadlgplkpapjfehnjhcebebgmibcb).
+- Simplified Stache Templates - Most of [can-stache]’s quirks have been eliminated or simplified. [can-stache-bindings.raw `key:raw="string"`] makes it easier to bind to string values.
 - Streaming property definitions - Contain the behavior of a stateful property within a single streaming property definition.  
 - Determinism and Performance with Queues - CanJS’s new queuing system makes callback ordering
   deterministic, eliminating odd corner cases, improving debuggability and performance.
-- Upgradability - CanJS 4.0 is much easier to upgrade to than 3.0.
-
+- [Tree-shaking](https://v4.canjs.com/doc/guides/advanced-setup.html) — Works with StealJS and webpack.
+- Compatibility — [Improved compatibility with how webpack strips out dev code.](https://github.com/canjs/canjs/issues/4011)
+- New APIs for routing and testing — [Components can be programmatically instantiated with new.](https://v4.canjs.com/doc/can-component.html#newComponent__options__)
+- Upgradability - CanJS 4.0 is much easier to upgrade to than 3.0!
+- Guides — [More recipes](https://v4.canjs.com/doc/guides/recipes.html) and guides on [guides/debugging] and [guides/forms].
 
 ## CanJS 4 Upgrade Video
 

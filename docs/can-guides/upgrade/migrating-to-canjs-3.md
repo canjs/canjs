@@ -12,11 +12,35 @@ Use this guide alone or with the [guides/upgrade/using-codemods] guide, which sh
 
 This guide goes over:
 
+* [Why you should upgrade](#WhyUpgrade)
 * [*Pre-migration preparation*](#Pre_migrationpreparation) you can do in your current 2.x project to more easily move to 3.x in the future.
 * [The *minimal migration path*](#Minimalmigrationpath), which includes the fewest changes required to upgrade from 2.x to 3.x.
 * [The *modernized migration path*](#Modernizedmigrationpath), which includes upgrading your code to match more modern conventions (such as using the new npm packages).
 * [The *latest & greatest migration path*](#Latest_greatestmigrationpath), which uses all of the modern libraries we are most excited about (such as [can-define]).
 * [How to *avoid future deprecations & removals*](#Avoidfuturedeprecations_removals) in releases after 3.x
+
+## Why Upgrade
+
+- Security: XSS vulnerability fixes in [v3.3.1](https://github.com/canjs/canjs/releases/tag/v3.3.1) and [v3.14.0](https://github.com/canjs/canjs/releases/tag/v3.14.0).
+- [can-stache-bindings](https://canjs.com/doc/can-stache-bindings.html) has new intuitive syntaxes for event, one-way bindings, and two-way bindings:
+	- `on:event="key()"` for event binding.
+	- `prop:from="key"` for one-way parent-to-child binding.
+	- `prop:to="key"` for one-way child-to-parent binding.
+	- `prop:bind="key"` for two-way binding.
+- [can-define/map/map] is faster, removes the need for writing `.attr()`, and allows nice syntax conventions like getters and will give warnings when setting properties that aren't defined.
+- Support for real-time with [can-connect]’s [can-connect/real-time/real-time] module.
+- [Much improved API docs.](https://v3.canjs.com/doc/api.html)
+- [More guides/recipes.](https://v3.canjs.com/doc/guides/recipes.html)
+- [{{debugger}} stache helper will break at the given point in the template so you can inspect the current scope in the browser’s console.](https://canjs.com/doc/can-stache.helpers.debugger.html)
+- [Named inline partials (define reusable partials inside your templates).](https://canjs.com/doc/can-stache.tags.named-partial.html)
+- Support for slots & templates via [can-component/can-slot `<can-slot>`] and [can-component/can-template `<can-template>`].
+- [can-stache-converters] for two-way binding with form elements.
+- [Control whitespace in stache templates.](https://v3.canjs.com/doc/can-stache.Whitespace.html)
+- New validation packages: [can-validate] and [can-validate-validatejs].
+- Support for FeathersJS with [can-connect-feathers].
+- NDJSON support: [can-connect-ndjson] and [can-ndjson-stream].
+- No dependency on jQuery/Mootools/Dojo/etc. [Integration with jQuery is still as easy as ever.](http://v3.canjs.com/doc/can-jquery.html)
+- Hundreds of other bug fixes and new features.
 
 ## Pre-migration preparation
 
