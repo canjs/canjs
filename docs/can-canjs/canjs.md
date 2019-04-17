@@ -257,7 +257,7 @@ p + ul {
   flex-direction: column;
   width: 100%;
 }
-img.package {
+.sm-bundle-svg {
     float: right;
     height: 60px;
     margin-top: -15px;
@@ -566,7 +566,7 @@ We promise you’ll love writing your templates this way.
 {{/ if }}
 {{# if(this.todosPromise.isResolved) }}
 	<ul>
-		{{# for(todo of this.todosPromise.value) }}   
+		{{# for(todo of this.todosPromise.value) }}
 			<li>
 				{{ todo.name }}
 			</li>
@@ -662,7 +662,7 @@ Below is an entire app that shows off some of the best features of CanJS:
     <h3>Use DevTools to debug your app</h3>
     <p>Use the CanJS DevTools to edit your app’s state at runtime, visualize the dependency graphs between elements and state, and debug changes to observables.</p>
     <h3>Small bundle size</h3>
-    <img class="package" src="docs/images/box-1299001_640.png" />
+    <object type="image/svg+xml" class="sm-bundle-svg" data="docs/images/3D-Isometric-Cardboard-Box-opt.svg"></object>
     <p>At 72 KB gzipped, CanJS provides all the tools you need at a small size.</p>
   </div>
   <div class="">
