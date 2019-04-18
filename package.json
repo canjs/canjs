@@ -170,7 +170,7 @@
     "steal": "^2.0.0",
     "steal-conditional": "^0.4.0",
     "steal-css": "^1.2.4",
-    "steal-qunit": "^1.0.1",
+    "steal-qunit": "^2.0.0",
     "steal-socket.io": "^4.0.9",
     "steal-tools": "^2.0.6",
     "test-saucelabs": "0.0.6",
