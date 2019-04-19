@@ -10,7 +10,7 @@ This guide will show how to set up and write tests for different pieces of CanJS
 
 This guide does not focus on how to write applications in a maintainable, testable way. That is covered in the [guides/logic Logic Guide].
 
-> NOTE: All of the examples in this guide use the [Mocha](https://mochajs.org/) test framework and [Chai](http://www.chaijs.com/) assertion library, but none of the examples are specific to Mocha/Chai and should work with any setup.
+> **Note:** All of the examples in this guide use the [Mocha](https://mochajs.org/) test framework and [Chai](http://www.chaijs.com/) assertion library, but none of the examples are specific to Mocha/Chai and should work with any setup.
 
 ## ViewModels
 
@@ -165,7 +165,7 @@ mocha.run();
 @highlight 32-39,only
 @codepen
 
-> NOTE: When using Mocha, [testing asynchronous code](https://mochajs.org/#asynchronous-code) is accomplished by calling the `done` callback to indicate the test is complete. Different testing frameworks might have slightly different solutions.
+> **Note:** When using Mocha, [testing asynchronous code](https://mochajs.org/#asynchronous-code) is accomplished by calling the `done` callback to indicate the test is complete. Different testing frameworks might have slightly different solutions.
 
 ### Properties derived from asynchronous behavior
 
@@ -319,7 +319,7 @@ let vm = new ViewModel({
 
 With this approach, the assertions can be made outside of the `listenTo` callback and there is no need to call `done()` since this test is now synchronous.
 
-> NOTE: Even with this approach, `listenTo` still needs to be called; without this, CanJS will not provide the `resolve` function to the asynchronous getter. This is done to prevent memory leaks.
+> **Note:** Even with this approach, `listenTo` still needs to be called; without this, CanJS will not provide the `resolve` function to the asynchronous getter. This is done to prevent memory leaks.
 
 ```html
 <div id="mocha"></div>
@@ -596,7 +596,7 @@ DOM events handled through [can-stache-bindings], like `value:bind="first"`, can
 2. Finding the event target through the Component’s `element` property
 3. Using [can-dom-events.dispatch domEvents.dispatch] to dispatch the event
 
-> NOTE: Tests like this will work even if the component is not in the document.
+> **Note:** Tests like this will work even if the component is not in the document.
 
 ```html
 <div id="mocha"></div>
@@ -799,7 +799,7 @@ You can add the element to the page using [appendChild](https://developer.mozill
 document.body.appendChild(dateRange.element);
 ```
 
-> NOTE: Some test frameworks like [QUnit](https://qunitjs.com/cookbook/#keeping-tests-atomic) have special test areas that you insert elements into for your tests.
+> **Note:** Some test frameworks like [QUnit](https://qunitjs.com/cookbook/#keeping-tests-atomic) have special test areas that you insert elements into for your tests.
 >These are automatically cleaned up after each test, so you do not have to worry about a test causing problems for other tests.
 >If the framework you’re using doesn’t have this, make sure to clean up after the test yourself.
 
@@ -1697,7 +1697,7 @@ No matter the purpose of the integration test, they generally follow the same pa
 4. Verify that the application responds correctly
 5. Clean up
 
-> NOTE: The test below is written using [funcunit](https://funcunit.com/) but it would also work with [cypress.io](https://www.cypress.io/), [dom-testing-library](https://www.npmjs.com/package/dom-testing-library), or whatever integration testing setup you prefer.
+> **Note:** The test below is written using [funcunit](https://funcunit.com/) but it would also work with [cypress.io](https://www.cypress.io/), [dom-testing-library](https://www.npmjs.com/package/dom-testing-library), or whatever integration testing setup you prefer.
 
 ```html
 <div id="mocha"></div>

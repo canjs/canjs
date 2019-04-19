@@ -179,7 +179,7 @@ console.log( myCounters.sum )      //-> 8
 
 
 
-> __NOTE:__ CanJS application logic is coded within instances of `DefineMap` and `DefineList`.
+> __NOTE:__ CanJS application logic is coded within instances of [can-define/map/map DefineMap] and [can-define/list/list DefineList].
 > You often don’t need the DOM for unit testing!
 
 [can-define/map/map DefineMap] and [can-define/list/list DefineList] have a wide variety of features and shorthands for defining property behavior. For more information about how to write logic within
@@ -218,7 +218,7 @@ Component.extend({
         <button on:click='increment()'>+1</button>
     `,
     // If `ViewModel` is set to an Object,
-    // that Object is used to extend `DefineMap`.
+    // that Object is used to extend [can-define/map/map DefineMap].
     ViewModel: {
         count: {default: 0},
         increment() {

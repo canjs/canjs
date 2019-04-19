@@ -383,7 +383,7 @@ Component.extend({
 });
 ```
 
-[can-component] will create a `can-stache` template from a string [can-component.prototype.view] value
+[can-component] will create a [can-stache] template from a string [can-component.prototype.view] value
 and define a [can-define/map/map DefineMap] type from a plain
 object [can-component.prototype.ViewModel] value. This is a useful short-hand for creating components. __We will use it for all components going forward.__
 

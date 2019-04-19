@@ -146,7 +146,7 @@ We want an `input` element to:
 ### Things to know
 
 - There are [can-define.types.propDefinition many ways] to define a property on
-  a `DefineMap`.  The simplest way is `propName: "<TYPE>"` like:
+  a [can-define/map/map DefineMap].  The simplest way is `propName: "<TYPE>"` like:
 
   ```js
   DefineMap.extend({
@@ -239,7 +239,7 @@ on the page.
 ### Things to know
 
 - [ES5 Getter Syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get) can
-  be used to define a `DefineMap` property that changes when another property changes.  For example,
+  be used to define a [can-define/map/map DefineMap] property that changes when another property changes.  For example,
   the following defines an `excitedMessage` property that always has a `!` after the `message` property:
 
   ```js
@@ -282,9 +282,9 @@ on the page.
   can.param({format: "json", q: "select"}) //-> "format=json&q=select"
   ```  
 
-- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
-- Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in `can-stache`.
-- `Promise`s are observable in [can-stache].  Given a promise `somePromise`, you can:
+- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in [can-stache].
+- Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in [can-stache].
+- [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) are observable in [can-stache].  Given a promise `somePromise`, you can:
   - Check if the promise is loading like: `{{#if(somePromise.isPending)}}`.
   - Loop through the resolved value of the promise like: `{{#for(item of somePromise.value)}}`.
 
@@ -389,7 +389,7 @@ When a user clicks on a place, we need to indicate their selection.
 
 ### Things to know
 
-- Use [can-stache-bindings.event (on:EVENT)] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `sayHi()` when the `<div>` is clicked.
+- Use [can-stache-bindings.event (on:EVENT)] to listen to an event on an element and call a method in [can-stache].  For example, the following calls `sayHi()` when the `<div>` is clicked.
 
    ```html
    <div on:click="sayHi()"> … </div>
@@ -680,7 +680,7 @@ other city is still visible.  Let’s hide it!
 
 ### Things to know
 
-- `DefineMap` [can-define.types.set setter]’s can be used to add behavior when a property is set like:
+- [can-define/map/map DefineMap] [can-define.types.set setter]’s can be used to add behavior when a property is set like:
 
   ```js
   const MessageViewModel = can.DefineMap.extend({

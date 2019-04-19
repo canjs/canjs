@@ -226,7 +226,7 @@ superModel({
 })
 ```
 
-> NOTE: If the service layer can be re-written to match [can-query-logic]’s
+> **Note:** If the service layer can be re-written to match [can-query-logic]’s
 > format, configuring a `queryLogic` instance isn't necessary.  Read
 > more about this format in [can-rest-model]’s documentation.
 
@@ -343,7 +343,7 @@ in 5.0, the above response would delete the `complete` property, resulting in a 
 todo //-> Todo{id: 5, name: "Laundry"}
 ```
 
-> NOTE: The 5.0 __merge__ behavior is quite powerful when dealing with nested data.  You can read more about the
+> **Note:** The 5.0 __merge__ behavior is quite powerful when dealing with nested data.  You can read more about the
 behavior on its documentation page: [can-diff/merge-deep/merge-deep].
 
 The solution is to either change your services to return all properties or set your connection's [can-connect/can/map/map.updateInstanceWithAssignDeep] property to `true`:
@@ -426,7 +426,7 @@ const todoConnection = connect( [ dataUrl, constructor, canMap ], {
 ```
 @highlight 12-14
 
-__Schemas__ are available on `DefineMap`s.  So you could also use the [can-define.types.identity] property
+__Schemas__ are available on [can-define/map/map DefineMap]s.  So you could also use the [can-define.types.identity] property
 behavior to specify that `_id` is the identity property:
 
 
@@ -498,7 +498,7 @@ const ClassRoom = DefineMap.extend({
 })
 ```
 
-> NOTE: use [can-symbol] if you want IE11 support.
+> **Note:** use [can-symbol] if you want IE11 support.
 
 ### Set urlData when using can-route-pushstate
 

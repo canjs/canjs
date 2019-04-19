@@ -609,7 +609,7 @@ const CarOwner = DefineMap.extend({
 });
 ```
 
-Using [can-define] allows you to use maps without the [can-map.prototype.attr .attr()] method that’s needed in [can-map] and [can-list]. To use this with `DefineMap`, just use the `.` (dot) operator instead:
+Using [can-define] allows you to use maps without the [can-map.prototype.attr .attr()] method that’s needed in [can-map] and [can-list]. To use this with [can-define/map/map DefineMap], just use the `.` (dot) operator instead:
 
 ```js
 const carOwner = new CarOwner();

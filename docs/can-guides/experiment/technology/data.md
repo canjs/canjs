@@ -234,7 +234,7 @@ Component.extend({
 
 @highlight 5-6,22,only
 
-> NOTE: A promise's values and state can be read in [can-stache] directly via:
+> **Note:** A promise's values and state can be read in [can-stache] directly via:
 > `promise.value`, `promise.reason`, `promise.isResolved`, `promise.isPending`, and `promise.isRejected`.
 
 See the component in action here:
@@ -410,7 +410,7 @@ POST /api/todos
 </tr>
 </table>
 
-`.save()` returns a `Promise` that eventually resolves to the same instance that `.save()` was called
+`.save()` returns a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that eventually resolves to the same instance that `.save()` was called
 on.  While the record is being saved, [can-connect/can/map/map.prototype.isSaving]
 will return `true`:
 
@@ -851,7 +851,7 @@ const todoConnection = realtimeRestModel({
 ```
 @highlight 1,14
 
-> NOTE: You can configure [can-query-logic] to match your service layer. Learn
+> **Note:** You can configure [can-query-logic] to match your service layer. Learn
 > more in the [configuration section of can-query-logic](../can-query-logic.html#Configuration).
 
 

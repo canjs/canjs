@@ -75,7 +75,7 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
 
 ### Things to know
 
-- `DefineMap` [can-define.types.get getters] can only derive a value from other values.  They can’t
+- [can-define/map/map DefineMap] [can-define.types.get getters] can only derive a value from other values.  They can’t
   derive a value from the change in other values.  However, event-stream libraries like [KefirJS](https://kefirjs.github.io/kefir/)
   can do this.
 

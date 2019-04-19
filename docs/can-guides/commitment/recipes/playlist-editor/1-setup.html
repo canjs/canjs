@@ -5,16 +5,16 @@
 
 <script>
 window.googleApiLoadedPromise = new Promise(function(resolve) {
-  window.googleScriptLoaded = function() {
-    gapi.load("client:auth2", function() {
-      gapi.client.init({
-        apiKey: 'AIzaSyBcnGGOryOnmjUC09T78VCFEqRQRgvPnAc',
-        clientId: '764983721035-85cbj35n0kmkmrba10f4jtte8fhpst84.apps.googleusercontent.com',
-        discoveryDocs: [ "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest" ],
-        scope: "https://www.googleapis.com/auth/youtube"
-      }).then(resolve);
-    });
-  }
+	window.googleScriptLoaded = function() {
+		gapi.load("client:auth2", function() {
+			gapi.client.init({
+				apiKey: "AIzaSyBcnGGOryOnmjUC09T78VCFEqRQRgvPnAc",
+				clientId: "764983721035-85cbj35n0kmkmrba10f4jtte8fhpst84.apps.googleusercontent.com",
+				discoveryDocs: [ "https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest" ],
+				scope: "https://www.googleapis.com/auth/youtube"
+			}).then(resolve);
+		});
+	}
 });
 </script>
 

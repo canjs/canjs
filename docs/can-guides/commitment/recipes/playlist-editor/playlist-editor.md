@@ -27,9 +27,9 @@ To use the widget:
 
 __START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED:__:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js" data-user="cherifGsoul" data-slug-hash="vMZYMZ" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Playlist Editor (Advanced) [Starter]">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/vMZYMZ/">
-  Playlist Editor (Advanced) [Starter]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="144" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="wZyLXb" style="height: 144px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Playlist Editor (Advanced) [Starter]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/wZyLXb/">
+  Playlist Editor (Advanced) [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
@@ -117,9 +117,7 @@ In this section, we will:
 
   CanJS can use promises in its [can-stache] templates.  More on that below.
 
-- A basic CanJS application is a live-bound template (or view) rendered with a component's ViewModel.
-
-- A [can-stache] template is used to render data into a document fragment:
+- A basic CanJS application is a live-bound template (or view) rendered with a component’s ViewModel.
 
   ```js
   import { Component } from "can";
@@ -141,8 +139,8 @@ In this section, we will:
   <my-app></my-app>
   ```  
 
-- Use [can-stache.helpers.if {{# if(value) }}] to do `if/else` branching in `can-stache`.
-- `Promise`s are observable in `can-stache`.  Given a promise `somePromise`, you can:
+- Use [can-stache.helpers.if {{# if(value) }}] to do `if/else` branching in [can-stache].
+- [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) are observable with [can-stache].  Given a promise `somePromise`, you can:
   - Check if the promise is loading like: `{{#if(somePromise.isPending)}}`.
   - Loop through the resolved value of the promise like: `{{#for(item of somePromise.value)}}`.
 
@@ -172,7 +170,7 @@ In this section, we will:
   });
   ```
 
-- `DefineMap` can specify a default value and a type:
+- [can-define/map/map DefineMap] can specify a default value and a type:
   ```js
   import { Component } from "can";
 
@@ -211,9 +209,9 @@ Update the __JavaScript__ tab to:
 
 In this section, we will:
 
-1. Show a `Sign In` button that signs a person into their google account.
-2. Show a `Sign Out` button that signs a person out of their google account.
-3. Automatically know via google’s API when the user signs in and out, and update the
+1. Show a `Sign In` button that signs a person into their Google account.
+2. Show a `Sign Out` button that signs a person out of their Google account.
+3. Automatically know via Google’s API when the user signs in and out, and update the
    page accordingly.
 4. Show a welcome message with the user’s given name.
 
@@ -297,7 +295,7 @@ In this section, we will:
   });
   ```
 
-- `DefineMap`’s [can-event-queue/map/map.listenTo] lets you listen on changes in a ViewModel.
+- [can-define/map/map DefineMap]’s [can-event-queue/map/map.listenTo] lets you listen on changes in a ViewModel.
   This can be used to change values when other values change.  The following will increment
   `nameChange` everytime the `name` property changes:
 
@@ -319,9 +317,9 @@ In this section, we will:
   });
   ```
 
-  > NOTE: EventStreams provide a much better way of doing this.  Check out [can-define-stream-kefir].
+  > **Note:** EventStreams provide a much better way of doing this.  Check out [can-define-stream-kefir].
 
-- Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `sayHi()` when the `<div>` is clicked.
+- Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in [can-stache].  For example, the following calls `sayHi()` when the `<div>` is clicked.
 
    ```html
    <div on:click="sayHi()"> <!-- ... --> </div>
@@ -349,7 +347,7 @@ In this section, we will:
 
 ### What you need to know
 
-- Use [can-stache-bindings.twoWay value:bind] to setup a two-way binding in `can-stache`.  For example, the following keeps `searchQuery` and the input’s `value` in sync:
+- Use [can-stache-bindings.twoWay value:bind] to setup a two-way binding in [can-stache].  For example, the following keeps `searchQuery` and the input’s `value` in sync:
 
    ```html
    <input value:bind="searchQuery" />
@@ -364,22 +362,22 @@ In this section, we will:
     type: "video"
   }).then(function(response) {
     response //-> {
-      // result: {
-      //   items: [
-      //     {
-      //       id: {videoId: "ajsadfa"},
-      //       snippet: {
-      //         title: "dogs",
-      //         thumbnails: {default: {url: "https://example.com/dog.png"}}
-      //       }
-      //     }
-      //   ]
-      // }	 
-      //}
+             //     result: {
+             //       items: [
+             //         {
+             //           id: {videoId: "ajsadfa"},
+             //           snippet: {
+             //             title: "dogs",
+             //             thumbnails: {default: {url: "https://example.com/dog.png"}}
+             //           }
+             //         }
+             //       ]
+             //     }
+             //   }
   });
   ```
 
-- To convert a `googlePromise` to a native `Promise` use:
+- To convert a `googlePromise` to a native [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) use:
 
   ```js
   new Promise(function(resolve, reject) {
@@ -498,7 +496,7 @@ In this section, we will:
   user.  On a high-level, this might look like:
 
   ```js
-  import { Component } from "can";
+  import { Component, DefineList } from "can";
 
   Component.extend({
     tag: "playlist-editor"
@@ -510,7 +508,7 @@ In this section, we will:
       // [video1, video2, ...]
       playlistVideos: {
         Type: ["any"],
-        Default: can.DefineList
+        Default: DefineList
       },
       get videosWithDropPlaceholder() {
         const copyOfPlaylistVideos = this.placeListVideos.map( /* ... */ );
@@ -571,17 +569,16 @@ In this section, we will:
         {{domData("dragData")}}>
     ```
 
-  - [can-dom-data.get can.domData.get] can access this data like:
+  - [can-dom-data.get domData.get()] can access this data like:
 
     ```js
     import { domData } from "can";
-    
+
     domData.get(drag.element[0], "dragData");
     ```
 
 ### The solution
 
-Update the template in the __HTML__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-drop.js
@@ -617,12 +614,12 @@ In this section, we will:
     that dispatch events with the `index` where the dragged item should be inserted
     and the `dragData` of what is being dragged.  
 
-- [can-control can.Control] is useful for listening to events on an element in a memory-safe
-  way.  Use [can-control.extend] to define a `can.Control` type, as follows:
+- [can-control Control] is useful for listening to events on an element in a memory-safe
+  way.  Use [can-control.extend] to define a `Control` type, as follows:
 
   ```js
   import { Control } from "can";
-  
+
   const Sortable = Control.extend({
     // Event handlers and methods
   });
@@ -652,7 +649,7 @@ In this section, we will:
   new Sortable(el);
   ```
 
-- [can-view-callbacks.attr can.view.callbacks.attr] can listen to when a custom attribute is
+- [can-view-callbacks.attr viewCallbacks.attr()] can listen to when a custom attribute is
   found in a [can-stache] template like:
 
   ```js
@@ -679,7 +676,7 @@ In this section, we will:
   });
   ```
 
-- Use [can-dom-events.dispatch can.domEvents.dispatch] to fire custom events:
+- Use [can-dom-events.dispatch domEvents.dispatch()] to fire custom events:
 
   ```js
   import { domEvents } from "can";
@@ -806,7 +803,7 @@ In this section, we will:
   When a callback to `.then` returns a promise, `.then` returns a promise that resolves
   after the _inner_ promise has been resolved.
 
-- Use [can-stache-bindings.toChild {$disabled}] to make an input disabled, like:
+- Use [can-stache-bindings.toChild {disabled:from="boolean"}] to make an input disabled, like:
 
   ```html
   <button disabled:from="createPlaylistPromise.isPending()">

@@ -476,7 +476,7 @@ players.forEach(function(player){
 
 ### can-define-backup is now mixin-based
 
-Previously importing `can-define-backup` would add the `backup`, `restore`, and `isDirty` functions to all `DefineMap`s. In 4.0, the `can-define-backup` mixin function must be called on any maps you would like to use these functions with.
+Previously importing `can-define-backup` would add the `backup`, `restore`, and `isDirty` functions to all [can-define/map/map DefineMap]s. In 4.0, the `can-define-backup` mixin function must be called on any maps you would like to use these functions with.
 
 Change:
 
