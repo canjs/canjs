@@ -1,10 +1,17 @@
-const PlaylistVM = can.DefineMap.extend("PlaylistVM", {
-  googleApiLoadedPromise: {
-    default: googleApiLoadedPromise
-  }
-});
+import { Component } from "//unpkg.com/can@5/core.mjs";
 
-const vm = new PlaylistVM();
-const template = can.stache.from("app-template");
-const fragment = template(vm);
-document.body.appendChild(fragment);
+Component.extend({
+	tag: "playlist-editor",
+	view: `
+	  {{# if(this.googleApiLoadedPromise.isPending) }}
+		  <div>Loading Google API…</div>
+	  {{ else }}
+		  <div>Loaded Google API</div>
+	  {{/ if }}
+	`,
+	ViewModel: {
+		googleApiLoadedPromise: {
+			default: () => googleApiLoadedPromise
+		}
+	}
+});

@@ -85,7 +85,7 @@ mkdir ./docs
 touch ./docs/can-fixture.md
 ```
 
-> Note: The location of the document files is discussed here as a common use case. Keep in mind that `bit-docs` does not expect documents in any folder. Only that documents use the correct [tag syntax](https://documentjs.com/docs/documentjs.tags.html).
+> **Note:** The location of the document files is discussed here as a common use case. Keep in mind that `bit-docs` does not expect documents in any folder. Only that documents use the correct [tag syntax](https://documentjs.com/docs/documentjs.tags.html).
 
 ### Source Repo Documentation Tags
 
@@ -201,7 +201,7 @@ If you can't you might need to:
 
 Open the main test file in the CanJS repo, located at `canjs/test/test.js`.
 
-> Note: The tests in this file will run in dev mode and production mode. If your tests should only run in dev mode, add them to `canjs/test/test-dev-only.js`.
+> **Note:** The tests in this file will run in dev mode and production mode. If your tests should only run in dev mode, add them to `canjs/test/test-dev-only.js`.
 
 Require the project repo's test main test file in the appropriate area. For example, if the project repo will go in "Legacy" area of the site, then add it to the "Legacy" section of the test file.
 

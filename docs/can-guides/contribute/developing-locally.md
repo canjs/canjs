@@ -106,7 +106,7 @@ Make sure Firefox is closed and run the test suite with:
 npm test
 ```
 
-> NOTE: When adding tests, make sure you check out [can-test-helpers](https://github.com/canjs/can-test-helpers) as it provides some useful helpers for some tests.
+> **Note:** When adding tests, make sure you check out [can-test-helpers](https://github.com/canjs/can-test-helpers) as it provides some useful helpers for some tests.
 
 If every test passed, __congrats__! You have everything you need to
 change code and have the core team review it.

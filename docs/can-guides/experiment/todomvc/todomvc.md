@@ -137,7 +137,7 @@ on the server.
 In `<todo-mvc>`'s `ViewModel`:
 
 - Use [can-connect/can/map/map.getList] to load a list of all todos on the server. The result
-  of `getList` is a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that resolves to a `Todo.List` with the todos returned from the fake data store.  That `Promise`
+  of `getList` is a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that resolves to a `Todo.List` with the todos returned from the fake data store.  That [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
   is available to the template as `this.todosPromise`.
 
 In `<todo-mvc>`'s `view`:

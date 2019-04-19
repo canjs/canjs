@@ -144,7 +144,7 @@ Print out the exported values like:
 ### What you need to know
 
 - Use [can-stache-bindings.twoWay value:bind] to set up a two-way binding in
-  `can-stache`.  For example, the following keeps `email` on the ViewModel and
+  [can-stache].  For example, the following keeps `email` on the ViewModel and
   the input’s `value` in sync:
 
     ```html
@@ -191,7 +191,7 @@ So that we can print out the values like:
 ### What you need to know
 
 - [ES5 Getter Syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get) can
-  be used to define a `DefineMap` property that changes when another property changes.  For example,
+  be used to define a [can-define/map/map DefineMap] property that changes when another property changes.  For example,
   the following defines a `firstName` property that always has the
   first word of the `fullName` property:
 
@@ -234,7 +234,7 @@ their respective form property:
   - `Stripe.card.validateExpiry(month, year)`
   - `Stripe.card.validateCVC(cvc)`
 
-- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
+- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in [can-stache].
   ```html
   {{#if(error)}}class="is-error"{{/if}}
   ```
@@ -266,7 +266,7 @@ After submitting the form, you should see an alert like:
 
 ### What you need to know
 
-- Use [can-stache-bindings.event] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked:
+- Use [can-stache-bindings.event] to listen to an event on an element and call a method in [can-stache].  For example, the following calls `doSomething()` when the `<div>` is clicked:
 
    ```html
    <div on:click="doSomething(scope.event)"> ... </div>

@@ -214,7 +214,7 @@ Update the `JavaScript` tab to:
   - have a `state` property that reads other stateful properties and returns a string representation
     of the state.
   - have an __abstract__ `executeStart` method that `Deposit` and `Withdrawal` will implement to
-    execute the transaction and return a `Promise` that resolves when the transaction is complete.
+    execute the transaction and return a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that resolves when the transaction is complete.
   - have an __abstract__ `executeEnd` method that `Deposit` and `Withdrawal` will implement to
     update the transactions values (typically the `account` balance) if the transaction is successfully completed.
   - have an `execute` method that calls `.executeStart()` and `executeEnd()` and keeps the stateful

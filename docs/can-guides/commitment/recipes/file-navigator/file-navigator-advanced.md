@@ -142,7 +142,7 @@ entity.name = "cats" //-> logs "entity name changed to cats"
 
 ### Things to know
 
-You can create a `DefineMap` type using [can-define/map/map.extend DefineMap.extend] with the type’s properties and the properties’ types like:
+You can create a [can-define/map/map DefineMap] type using [can-define/map/map.extend DefineMap.extend] with the type’s properties and the properties’ types like:
 
 ```js
 import { DefineMap } from "can";
@@ -272,10 +272,10 @@ In this section, we’ll list the files and folders within the root folder.
 
 ### Things to know
 
-- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
-- Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in `can-stache`.
-- Use [can-stache.helpers.is {{#eq(value1, value2)}}] to test equality in `can-stache`.
-- `Promise`s are observable in `can-stache`.  Given a promise `somePromise`, you can:
+- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in [can-stache].
+- Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in [can-stache].
+- Use [can-stache.helpers.is {{#eq(value1, value2)}}] to test equality in [can-stache].
+- [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) are observable in [can-stache].  Given a promise `somePromise`, you can:
   - Check if the promise is loading like: `{{#if(somePromise.isPending)}}`.
   - Loop through the resolved value of the promise like: `{{#for(item of somePromise.value)}}`.
 - Write `<div class="loading">Loading</div>` when files are loading.
@@ -348,7 +348,7 @@ Now we want to make all the folders able to open and close.
   });
   ```
 
-- Use [can-stache-bindings.event] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
+- Use [can-stache-bindings.event] to listen to an event on an element and call a method in [can-stache].  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
    ```html
    <div on:click="doSomething()"> ... </div>

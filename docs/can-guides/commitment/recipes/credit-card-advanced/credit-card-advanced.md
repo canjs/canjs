@@ -310,7 +310,7 @@ the input in a `userCardNumberBlurred` `emitterProperty`.
   //             -Ramiya MeyerX
   ```
 
-  > NOTE: `fullName` can be derived more simply from `Kefir.combine`. The reducer
+  > **Note:** `fullName` can be derived more simply from `Kefir.combine`. The reducer
   > pattern is used here for illustrative purposes. It is able to support a larger
   > set of stream transformations than `Kefir.combine`.
 
@@ -450,7 +450,7 @@ we will change the __Pay__ button to say __Paying__.
   });
   ```
 
-- Use [can-stache-bindings.event] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked:
+- Use [can-stache-bindings.event] to listen to an event on an element and call a method in [can-stache].  For example, the following calls `doSomething()` when the `<div>` is clicked:
 
      ```html
      <div on:click="doSomething(scope.event)"> ... </div>

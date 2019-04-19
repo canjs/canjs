@@ -37,7 +37,7 @@ The following sections show how to enable [can-debug] using ES Modules, StealJS,
 
 If you are using the [core](guides/setup.html#ImportingthecoreESmodulebundle) or [ecosystem](guides/setup.html#ImportingtheecosystemESmodulebundle) ES module bundle, [can-debug] will be enabled automatically.
 
-> NOTE: When first accessing properties on the global `can`, a warning will be logged. This is to discourage
+> **Note:** When first accessing properties on the global `can`, a warning will be logged. This is to discourage
 > relying on the global `can` object.
 
 Debugging is not enabled automatically with the minified ES module bundles. To enable it, you will need to import [can-debug] from the ecosystem bundle and enable it yourself:
@@ -65,7 +65,7 @@ debug();
 //!steal-remove-end
 ```
 
-> NOTE: You can also do this using [individual packages](guides/setup.html#Installingindividualpackages)
+> **Note:** You can also do this using [individual packages](guides/setup.html#Installingindividualpackages)
 > with `import debug from "can-debug";`
 
 #### Conditional loading
@@ -141,7 +141,7 @@ CanJS tries to create useful names to help identify the objects and
 functions in your application. It uses [can-reflect]’s [can-reflect.getName]
 to return a useful debugger name. By default objects are named using the following convention:
 
-- The name starts with the observable constructor name, ex: `DefineMap`.
+- The name starts with the observable constructor name, ex: [can-define/map/map DefineMap].
 - The constructor name is decorated with the following characters based on its type:
   - `<>`: for value-like observables, ex: `SimpleObservable<>`
   - `[]`: for list-like observables, ex: `DefineList[]`
@@ -197,7 +197,7 @@ new Observation(function fullName(){
 });
 ```
 
-> NOTE: If your function is a property on an observable map or list like [can-define/map/map],
+> **Note:** If your function is a property on an observable map or list like [can-define/map/map],
 > you don't have to name it. For example, CanJS will name the `fullName` getter in the following example:
 > ```js
 > DefineMap.extend("Person",{
