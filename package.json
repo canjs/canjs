@@ -146,7 +146,7 @@
     "steal-stache": "4.1.2"
   },
   "devDependencies": {
-    "bit-docs": "0.0.11",
+    "bit-docs": "0.2.0",
     "can-reflect-tests": "<2.0.0",
     "can-test-helpers": "^1.1.1",
     "core-js": "^2.5.7",
