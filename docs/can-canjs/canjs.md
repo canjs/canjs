@@ -36,7 +36,7 @@ code {
 p + ul {
   margin-top: 0;
 }
-.description {
+.title .description {
   display: none;
 }
 .btn {
