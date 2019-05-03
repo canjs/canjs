@@ -22,7 +22,7 @@ There are three different ways to easily make a connection:
 2. [can-realtime-rest-model] - (recommended) useful for realtime updates (sockets)
 3. [can-super-model] - (advanced) all the bells and whistles, including caching and other goodness
 
-> Note: Each of the above is simply a different combination of behaviors composed together.
+> **Note:** Each of the above is simply a different combination of behaviors composed together.
 
 ## Building your own connection (advanced)
 

@@ -32,7 +32,7 @@ The CanJS theme is in
 has instructions on how to test out the theme.  Once the theme is updated and published,
 
 1. Open `canjs/package.json`. Update `bit-docs-html-canjs`’s version to the new theme version.
-2. Run `npm run document:force` to make sure the theme is correctly applied.
+2. Run `npm run document` to make sure the theme is correctly applied.
 
 The [CanJS design folder](https://drive.google.com/open?id=0B9uYesPecByGZGkzc2YxRHA4ZEE)
 has logos, stickers, and other design resources.
@@ -44,7 +44,7 @@ improving the docs for say `can-compute`, you want to see what `can-compute`’s
 install your local `can-compute` and re-run bit-docs like:
 
 ```shell
-npm install ../can-compute && npm run document:force
+npm install ../can-compute && npm run document
 ```
 
 

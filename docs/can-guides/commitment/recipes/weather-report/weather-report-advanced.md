@@ -1,7 +1,8 @@
-@page guides/recipes/weather-report-advanced Weather Report Guide (Advanced)
-@parent guides/recipes
+@page guides/recipes/weather-report-advanced Weather Report
+@parent guides/recipes/advanced
+@hide
 
-@description This guides you through extending the [guides/recipes/weather-report-simple Simple Weather Report Guide] to
+@description This advanced guides you through extending the [guides/recipes/weather-report-simple Simple Weather Report Guide] to
 remove imperative code and automatically look up the user’s location using the
 browser’s [geolocation API](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation).  Both of these will be done with event streams.
 
@@ -74,7 +75,7 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
 
 ### Things to know
 
-- `DefineMap` [can-define.types.get getters] can only derive a value from other values.  They can’t
+- [can-define/map/map DefineMap] [can-define.types.get getters] can only derive a value from other values.  They can’t
   derive a value from the change in other values.  However, event-stream libraries like [KefirJS](https://kefirjs.github.io/kefir/)
   can do this.
 

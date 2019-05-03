@@ -22,7 +22,7 @@ This document describes how to configure [can-connect] for loading model data fr
 
 When configuring a connection, the [can-connect/data/url/url data-url behavior] is responsible for making AJAX requests, and this behavior expects the URLs and data to be formatted a certain way. If your services do not line up with what is expected, we will describe how to configure things to meet your needs.
 
-> Note: all examples will be using the [can-rest-model] as it serves as a good starting point for learning how to use [can-connect]. For those familiar with [`can.Model`](https://v2.canjs.com/docs/can.Model.html), the `can-rest-model` is essentially the next generation.
+> **Note:** all examples will be using the [can-rest-model] as it serves as a good starting point for learning how to use [can-connect]. For those familiar with [`can.Model`](https://v2.canjs.com/docs/can.Model.html), the `can-rest-model` is essentially the next generation.
 
 ### Understanding the [can-connect/DataInterface]
 
@@ -83,7 +83,7 @@ connection.getList({}).then(todos => {
 ```
 @codepen
 
-> NOTE: For more information, read about the [can-connect/data/url/url data-url behavior], the [can-connect/data/url/url.url url configuration], and the [can-connect/DataInterface].
+> **Note:** For more information, read about the [can-connect/data/url/url data-url behavior], the [can-connect/data/url/url.url url configuration], and the [can-connect/DataInterface].
 
 
 ### Customizing the request method and URL
@@ -172,7 +172,7 @@ const connection = restModel({
 });
 ```
 
-> Note: Any data transport can be used so long as it can conform to the [can-ajax] interface, which is based on the [`jQuery.ajax`](http://api.jquery.com/jquery.ajax/) interface.
+> **Note:** Any data transport can be used so long as it can conform to the [can-ajax] interface, which is based on the [`jQuery.ajax`](http://api.jquery.com/jquery.ajax/) interface.
 
 ### Creating your own data-url behavior
 

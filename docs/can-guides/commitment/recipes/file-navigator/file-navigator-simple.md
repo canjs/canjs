@@ -1,7 +1,7 @@
-@page guides/recipes/file-navigator-simple File Navigator Guide (Simple)
-@parent guides/recipes
+@page guides/recipes/file-navigator-simple File Navigator
+@parent guides/recipes/beginner
 
-@description This guide walks you through building a simple file navigation
+@description This beginner guide walks you through building a simple file navigation
 widget.  It takes about 25 minutes to complete.  It was written with
 CanJS 5.22.0. Check out the [guides/recipes/file-navigator-advanced]
 for an example that makes AJAX requests for its data and uses [can-component].
@@ -19,7 +19,7 @@ The final widget looks like:
 
 Click `ROOT/` to see its files and folders.
 
-> Note: If you don’t see any files show up, run the CodePen again. This
+> **Note:** If you don’t see any files show up, run the CodePen again. This
 > CodePen uses randomly generated files, so it’s possible nothing shows up.
 
 __Start this tutorial by cloning the following CodePen__:
@@ -152,9 +152,9 @@ Let’s render `rootEntityData` in the page with its immediate children.
   ```
 
 - Use [can-define/map/map] to model Component data as [can-component.prototype.ViewModel].
-- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
-- Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in `can-stache`.
-- Use [can-stache.helpers.is {{#eq(value1, value2)}}] to test equality in `can-stache`.
+- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in [can-stache].
+- Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in [can-stache].
+- Use [can-stache.helpers.is {{#eq(value1, value2)}}] to test equality in [can-stache].
 - [can-stache/keys/current {{./key}}] only returns the value in the current scope.
 - Write a `<ul>` to contain all the files.  Within the `<ul>` there should be:
   - An `<li>` with a className that includes `file` or `folder` and `hasChildren` if the folder has children.
@@ -441,9 +441,9 @@ We want to be able to toggle if a folder is open or closed.
   });
   ```
 
-- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
+- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in [can-stache].
 
-- Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
+- Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in [can-stache].  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
    ```html
    <div on:click="doSomething()"> ... </div>

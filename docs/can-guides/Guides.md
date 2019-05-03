@@ -32,7 +32,7 @@ We encourage everyone to take a look at:
   get CanJS working in your development and production environments.
 - [guides/debugging] to know how to fix problems when they arise.
 
-> Note: Some of the following guides are on [DoneJS.com](http://donejs.com).
+> **Note:** Some of the following guides are on [DoneJS.com](http://donejs.com).
 > DoneJS is another framework built on top of CanJS.
 > These DoneJS guides feature CanJS extensively and are __extremely__
 > useful to understanding how to build a CanJS application even if you are

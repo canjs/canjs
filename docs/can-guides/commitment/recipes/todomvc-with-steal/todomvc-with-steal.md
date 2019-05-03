@@ -1,5 +1,5 @@
 @page guides/recipes/todomvc-with-steal TodoMVC with StealJS
-@parent guides/recipes
+@parent guides/experiment 3
 
 @description This tutorial walks through building TodoMVC with
 StealJS. It includes KeyNote presentations
@@ -363,8 +363,8 @@ Update _models/todo.js_ to the following:
   ```html
     {{something.name}}
   ```
-- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in `can-stache`.
-- Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in `can-stache`.
+- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in [can-stache].
+- Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in [can-stache].
 
 ### The solution
 
@@ -387,7 +387,7 @@ Update _index.stache_ to the following:
 ### What you need to know
 
 - [The can-stache-bindings Presentation’s](https://drive.google.com/open?id=0Bx-kNqf-wxZeYUJ3ZVRxUlU2MjQ) _DOM Event Bindings_
-- Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
+- Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in [can-stache].  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
    ```html
    <div on:click="doSomething()"> ... </div>
@@ -409,7 +409,7 @@ Update _index.stache_ to the following:
 ### What you need to know
 
 - [The can-stache-bindings Presentation’s](https://drive.google.com/open?id=0Bx-kNqf-wxZeYUJ3ZVRxUlU2MjQ) _DOM Data Bindings_
-- Use [can-stache-bindings.twoWay value:bind] to setup a two-way binding in `can-stache`.  For example, the following keeps `todo.name` and the input’s `value` in sync:
+- Use [can-stache-bindings.twoWay value:bind] to setup a two-way binding in [can-stache].  For example, the following keeps `todo.name` and the input’s `value` in sync:
 
    ```html
    <input  value:bind="todo.name" />
@@ -541,7 +541,7 @@ Create _models/todos-fixture.js_ as follows:
 ### What you need to know
 
 - [The can-connect Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZebHFWMElNOVEwSlE) up to and including _Migrate 2 can-connect_.
-- [can-connect/can/base-map/base-map] can decorate a `DefineMap` with methods that connect it to a restful URL like:
+- [can-connect/can/base-map/base-map] can decorate a [can-define/map/map DefineMap] with methods that connect it to a restful URL like:
 
   ```js
   baseMap({
@@ -696,7 +696,7 @@ custom element.
 - You can use `on:enter` to listen to when the user hits the __enter__ key.
 - Listening to the `enter` event can be enabled by [can-event-dom-enter/add-global/add-global].
 - The [can-define.types.defaultConstructor] behavior creates a default value by using `new Default` to initialize the value when
-a `DefineMap` property is read for the first time.
+a [can-define/map/map DefineMap] property is read for the first time.
 
   ```js
   const SubType = DefineMap.extend({})
@@ -841,7 +841,7 @@ Make the "Clear completed" button work. When the button is clicked, It should de
 ### What you need to know
 
 - [The can-stache-bindings Presentation’s](https://drive.google.com/open?id=0Bx-kNqf-wxZeYUJ3ZVRxUlU2MjQ) _DOM Event Bindings_
-- Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in `can-stache`.  For example, the following calls `doSomething()` when the `<div>` is clicked.
+- Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in [can-stache].  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
    ```html
    <div on:click="doSomething()"> ... </div>
@@ -875,7 +875,7 @@ be added if they represent the current page.
 
 ### What you need to know
 
-- [can-route] is used to connect a `DefineMap`’s properties
+- [can-route] is used to connect a [can-define/map/map DefineMap]’s properties
   to the URL.  This is done with [can-route.data] like:
 
   ```js

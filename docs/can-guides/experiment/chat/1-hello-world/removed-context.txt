@@ -11,7 +11,7 @@ console.log(appVM.message)
 
 Will print out `"Chat Home"` and then `"Chat Home!"`.
 
-`DefineMap` instances are observable.  This is why when `message` changes,
+[can-define/map/map DefineMap] instances are observable.  This is why when `message` changes,
 the template updates automatically.
 
 -->

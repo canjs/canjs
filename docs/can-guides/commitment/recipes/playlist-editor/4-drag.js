@@ -1,57 +1,84 @@
-const PlaylistVM = can.DefineMap.extend("PlaylistVM", {
-  init: function() {
-    const self = this;
+import { addJQueryEvents, Component } from "//unpkg.com/can@5/core.mjs";
 
-    self.on("googleAuth", function(ev, googleAuth) {
-      self.signedIn = googleAuth.isSignedIn.get();
-      googleAuth.isSignedIn.listen(function(isSignedIn) {
-        self.signedIn = isSignedIn;
-      });
-    });
-  },
-  googleApiLoadedPromise: {
-    default: googleApiLoadedPromise
-  },
-  googleAuth: {
-    get: function(lastSet, resolve) {
-      this.googleApiLoadedPromise.then(function() {
-        resolve(gapi.auth2.getAuthInstance());
-      });
-    }
-  },
-  signedIn: "boolean",
-  get givenName() {
-    return this.googleAuth &&
-      this.googleAuth.currentUser.get().getBasicProfile().getGivenName();
-  },
-  searchQuery: {
-    type: "string",
-    default: ""
-  },
-  get searchResultsPromise() {
-    if (this.searchQuery.length > 2) {
+addJQueryEvents(jQuery);
 
-      const results = gapi.client.youtube.search.list({
-        q: this.searchQuery,
-        part: "snippet",
-        type: "video"
-      }).then(function(response) {
-        console.info("Search results:", response.result.items);
-        return response.result.items;
-      });
-      return new Promise(function(resolve, reject) {
-        results.then(resolve, reject);
-      });
-    }
-  },
-  videoDrag: function(drag) {
-    drag.ghost().addClass("ghost");
-  }
+Component.extend({
+	tag: "playlist-editor",
+	view: `
+		{{# if(this.googleApiLoadedPromise.isPending) }}
+			<div>Loading Google API…</div>
+		{{ else }}
+			{{# if(this.signedIn) }}
+				Welcome {{ this.givenName }}! <button on:click="this.googleAuth.signOut()">Sign Out</button>
+			{{ else }}
+				<button on:click="this.googleAuth.signIn()">Sign In</button>
+			{{/ if }}
+
+			<div>
+				<input value:bind="this.searchQuery" placeholder="Search for videos" />
+			</div>
+
+			{{# if(this.searchResultsPromise.isPending) }}
+				<div class="loading">Loading videos…</div>
+			{{/ if }}
+
+			{{# if(this.searchResultsPromise.isResolved) }}
+				<ul class="source">
+					{{# for(searchResult of this.searchResultsPromise.value) }}
+						<li on:draginit="this.videoDrag(scope.arguments[1])">
+							<a draggable="false" href="https://www.youtube.com/watch?v={{ searchResult.id.videoId }}" target="_blank">
+								<img draggable="false" src="{{ searchResult.snippet.thumbnails.default.url }}" width="50px" />
+							</a>
+							{{ searchResult.snippet.title }}
+						</li>
+					{{/ for }}
+				</ul>
+			{{/ if }}
+		{{/ if }}
+	`,
+	ViewModel: {
+		googleApiLoadedPromise: {
+			default: () => googleApiLoadedPromise
+		},
+		googleAuth: {
+			get(lastSet, resolve) {
+				this.googleApiLoadedPromise.then(() => {
+					resolve(gapi.auth2.getAuthInstance());
+				});
+			}
+		},
+		signedIn: "boolean",
+		get givenName() {
+			return this.googleAuth &&
+				this.googleAuth.currentUser.get().getBasicProfile().getGivenName();
+		},
+		searchQuery: {
+			type: "string",
+			default: ""
+		},
+		get searchResultsPromise() {
+			if (this.searchQuery.length > 2) {
+				const results = gapi.client.youtube.search.list({
+					q: this.searchQuery,
+					part: "snippet",
+					type: "video"
+				}).then((response) => {
+					console.info("Search results:", response.result.items);
+					return response.result.items;
+				});
+				return results;
+			}
+		},
+		videoDrag(drag) {
+			drag.ghost().addClass("ghost");
+		},
+		connectedCallback() {
+			this.listenTo("googleAuth", (ev, googleAuth) => {
+				this.signedIn = googleAuth.isSignedIn.get();
+				googleAuth.isSignedIn.listen((isSignedIn) => {
+					this.signedIn = isSignedIn;
+				});
+			});
+		}
+	}
 });
-
-can.addJQueryEvents(jQuery);
-
-const vm = new PlaylistVM();
-const template = can.stache.from("app-template");
-const fragment = template(vm);
-document.body.appendChild(fragment);

@@ -15,7 +15,7 @@ CanJS’s documentation is broken down by pages for:
  - functions, properties, and type definitions (typedefs) related to module exports
 
 For example, [can-define/map/map.prototype.forEach can-define/map/map.prototype.forEach] is a
-method that loops through properties and values on an `DefineMap`:
+method that loops through properties and values on an [can-define/map/map DefineMap]:
 
 ```js
 import DefineMap from 'can-define/map/map';
@@ -27,7 +27,7 @@ map.forEach(function(value, property){
 });
 ```
 
-`.forEach` is a function the `prototype` of the `DefineMap` export of the `can-define/map/map`
+`.forEach` is a function the `prototype` of the [can-define/map/map DefineMap] export of the `can-define/map/map`
 module.  The `can-define/map/map` is part of CanJS’s [can-core] collection.
 
 So understanding CanJS’s API pages are about understanding the relationships between:
@@ -80,7 +80,7 @@ A package or module documents the "direct" functionality of the export and provi
 all functionality contained within the module or package.
 
 For example, [can-define/list/list] documents the "direct" functionality of the export, namely
-the `DefineList` function that is exported.  While  [can-define/list/list.extend DefineList.extend] is the most common starting place when using `DefineList`, the `DefineList` export method can only be used like `new DefineList()` directly.  This is why `new DefineList()` is documented
+the [can-define/list/list DefineList] function that is exported.  While  [can-define/list/list.extend DefineList.extend] is the most common starting place when using [can-define/list/list DefineList], the [can-define/list/list DefineList] export method can only be used like `new DefineList()` directly.  This is why `new DefineList()` is documented
 on [can-define/list/list].  
 
 However, after the `new DefineList()` signature is detailed, [can-define/list/list] has a __#Use__
@@ -116,7 +116,7 @@ DefineList.prototype.concat //-> function
 ```
 
 Because of how JavaScript works, this means that you can call `.concat` directly on any instance
-of `DefineList`:
+of [can-define/list/list DefineList]:
 
 ```js
 let hobbies = new DefineList(["learning"]);

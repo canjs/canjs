@@ -135,7 +135,19 @@ CanJS 5.0:
     There's [can-query-logic#Configuration detailed documentation] on how
     to configure a `new QueryLogic()` for any circumstances.
     @highlight 21-38,43,only
-
+- Includes guides on [guides/html], [guides/routing], [guides/data], [guides/testing], [guides/logic], and [guides/data-extreme].
+- Includes hundreds of other bug fixes and new features, including:
+  - New stache helpers for logic: [can-stache.helpers.and and()], [can-stache.helpers.or or()], and [can-stache.helpers.not not()].
+  - [can-stache.helpers.let #let stache helper] for creating block-level variables.
+  - [can-stache.helpers.for-of #for(of) stache helper] for looping through lists without creating new contexts.
+  - [can-stache.portal #portal stache helper] for inserting a section of a template into another element.
+  - [can-stache/keys/scope/key scope/key] syntax for scope walking within a stache template.
+  - [Component elements now have a `.viewModel` property.](https://github.com/canjs/can-component/releases/tag/v4.3.0)
+  - [Slots are able to pass individual values.](https://github.com/canjs/can-component/releases/tag/v4.4.0)
+  - Support for [can-stache-bindings.event#on_VIEW_MODEL_OR_DOM_EVENT__KEY_VALUE_ setting properties within event handlers in stache] (e.g. `on:click="this.prop = value"`).
+  - Security: XSS vulnerability fix in [v5.13.0](https://github.com/canjs/canjs/releases/tag/v5.13.0).
+  - New packages: [can-map-compat] and [can-route-mock].
+  - Internet Explorer 11 support
 
 ## Breaking Changes
 
@@ -226,7 +238,7 @@ superModel({
 })
 ```
 
-> NOTE: If the service layer can be re-written to match [can-query-logic]’s
+> **Note:** If the service layer can be re-written to match [can-query-logic]’s
 > format, configuring a `queryLogic` instance isn't necessary.  Read
 > more about this format in [can-rest-model]’s documentation.
 
@@ -343,7 +355,7 @@ in 5.0, the above response would delete the `complete` property, resulting in a 
 todo //-> Todo{id: 5, name: "Laundry"}
 ```
 
-> NOTE: The 5.0 __merge__ behavior is quite powerful when dealing with nested data.  You can read more about the
+> **Note:** The 5.0 __merge__ behavior is quite powerful when dealing with nested data.  You can read more about the
 behavior on its documentation page: [can-diff/merge-deep/merge-deep].
 
 The solution is to either change your services to return all properties or set your connection's [can-connect/can/map/map.updateInstanceWithAssignDeep] property to `true`:
@@ -426,7 +438,7 @@ const todoConnection = connect( [ dataUrl, constructor, canMap ], {
 ```
 @highlight 12-14
 
-__Schemas__ are available on `DefineMap`s.  So you could also use the [can-define.types.identity] property
+__Schemas__ are available on [can-define/map/map DefineMap]s.  So you could also use the [can-define.types.identity] property
 behavior to specify that `_id` is the identity property:
 
 
@@ -498,7 +510,7 @@ const ClassRoom = DefineMap.extend({
 })
 ```
 
-> NOTE: use [can-symbol] if you want IE11 support.
+> **Note:** use [can-symbol] if you want IE11 support.
 
 ### Set urlData when using can-route-pushstate
 
