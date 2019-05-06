@@ -2,7 +2,7 @@
 @parent guides/recipes/advanced
 
 @description Learn how to use YouTube’s API to search for videos and make a playlist.  This
-makes authenticated requests with OAuth2. It uses [jQuery++](https://jquerypp.com) for
+makes authenticated requests with OAuth2. It uses [https://jquerypp.com jQuery++] for
 drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes
 an hour to complete.
 

@@ -2,7 +2,7 @@
 @parent guides/recipes/beginner
 
 @description This beginner guide walks you through building a clock with the
-[Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API).
+[https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API Canvas API].
 
 
 @body

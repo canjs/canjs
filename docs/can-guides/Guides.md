@@ -2,8 +2,11 @@
 @parent canjs 1
 @group guides/essentials 2 essentials
 @group guides/experiment 3 app guides
-@group guides/upgrade 5 upgrade
-@group guides/getting-started 6 other
+@group guides/recipes/beginner 4 beginner recipes
+@group guides/recipes/intermediate 5 intermediate recipes
+@group guides/recipes/advanced 6 advanced recipes
+@group guides/upgrade 7 upgrade
+@group guides/getting-started 8 other
 @templateRender <% %>
 @subchildren
 
@@ -171,7 +174,7 @@ We encourage everyone to take a look at:
 <td class='end'>[guides/debugging]
 <p><%this.[guides/debugging].description%></p>
 <img src="../node_modules/can-debug/doc/map-dependency-graph.png"
-  alt="A visual representation of an observable's dependency graph"
+  alt="A visual representation of an observable’s dependency graph"
   width="100px"/></td>
 </TR>
 
@@ -193,7 +196,10 @@ We encourage everyone to take a look at:
  [guides/atm]
  <p><%this.[guides/atm].description%></p>
  <img src="../docs/can-guides/experiment/atm/atm.png" width='100px'/></td>
-<td class='end proposed'>[https://github.com/canjs/canjs/issues/3862 Testing Guide]<p>Proposed. Vote for it in our Survey.</p></td>
+ <td class='end'>[guides/testing]
+  <p><%this.[guides/testing].description%></p>
+  <img alt="" src="https://user-images.githubusercontent.com/10070176/57243909-182bcf00-6fec-11e9-9a4a-7f5164120024.png" width='100px'/>
+ </td>
 <td></td>
 </TR>
 
@@ -204,9 +210,9 @@ We encourage everyone to take a look at:
  <p>The Bitballs example routes between a large number of pages.</p>
  <img src="https://donejs.com/static/img/bitballs/bitballs-video.png" width='100px'/>
 </td>
-<td class='end in-progress'>
- [https://github.com/canjs/can-route/issues/122 Routing Guide]
- <p>In Progress.</p>
+<td class='end'>[guides/routing]
+ <p><%this.[guides/routing].description%></p>
+ <img alt="" src="../docs/can-guides/experiment/technology/observable-routing.png" width='100px'/>
 </td>
 
 </tr>
@@ -216,8 +222,8 @@ We encourage everyone to take a look at:
  <p><%this.[guides/recipes/file-navigator-advanced].description%></p>
  <img src="../docs/can-guides/commitment/recipes/file-navigator/file-navigator.png" width='100px'/>
 </td>
-<td class='right down-right proposed'>[https://github.com/canjs/canjs/issues/4014 Data Guide]
-<p>Proposed. Vote for it in our Survey.</p>
+<td class='right down-right in-progress'>[guides/data-extreme]
+ <p>In progress. Help us by adding comments to <a href="https://github.com/canjs/canjs/issues/4014">the proposal</a>.</p>
 </td>
 <td class='right down-right'>[guides/todomvc]
  <p>
@@ -272,10 +278,6 @@ We encourage everyone to take a look at:
 <p><%this.[guides/recipes/canvas-clock].description%></p>
 <img src="../docs/can-guides/commitment/recipes/canvas-clock/canvas-clock.png"/>
 </td>
-
-<td class='right'>[guides/recipes/weather-report-simple]
-<p><%this.[guides/recipes/weather-report-simple].description%></p>
-<img src="../docs/can-guides/commitment/recipes/weather-report/weather-report.png"/></td>
 
 <td class='right'>[guides/recipes/cta-bus-map]
 <p><%this.[guides/recipes/cta-bus-map].description%></p>

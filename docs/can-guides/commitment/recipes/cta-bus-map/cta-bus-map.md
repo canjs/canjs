@@ -2,7 +2,7 @@
 @parent guides/recipes/intermediate
 
 @description This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map.  
-
+You'll learn how to create a [can-component] that integrates with 3rd party widgets.
 
 @body
 
