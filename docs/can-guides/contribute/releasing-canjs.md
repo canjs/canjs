@@ -24,7 +24,7 @@ All repositories automatically run their tests in [Travis CI](https://travis-ci.
 
 [canjs/canjs](https://github.com/canjs/canjs) also runs the tests of all dependencies in the supported browsers on [Saucelabs](https://saucelabs.com):
 
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/canjs.svg)](https://saucelabs.com/u/canjs)
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/canjs-not-master.svg)](https://saucelabs.com/u/canjs-not-master)
 
 To view Saucelabs test runs and results, request an invite from a Saucelabs user that has access to the `canjs` Saucelabs project (existing users can send invites under [my account](https://saucelabs.com/beta/users/canjs)). Saucelabs tests can be run locally via
 

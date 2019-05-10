@@ -14,7 +14,7 @@ CanJS supports:
  - iOS Safari 11+
  - NodeJS 6+ with [can-vdom] as a document.
 
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/canjs.svg)](https://saucelabs.com/u/canjs)
+[![Sauce Test Status](https://saucelabs.com/browser-matrix/canjs-not-master.svg)](https://saucelabs.com/u/canjs-not-master)
 
 ## Phenomenal Features, Small Size
 

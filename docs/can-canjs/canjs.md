@@ -667,7 +667,7 @@ Below is an entire app that shows off some of the best features of CanJS:
   <div class="">
     <h3>Browser support</h3>
     <p>CanJS supports Internet Explorer 11, Chrome, Edge, Firefox, and Safari.</p>
-    <img src="https://saucelabs.com/browser-matrix/canjs.svg" alt="Sauce Test Status" />
+    <img src="https://saucelabs.com/browser-matrix/canjs-not-master.svg" alt="Sauce Test Status" />
   </div>
 </div>
 <div class="gray-callout footer">
