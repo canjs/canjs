@@ -1,0 +1,63 @@
+<script type="module">
+  import { connect, QueryLogic } from "//unpkg.com/can@5/core.mjs";
+
+  const websocketSidechannel = connect.behavior('websocket-sidechannel', (previousPrototype) => {
+    return {
+      init() {
+        // start listening to websocket when connection is built
+        this.websocket.onmessage(({data}) => {
+          this.updateInstance(data);
+        })
+      },
+    }
+  });
+
+  // an object taking the place of an open websocket for the purpose of this test
+  // receives a message completing a todo every 5 seconds
+  const mockWebsocket = {
+    id: 1,
+    onmessage(listener) {
+      setInterval(() => {
+        // send a message completing a todo 5 seconds
+        listener({ data: { id: this.id, complete: true }});
+        this.id = this.id + 1;
+      }, 5000);
+    }
+  };
+
+  const connectionOptions = {
+    url: 'https://jsonplaceholder.typicode.com/todos/',
+    queryLogic: new QueryLogic({ identity: ['id'] }),
+    websocket: mockWebsocket
+  };
+
+  const behaviors = [
+    connect.base,
+    connect.dataUrl,
+    connect.constructor,
+    connect.constructorStore,
+    connect.realTime,
+    connect.dataCallbacks,
+    connect.constructorCallbacksOnce,
+    websocketSidechannel
+  ];
+
+  let todos = [];
+
+  // build connection and load todo list
+  const connection = behaviors.reduce((connection, behavior) => behavior(connection), connectionOptions);
+  connection.getListData({}).then(({ data }) => {
+    console.log(`Loaded ${data.length} todos.`);
+    todos = data;
+  });
+  connection.init();
+
+  // update todo output element with the current state of the first 50 todos every two seconds
+  const todosEl = document.getElementById('todos');
+  setInterval(() => {
+    todosEl.innerHTML = '';
+    todos.slice(0, 50).forEach((todo) => {
+      todosEl.insertAdjacentHTML('beforeend', `<li>${JSON.stringify(todo)}</li>`);
+    })
+  }, 2000);
+</script>
