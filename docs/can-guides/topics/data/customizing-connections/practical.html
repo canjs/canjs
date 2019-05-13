@@ -7,7 +7,8 @@
         // start listening to websocket when connection is built
         this.websocket.onmessage(({data}) => {
           this.updateInstance(data);
-        })
+        });
+        previousPrototype.init();
       },
     }
   });
@@ -31,6 +32,7 @@
     websocket: mockWebsocket
   };
 
+  // TODO: needs can/map behavior so constructor store reference counting works for list. can/map not exported by connect.
   const behaviors = [
     connect.base,
     connect.dataUrl,
@@ -46,12 +48,13 @@
 
   // build connection and load todo list
   const connection = behaviors.reduce((connection, behavior) => behavior(connection), connectionOptions);
-  connection.getListData({}).then(({ data }) => {
-    console.log(`Loaded ${data.length} todos.`);
-    todos = data;
+  connection.getList({}).then((list) => {
+    console.log(`Loaded ${list.length} todos.`);
+    todos = list;
   });
   connection.init();
 
+  // TODO: will have to render in a typical way using stache to get reference counting for real-time
   // update todo output element with the current state of the first 50 todos every two seconds
   const todosEl = document.getElementById('todos');
   setInterval(() => {
@@ -61,3 +64,4 @@
     })
   }, 2000);
 </script>
+<ul id="todos"></ul>
