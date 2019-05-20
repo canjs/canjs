@@ -147,7 +147,7 @@
   },
   "devDependencies": {
     "bit-docs": "0.0.11",
-    "can-reflect-tests": "<2.0.0",
+    "can-reflect-tests": "^0.2.1",
     "can-test-helpers": "^1.1.1",
     "core-js": "^2.5.7",
     "es6-promise-polyfill": "^1.2.0",
