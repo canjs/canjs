@@ -11,9 +11,15 @@ const connection = connect.dataCombineRequests(dataUrl);
 connection.init();
 
 // connection prototype chain is made up of the behavior instances
-console.log(`First proto: ${connection.__proto__ === dataUrlInstance}`);
-console.log(`Second proto: ${connection.__proto__.__proto__ === baseInstance}`);
-console.log(`Third proto: ${connection.__proto__.__proto__.__proto__ === connectionOptions}`);
+console.log(
+	`First proto: ${connection.__proto__ === dataUrlInstance}`
+);
+console.log(
+	`Second proto: ${connection.__proto__.__proto__ === baseInstance}`
+);
+console.log(
+	`Third proto: ${connection.__proto__.__proto__.__proto__ === connectionOptions}`
+);
 
 connection.getData({id: 5}).then((result) => {
 	console.log(`Fetched Todo JSON: `, result);

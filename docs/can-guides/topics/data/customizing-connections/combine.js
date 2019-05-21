@@ -22,7 +22,10 @@ const connectionOptions = {
 	queryLogic: new QueryLogic(Todo)
 };
 
-const connection = behaviors.reduce((connection, behavior) => behavior(connection), connectionOptions);
+const connection = behaviors.reduce(
+	(connection, behavior) => behavior(connection), 
+	connectionOptions
+);
 connection.init();
 
 connection.get({id: 5}).then((result) => {

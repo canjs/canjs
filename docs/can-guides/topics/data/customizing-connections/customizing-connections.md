@@ -52,7 +52,7 @@ Interfaces in [can-connect <code>can-connect</code>] refer to categorizations of
 Essentially, interfaces are a loose specification of shared "extension points" that are used in the implementation of behaviors. For example, the following shows two behaviors that implement the same extension point differently; one using XHR, another using [`fetch`](https://developer.mozilla.org/en/docs/Web/API/Fetch_API):
 
 @sourceref ./interface.js
-@highlight 3,5-17,19-26,only
+@highlight 3,5-20,22-33,only
 @codepen  
 
 Considering interfaces are just potential points of extension, an entire interface doesn't need to be implemented for a connection to function. Many behaviors interact to implement parts of an interface. Functions of one interface may depend on functions from another.
@@ -64,7 +64,7 @@ As an example of how interfaces are used as extension points: the [can-connect/D
 Behaviors are the "layers" of [can-connect <code>can-connect</code>] connections. A connection is an object with a prototype chain made of behavior instances. The default export of behavior modules are "object extension functions" that add an instance of the behavior to the prototype chain of the passed object instance, and by chaining these functions connections are built:
 
 @sourceref ./chain.js
-@highlight 8-16,only
+@highlight 8-11,13-22,only
 @codepen  
 
 Illustrating the prototype chain in the example above:
@@ -81,20 +81,20 @@ Behaviors can be:
 To be a method ***implementor***, a behavior just needs to include that method as part of their definition. The following implements [can-connect/connection.getListData <code>getListData</code>]:
 
 @sourceref ./implement.js
-@highlight 4-11,only
+@highlight 4-15,only
 @codepen     
 
 Being a method ***consumer*** just means calling a method on the connection. Here the behavior is consuming the [can-connect/data/url/url.getData <code>getData</code>] method:
 
 @sourceref ./consume.js
-@highlight 14-21,only
+@highlight 15-26,only
 @codepen   
 
 <a id="extend"></a>
 ***Extending*** is a bit more complicated. Property access on a connection works like any normal JavaScript object, the property is first searched for on the "base" object instance, before searching up the objects on the base object's prototype chain. Since behaviors are instances on that chain, a behavior can override an implementation of a property from a behavior higher in the prototype chain. That feature, along with behaviors having a reference to the prototype higher than them in the chain, is what allows them to extend interface methods. This is done by overriding a method and calling the previous implementation as part of that overriding implementation. The following extends [can-connect/data/url/url.getData <code>getData</code>] :
 
 @sourceref ./extend.js
-@highlight 14-23, only
+@highlight 15-29, only
 @codepen
 
 ### Calling From Root vs Calling On Previous Behavior
@@ -428,7 +428,7 @@ The combining of behaviors by chaining functions (as shown in the [Behaviors Ove
 ***Note:*** the `init` function must be called after creating the connection to initialize some behaviors. When using the [can-connect#connect_behaviors_options_ <code>connect</code>] function this is called automatically. 
 
 @sourceref ./combine.js
-@highlight 13-18, 25-26, only
+@highlight 13-18, 25-28, only
 @codepen
 
 

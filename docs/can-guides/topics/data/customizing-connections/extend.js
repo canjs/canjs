@@ -10,17 +10,23 @@ const Todo = DefineMap.extend('Todo', {
 	completed: "boolean"
 });
 
-// a behavior that extends the `getData` method of the `Data Interface`, to add logging whenever a single instance is loaded
-const loggingBehavior = connect.behavior('data-logging', (previousPrototype) => {
-	return {
-		getData(query) {
-			return previousPrototype.getData(query).then((data) => {
-				console.log(`Successfully fetched ${this.Map.shortName} ${this.id(data)} data from server.`);
-				return data;
-			});
-		}
-	};
-});
+// a behavior that extends the `getData` method of the `Data Interface`, to add 
+// logging whenever a single instance is loaded
+const loggingBehavior = connect.behavior(
+	'data-logging', 
+	(previousPrototype) => {
+		return {
+			getData(query) {
+				return previousPrototype.getData(query).then((data) => {
+					console.log(
+						`Successfully fetched ${this.Map.shortName} ${this.id(data)} data from server.`
+					);
+					return data;
+				});
+			}
+		};
+	}
+);
 
 const connectionOptions = {
 	url: 'https://jsonplaceholder.typicode.com/todos/{id}',
@@ -28,7 +34,9 @@ const connectionOptions = {
 	Map: Todo,
 };
 
-const connection = connect.constructor(loggingBehavior(connect.dataUrl(connect.base(connectionOptions))));
+const connection = connect.constructor(loggingBehavior(connect.dataUrl(connect.base(
+	connectionOptions
+))));
 connection.init();
 
 connection.get({id: 5}).then((instance) => {

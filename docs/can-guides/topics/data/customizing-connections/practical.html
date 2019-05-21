@@ -1,17 +1,20 @@
 <script type="module">
   import { connect, QueryLogic } from "//unpkg.com/can@5/core.mjs";
 
-  const websocketSidechannel = connect.behavior('websocket-sidechannel', (previousPrototype) => {
-    return {
-      init() {
-        // start listening to websocket when connection is built
-        this.websocket.onmessage(({data}) => {
-          this.updateInstance(data);
-        });
-        previousPrototype.init();
-      },
-    }
-  });
+  const websocketSidechannel = connect.behavior(
+		'websocket-sidechannel',
+		(previousPrototype) => {
+			return {
+				init() {
+					// start listening to websocket when connection is built
+					this.websocket.onmessage(({data}) => {
+						this.updateInstance(data);
+					});
+					previousPrototype.init();
+				},
+			}
+		}
+	);
 
   // an object taking the place of an open websocket for the purpose of this test
   // receives a message completing a todo every 5 seconds
@@ -32,7 +35,8 @@
     websocket: mockWebsocket
   };
 
-  // TODO: needs can/map behavior so constructor store reference counting works for list. can/map not exported by connect.
+  // TODO: needs can/map behavior so constructor store reference counting works for list. 
+	//  can/map not exported by connect.
   const behaviors = [
     connect.base,
     connect.dataUrl,
@@ -47,15 +51,19 @@
   let todos = [];
 
   // build connection and load todo list
-  const connection = behaviors.reduce((connection, behavior) => behavior(connection), connectionOptions);
+  const connection = behaviors.reduce(
+		(connection, behavior) => behavior(connection), 
+		connectionOptions
+	);
   connection.getList({}).then((list) => {
     console.log(`Loaded ${list.length} todos.`);
     todos = list;
   });
   connection.init();
 
-  // TODO: will have to render in a typical way using stache to get reference counting for real-time
-  // update todo output element with the current state of the first 50 todos every two seconds
+  // TODO: will have to render in a typical way using stache to get reference 
+	// counting for real-time update todo output element with the current state 
+	//  of the first 50 todos every two seconds
   const todosEl = document.getElementById('todos');
   setInterval(() => {
     todosEl.innerHTML = '';
