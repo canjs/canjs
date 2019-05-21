@@ -51,8 +51,8 @@ Interfaces in [can-connect <code>can-connect</code>] refer to categorizations of
 
 Essentially, interfaces are a loose specification of shared "extension points" that are used in the implementation of behaviors. For example, the following shows two behaviors that implement the same extension point differently; one using XHR, another using [`fetch`](https://developer.mozilla.org/en/docs/Web/API/Fetch_API):
 
-@sourceref ./interface.html
-@highlight 4,6-18,20-27,only
+@sourceref ./interface.js
+@highlight 3,5-17,19-26,only
 @codepen  
 
 Considering interfaces are just potential points of extension, an entire interface doesn't need to be implemented for a connection to function. Many behaviors interact to implement parts of an interface. Functions of one interface may depend on functions from another.
@@ -63,8 +63,8 @@ As an example of how interfaces are used as extension points: the [can-connect/D
 ## Behaviors Overview
 Behaviors are the "layers" of [can-connect <code>can-connect</code>] connections. A connection is an object with a prototype chain made of behavior instances. The default export of behavior modules are "object extension functions" that add an instance of the behavior to the prototype chain of the passed object instance, and by chaining these functions connections are built:
 
-@sourceref ./chain.html
-@highlight 9-17,only
+@sourceref ./chain.js
+@highlight 8-16,only
 @codepen  
 
 Illustrating the prototype chain in the example above:
@@ -80,21 +80,21 @@ Behaviors can be:
 <a id="implement"></a>
 To be a method ***implementor***, a behavior just needs to include that method as part of their definition. The following implements [can-connect/connection.getListData <code>getListData</code>]:
 
-@sourceref ./implement.html
-@highlight 5-12,only
+@sourceref ./implement.js
+@highlight 4-11,only
 @codepen     
 
 Being a method ***consumer*** just means calling a method on the connection. Here the behavior is consuming the [can-connect/data/url/url.getData <code>getData</code>] method:
 
-@sourceref ./consume.html
-@highlight 15-22,only
+@sourceref ./consume.js
+@highlight 14-21,only
 @codepen   
 
 <a id="extend"></a>
 ***Extending*** is a bit more complicated. Property access on a connection works like any normal JavaScript object, the property is first searched for on the "base" object instance, before searching up the objects on the base object's prototype chain. Since behaviors are instances on that chain, a behavior can override an implementation of a property from a behavior higher in the prototype chain. That feature, along with behaviors having a reference to the prototype higher than them in the chain, is what allows them to extend interface methods. This is done by overriding a method and calling the previous implementation as part of that overriding implementation. The following extends [can-connect/data/url/url.getData <code>getData</code>] :
 
-@sourceref ./extend.html
-@highlight 15-24, only
+@sourceref ./extend.js
+@highlight 14-23, only
 @codepen
 
 ### Calling From Root vs Calling On Previous Behavior
@@ -279,7 +279,7 @@ The built-in behaviors of `can-connect` have a canonical order to ensure they fu
 	  <tr>
 	    <td></td>
 	    <td>
-	      <b>Note:</b> Behaviors here are listed from highest in the prototype chain to lowest.
+	      <i><b>Note:</b></i> Behaviors here are listed from highest in the prototype chain to lowest.
 	    </td>
 	  </tr>
 	</thead>
@@ -379,7 +379,7 @@ The built-in behaviors of `can-connect` have a canonical order to ensure they fu
 			<td>
 			  Extends the instance creation methods so new or updated instances are added to existing Lists where appropriate. This is positoned lower in the prototype chain so that other `Instance Interface` extensions can be overridden to modify when certain actions execute.
 			  <br/><br/>
-			  <b>Note:</b> [can-connect/real-time/real-time <code>real-time</code>] depends on:
+			  <i><b>Note:</b></i> [can-connect/real-time/real-time <code>real-time</code>] depends on:
 			   <ul>
 			   		<li>[can-connect/constructor/callbacks-once/callbacks-once <code>constructor/callbacks-once</code>]</li>
 			   		<li>
@@ -425,10 +425,10 @@ The combining of behaviors by chaining functions (as shown in the [Behaviors Ove
  
  One way behaviors can be assembled cleanly is by using the [`reduce`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce) method of arrays which iterates over the elements of an array, assembling a result:  
 
-*Note:* the `init` function must be called after creating the connection to initialize some behaviors. When using the [can-connect#connect_behaviors_options_ <code>connect</code>] function this is called automatically. 
+***Note:*** the `init` function must be called after creating the connection to initialize some behaviors. When using the [can-connect#connect_behaviors_options_ <code>connect</code>] function this is called automatically. 
 
-@sourceref ./combine.html
-@highlight 14-19, 26-27, only
+@sourceref ./combine.js
+@highlight 13-18, 25-26, only
 @codepen
 
 
