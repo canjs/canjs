@@ -1,5 +1,6 @@
 sudo: false
 language: node_js
+dist: trusty
 before_install:
 - ./firefox-allow-popups.sh
 - "export DISPLAY=:99.0"
