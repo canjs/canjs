@@ -53,10 +53,15 @@ var globalConfig = {
 	removeDevelopmentCode: false
 };
 
-stealTools.export({
+var globalBuilds = stealTools.export({
 	steal: {
 		config: __dirname + "/package.json!npm",
-		main: "can/can"
+		main: "can/can",
+		map: {
+			"can-define-object": "can-define-object/dist/can-define-object",
+			"can-define-mixin": "can-define-mixin/dist/mixins",
+			"can-stache-define-element": "can-stache-define-element/dist/can-stache-define-element"
+		}
 	},
 	options: {
 		useNormalizedDependencies: false,
@@ -76,7 +81,20 @@ stealTools.export({
 			modules: ["can/can"],
 			dest: globalJS.dest(__dirname+"/dist/global/everything.js"),
 			removeDevelopmentCode: false
-		}, globalConfig),
+		}, globalConfig)
+	}
+});
+
+var esBuilds = stealTools.export({
+	steal: {
+		config: __dirname + "/package.json!npm",
+		main: "can/can"
+	},
+	options: {
+		useNormalizedDependencies: false,
+		verbose: true
+	},
+	outputs: {
 		"+bundled-es core": {
 			modules: ["can/core"],
 			addProcessShim: true,
@@ -114,7 +132,9 @@ stealTools.export({
 			dest: __dirname + "/everything.min.mjs"
 		}
 	}
-}).catch(function(e){
+});
+
+Promise.all([globalBuilds, esBuilds]).catch(function(e){
 
 	setTimeout(function(){
 		throw e;
