@@ -11,6 +11,7 @@ export { default as makeMapCompat } from "./es/can-map-compat";
 export { default as DefineObject } from "./es/can-define-object";
 
 // Views
+export { default as StacheDefineElement } from "./es/can-stache-define-element";
 export { default as stacheConverters } from "./es/can-stache-converters";
 export { default as viewAutorender } from "./es/can-view-autorender";
 

@@ -59,7 +59,8 @@ var globalBuilds = stealTools.export({
 		main: "can/can",
 		map: {
 			"can-define-object": "can-define-object/dist/can-define-object",
-			"can-define-mixin": "can-define-mixin/dist/mixins"
+			"can-define-mixin": "can-define-mixin/dist/mixins",
+			"can-stache-define-element": "can-stache-define-element/dist/can-stache-define-element"
 		}
 	},
 	options: {
