@@ -432,10 +432,22 @@ The combining of behaviors by chaining functions (as shown in the [Behaviors Ove
 @codepen
 
 
-## Practical Custom Behavior Example 
-As a small demo of the concepts shown above, below is an example of a simple custom behavior that allows updates to instances to be received as part of a WebSocket connection:
+## Practical Custom Behavior Examples
+As a demo of the concepts shown above, below are examples of custom behaviors that add functionality via behavior implementation, consumption & extension.
 
-@sourceref ./practical.html
+### Fetch-based data/url
+The following is an ***implementor*** behavior that implements the same functionality as the [can-connect/data/url/url <code>data/url</code>] behavior, but using the newer [fetch API](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) rather than the XHR API. This behavior may be useful if you want a feature [fetch](https://developer.mozilla.org/en/docs/Web/API/Fetch_API) offers, like the ability to abort a request.
+@sourceref ./practical-implementor.js
+@codepen
+
+### WebSocket update channel
+The following is a ***consumer*** behavior that uses the API of [can-connect/real-time/real-time <code>real-time</code>] to allow real-time updates of models from a web socket connection. A behavior like this may be useful if your API allows you to subscribe via WebSocket to receive notifications of changes to models. 
+@sourceref ./practical-consumer.html
+@codepen
+
+### Auto-updating Field
+The following is a ***extender*** behavior that extends the [can-connect/constructor/constructor.createdInstance <code>createdInstance</code>] callbacks to update instances with a "last viewed" time.
+@sourceref ./practical-extender.js
 @codepen
 
 

@@ -20,6 +20,6 @@ const connectionOptions = {
 
 const fetchConn = fetchData(connectionOptions);
 
-fetchConn.getListData().then(data => 
+fetchConn.getListData({}).then(data => 
 	console.log(`Used fetch to load ${data.length} todos.`)
 );

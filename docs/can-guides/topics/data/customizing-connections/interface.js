@@ -39,9 +39,9 @@ const connectionOptions = {
 const xhrConn = xhrData(connectionOptions);
 const fetchConn = fetchData(connectionOptions);
 
-xhrConn.getListData().then(data => 
+xhrConn.getListData({}).then(data => 
 	console.log(`Used XHR to load ${data.length} todos.`)
 );
-fetchConn.getListData().then(data => 
+fetchConn.getListData({}).then(data => 
 	console.log(`Used fetch to load ${data.length} todos.`)
 );
