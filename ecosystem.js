@@ -8,7 +8,7 @@ export { default as observe } from "./es/can-observe";
 export { default as stream } from "./es/can-stream";
 export { default as streamKefir } from "./es/can-stream-kefir";
 export { default as makeMapCompat } from "./es/can-map-compat";
-
+export { default as DefineObject } from "./es/can-define-object";
 
 // Views
 export { default as stacheConverters } from "./es/can-stache-converters";
@@ -37,3 +37,4 @@ export { default as validateValidatejs } from "./es/can-validate-validatejs";
 // DOM Utilities
 export { default as radioChangeEvent } from "./es/can-event-dom-radiochange";
 export { default as enterEvent } from "./es/can-event-dom-enter";
+export { default as defineMixin } from "./es/can-define-mixin";
