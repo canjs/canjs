@@ -145,7 +145,7 @@
     "can-view-model": "4.0.2",
     "can-view-nodelist": "4.3.3",
     "can-view-parser": "4.1.2",
-    "can-view-scope": "4.13.0",
+    "can-view-scope": "4.13.1",
     "can-view-target": "4.1.2",
     "steal-stache": "4.1.3"
   },
