@@ -56,7 +56,7 @@
     "can-child-nodes": "1.2.0",
     "can-cid": "1.3.0",
     "can-component": "4.6.1",
-    "can-compute": "4.1.0",
+    "can-compute": "4.1.1",
     "can-connect": "3.0.7",
     "can-connect-feathers": "5.0.0",
     "can-connect-ndjson": "1.0.0",
