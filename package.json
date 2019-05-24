@@ -72,7 +72,7 @@
     "can-define-mixin": "0.2.0",
     "can-define-object": "0.1.0",
     "can-define-stream": "1.1.0",
-    "can-define-stream-kefir": "1.1.0",
+    "can-define-stream-kefir": "1.1.1",
     "can-define-validate-validatejs": "1.1.0",
     "can-deparam": "1.2.0",
     "can-diff": "1.4.4",
