@@ -114,7 +114,7 @@
     "can-rest-model": "1.1.0",
     "can-route": "4.4.7",
     "can-route-hash": "1.0.1",
-    "can-route-mock": "1.0.1",
+    "can-route-mock": "1.0.2",
     "can-route-pushstate": "5.0.11",
     "can-set-legacy": "1.0.0",
     "can-simple-dom": "1.6.1",
