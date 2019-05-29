@@ -9,6 +9,7 @@ export { default as stream } from "./es/can-stream";
 export { default as streamKefir } from "./es/can-stream-kefir";
 export { default as makeMapCompat } from "./es/can-map-compat";
 export { default as DefineObject } from "./es/can-define-object";
+export { default as DefineArray } from "./es/can-define-array";
 
 // Views
 export { default as StacheDefineElement } from "./es/can-stache-define-element";
