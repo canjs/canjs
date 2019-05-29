@@ -123,7 +123,7 @@
     "can-stache": "4.17.17",
     "can-stache-bindings": "4.10.5",
     "can-stache-converters": "4.2.5",
-    "can-stache-define-element": "0.1.4",
+    "can-stache-define-element": "0.2.1",
     "can-stache-key": "1.4.0",
     "can-stache-route-helpers": "1.2.0",
     "can-stream": "1.1.0",
