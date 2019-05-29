@@ -12,7 +12,7 @@ abbr[title] {
   text-decoration: underline #c4c4c3;
 }
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 300;
+  font-weight: 400;
   color: #1A1E1F;
   border-bottom: none;
   margin: 0;
@@ -30,7 +30,7 @@ h3 {
   margin-bottom: 10px;
 }
 code {
-  border-top: 20px solid #327ABB;
+  border-top: 20px solid #3e7abe;
   border-radius: 6px 6px 0 0;
 }
 p + ul {
@@ -42,7 +42,7 @@ p + ul {
 .btn {
   display: inline-flex;
   border-radius: 5px;
-  background: linear-gradient(#0288C9, #327ABB);
+  background-color: #333;
   margin: 0 auto;
   padding: 13px 23px;
   font-size: 24px;
@@ -99,7 +99,7 @@ p + ul {
   margin: 30px 0 45px;
 }
 .hero-logo {
-  fill: #327ABB;
+  fill: #3e7abe;
   width: 300px;
 }
 .single-col-wrapper {
@@ -113,7 +113,7 @@ p + ul {
 }
 .three-col-wrapper {
   display: flex;
-  margin: 60px 30px 60px;
+  margin: 40px 30px 40px;
 }
 .three-col-wrapper .col-container {
   display: flex;
@@ -152,7 +152,7 @@ p + ul {
 .social {
   display: flex;
   flex-direction: column;
-  padding: 45px 60px 30px;
+  padding: 40px 50px;
 }
 .social h2 {
   margin-bottom: 15px;
@@ -174,14 +174,16 @@ p + ul {
   padding-bottom: 0;
 }
 .social-two-col .right-col a {
-  margin-right: 30px;
+  margin-right: 50px;
 }
 .social-two-col .right-col a:last-of-type {
   margin-right: 0;
 }
 .social-two-col img {
-  max-height: 60px;
-  min-height: 50px;
+  height: 40px;
+}
+.social-two-col .github {
+  height: 35px;
 }
 .code-overview {
   display: flex;
@@ -189,12 +191,12 @@ p + ul {
   margin: 30px 30px 60px;
 }
 .code-overview h3 {
-  font-weight: 600;
+  font-weight: 500;
 }
 .code-proof {
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 30px;
+  margin: 30px 0;
 }
 .code-proof:last-of-type {
   margin-bottom: 0;
@@ -268,7 +270,7 @@ p + ul {
   display: none;
 }
 pre[class*=language-].line-numbers.line-numbers code {
-  padding-left: .5em;
+  padding: 15px;
 }
 @@media (max-width: 1699px) {
   .three-col-wrapper .col-container .content {
@@ -299,7 +301,7 @@ pre[class*=language-].line-numbers.line-numbers code {
     flex-direction: column;
   }
   .social-two-col .right-col a {
-    margin-right: 0;
+    margin-right: 30px;
     margin-bottom: 30px;
   }
   .social-two-col .right-col a:last-of-type {
@@ -320,6 +322,7 @@ pre[class*=language-].line-numbers.line-numbers code {
 @@media (max-width: 1099px) {
   .three-col-wrapper {
     flex-wrap: wrap;
+    margin-top: 30px;
     margin-bottom: 30px;
   }
   .three-col-wrapper .col-container {
@@ -375,8 +378,8 @@ pre[class*=language-].line-numbers.line-numbers code {
     flex-wrap: wrap;
   }
   .code-proof .left-col {
-      width: 100%;
-      margin-right: 0;
+    width: 100%;
+    margin-right: 0;
   }
   .two-col-wrapper {
     flex-wrap: wrap;
@@ -384,6 +387,12 @@ pre[class*=language-].line-numbers.line-numbers code {
   .two-col-wrapper div {
     width: 100%;
     margin-right: 0;
+  }
+  .three-col-wrapper .col-container {
+    padding: 10px 20px;
+  }
+  .three-col-wrapper .col-container .content {
+    flex-direction: column;
   }
 }
 @@media (max-width: 759px) {
@@ -417,6 +426,9 @@ pre[class*=language-].line-numbers.line-numbers code {
   .three-col-wrapper .col-container .content object,
   .three-col-wrapper .col-container .content .code-toolbar {
     margin-bottom: 15px;
+  }
+  .social .social-two-col .right-col {
+    flex-direction: column;
   }
 }
 </style>
@@ -498,6 +510,12 @@ pre[class*=language-].line-numbers.line-numbers code {
       </a>
       <a href="https://forums.bitovi.com/">
         <img alt="Discourse" src="../docs/images/logos/discourse.svg" />
+      </a>
+      <a href="https://github.com/bitovi">
+        <img alt="Github" src="../docs/images/logos/github.svg" class="github" />
+      </a>
+      <a href="https://twitter.com/bitovi">
+        <img alt="Twitter" src="../docs/images/logos/twitter.svg" />
       </a>
     </div>
   </div>
