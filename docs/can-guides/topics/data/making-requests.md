@@ -1,4 +1,4 @@
-@page guides/data-making-requests Making requests
+@page guides/data-making-requests Making Requests
 @parent guides/data-extreme
 @outline 3
 
