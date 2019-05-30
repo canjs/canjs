@@ -8,6 +8,9 @@
 @body
 
 <style>
+.on-this-page-table {
+  display: none;
+}
 abbr[title] {
   text-decoration: underline #c4c4c3;
 }
