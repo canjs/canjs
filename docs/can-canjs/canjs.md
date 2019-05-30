@@ -42,7 +42,7 @@ p + ul {
 .btn {
   display: inline-flex;
   border-radius: 5px;
-  background-color: #333;
+  background-color: #3e7abe;
   margin: 0 auto;
   padding: 13px 23px;
   font-size: 24px;
@@ -113,7 +113,7 @@ p + ul {
 }
 .three-col-wrapper {
   display: flex;
-  margin: 40px 30px 40px;
+  margin: 30px 15px 40px;
 }
 .three-col-wrapper .col-container {
   display: flex;
@@ -152,7 +152,7 @@ p + ul {
 .social {
   display: flex;
   flex-direction: column;
-  padding: 40px 50px;
+  padding: 40px 30px;
 }
 .social h2 {
   margin-bottom: 15px;
@@ -240,7 +240,7 @@ p + ul {
 }
 .two-col-wrapper {
   display: flex;
-  margin: 60px;
+  margin: 40px 30px;
 }
 .two-col-wrapper div {
   width: 50%;
@@ -326,7 +326,8 @@ pre[class*=language-].line-numbers.line-numbers code {
     margin-bottom: 30px;
   }
   .three-col-wrapper .col-container {
-    width: 100%
+    width: 100%;
+    padding: 15px 20px 0;
   }
   .three-col-wrapper .col-container .content {
     flex-direction: row;
@@ -387,9 +388,6 @@ pre[class*=language-].line-numbers.line-numbers code {
   .two-col-wrapper div {
     width: 100%;
     margin-right: 0;
-  }
-  .three-col-wrapper .col-container {
-    padding: 10px 20px;
   }
   .three-col-wrapper .col-container .content {
     flex-direction: column;
