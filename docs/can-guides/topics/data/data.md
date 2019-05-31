@@ -13,4 +13,5 @@ The **Data guide** and its sub-sections are a work in progress and are currently
 
 The following sections are currently available:
 
-- [Making requests](./data-making-requests) 
+- [guides/data-making-requests Making Requests] 
+- [guides/data-customizing-connections Customizing Connections]
