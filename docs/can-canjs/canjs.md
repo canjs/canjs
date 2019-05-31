@@ -8,14 +8,14 @@
 @body
 
 <style>
-.on-this-page-table {
+.on-this-page-table {  // fixes the flicker issue on page load
   display: none;
 }
 abbr[title] {
   text-decoration: underline #c4c4c3;
 }
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 400;
+  font-weight: 300;
   color: #1A1E1F;
   border-bottom: none;
   margin: 0;
@@ -275,6 +275,25 @@ p + ul {
 pre[class*=language-].line-numbers.line-numbers code {
   padding: 15px;
 }
+.social-links {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: flex;
+  list-style: none;
+  margin: 15px 0;
+  padding: 0;
+  flex-basis: 100%;
+  align-self: flex-start;
+}
+.social-links li {
+  margin-right: 15px;
+}
+@@media (min-width: 1699px) {
+  .three-col-wrapper .col-container .content {
+    flex-direction: column;
+  }
+}
 @@media (max-width: 1699px) {
   .three-col-wrapper .col-container .content {
     flex-direction: column;
@@ -355,9 +374,6 @@ pre[class*=language-].line-numbers.line-numbers code {
   .social .social-two-col {
     flex-wrap: wrap;
   }
-  .social-two-col p {
-    padding-bottom: 15px;
-  }
   .social .social-two-col .left-col {
     flex-wrap: wrap;
     width: 100%;
@@ -368,7 +384,7 @@ pre[class*=language-].line-numbers.line-numbers code {
     align-items: baseline;
     flex-direction: row;
     width: 100%;
-    margin-top: 30px;
+    margin-top: 10px;
   }
   .social-two-col .right-col a {
     margin-right: 30px;
@@ -504,6 +520,14 @@ pre[class*=language-].line-numbers.line-numbers code {
     <div class="left-col">
       <h2>We have your back</h2>
       <p>CanJS is backed by <a href="https://www.bitovi.com/">Bitovi</a>, a company built on using and publishing open source software. We answer every question on <a href="https://bitovi.com/community/slack">our Slack</a> and <a href="https://forums.bitovi.com/">our Discourse forums</a>. We want to help you get started with CanJS!</p>
+      <ul class="social-links">
+        <li>
+          <a class="github-button nav-social" href="https://github.com/canjs/canjs" data-count-href="/canjs/canjs/stargazers" data-show-count="true">Star</a>
+        </li>
+        <li>
+          <a href="https://twitter.com/canjs" class="twitter-follow-button nav-social" data-show-count="true" data-show-screen-name="false">Follow @canjs</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </li>
+      </ul>
     </div>
     <div class="right-col">
       <a href="https://bitovi.com/community/slack">
