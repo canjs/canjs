@@ -10,7 +10,7 @@
 	var name = document.querySelector("#hw-name");
 
 	if(QUnit) {
-		QUnit.ok(!!name, "It rendered");
+		QUnit.assert.ok(!!name, "It rendered");
 		removeMyself();
 	} else {
 		console.log("Got element", name);

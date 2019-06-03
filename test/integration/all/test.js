@@ -1,11 +1,11 @@
 var QUnit = require("steal-qunit");
 
-var makeIframe = function(src){
+var makeIframe = function(src, done){
 	var iframe = document.createElement('iframe');
 	window.removeMyself = function(){
 		delete window.removeMyself;
 		document.body.removeChild(iframe);
-		QUnit.start();
+		done();
 	};
 	document.body.appendChild(iframe);
 	iframe.src = src;
@@ -19,15 +19,17 @@ function supportsStaticImport() {
 QUnit.module('can.all.js');
 
 if (__dirname !== '/') {
-	QUnit.asyncTest("works without globals (jquery, kefir, etc)", function(){
-		makeIframe(__dirname + "/no-globals.html?" + Math.random());
+	QUnit.test("works without globals (jquery, kefir, etc)", function(assert){
+		var done = assert.async();
+		makeIframe(__dirname + "/no-globals.html?" + Math.random(), done);
 	});
 }
 
 QUnit.module('can.mjs');
 
 if(supportsStaticImport() && __dirname !== '/') {
-	QUnit.asyncTest("works in the browser", function(){
-		makeIframe(__dirname + "/es-smoke.html?" + Math.random());
+	QUnit.test("works in the browser", function(assert){
+		var done = assert.async();
+		makeIframe(__dirname + "/es-smoke.html?" + Math.random(), done);
 	})
 }

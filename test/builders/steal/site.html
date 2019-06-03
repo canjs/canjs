@@ -16,7 +16,7 @@
 		var myApp = document.querySelector('my-app');
 
 		if(QUnit) {
-			QUnit.equal(myApp.textContent.trim(), "Hello world");
+			QUnit.assert.equal(myApp.textContent.trim(), "Hello world");
 			removeMyself();
 		}
 	};
