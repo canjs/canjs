@@ -67,7 +67,7 @@ describe("NameForm ViewModel", () => {
 		// 3. Set ViewModel properties (or call ViewModel functions)
 		vm.last = "McCallister";
 		// 4. Test values of the ViewModel’s properties
-		assert.equal(vm.name, "Kevin McCallister", "setting `first` updates `name` correctly");
+		assert.equal(vm.name, "Kevin McCallister", "setting `last` updates `name` correctly");
 
 		// 3. Set ViewModel properties (or call ViewModel functions)
 		vm.setName("Marv Merchants");
