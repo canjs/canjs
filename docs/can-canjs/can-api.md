@@ -28,7 +28,7 @@ This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the
     position: relative;
     text-align: left;
     background: none;
-    color: #4078c0;
+    color: #3e7abe;
     padding: 0px;
     cursor: pointer;
 	margin-bottom: 15px;
