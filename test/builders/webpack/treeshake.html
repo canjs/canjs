@@ -9,9 +9,9 @@
 	var removeMyself = window.parent.removeMyself;
 
 	if(QUnit) {
-		QUnit.ok(!can.connect, "can-connect not used");
-		QUnit.ok(!can.realtimeRestModel, "can-realtime-rest-model not used");
-		QUnit.ok(!can.defineStreamKefir, "can-define-stream-kefir not used");
+		QUnit.assert.ok(!can.connect, "can-connect not used");
+		QUnit.assert.ok(!can.realtimeRestModel, "can-realtime-rest-model not used");
+		QUnit.assert.ok(!can.defineStreamKefir, "can-define-stream-kefir not used");
 		removeMyself();
 	} else {
 		console.log("loaded");

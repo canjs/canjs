@@ -21,12 +21,12 @@
 		el.src = "../../../dist/global/core.js";
 
 		window.onerror = function(msg) {
-			QUnit.ok(false, msg);
+			QUnit.assert.ok(false, msg);
 			removeMyself();
 		};
 
 		el.onload = function() {
-			QUnit.ok(true);
+			QUnit.assert.ok(true);
 			removeMyself();
 		};
 
