@@ -88,6 +88,9 @@ p + ul {
   max-width: 1280px;
   margin: 0 auto;
 }
+.hero-secton h2 {
+  margin-bottom: 0;
+}
 .hero-section .left-col {
   padding: 30px 0 0 60px;
 }
@@ -95,11 +98,11 @@ p + ul {
   flex: 1;
 }
 .hero-section .right-col img {
-  margin-top: 30px;
+  margin-top: 40px;
   max-height: 370px;
 }
 .hero-section .btn {
-  margin: 30px 0 45px;
+  margin: 30px 0;
 }
 .hero-logo {
   fill: #3e7abe;
@@ -119,10 +122,7 @@ p + ul {
   margin: 30px 15px 40px;
 }
 .three-col-wrapper .col-container {
-  display: flex;
-  flex-direction: column;
   padding: 15px 15px 0;
-  border-radius: 10px;
 }
 .three-col-wrapper .col-container:last-of-type {
   margin-right: 0;
@@ -138,7 +138,7 @@ p + ul {
 }
 .three-col-wrapper .col-container .content object {
   margin: auto 15px;
-  max-height: 240px;
+  max-height: 270px;
   min-width: 240px;
 }
 .three-col-wrapper a.col-container {
@@ -216,7 +216,8 @@ p + ul {
   flex: 2;
 }
 .code-toolbar {
-  width: 100%;
+  text-align: center;
+  margin: auto;
 }
 .clients {
   display: flex;
@@ -308,7 +309,7 @@ pre[class*=language-].line-numbers.line-numbers code {
     background-position: 110%;
   }
   .hero-section .left-col {
-    width: 40%;
+    width: 50%;
     padding-top: 60px;
   }
   .single-col-wrapper .code-overview, .two-col-wrapper {
@@ -380,7 +381,6 @@ pre[class*=language-].line-numbers.line-numbers code {
     margin-right: 0;
   }
   .social .social-two-col .right-col {
-    justify-content: space-between;
     align-items: baseline;
     flex-direction: row;
     width: 100%;
@@ -437,6 +437,9 @@ pre[class*=language-].line-numbers.line-numbers code {
   }
 }
 @@media (max-width: 529px) {
+  .hero-logo {
+    width: 260px;
+  }
   .three-col-wrapper .col-container .content {
     flex-direction: column;
   }
@@ -458,7 +461,7 @@ pre[class*=language-].line-numbers.line-numbers code {
       <a href="./doc/guides/crud-beginner.html" class="btn">Learn how to build this CRUD app</a>
     </div>
     <div class="right-col">
-      <img src="docs/images/hero-image.svg" />
+      <img src="docs/images/hero-image.svg" width="642" />
     </div>
   </div>
 </div>
@@ -525,7 +528,7 @@ pre[class*=language-].line-numbers.line-numbers code {
           <a class="github-button nav-social" href="https://github.com/canjs/canjs" data-count-href="/canjs/canjs/stargazers" data-show-count="true">Star</a>
         </li>
         <li>
-          <a href="https://twitter.com/canjs" class="twitter-follow-button nav-social" data-show-count="true" data-show-screen-name="false">Follow @canjs</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+          <a href="https://twitter.com/canjs" class="twitter-follow-button nav-social" data-show-count="true" data-show-screen-name="false">@canjs</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
         </li>
       </ul>
     </div>
@@ -535,12 +538,6 @@ pre[class*=language-].line-numbers.line-numbers code {
       </a>
       <a href="https://forums.bitovi.com/">
         <img alt="Discourse" src="../docs/images/logos/discourse.svg" />
-      </a>
-      <a href="https://github.com/bitovi">
-        <img alt="Github" src="../docs/images/logos/github.svg" class="github" />
-      </a>
-      <a href="https://twitter.com/bitovi">
-        <img alt="Twitter" src="../docs/images/logos/twitter.svg" />
       </a>
     </div>
   </div>
@@ -676,7 +673,7 @@ Below is an entire app that shows off some of the best features of CanJS:
 - `isPending`, `isRejected`, `isResolved`, and `value` helpers for directly reading the state of a Promise.
 - When you add a to-do, it automatically gets inserted into the list in the right position.
 
-<p class="codepen" data-height="530" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 530px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
+<p class="codepen" data-height="580" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 530px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
   <span>See the Pen <a href="https://codepen.io/bitovi/pen/omqyMw/">
   CanJS 5 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
