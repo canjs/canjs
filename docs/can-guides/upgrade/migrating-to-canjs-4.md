@@ -28,7 +28,7 @@ application. Read more details about it [CanJS 4.0's release article](https://ww
 
 ## CanJS 4 Upgrade Video
 
-The following video walks through much of this mirgation guide &mdash; including how to perform the upgrade, the changes you might need to make during the process, and all of the new features in CanJS 4 that you can take advantage of once your app is upgraded. The [slides](https://docs.google.com/presentation/d/1O0kF0Shr8Ema99yWi8fVpGttCUW7rjIHJLBM-u0M39s/edit#slide=id.p) for this presentation are also available.
+The following video walks through much of this migration guide &mdash; including how to perform the upgrade, the changes you might need to make during the process, and all of the new features in CanJS 4 that you can take advantage of once your app is upgraded. The [slides](https://docs.google.com/presentation/d/1O0kF0Shr8Ema99yWi8fVpGttCUW7rjIHJLBM-u0M39s/edit#slide=id.p) for this presentation are also available.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/w_LqYMSVYW8" frameborder="0" allowfullscreen></iframe>
 
