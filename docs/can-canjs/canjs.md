@@ -1,9 +1,9 @@
-@page canjs CanJS
+@page canjs CanJS — Build CRUD apps in fewer lines of code.
 @dest ../index
 @outline 0
 @package ../../package.json
 @templateRender <% %>
-@description Build CRUD apps in fewer lines of code.
+@description Learn how you can build CRUD apps in fewer lines of code.
 
 @body
 
