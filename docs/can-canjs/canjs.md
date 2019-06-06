@@ -469,7 +469,7 @@ pre[class*=language-].line-numbers.line-numbers code {
       <a href="./doc/guides/crud-beginner.html" class="btn">Learn how to build this CRUD app</a>
     </div>
     <div class="right-col">
-      <img src="docs/images/hero-image.svg" width="642" />
+      <img src="docs/images/hero-image.svg" width="642" height="370" />
     </div>
   </div>
 </div>
