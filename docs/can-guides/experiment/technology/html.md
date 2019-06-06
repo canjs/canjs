@@ -1,5 +1,5 @@
 @page guides/html HTML
-@parent guides/essentials 2
+@parent guides/essentials 3
 @outline 2
 
 @description Learn how to update HTML and listen to user interactions.
