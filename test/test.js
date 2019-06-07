@@ -49,7 +49,7 @@ require('can-view-parser/test/can-view-parser-test');
 require('can-view-scope/test/scope-test');
 require('can-view-target/test/test');
 require('can-stache-converters/test/test');
-// End Infrastructure tests
+
 
 // Legacy tests
 require('can-compute/can-compute_test');
