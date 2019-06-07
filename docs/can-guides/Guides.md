@@ -222,7 +222,7 @@ We encourage everyone to take a look at:
  <p><%this.[guides/recipes/file-navigator-advanced].description%></p>
  <img src="../docs/can-guides/commitment/recipes/file-navigator/file-navigator.png" width='100px'/>
 </td>
-<td class='right down-right in-progress'>[guides/data-extreme]
+<td class='right down-right in-progress'>[guides/data]
  <p>In progress. Help us by adding comments to <a href="https://github.com/canjs/canjs/issues/4014">the proposal</a>.</p>
 </td>
 <td class='right down-right'>[guides/todomvc]

@@ -1,89 +1,94 @@
 import { connect, key } from "//unpkg.com/can@5/core.mjs";
 
+`function _getRequestURLAndMethod(connUrl, requestName, params) {
+	let url = null;
+	let method = null;
+
+	if (connUrl[requestName]) {
+		[method, url] = connUrl[requestName].split(/ (.+)/);
+	} else {
+		switch(requestName) {
+			case 'getListData':
+				url = connUrl;
+				method = 'GET';
+				break;
+			case 'createData':
+				url = connUrl;
+				method = 'POST';
+				break;
+			case 'getData':
+				url = connUrl+"/{id}";
+				method = 'GET';
+				break;
+			case 'updateData':
+				url = connUrl+"/{id}";
+				method = 'PUT';
+				break;
+			case 'destroyData':
+				url = connUrl+"/{id}";
+				method = 'DELETE';
+				break;
+		}
+	}
+
+	url = key.replaceWith(url, params, (key, value) => encodeURIComponent(value), true);
+
+	return { url, method };
+}
+
+function _makeFetchRequest({ url, method }, params) {
+	return fetch(url, {
+		method,
+		credentials: 'same-origin',
+		body: method !== 'GET' ? JSON.stringify(params) : undefined,
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	}).then(
+		response => {
+			if (response.ok) {
+				return response.json();
+			} else {
+				throw new Error(`Server did not produce a successful response code: ${response.status}`);
+			}
+		},
+		error => {
+			console.log('There has been a network error during fetch execution: ', error.message);
+		}
+	);
+}
+
 const fetchData = connect.behavior(
 	'fetch-data',
 	() => {
 		return {
-			_getRequestURLAndMethod(requestName, params) {
-				let url = null;
-				let method = null;
-				
-				if (this.url[requestName]) {
-					[method, url] = this.url[requestName].split(/ (.+)/);
-				} else {
-					switch(requestName) {
-						case 'getListData':
-							url = this.url;
-							method = 'GET';
-							break;
-						case 'createData':
-							url = this.url;
-							method = 'POST';
-							break;
-						case 'getData':
-							url = this.url+"/{id}";
-							method = 'GET';
-							break;
-						case 'updateData':
-							url = this.url+"/{id}";
-							method = 'PUT';
-							break;
-						case 'destroyData':
-							url = this.url+"/{id}";
-							method = 'DELETE';
-							break;
-					}
-				}
-				
-				url = key.replaceWith(url, params, (key, value) => encodeURIComponent(value), true);
-				
-				return { url, method };
-			},
-			_makeFetchRequest({ url, method }, params) {
-				return fetch(url, {
-					method,
-					credentials: 'same-origin',
-					body: JSON.stringify(params),
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				}).then(response => {
-					if (response.ok) {
-						return response.json();
-					} else {
-						throw new Error('Server did not produce an expected response.');
-					}
-				}).catch(error => {
-					console.log('There has been a network error during fetch execution: ', error.message);
-				});
-			},
 			getListData(params) {
-				return this._makeFetchRequest(
-					this._getRequestURLAndMethod('getListData', params),
+				return _makeFetchRequest(
+					_getRequestURLAndMethod(this.url, 'getListData', params),
 					params
 				);
 			},
 			getData(params) {
-				return this._makeFetchRequest(
-					this._getRequestURLAndMethod('getData', params),
+				return _makeFetchRequest(
+					_getRequestURLAndMethod(this.url, 'getData', params),
 					params
 				);
 			},
 			createData(params) {
-				return this._makeFetchRequest(
-					this._getRequestURLAndMethod('createData', params),
+				return _makeFetchRequest(
+					_getRequestURLAndMethod(this.url, 'createData', params),
 					params
 				);
 			},
 			updateData(params) {
-				return this._makeFetchRequest(
-					this._getRequestURLAndMethod('updateData', params),
+				return _makeFetchRequest(
+					_getRequestURLAndMethod(this.url, 'updateData', params),
 					params
 				);
 			},
 			destroyData(params) {
-				return this._makeFetchRequest(
-					this._getRequestURLAndMethod('destroyData', params),
+				return _makeFetchRequest(
+					_getRequestURLAndMethod(this.url, 'destroyData', params),
 					params
 				);
 			},

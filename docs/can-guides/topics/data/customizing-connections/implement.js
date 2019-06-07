@@ -8,7 +8,7 @@ const fetchData = connect.behavior(
 			getListData() {
 				return fetch(this.url).then(response => response.json());
 			}
-			// ... an actual Data Interface implementation would also implement:
+			// ... a complete Data Interface implementation would also implement:
 			//     getData, createData, updateData, destroyData
 		};
 	}

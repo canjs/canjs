@@ -135,7 +135,7 @@ CanJS 5.0:
     There's [can-query-logic#Configuration detailed documentation] on how
     to configure a `new QueryLogic()` for any circumstances.
     @highlight 21-38,43,only
-- Includes guides on [guides/html], [guides/routing], [guides/data], [guides/testing], [guides/logic], and [guides/data-extreme].
+- Includes guides on [guides/html], [guides/routing], [guides/data], [guides/testing] and [guides/logic].
 - Includes hundreds of other bug fixes and new features, including:
   - New stache helpers for logic: [can-stache.helpers.and and()], [can-stache.helpers.or or()], and [can-stache.helpers.not not()].
   - [can-stache.helpers.let #let stache helper] for creating block-level variables.

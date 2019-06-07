@@ -1,5 +1,5 @@
-@page guides/data Service Layer
-@parent guides/essentials 4
+@page guides/data-introduction Introduction
+@parent guides/data 1
 @outline 2
 
 @description Learn how to get, create, update, and delete backend service layer data.
