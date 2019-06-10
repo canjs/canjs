@@ -143,11 +143,17 @@ p + ul {
   align-items: flex-start;
 }
 .three-col-wrapper .col-container .content-details {
-  min-height: 195px;
+  min-height: 225px;
 }
 .three-col-wrapper .col-container .content-image {
   text-align: center;
   margin: auto;
+}
+.three-col-wrapper .col-container .image-one {
+  margin-top: -10px;
+}
+.three-col-wrapper .col-container .image-three {
+  margin-top: -19px;
 }
 .three-col-wrapper .col-container .content object {
   margin: auto;
@@ -284,6 +290,9 @@ p + ul {
 }
 .line-numbers-rows {
   display: none;
+}
+pre[class*=language-] {
+  margin-top: 0;
 }
 pre[class*=language-].line-numbers.line-numbers code {
   padding: 15px;
@@ -489,7 +498,7 @@ pre[class*=language-].line-numbers.line-numbers code {
           <a href="#model-layer">Learn&nbsp;more…</a>
         </p>
       </div>
-      <div class="content-image">
+      <div class="content-image image-one">
         <object type="image/svg+xml" data="docs/images/animations/model-layer-still.svg"></object>
       </div>
     </div>
@@ -504,7 +513,7 @@ pre[class*=language-].line-numbers.line-numbers code {
           <a href="#promises-in-templates">Learn&nbsp;more…</a>
         </p>
       </div>
-      <div class="content-image">
+      <div class="content-image two">
 
 ```html
 {{# if(this.promise.isPending) }}
@@ -530,7 +539,7 @@ pre[class*=language-].line-numbers.line-numbers code {
           <a href="#real-time-list-updating">Learn&nbsp;more…</a>
         </p>
       </div>
-      <div class="content-image">
+      <div class="content-image image-three">
         <object type="image/svg+xml" data="docs/images/animations/realtime-amin.svg"></object>
       </div>
     </div>
