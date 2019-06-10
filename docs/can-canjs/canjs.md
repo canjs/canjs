@@ -13,6 +13,7 @@
 }
 #right {
   max-width: 1425px;
+  margin: auto;
 }
 abbr[title] {
   text-decoration: underline #c4c4c3;
