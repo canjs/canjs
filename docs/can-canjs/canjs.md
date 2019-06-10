@@ -11,6 +11,9 @@
 .on-this-page-table {
   display: none;
 }
+#right {
+  max-width: 1425px;
+}
 abbr[title] {
   text-decoration: underline #c4c4c3;
 }
@@ -124,6 +127,7 @@ p + ul {
 }
 .three-col-wrapper .col-container {
   padding: 15px 15px 0;
+  width: 33.33%;
 }
 .three-col-wrapper .col-container:last-of-type {
   margin-right: 0;
