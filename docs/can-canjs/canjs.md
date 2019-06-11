@@ -188,7 +188,7 @@ p + ul {
   align-items: center;
   flex-direction: row;
   margin: auto;
-  max-width: 1365px;
+  max-width: 1375px;
 }
 .social-two-col .left-col {
   display: flex;
