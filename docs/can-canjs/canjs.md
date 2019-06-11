@@ -112,7 +112,7 @@ p + ul {
 .single-col-wrapper {
   display: flex;
   flex-direction: column;
-  max-width: 1425px;
+  max-width: 1440px;
   margin: 40px auto;
   width: 100%;
 }
@@ -130,7 +130,7 @@ p + ul {
 }
 .three-col-wrapper {
   display: flex;
-  max-width: 1425px;
+  max-width: 1440px;
   text-align: center;
   margin: auto;
 }
@@ -216,7 +216,7 @@ p + ul {
 .code-overview {
   display: flex;
   flex-direction: column;
-  max-width: 1425px;
+  max-width: 1440px;
   margin: auto;
 }
 .code-overview h3 {
@@ -274,7 +274,7 @@ p + ul {
 }
 .two-col-wrapper {
   display: flex;
-  max-width: 1425px;
+  max-width: 1440px;
   margin: 50px auto
 }
 .two-col-wrapper div {
