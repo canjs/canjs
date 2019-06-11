@@ -154,10 +154,10 @@ p + ul {
   text-align: center;
   margin: auto;
 }
-.three-col-wrapper .col-container .image-one {
+.three-col-wrapper .col-container .modal-layer {
   margin-top: -10px;
 }
-.three-col-wrapper .col-container .image-three {
+.three-col-wrapper .col-container .real-time-list {
   margin-top: -19px;
 }
 .three-col-wrapper .col-container .content object {
@@ -202,10 +202,10 @@ p + ul {
   padding-bottom: 0;
 }
 .social-two-col .right-col a {
-  margin-right: 50px;
+  margin-right: 45px;
 }
 .social-two-col .right-col a:last-of-type {
-  margin-right: 0;
+  margin-right: 5px;
 }
 .social-two-col img {
   height: 40px;
@@ -241,9 +241,10 @@ p + ul {
   display: flex;
   flex: 2;
 }
-.code-toolbar {
+.code-proof .code-toolbar {
   text-align: center;
   margin: auto;
+  width: 560px;
 }
 .clients {
   display: flex;
@@ -363,8 +364,6 @@ pre[class*=language-].line-numbers.line-numbers code {
   .code-proof .right-col {
     width: 100%;
     flex: none;
-    overflow-x: scroll;
-    padding: 1px;
   }
 }
 @@media (max-width: 1099px) {
@@ -389,10 +388,10 @@ pre[class*=language-].line-numbers.line-numbers code {
   .three-col-wrapper .col-container .content .code-toolbar {
     margin: auto 0 auto 30px;
   }
-  .three-col-wrapper .col-container .image-one {
+  .three-col-wrapper .col-container .modal-layer {
     margin-top: 0;
   }
-  .three-col-wrapper .col-container .image-three {
+  .three-col-wrapper .col-container .real-time-list {
     margin-top: 0;
   }
 }
@@ -474,6 +473,9 @@ pre[class*=language-].line-numbers.line-numbers code {
     margin-right: 15px;
     margin-left: 15px;
   }
+  .code-proof .code-toolbar {
+    width: 100%;
+  }
 }
 @@media (max-width: 529px) {
   .hero-logo {
@@ -523,7 +525,7 @@ pre[class*=language-].line-numbers.line-numbers code {
           <a href="#model-layer">Learn&nbsp;more…</a>
         </p>
       </div>
-      <div class="content-image image-one">
+      <div class="content-image modal-layer">
         <object type="image/svg+xml" data="docs/images/animations/model-layer-still.svg"></object>
       </div>
     </div>
@@ -538,7 +540,7 @@ pre[class*=language-].line-numbers.line-numbers code {
           <a href="#promises-in-templates">Learn&nbsp;more…</a>
         </p>
       </div>
-      <div class="content-image two">
+      <div class="content-image">
 
 ```html
 {{# if(this.promise.isPending) }}
@@ -564,7 +566,7 @@ pre[class*=language-].line-numbers.line-numbers code {
           <a href="#real-time-list-updating">Learn&nbsp;more…</a>
         </p>
       </div>
-      <div class="content-image image-three">
+      <div class="content-image real-time-list">
         <object type="image/svg+xml" data="docs/images/animations/realtime-amin.svg"></object>
       </div>
     </div>
