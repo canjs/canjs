@@ -11,10 +11,6 @@
 .on-this-page-table {
   display: none;
 }
-#right {
-  max-width: 1425px;
-  margin: auto;
-}
 abbr[title] {
   text-decoration: underline #c4c4c3;
 }
@@ -116,23 +112,32 @@ p + ul {
 .single-col-wrapper {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  margin: 60px 30px;
+  max-width: 1425px;
+  margin: 40px auto;
+  width: 100%;
 }
-.single-col-wrapper .btn {
-  margin-top: 45px;
+.single-col-wrapper .content-wrapper {
+  margin-left: 30px;
+  margin-right: 30px;
+}
+.single-col-wrapper .cp_embed_wrapper {
+  margin: 30px 0 0 0;
+}
+.single-col-wrapper .btn-wrapper {
+  margin: 45px auto 30px auto;
+  text-align: center;
+  width: 100%;
 }
 .three-col-wrapper {
   display: flex;
-  margin: 30px 15px 40px;
+  max-width: 1425px;
+  text-align: center;
+  margin: auto;
 }
 .three-col-wrapper .col-container {
-  padding: 15px 15px 0;
+  margin: 40px 30px;
+  text-align: left;
   width: 33.33%;
-}
-.three-col-wrapper .col-container:last-of-type {
-  margin-right: 0;
-  margin-bottom: 0;
 }
 .three-col-wrapper .col-container h3 {
   transition: all .3s ease-in-out;
@@ -182,6 +187,8 @@ p + ul {
   display: flex;
   align-items: center;
   flex-direction: row;
+  margin: auto;
+  max-width: 1375px;
 }
 .social-two-col .left-col {
   display: flex;
@@ -209,7 +216,8 @@ p + ul {
 .code-overview {
   display: flex;
   flex-direction: column;
-  margin: 30px 30px 60px;
+  max-width: 1425px;
+  margin: auto;
 }
 .code-overview h3 {
   font-weight: 500;
@@ -217,10 +225,10 @@ p + ul {
 .code-proof {
   display: flex;
   flex-wrap: wrap;
-  margin: 30px 0;
+  margin: 40px 30px 20px;
 }
 .code-proof:last-of-type {
-  margin-bottom: 0;
+  margin-bottom: 40px;
 }
 .code-proof .left-col {
   display: flex;
@@ -245,6 +253,9 @@ p + ul {
 .clients-single-col {
   display: flex;
   flex-direction: column;
+  max-width: 1455px;
+  margin: auto;
+  text-align: center;
   width: 100%;
 }
 .clients h2 {
@@ -262,17 +273,16 @@ p + ul {
 }
 .two-col-wrapper {
   display: flex;
-  margin: 40px 30px;
+  max-width: 1425px;
+  margin: 50px auto
 }
 .two-col-wrapper div {
   width: 50%;
-  margin-right: 60px;
+  margin-left: 30px;
+  margin-right: 30px;
 }
 .two-col-wrapper img {
   max-width: 100%;
-}
-.two-col-wrapper div:last-of-type {
-  margin-right: 0;
 }
 .footer .btn {
   margin: 45px auto;
@@ -333,14 +343,6 @@ pre[class*=language-].line-numbers.line-numbers code {
     width: 50%;
     padding-top: 60px;
   }
-  .single-col-wrapper .code-overview, .two-col-wrapper {
-    margin-right: 30px;
-    margin-left: 30px;
-  }
-  .three-col-wrapper {
-    margin-right: 10px;
-    margin-left: 10px;
-  }
   .social-two-col .right-col {
     flex-direction: column;
   }
@@ -361,17 +363,24 @@ pre[class*=language-].line-numbers.line-numbers code {
   .code-proof .right-col {
     width: 100%;
     flex: none;
+    overflow-x: scroll;
+    padding: 1px;
   }
 }
 @@media (max-width: 1099px) {
   .three-col-wrapper {
     flex-wrap: wrap;
-    margin-top: 30px;
-    margin-bottom: 30px;
   }
   .three-col-wrapper .col-container {
     width: 100%;
-    padding: 15px 20px 0;
+    margin: 10px 30px;
+  }
+  .three-col-wrapper .col-container:first-of-type {
+    margin-top: 40px;
+  }
+  .three-col-wrapper .col-container:last-of-type {
+    margin-right: 10px;
+    margin-bottom: 20px;
   }
   .three-col-wrapper .col-container .content {
     flex-direction: row;
@@ -379,6 +388,12 @@ pre[class*=language-].line-numbers.line-numbers code {
   .three-col-wrapper .col-container .content object,
   .three-col-wrapper .col-container .content .code-toolbar {
     margin: auto 0 auto 30px;
+  }
+  .three-col-wrapper .col-container .image-one {
+    margin-top: 0;
+  }
+  .three-col-wrapper .col-container .image-three {
+    margin-top: 0;
   }
 }
 @@media (max-width: 999px) {
@@ -428,10 +443,12 @@ pre[class*=language-].line-numbers.line-numbers code {
   }
   .two-col-wrapper div {
     width: 100%;
-    margin-right: 0;
   }
   .three-col-wrapper .col-container .content {
     flex-direction: column;
+  }
+  .three-col-wrapper .col-container .content-details {
+    min-height: 0;
   }
 }
 @@media (max-width: 759px) {
@@ -462,12 +479,20 @@ pre[class*=language-].line-numbers.line-numbers code {
   .hero-logo {
     width: 260px;
   }
+  .three-col-wrapper .col-container:last-of-type {
+    margin-right: 30px;
+    margin-bottom: 20px;
+  }
   .three-col-wrapper .col-container .content {
     flex-direction: column;
   }
   .three-col-wrapper .col-container .content object,
   .three-col-wrapper .col-container .content .code-toolbar {
     margin-bottom: 15px;
+    margin-left: 0;
+  }
+  .three-col-wrapper .col-container .content .code-toolbar {
+    margin-top: 10px;
   }
   .social .social-two-col .right-col {
     flex-direction: column;
@@ -643,9 +668,9 @@ We promise you’ll love writing your templates this way.
 
 </div>
 </div>
-  <div class="code-proof">
-    <div class="left-col">
-      <h3 id="real-time-list-updating">Real-time list updating</h3>
+<div class="code-proof">
+  <div class="left-col">
+    <h3 id="real-time-list-updating">Real-time list updating</h3>
 
 Here you can see CanJS’s model layer in action. When `Todo.getList({sort: "name"})` is called,
 CanJS makes a GET request to `/api/todos?sort=name`
@@ -685,13 +710,16 @@ Todo.getList({sort: "name"}).then(todos => {
 </div>
 </div>
 </div>
+
 <div class="gray-callout footer">
   <div class="footer-single-col">
     <a href="./doc/guides/crud-beginner.html" class="btn">Take the CRUD Tutorial</a>
   </div>
 </div>
-<div class="single-col-wrapper">
 
+<div class="single-col-wrapper">
+<div class="content-wrapper">
+  
 ## Get started with just a few lines of code
 
 Below is an entire app that shows off some of the best features of CanJS:
@@ -707,7 +735,10 @@ Below is an entire app that shows off some of the best features of CanJS:
 </p>
   <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
   <span class="caption">Type in a new to-do and click “Add” to see it appear in the list. Notice that new to-dos are inserted in alphabetical order, without any code that explicitly inserts the new one in the right place!</span>
-  <a href="./doc/guides/crud-beginner.html" class="btn">Learn how to build this CRUD app</a>
+  <div class="btn-wrapper">
+    <a href="./doc/guides/crud-beginner.html" class="btn">Learn how to build this CRUD app</a>
+  </div>
+</div>
 </div>
 <a class="gray-callout clients" href="./doc/about.html">
   <div class="clients-single-col">
