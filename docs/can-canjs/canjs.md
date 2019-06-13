@@ -695,7 +695,7 @@ Below is an entire app that shows off some of the best features of CanJS:
   <span class="caption">Type in a new to-do and click “Add” to see it appear in the list. Notice that new to-dos are inserted in alphabetical order, without any code that explicitly inserts the new one in the right place!</span>
   <a href="./doc/guides/crud-beginner.html" class="btn">Learn how to build this CRUD app</a>
 </div>
-<a class="gray-callout clients" href="./doc/about.html">
+<a class="gray-callout clients" href="./doc/guides/who-uses-canjs.html">
   <div class="clients-single-col">
     <h2>Who Uses CanJS?</h2>
     <div class="client-logos">
