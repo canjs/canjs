@@ -1,7 +1,7 @@
 <make-model-year id="out"></make-model-year>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main='@empty'>
-import { CanMap, Component, DefineMap, DefineList, QueryLogic, fixture, restModel, route, stache, stacheConverters } from "can";
+import { CanMap, Component, DefineMap, DefineList, QueryLogic, fixture, restModel, route } from "can";
 import "can-map-define";
 fixture.delay = 1200;
 
@@ -120,7 +120,7 @@ const CarModel = DefineMap.extend({
 }, {
 	id: { type: "string", identity: true }
 });
-	
+
 CarModel.queryLogic = new QueryLogic(CarModel);
 
 const Vehicle = DefineMap.extend({
@@ -236,7 +236,7 @@ const MMYViewModel = CanMap.extend({
 			get() {
 				let year = this.attr("year"),
 					modelId = this.attr("modelId");
-					
+
 				if (modelId !== undefined && year) {
 					return new Vehicle.getList({ filter: { modelId: modelId, year: year } });
 				}
@@ -251,7 +251,7 @@ Component.extend({
 	{{# if(this.makes.isResolved) }}
 		<select value:bind="string-to-any(~makeId)">
 			{{^makeId}}
-				<option value='undefined'>Select a Make</option>
+				<option value="undefined">Select a Make</option>
 			{{/makeId}}
 			{{# for (carMake of makes.value)}}
 				<option value="{{carMake.id}}">{{carMake.name}}</option>
@@ -267,9 +267,9 @@ Component.extend({
 		{{# if(models) }}
 			<select value:bind="string-to-any(~modelId)">
 				{{^ modelId }}
-					<option value='undefined'>Select a Model</option>
+					<option value="undefined">Select a Model</option>
 				{{/ modelId }}
-				
+
 				{{# for (carModel of models)}}
 					<option value="{{carModel.id}}">{{carModel.name}}</option>
 				{{/for}}
@@ -288,7 +288,7 @@ Component.extend({
 	{{# if(years) }}
 		<select value:bind="string-to-any(~year)">
 			{{^ year}}
-				<option value='undefined'>Select a Year</option>
+				<option value="undefined">Select a Year</option>
 			{{/year}}
 			{{# for (year of years)}}
 				<option value="{{year}}">{{year}}</option>
