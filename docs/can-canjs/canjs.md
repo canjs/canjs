@@ -120,9 +120,6 @@ p + ul {
   margin-left: 30px;
   margin-right: 30px;
 }
-.single-col-wrapper .cp_embed_wrapper {
-  margin: 30px 0 0 0;
-}
 .single-col-wrapper .btn-wrapper {
   margin: 45px auto 30px auto;
   text-align: center;
