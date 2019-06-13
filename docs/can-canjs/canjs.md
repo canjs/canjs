@@ -3,7 +3,7 @@
 @outline 0
 @package ../../package.json
 @templateRender <% %>
-@description Learn how you can build CRUD apps in fewer lines of code.
+@description CanJS is a JavaScript framework for building CRUD apps in fewer lines of code.
 
 @body
 
