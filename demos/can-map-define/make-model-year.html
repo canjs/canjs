@@ -1,0 +1,316 @@
+<make-model-year id="out"></make-model-year>
+
+<script src="../../node_modules/steal/steal.js" dev-bundle main='@empty'>
+import { CanMap, Component, DefineMap, DefineList, QueryLogic, fixture, restModel, route } from "can";
+import "can-map-define";
+fixture.delay = 1200;
+
+const eqeq = (a, b)  => {
+	if (a && b) {
+		return a == b;
+	}
+};
+
+fixture({
+	"/makes": fixture.store([{
+		id: 1,
+		name: "Ford"
+	},
+	{
+		id: 2,
+		name: "Nissan"
+	}]).getListData,
+	"/models": fixture.store([{
+		id: 1,
+		makeId: 1,
+		name: "Mustang",
+		years: [2013, 2014]
+	},
+	{
+		id: 2,
+		makeId: 1,
+		name: "Focus",
+		years: [2013, 2014]
+	},
+	{
+		id: 3,
+		makeId: 2,
+		name: "Altima",
+		years: [2013, 2014]
+	},
+	{
+		id: 4,
+		makeId: 2,
+		name: "Leaf",
+		years: [2013, 2014]
+	}], {
+		makeId: eqeq
+	}).getListData,
+	"/vehicles": fixture.store([{
+		id: 1,
+		modelId: 1,
+		year: 2013,
+		name: "2013 Mustang",
+		thumb: "http://mustangsdaily.com/blog/wp-content/uploads/2012/07/01-2013-ford-mustang-gt-review-585x388.jpg"
+	},
+	{
+		id: 2,
+		modelId: 1,
+		year: 2014,
+		name: "2014 Mustang",
+		thumb: "http://mustangsdaily.com/blog/wp-content/uploads/2013/03/2014-roush-mustang.jpg"
+	},
+	{
+		id: 3,
+		modelId: 2,
+		year: 2013,
+		name: "2013 Focus",
+		thumb: "http://images.newcars.com/images/car-pictures/original/2013-Ford-Focus-Sedan-S-4dr-Sedan-Exterior.png"
+	},
+	{
+		id: 4,
+		modelId: 2,
+		year: 2014,
+		name: "2014 Focus",
+		thumb: "http://ipinvite.iperceptions.com/Invitations/survey705/images_V2/top4.jpg"
+	},
+	{
+		id: 5,
+		modelId: 3,
+		year: 2013,
+		name: "2013 Altima",
+		thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/04-2013-nissan-altima-1333416664.jpg"
+	},
+	{
+		id: 6,
+		modelId: 3,
+		year: 2014,
+		name: "2014 Altima",
+		thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/01-2013-nissan-altima-ny.jpg"
+	},
+	{
+		id: 7,
+		modelId: 4,
+		year: 2013,
+		name: "2013 Leaf",
+		thumb: "http://www.blogcdn.com/www.autoblog.com/media/2012/04/01-2013-nissan-altima-ny.jpg"
+	},
+	{
+		id: 8,
+		modelId: 4,
+		year: 2014,
+		name: "2014 Leaf",
+		thumb: "http://images.thecarconnection.com/med/2013-nissan-leaf_100414473_m.jpg"
+	}], {
+			year: eqeq,
+			modelId: eqeq
+		}).getListData
+	});
+
+const CarMake = DefineMap.extend({
+	seal: false
+}, {
+	id: { type: "string", identity: true }
+});
+
+CarMake.queryLogic = new QueryLogic(CarMake);
+
+const CarModel = DefineMap.extend({
+	seal: false
+}, {
+	id: { type: "string", identity: true }
+});
+
+CarModel.queryLogic = new QueryLogic(CarModel);
+
+const Vehicle = DefineMap.extend({
+	seal: false
+}, {
+	id: { type: "string", identity: true }
+});
+Vehicle.queryLogic = new QueryLogic(Vehicle);
+
+CarMake.List = DefineList.extend({
+	"#": CarMake
+});
+
+CarModel.List = DefineList.extend({
+	"#": CarModel
+});
+
+Vehicle.List = DefineList.extend({
+	"#": Vehicle
+});
+
+CarMake.connection = restModel({
+	Map: CarMake,
+	List: CarMake.List,
+	url: "/makes/{id}"
+});
+
+CarModel.connection = restModel({
+	Map: CarModel,
+	List: CarModel.List,
+	url: "/models/{id}"
+});
+
+Vehicle.connection = restModel({
+	Map: Vehicle,
+	List: Vehicle.List,
+	url: "/vehicles/{id}"
+});
+
+const MMYViewModel = CanMap.extend({
+	define: {
+		makes: {
+			get() {
+				return CarMake.getList({});
+			},
+			serialize: false
+		},
+		makeId: {
+			type: "number",
+			remove() {
+				this.removeAttr("modelId");
+			},
+			set(newValue) {
+				if (newValue !== this.makeId) {
+					this.removeAttr("modelId");
+				}
+				return newValue;
+			}
+		},
+		modelsPromise: {
+			get() {
+				let makeId = this.attr("makeId");
+				if (makeId) {
+					return CarModel.getList({ filter: { makeId: makeId } });
+				}
+			}
+		},
+		models: {
+			get: function(lastSet, resolve) {
+				let promise = this.attr("modelsPromise");
+				if (promise) {
+					promise.then(function(models) {
+						resolve(models);
+					});
+					return null;
+				}
+			}
+		},
+		model: {
+			get() {
+				let models = this.attr("models"),
+				modelId = this.attr("modelId");
+				if (models && models.length && modelId) {
+					var matched = models.filter(function(model) {
+						return modelId == model.id;
+					});
+					return matched[0];
+				}
+			}
+		},
+		modelId: {
+			type: "number",
+			remove() {
+				this.removeAttr("year");
+			},
+			set(newValue) {
+				if (newValue !== this.modelId) {
+					this.removeAttr("year");
+				}
+				return newValue;
+			}
+		},
+		years: {
+			get() {
+				let model = this.attr("model");
+				return model && model.years;
+			}
+		},
+		year: {
+			type: "number"
+		},
+		vehicles: {
+			get() {
+				let year = this.attr("year"),
+					modelId = this.attr("modelId");
+
+				if (modelId !== undefined && year) {
+					return new Vehicle.getList({ filter: { modelId: modelId, year: year } });
+				}
+			}
+		}
+	}
+});
+
+Component.extend({
+	tag: "make-model-year",
+	view: `
+	{{# if(this.makes.isResolved) }}
+		<select value:bind="string-to-any(~makeId)">
+			{{^makeId}}
+				<option value="undefined">Select a Make</option>
+			{{/makeId}}
+			{{# for (carMake of makes.value)}}
+				<option value="{{carMake.id}}">{{carMake.name}}</option>
+			{{/ for }}
+		</select>
+	{{else}}
+		<select disabled>
+			<option>Loading...</option>
+		</select>
+	{{/ if }}
+
+	{{# if(this.modelsPromise) }}
+		{{# if(models) }}
+			<select value:bind="string-to-any(~modelId)">
+				{{^ modelId }}
+					<option value="undefined">Select a Model</option>
+				{{/ modelId }}
+
+				{{# for (carModel of models)}}
+					<option value="{{carModel.id}}">{{carModel.name}}</option>
+				{{/for}}
+			</select>
+		{{ else }}
+			<select disabled>
+				<option>Loading Models</option>
+			</select>
+		{{/ if }}
+	{{ else }}
+		<select disabled>
+			<option>Models</option>
+		</select>
+	{{/if}}
+
+	{{# if(years) }}
+		<select value:bind="string-to-any(~year)">
+			{{^ year}}
+				<option value="undefined">Select a Year</option>
+			{{/year}}
+			{{# for (year of years)}}
+				<option value="{{year}}">{{year}}</option>
+			{{/ for }}
+		</select>
+	{{ else }}
+		<select disabled>
+			<option>Years</option>
+		</select>
+	{{/ if }}
+
+	<div>
+		{{# for (vehicle of this.vehicles.value) }}
+			<h2>{{vehicle.name}}</h2>
+			<img src="{{vehicle.thumb}}" width="200px" />
+		{{/ for }}
+	</div>
+	`,
+	ViewModel: MMYViewModel
+});
+
+route.data = out.viewModel;
+route.start();
+
+</script>
