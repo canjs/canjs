@@ -10,4 +10,5 @@ The following sections are currently available:
 
 - [guides/data-introduction Introduction]
 - [guides/data-configuring-requests Configuring Requests] 
+- [guides/data-managing-sessions Managing Sessions] 
 - [guides/data-customizing-connections Customizing Connections]
