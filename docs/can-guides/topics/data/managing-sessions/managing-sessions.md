@@ -6,8 +6,6 @@
 
 @body
 
-// TODO: update google doc link
-
 ## Note to reader
 The data guide and its sub-sections are a work in progress and are currently under review. The information provided is accurate; however, it will likely undergo revisions before being formally published. Feel free to go through this section to learn about how session management works, and please leave any comments in [this Google Doc](https://docs.google.com/document/d/17RKW9lM8iVJsT1mgoyxhFVU-cCY4B1kqQqvl5T6JKD4/edit?usp=sharing).
 
