@@ -1,5 +1,5 @@
 @page guides/data-customizing-connections Customizing Connections
-@parent guides/data 3
+@parent guides/data 4
 @outline 3
 
 @description Learn the layers that make up [can-connect] and how to implement custom connection functionality.
