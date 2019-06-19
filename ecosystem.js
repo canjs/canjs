@@ -24,6 +24,7 @@ export { default as connectTag } from "./es/can-connect-tag";
 export { default as fixtureSocket } from "./es/can-fixture-socket";
 export { default as ndjsonStream } from "./es/can-ndjson-stream";
 export { default as connectNDJSON } from "./es/can-connect-ndjson";
+export { default as connectCanSession } from "./es/can-connect-session";
 
 
 // Routing
