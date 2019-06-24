@@ -1,6 +1,6 @@
 {
   "name": "can",
-  "version": "5.28.1",
+  "version": "5.28.2",
   "main": "can.js",
   "scripts": {
     "preversion": "npm test",
