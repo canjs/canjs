@@ -1,5 +1,5 @@
 @page guides/logic Logic
-@parent guides/essentials 9
+@parent guides/topics 9
 @outline 2
 
 @description Learn how to write observables in an organized, maintainable, and testable way.

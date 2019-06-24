@@ -1,5 +1,5 @@
 @page guides/setup Setting Up CanJS
-@parent guides/essentials 2
+@parent guides/getting-started 2
 @outline 2
 
 @description Learn how to install CanJS in your environment.

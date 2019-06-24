@@ -1,5 +1,5 @@
 @page guides/crud-beginner CRUD Guide
-@parent guides/experiment 0
+@parent guides/getting-started 1
 @templateRender <% %>
 @description Learn how to build a basic CRUD app with CanJS in 30 minutes.
 

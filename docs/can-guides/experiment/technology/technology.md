@@ -1,5 +1,5 @@
 @page guides/technology-overview Technology Overview
-@parent guides/essentials 1
+@parent guides/getting-started 3
 @outline 2
 
 @description Learn the basics of CanJS’s technology.

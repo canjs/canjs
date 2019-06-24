@@ -1,5 +1,5 @@
 @page guides/testing Testing
-@parent guides/essentials 8
+@parent guides/topics 8
 @outline 2
 
 @description Learn how to test CanJS applications.
