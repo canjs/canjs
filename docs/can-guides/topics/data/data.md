@@ -1,5 +1,5 @@
 @page guides/data Service Layer
-@parent guides/essentials 4
+@parent guides/topics 4
 @outline 0
 
 @description Learn how to use [can-connect] to integrate service layer APIs into your CanJS application.

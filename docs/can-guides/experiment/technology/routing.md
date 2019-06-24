@@ -1,5 +1,5 @@
 @page guides/routing Routing
-@parent guides/essentials 3
+@parent guides/topics 3
 @outline 2
 
 @description Learn how to make your application respond to changes in the URL and

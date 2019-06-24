@@ -1,12 +1,13 @@
 @page guides Guides
 @parent canjs 1
-@group guides/essentials 2 essentials
+@group guides/getting-started 1 getting started
+@group guides/topics 2 topics
 @group guides/experiment 3 app guides
 @group guides/recipes/beginner 4 beginner recipes
 @group guides/recipes/intermediate 5 intermediate recipes
 @group guides/recipes/advanced 6 advanced recipes
 @group guides/upgrade 7 upgrade
-@group guides/getting-started 8 other
+@group guides/other 8 other
 @templateRender <% %>
 @subchildren
 
