@@ -17,7 +17,7 @@ This guide will explain how:
 - [can-connect/can/session/session can/session] expects your backend to work by default
 - to use [can-connect/can/session/session can/session] with cookies 
 - to use [can-connect/can/session/session can/session] with application held tokens 
-- to initialize [can-connect/can/session/session can/session] manually if already know you have an active session
+- to initialize [can-connect/can/session/session can/session] manually if you know you have an active session
 
 ## Benefits Of The can/session Behavior
 
