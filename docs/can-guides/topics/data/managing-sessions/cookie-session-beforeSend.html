@@ -44,52 +44,48 @@
   });
 
   class TodoLogin extends StacheDefineElement {
-    static get view() {
-      return `
-        {{# if (this.Session.currentPromise.isResolved) }}
-          <p class="welcome-message">
-             Welcome {{ Session.current.email }}.
-             <a href="javascript://" on:click="this.logOut()">Log out</a>
-          </p>
-          <todo-list></todo-list>
-        {{/ if }}
+    static view = `
+      {{# if (this.Session.currentPromise.isResolved) }}
+        <p class="welcome-message">
+           Welcome {{ Session.current.email }}.
+           <a href="javascript://" on:click="this.logOut()">Log out</a>
+        </p>
+        <todo-list></todo-list>
+      {{/ if }}
 
-        {{# if (this.Session.currentPromise.isPending) }}
-          Loading User...
-        {{/ if }}
+      {{# if (this.Session.currentPromise.isPending) }}
+        Loading User...
+      {{/ if }}
 
-        {{# if (this.Session.currentPromise.isRejected) }}
-          <form on:submit="this.logIn(scope.event)">
-            <h2>Log In</h2>
+      {{# if (this.Session.currentPromise.isRejected) }}
+        <form on:submit="this.logIn(scope.event)">
+          <h2>Log In</h2>
 
-            <input placeholder="email" value:to="this.email" />
+          <input placeholder="email" value:to="this.email" />
 
-            <input type="password" placeholder="password"
-                   value:to="this.password" />
+          <input type="password" placeholder="password"
+                 value:to="this.password" />
 
-            <button>Log In</button>
+          <button>Log In</button>
 
-            {{# if (this.logInError) }}
-              <div class="error">{{ this.logInError.message }}</div>
-            {{/ if }}
+          {{# if (this.logInError) }}
+            <div class="error">{{ this.logInError.message }}</div>
+          {{/ if }}
 
-            <aside>
-               Login with the following account details:<br/>
-               Email: nils@bitovi.com<br/>
-               Password: abc123<br/>
-            </aside>
-          </form>
-        {{/ if }}
-				`;
-    }
+          <aside>
+             Login with the following account details:<br/>
+             Email: nils@bitovi.com<br/>
+             Password: abc123<br/>
+          </aside>
+        </form>
+      {{/ if }}
+    `;
 
-    static get define() {
-      return {
-        email: { Type: String },
-        password: { Type: String },
-        logInError: {},
-      };
-    }
+    static define = {
+      email: { Type: String },
+      password: { Type: String },
+      logInError: {},
+    };
 
     get Session() {
       return Session;
@@ -116,30 +112,26 @@
   customElements.define("todo-login", TodoLogin);
 
   class TodoList extends StacheDefineElement {
-    static get view() {
-      return `
-        <h3>Todos:</h3>
-        <ol>
-        {{#each (this.todos)}}
-          <li>
-            <input type="checkbox" checked:bind="this.completed" />
-            {{ this.body }}
-          </li>
-        {{/each}}
-        </ol>
-      `;
-    }
+    static view = `
+      <h3>Todos:</h3>
+      <ol>
+      {{#each (this.todos)}}
+        <li>
+          <input type="checkbox" checked:bind="this.completed" />
+          {{ this.body }}
+        </li>
+      {{/each}}
+      </ol>
+    `;
 
-    static get define() {
-      return {
-        todos: {
-          get(lastSetVal, resolve) {
-            Todo.getList({}).then(resolve);
-            return [];
-          }
-        },
-      };
-    }
+    static define = {
+      todos: {
+        get(lastSetVal, resolve) {
+          Todo.getList({}).then(resolve);
+          return [];
+        }
+      },
+    };
   }
   customElements.define("todo-list", TodoList);
 
