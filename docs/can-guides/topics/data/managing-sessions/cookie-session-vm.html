@@ -6,6 +6,7 @@
     connectCanSession,
     fixture,
     restModel,
+    type,
     DefineMap,
     StacheDefineElement,
   } from "//unpkg.com/can@5/ecosystem.mjs";
@@ -79,7 +80,7 @@
     static define = {
       email: { Type: String },
       password: { Type: String },
-      logInError: {},
+      logInError: { Type: type.Any },
     };
 
     get Session() {
