@@ -1,0 +1,129 @@
+<script type="module">
+  import { ajax, fixture, StacheDefineElement } from "//unpkg.com/can@5/ecosystem.mjs";
+
+  fixture("POST /api/session", function(request, response) {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      const user = JSON.parse(userData);
+      const requestUser = request.data.user;
+      if (
+        user.email === requestUser.email &&
+        user.password === requestUser.password
+      ) {
+        return request.data;
+      } else {
+        response(401, { message: "Unauthorized" }, {}, "unauthorized");
+      }
+    }
+    response(401, { message: "Unauthorized" }, {}, "unauthorized");
+  });
+  fixture("GET /api/session", function(request, response) {
+    const session = localStorage.getItem("session");
+    if (session) {
+      response(JSON.parse(session));
+    } else {
+      response(404, { message: "No session" }, {}, "unauthorized");
+    }
+  });
+  fixture("DELETE /api/session", function() {
+    localStorage.removeItem("session");
+    return {};
+  });
+  fixture("POST /api/users", function(request) {
+    const session = {
+      user: { email: request.data.email }
+    };
+    localStorage.setItem("user", JSON.stringify(request.data));
+    localStorage.setItem("session", JSON.stringify(session));
+
+    return session.user;
+  });
+</script>
+
+<style type="text/less">
+  @font-family: 'Raleway', "Helvetica Neue", Arial, sans-serif;
+  @font-size: 1em;
+  @color-dark: #54599c;
+  @color-light: #fff;
+  @color-light-gray: #d3d3d3;
+  @color-light-blue: #e2f5ff;
+  @color-error: #ff000e;
+  @color-error-light: #fde5ec;
+  @link-color: #2196F3;
+
+  body,
+  input,
+  button {
+    font-family: @font-family;
+    font-size: @font-size;
+  }
+
+  body {
+    background-color: @color-dark;
+    padding: 5%;
+  }
+
+  form {
+    background-color: @color-light;
+    padding: 30px 40px 0 40px;
+    border-radius: 6px;
+
+  }
+
+  input {
+    border: 1px solid @color-light-gray;
+    border-radius: 4px;
+    width: 93%;
+    padding: 3%;
+    margin-bottom: 20px;
+    &:focus {
+      background-color: @color-light-blue;
+      outline: 0;
+      border-color: #a1c7e8;
+    }
+  }
+
+  button {
+    background-color: #3ec967;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 20px;
+    border: 0;
+    color: White;
+    padding: 10px;
+    width:100%;
+  }
+
+  a {
+    color: @link-color;
+  }
+
+  h2 {
+    color: #b027a1;
+    text-align: center;
+    font-size: 2em;
+  }
+
+  aside {
+    background-color: #f1f0ff;
+    margin: 40px -40px;
+    padding: 15px;
+    border-radius: 0px 0px 6px 6px;
+    text-align: center;
+    color: @color-dark;
+  }
+
+  .welcome-message {
+    color: white;
+    text-align: center;
+  }
+
+  .error {
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+    color: @color-error;
+    background-color: @color-error-light;
+  }
+</style>
+
