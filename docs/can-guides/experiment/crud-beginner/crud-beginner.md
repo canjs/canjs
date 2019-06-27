@@ -62,6 +62,9 @@ Instead of connecting to a real backend API or web service, we’ll use [can-fix
 to “mock” an API. Whenever an [AJAX](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
 request is made, the fixture will “capture” the request and instead respond with mock data.
 
+> **Note:** if you open your browser’s Network panel, you will *not* see any network requests.
+> You can see the fixture requests and responses in your browser’s Console panel.
+
 How fixtures work is outside the scope of this tutorial and not necessary to understand to continue,
 but you can learn more in the [can-fixture] documentation.
 
