@@ -493,8 +493,14 @@ pre[class*=language-].line-numbers.line-numbers code {
   .three-col-wrapper .col-container .content .code-toolbar {
     margin-top: 10px;
   }
+  .social-two-col img {
+    height: 30px;
+  }
   .social .social-two-col .right-col {
-    flex-direction: column;
+    margin-top: 0;
+  }
+  .social .social-two-col .right-col a {
+    margin-bottom: 0;
   }
 }
 </style>
