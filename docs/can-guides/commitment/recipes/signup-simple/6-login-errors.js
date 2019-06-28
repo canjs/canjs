@@ -1,26 +1,4 @@
-import { ajax, Component, fixture } from "//unpkg.com/can@5/core.mjs";
-
-fixture("GET /api/session", function(request, response) {
-	const session = localStorage.getItem("session");
-	if (session) {
-		response(JSON.parse(session));
-	} else {
-		response(404, { message: "No session" }, {}, "unauthorized");
-	}
-});
-fixture("POST /api/users", function(request, response) {
-	const session = {
-		user: { email: request.data.email }
-	};
-	localStorage.setItem("user", JSON.stringify(request.data));
-	localStorage.setItem("session", JSON.stringify(session));
-
-	return session.user;
-});
-fixture("DELETE /api/session", function() {
-	localStorage.removeItem("session");
-	return {};
-});
+import { ajax, fixture, type, StacheDefineElement } from "//unpkg.com/can@5/ecosystem.mjs";
 
 fixture("POST /api/session", function(request, response) {
 	const userData = localStorage.getItem("user");
@@ -38,115 +16,136 @@ fixture("POST /api/session", function(request, response) {
 	}
 	response(401, { message: "Unauthorized" }, {}, "unauthorized");
 });
+fixture("GET /api/session", function(request, response) {
+	const session = localStorage.getItem("session");
+	if (session) {
+		response(JSON.parse(session));
+	} else {
+		response(404, { message: "No session" }, {}, "unauthorized");
+	}
+});
+fixture("DELETE /api/session", function() {
+	localStorage.removeItem("session");
+	return {};
+});
+fixture("POST /api/users", function(request) {
+	const session = {
+		user: { email: request.data.email }
+	};
+	localStorage.setItem("user", JSON.stringify(request.data));
+	localStorage.setItem("session", JSON.stringify(session));
 
-Component.extend({
-	tag: "signup-login",
-	view: `
-		{{# if(this.sessionPromise.value) }}
+	return session.user;
+});
 
-			<p class="welcome-message">
-				Welcome {{ this.sessionPromise.value.user.email }}.
-				<a href="javascript://" on:click="this.logOut()">Log out</a>
-			</p>
+class SignupLogin extends StacheDefineElement {
+	static view = `
+      {{# if(this.sessionPromise.value) }}
 
-		{{ else }}
-			{{# eq(this.page, "signup") }}
+          <p class="welcome-message">
+              Welcome {{ this.sessionPromise.value.user.email }}.
+              <a href="javascript://" on:click="this.logOut()">Log out</a>
+          </p>
 
-				<form on:submit="this.signUp(scope.event)">
-					<h2>Sign Up</h2>
+      {{ else }}
+          {{# eq(this.page, "signup") }}
 
-					<input placeholder="email" value:to="this.email" />
+              <form on:submit="this.signUp(scope.event)">
+                  <h2>Sign Up</h2>
 
-					<input type="password"
-							 placeholder="password" value:to="this.password" />
+                  <input placeholder="email" value:to="this.email" />
 
-					<button>Sign Up</button>
+                  <input type="password"
+                           placeholder="password" value:to="this.password" />
 
-					<aside>
-						Have an account?
-						<a href="javascript://" on:click="this.page = 'login'">Log in</a>
-					</aside>
-				</form>
+                  <button>Sign Up</button>
 
-			{{ else }}
+                  <aside>
+                      Have an account?
+                      <a href="javascript://" on:click="this.page = 'login'">Log in</a>
+                  </aside>
+              </form>
 
-				<form on:submit="this.logIn(scope.event)">
-					<h2>Log In</h2>
+          {{ else }}
 
-					<input placeholder="email" value:to="this.email" />
+              <form on:submit="this.logIn(scope.event)">
+                  <h2>Log In</h2>
 
-					<input type="password"
-						 placeholder="password" value:to="this.password" />
+                  <input placeholder="email" value:to="this.email" />
 
-					<button>Log In</button>
+                  <input type="password"
+                       placeholder="password" value:to="this.password" />
 
-					{{# if(this.logInError) }}
-						<div class="error">{{ this.logInError.message }}</div>
-					{{/ if }}
+                  <button>Log In</button>
 
-					<aside>
-						Don’t have an account?
-						<a href="javascript://" on:click="this.page = 'signup'">Sign up</a>
-					</aside>
-				</form>
+                  {{# if(this.logInError) }}
+                      <div class="error">{{ this.logInError.message }}</div>
+                  {{/ if }}
 
-			{{/ eq }}
+                  <aside>
+                      Don’t have an account?
+                      <a href="javascript://" on:click="this.page = 'signup'">Sign up</a>
+                  </aside>
+              </form>
 
-		{{/ if }}
-	`,
-	ViewModel: {
+          {{/ eq }}
+      {{/ if }}
+    `;
+
+	static define = {
+		email: String,
+		password: String,
+		page: { type: String, default: 'login' },
+		logInError: type.Any,
 		sessionPromise: {
-			default: function() {
+			get default() {
 				return ajax({
 					url: "/api/session"
 				});
 			}
 		},
+	};
 
-		email: "string",
-		password: "string",
-		signUp: function(event) {
-			event.preventDefault();
-			this.sessionPromise = ajax({
-				url: "/api/users",
-				type: "post",
-				data: {
+	signUp(event) {
+		event.preventDefault();
+		this.sessionPromise = ajax({
+			url: "/api/users",
+			type: "post",
+			data: {
+				email: this.email,
+				password: this.password
+			}
+		}).then(function(user) {
+			return {user: user};
+		});
+	}
+
+	logIn(event) {
+		event.preventDefault();
+		this.sessionPromise = ajax({
+			url: "/api/session",
+			type: "post",
+			data: {
+				user: {
 					email: this.email,
 					password: this.password
 				}
-			}).then(function(user) {
-				return {user: user};
-			});
-		},
+			}
+		});
 
-		logOut: function() {
-			this.sessionPromise = ajax({
-				url: "/api/session",
-				type: "delete"
-			}).then(function() {
-				return Promise.reject({message: "Unauthorized"});
-			});
-		},
-
-		page: {default: "login"},
-		logIn: function(event) {
-			event.preventDefault();
-			this.sessionPromise = ajax({
-				url: "/api/session",
-				type: "post",
-				data: {
-					user: {
-						email: this.email,
-						password: this.password
-					}
-				}
-			});
-
-			this.logInError = null;
-			this.sessionPromise.catch(function(error) {
-				this.logInError = error;
-			}.bind(this));
-		},
-		logInError: "any"
+		this.logInError = null;
+		this.sessionPromise.catch(function(error) {
+			this.logInError = error;
+		}.bind(this));
 	}
-});
+
+	logOut() {
+		this.sessionPromise = ajax({
+			url: "/api/session",
+			type: "delete"
+		}).then(function() {
+			return Promise.reject({message: "Unauthorized"});
+		});
+	}
+}
+customElements.define("signup-login", SignupLogin);

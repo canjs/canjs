@@ -1,26 +1,4 @@
-import { ajax, Component, fixture } from "//unpkg.com/can@5/core.mjs";
-
-fixture("GET /api/session", function(request, response) {
-	const session = localStorage.getItem("session");
-	if (session) {
-		response(JSON.parse(session));
-	} else {
-		response(404, { message: "No session" }, {}, "unauthorized");
-	}
-});
-fixture("POST /api/users", function(request, response) {
-	const session = {
-		user: { email: request.data.email }
-	};
-	localStorage.setItem("user", JSON.stringify(request.data));
-	localStorage.setItem("session", JSON.stringify(session));
-
-	return session.user;
-});
-fixture("DELETE /api/session", function() {
-	localStorage.removeItem("session");
-	return {};
-});
+import { ajax, fixture, type, StacheDefineElement } from "//unpkg.com/can@5/ecosystem.mjs";
 
 fixture("POST /api/session", function(request, response) {
 	const userData = localStorage.getItem("user");
@@ -38,10 +16,30 @@ fixture("POST /api/session", function(request, response) {
 	}
 	response(401, { message: "Unauthorized" }, {}, "unauthorized");
 });
+fixture("GET /api/session", function(request, response) {
+	const session = localStorage.getItem("session");
+	if (session) {
+		response(JSON.parse(session));
+	} else {
+		response(404, { message: "No session" }, {}, "unauthorized");
+	}
+});
+fixture("DELETE /api/session", function() {
+	localStorage.removeItem("session");
+	return {};
+});
+fixture("POST /api/users", function(request) {
+	const session = {
+		user: { email: request.data.email }
+	};
+	localStorage.setItem("user", JSON.stringify(request.data));
+	localStorage.setItem("session", JSON.stringify(session));
 
-Component.extend({
-	tag: "signup-login",
-	view: `
+	return session.user;
+});
+
+class SignupLogin extends StacheDefineElement {
+	static view = `
 		<p class="welcome-message">
 			Welcome Someone.
 			<a href="javascript://">Log out</a>
@@ -62,6 +60,6 @@ Component.extend({
 				<a href="javascript://">Log in</a>
 			</aside>
 		</form>
-	`,
-	ViewModel: {}
-});
+	`;
+}
+customElements.define("signup-login", SignupLogin);

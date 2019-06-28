@@ -1,43 +1,42 @@
 @page guides/recipes/signup-simple Signup and Login
 @parent guides/recipes/beginner
 
-@description This beginner guide walks through building simple signup, login forms and
-a logout button.   
+@description This beginner guide walks through building simple signup, login forms and a logout button.   
 
 @body
 
 In this guide, you will learn how to:
 
 - Set up a basic CanJS application.
-- Collect form data and post it to a service
-  endpoint when the form is submitted.
+- Collect form data and post it to a service endpoint when the form is submitted.
 
 The final widget looks like:
 
-<p class="codepen" data-height="500" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="OaOxEW" style="height: 500px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Signup and Login (Simple) [Finished]">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/OaOxEW/">
-  Signup and Login (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
-  on <a href="https://codepen.io">CodePen</a>.</span>
+<p>
+  <div class="codepen" data-height="500" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="OaOxEW" style="height: 500px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Signup and Login (Simple) [Finished]">
+    <span>See the Pen <a href="https://codepen.io/bitovi/pen/OaOxEW/">
+    Signup and Login (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+    on <a href="https://codepen.io">CodePen</a>.</span>
+  </div>
 </p>
 
 To use the widget:
 
-1. __Click__ the _Sign up_ link.
-2. __Enter__ an _email_ and _password_ and __Click__ _SIGN UP_.  You will be logged in.
-3. __Click__ the _Log out_ link. You will be presented with the _Sign Up_ form.
-4. __Click__ the _Log in_ link.  __Enter__ the same _email_ and _password_ you used to sign up.  __Click__ the _LOG IN_ button.  You will be logged in.
+1. __Click__ the "_Sign up_" link.
+2. __Enter__ an _email_ and _password_ and __click__ "_SIGN UP_".  You will be logged in.
+3. __Click__ the "_Log out_" link. You will be presented with the "_Sign Up_" form.
+4. __Click__ the "_Log in_" link. __Enter__ the same _email_ and _password_ you used to sign up. __Click__ the "_LOG IN_" button.  You will be logged in.
 
-__START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED__:
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="eQeGrL" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Signup and Login (Simple) [Starter]">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/eQeGrL/">
-  Signup and Login (Simple) [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
-  on <a href="https://codepen.io">CodePen</a>.</span>
-</p>
+__Start this tutorial by clicking the “Run in your browser” button below:__
+@sourceref ./0-skeleton.html
+@highlight only
+@codepen 
 
-This CodePen includes:
+This starter code includes:
 
-- CanJS (`import { ajax, Component, fixture } from "//unpkg.com/can@5/core.mjs"` imports [can-ajax], [can-component], and [can-fixture]).
-- Pre-made styles so the app looks pretty. 😍
+- CanJS (`import { ajax, fixture, type, StacheDefineElement } from "//unpkg.com/can@5/core.mjs"` imports [can-ajax], [can-fixture], [can-type] and [can-stache-define-element])
+- Pre-made styles so the app looks pretty 😍
+- A mock service layer
 
 The following sections are broken down into:
 
@@ -47,13 +46,12 @@ The following sections are broken down into:
 
 ## Understanding the service API
 
-This CodePen comes with a mock service layer provided
-by [can-fixture].  It supplies:
+The mock service layer provided by the starter code is implemented with [can-fixture]. The service layer supplies:
 
-- `POST /api/session` for creating sessions (log in).
-- `GET /api/session` for getting if there is a session.
-- `DELETE /api/session` for deleting a session (log out).
-- `POST /api/users` for creating users.
+- `POST /api/session` for creating sessions (log in)
+- `GET /api/session` for checking if there is a session
+- `DELETE /api/session` for deleting a session (log out)
+- `POST /api/users` for creating users
 
 To tell if the current client is logged in:
 
@@ -153,8 +151,7 @@ STATUS: 200
 
 ### The problem
 
-When someone adds `<signup-login></signup-login>` to their HTML, we want the following HTML
-to show up:
+When someone adds `<signup-login></signup-login>` to their HTML, we want the following HTML to show up:
 
 ```html
 <p class="welcome-message">
@@ -181,43 +178,33 @@ to show up:
 
 ### What you need to know
 
-To set up a basic CanJS application, you define a custom element in JavaScript and
-use the custom element in your page’s `HTML`.
+To set up a basic CanJS application, you define a custom element in JavaScript and use the custom element in your page’s HTML.
 
-To define a custom element, extend [can-component] with a [can-component.prototype.tag]
-that matches the name of your custom element.
+To define a custom element, create a class that extends [can-stache-define-element]. Then register your element via [`customElements.define`](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define) by calling it with the name of your custom element and the class.
 
 For example, we will use `<signup-login>` as our custom tag:
 
 ```js
-Component.extend({
-  tag: "signup-login"
-});
+  class SignupLogin extends StacheDefineElement {}
+  customElements.define("signup-login", SignupLogin);
 ```
 
-But this doesn’t do anything.  Components add their own HTML through their [can-component.prototype.view]
-property like this:
+But this doesn’t do anything. Components created with [can-stache-define-element] add their own HTML through their [can-stache-define-element/static.view view] property like this:
 
 ```js
-Component.extend({
-  tag: "signup-login",
-  view: `
+class SignupLogin extends StacheDefineElement {
+  static view = `
     <h2>Sign Up or Log In</h2>
-  `,
-  ViewModel: {
-  }
-});
+  `   
+}
 ```
-
-> **NOTE:** We’ll make use of the `ViewModel` property later.
-
 
 ### The solution
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
-@highlight 42-67,only
+@highlight 41-65,only
 
 Update the __HTML__ tab to:
 
@@ -228,34 +215,42 @@ Update the __HTML__ tab to:
 
 ### The problem
 
-Let’s make a request to `GET /api/session` to know if there is a
-session.  If there is a session, we will print out the user’s email address.  If there
-is not a session, we will show the _Sign Up_ form.
+Let’s make a request to `GET /api/session` to know if there is an active user session. If there is a session, we will print out the user’s email address. If there is not a session, we will show the "_Sign Up_" form.
 
-We’ll keep the session data within a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) on
-the `sessionPromise` property. The following simulates a logged in user:
+We’ll keep the session data within a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) on the `sessionPromise` property. The following simulates a logged in user:
 
 ```js
-viewModel.sessionPromise = Promise.resolve({user: {email: "someone@email.com"}})
+signupLogin.sessionPromise = Promise.resolve({user: {email: "someone@email.com"}})
 ```
 
 ### What you need to know
 
-- The [can-define.types.default] property definition can return the initial value of a property like:
+- The [can-stache-define-element/static.define define] property on a [can-stache-define-element StacheDefineElement] class specifies well-defined properties for each element instance via [can-define-object]:
   ```js
-  Component.extend({
-    tag: "signup-login",
-    view: `
+  class SignupLogin extends StacheDefineElement {
+  	static view = `
+  	  {{this.myProperty}}
+    `;  
+	  static define = {
+      myProperty: String
+    }
+  }
+  ```
+
+- The [can-define-object/define/get-default default] property can return the initial value of a property:
+  ```js
+  class SignupLogin extends StacheDefineElement {
+  	static view = `
       {{this.myProperty}} <!-- renders “This string” -->
-    `,
-    ViewModel: {
+    `;  
+	  static define = {
       myProperty: {
-        default: function() {
+        get default() {
           return "This string"
         }
       }
     }
-  });
+  }
   ```
 - [can-ajax] can make requests to a URL like:
   ```js
@@ -287,7 +282,7 @@ viewModel.sessionPromise = Promise.resolve({user: {email: "someone@email.com"}})
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-check-login.js
-@highlight 45,52,70,73-79,only
+@highlight 43,50,68,71-79,only
 
 
 
@@ -296,9 +291,7 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-Let’s allow the user to enter an _email_ and _password_ and click _Sign Up_.  When this happens,
-we’ll `POST` this data to `/api/users`.  Once the user is created, we’ll want to update the `sessionPromise`
-property to have a promise with a _session-like_ object.
+Let’s allow the user to enter an _email_ and _password_ and click "_Sign Up_".  When this happens, we’ll `POST` this data to `/api/users`.  Once the user is created, we’ll want to update the `sessionPromise` property to have a promise with a _session-like_ object.
 
 A promise with a _session-like_ object looks like:
 
@@ -308,17 +301,15 @@ A promise with a _session-like_ object looks like:
 
 ### What you need to know
 
-- A ViewModel allows you to define a property with its [can-define.types type] like so:
-
+- Component properties defined with [can-define-object] allow you specify a [can-define-object/define/type type] like so:
   ```js
-  ViewModel: {
-    name: "string",
-    password: "number"
+  static define = {
+    name: String,
+    password: Number
   }
   ```
 
-- The [can-stache-bindings.toParent] binding can set an input’s `value` to
-  a ViewModel property like:
+- The [can-stache-bindings.toParent] binding can set an input’s `value` to an element property like:
   ```html
   <input value:to="this.name" />
   ```
@@ -346,7 +337,7 @@ ajax({
 ```
 @highlight 3
 
-- Use the [then()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then) method on a promise to map the source promise to another promise value.
+- Use the [then()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then) method on a Promise to map the source Promise to another Promise value.
 
   ```js
   const source = Promise.resolve({email: "justin@bitovi.com"})
@@ -362,7 +353,7 @@ ajax({
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-signup.js
-@highlight 54,57,60,81-95,only
+@highlight 52,55,58,72-73,83-95,only
 
 
 
@@ -371,9 +362,7 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-Let’s update the app to log the user out when the _Log out_ button is clicked.  We can
-do this by making a `DELETE` request to `/api/session` and updating the `sessionPromise`
-property to have a rejected value.
+Let’s update the app to log the user out when the "_Log out_" button is clicked.  We can do this by making a `DELETE` request to `/api/session` and updating the `sessionPromise` property to have a rejected value.
 
 ### What you need to know
 
@@ -398,7 +387,7 @@ property to have a rejected value.
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-logout.js
-@highlight 49,97-104,only
+@highlight 47,97-104,only
 
 
 
@@ -406,7 +395,7 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-Let’s add a _Log In_ form for the user:
+Let’s add a "_Log In_" form for the user:
 
 ```html
 <form>
@@ -428,11 +417,10 @@ Let’s add a _Log In_ form for the user:
 </form>
 ```
 
-The user should be able to go back and forth between the _Sign Up_ page and the _Log In_
+The user should be able to go back and forth between the "_Sign Up_" page and the "_Log In_"
 page. We’ll do this by changing a `page` property to `"signup"` or `"login"`.
 
-We’ll also implement the _Log In_ form’s functionality.  When a session is created,
-we’ll want to `POST` session data to `/api/session` and update `this.sessionPromise` accordingly.
+We’ll also implement the "_Log In_" form’s functionality.  When a session is created, we’ll want to `POST` session data to `/api/session` and update `this.sessionPromise` accordingly.
 
 ### What you need to know
 
@@ -454,7 +442,7 @@ we’ll want to `POST` session data to `/api/session` and update `this.sessionPr
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-login.js
-@highlight 53,67,71-89,127-140,only
+@highlight 51,65,69-87,95,128-140,only
 
 
 
@@ -462,15 +450,13 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-If the user tried to login, but the server responded with an error message, let’s
-display that error message.
+If the user tried to login, but the server responded with an error message, let’s display that error message.
 
 ```html
 <div class="error">An error message</div>
 ```
 
-We’ll do this by `catch`ing the create-session request. If
-the request fails, we will set a `logInError` property with the server’s response data.
+We’ll do this by `catch`ing the create-session request. If the request fails, we will set a `logInError` property with the server’s response data.
 
 ### What you need to know
 
@@ -483,29 +469,30 @@ the request fails, we will set a `logInError` property with the server’s respo
   ```
   @highlight 2
 
-- Use the `"any"` [can-define.types type] to define a property of indeterminate type:
+- Use the [can-type.any Any type] to define a property of indeterminate type:
   ```js
-  const AppViewModel = DefineMap.extend({
-    myProperty: "any"
-  });
-  const viewModel = new AppViewModel({});
-  viewModel.myProperty = ANYTHING;
+  class AppModel extends DefineObject {
+    static define = {
+      myProperty: type.Any
+    };    
+  };
+  const appModel = new AppModel({});
+  appModel.myProperty = ANYTHING;
   ```
-  @highlight 2
+  @highlight 3
 
 ### The solution
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-login-errors.js
-@highlight 83-85,145-150,only
+@highlight 81-83,99,136-139,only
 
 ## Result
 
-When finished, you should see something like the following code:
+When finished, you should have something like the following code:
 
 @sourceref ./final.html
-@highlight 45-155,only
 @codepen 
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
