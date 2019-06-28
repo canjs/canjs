@@ -1,4 +1,4 @@
-<signup-login></signup-login>
+<todo-login></todo-login>
 
 <script type="module">
   import {
@@ -6,8 +6,9 @@
     connectCanSession,
     fixture,
     restModel,
-    Component,
+    type,
     DefineMap,
+    StacheDefineElement,
   } from "//unpkg.com/can@5/ecosystem.mjs";
 
   setupFixtures();
@@ -45,77 +46,76 @@
     }
   });
 
-  Component.extend({
-    tag: "signup-login",
-    view: `
-     {{# if (this.Session.currentPromise.isResolved) }}
-       <p class="welcome-message">
+  class TodoLogin extends StacheDefineElement {
+    static view = `
+      {{# if (this.Session.currentPromise.isResolved) }}
+        <p class="welcome-message">
            Welcome {{ Session.current.email }}.
            <a href="javascript://" on:click="this.logOut()">Log out</a>
-       </p>
-       <todo-list></todo-list>
-     {{/ if }}
+        </p>
+        <todo-list></todo-list>
+      {{/ if }}
 
-     {{# if (this.Session.currentPromise.isPending) }}
+      {{# if (this.Session.currentPromise.isPending) }}
         Loading User...
-     {{/ if }}
+      {{/ if }}
 
-     {{# if (this.Session.currentPromise.isRejected) }}
-         <form on:submit="this.logIn(scope.event)">
-             <h2>Log In</h2>
+      {{# if (this.Session.currentPromise.isRejected) }}
+        <form on:submit="this.logIn(scope.event)">
+          <h2>Log In</h2>
 
-             <input placeholder="email" value:to="this.email" />
+          <input placeholder="email" value:to="this.email" />
 
-             <input type="password" placeholder="password"
-                    value:to="this.password" />
+          <input type="password" placeholder="password"
+                 value:to="this.password" />
 
-             <button>Log In</button>
+          <button>Log In</button>
 
-             {{# if (this.logInError) }}
-                 <div class="error">{{ this.logInError.message }}</div>
-             {{/ if }}
+          {{# if (this.logInError) }}
+            <div class="error">{{ this.logInError.message }}</div>
+          {{/ if }}
 
-             <aside>
-                 Login with the following account details:<br/>
-                 Email: nils@bitovi.com<br/>
-                 Password: abc123<br/>
-             </aside>
-         </form>
-     {{/ if }}
-   `,
-    ViewModel: {
-      email: "string",
-      password: "string",
-      logInError: "any",
-      Session: {
-        get() {
-          return Session;
-        }
-      },
+          <aside>
+             Login with the following account details:<br/>
+             Email: nils@bitovi.com<br/>
+             Password: abc123<br/>
+          </aside>
+        </form>
+      {{/ if }}
+      `;
 
-      logOut: function () {
-        Session.current.destroy();
-      },
+    static define = {
+      email: String,
+      password: String,
+      logInError: type.Any,
+    };
 
-      logIn: function (event) {
-        event.preventDefault();
-        this.logInError = null;
-
-        const session = new Session({
-          email: this.email,
-          password: this.password
-        });
-
-        session.save().catch((error) => {
-          this.logInError = error;
-        });
-      },
+    get Session() {
+      return Session;
     }
-  });
 
-  Component.extend({
-    tag: "todo-list",
-    view: `
+    logOut() {
+      Session.current.destroy();
+    }
+
+    logIn(event) {
+      event.preventDefault();
+      this.logInError = null;
+
+      const session = new Session({
+        email: this.email,
+        password: this.password
+      });
+
+      session.save().catch((error) => {
+        this.logInError = error;
+      });
+    }
+  }
+  customElements.define("todo-login", TodoLogin);
+
+  class TodoList extends StacheDefineElement {
+    static view = `
       <h3>Todos:</h3>
       <ol>
       {{#each (this.todos)}}
@@ -125,16 +125,18 @@
         </li>
       {{/each}}
       </ol>
-    `,
-    ViewModel: {
+    `;
+
+    static define = {
       todos: {
-        get(lastSetVal, resolve) {
+        async(resolve) {
           Todo.getList({}).then(resolve);
           return [];
         }
-      }
-    }
-  });
+      },
+    };
+  }
+  customElements.define("todo-list", TodoList);
 
   function setupFixtures() {
     fixture("GET /api/session", function (request, response, headers) {

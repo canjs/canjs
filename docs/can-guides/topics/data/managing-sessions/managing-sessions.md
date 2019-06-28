@@ -98,7 +98,7 @@ Here, we'll show examples of all three dependencies. The third one is of particu
 
 In a component's view you could depend on `Session.currentPromise` directly like this: 
 @sourceref ./cookie-session-basic.html
-@highlight 34,41,45,only
+@highlight 33,40,44,only
 @codepen
 
 This is a good option when you can make this dependency high in the component hierarchy, toggling several session-dependant components at once. In cases where a rendered component should determine for itself if a session is active, rather than depending on a parent component to check, one of the following two techniques should be used.
@@ -175,7 +175,7 @@ The use of application held tokens, in general, is considered a hazardous practi
 From a code perspective, the difference from a cookie-based scenario is the requirement to add the token to requests manually, rather than letting the browser do it for you. When initializing an app using app-held tokens you'll typically use the third scenario [described above](#connectionDependency). You'll access `Session.currentPromise` in the `beforeSend` handler of requests for restricted data, which looks something like this:
 
 @sourceref ./app-session-beforeSend.html
-@highlight 36-46,only
+@highlight 42,only
 @codepen  
 
 With the above configuration every request made via `Todo.connection` (e.g `Todo.getList()`, `newTodo.save()`, etc.) will wait for a session to be available before attempting the request. Once the session is available it will use the token held by the application (as part of the Session instance) and add it via an HTTP header to the outgoing request.
