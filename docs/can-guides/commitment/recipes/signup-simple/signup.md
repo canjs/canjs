@@ -229,17 +229,15 @@ signupLogin.sessionPromise = Promise.resolve({user: {email: "someone@email.com"}
   ```js
   class SignupLogin extends StacheDefineElement {
   	static view = `
-      {{this.myProperty}}
+  	  {{this.myProperty}}
     `;  
 	  static define = {
-      myProperty: {
-        Type: String
-      }
+      myProperty: String
     }
   }
   ```
 
-- The [can-define-object/define/default default] property can return the initial value of a property:
+- The [can-define-object/define/get-default default] property can return the initial value of a property:
   ```js
   class SignupLogin extends StacheDefineElement {
   	static view = `
@@ -247,7 +245,7 @@ signupLogin.sessionPromise = Promise.resolve({user: {email: "someone@email.com"}
     `;  
 	  static define = {
       myProperty: {
-        default() {
+        get default() {
           return "This string"
         }
       }

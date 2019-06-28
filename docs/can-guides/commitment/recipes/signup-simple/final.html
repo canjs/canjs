@@ -96,12 +96,12 @@
     `;
 
     static define = {
-      email: { Type: String },
-      password: { Type: String },
-      page: { Type: String, default: 'login' },
-      logInError: { Type: type.Any },
+      email: String,
+      password: String,
+      page: { type: String, default: 'login' },
+      logInError: type.Any,
       sessionPromise: {
-        default() {
+        get default() {
           return ajax({
             url: "/api/session"
           });

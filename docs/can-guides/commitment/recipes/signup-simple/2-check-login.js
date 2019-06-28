@@ -70,7 +70,7 @@ class SignupLogin extends StacheDefineElement {
 
 	static define = {
 		sessionPromise: {
-			default() {
+			get default() {
 				return ajax({
 					url: "/api/session"
 				});
