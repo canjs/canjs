@@ -83,9 +83,9 @@
     `;
 
     static define = {
-      email: { Type: String },
-      password: { Type: String },
-      logInError: { Type: type.Any },
+      email: String,
+      password: String,
+      logInError: type.Any,
     };
 
     get Session() {
@@ -127,7 +127,7 @@
 
     static define = {
       todos: {
-        get(lastSetVal, resolve) {
+        async(resolve) {
           Todo.getList({}).then(resolve);
           return [];
         }
