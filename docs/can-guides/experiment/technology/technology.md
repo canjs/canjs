@@ -25,6 +25,10 @@ table.panels pre {
     border-bottom: 1px solid #ccc;
     border-left: 1px solid #ccc;
 }
+.object-svg {
+    max-width: 600px;
+    padding-bottom: 15px;
+}
 </style>
 
 ## Overview
@@ -33,9 +37,9 @@ CanJS, at its most simplified, consists of key-value <span class='obs'>observabl
 connected to web browser APIs using various libraries.
 
 
-<img src="../../docs/can-guides/experiment/technology/overview.svg"
-  alt="Observables are the center hub.  They are connected to the DOM by the view layer, the service layer by the data modeling layer, and the window location by the routing layer"
-  class='bit-docs-screenshot' width='600px'/>
+<object type='image/svg+xml' data='../../docs/can-guides/experiment/technology/overview.svg' class='bit-docs-screenshot object-svg'>
+    Observables are the center hub.  They are connected to the DOM by the view layer, the service layer by the data modeling layer, and the window location by the routing layer
+</object>
 
 The general idea is that you create <span class='obs'>observable</span> objects that encapsulate
 the logic and state of your application and connect those <span class='obs'>observable</span>
@@ -293,7 +297,7 @@ the forward (`⇦`) and back (`⇨`) buttons to see the count change:
 @demo demos/technology-overview/route-counter.html
 
 Notice how the URL changes when you click the `+1` button AND the _Count_ changes when the
-forward and back button are clicked.  
+forward and back button are clicked.
 
 
 The following connects the `<my-counter>`’s observable [can-component.prototype.ViewModel]
@@ -325,7 +329,7 @@ Component.extend({
 });
 
 // The `.data` property specifies the observable to cross
-// bind the URL to.  
+// bind the URL to.
 route.data = document.querySelector("my-counter").viewModel;
 route.start();
 </script>
