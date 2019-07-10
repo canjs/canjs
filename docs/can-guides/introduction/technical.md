@@ -180,7 +180,7 @@ let fullName = value.returnedBy(function(){
 or like:
 
 ```js
-let Person = DefineMap.extend({
+const Person = DefineMap.extend({
     firstName: "string",
     lastName: "string",
     get fullName() {
