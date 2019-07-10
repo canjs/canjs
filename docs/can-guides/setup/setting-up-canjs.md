@@ -58,7 +58,7 @@ any development environment. This section gives technical details on these items
     ```js
     export { default as Component } from "can-component";
     export { default as restModel } from "can-rest-model";
-    ...
+    // ...
     ```
 
     Most module loaders setups with tree-shaking (ex: webpack 2 and StealJS 2)
@@ -1105,7 +1105,7 @@ For example, after installing the packages you need, you can create `my-can.js` 
 // my-can.js
 export { default as Component } from "can-component";
 export { default as restModel } from "can-rest-model";
-...
+// ...
 ```
 
 And then import the named exports from "my-can":

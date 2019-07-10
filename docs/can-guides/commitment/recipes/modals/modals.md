@@ -116,7 +116,7 @@ in a modal instead of "light DOM".
 
 ### What you need to know
 
-- Use `{default(){ ... }}` to create a default value for a property:
+- Use `{default(){ /* ... */ }}` to create a default value for a property:
 
   ```js
   ViewModel: {

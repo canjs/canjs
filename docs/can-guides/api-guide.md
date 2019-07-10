@@ -36,7 +36,7 @@ So understanding CanJS’s API pages are about understanding the relationships b
 - packages and modules and their exports
 - functions, properties, and type definitions (typedefs) related to module exports
 
-... and what’s documented on those pages.  
+…and what’s documented on those pages.  
 
 ### Library Collection pages
 
@@ -172,7 +172,7 @@ more information and examples on what is being documented.
 > a specific piece of CanJS’s API.
 
 
-## How to find what you’re looking for ...
+## How to find what you’re looking for…
 
 1. Get a good understand of the purpose behind each module.  
 2. Start with core modules.

@@ -9,7 +9,7 @@ Component.extend({
     </div>
 
     {{# if(routeComponent.isPending) }}
-      Loading...
+      Loading…
     {{/ if }}
 
     {{# if(routeComponent.isResolved) }}

@@ -318,7 +318,7 @@ as the user creates a drag motion.
   You can listen to pointer events with [can-event-queue/map/map.listenTo] inside `connectedCallback` like:
 
   ```js
-  this.listenTo(current, "pointerdown", (event) => { ... })
+  this.listenTo(current, "pointerdown", (event) => { /* ... */ })
   ```
 
   As mobile Safari doesn't support pointer events, we have already installed the

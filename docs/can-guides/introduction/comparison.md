@@ -286,7 +286,7 @@ These layers have a simple and inverse API, the Store layer takes actions and re
 
 <img src="../../docs/can-guides/images/introduction/redux-flow.png" style="width:100%;max-width:750px"/>
 
-...and there are layers *within those layers*, like **action creators** and **redux-middleware**.
+…and there are layers *within those layers*, like **action creators** and **redux-middleware**.
 
 This architecture is nice and simple, with discrete lines of interaction and well-defined purpose and interface. The **tradeoff** however, is that to add a feature you need to add **_all_** the individual pieces to each of these layers.
 
@@ -310,7 +310,7 @@ So in your **React-Redux** app, you would at minimum need to import:
 
 <img src="../../docs/can-guides/images/introduction/video-chat-react.png" style="width:100%;max-width:750px"/>
 
-...and wire them all together with code. The wiring up is not free, and though simple, may produce bugs and there is no guarantee the individual bits will work well together.
+…and wire them all together with code. The wiring up is not free, and though simple, may produce bugs and there is no guarantee the individual bits will work well together.
 
 **CanJS** has a more cross-cutting encapsulation strategy. A can-component knows what data it accepts through **attrs**, and can fetch its own data with models as dependencies, and also handles the user interaction, state-changes and display all within the component.
 
@@ -507,7 +507,7 @@ var keyup = Rx.Observable.fromEvent($input, 'keyup')
   .distinctUntilChanged();
 ```
 
-...where data flows through functions, that convert, filter and transform that data and pass it on to callbacks over time.
+…where data flows through functions, that convert, filter and transform that data and pass it on to callbacks over time.
 
 **CanJS** supports a more Object Oriented approach:
 
@@ -538,7 +538,7 @@ let Order = DefineMap.extend({
   }
 });
 ```
-...where data is packaged along with behaviors (methods) in objects that represent domain concepts.
+…where data is packaged along with behaviors (methods) in objects that represent domain concepts.
 
 While **RxJS** offers a **stream** of events and values, **CanJS** offers instances that can be directly acted upon, stored and serialized.
 

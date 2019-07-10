@@ -274,7 +274,7 @@ In this section, we will:
 
 ### What you need to know
 
-- Move the __draw circle__ into the `this.listenTo("time", ...)` event handler so it is redrawn
+- Move the __draw circle__ into the `this.listenTo("time", /* ... */)` event handler so it is redrawn
   when the time changes.
 - Use [clearRect(x, y, width, height)](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clearRect) to clear
   the canvas.

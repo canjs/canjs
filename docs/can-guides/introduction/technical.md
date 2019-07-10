@@ -410,14 +410,14 @@ The following illustrates the signatures of these behaviors:
 ```js
 DefineMap.extend({
     propertyName: {
-        get: function(lastSetValue, resolve){ ... },
-        set: function(newValue, resolve){ ... },
-        type: function(newValue, propertyName){ ... },
+        get: function(lastSetValue, resolve){ /* ... */ },
+        set: function(newValue, resolve){ /* ... */ },
+        type: function(newValue, propertyName){ /* ... */ },
         Type: Constructor,
-        default: function(){ ... },
+        default: function(){ /* ... */ },
         Default: Constructor,
-        serialize: function(){ ... },
-        stream: function(setStream){ ... }
+        serialize: function(){ /* ... */ },
+        stream: function(setStream){ /* ... */ }
     }
 })
 ```
@@ -431,8 +431,8 @@ DefineMap.extend({
     propertyB: String      -> {type: String}
     propertyC: Constructor -> {Type: Constructor}
     propertyD: [PropDefs]  -> {Type: DefineList.extend({"#": PropDefs})>}
-    get propertyE(){...}   -> {get: propertyE(){... }}
-    set propertyF(){...}   -> {get: propertyF(){... }}
+    get propertyE(){ /* ... */ }   -> {get: propertyE(){ /* ... */ }}
+    set propertyF(){ /* ... */ }   -> {get: propertyF(){ /* ... */ }}
     method: Function
 })
 ```
@@ -1031,7 +1031,7 @@ hands when the time changes.
 
 ```js
 Analog = function(element, timer) {
-    ...
+    // ...
     timer.on("time", this.drawClock.bind(this) );
 };
 

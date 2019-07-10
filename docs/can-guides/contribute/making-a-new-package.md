@@ -99,7 +99,7 @@ In order to include the source project's documentation on the CanJS site, the ma
 
 - `PACKAGE_NAME`: is the project name, which should match the `name` property in the source project's `package.json`.
 - `CANJS_PARENT_TARGET`: is the name of the target area in CanJS. For example, if the module is a part of the "Ecosystem", then the value for `@parent` would be `can-ecosystem`. If the target is "Legacy" then the value is `can-legacy`.
-- `PATH_TO_PACKAGE.JSON`: is a relative path from the main document file for the project repo. Considering the following structure...
+- `PATH_TO_PACKAGE.JSON`: is a relative path from the main document file for the project repo. Considering the following structure…
 
 ```
 - docs
@@ -166,8 +166,8 @@ If you can't you might need to:
   ```js
   let ignoreModuleNamesStartingWith = [
   	"jquery",
-	"SOME_OTHER_LIBRARY"
-  	...
+    "SOME_OTHER_LIBRARY"
+  	// ...
   ]
   ```
 
@@ -175,9 +175,9 @@ If you can't you might need to:
 
   ```js
   let exportsMap = {
-      "jquery": "jQuery",
-      "SOME_OTHER_LIBRARY": "SomeOtherLibrary"
-	  ...
+    "jquery": "jQuery",
+    "SOME_OTHER_LIBRARY": "SomeOtherLibrary"
+	  // ...
   };
   ```
 

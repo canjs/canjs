@@ -7,12 +7,12 @@
 @body
 
 ## Note to reader
- 
+
 The data guide and its sub-sections are a work in progress and are currently under review. The information provided is accurate; however, it will likely undergo several rounds of revision before being formally published. Feel free to go through these sections to learn about how data-modeling works, and please leave any comments in [this Google Doc](https://docs.google.com/document/d/14egbanRmOqpxw5MJbpBOTFfqkd3sGAN6jurog5l2my8/edit?usp=sharing.
 
 ## Overview
 
-This document describes how to configure [can-connect] for loading model data from a remote server. Every model in your application will have its own connection, and each connection will be able to Create, Read, Update, and Delete (CRUD) model data from the server. There are two sections of this document: 
+This document describes how to configure [can-connect] for loading model data from a remote server. Every model in your application will have its own connection, and each connection will be able to Create, Read, Update, and Delete (CRUD) model data from the server. There are two sections of this document:
 
 1. [Part 1 - Making requests](#making-requests) - configuring your connection for outgoing requests
 2. [Part 2 - Handling the response](#managing-response-data) - parsing and formatting response data for use within your app
@@ -26,7 +26,7 @@ When configuring a connection, the [can-connect/data/url/url data-url behavior] 
 
 ### Understanding the [can-connect/DataInterface]
 
-Each of the CRUD operations maps to one of the functions descibed by the [can-connect/DataInterface]. The `DataInterface` is a lower level interface used for loading **raw data** from a remote data source. This is not the same as the [can-connect/InstanceInterface] which deals with typed data. Understanding the raw `DataInterface` is crucial for making the customizations described below. 
+Each of the CRUD operations maps to one of the functions descibed by the [can-connect/DataInterface]. The `DataInterface` is a lower level interface used for loading **raw data** from a remote data source. This is not the same as the [can-connect/InstanceInterface] which deals with typed data. Understanding the raw `DataInterface` is crucial for making the customizations described below.
 
 > **IMPORTANT:** Whenever loading data within your application, you almost always want to use the [can-connect/InstanceInterface]. The lower level `DataInterface` should be used for customizing how raw data is loaded .
 
@@ -103,7 +103,7 @@ const connection = restModel({
 ```
 
 ### Implementing the DataInterface yourself
-    
+
 Consider a situation where an application loads all incomplete TODOs from a special URL like `/api/todos/incomplete`. In such cases, you can write a custom [can-connect/data/url/url.getListData getListData] function which performs the actual ajax request. You can implement any of the [can-connect/DataInterface] methods in a similar way:
 
 ```js
@@ -114,18 +114,18 @@ const connection = restModel({
     getListData(query) {
       if(query.filter.complete === false) {
         // Load all incomplete TODOs from a separate URL
-        return ajax({ url: '/api/todos/incomplete', data: query, ... });
+        return ajax({ url: '/api/todos/incomplete', data: query, /* ... */ });
       }
-      
+
       // Load all other TODOs from the primary URL
-      return ajax({ url: '/api/todos', data: query, ... });
+      return ajax({ url: '/api/todos', data: query, /* ... */ });
     }
   }
 });
-    
+
 // Loads incomplete TODOs from '/api/todos/incomplete'
 connection.getList({ complete: false });
-    
+
 // Loads all TODOs from '/api/todos'
 connection.getList({});
 ```
@@ -188,15 +188,15 @@ connect.behavior("data/url", function( baseConnection ) {
         data: query
       });
     },
-    getData(query) { return ajax(...) },
-    createData(data) { return ajax(...) },
-    updateData(data) { return ajax(...) },
-    destroyData(data) { return ajax(...) }
+    getData(query) { return ajax( /* ... */ ) },
+    createData(data) { return ajax( /* ... */ ) },
+    updateData(data) { return ajax( /* ... */ ) },
+    destroyData(data) { return ajax( /* ... */ ) }
   };
 });
 ```
 
-### Loading list data 
+### Loading list data
 
 Loading list data is unique because data can be filtered, sorted, and paginated using [can-query-logic]. This is where the real power of [can-connect] becomes available as it enables advanced behaviors such as the [can-connect/constructor/store/store constructor store], [can-connect/real-time/real-time real-time updates], caching, and other goodness. We recommend reading the following documents to become familiar with how to query logic works:
 
@@ -212,34 +212,34 @@ Once raw data is loaded from a server, that data needs to be instantiated into t
 
 ### Understanding how `can-connect` manages Model instances
 
-Many of the behaviors available with [can-connect] are designed to work with instances of Model data for your application. A single [can-connect/constructor/store/store] is used to keep references to instance data and prevent multiple copies of an instance from being used by the application at once. 
+Many of the behaviors available with [can-connect] are designed to work with instances of Model data for your application. A single [can-connect/constructor/store/store] is used to keep references to instance data and prevent multiple copies of an instance from being used by the application at once.
 
 For example, if you have 3 different components which display information about the currently logged in `User`, you can rest easy knowing that all 3 components will receive the same exact instance of that user. If the user gets updated by one component, all other components will receive those updates thanks to the [can-connect/real-time/real-time real-time behavior].
 
 
 ### Customizing how response data his handled
 
-There are two types of response formats expected by the [can-connect/constructor/constructor constructor behavior]: 
+There are two types of response formats expected by the [can-connect/constructor/constructor constructor behavior]:
 
 - **Instance Data:** - The result of most CRUD operations. The full response body is treated as the instance data.
 
-    ```json
+    ```js
     {
       id: 111,
       name: 'Justin',
       email: ...
     }
     ```
-    
+
 - **List Data:** The result of a a call to `getList`. An array of instance data must be on a `data` property in the response body.
 
-    ```json
+    ```js
     {
       count: 3,
       data: [
-        { id: 111, name: 'Justin', ...},
-        { id: 222, name: 'Brian', ...},
-        { id: 333, name: 'Paula', ...}
+        { id: 111, name: 'Justin', /* ... */},
+        { id: 222, name: 'Brian', /* ... */},
+        { id: 333, name: 'Paula', /* ... */}
       ]
     }
     ```
