@@ -23,8 +23,8 @@ import canEvent from 'can-event';
 import assign from 'can-util/js/assign/assign';
 
 // Create the Person type
-function Person(){ ... };
-Person.prototype.method = function(){ ... };
+function Person(){ /* ... */ };
+Person.prototype.method = function(){ /* ... */ };
 
 // Add event mixin:
 assign(Person.prototype, canEvent);
@@ -33,7 +33,7 @@ assign(Person.prototype, canEvent);
 const me = new Person();
 
 // Now listen and dispatch events!
-me.addEventListener("name", function(){ ... });
+me.addEventListener("name", function(){ /* ... */ });
 
 me.dispatch("name");
 ```

@@ -57,7 +57,7 @@ For example, you might be using [can-component] like this:
 ```js
 import can from 'can';
 
-can.Component.extend({ ... });
+can.Component.extend({ /* ... */ });
 ```
 
 Update your code to instead look like this:
@@ -65,7 +65,7 @@ Update your code to instead look like this:
 ```js
 import Component from 'can/component/component';
 
-Component.extend({ ... });
+Component.extend({ /* ... */ });
 ```
 
 Use the same pattern for the other modules you are using. Be careful when declaring names for imported modules that share a similar name to native objects like Map.
@@ -159,7 +159,7 @@ It can only lookup the `page` property on `some-component`’s own [can-componen
 ```js
 Component.extend({
 	tag: "some-component",
-	ViewModel: ...,
+	ViewModel: { /* ... */ },
 	leakScope: true
 });
 ```
@@ -177,7 +177,7 @@ This will update your `package.json` to look something like this:
 
 ```js
 {
-  ...
+  // ...
   "dependencies": {
     "can": "^<%canjs.package.version%>"
   }
@@ -464,7 +464,7 @@ You can fix this either by having your helpers handle computes, or by using [can
 Most recently-built applications do not depend on adding to the global namespace, but in case you have code that does:
 
 ```js
-Construct.extend("foo.bar", ...)
+Construct.extend("foo.bar", /* ... */)
 ```
 
 Which sets `window.foo.bar`, this argument is no longer accepted by [can-construct]. If you *really* need to set a global, you can do so yourself using the return value of [can-construct.extend].
@@ -485,11 +485,11 @@ If you’re using StealJS 0.16, you don’t need to do anything else to make you
 
 If you’re using StealJS 1, you also need to add `steal-stache` to the `plugins` configuration in your `package.json`:
 
-```json
+```js
 {
-  ...
+  // ...
   "steal": {
-    ...
+    // ...
     "plugins": ["steal-stache"]
   }
 }
@@ -532,7 +532,7 @@ For example, you might be using [can-component] like either:
 ```js
 import can from 'can';
 
-can.Component.extend({ ... });
+can.Component.extend({ /* ... */ });
 ```
 
 or
@@ -540,7 +540,7 @@ or
 ```js
 import Component from 'can/component/component';
 
-Component.extend({ ... });
+Component.extend({ /* ... */ });
 ```
 
 Regardless of which you are using, update your code to instead look like:
@@ -548,7 +548,7 @@ Regardless of which you are using, update your code to instead look like:
 ```js
 import Component from 'can-component';
 
-Component.extend({ ... });
+Component.extend({ /* ... */ });
 ```
 
 Use the same pattern for the other `can` modules you are using. In general, you should not be using the `can.` properties any more, but rather importing (through your module loader / bundler) only the packages and modules that you are using.

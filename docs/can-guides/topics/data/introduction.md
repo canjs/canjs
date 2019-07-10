@@ -451,7 +451,7 @@ Component.extend({
                 <input type='date' valueAsDate:bind='todo.dueDate'/>
             </p>
             <button disabled:from="todo.preventSave()">Create Todo</button>
-            {{# if(todo.isSaving()) }}Creating ....{{/ if}}
+            {{# if(todo.isSaving()) }}Creating…{{/ if}}
         </form>
     `,
     ViewModel: {
@@ -773,9 +773,9 @@ The previous _Creating Records_, _Updating Records_ and _Destroying Records_
 examples showed how to listen to when records are mutated:
 
 ```js
-this.listenTo(Todo,"created",   (event, createdTodo)   => { ... })
-this.listenTo(Todo,"updated",   (event, updatedTodo)   => { ... })
-this.listenTo(Todo,"destroyed", (event, destroyedTodo) => { ... })
+this.listenTo(Todo,"created",   (event, createdTodo)   => { /* ... */ })
+this.listenTo(Todo,"updated",   (event, updatedTodo)   => { /* ... */ })
+this.listenTo(Todo,"destroyed", (event, destroyedTodo) => { /* ... */ })
 ```
 
 These listeners can be used to update lists similar to how the _Destroying Records_

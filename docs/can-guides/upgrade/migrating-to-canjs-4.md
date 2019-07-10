@@ -236,7 +236,7 @@ function Thing(){
 assign(Thing.prototype, canEvent);
 
 let thing = new Thing();
-thing.on("prop", function(){ ... });
+thing.on("prop", function(){ /* ... */ });
 ```
 
 with:
@@ -251,7 +251,7 @@ function Thing(){
 mixinMapBindings(Thing.prototype);
 
 let thing = new Thing();
-thing.on("prop", function(){ ... });
+thing.on("prop", function(){ /* ... */ });
 ```
 
 ### inserted/removed event
@@ -357,7 +357,7 @@ import stache from "can-stache";
 const view = stache.from("my-template");
 view({
 	team: "Dragons",
-	players: [ ... ]
+	players: [ /* ... */ ]
 });
 ```
 

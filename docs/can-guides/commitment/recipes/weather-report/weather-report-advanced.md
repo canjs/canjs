@@ -40,7 +40,7 @@ const WeatherViewModel = can.DefineMap.extend({
       this.place = null;
     }
   },
-  ...
+  // ...
 });
 ```
 
@@ -54,7 +54,7 @@ this:
 
 ```js
 const WeatherViewModel = can.DefineMap.extend({
-  ...
+  // ...
   place: {
     type: "any",
     get: function(lastSet) {
@@ -67,7 +67,7 @@ const WeatherViewModel = can.DefineMap.extend({
       }
     }
   },
-  ...
+  // ...
 });
 ```
 
@@ -227,7 +227,7 @@ We want to define the behavior of `place` so that it becomes `null` when `locati
 
   const nameStream = me.toStream(".name");
 
-  nameStream.onValue(function() { ... })
+  nameStream.onValue(function() { /* ... */ })
   ```
 
 ### The solution
@@ -269,8 +269,8 @@ We will do this by:
 
   ```js
   navigator.geolocation.getCurrentPosition(
-      function(position) {...},
-      function(err) {...});
+      function(position) { /* ... */ },
+      function(err) { /* ... */ });
   ```
 
 - The [geolocation](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation)
@@ -278,8 +278,8 @@ We will do this by:
 
   ```js
   const watch = navigator.geolocation.watchPosition(
-      function(position) {...},
-      function(err) {...});
+      function(position) { /* ... */ },
+      function(err) { /* ... */ });
   ```
 
   To cancel watching, call:

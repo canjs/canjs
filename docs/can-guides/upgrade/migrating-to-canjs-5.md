@@ -164,7 +164,7 @@ import set from "can-set";
 import DefineMap from "can-define/map/map";
 import superMap from "can-connect/can/super-map/super-map";
 
-const Todo = DefineMap.extend({ ... });
+const Todo = DefineMap.extend({ /* ... */ });
 
 todoAlgebra = new set.Algebra(
     set.props.id("_id"),
@@ -175,7 +175,7 @@ todoAlgebra = new set.Algebra(
 superMap({
     Map: Todo,
     algebra: todoAlgebra,
-    ...
+    // ...
 })
 ```
 
@@ -187,8 +187,8 @@ import DefineMap from "can-define/map/map";
 import DefineList from "can-define/list/list";
 import superMap from "can-connect/can/super-map/super-map";
 
-const Todo = DefineMap.extend({ ... });
-Todo.List = DefineList.extend({"#": Todo, ...});
+const Todo = DefineMap.extend({ /* ... */ });
+Todo.List = DefineList.extend({"#": Todo, /* ... */});
 
 todoAlgebra = new set.Algebra(
     set.props.id("_id"),
@@ -199,7 +199,7 @@ todoAlgebra = new set.Algebra(
 superMap({
     Map: Todo,
     algebra: todoAlgebra,
-    ...
+    // ...
 })
 ```
 
@@ -220,7 +220,7 @@ const Todo = DefineMap.extend({
     complete: QueryLogic.makeEnum([true, false]),
     status: QueryLogic.makeEnum(["new","pending","resolved"])
 });
-Todo.List = DefineList.extend({"#": Todo, ...});
+Todo.List = DefineList.extend({"#": Todo, /* ... */});
 
 let todoQueryLogic = new QueryLogic(Todo,{
     toQuery(params){
@@ -234,7 +234,7 @@ let todoQueryLogic = new QueryLogic(Todo,{
 superModel({
     Map: Todo,
     queryLogic: todoQueryLogic,
-    ...
+    // ...
 })
 ```
 
@@ -256,7 +256,7 @@ import DefineMap from "can-define/map/map";
 
 const Todo = DefineMap.extend({
     id: "number",
-    ...
+    // ...
 });
 
 const todoConnection = connect( [ dataUrl, constructor, canMap ], {
@@ -279,7 +279,7 @@ import DefineList from "can-define/list/list";
 
 const Todo = DefineMap.extend({
     id: "number",
-    ...
+    // ...
 });
 const TodoList = DefineList.extend({
     "#": Todo
@@ -305,7 +305,7 @@ import DefineList from "can-define/list/list";
 
 const Todo = DefineMap.extend({
     id: "number",
-    ...
+    // ...
 });
 Todo.List = DefineList.extend({
     "#": Todo
@@ -370,7 +370,7 @@ import DefineList from "can-define/list/list";
 
 const Todo = DefineMap.extend({
     id: "number",
-    ...
+    // ...
 });
 Todo.List = DefineList.extend({
     "#": Todo
@@ -399,7 +399,7 @@ import DefineList from "can-define/list/list";
 
 const Todo = DefineMap.extend({
     _id: "number",
-    ...
+    // ...
 });
 Todo.List = DefineList.extend({
     "#": Todo
@@ -422,7 +422,7 @@ from the [can-query-logic] created by or passed to the `todoConnection`. For exa
 ```js
 const Todo = DefineMap.extend({
     _id: "number",
-    ...
+    // ...
 });
 Todo.List = DefineList.extend({
     "#": Todo
@@ -445,7 +445,7 @@ behavior to specify that `_id` is the identity property:
 ```js
 const Todo = DefineMap.extend({
     _id: {type: "number", identity: true}
-    ...
+    // ...
 });
 Todo.List = DefineList.extend({
     "#": Todo
@@ -465,7 +465,7 @@ no `queryLogic` is needed as this will happen by default.  The following is equi
 ```js
 const Todo = DefineMap.extend({
     _id: {type: "number", identity: true}
-    ...
+    // ...
 });
 Todo.List = DefineList.extend({
     "#": Todo
@@ -484,7 +484,7 @@ a `can.listQuery` symbol.  If you were setting `__listSet` on an List like the f
 
 ```js
 const ClassRoom = DefineMap.extend({
-    ...
+    // ...
     students: {
         type: Student.List
         set(students) {
@@ -499,7 +499,7 @@ You should do it as follows:
 
 ```js
 const ClassRoom = DefineMap.extend({
-    ...
+    // ...
     students: {
         type: Student.List
         set(students) {
@@ -711,7 +711,7 @@ Component.extend({
 	ViewModel: {
 		get todosPromise(){ return Todo.getList(); },
 		name: { type: "string", default: "ViewModel" },
-		edit(todo) { ... }
+		edit(todo) { /* ... */ }
 	}
 })
 ```
@@ -729,7 +729,7 @@ Component.extend({
 	ViewModel: {
 		get todosPromise(){ return Todo.getList(); },
 		name: { type: "string", default: "ViewModel" },
-		edit(todo) { ... }
+		edit(todo) { /* ... */ }
 	}
 })
 ```
@@ -755,7 +755,7 @@ Component.extend({
 	ViewModel: {
 		get todosPromise(){ return Todo.getList(); },
 		name: { type: "string", default: "ViewModel" },
-		edit(todo) { ... }
+		edit(todo) { /* ... */ }
 	}
 })
 ```

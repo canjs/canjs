@@ -158,7 +158,7 @@ name your function by passing `.extend` a name as the first argument:
 ```js
 import { DefineMap } from "can";
 
-export default DefineMap.extend("TheNameOfMyType", { ... })
+export default DefineMap.extend("TheNameOfMyType", { /* ... */ })
 ```
 
 #### Label instances
@@ -176,10 +176,10 @@ expressions:
 
 ```js
 // INSTEAD OF THIS:
-map.on("key", function(ev, newVal) { ... })
+map.on("key", function(ev, newVal) { /* ... */ })
 
 // DO THIS:
-map.on("key", function keyChanged(ev, newVal) { ... })
+map.on("key", function keyChanged(ev, newVal) { /* ... */ })
 ```
 
 Similarly, if you create [can-compute]s or [can-observation]s yourself, make sure the function

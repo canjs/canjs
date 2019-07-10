@@ -37,7 +37,7 @@ covering CanJS core libraries.
 
 - If you load StealJS plugins, add them to your _package.json_ configuration like:
 
-  ```
+  ```js
   "steal": {
     "plugins": [
       "steal-css"
@@ -52,7 +52,7 @@ covering CanJS core libraries.
 
   Component.extend({
       tag: "todo-mvc",
-      view: ...,
+      view: "...",
       ViewModel: {
          ...
       }
@@ -314,7 +314,7 @@ QUnit.equal(todos.allComplete, true, "allComplete");
 
   ```js
   list = new ListType([
-    // ...
+    // // ...
   ]);
   list.filter(function(item) {
       return test(item);
@@ -509,14 +509,14 @@ __DELETE /api/todos/{id}__
   fixture("/api/entities", function(request) {
     request.data.folderId //-> "1"
 
-    return {data: [...]}
+    return {data: [ /* ... */ ]}
   })
   ```
 
 - [can-fixture.store can-fixture.store] - can be used to automatically filter records if given a [can-set.Algebra].
 
   ```js
-  const entities = [ .... ];
+  const entities = [ /* ... */ ];
   const entitiesStore = fixture.store( entities, entitiesAlgebra );
   fixture("/api/entities/{id}", entitiesStore);
   ```

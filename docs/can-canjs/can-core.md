@@ -190,14 +190,14 @@ import DefineList from 'can-define/list/list';
 import set from 'can-set';
 
 const Todo = DefineMap.extend({
-	...
+	// ...
 });
 const TodosList = DefineMap.extend({
 	"#": Todo,
-	...
+	// ...
 });
 const todosAlgebra = new set.Algebra({
-	...
+	// ...
 });
 
 const connection = baseMap({
@@ -270,12 +270,13 @@ let template = stache(`
 		{{#if(todos.isPending)}}<li>Loading…</li>{{/if}}
 		{{#if(todos.isResolved)}}
 			{{#for(todo of todos.value)}}
-				"<li class='{{#todo.complete}}complete{{/}}'>{{todo.name}}</li>
+				<li class="{{#todo.complete}}complete{{/}}">{{todo.name}}</li>
 			{{else}}
 				<li>No todos</li>
 			{{/for}}
 		{{/if}}
-	</ul>`);
+	</ul>
+`);
 
 // Calls the template with some data
 let fragment = template({

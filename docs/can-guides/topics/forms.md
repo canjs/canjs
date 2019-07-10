@@ -71,7 +71,7 @@ You can combine Event and Attribute bindings in a [“data down, actions up”](
 
 This example uses `value:from="name"` to set the `value` attribute of both text fields when `name` in the scope changes. It also uses `on:change="handleAction('set', 'name', scope.element.value)"` to listen for `"change"` events on the text fields and call the `handleAction` function with the text field’s [http://localhost/canjs/doc/can-stache/keys/scope#scope_element value].
 
-Data is passed _down_ from the scope to each element using `value:from` and the action of changing the data is passed _up_ through `on:change="handleAction(...)"`, which means that the `value` attribute of the text field is always in sync with the `name` property in the scope.
+Data is passed _down_ from the scope to each element using `value:from` and the action of changing the data is passed _up_ through `on:change="handleAction( /* ... */ )"`, which means that the `value` attribute of the text field is always in sync with the `name` property in the scope.
 
 To see a larger example of this pattern, check out the [guides/forms#Datadown_actionsupwithmultiplecomponents extended example].
 
@@ -334,7 +334,7 @@ Here is an example showing this kind of manual validation for a phone number:
 
 It is also possible to use [https://validatejs.org/#validators validate.js] or another JavaScript validation library through plugins to [can-define] like [can-define-validate-validatejs]. This makes it easy to have consistent validation throughout your application without having to write your own validation rules.
 
-This plugin works by reading `validate: { ... }` behaviors from each [can-define.types.propDefinition PropDefinition] of your view-model and using them to build up [https://validatejs.org/#validators validate.js constraints].
+This plugin works by reading `validate: { /* ... */ }` behaviors from each [can-define.types.propDefinition PropDefinition] of your view-model and using them to build up [https://validatejs.org/#validators validate.js constraints].
 
 It also adds an `errors` method to your view-model for getting a list of invalid properties. The example below also creates a `formatErrors` helper to make working with these errors easier.
 
@@ -596,7 +596,7 @@ This `default` value is initialized the first time the `makes` property is used 
 <select value:bind="makeId"
 	{{# if(makes.isPending) }}disabled{{/ if }}>
 	{{# if(makes.isPending) }}
-	  <option value=''>Loading...</option>
+	  <option value=''>Loading…</option>
 	{{ else }}
 	  {{^ makeId }}
 		<option value=''>Select a Make</option>
@@ -679,7 +679,7 @@ This also means that in order to get the `makes` data, we need to use the `value
 <select value:bind="makeId"
 	{{# if(makes.isPending) }}disabled{{/ if }}>
 	{{# if(makes.isPending) }}
-	  <option value=''>Loading...</option>
+	  <option value=''>Loading…</option>
 	{{ else }}
 	  {{^ makeId }}
 		<option value=''>Select a Make</option>
@@ -759,7 +759,7 @@ this.makesPromise.then(function(makes) {
 });
 ```
 
-> **Note:** when using asynchronous getters, you cannot use the shorthand getter syntax (`get makes() { ... }`) since JavaScript getters [http://whereswalden.com/2010/08/22/incompatible-es5-change-literal-getter-and-setter-functions-must-now-have-exactly-zero-or-one-arguments/ must have only one argument].
+> **Note:** when using asynchronous getters, you cannot use the shorthand getter syntax (`get makes() { /* ... */ }`) since JavaScript getters [http://whereswalden.com/2010/08/22/incompatible-es5-change-literal-getter-and-setter-functions-must-now-have-exactly-zero-or-one-arguments/ must have only one argument].
 
 #### Loading new data
 
@@ -769,7 +769,7 @@ In order to load the correct `models` for a make, a request to the `/models` API
 <select value:bind="makeId"
 	{{# if(makes.isPending) }}disabled{{/ if }}>
 	{{# if(makes.isPending) }}
-	  <option value=''>Loading...</option>
+	  <option value=''>Loading…</option>
 	{{ else }}
 	  {{^ makeId }}
 		<option value=''>Select a Make</option>
@@ -928,7 +928,7 @@ Similar to the `makeId`, the `<select>` for models is bound to the `modelId` pro
 <select value:bind="makeId"
 	{{# if(makes.isPending) }}disabled{{/ if }}>
 	{{# if(makes.isPending) }}
-	  <option value=''>Loading...</option>
+	  <option value=''>Loading…</option>
 	{{ else }}
 	  {{^ makeId }}
 		<option value=''>Select a Make</option>

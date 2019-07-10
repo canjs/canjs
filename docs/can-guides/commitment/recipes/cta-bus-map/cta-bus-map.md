@@ -553,7 +553,7 @@ We will do this by:
   });
   ```
 
-- To create a google map, use [new google.map.Map(...)](https://developers.google.com/maps/documentation/javascript/reference) once the
+- To create a google map, use [new google.map.Map( /* ... */ )](https://developers.google.com/maps/documentation/javascript/reference) once the
   `googleAPI` has completed loading:
 
   ```js

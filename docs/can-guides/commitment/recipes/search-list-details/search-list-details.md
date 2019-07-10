@@ -76,7 +76,7 @@ ViewModel: {
 }
 ```
 
-- Use `new observe.Object({ ... })` to create an [can-observe.Object observable Object].
+- Use `new observe.Object({ /* ... */ })` to create an [can-observe.Object observable Object].
 - Set [can-route.data route.data] to the object you want cross-bound to the URL.
 - `route.register( "{abc}" );` will create a URL matching rule.
 
