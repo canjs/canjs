@@ -180,7 +180,7 @@ let fullName = value.returnedBy(function(){
 or like:
 
 ```js
-Person = DefineMap.extend({
+let Person = DefineMap.extend({
     firstName: "string",
     lastName: "string",
     get fullName() {
@@ -1460,7 +1460,7 @@ Let’s look at an example of how we would define a `Todo` type and a list of to
 import {DefineList, DefineMap} from 'can';
 
 const Todo = DefineMap.extend({
-	id: {identity: true, type: "number"}
+	id: {identity: true, type: "number"},
 	complete: "boolean",
 	name: "string"
 });
