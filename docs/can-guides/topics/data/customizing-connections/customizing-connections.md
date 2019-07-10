@@ -493,13 +493,13 @@ div.spaced > ol > li {
 
 1. A user calls [can-connect/can/map/map.prototype.save <code>save</code>] on an instance of one of their [can-connect ]'d models: 
 	```
-	const Todo = DefineMap.extend(...);
+	const Todo = DefineMap.extend( /* ... */ );
 	Todo.connection = restModel({
 		Map: Todo,
 		...
 	});
 	const todoInstance = new Todo({ value: 'say hello to world' });
-	todoInstance.save().then(...)
+	todoInstance.save().then( /* ... */ )
 	```
 	@highlight 7
 	

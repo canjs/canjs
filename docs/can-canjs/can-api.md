@@ -1431,7 +1431,7 @@ GET /api/todos?
       "name": "mow lawn",
       "complete": false
     },
-    ...
+    // ...
   ]
 }
 ```

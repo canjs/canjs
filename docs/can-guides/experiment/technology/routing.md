@@ -548,7 +548,7 @@ Component.extend({
 ## Register routes
 
 Currently, after the user logs in, the application will show `<h2>Page Missing</h2>` because if the URL hash is empty, `page` property will be undefined. To have `page`
-be `"home"`, one would have to navigate to `"#!&page=home"` ... yuck!
+be `"home"`, one would have to navigate to `"#!&page=home"` … yuck!
 
 We want the `page` property to be `"home"` when the hash is empty. Furthermore,
 we want URLs like `#!tasks` to set the `page` property. We can do that
@@ -705,7 +705,7 @@ Component.extend({
 
 > Note, [can-reflect-promise] also adds `isPending` and `isRejected` properties to promises so that the view can handle these states as well.
 
-Then update the `componentToShow` getter to import the correct module. The value passed to the promise’s [then](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then) method will be a module object with a property for each of the module’s exports. In this example, the component constructor is the default export, so an instance of the component can be created using `new module.default({ ... })`. Returning the instances from the `then` method will set `componentToShow.value` to the component instance:
+Then update the `componentToShow` getter to import the correct module. The value passed to the promise’s [then](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then) method will be a module object with a property for each of the module’s exports. In this example, the component constructor is the default export, so an instance of the component can be created using `new module.default({ /* ... */ })`. Returning the instances from the `then` method will set `componentToShow.value` to the component instance:
 
 ```js
 import { Component, DefineMap, route, stacheRouteHelpers, value } from "can";
