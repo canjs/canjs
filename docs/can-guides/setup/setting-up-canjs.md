@@ -76,7 +76,7 @@ any development environment. This section gives technical details on these items
 
     You can import directly from the file as follows:
 
-    ```js
+    ```html
     <script type="module">
 	import { Component } from "//unpkg.com/can/core.mjs";
 
@@ -104,7 +104,7 @@ any development environment. This section gives technical details on these items
 
     You can import directly from the file as follows:
 
-    ```js
+    ```html
     <script type="module">
 	import { Component } from "//unpkg.com/can@5/everything.mjs";
 
@@ -382,7 +382,7 @@ __Model Example__
 
 [After setting up Node.js and npm](#Node_jsandnpm), install `can` and [StealJS](https://stealjs.com) from npm:
 
-```
+```bash
 npm install can@5 steal@2 --save
 ```
 
@@ -542,7 +542,7 @@ module.exports = {
 
 Next, run webpack from your terminal:
 
-```
+```bash
 ./node_modules/.bin/webpack
 ```
 
@@ -605,7 +605,7 @@ module.exports = {
 
 Next run webpack in your terminal with the production configuration:
 
-```
+```bash
 ./node_modules/.bin/webpack --config webpack.config.prod.js
 ```
 
@@ -652,7 +652,7 @@ const Component = require("can-component");
 [After setting up Node.js and npm](#Node_jsandnpm), install [can-component]
 and Browserify from npm:
 
-```js
+```bash
 npm install can-component --save
 npm install browserify --save-dev
 ```
@@ -676,7 +676,7 @@ Component.extend({
 
 Next, run Browserify from your terminal:
 
-```
+```bash
 ./node_modules/browserify/bin/cmd.js --debug --entry index.js --outfile dist/bundle.js
 ```
 
@@ -724,7 +724,7 @@ import Component from "can-component";
 [After setting up Node.js and npm](#Node_jsandnpm), install [can-component]
 and Browserify (with various plugins) from npm:
 
-```
+```bash
 npm install can-component --save
 npm install browserify stringify babelify babel-core babel-preset-env --save-dev
 ```
@@ -797,7 +797,7 @@ Component.extend({
 
 Next, run Browserify from your terminal:
 
-```
+```bash
 ./node_modules/browserify/bin/cmd.js --debug --transform babelify --transform stringify --entry index.js --outfile dist/bundle.js
 ```
 
@@ -847,25 +847,25 @@ and many other [features](https://donejs.com/Features.html).
 
 To use CanJS within DoneJS, first install the DoneJS cli:
 
-```
+```bash
 npm install -g donejs
 ```
 
 Then, generate a new app:
 
-```
+```bash
 donejs add app hello-world --yes
 ```
 
 Then go into that application directory:
 
-```
+```bash
 cd hello-world
 ```
 
 And start development by running:
 
-```
+```bash
 donejs develop
 ```
 
@@ -884,7 +884,7 @@ In short, these projects should use the "global" build.  That build can be eithe
 
 - downloaded at [unpkg.com/dist/global/core.js](http://unpkg.com/dist/global/core.js), or
 - installed via npm:
-  ```
+  ```bash
   npm install can
   ```
   and found in `./node_modules/can/dist/global/core.js`.
@@ -1067,7 +1067,7 @@ import { Component, DefineMap } from "can";
 
 These packages should be individually installed:
 
-```
+```bash
 npm install can-component can-define
 ```
 
@@ -1137,14 +1137,14 @@ your terminal.
 
 In your terminal, [create a new package.json](https://docs.npmjs.com/cli/init):
 
-```
+```bash
 npm init -y
 ```
 
 Next, install [http-server](https://www.npmjs.com/package/http-server)
 (so you can load the files we create):
 
-```
+```bash
 npm install http-server --save-dev
 ```
 
@@ -1173,7 +1173,7 @@ HTTP server. Add the following line to your `package.json`:
 
 Last, start the HTTP server from your terminal:
 
-```
+```bash
 npm start
 ```
 

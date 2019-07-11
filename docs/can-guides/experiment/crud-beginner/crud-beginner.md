@@ -14,8 +14,8 @@ In this tutorial, we’ll build a simple to-do app that lets you:
 - Mark to-dos as “completed”
 - Delete to-dos
 
-<p class="codepen" data-height="536" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 536px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/omqyMw/">
+<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="dBawyZ" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/dBawyZ/">
   CanJS 5 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p><br>
@@ -255,7 +255,8 @@ This template also shows how we can read the state and value of a Promise:
 
 So first, we check `#if(this.todosPromise.isResolved)` is true. If it is, we loop through all
 the to-dos (`#for(todo of this.todosPromise.value)`) and create a `todo` variable in our template.
-Then we read `{{ todo.name }}` to put the to-do’s name in the list.
+Then we read `{{ todo.name }}` to put the to-do’s name in the list. Additionally, the li’s class
+changes depending on [can-stache.helpers.if if] `todo.complete` is true or false.
 
 ## Handling loading and error states
 
@@ -384,7 +385,7 @@ We’ll also make it possible to click on a to-do to select it and edit its name
 After either of these changes, we’ll save the to-do to the backend API.
 
 @sourceref ./8.js
-@highlight 25-32,40,49-52,only
+@highlight 25-34,42,51-54,only
 
 The next four sections will more thoroughly explain the code above.
 
@@ -397,7 +398,7 @@ the checkbox is either checked or unchecked, respectively.
 Additionally, when the checkbox is clicked, `todo.complete` is updated to be `true` or `false`.
 
 @sourceref ./8.js
-@highlight 25,only
+@highlight 26,only
 
 We also listen for [change](https://developer.mozilla.org/en-US/docs/Web/Events/change) events with the
 [can-stache-bindings.event on:event] syntax. When the input’s value changes, the
@@ -411,7 +412,7 @@ This section uses two stache helpers:
 - [can-stache.helpers.else {{ else }}] will only render if `#eq()` returns `false`
 
 @sourceref ./8.js
-@highlight 26,28,32,only
+@highlight 28,30,34,only
 
 The code above checks whether `todo` is equal to `this.selected`. We haven’t added `selected`
 to our ViewModel yet, but we will in the next section!
@@ -424,13 +425,10 @@ also [can-stache-bindings.event#on_VIEW_MODEL_OR_DOM_EVENT__KEY_VALUE_ set prope
 Let’s examine this part of the code:
 
 @sourceref ./8.js
-@highlight 29-31,40,only
+@highlight 31-33,42,only
 
 `on:click="this.selected = todo"` will cause the ViewModel’s `selected` property to be set
 to the `todo` when the `<span>` is clicked.
-
-The template above also changes the span’s class depending on [can-stache.helpers.if if]
-`todo.complete` is true or false.
 
 Additionally, we add [can-define.types.propDefinition#function__ `selected: Todo`]
 to the ViewModel. In our app, we only ever set `selected` to an instance of a `Todo`,
@@ -443,7 +441,7 @@ to-do’s name (and immediately give it focus). When the input loses focus, we w
 and the input to be replaced with the span again.
 
 @sourceref ./8.js
-@highlight 27,49-52,only
+@highlight 29,51-54,only
 
 Let’s break down the code above:
 
@@ -460,7 +458,7 @@ Let’s break down the code above:
 Now there’s just one more feature we want to add to our app: deleting to-dos!
 
 @sourceref ./9.js
-@highlight 33,only
+@highlight 35,only
 
 When the `<button>` is clicked, the to-do’s [can-connect/can/map/map.prototype.destroy destroy]
 method is called, which will make a `DELETE /api/todos/{id}` call to delete the to-do in the
@@ -472,8 +470,8 @@ Congrats! You’ve built your first app with CanJS and learned all the basics.
 
 Here’s what your finished CodePen will look like:
 
-<p class="codepen" data-height="536" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 536px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/omqyMw/">
+<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="dBawyZ" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/dBawyZ/">
   CanJS 5 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>

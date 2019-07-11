@@ -839,7 +839,7 @@ const Todo = DefineMap.extend("Todo",{
     name: "string"
 });
 
-Todo.List = DefineMap.extend("TodoList",{
+Todo.List = DefineList.extend("TodoList",{
     "#": Todo
 });
 

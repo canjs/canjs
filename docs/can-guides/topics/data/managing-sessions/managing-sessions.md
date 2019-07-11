@@ -6,9 +6,6 @@
 
 @body
 
-## Note to reader
-The data guide and its sub-sections are a work in progress and are currently under review. The information provided is accurate; however, it will likely undergo revisions before being formally published. Feel free to go through this section to learn about how session management works, and please leave any comments in [this Google Doc](https://docs.google.com/document/d/17RKW9lM8iVJsT1mgoyxhFVU-cCY4B1kqQqvl5T6JKD4/edit?usp=sharing).
-
 ## Introduction
 A "session" refers to the period of time when a user has logged into an application. To begin sessions users submit login requests to access restricted data or features. The response from a login request contains a piece of information that is passed in future requests to identify them as being from a particular user. This piece of information is called a session token and is typically a string, either held directly by the application or in a cookie held by the browser. The [can-connect/can/session/session can/session] behavior assists in managing the lifecycle of user sessions and accessing any session-related data. 
 
