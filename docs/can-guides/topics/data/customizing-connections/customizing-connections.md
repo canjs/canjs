@@ -6,10 +6,6 @@
 
 @body
 
-## Note to reader
- 
-The data guide and its sub-sections are a work in progress and are currently under review. The information provided is accurate; however, it will likely undergo revisions before being formally published. Feel free to go through these sections to learn about how connection customization works, and please leave any comments in [this Google Doc](https://docs.google.com/document/d/1NVipVDIjVRvMXeQYSKUQEvNK2n5BvHrsqhNmRLcxqAY/edit?usp=sharing).
-
 ## Introduction
 CanJS provides several convenient ways of creating service layer interfaces (i.e connections) for your data models (i.e Lists & Maps). These include [can-rest-model], [can-realtime-rest-model] and [can-super-model]. Underneath the surface, these are all just pre-defined sets of the building blocks of [can-connect], ***behaviors***.
 
