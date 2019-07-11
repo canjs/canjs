@@ -2,33 +2,38 @@
 import { todoFixture } from "//unpkg.com/can-demo-models@5";
 todoFixture(3);
 
-import { Component, realtimeRestModel } from "//unpkg.com/can@5/core.mjs";
+import { realtimeRestModel, StacheDefineElement } from "//unpkg.com/can@5/everything.mjs";
 
 const Todo = realtimeRestModel("/api/todos/{id}").Map;
 
-Component.extend({
-	tag: "todos-app",
-	view: `
-		<h1>Today’s to-dos</h1>
-		{{# if(this.todosPromise.isPending) }}
-			Loading todos…
-		{{/ if }}
-		{{# if(this.todosPromise.isRejected) }}
-			<p>Couldn’t load todos; {{ this.todosPromise.reason }}</p>
-		{{/ if }}
-		{{# if(this.todosPromise.isResolved) }}
-			<ul>
-				{{# for(todo of this.todosPromise.value) }}
-					<li class="{{# if(todo.complete) }}done{{/ if }}">
-						{{ todo.name }}
-					</li>
-				{{/ for }}
-			</ul>
-		{{/ if }}
-	`,
-	ViewModel: {
-		get todosPromise() {
-			return Todo.getList({sort: "name"});
-		}
-	}
-});
+class TodosApp extends StacheDefineElement {
+    static get view() {
+        return `
+            <h1>Today’s to-dos</h1>
+            {{# if(this.todosPromise.isPending) }}
+                Loading todos…
+            {{/ if }}
+            {{# if(this.todosPromise.isRejected) }}
+                <p>Couldn’t load todos; {{ this.todosPromise.reason }}</p>
+            {{/ if }}
+            {{# if(this.todosPromise.isResolved) }}
+                <ul>
+                    {{# for(todo of this.todosPromise.value) }}
+                        <li class="{{# if(todo.complete) }}done{{/ if }}">
+                            {{ todo.name }}
+                        </li>
+                    {{/ for }}
+                </ul>
+            {{/ if }}
+        `;
+    }
+
+    static get define() {
+        return {
+            get todosPromise() {
+                return Todo.getList({sort: "name"});
+            }
+        };
+    }
+};
+customElements.define("todos-app", TodosApp);

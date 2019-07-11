@@ -2,13 +2,18 @@
 import { todoFixture } from "//unpkg.com/can-demo-models@5";
 todoFixture(3);
 
-import { Component } from "//unpkg.com/can@5/core.mjs";
+import { StacheDefineElement } from "//unpkg.com/can@5/everything.mjs";
 
-Component.extend({
-	tag: "todos-app",
-	view: `
-		<h1>Today’s to-dos</h1>
-	`,
-	ViewModel: {
-	}
-});
+class TodosApp extends StacheDefineElement {
+    static get view() {
+        return `
+            <h1>Today’s to-dos</h1>
+        `;
+    }
+
+    static get define() {
+        return {
+        };
+    }
+};
+customElements.define("todos-app", TodosApp);
