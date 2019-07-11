@@ -21,12 +21,14 @@ Component.extend({
 			<button on:click="this.save()" type="button">Add</button>
 			<ul>
 				{{# for(todo of this.todosPromise.value) }}
-					<li>
-						<input checked:bind="todo.complete" on:change="todo.save()" type="checkbox" />
+					<li class="{{# if(todo.complete) }}done{{/ if }}">
+						<label>
+							<input checked:bind="todo.complete" on:change="todo.save()" type="checkbox" />
+						</label>
 						{{# eq(todo, this.selected) }}
 							<input focused:from="true" on:blur="this.saveTodo(todo)" value:bind="todo.name" />
 						{{ else }}
-							<span class="{{# if(todo.complete) }}done{{/ if }}" on:click="this.selected = todo">
+							<span on:click="this.selected = todo">
 								{{ todo.name }}
 							</span>
 						{{/ eq }}

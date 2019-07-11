@@ -21,7 +21,7 @@ Component.extend({
 			<button on:click="this.save()" type="button">Add</button>
 			<ul>
 				{{# for(todo of this.todosPromise.value) }}
-					<li>
+					<li class="{{# if(todo.complete) }}done{{/ if }}">
 						{{ todo.name }}
 					</li>
 				{{/ for }}
