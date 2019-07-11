@@ -724,7 +724,7 @@ Todo.getList({sort: "name"}).then(todos => {
 
 <div class="single-col-wrapper">
 <div class="content-wrapper">
-  
+
 ## Get started with just a few lines of code
 
 Below is an entire app that shows off some of the best features of CanJS:
@@ -733,8 +733,8 @@ Below is an entire app that shows off some of the best features of CanJS:
 - `isPending`, `isRejected`, `isResolved`, and `value` helpers for directly reading the state of a Promise.
 - When you add a to-do, it automatically gets inserted into the list in the right position.
 
-<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="omqyMw" style="height: 530px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/omqyMw/">
+<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="dBawyZ" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/dBawyZ/">
   CanJS 5 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
