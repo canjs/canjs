@@ -35,7 +35,7 @@ publish-docs:
 	git add -f node_modules/validate.js
 	git fetch
 	echo "next.canjs.com" >> CNAME
-	git checkout origin/gh-pages -- CNAME
+	# git checkout origin/gh-pages -- CNAME
 	git checkout origin/gh-pages -- release/
 	git commit -m "Publish docs"
 	git push -f git@github.com:canjs/next gh-pages
