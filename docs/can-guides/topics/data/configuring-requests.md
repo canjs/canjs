@@ -8,7 +8,7 @@
 
 ## Note to reader
 
-The data guide and its sub-sections are a work in progress and are currently under review. The information provided is accurate; however, it will likely undergo several rounds of revision before being formally published. Feel free to go through these sections to learn about how data-modeling works, and please leave any comments in [this Google Doc](https://docs.google.com/document/d/14egbanRmOqpxw5MJbpBOTFfqkd3sGAN6jurog5l2my8/edit?usp=sharing.
+The data guide and its sub-sections are a work in progress and are currently under review. The information provided is accurate; however, it will likely undergo several rounds of revision before being formally published. Feel free to go through these sections to learn about how data-modeling works, and please leave any comments in [this Google Doc](https://docs.google.com/document/d/14egbanRmOqpxw5MJbpBOTFfqkd3sGAN6jurog5l2my8/edit?usp=sharing).
 
 ## Overview
 
