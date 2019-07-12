@@ -200,7 +200,7 @@ new Observation(function fullName(){
 > **Note:** If your function is a property on an observable map or list like [can-define/map/map],
 > you don't have to name it. For example, CanJS will name the `fullName` getter in the following example:
 > ```js
-> DefineMap.extend("Person",{
+> const Person = DefineMap.extend("Person",{
 >   fullName: {
 >     get: function(){ return this.first + " " + this.last; }
 >   }
@@ -354,7 +354,7 @@ easy to log value or even test performance.
 DOM. This means that `count` will be logged every second in the following component:
 
 ```js
-Component.extend({
+const MyCounter = Component.extend({
     tag: "my-counter",
     view: `{{console.log(count)}}`,
     ViewModel: {
