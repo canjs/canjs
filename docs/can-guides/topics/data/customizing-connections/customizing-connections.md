@@ -488,7 +488,7 @@ div.spaced > ol > li {
 <div class='spaced'>
 
 1. A user calls [can-connect/can/map/map.prototype.save <code>save</code>] on an instance of one of their [can-connect ]'d models: 
-	```
+	```js
 	const Todo = DefineMap.extend( /* ... */ );
 	Todo.connection = restModel({
 		Map: Todo,
@@ -502,7 +502,7 @@ div.spaced > ol > li {
     `todoInstance.save()` returns a promise that resolves when all the connection's promise handlers for the request are completed (in step 9).
 
 2. The [can-connect/can/map/map.prototype.save <code>save</code>] method is not a default part of CanJS Map instances, rather it is added to the Todo prototype by the [can-connect/can/map/map <code>can/map</code>] behavior during the creation of the connection. The implementation of [can-connect/can/map/map.prototype.save <code>save</code>] in [can-connect/can/map/map <code>can/map</code>] calls the [can-connect/connection.save <code>save</code>] method of the connection with the instance:
-	```
+	```js
 	connection.save(instance);
 	```  
 	
