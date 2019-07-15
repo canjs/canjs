@@ -231,7 +231,7 @@ QUnit.equal(todo.complete, true, "toggleComplete works");
 - The [can-define.types.type type] behavior defines a property’s type like:
 
   ```js
-  const Obj = DefineMap.extend({
+  const CustomType = DefineMap.extend({
       propertyName: {type: "number"}
   })
   ```
@@ -239,7 +239,7 @@ QUnit.equal(todo.complete, true, "toggleComplete works");
 - The [can-define.types.default] behavior defines a property’s initial value like:
 
   ```js
-  const Obj = DefineMap.extend({
+  const CustomType = DefineMap.extend({
       propertyName: {default: 3}
   })
   ```
@@ -247,7 +247,7 @@ QUnit.equal(todo.complete, true, "toggleComplete works");
 - Methods can be defined directly on the prototype like:
 
   ```js
-  const Obj = DefineMap.extend({
+  const CustomType = DefineMap.extend({
       methodName: function() {}
   })
   ```
@@ -301,7 +301,7 @@ QUnit.equal(todos.allComplete, true, "allComplete");
 - The [can-define.types.get] behavior defines observable computed properties like:
 
   ```js
-  const Obj = DefineMap.extend({
+  const CustomType = DefineMap.extend({
       propertyName: {
           get: function() {
               return this.otherProperty;
