@@ -2,7 +2,7 @@
 import { todoFixture } from "//unpkg.com/can-demo-models@5";
 todoFixture(3);
 
-import { realtimeRestModel, StacheDefineElement } from "//unpkg.com/can@5/everything.mjs";
+import { realtimeRestModel, StacheDefineElement, type } from "//unpkg.com/can@5/everything.mjs";
 
 const Todo = realtimeRestModel("/api/todos/{id}").Map;
 
@@ -42,7 +42,7 @@ class TodosApp extends StacheDefineElement {
     static get define() {
         return {
             newName: String,
-            selected: Todo,
+            selected: type.maybe(Todo),
 
             get todosPromise() {
                 return Todo.getList({sort: "name"});

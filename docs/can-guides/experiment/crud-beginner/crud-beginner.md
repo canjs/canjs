@@ -392,9 +392,18 @@ We’ll also make it possible to click on a to-do to select it and edit its name
 After either of these changes, we’ll save the to-do to the backend API.
 
 @sourceref ./8.js
-@highlight 25-34,45,59-62,only
+@highlight 5,25-34,45,59-62,only
 
-The next four sections will more thoroughly explain the code above.
+The next five sections will more thoroughly explain the code above.
+
+### Importing type
+
+First, we import the [can-type type] module:
+
+@sourceref ./8.js
+@highlight 5,only
+
+This module gives us helpers for type checking and conversion.
 
 ### Binding to checkbox form elements
 
@@ -437,10 +446,8 @@ Let’s examine this part of the code:
 `on:click="this.selected = todo"` will cause the custom element’s `selected` property to be set
 to the `todo` when the `<span>` is clicked.
 
-Additionally, we add [can-define.types.propDefinition#function__ `selected: Todo`]
-to the custom element. In our app, we only ever set `selected` to an instance of a `Todo`,
-otherwise CanJS would throw an error. If we wanted plain objects to be converted into
-new `Todo` instances, we could use [can-type/convert type.convert(Todo)].
+Additionally, we add [can-type/maybe `selected: type.maybe(Todo)`] to the custom element.
+This allows us to set `selected` to either an instance of `Todo` or `null`.
 
 ### Editing to-do names
 

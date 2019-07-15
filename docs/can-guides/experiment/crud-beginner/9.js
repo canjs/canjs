@@ -43,7 +43,7 @@ class TodosApp extends StacheDefineElement {
     static get define() {
         return {
             newName: String,
-            selected: Todo,
+            selected: type.maybe(Todo),
 
             get todosPromise() {
                 return Todo.getList({sort: "name"});
