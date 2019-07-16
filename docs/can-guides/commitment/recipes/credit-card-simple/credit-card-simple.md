@@ -90,7 +90,7 @@ should be able update the displayed “pay amount”.
 - The ViewModel is an instance of [can-define/map/map] allows you to define a property with a default value like:
 
   ```js
-  ProductVM = DefineMap.extend("ProductVM", {
+  const ProductVM = DefineMap.extend("ProductVM", {
     age: {default: 34}
   })
   ```
@@ -156,7 +156,7 @@ Print out the exported values like:
   ```js
   import { DefineMap } from "can";
 
-  Person = DefineMap.extend("Person", {
+  const Person = DefineMap.extend("Person", {
     name: "string",
     age: "number"
   })
@@ -196,7 +196,7 @@ So that we can print out the values like:
   first word of the `fullName` property:
 
   ```js
-  DefineMap.extend({
+  const Person = DefineMap.extend({
     fullName: "string",
     get firstName(){
       return this.fullName.split(" ")[0];

@@ -499,7 +499,7 @@ In this section, we will:
   import { Component, DefineList } from "can";
 
   Component.extend({
-    tag: "playlist-editor"
+    tag: "playlist-editor",
     view: `...`,
     ViewModel: {
       // ...
