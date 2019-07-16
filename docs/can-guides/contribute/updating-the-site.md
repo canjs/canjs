@@ -1,5 +1,5 @@
 @page guides/contributing/updating-the-site Updating the Site
-@parent guides/contribute 10
+@parent guides/contribute 11
 @outline 2
 @description How to update the CanJS website.
 

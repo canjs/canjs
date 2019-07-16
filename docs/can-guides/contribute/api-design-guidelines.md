@@ -1,5 +1,5 @@
 @page guides/contributing/api-design-guidelines API Design Guidelines
-@parent guides/contribute 8
+@parent guides/contribute 9
 
 @description Learn how to design APIs which are consistent with CanJS.
 
