@@ -25,7 +25,6 @@ export { default as stacheRouteHelpers } from "./es/can-stache-route-helpers";
 export { default as viewCallbacks } from "./es/can-view-callbacks";
 export { default as viewLive } from "./es/can-view-live";
 export { default as viewModel } from "./es/can-view-model";
-export { default as nodeList } from "./es/can-view-nodelist";
 export { default as viewParser } from "./es/can-view-parser";
 export { default as Scope } from "./es/can-view-scope";
 export { default as target } from "./es/can-view-target";

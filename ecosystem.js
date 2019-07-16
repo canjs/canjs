@@ -12,7 +12,7 @@ export { default as DefineObject } from "./es/can-define-object";
 export { default as DefineArray } from "./es/can-define-array";
 
 // Views
-export { default as StacheDefineElement } from "./es/can-stache-define-element";
+//export { default as StacheDefineElement } from "./es/can-stache-define-element";
 export { default as stacheConverters } from "./es/can-stache-converters";
 export { default as viewAutorender } from "./es/can-view-autorender";
 

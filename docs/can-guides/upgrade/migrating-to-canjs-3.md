@@ -578,7 +578,7 @@ Here’s a list of all the paths in CanJS 2.3 that now have separate modules in 
 - `can/view/import/import` — [can-view-import]
 - `can/view/live/live` — [can-view-live]
 - `can/view/mustache/mustache` — [can-mustache](https://github.com/canjs/can-mustache)
-- `can/view/node_lists/node_lists` — [can-view-nodelist]
+- `can/view/node_lists/node_lists` — [can-view-nodelist](https://github.com/canjs/can-view-nodelist)
 - `can/view/parser/parser` — [can-view-parser]
 - `can/view/scope/scope` — [can-view-scope]
 - `can/view/stache/stache` — [can-stache]

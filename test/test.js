@@ -44,7 +44,6 @@ require('can-validate-interface/test');
 // require('can-view-callbacks/test/callbacks-test'); in dev-only
 require('can-view-live/test/test');
 require('can-view-model/test/test');
-require('can-view-nodelist/test/can-view-nodelist-test');
 require('can-view-parser/test/can-view-parser-test');
 require('can-view-scope/test/scope-test');
 require('can-view-target/test/test');

@@ -124,7 +124,6 @@
     "can-stache": "canjs/can-stache#major",
     "can-stache-bindings": "canjs/can-stache-bindings#major",
     "can-stache-converters": "canjs/can-stache-converters#major",
-    "can-stache-define-element": "0.7.4",
     "can-stache-key": "1.4.3",
     "can-stache-route-helpers": "canjs/can-stache-route-helpers#major",
     "can-stream": "1.1.1",
