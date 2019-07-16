@@ -54,7 +54,7 @@ covering CanJS core libraries.
       tag: "todo-mvc",
       view: "...",
       ViewModel: {
-         ...
+         /* ... */
       }
   });
   ```
@@ -231,7 +231,7 @@ QUnit.equal(todo.complete, true, "toggleComplete works");
 - The [can-define.types.type type] behavior defines a property’s type like:
 
   ```js
-  DefineMap.extend({
+  const CustomType = DefineMap.extend({
       propertyName: {type: "number"}
   })
   ```
@@ -239,7 +239,7 @@ QUnit.equal(todo.complete, true, "toggleComplete works");
 - The [can-define.types.default] behavior defines a property’s initial value like:
 
   ```js
-  DefineMap.extend({
+  const CustomType = DefineMap.extend({
       propertyName: {default: 3}
   })
   ```
@@ -247,7 +247,7 @@ QUnit.equal(todo.complete, true, "toggleComplete works");
 - Methods can be defined directly on the prototype like:
 
   ```js
-  DefineMap.extend({
+  const CustomType = DefineMap.extend({
       methodName: function() {}
   })
   ```
@@ -293,7 +293,7 @@ QUnit.equal(todos.allComplete, true, "allComplete");
 - The [can-define/list/list.prototype.wildcardItems] property defines the behavior of items in a list like:
 
   ```js
-  DefineList.extend({
+  const List = DefineList.extend({
       "#": {type: ItemType}
   })
   ```
@@ -301,7 +301,7 @@ QUnit.equal(todos.allComplete, true, "allComplete");
 - The [can-define.types.get] behavior defines observable computed properties like:
 
   ```js
-  DefineMap.extend({
+  const CustomType = DefineMap.extend({
       propertyName: {
           get: function() {
               return this.otherProperty;
@@ -314,7 +314,7 @@ QUnit.equal(todos.allComplete, true, "allComplete");
 
   ```js
   list = new ListType([
-    // // ...
+    // ...
   ]);
   list.filter(function(item) {
       return test(item);
@@ -683,7 +683,7 @@ custom element.
   import Component from "can-component";
   import view from "./template.stache";
   const ViewModel = DefineMap.extend({
-    ...      
+    /* ... */
   });
 
   Component.extend({
@@ -802,7 +802,7 @@ single todo is saving.
 can be simulated like:
 
   ```js
-  DefineMap.extend({
+  const Person = DefineMap.extend({
       first: "string",
       last: "string",
       get fullName() {
