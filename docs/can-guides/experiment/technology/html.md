@@ -31,7 +31,7 @@ Let's say you want to create a page that counts clicks like the following: (_cli
 <style>
   my-counter button {margin-left: 15px;}
 </style>
-<script type="text/steal-module">
+<script id="counter-demo" type="text/steal-module">
 const Component = require("can-component");
 Component.extend({
     tag: "my-counter",
