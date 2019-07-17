@@ -290,7 +290,7 @@ we change the data, the UI will automatically change.
   ```js
   import { DefineMap } from "can";
 
-  Person = DefineMap.extend("Person", {
+  const Person = DefineMap.extend("Person", {
     name: "string",
     age: "number"
   })

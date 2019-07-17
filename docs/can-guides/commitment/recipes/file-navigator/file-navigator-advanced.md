@@ -146,7 +146,7 @@ You can create a [can-define/map/map DefineMap] type using [can-define/map/map.e
 
 ```js
 import { DefineMap } from "can";
-Type = DefineMap.extend({
+const Type = DefineMap.extend({
   id: "string",
   hasChildren: "boolean",
   // ...
@@ -210,7 +210,7 @@ in the same way it’s expected by the designer.
 
   Component.extend({
     tag: 'my-component',
-    view: `TEMPLATE CONTENT`
+    view: `TEMPLATE CONTENT`,
     ViewModel: {}
   });
   ```
@@ -224,7 +224,7 @@ in the same way it’s expected by the designer.
 
   Component.extend({
     tag: 'my-component',
-    view: `{{something.name}}`
+    view: `{{something.name}}`,
     ViewModel: {}
   });
   ```
