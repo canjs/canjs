@@ -139,7 +139,7 @@
     "can-validate-validatejs": "1.0.1",
     "can-value": "1.1.1",
     "can-vdom": "4.4.1",
-    "can-view-autorender": "5.0.4",
+    "can-view-autorender": "canjs/can-view-autorender#major",
     "can-view-callbacks": "canjs/can-view-callbacks#major",
     "can-view-live": "canjs/can-view-live#major",
     "can-view-model": "4.0.3",
