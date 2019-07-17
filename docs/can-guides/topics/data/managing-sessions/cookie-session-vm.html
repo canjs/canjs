@@ -8,7 +8,7 @@
     restModel,
     type,
     DefineMap,
-    StacheDefineElement,
+    StacheElement,
   } from "//unpkg.com/can@5/ecosystem.mjs";
 
   setupFixtures();
@@ -39,7 +39,7 @@
     url: '/api/todo'
   });
 
-  class TodoLogin extends StacheDefineElement {
+  class TodoLogin extends StacheElement {
     static view = `
       {{# if (this.Session.currentPromise.isResolved) }}
         <p class="welcome-message">
@@ -77,7 +77,7 @@
       {{/ if }}
     `;
 
-    static define = {
+    static props = {
       email: String,
       password: String,
       logInError: type.Any,
@@ -107,7 +107,7 @@
   }
   customElements.define("todo-login", TodoLogin);
 
-  class TodoList extends StacheDefineElement {
+  class TodoList extends StacheElement {
     static view = `
       <h3>Todos:</h3>
       <ol>
@@ -120,7 +120,7 @@
       </ol>
     `;
 
-    static define = {
+    static props = {
       todos: {
         async(resolve) {
           Session.currentPromise.then(() => {
