@@ -7,7 +7,7 @@
     fixture,
     type,
     DefineMap,
-    StacheDefineElement,
+    StacheElement,
   } from "//unpkg.com/can@5/ecosystem.mjs";
 
   setupFixtures();
@@ -29,7 +29,7 @@
   });
   Session.connection.init();
 
-  class TodoLogin extends StacheDefineElement {
+  class TodoLogin extends StacheElement {
     static view =`
       {{# if (this.Session.currentPromise.isResolved) }}
         <p class="welcome-message">
@@ -66,7 +66,7 @@
       {{/ if }}
     `;
 
-    static define = {
+    static props = {
       email: String,
       password: String,
       logInError: type.Any,
