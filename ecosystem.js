@@ -26,6 +26,8 @@ export { default as ndjsonStream } from "./es/can-ndjson-stream";
 export { default as connectNDJSON } from "./es/can-connect-ndjson";
 export { default as connectCanSession } from "./es/can-connect-session";
 
+// Typed Data
+export { default as constructSuper } from './es/can-construct-super';
 
 // Routing
 export { default as RouteMock } from "./es/can-route-mock";
