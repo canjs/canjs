@@ -83,7 +83,7 @@
     "can-dom-mutate": "^2.0.0",
     "can-event-dom-enter": "2.2.1",
     "can-event-dom-radiochange": "2.2.1",
-    "can-event-queue": "1.1.6",
+    "can-event-queue": "canjs/can-event-queue#dom-queue",
     "can-fixture": "3.1.7",
     "can-fixture-socket": "2.0.2",
     "can-fragment": "1.3.1",
