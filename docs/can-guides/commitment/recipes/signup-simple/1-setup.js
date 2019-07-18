@@ -1,4 +1,4 @@
-import { ajax, fixture, type, StacheDefineElement } from "//unpkg.com/can@5/ecosystem.mjs";
+import { ajax, fixture, type, StacheElement } from "//unpkg.com/can@5/ecosystem.mjs";
 
 fixture("POST /api/session", function(request, response) {
 	const userData = localStorage.getItem("user");
@@ -38,7 +38,7 @@ fixture("POST /api/users", function(request) {
 	return session.user;
 });
 
-class SignupLogin extends StacheDefineElement {
+class SignupLogin extends StacheElement {
 	static view = `
 		<p class="welcome-message">
 			Welcome Someone.
