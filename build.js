@@ -58,10 +58,10 @@ var globalBuilds = stealTools.export({
 		config: __dirname + "/package.json!npm",
 		main: "can/can",
 		map: {
-			"can-define-array": "can-define-array/dist/can-define-array",
-			"can-define-object": "can-define-object/dist/can-define-object",
-			"can-define-mixin": "can-define-mixin/dist/mixins",
-			"can-stache-define-element": "can-stache-define-element/dist/can-stache-define-element"
+			"can-observable-array": "can-observable-array/dist/can-observable-array",
+			"can-observable-object": "can-observable-object/dist/can-observable-object",
+			"can-observable-mixin": "can-observable-mixin/dist/mixins",
+			"can-stache-element": "can-stache-element/dist/can-stache-element"
 		}
 	},
 	options: {
