@@ -34,7 +34,7 @@ __Start this tutorial by clicking the “Run in your browser” button below:__
 
 This starter code includes:
 
-- CanJS (`import { ajax, fixture, type, StacheDefineElement } from "//unpkg.com/can@5/core.mjs"` imports [can-ajax], [can-fixture], [can-type] and [can-stache-define-element])
+- CanJS (`import { ajax, fixture, type, StacheElement } from "//unpkg.com/can@5/core.mjs"` imports [can-ajax], [can-fixture], [can-type] and [can-stache-element])
 - Pre-made styles so the app looks pretty 😍
 - A mock service layer
 
@@ -180,19 +180,19 @@ When someone adds `<signup-login></signup-login>` to their HTML, we want the fol
 
 To set up a basic CanJS application, you define a custom element in JavaScript and use the custom element in your page’s HTML.
 
-To define a custom element, create a class that extends [can-stache-define-element]. Then register your element via [`customElements.define`](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define) by calling it with the name of your custom element and the class.
+To define a custom element, create a class that extends [can-stache-element]. Then register your element via [`customElements.define`](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define) by calling it with the name of your custom element and the class.
 
 For example, we will use `<signup-login>` as our custom tag:
 
 ```js
-  class SignupLogin extends StacheDefineElement {}
+  class SignupLogin extends StacheElement {}
   customElements.define("signup-login", SignupLogin);
 ```
 
-But this doesn’t do anything. Components created with [can-stache-define-element] add their own HTML through their [can-stache-define-element/static.view view] property like this:
+But this doesn’t do anything. Components created with [can-stache-element] add their own HTML through their [can-stache-element/static.view view] property like this:
 
 ```js
-class SignupLogin extends StacheDefineElement {
+class SignupLogin extends StacheElement {
   static view = `
     <h2>Sign Up or Log In</h2>
   `   
@@ -225,25 +225,25 @@ signupLogin.sessionPromise = Promise.resolve({user: {email: "someone@email.com"}
 
 ### What you need to know
 
-- The [can-stache-define-element/static.define define] property on a [can-stache-define-element StacheDefineElement] class specifies well-defined properties for each element instance via [can-define-object]:
+- The [can-stache-element/static.props props] property on a [can-stache-element StacheElement] class specifies well-defined properties for each element instance via [can-observable-object]:
   ```js
-  class SignupLogin extends StacheDefineElement {
+  class SignupLogin extends StacheElement {
   	static view = `
   	  {{this.myProperty}}
     `;  
-	  static define = {
+	  static props = {
       myProperty: String
     }
   }
   ```
 
-- The [can-define-object/define/get-default default] property can return the initial value of a property:
+- The [can-observable-object/define/get-default default] property can return the initial value of a property:
   ```js
-  class SignupLogin extends StacheDefineElement {
+  class SignupLogin extends StacheElement {
   	static view = `
       {{this.myProperty}} <!-- renders “This string” -->
     `;  
-	  static define = {
+	  static props = {
       myProperty: {
         get default() {
           return "This string"
@@ -301,9 +301,9 @@ A promise with a _session-like_ object looks like:
 
 ### What you need to know
 
-- Component properties defined with [can-define-object] allow you specify a [can-define-object/define/type type] like so:
+- Component properties defined with [can-observable-object] allow you specify a [can-observable-object/define/type type] like so:
   ```js
-  static define = {
+  static props = {
     name: String,
     password: Number
   }
@@ -471,8 +471,8 @@ We’ll do this by `catch`ing the create-session request. If the request fails, 
 
 - Use the [can-type.any Any type] to define a property of indeterminate type:
   ```js
-  class AppModel extends DefineObject {
-    static define = {
+  class AppModel extends ObservableObject {
+    static props = {
       myProperty: type.Any
     };    
   };
