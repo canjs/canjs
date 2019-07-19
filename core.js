@@ -1,11 +1,12 @@
 // __ Observables __
 
 // -> Core
-export { define, DefineMap, DefineList } from "./es/can-define";
 export { default as value } from "./es/can-value";
 export { default as Observation } from "./es/can-observation";
 export { default as ObservationRecorder } from "./es/can-observation-recorder";
 export { default as SimpleMap } from "./es/can-simple-map";
+export { default as ObservableObject } from "./es/can-observable-object";
+export { default as ObservableArray } from "./es/can-observable-array";
 
 // -> Infrastruture
 export { default as bind } from "./es/can-bind";
@@ -14,9 +15,9 @@ export { default as SimpleObservable } from "./es/can-simple-observable";
 
 
 // __ Views __
+export { default as StacheElement } from "./es/can-stache-element";
 
 // -> Core
-export { default as Component } from './es/can-component';
 export { default as stache } from "./es/can-stache";
 export { default as stacheBindings } from "./es/can-stache-bindings";
 export { default as stacheRouteHelpers } from "./es/can-stache-route-helpers";
