@@ -62,16 +62,17 @@ Another paragraph. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed 
 ## Blockquote
 > Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
-<p><details>
-<summary>This is a summary element that shows a paragraph</summary></p>
-<p>Another paragraph. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-<p></details></p>
+<details>
+<summary>This is a summary element that shows a paragraph</summary>
 
-<p><details>
-<summary>This is a summary element that shows a pre</summary></p>
+Another paragraph. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+</details>
+
+<details>
+<summary>This is a summary element that shows a pre</summary>
 <pre><code class="language-js">foo();
 </code></pre>
-<p></details></p>
+</details>
 
 ### HTML code example:
 <pre><code class="language-html">&lt;hello-world&gt;&lt;/hello-world&gt;
