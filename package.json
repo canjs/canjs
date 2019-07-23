@@ -98,7 +98,7 @@
     "can-memory-store": "1.0.2",
     "can-namespace": "1.0.0",
     "can-ndjson-stream": "1.0.1",
-    "can-observable-array": "0.5.0",
+    "can-observable-array": "0.6.0",
     "can-observable-mixin": "0.4.0",
     "can-observable-object": "0.2.0",
     "can-observation": "4.1.3",
