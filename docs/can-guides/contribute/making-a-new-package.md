@@ -1,5 +1,5 @@
 @page guides/contributing/adding-ecosystem-modules Making a New Package
-@parent guides/contribute 7
+@parent guides/contribute 8
 @outline 0
 
 @description Learn how to add a new package to the CanJS toolkit.
