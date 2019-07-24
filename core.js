@@ -103,6 +103,10 @@ export { default as Reflect } from "./es/can-reflect";
 export { default as reflectDependencies } from "./es/can-reflect-dependencies";
 export { default as reflectPromise } from "./es/can-reflect-promise";
 
+// __ Data Validation__
+// -> Core
+export { default as type } from "./es/can-type";
+
 // __ Enable Devtools __
 //!steal-remove-start
 import "./enable-can-debug";
