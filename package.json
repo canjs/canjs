@@ -109,6 +109,7 @@
     "can-query-logic": "1.1.14",
     "can-queues": "1.2.2",
     "can-realtime-rest-model": "1.1.1",
+    "can-recursive-observable": "0.1.0",
     "can-reflect": "1.17.11",
     "can-reflect-dependencies": "1.1.2",
     "can-reflect-promise": "2.2.1",
