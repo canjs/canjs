@@ -1,6 +1,10 @@
 // Core tests
-require('can-component/test/test');
-require('can-define/test/test');
+require("can-stache-element/test/test");
+require("can-observable-array/can-observable-array-test");
+require("can-observable-bindings/test/test");
+require("can-observable-object/can-observable-object-test");
+require("can-observable-mixin/test/test");
+require("can-type/can-type-test");
 // require('can-route/test/test'); in dev-only
 // require('can-route-pushstate/can-route-pushstate_test'); in dev-only
 // require('can-stache/test/stache-test'); in dev-only
@@ -51,6 +55,8 @@ require('can-stache-converters/test/test');
 
 
 // Legacy tests
+require('can-component/test/test');
+require('can-define/test/test');
 require('can-compute/can-compute_test');
 require('can-list/can-list_test');
 require('can-map/can-map_test');
