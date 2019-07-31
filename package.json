@@ -98,6 +98,7 @@
     "can-namespace": "1.0.0",
     "can-ndjson-stream": "1.0.1",
     "can-observable-array": "canjs/can-observable-array#major",
+    "can-observable-bindings": "canjs/can-observable-bindings#master",
     "can-observable-mixin": "canjs/can-observable-mixin#major",
     "can-observable-object": "canjs/can-observable-object#major",
     "can-observation": "canjs/can-observation#dom-queue",
