@@ -65,7 +65,7 @@
     "can-control": "canjs/can-control#major",
     "can-data-types": "1.2.1",
     "can-debug": "2.0.7",
-    "can-define": "2.7.20",
+    "can-define": "2.7.21",
     "can-define-backup": "2.1.2",
     "can-define-lazy-value": "1.1.1",
     "can-define-stream": "1.1.1",
