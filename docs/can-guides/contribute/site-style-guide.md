@@ -121,3 +121,15 @@ npm install can --save
 
 The following is a very long sentence that will hopefully go across many lines because it
 is so long and filled with <code>code elements</code>, <strong>bold elements</strong>, <em>italic elements</em>, <a href="#">link elements</a>.
+
+## Screenshots
+
+Use the `bit-docs-screenshot` class on images to center them. Add a `width` to the image to set a max width.
+
+### With width
+
+<img alt="" class="bit-docs-screenshot" src="https://canjs.com/docs/can-guides/images/devtools/panel-component-selected.png" width="600px" />
+
+### Without width
+
+<img alt="" class="bit-docs-screenshot" src="https://canjs.com/docs/can-guides/images/devtools/panel-component-selected.png" />
