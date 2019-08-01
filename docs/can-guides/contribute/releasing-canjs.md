@@ -1,5 +1,5 @@
 @page guides/contributing/releases Releasing CanJS
-@parent guides/contribute 9
+@parent guides/contribute 10
 @outline 2
 @description Release and hosting information for CanJS maintainers.
 

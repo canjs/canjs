@@ -2,11 +2,11 @@
 import { todoFixture } from "//unpkg.com/can-demo-models@5/index.mjs";
 todoFixture(3);
 
-import { realtimeRestModel, StacheDefineElement } from "//unpkg.com/can@5/everything.mjs";
+import { realtimeRestModel, StacheElement } from "//unpkg.com/can@5/everything.mjs";
 
 const Todo = realtimeRestModel("/api/todos/{id}").Map;
 
-class TodosApp extends StacheDefineElement {
+class TodosApp extends StacheElement {
     static get view() {
         return `
             <h1>Today’s to-dos</h1>
@@ -30,7 +30,7 @@ class TodosApp extends StacheDefineElement {
         `;
     }
 
-    static get define() {
+    static get props() {
         return {
             newName: String,
 

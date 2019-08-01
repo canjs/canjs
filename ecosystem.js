@@ -34,6 +34,8 @@ export { default as RouteMock } from "./es/can-route-mock";
 export { default as defineValidateValidatejs } from "./es/can-define-validate-validatejs";
 export { default as validate } from "./es/can-validate";
 export { default as validateValidatejs } from "./es/can-validate-validatejs";
+export { default as type } from "./es/can-type";
+export { default as DeepObservable } from "./es/can-deep-observable";
 
 // DOM Utilities
 export { default as radioChangeEvent } from "./es/can-event-dom-radiochange";

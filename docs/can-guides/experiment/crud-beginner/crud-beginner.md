@@ -91,25 +91,25 @@ With one line of code, we load CanJS from a CDN and import one of its modules:
 Here’s what the different parts mean:
 
 - `import` is a keyword that [loads modules from files](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import).
-- `StacheDefineElement` is the _named export_ from CanJS that lets us [can-stache-define-element create custom element constructors].
+- `StacheElement` is the _named export_ from CanJS that lets us [can-stache-element create custom element constructors].
 - `//unpkg.com/can@5/everything.mjs` loads the `everything.mjs` file from CanJS 5; this is explained more thoroughly in the [guides/setup#Explanationofdifferentbuilds setup guide].
 - `unpkg.com` is a CDN that hosts packages like CanJS ([can](https://www.npmjs.com/package/can)).
 
 ### Defining a custom element
 
-The `StacheDefineElement` _named export_ comes from CanJS’s [can-stache-define-element can-stache-define-element] package.
+The `StacheElement` _named export_ comes from CanJS’s [can-stache-element can-stache-element] package.
 
 CanJS is composed of dozens of different packages that are responsible for different features.
-[can-stache-define-element can-stache-define-element] is responsible for letting us define custom elements that can be
+[can-stache-element can-stache-element] is responsible for letting us define custom elements that can be
 used by the browser.
 
 @sourceref ./2.js
 @highlight 7-19,only
 
-The `StacheDefineElement` class can be extended to define a new custom element. It has two properties:
+The `StacheElement` class can be extended to define a new custom element. It has two properties:
 
-- [can-stache-define-element/static.view `static view`] is a [can-stache stache template] that gets parsed by CanJS and inserted into the custom element; more on that later.
-- [can-stache-define-element/static.define `static define`] is an object that _defines_ the properties available to the view.
+- [can-stache-element/static.view `static view`] is a [can-stache stache template] that gets parsed by CanJS and inserted into the custom element; more on that later.
+- [can-stache-element/static.props `static props`] is an object that defines the properties available to the view.
 
 After calling [customElements.define()](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define)
 with the custom element’s tag name and constructor, a new instance of the `TodosApp` class will be instantiated every time
@@ -122,7 +122,7 @@ The `view` is pretty boring right now; it just renders `<h1>Today’s to-dos</h1
 
 ## Rendering a template with data
 
-A custom element’s [can-stache-define-element/static.view] has access to all the properties in the [can-stache-define-element/static.define] object.
+A custom element’s [can-stache-element/static.view] has access to all the properties in the [can-stache-element/static.props] object.
 
 Let’s update our custom element to be a little more interesting:
 
@@ -328,14 +328,15 @@ Again, you might be wondering where we’ve defined the `save()` method in the c
 
 Earlier we said that:
 
-> [can-stache-define-element/static.define `static define`] is an object that _defines_ the properties available to the view.
+> [can-stache-element/static.props `static props`] is an object that defines the properties available to the view.
 
-This is true, although there’s more information to be known. The `static define` object is made up of [can-define-object DefineObject]-like
+This is true, although there’s more information to be known. The `static props` object is made up of [can-observable-object ObservableObject]-like
 property definitions that explicitly configure how a custom element’s properties are defined.
 
 We’ve been defining properties and methods on the custom element with the
 [standard JavaScript getter and method syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions#Defining_method_functions).
-Now we’re going to use [can-define-object/object.types.property#function__ DefineObject’s constructor syntax] to define
+
+Now we’re going to use [can-observable-object/object.types.property#function__ ObservableObject’s constructor syntax] to define
 a property as a [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String):
 
 @sourceref ./7.js
@@ -392,9 +393,18 @@ We’ll also make it possible to click on a to-do to select it and edit its name
 After either of these changes, we’ll save the to-do to the backend API.
 
 @sourceref ./8.js
-@highlight 25-34,45,59-62,only
+@highlight 5,25-34,45,59-62,only
 
-The next four sections will more thoroughly explain the code above.
+The next five sections will more thoroughly explain the code above.
+
+### Importing type
+
+First, we import the [can-type type] module:
+
+@sourceref ./8.js
+@highlight 5,only
+
+This module gives us helpers for type checking and conversion.
 
 ### Binding to checkbox form elements
 
@@ -437,10 +447,8 @@ Let’s examine this part of the code:
 `on:click="this.selected = todo"` will cause the custom element’s `selected` property to be set
 to the `todo` when the `<span>` is clicked.
 
-Additionally, we add [can-define.types.propDefinition#function__ `selected: Todo`]
-to the custom element. In our app, we only ever set `selected` to an instance of a `Todo`,
-otherwise CanJS would throw an error. If we wanted plain objects to be converted into
-new `Todo` instances, we could use [can-type/convert type.convert(Todo)].
+Additionally, we add [can-type/maybe `selected: type.maybe(Todo)`] to the custom element.
+This allows us to set `selected` to either an instance of `Todo` or `null`.
 
 ### Editing to-do names
 
