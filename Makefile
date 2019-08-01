@@ -1,8 +1,7 @@
 publish-docs:
 	npm install --no-shrinkwrap
 	git checkout -b gh-pages
-	npm run deps-bundle
-	./node_modules/.bin/bit-docs -fd
+	npm run document:force
 	rm -rf test/builders/
 	git add -f dev-bundle.js
 	git add -f test/
