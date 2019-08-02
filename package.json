@@ -108,7 +108,7 @@
     "can-param": "1.1.2",
     "can-parse-uri": "1.2.2",
     "can-query-logic": "1.1.14",
-    "can-queues": "canjs/can-queues#dom-queue",
+    "can-queues": "2.0.0-pre.0",
     "can-realtime-rest-model": "1.1.1",
     "can-reflect": "1.17.11",
     "can-reflect-dependencies": "1.1.2",
