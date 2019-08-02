@@ -128,7 +128,7 @@ In all the above examples, after the `currentPromise` resolves, properties like 
 The `can/session` behavior makes it easy to log in and start a session. All you have to do is save a new instance of the session model when the user has provided their login details:
 
 @sourceref ./cookie-session-vm.html
-@highlight 102-104,only
+@highlight 103-105,only
 @codepen 
 
 After the Promise returned by the `.save` method completes `Session.current` is set to the new instance `session` and `Session.currentPromise` is set to a resolved Promise that returns `session`. Any components using `current` or `currentPromise` will notice this change and update their view  or make requests for restricted services.
