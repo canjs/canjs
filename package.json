@@ -99,7 +99,7 @@
     "can-namespace": "1.0.0",
     "can-ndjson-stream": "1.0.1",
     "can-observable-array": "1.0.0-pre.1",
-    "can-observable-bindings": "1.0.0-pre.2",
+    "can-observable-bindings": "1.0.0-pre.3",
     "can-observable-mixin": "1.0.0-pre.1",
     "can-observable-object": "1.0.0-pre.2",
     "can-observation": "4.2.0",
