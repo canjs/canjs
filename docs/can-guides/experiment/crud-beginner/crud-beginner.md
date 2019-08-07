@@ -335,6 +335,7 @@ property definitions that explicitly configure how a custom element’s properti
 
 We’ve been defining properties and methods on the custom element with the
 [standard JavaScript getter and method syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions#Defining_method_functions).
+
 Now we’re going to use [can-observable-object/object.types.property#function__ ObservableObject’s constructor syntax] to define
 a property as a [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String):
 

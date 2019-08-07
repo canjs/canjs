@@ -154,27 +154,6 @@ message("Earth");
 document.body.innerHTML //-> Hello Earth!
 ```
 
-## can-view-nodelist
-
-[can-view-nodelist] is used to maintain the structure of HTML nodes produced by a
-template. For example, a [can-stache] template like:
-
-```
-{{#if(over21)}}name:{{{highlight name}}}.{{/if}}
-```
-
-Might result in a nodeList structure that looks like:
-
-```
-if[
-	TextNode("name:"),
-	highlight[<b>Justin</b>]
-]
-```
-
-This is to say that the `#if over21` nodeList will contain a text node for `"name:"`
-and the `highlight name` nodeList.  The `highlight name` nodeList will contain the
-html content resulting from that helper (`<b>Justin</b>`).
 
 ## can-view-parser
 

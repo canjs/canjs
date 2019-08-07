@@ -1,11 +1,13 @@
 // __ Observables __
 
 // -> Core
-export { define, DefineMap, DefineList } from "./es/can-define";
 export { default as value } from "./es/can-value";
 export { default as Observation } from "./es/can-observation";
 export { default as ObservationRecorder } from "./es/can-observation-recorder";
 export { default as SimpleMap } from "./es/can-simple-map";
+export { default as ObservableObject } from "./es/can-observable-object";
+export { default as ObservableArray } from "./es/can-observable-array";
+export { fromAttribute } from "can-observable-bindings";
 
 // -> Infrastruture
 export { default as bind } from "./es/can-bind";
@@ -14,9 +16,9 @@ export { default as SimpleObservable } from "./es/can-simple-observable";
 
 
 // __ Views __
+export { default as StacheElement } from "./es/can-stache-element";
 
 // -> Core
-export { default as Component } from './es/can-component';
 export { default as stache } from "./es/can-stache";
 export { default as stacheBindings } from "./es/can-stache-bindings";
 export { default as stacheRouteHelpers } from "./es/can-stache-route-helpers";
@@ -25,7 +27,6 @@ export { default as stacheRouteHelpers } from "./es/can-stache-route-helpers";
 export { default as viewCallbacks } from "./es/can-view-callbacks";
 export { default as viewLive } from "./es/can-view-live";
 export { default as viewModel } from "./es/can-view-model";
-export { default as nodeList } from "./es/can-view-nodelist";
 export { default as viewParser } from "./es/can-view-parser";
 export { default as Scope } from "./es/can-view-scope";
 export { default as target } from "./es/can-view-target";
@@ -102,6 +103,10 @@ export { default as default, default as can } from "./es/can-namespace";
 export { default as Reflect } from "./es/can-reflect";
 export { default as reflectDependencies } from "./es/can-reflect-dependencies";
 export { default as reflectPromise } from "./es/can-reflect-promise";
+
+// __ Data Validation__
+// -> Core
+export { default as type } from "./es/can-type";
 
 // __ Enable Devtools __
 //!steal-remove-start

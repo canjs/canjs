@@ -5,13 +5,17 @@
 <main></main>
 
 <script type="module">
-	import { Component, stache, Reflect } from "../../../core.mjs";
+	import { StacheElement, stache, Reflect } from "../../../core.mjs";
 
-	Component.extend({
-		tag: "my-app",
-		view: `Hello {{ name }}!`,
-		ViewModel: {
-			name: { default: "world" }
+	customElements.define("my-app", class extends StacheElement {
+		static get view() {
+			return `Hello {{ name }}!`;
+		}
+
+		static get props() {
+			return {
+				name: "world"
+			};
 		}
 	});
 

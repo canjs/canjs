@@ -52,7 +52,6 @@ _Utility libraries that power the core and ecosystem collections._
   - Register custom elements or attributes in templates — [can-view-callbacks](https://canjs.com/doc/can-view-callbacks.html)
   - Keeps part of the DOM up to date with a compute — [can-view-live](https://canjs.com/doc/can-view-live.html)
   - Read a view model from a custom element — [can-view-model](https://canjs.com/doc/can-view-model.html)
-  - Maintains — [can-view-nodelist](https://canjs.com/doc/can-view-nodelist.html)
   - Parses HTML and magic tags — [can-view-parser](https://canjs.com/doc/can-view-parser.html)
   - Lookup scope within a stache template — [can-view-scope](https://canjs.com/doc/can-view-scope.html)
   - A fast-path compile target — [can-view-target](https://canjs.com/doc/can-view-target.html)
