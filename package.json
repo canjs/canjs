@@ -155,7 +155,7 @@
     "@feathersjs/socketio-client": "^1.2.1",
     "@octokit/rest": "^16.27.3",
     "bit-docs": "0.0.11",
-    "can-reflect-tests": "^0.3.1",
+    "can-reflect-tests": "^1.0.0",
     "can-test-helpers": "^1.1.1",
     "core-js": "^2.5.7",
     "es6-promise-polyfill": "^1.2.0",
