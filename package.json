@@ -94,7 +94,7 @@
     "can-make-map": "1.2.1",
     "can-map": "4.3.8",
     "can-map-compat": "1.1.1",
-    "can-map-define": "4.3.8",
+    "can-map-define": "4.3.9",
     "can-memory-store": "1.0.2",
     "can-namespace": "1.0.0",
     "can-ndjson-stream": "1.0.1",
