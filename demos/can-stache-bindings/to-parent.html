@@ -1,55 +1,75 @@
 <my-demo></my-demo>
-<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id='demo-source'>
-import { Component } from "can";
+<script src="../../node_modules/steal/steal.js" main="@empty" id='demo-source'>
+import { StacheElement, type } from "can";
 
-Component.extend({
-	tag: "drivers-list",
-	view:`
-		<ul>
-			{{# for(driver of this.drivers) }}
-				<li on:click="this.select(driver)">
-					{{ driver.title }} {{ driver.first }} {{ driver.last }} - {{ driver.licensePlate }}
-				</li>
-			{{/ for }}
-		</ul>
-	`,
-	ViewModel: {
-		drivers: {
-			default: () =>[
-					{ title: "Dr.", first: "Cosmo", last: "Kramer", licensePlate: "ASMAN" },
-					{ title: "Ms.", first: "Elaine", last: "Benes", licensePlate: "621433" }
-			]
+class DriversList extends StacheElement {
+    static get view() {
+        return `
+            <ul>
+                {{# for(driver of this.drivers) }}
+                    <li on:click="this.select(driver)">
+                        {{ driver.title }} {{ driver.first }} {{ driver.last }} - {{ driver.licensePlate }}
+                    </li>
+                {{/ for }}
+            </ul>
+        `;
+    }
 
-		},
-		selected: {
-			default: false
-		},
-		select: function(driver){
-			this.selected = driver;
-		}
-	}
-});
+    static get props() {
+        return {
+            drivers: {
+                get default() {
+                    return [
+                            { title: "Dr.", first: "Cosmo", last: "Kramer", licensePlate: "ASMAN" },
+                            { title: "Ms.", first: "Elaine", last: "Benes", licensePlate: "621433" }
+                    ];
+                }
+            },
+
+            selected: {
+                default: false,
+								type: type.Any
+            }
+        };
+    }
+
+    select(driver) {
+        this.selected = driver;
+    }
+};
 
 
-Component.extend({
-	tag: "edit-plate",
-	view: `
-		<input value:from='this.plateName' on:input='update(scope.element.value)'/>
-	`,
-	ViewModel: {
-		plateName: "string",
-		update: function(value){
-			this.plateName = value;
-		}
-	}
-});
+customElements.define("drivers-list", DriversList);
 
-Component.extend({
-	tag: 'my-demo',
-	view: `
-		{{ let editing=null }}
-		<drivers-list selected:to="editing"></drivers-list>
-		<edit-plate plateName:bind="editing.licensePlate"/>
-	`
-})
+
+class EditPlate extends StacheElement {
+    static get view() {
+        return `
+            <input value:from='this.plateName' on:input='update(scope.element.value)'/>
+        `;
+    }
+
+    static get props() {
+        return {
+            plateName: type.maybeConvert(String)
+        };
+    }
+
+    update(value) {
+        this.plateName = value;
+    }
+};
+
+customElements.define("edit-plate", EditPlate);
+
+class MyDemo extends StacheElement {
+    static get view() {
+        return `
+            {{ let editing=null }}
+            <drivers-list selected:to="editing"></drivers-list>
+            <edit-plate plateName:bind="editing.licensePlate"/>
+        `;
+    }
+};
+customElements.define("my-demo", MyDemo);
 </script>

@@ -1,18 +1,29 @@
 <my-items></my-items>
-<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id='demo-source'>
-import { Component } from "can";
+<script>
+	steal = { forceES5: false };
+</script>
+<script src="../../node_modules/steal/steal.js" main="@empty" id='demo-source'>
+import { ObservableArray, StacheElement } from "can";
 
-Component.extend({
-	tag: 'my-items',
-	view: `
-		{{# for(item of this.items) }}
-			<li on:click='this.items.splice(scope.index,1)'>{{ item.name }}</li>
-		{{/ for }}
-	`,
-	ViewModel: {
-		items: {
-			default: () => [{name: "first"}, {name: "second"}]
-		}
-	}
-})
+class MyItems extends StacheElement {
+    static get view() {
+        return `
+            {{# for(item of this.items) }}
+                <li on:click='this.items.splice(scope.index,1)'>{{ item.name }}</li>
+            {{/ for }}
+        `;
+    }
+
+    static get props() {
+        return {
+            items: {
+                get default() {
+                    return new ObservableArray([{name: "first"}, {name: "second"}]);
+                }
+            }
+        };
+    }
+}
+
+customElements.define("my-items", MyItems);
 </script>
