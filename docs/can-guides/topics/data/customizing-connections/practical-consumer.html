@@ -1,17 +1,21 @@
 <script type="module">
-	import { connect, QueryLogic, realtimeRestModel, DefineMap, stache } from "//unpkg.com/can@5/core.mjs";
+	import { connect, ObservableObject, QueryLogic, realtimeRestModel, stache, type } from "//unpkg.com/can@5/everything.mjs";
 
-	const Todo = DefineMap.extend({
-		id: {
-			identity: true,
-			type: "number"
-		},
-		userId: 'number',
-		title: "string",
-		completed: "boolean"
-	});
+    class Todo extends ObservableObject {
+        static get props() {
+            return {
+                id: {
+                    identity: true,
+                    type: type.maybeConvert(Number)
+                },
+                userId: type.maybeConvert(Number),
+                title: type.maybeConvert(String),
+                completed: type.maybeConvert(Boolean)
+            };
+        }
+    }
 
-	const websocketSidechannel = connect.behavior('websocket-sidechannel', (previousPrototype) => {
+    const websocketSidechannel = connect.behavior('websocket-sidechannel', (previousPrototype) => {
 		return {
 			init() {
 				// start listening to websocket when connection is built
@@ -25,10 +29,10 @@
 		}
 	});
 
-	// an object taking the place of an open websocket for the purpose of this test
-	// receives a message updating a todo as completed every 3 seconds, starting 
-	//  from the first todo
-	const mockWebsocket = {
+    // an object taking the place of an open websocket for the purpose of this test
+    // receives a message updating a todo as completed every 3 seconds, starting
+    //  from the first todo
+    const mockWebsocket = {
 		id: 1,
 		onmessage(listener) {
 			setInterval(() => {
@@ -38,23 +42,23 @@
 			}, 3000);
 		}
 	};
-	
-	const template = stache(`
+
+    const template = stache(`
 		{{# for(todo of this.todos)}}
 		<li>{{todo.title}} - {{todo.completed}}</li>
 		{{/ for}}
 	`);
 
-	const connectionOptions = {
+    const connectionOptions = {
 		url: 'https://jsonplaceholder.typicode.com/todos/',
 		queryLogic: new QueryLogic(Todo),
 		Map: Todo,
 		websocket: mockWebsocket,
 	};
-	const connection = websocketSidechannel(realtimeRestModel(connectionOptions));
-	connection.init();
-	
-	connection.getList({}).then((todos) => {
+    const connection = websocketSidechannel(realtimeRestModel(connectionOptions));
+    connection.init();
+
+    connection.getList({}).then((todos) => {
 		document.getElementById('todos').appendChild(template({todos}));
 	});
 </script>

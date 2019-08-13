@@ -20,20 +20,27 @@
 	}
 </style>
 
-<script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" dev-bundle>
-import { DefineMap, debug, stache, stacheBindings } from "can";
+<script>
+	steal = { forceES5: false };
+</script>
+<script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js">
+import { debug, ObservableObject, stache, stacheBindings, type } from "can";
 
 const canDebug = debug();
 
-const Person = DefineMap.extend("Person", {
-	first: "string",
-	last: "string",
-	fullName: {
-		get: function() {
-			return this.first + " " + this.last;
-		}
-	}
-});
+class Person extends ObservableObject {
+    static get props() {
+        return {
+            first: type.maybeConvert(String),
+            last: type.maybeConvert(String),
+            fullName: {
+                get: function() {
+                    return this.first + " " + this.last;
+                }
+            }
+        };
+    }
+}
 
 const out = document.querySelector("#out");
 const template = stache.from("demo-html");

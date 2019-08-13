@@ -5,29 +5,46 @@
 
 <div id='list'></div>
 
+<script>
+	steal = { forceES5: false };
+</script>
 <script src="../../node_modules/steal/steal.js"  id="demo-source">
-var connect = require("can-connect");
-var fixture = require("can-fixture");
-var $ =  require("jquery");
-var DefineMap = require("can-define/map/map");
-var DefineList = require("can-define/list/list");
-var Observation = require("can-observation");
-var QueryLogic = require("can-query-logic");
-var domEvents = require("can-dom-events");
+import {
+	connect, fixture, ObservableObject, ObservableArray, Observation,
+	QueryLogic, domEvents, type, localStore
+} from "can";
+import $ from "jquery";
 
-var Todo = DefineMap.extend({
-	id: {type: "number", identity: true},
-	name: "string",
-	complete: "boolean"
-});
+import fallThroughCache from "can-connect/fall-through-cache/fall-through-cache";
+import dataUrl from "can-connect/data/url/url";
+import connectConstructor from "can-connect/constructor/constructor";
+import constructorStore from "can-connect/constructor/store/store";
+import connectCanMap from "can-connect/can/map/map";
+
+class Todo extends ObservableObject {
+    static get props() {
+        return {
+            id: {type: type.maybeConvert(Number), identity: true},
+            name: type.maybeConvert(String),
+            complete: type.maybeConvert(Boolean)
+        };
+    }
+}
+
 Todo.queryLogic = new QueryLogic(Todo);
 
-Todo.List = DefineList.extend({
-	"#": Todo
-});
+class TodoList extends ObservableArray {
+    static get props() {
+        return {};
+    }
+
+    static get items() {
+        return type.maybeConvert(Todo);
+    }
+}
 
 var cache = connect([
-	require("can-local-store")
+	localStore
 ],{
 	name: "todos",
 	queryLogic: Todo.queryLogic
@@ -35,16 +52,16 @@ var cache = connect([
 
 // A connection that gets todos data
 var todosConnection = connect([
-	require("can-connect/fall-through-cache/fall-through-cache"),
-    require("can-connect/data/url/url"),
-    require("can-connect/constructor/constructor"),
-    require("can-connect/constructor/store/store"),
-	require("can-connect/can/map/map")
+	fallThroughCache,
+	dataUrl,
+	connectConstructor,
+	constructorStore,
+	connectCanMap
 ],{
   url: "/todos",
   cacheConnection: cache,
   Map: Todo,
-  List: Todo.List
+  List: TodoList
 });
 
 
@@ -162,7 +179,7 @@ function randomTodos(complete){
 		});
 	}
 	return todos;
-};
+}
 
 // Kick off current page
 updatePage();

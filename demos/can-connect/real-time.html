@@ -4,38 +4,55 @@
 <button id='next'>Run Code:</button>
 <pre id='next-source'></pre>
 
+<script>
+	steal = { forceES5: false };
+</script>
 <script src="../../node_modules/steal/steal.js"  id="demo-source">
-var connect = require("can-connect");
-var fixture = require("can-fixture");
-var $ =  require("jquery");
-var DefineMap = require("can-define/map/map");
-var DefineList = require("can-define/list/list");
-var Observation = require("can-observation");
-var domEvents = require("can-dom-events");
+import {
+	connect, fixture, ObservableObject, ObservableArray, Observation,
+	QueryLogic, domEvents, type, localStore
+} from "can";
+import $ from "jquery";
 
+import realTime from "can-connect/real-time/real-time";
+import callbacksOnce from "can-connect/constructor/callbacks-once/callbacks-once";
+import dataUrl from "can-connect/data/url/url";
+import connectConstructor from "can-connect/constructor/constructor";
+import constructorStore from "can-connect/constructor/store/store";
+import connectCanMap from "can-connect/can/map/map";
 
-var Todo = DefineMap.extend({
-	id: "number",
-	name: "string",
-	complete: "boolean"
-});
+class Todo extends ObservableObject {
+    static get props() {
+        return {
+            id: type.maybeConvert(Number),
+            name: type.maybeConvert(String),
+            complete: type.maybeConvert(Boolean)
+        };
+    }
+}
 
-Todo.List = DefineList.extend({
-	"#": Todo
-});
+class TodoList extends ObservableArray {
+    static get props() {
+        return {};
+    }
+
+    static get items() {
+        return type.maybeConvert(Todo);
+    }
+}
 
 // A connection that gets todos data
 var todosConnection = connect([
-	require("can-connect/real-time/real-time"),
-	require("can-connect/data/url/url"),
-    require("can-connect/constructor/constructor"),
-    require("can-connect/constructor/store/store"),
-	require("can-connect/constructor/callbacks-once/callbacks-once"),
-	require("can-connect/can/map/map")
+	realTime,
+	dataUrl,
+	connectConstructor,
+	constructorStore,
+	callbacksOnce,
+	connectCanMap
 ],{
 	url: "/todos",
 	Map: Todo,
-	List: Todo.List
+	List: TodoList
 });
 
 // Trap ajax requests to return and modify the following `todo` object.
