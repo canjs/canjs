@@ -95,7 +95,7 @@ route.register( "{abc}/{def}" );
 
 ### How to verify it works
 
-You can access the viewModel for the app using `document.querySelector("character-search-app").viewModel` from the console.
+You can access the the app's properties using `document.querySelector("character-search-app")` from the console.
 
 You should be able to update properties on the viewModel and see the URL update. Also, updating the URL should update the properties on the viewModel.
 

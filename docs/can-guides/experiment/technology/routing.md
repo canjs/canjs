@@ -76,7 +76,7 @@ route.data = observable;
 route.start();
 
 // Set up the json editor to edit the observable.
-document.querySelector("bit-json-editor").viewModel.data = observable;
+document.querySelector("bit-json-editor").data = observable;
 </script>
 
 <style>

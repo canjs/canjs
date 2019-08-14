@@ -330,7 +330,7 @@ Component.extend({
 
 // The `.data` property specifies the observable to cross
 // bind the URL to.
-route.data = document.querySelector("my-counter").viewModel;
+route.data = document.querySelector("my-counter");
 route.start();
 </script>
 ```

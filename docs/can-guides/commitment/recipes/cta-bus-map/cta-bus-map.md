@@ -218,7 +218,7 @@ In this section, we will:
 Run the following in the `Console` tab:
 
 ```js
-document.querySelector('my-component').viewModel.someValue = "TITLE UPDATED";
+document.querySelector('my-component').someValue = "TITLE UPDATED";
 ```
 
 You should see the title update.
