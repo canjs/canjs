@@ -1,14 +1,13 @@
-import { Component } from "//unpkg.com/can@5/core.mjs";
+import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
 
 const proxyUrl = "https://can-cors.herokuapp.com/";
 const token = "?key=piRYHjJ5D2Am39C9MxduHgRZc&format=json";
-const apiRoot = "http://www.ctabustracker.com/bustime/api/v2/"
+const apiRoot = "http://www.ctabustracker.com/bustime/api/v2/";
 const getRoutesEnpoint = apiRoot + "getroutes" + token;
 const getVehiclesEndpoint = apiRoot + "getvehicles" + token;
 
-Component.extend({
-  tag: "bus-tracker",
-  view: `
+class BusTracker extends StacheElement {
+  static view = `
     <div class="top">
       <div class="header">
         <h1>{{ this.title }}</h1>
@@ -31,17 +30,20 @@ Component.extend({
       </div>
       <div class="gmap">Google map will go here.</div>
     </div>
-  `,
-  ViewModel: {
+  `;
+
+  static props = {
     title: {
       default: "Chicago CTA Bus Tracker"
     },
     routesPromise: {
-      default () {
+      get default() {
         return fetch(proxyUrl + getRoutesEnpoint)
           .then(response => response.json())
           .then(data => data["bustime-response"].routes);
       }
     }
-  }
-});
+  };
+}
+
+customElements.define("bus-tracker", BusTracker);
