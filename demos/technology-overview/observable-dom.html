@@ -1,12 +1,20 @@
+<script>
+	steal = { forceES5: false };
+</script>
 <script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" dev-bundle>
-import { DefineMap, stache, stacheBindings } from "can";
+import { ObservableObject, stache, stacheBindings } from "can";
 
-var Counter = DefineMap.extend({
-    count: {default: 0},
+class Counter extends ObservableObject {
+    static get props() {
+        return {
+            count: {default: 0}
+        };
+    }
+
     increment() {
         this.count++;
     }
-});
+}
 
 var myCounter = new Counter();
 

@@ -2,59 +2,67 @@
 <mock-url></mock-url>
 <my-app></my-app>
 <script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" dev-bundle>
-import { Component, DefineMap, route, stacheRouteHelpers, value } from "can";
+import { ObservableObject, route, StacheElement, stacheRouteHelpers, type, value } from "can";
 import { PageHome, PageLogin, TaskEditor } from "can/demos/technology-overview/route-mini-app-components";
 import "can/demos/technology-overview/mock-url";
 
-Component.extend({
-    tag: "my-app",
-    view: `
-        {{ componentToShow }}
-    `,
-    ViewModel: {
-        routeData: {
-            default() {
-                route.register("{page}", { page: "home" });
-                route.register("tasks/{taskId}", { page: "tasks" });
-                route.start();
-                return route.data;
-            }
-        },
-        get componentToShow(){
-            if(!this.isLoggedIn) {
-                return new PageLogin({
-                    viewModel: {
-                        isLoggedIn: value.bind(this, "isLoggedIn")
-                    }
-                });
-            }
-
-            switch(this.routeData.page) {
-                case "home":
-                    return new PageHome({
-                        viewModel: {
-                            logout: this.logout.bind(this)
-                        }
-                    });
-                case "tasks":
-                    return new TaskEditor({
-                        viewModel: {
-                            id: value.from(this.routeData, "taskId"),
-                            logout: this.logout.bind(this)
-                        }
-                    });
-                default:
-                    var page404 = document.createElement("h2");
-                    page404.innerHTML = "Page Missing";
-                    return page404;
-            }
-        },
-        isLoggedIn: { default: false, type: "boolean" },
-        logout() {
-            this.isLoggedIn = false;
-        }
+class MyApp extends StacheElement {
+    static get view() {
+        return `
+            {{ componentToShow }}
+        `;
     }
-});
+
+    static get props() {
+        return {
+            routeData: {
+                get default() {
+                    route.register("{page}", { page: "home" });
+                    route.register("tasks/{taskId}", { page: "tasks" });
+                    route.start();
+                    return route.data;
+                }
+            },
+
+            get componentToShow(){
+                if(!this.isLoggedIn) {
+                    return new PageLogin({
+                        viewModel: {
+                            isLoggedIn: value.bind(this, "isLoggedIn")
+                        }
+                    });
+                }
+
+                switch(this.routeData.page) {
+                    case "home":
+                        return new PageHome({
+                            viewModel: {
+                                logout: this.logout.bind(this)
+                            }
+                        });
+                    case "tasks":
+                        return new TaskEditor({
+                            viewModel: {
+                                id: value.from(this.routeData, "taskId"),
+                                logout: this.logout.bind(this)
+                            }
+                        });
+                    default:
+                        var page404 = document.createElement("h2");
+                        page404.innerHTML = "Page Missing";
+                        return page404;
+                }
+            },
+
+            isLoggedIn: { default: false, type: type.maybeConvert(Boolean) }
+        };
+    }
+
+    logout() {
+        this.isLoggedIn = false;
+    }
+};
+customElements.define("my-app", MyApp);
 </script>
 <style>
 .slider {
