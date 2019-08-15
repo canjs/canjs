@@ -73,16 +73,16 @@ import {ObservableObject} from "can";
 
 // Extend ObservableObject to create a custom observable type.
 class Counter extends ObservableObject {
-	static props = {
-		// Defines a `count` property that defaults to 0.
-		count: 0
-	}
+  static props = {
+    // Defines a `count` property that defaults to 0.
+    count: 0
+  }
 
-	// Defines an `increment` method that increments
-	// the `count` property.
-	increment() {
-		this.count++;
-	}
+  // Defines an `increment` method that increments
+  // the `count` property.
+  increment() {
+    this.count++;
+  }
 }
 
 // Create an instance of the Counter observable type.
@@ -112,19 +112,19 @@ to log each time the [can-define/map/map/PropertyNameEvent count] changes:
 import {ObservableObject} from "can";
 
 class Counter extends ObservableObject {
-	static props = {
-		count: 0
-	}
+  static props = {
+    count: 0
+  }
 
-	increment() {
-		this.count++;
-	}
+  increment() {
+    this.count++;
+  }
 }
 
 const myCounter = new Counter();
 
 myCounter.listenTo("count", (event, newCount) => {
-    console.log(newCount); // logs 1, 10, then 11
+  console.log(newCount); // logs 1, 10, then 11
 });
 
 myCounter.increment();
@@ -145,36 +145,36 @@ each `Counter` within the list:
 import {ObservableObject, ObservableArray, type} from "can";
 
 class Counter extends ObservableObject {
-	static props = {
-		count: 0
-	}
+  static props = {
+    count: 0
+  }
 
-	increment() {
-			this.count++;
-	}
+  increment() {
+    this.count++;
+  }
 }
 
 class Counters extends ObservableArray {
-	// Specifies the type of items in the list.
-	// Plain objects will be converted to Counter instances.
-	static items = type.convert(Counter)
+  // Specifies the type of items in the list.
+  // Plain objects will be converted to Counter instances.
+  static items = type.convert(Counter)
 
-	// Defines a getter for sum
-	get sum(){
-			// Loop through each counter and sum its count;
-			let sum = 0;
-			this.forEach( (counter) => sum += counter.count );
-			return sum;
-	}
+  // Defines a getter for sum
+  get sum(){
+    // Loop through each counter and sum its count;
+    let sum = 0;
+    this.forEach( (counter) => sum += counter.count );
+    return sum;
+  }
 }
 
 // Create an instance of Counters
 let myCounters = new Counters([
-    new Counter(),
-    // Initializes count with value 3
-    new Counter({count: 3}),
-    // Plain objects will be converted to Counter instances.
-    {count: 4}
+  new Counter(),
+  // Initializes count with value 3
+  new Counter({count: 3}),
+  // Plain objects will be converted to Counter instances.
+  {count: 4}
 ]);
 
 console.log( myCounters[0].count ) //-> 0
@@ -217,20 +217,21 @@ a Component's [can-component.prototype.ViewModel] and view are typically defined
 <script type="module">
 import { StacheElement } from "can";
 
-customElements.define("my-counter", class extends StacheElement {
-	static view = `
-      Count: <span>{{count}}</span>
-      <button on:click='increment()'>+1</button>
+class MyCounter extends StacheElement {
+  static view = `
+    Count: <span>{{this.count}}</span>
+    <button on:click='this.increment()'>+1</button>
   `
 
-	static props = {
-		count: 0
-	}
+  static props = {
+    count: 0
+  }
 
-	increment() {
-		this.count++;
-	}
-});
+  increment() {
+    this.count++;
+  }
+}
+customElements.define("my-counter", MyCounter);
 </script>
 ```
 @codepen
@@ -314,20 +315,21 @@ import "//unpkg.com/mock-url@5";
 
 import {route, StacheElement} from "can";
 
-customElements.define("my-count", class extends StacheElement {
-	static view = `
-		Count: <span>{{count}}</span>
-		<button on:click='increment()'>+1</button>
-	`
+class MyCounter extends StacheElement {
+  static view = `
+    Count: <span>{{this.count}}</span>
+    <button on:click='this.increment()'>+1</button>
+  `
 
-	static props = {
-		count: 0
-	}
+  static props = {
+    count: 0
+  }
 
-	increment() {
-			this.count++;
-	}
-});
+  increment() {
+    this.count++;
+  }
+}
+customElements.define("my-counter", MyCounter);
 
 // The `.data` property specifies the observable to cross
 // bind the URL to.
@@ -335,7 +337,7 @@ route.data = document.querySelector("my-counter");
 route.start();
 </script>
 ```
-@highlight 28-29
+@highlight 29-30
 @codepen
 
 
@@ -355,20 +357,21 @@ import "//unpkg.com/mock-url@^5.0.0";
 
 import {route, StacheElement} from "can";
 
-customElements.define("my-counter", class extends StacheElement {
-	static view = `
-			Count: <span>{{count}}</span>
-			<button on:click='increment()'>+1</button>
-	`
+class MyCounter extends StacheElement {
+  static view = `
+    Count: <span>{{this.count}}</span>
+    <button on:click='this.increment()'>+1</button>
+  `
 
-	static props = {
-		count: 0
-	}
+  static props = {
+    count: 0
+  }
 
-	increment() {
-			this.count++;
-	}
-});
+  increment() {
+    this.count++;
+  }
+}
+customElements.define("my-counter", MyCounter);
 
 // Register rules that translate from the URL to
 // setting properties on the cross-bound observable.
@@ -377,7 +380,7 @@ route.data = document.querySelector("my-counter");
 route.start();
 </script>
 ```
-@highlight 28
+@highlight 29
 @codepen
 
 
@@ -425,7 +428,7 @@ class Todo extends ObservableObject {
     complete: false,
     dueDate: type.convert(Date),
     name: String
-	}
+  }
 }
 
 // Defines an observable list of Todo instances and its methods
@@ -485,7 +488,7 @@ class Todo extends ObservableObject {
 }
 
 Todo.List = class extends ObservableArray {
-	static items = Todo;
+  static items = Todo;
 
   completeAll(){
     return this.forEach((todo) => { todo.complete = true; });
@@ -500,9 +503,9 @@ restModel({
 mockTodosService(20);
 
 class TodoListElement extends StacheElement {
-	static view = `
+  static view = `
     <ul>
-      {{# for(todo of todosPromise.value) }}
+      {{# for(todo of this.todosPromise.value) }}
         <li>
           <input type='checkbox' checked:from='todo.complete' disabled/>
           <label>{{todo.name}}</label>
@@ -510,7 +513,7 @@ class TodoListElement extends StacheElement {
         </li>
       {{/ for }}
     </ul>
-	`
+  `
 
   static props = {
     todosPromise: {
