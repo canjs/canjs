@@ -62,7 +62,7 @@ when the template’s data is changed, it will update automatically. You can see
 following in the console:
 
 ```js
-document.querySelector("todo-mvc").viewModel.appName = "My Todos";
+document.querySelector("todo-mvc").appName = "My Todos";
 ```
 
 

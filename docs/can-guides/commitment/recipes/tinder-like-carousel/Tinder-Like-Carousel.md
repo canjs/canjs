@@ -135,7 +135,7 @@ in the following list of profiles:
 If we were to remove items on the `ViewModel` as follows, the images will update:
 
 ```js
-document.querySelector("evil-tinder").viewModel.profiles.shift()
+document.querySelector("evil-tinder").profiles.shift()
 ```
 
 ### What you need to know
@@ -183,7 +183,7 @@ document.querySelector("evil-tinder").viewModel.profiles.shift()
 Run the following in the **Console** tab.  The background image should move to the foreground.
 
 ```js
-document.querySelector("evil-tinder").viewModel.profiles.shift()
+document.querySelector("evil-tinder").profiles.shift()
 ```
 
 ### The solution
