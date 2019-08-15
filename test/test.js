@@ -1,7 +1,7 @@
 // Core tests
 require("can-stache-element/test/test");
 require("can-observable-array/can-observable-array-test");
-require("can-observable-bindings/test/test");
+require("can-observable-bindings/test");
 require("can-observable-object/can-observable-object-test");
 require("can-observable-mixin/test/test");
 require("can-type/can-type-test");
