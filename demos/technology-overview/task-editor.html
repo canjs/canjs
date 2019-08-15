@@ -1,55 +1,76 @@
 <body>
 <div id='demo-html'>
-<task-editor id:from='4'></task-editor>
+<task-editor></task-editor>
 </div>
 
+<script>
+	steal = { forceES5: false };
+</script>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component, DefineMap, stache } from "can";
+import { fromAttribute, ObservableObject, stache, StacheElement, type } from "can";
 import "can/demos/technology-overview/component-slider";
 
-Component.extend({
-    tag: "task-editor",
-    view: `
-        <h2>Task Editor</h2>
-        <form on:submit='save(scope.event)'>
-            Name: {{ name }}
-            <p>
-                <input bind='name'/>
-            </p>
-            Progress: {{ progress }}
-            <p>
-                <percent-slider value:bind='progress'/>
-            </p>
-            <button disabled:from="isSaving">
-                {{# if(isSaving) }}Saving{{ else }}Save{{/ if }}
-            </button>
-        </form>
-    `,
-    ViewModel: {
-        id: "number",
-        name: {
-            default: function(){
-                return "Task "+this.id;
-            }
-        },
-        progress: {
-            // makes progress an integer
-            type(num){
-                return parseInt(num);
-            },
-            default: 0
-        },
-        isSaving: {default: false},
-        save(event){
-            event.preventDefault();
-            this.isSaving = true;
-            // fake ajax request
-            setTimeout(() => {
-                this.isSaving = false;
-            },2000)
-        }
+var Integer = {
+	[Symbol.for("can.new")](val) {
+		return parseInt(val);
+	},
+	[Symbol.for("can.isMember")](val) {
+		return Number.isInteger(val);
+	}
+};
+
+class TaskEditor extends StacheElement {
+    static get view() {
+        return `
+            <h2>Task Editor</h2>
+            <form on:submit='save(scope.event)'>
+                Name: {{ name }}
+                <p>
+                    <input bind='name'/>
+                </p>
+                Progress: {{ progress }}
+                <p>
+                    <percent-slider value:bind='progress'/>
+                </p>
+                <button disabled:from="isSaving">
+                    {{# if(isSaving) }}Saving{{ else }}Save{{/ if }}
+                </button>
+            </form>
+        `;
     }
-});
+
+    static get props() {
+        return {
+            taskId: type.maybeConvert(Number),
+
+            name: {
+                get() {
+                    return "Task "+this.taskId;
+                }
+            },
+
+            progress: {
+                // makes progress an integer
+                type: type.convert(Integer),
+                default: 0
+            },
+
+            isSaving: {default: false}
+        };
+    }
+
+    save(event) {
+        event.preventDefault();
+        this.isSaving = true;
+        // fake ajax request
+        setTimeout(() => {
+            this.isSaving = false;
+        },2000)
+    }
+}
+
+customElements.define("task-editor", TaskEditor);
+document.querySelector("task-editor").taskId = 44;
 </script>
 <style>
 .slider {

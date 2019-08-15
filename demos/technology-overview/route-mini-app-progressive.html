@@ -2,66 +2,74 @@
 <mock-url></mock-url>
 <my-app></my-app>
 <script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" dev-bundle>
-import { Component, DefineMap, route, stacheRouteHelpers, value } from "can";
+import { ObservableObject, route, StacheElement, stacheRouteHelpers, type, value } from "can";
 import "can/demos/technology-overview/mock-url";
 
-Component.extend({
-	tag: "my-app",
-	view: `
-		{{# if(componentToShow.isResolved) }}
-			{{ componentToShow.value }}
-		{{/ if }}
-	`,
-	ViewModel: {
-		routeData: {
-			default() {
-				route.register("{page}", { page: "home" });
-				route.register("tasks/{taskId}", { page: "tasks" });
-				route.start();
-				return route.data;
-			}
-		},
-		get componentToShow(){
-			if(!this.isLoggedIn) {
-				return steal.import("can/demos/technology-overview/page-login")
-					.then((module) => {
-						return new module.default({
-							viewModel: {
-								isLoggedIn: value.bind(this, "isLoggedIn")
-							}
-						});
-					});
-			}
+class MyApp extends StacheElement {
+    static get view() {
+        return `
+            {{# if(componentToShow.isResolved) }}
+                {{ componentToShow.value }}
+            {{/ if }}
+        `;
+    }
 
-			return steal.import(`can/demos/technology-overview/page-${this.routeData.page}`)
-				.then((module) => {
-					switch(this.routeData.page) {
-						case "home":
-							return new module.default({
-								viewModel: {
-									logout: this.logout.bind(this)
-								}
-							});
-						case "tasks":
-							return new module.default({
-								viewModel: {
-									id: value.from(this.routeData, "taskId"),
-									logout: this.logout.bind(this)
-								}
-							});
-						default:
-							var page404 = document.createElement("h2");
-							page404.innerHTML = "Page Missing";
-							return page404;
-					}
-				});
-		},
-		isLoggedIn: { default: false, type: "boolean" },
-		logout() {
-			this.isLoggedIn = false;
-		}
-	}
-});
+    static get props() {
+        return {
+            routeData: {
+                get default() {
+                    route.register("{page}", { page: "home" });
+                    route.register("tasks/{taskId}", { page: "tasks" });
+                    route.start();
+                    return route.data;
+                }
+            },
+
+            get componentToShow(){
+                if(!this.isLoggedIn) {
+                    return steal.import("can/demos/technology-overview/page-login")
+                        .then((module) => {
+                            return new module.default({
+                                viewModel: {
+                                    isLoggedIn: value.bind(this, "isLoggedIn")
+                                }
+                            });
+                        });
+                }
+
+                return steal.import(`can/demos/technology-overview/page-${this.routeData.page}`)
+                    .then((module) => {
+                        switch(this.routeData.page) {
+                            case "home":
+                                return new module.default({
+                                    viewModel: {
+                                        logout: this.logout.bind(this)
+                                    }
+                                });
+                            case "tasks":
+                                return new module.default({
+                                    viewModel: {
+                                        id: value.from(this.routeData, "taskId"),
+                                        logout: this.logout.bind(this)
+                                    }
+                                });
+                            default:
+                                var page404 = document.createElement("h2");
+                                page404.innerHTML = "Page Missing";
+                                return page404;
+                        }
+                    });
+            },
+
+            isLoggedIn: { default: false, type: type.maybeConvert(Boolean) }
+        };
+    }
+
+    logout() {
+        this.isLoggedIn = false;
+    }
+};
+customElements.define("my-app", MyApp);
 </script>
 <style>
 .slider {

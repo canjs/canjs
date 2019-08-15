@@ -1,42 +1,56 @@
 <todos-list></todo-list>
-
+<script>
+	steal = { forceES5: false };
+</script>
 <script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" dev-bundle>
-import { Component } from "can";
+import { Reflect, DeepObservable, StacheElement } from "can";
 
-Component.extend({
-    tag: "todos-list",
-    view: `
-      <ul>
-        {{# for(todo of this.todos) }}
-            <li>
-              <input type='checkbox' checked:bind='todo.complete'/>
-              {{ todo.name }}
-            </li>
-        {{/ for }}
-      </ul>
-      There are {{ this.completeCount }} completed todo(s).
-      {{# is(this.completeCount, this.todos.length) }}
-        You completed all the todos!
-      {{ else }}
-        Some todos remain. <button on:click='this.completeAll()'>Complete All</button>
-      {{/ is }}
-    `,
-    ViewModel: {
-        todos: {
-            default: () => [
-                {complete: true, name: "Do the dishes."},
-                {complete: true, name: "Wash the car."},
-                {complete: false, name: "Learn CanJS."}
-            ]
-        },
-        get completeCount(){
-            return this.todos.filter({complete: true}).length
-        },
-        completeAll(){
-            this.todos.forEach(function(todo){
-                todo.complete= true;
-            })
-        }
+console.log("WHA", DeepObservable)
+
+class TodosList extends StacheElement {
+    static get view() {
+        return `
+          <ul>
+            {{# for(todo of this.todos) }}
+						{{console.log(todo.name)}}
+                <li>
+                  <input type='checkbox' checked:bind='todo.complete'/>
+                  {{ todo.name }}
+                </li>
+            {{/ for }}
+          </ul>
+          There are {{ this.completeCount }} completed todo(s).
+          {{# is(this.completeCount, this.todos.length) }}
+            You completed all the todos!
+          {{ else }}
+            Some todos remain. <button on:click='this.completeAll()'>Complete All</button>
+          {{/ is }}
+        `;
     }
-});
+
+    static get props() {
+        return {
+            todos: {
+                get default() {
+                    return new Reflect.new(DeepObservable, [
+                        {complete: true, name: "Do the dishes."},
+                        {complete: true, name: "Wash the car."},
+                        {complete: false, name: "Learn CanJS."}
+                    ]);
+                }
+            },
+
+            get completeCount(){
+                return this.todos.filter({complete: true}).length
+            }
+        };
+    }
+
+    completeAll() {
+        this.todos.forEach(function(todo){
+            todo.complete= true;
+        })
+    }
+};
+customElements.define("todos-list", TodosList);
 </script>

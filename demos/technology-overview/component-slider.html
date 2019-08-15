@@ -3,7 +3,7 @@
 <percent-slider value:from='50'></percent-slider>
 </div>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
-import { Component } from "can";
+import { StacheElement, type } from "can";
 
 function width(el) {
     var cs = window.getComputedStyle(el,null)
@@ -11,68 +11,77 @@ function width(el) {
         - parseFloat( cs.getPropertyValue("padding-left") );
 }
 
-Component.extend({
-    tag: "percent-slider",
-    view: `
-        <div class='slider'
-        style="left: {{ left }}px"
-        on:mousedown='startDrag(scope.event.clientX)'/>`,
-
-    ViewModel: {
-        start: {type: "number", default: 0},
-        end: {type: "number", default: 100},
-        currentValue: {
-            default: function(){
-                return this.value || 0;
-            }
-        },
-        width: {type: "number", default: 0},
-        get left(){
-            var left = this.currentValue / this.end * this.width;
-            return Math.min( Math.max(0, left), this.width) || 0;
-        },
-        connectedCallback(el) {
-            // derive the width
-            this.width = width(el) - el.firstElementChild.offsetWidth;
-            this.listenTo(window,"resize", () => {
-                this.width = width(el) - el.firstElementChild.offsetWidth;
-            });
-
-            // Produce dragmove and dragup events on the view-model
-            this.listenTo("startClientX", () => {
-                var startLeft = this.left;
-                this.listenTo(document,"mousemove", (event)=>{
-                    this.dispatch("dragmove", [event.clientX - this.startClientX + startLeft]);
-                });
-                this.listenTo(document,"mouseup", (event)=>{
-                    this.dispatch("dragup", [event.clientX - this.startClientX + startLeft]);
-                    this.stopListening(document);
-                })
-            });
-            // Update the slider position when currentValue changes
-            this.listenTo("dragmove", (ev, left)=> {
-                this.currentValue = (left / this.width) * (this.end - this.start);
-            },"notify");
-
-            // If the value is set, update the current value
-            this.listenTo("value", (ev, newValue) => {
-                this.currentValue = newValue;
-            }, "notify");
-
-            // Update the value on a dragmove
-            this.listenTo("dragup", (ev, left)=> {
-                this.value = (left / this.width) * (this.end - this.start);
-            },"notify");
-
-            return this.stopListening.bind(this);
-        },
-        startClientX: "any",
-        startDrag(clientX) {
-            this.startClientX = clientX;
-        }
-
+class PercentSlider extends StacheElement {
+    static get view() {
+        return `
+            <div class='slider'
+            style="left: {{ left }}px"
+            on:mousedown='startDrag(scope.event.clientX)'/>`;
     }
-});
+
+    static get props() {
+        return {
+            start: {type: type.maybeConvert(Number), default: 0},
+            end: {type: type.maybeConvert(Number), default: 100},
+
+            currentValue: {
+                get default() {
+                    return this.value || 0;
+                }
+            },
+
+            width: {type: type.maybeConvert(Number), default: 0},
+
+            get left(){
+                var left = this.currentValue / this.end * this.width;
+                return Math.min( Math.max(0, left), this.width) || 0;
+            },
+
+            startClientX: type.Any
+        };
+    }
+
+    startDrag(clientX) {
+        this.startClientX = clientX;
+    }
+
+    connected() {
+        // derive the width
+        this.width = width(this) - this.firstElementChild.offsetWidth;
+        this.listenTo(window,"resize", () => {
+            this.width = width(this) - this.firstElementChild.offsetWidth;
+        });
+
+        // Produce dragmove and dragup events on the view-model
+        this.listenTo("startClientX", () => {
+            var startLeft = this.left;
+            this.listenTo(document,"mousemove", (event)=>{
+                this.dispatch("dragmove", [event.clientX - this.startClientX + startLeft]);
+            });
+            this.listenTo(document,"mouseup", (event)=>{
+                this.dispatch("dragup", [event.clientX - this.startClientX + startLeft]);
+                this.stopListening(document);
+            })
+        });
+        // Update the slider position when currentValue changes
+        this.listenTo("dragmove", (ev, left)=> {
+            this.currentValue = (left / this.width) * (this.end - this.start);
+        },"notify");
+
+        // If the value is set, update the current value
+        this.listenTo("value", (ev, newValue) => {
+            this.currentValue = newValue;
+        }, "notify");
+
+        // Update the value on a dragmove
+        this.listenTo("dragup", (ev, left)=> {
+            this.value = (left / this.width) * (this.end - this.start);
+        },"notify");
+
+        return this.stopListening.bind(this);
+    }
+};
+customElements.define("percent-slider", PercentSlider);
 </script>
 <style>
 .slider {

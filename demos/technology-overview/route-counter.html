@@ -1,21 +1,29 @@
 <body>
 <mock-url></mock-url>
+<script>
+	steal = { forceES5: false };
+</script>
 <script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" dev-bundle>
-import { DefineMap, route, stache, stacheBindings } from "can";
+import { ObservableObject, route, stache, stacheBindings, type } from "can";
 import "can/demos/technology-overview/mock-url";
 
-const Counter = DefineMap.extend({
-    count: {
-        default: 0,
-        type: "number",
-        set(newValue){
-            return newValue || 0;
-        }
-    },
+class Counter extends ObservableObject {
+    static get props() {
+        return {
+            count: {
+                default: 0,
+                type: type.maybeConvert(Number),
+                set(newValue){
+                    return newValue || 0;
+                }
+            }
+        };
+    }
+
     increment() {
         this.count++;
     }
-});
+}
 
 window.myCounter = new Counter();
 route.data = myCounter;
