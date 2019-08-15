@@ -59,7 +59,7 @@ The following defines a `<my-counter>` widget and includes it in the page:
 	// Extend StacheElement to define a custom element
 	class Counter extends StacheElement {
 		// The HTML content within the custom element.
-		//  - {{count}} is a `stache` magic tag.
+		//  - {{this.count}} is a `stache` magic tag.
 		//  - `on:click` is a `stache` event binding.
 		// Read the VIEWS section below for more details. 👀
 		static view = `
@@ -84,13 +84,12 @@ The following defines a `<my-counter>` widget and includes it in the page:
 ```
 @codepen
 
- A component's:
+ An element's:
 
-- [can-component.prototype.ViewModel] is defined with the [api#Observables Observables] APIs documented below.
-- [can-component.prototype.view] is defined with the [api#Views Views] APIs documented below.
+- [can-stache-element/static.props properties] are defined with the [api#Observables Observables] APIs documented below.
+- [can-stache-element/static.view view] is defined with the [api#Views Views] APIs documented below.
 
-Also, the [api#ElementBindings Element Bindings] section shows how to pass data between
-components.
+Also, the [api#ElementBindings Element Bindings] section shows how to pass data between components.
 
 
 ## Observables
@@ -160,12 +159,12 @@ class Todo extends ObservableObject {
 				return ["new"];
 			}
 		},
-
-		// `toggleComplete` is a method
-		toggleComplete() {
-			this.complete = !this.complete;
-		}
 	};
+
+	// `toggleComplete` is a method
+	toggleComplete() {
+		this.complete = !this.complete;
+	}
 }
 
 // -----------------------------------------------------------
@@ -217,7 +216,7 @@ console.log(todo.serialize()); //-> {
 Define observable list types with [can-observable-array ObservableArray]:
 
 ```js
-import { ObservableArray } from "//unpkg.com/can@pre/core.mjs";
+import { ObservableArray, type } from "//unpkg.com/can@pre/core.mjs";
 import Todo from "//canjs.com/demos/api/todo.mjs";
 
 // -----------------------------------
@@ -225,7 +224,7 @@ import Todo from "//canjs.com/demos/api/todo.mjs";
 // -----------------------------------
 class TodoList extends ObservableArray {
 	// Specify the behavior of items in the TodoList
-	static items = Todo;
+	static items = type.convert(Todo);
 
 	// Create a computed `complete` property
 	get complete() {
@@ -239,25 +238,21 @@ class TodoList extends ObservableArray {
 // -----------------------------------
 
 /// Create a todo list
-const todos = new TodoList(
+const todos = new TodoList([
 	{ id: 1, name: "learn observable lists" },
 	new Todo({ id: 2, name: "mow lawn", complete: true })
-);
+]);
 
 // Read the length and access items
 console.log(todos.length); //-> 2
-console.log(todos[0]); //-> Todo {id: 1, name: "learn observable lists"}
+console.log(todos[0]); //-> Todo { id: 1, name: "learn observable lists" }
 
 // Read properties
-console.log(todos.complete); //-> TodoList[Todo{id: 2, name: "mow lawn", complete: true}]
+console.log(todos.complete); //-> TodoList[Todo{ id: 2, name: "mow lawn", complete: true }]
 
 // Listen for changes:
 todos.listenTo("length", (event, newLength, oldLength) => {
 	console.log(newLength); //-> 1
-});
-todos.listenTo("add", function(event, addedItems, index) {});
-todos.listenTo("remove", function(event, removedItems, index) {
-	console.log(removedItems.length, index); //-> 1, 1
 });
 
 // Make changes:
@@ -270,71 +265,6 @@ const areSomeComplete = todos.some(function(todo) {
 console.log(areSomeComplete); //-> false
 ```
 @codepen
-
-<details>
-<summary>Ecosystem APIs</summary>
-
-Create and use observable objects and arrays with [can-observe]:
-
-```js
-import { observe } from "//unpkg.com/can@pre/core.mjs";
-
-// Create an observable object
-const todo = observe({ name: "dishes" });
-
-// get, set and delete properties as usual
-todo.name; //-> "dishes"
-todo.id = 1;
-delete todo.id;
-
-// Create an observable array
-const todos = observe([todo]);
-
-// use the array as usual
-todos.push({
-	name: "lawn"
-});
-todos[1].name; //-> "lawn"
-```
-
-Define observable objects types:
-
-```js
-class Todo extends observe.Object {
-	constructor(props) {
-		super(props);
-		// identity?
-		if (this.hasOwnProperty("complete")) {
-			this.complete = false;
-		}
-	}
-
-	// `isDueWithin24Hours` property returns if the `.dueDate`
-	// is in the next 24 hrs.
-	get isDueWithin24Hours() {
-		let msLeft = this.dueDate - new Date();
-		return msLeft >= 0 && msLeft <= 24 * 60 * 60 * 1000;
-	}
-
-	// `nameChangeCount` increments when `name` changes.
-	@@observe.resolvedBy
-	nameChangeCount({ listenTo, resolve }) {
-		let count = resolve(0);
-		listenTo("name", () => {
-			resolve(++count);
-		});
-	}
-
-	// `toggleComplete` is a method
-	toggleComplete() {
-		this.complete != this.complete;
-	}
-}
-```
-
-
-</details>
-
 
 <details>
 <summary>Infrastructure APIs</summary>
@@ -353,13 +283,13 @@ const fullName = new Observation( function() {
 Render a template that updates the page when any data changes using [can-stache]:
 
 ```js
-import {stache} from "//unpkg.com/can@pre/core.mjs";
+import { stache } from "//unpkg.com/can@pre/core.mjs";
 import Todo from "//canjs.com/demos/api/todo.mjs";
 
 // Create a template / view
 let view = stache(`<p>I need to {{this.name}}</p>`);
 
-const todo = new Todo({name: "learn views"});
+const todo = new Todo({ name: "learn views" });
 
 // Render the template into document fragment
 let fragment = view(todo);
@@ -391,7 +321,7 @@ Common [can-stache] tags and built in helpers:
 <td>
 
 ```js
-{value: "<b>esc</b>"}
+{ value: "<b>esc</b>" }
 ```
 
 </td>
@@ -413,7 +343,7 @@ Common [can-stache] tags and built in helpers:
 <td>
 
 ```js
-{value: "<b>unescape</b>"}
+{ value: "<b>unescape</b>" }
 ```
 
 </td>
@@ -443,7 +373,7 @@ Common [can-stache] tags and built in helpers:
 <td>
 
 ```js
-{value: true}
+{ value: true }
 
 
 
@@ -548,8 +478,8 @@ Common [can-stache] tags and built in helpers:
 ```js
 {
   todos: [
-    {name: "lawn"},
-    {name: "dishes"}
+    { name: "lawn" },
+    { name: "dishes" }
   ],
   owner: "Justin"
 }
@@ -757,9 +687,9 @@ Common [can-stache] tags and built in helpers:
 			</p>
 		`;
 		static props = {
-			escapeValue: { default: "<b>esc</b>" },
-			unescapeValue: { default: "<b>unescape</b>" },
-			truthyValue: { default: true },
+			escapeValue: "<b>esc</b>",
+			unescapeValue: "<b>unescape</b>",
+			truthyValue: true,
 			promise: {
 				get default() {
 					return Promise.resolve("Yo");
@@ -778,7 +708,7 @@ Common [can-stache] tags and built in helpers:
 					};
 				}
 			},
-			eqValue: { default: 22 }
+			eqValue: 22
 		};
 	}
 
@@ -936,8 +866,8 @@ class StacheExamples extends StacheElement {
 		<p>{{ addProps(v1=age v2=2) }}</p>
 	`;
 	static props = {
-		age: { default: 3 },
-		key: { default: "age" },
+		age: 3,
+		key: "age",
 		addArgs(v1, v2) {
 			return v1 + v2;
 		},
@@ -1147,7 +1077,7 @@ todo.on("name",function(){
 }
 </style>
 <script type="module">
-import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
+import { StacheElement, ObservableObject } from "//unpkg.com/can@pre/core.mjs";
 
 // Extend StacheElement to define a custom element
 class StacheExamples extends StacheElement {
@@ -1189,12 +1119,12 @@ class StacheExamples extends StacheElement {
 		},
 		todo: {
 			get default() {
-				return {
+				return new ObservableObject({
 					name: "",
 					sayHi() {
 						console.log("the todo says hi");
 					}
-				};
+				});
 			}
 		}
 	};
@@ -1209,8 +1139,8 @@ customElements.define("stache-examples", StacheExamples);
 
 ## Custom Element Bindings
 
-Similar to the bindings on normal elements in the previous section, you can
-listen to events on custom elements, read, write or cross-bind `ViewModel` data with [can-stache-bindings].
+Similar to the bindings on normal elements in the previous section &mdash; you can
+listen to events on custom elements, read, write or cross-bind an element's properties with [can-stache-bindings].
 
 The following shows examples of passing data to and from
 the `<my-counter>` element in the [api#CustomElementBasics Custom Elements Basics]
@@ -1254,6 +1184,7 @@ class MyCounter extends StacheElement {
 		}
 	};
 }
+customElements.define("my-counter", MyCounter);
 
 class MyApp extends StacheElement {
 	static view = `
@@ -1283,6 +1214,7 @@ class MyApp extends StacheElement {
 		bindCount: { default: 10 }
 	};
 }
+customElements.define("my-app", MyApp);
 
 </script>
 ```
@@ -1290,38 +1222,75 @@ class MyApp extends StacheElement {
 </div>
 @codepen
 
-Pass [can-component/can-template can-template] views to custom elements to customize layout:
+You can also pass data to custom elements directly in html using [can-observable-bindings/fromAttribute]:
 
-```js
-<my-counter count:from="5">
-  <can-template name="incrementButton">
-    <button on:click="add(5)">ADD 5!</button>
-  </can-template>
-  <can-template name="countDisplay">
-    You have counted to {{count}}!
-  </can-template>
-</my-counter>
+```html
+<!-- pass count directly to the <my-counter> element -->
+<my-counter count="5"></my-counter>
 ```
 
-Use [can-component/can-slot can-slot] to render the passed `<can-template>` views or
-provide default content if a corresponding `<can-template>` was not provided:
+<div class='hidden-codepen'>
+
+```html
+<!-- pass count directly to the <my-counter> element -->
+<my-counter count="5"></my-counter>
+
+<script type="module">
+import { StacheElement, type, fromAttribute } from "//unpkg.com/can@pre/core.mjs";
+
+class MyCounter extends StacheElement {
+	static view = `
+		Count: <span>{{this.count}}</span>
+		<button on:click='this.increment()'>+1</button>
+	`;
+	static props = {
+		count: { type: type.convert(String), default: 0, bind: fromAttribute },
+		increment() {
+			this.count++;
+		}
+	};
+}
+customElements.define("my-counter", MyCounter);
+
+</script>
+```
+
+</div>
+@codepen
+
+Pass [can-stache.tags.named-partial can-stache renderers] to custom elements to customize layout:
+
+```js
+{{<incrementButton}}
+	<button on:click="add(5)">ADD 5!</button>
+{{/incrementButton}}
+
+{{<countDisplay}}
+	You have counted to {{this.count}}!
+{{/countDisplay}}
+
+<my-counter count:from="5" incrementButton:from="incrementButton" countDisplay:from="countDisplay"></my-counter>
+```
+
+Use [can-stache/expressions/call call expressions] to call the passed renderer or the 
+[can-observable-object/define/default default renderers] if one was not provided.
 
 ```js
 import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
 
 class MyCounter extends StacheElement {
 	static view = `
-		<can-slot name="incrementButton"
-			add:from="this.add">
-			<button on:click="add(1)">+1</button>
-		</can-slot>
-		<can-slot name="countDisplay"
-			count:from="this.count">
-			{{count}}
-		</can-slot>
+		{{incrementButton(this)}}
+		{{countDisplay(this)}}
 	`;
 	static props = {
-		count: { type: Number, default: 0 },
+		incrementButton() {
+			return `<button on:click="add(1)">+1</button>`;
+		},
+		countDisplay() {
+			return `{{this.count}}`;
+		},
+		count: 0,
 		add(increment) {
 			this.count += increment;
 		}
@@ -1341,38 +1310,37 @@ import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
 
 class MyCounter extends StacheElement {
 	static view = `
-		<can-slot name="incrementButton"
-			add:from="add">
-			<button on:click="add(1)">+1</button>
-		</can-slot>
-		<can-slot name="countDisplay"
-			count:from="count">
-			{{count}}
-		</can-slot>
+		{{incrementButton(this)}}
+		{{countDisplay(this)}}
 	`;
 	static props = {
-		count: { type: Number, default: 0 },
+		incrementButton() {
+			return `<button on:click="add(1)">+1</button>`;
+		},
+		countDisplay() {
+			return `{{this.count}}`;
+		},
+		count: 0,
 		add(increment) {
 			this.count += increment;
 		}
 	};
 }
-
 customElements.define("my-counter", MyCounter);
 
 class MyApp extends StacheElement {
 	static view = `
-		<my-counter count:from="5">
-			<can-template name="incrementButton">
-				<button on:click="add(5)">ADD 5!</button>
-			</can-template>
-			<can-template name="countDisplay">
-				You've counted to {{count}}!
-			</can-template>
-		</my-counter>
+		{{<incrementButton}}
+			<button on:click="add(5)">ADD 5!</button>
+		{{/incrementButton}}
+
+		{{<countDisplay}}
+			You have counted to {{this.count}}!
+		{{/countDisplay}}
+
+		<my-counter count:from="5" incrementButton:from="incrementButton" countDisplay:from="countDisplay"></my-counter>
 	`;
 }
-
 customElements.define("my-app", MyApp);
 </script>
 ```
@@ -1386,7 +1354,7 @@ customElements.define("my-app", MyApp);
 Connect data types to a restful service with [can-rest-model]:
 
 ```js
-import {restModel} from "can";
+import { restModel } from "can";
 import Todo from "//canjs.com/demos/api/todo.mjs";
 import TodoList from "//canjs.com/demos/api/todo-list.mjs";
 
@@ -1413,12 +1381,12 @@ Retrieve, create, update and destroy data programmatically:
 Todo.getList({
   // Selects only the todos that match
   filter: {
-    complete: {$in: [false, null]}
+    complete: { $in: [false, null] }
   },
   // Sort the results of the selection
   sort: "-name",
   // Paginate the sorted result
-  page: {start: 0, end: 19}
+  page: { start: 0, end: 19 }
 }) //-> Promise<TodoList[]>
 ```
 
@@ -1635,7 +1603,7 @@ Connect data types to a restful service and have CanJS automatically manage
 adding and removing items from lists with [can-realtime-rest-model]:
 
 ```js
-import {realtimeRestModel} from "can";
+import { realtimeRestModel } from "can";
 
 // Define a real time restful model
 const todoConnection = realtimeRestModel({
@@ -1665,10 +1633,10 @@ Simulate a service layer where you can create, retrieve, update and delete (CRUD
 records:
 
 ```js
-import {fixture} from "can";
+import { fixture } from "can";
 
 let todosStore = fixture.store([
-    {id: 0, name: "use fixtures", complete: false}
+    { id: 0, name: "use fixtures", complete: false }
 ], Todo);
 
 fixture("/api/todos/{id}", todosStore);
@@ -1679,18 +1647,17 @@ fixture("/api/todos/{id}", todosStore);
 Define routing rules and initialize routing with [can-route]:
 
 ```js
-import {route} from "can";
+import { route } from "can";
 
 // Create two-way routing rule:
-route.register("{page}", {page: "home"});
+route.register("{page}", { page: "home" });
 
 // Define routing data type
-const RouteData = DefineMap.extend({
-    // Allow undefined properties to be created
-    seal: false
-},{
-    page: "string"
-});
+class RouteData extends ObservableObject {
+	static props = {
+		page: String
+	};
+}
 
 // Connect routing system to an instance
 // of the routing data type
@@ -1732,7 +1699,7 @@ Create responsive links in [can-stache] views with [can-stache-route-helpers]:
 Make AJAX requests with [can-ajax]:
 
 ```js
-import {ajax} from "can-ajax";
+import { ajax } from "can-ajax";
 
 ajax({
     url: "http://query.yahooapis.com/v1/public/yql",
@@ -1747,16 +1714,16 @@ Perform differences with [can-diff]:
 
 ```js
 diff.list(["a","b"], ["a","c"])
-//-> [{type: "splice", index: 1, deleteCount: 1, insert: ["c"]}]
+//-> [{ type: "splice", index: 1, deleteCount: 1, insert: ["c"] }]
 
-diff.map({a: "a"},{a: "A"})
-//-> [{type: "set", key: "a", value: "A"}]
+diff.map({ a: "a" },{ a: "A" })
+//-> [{ type: "set", key: "a", value: "A" }]
 ```
 
 Read and store the results of [feature detection](https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Cross_browser_testing/Feature_detection) with [can-globals]:
 
 ```js
-import {globals} from "can";
+import { globals } from "can";
 
 globals.getKeyValue("isNode")          //-> false
 globals.getKeyValue("isBrowserWindow") //-> true
@@ -1766,11 +1733,11 @@ globals.getKeyValue("MutationObserver") //-> MutationObserver
 Read and write nested values with [can-key]:
 
 ```js
-import  {key} from "can";
+import  { key } from "can";
 
 const task = {
     name: "learn can-key",
-    owner: { name: {first: "Justin", last: "Meyer"} }
+    owner: { name: { first: "Justin", last: "Meyer" } }
 }
 
 key.delete(task, "owner.name.first");
@@ -1778,10 +1745,50 @@ key.get(task, "owner.name.last") //-> "Meyer"
 key.set(task, "owner.name.first", "Bohdi");
 ```
 
+Parse a URI into its parts with [can-parse-uri]:
+
+```js
+import { parseURI } from "can";
+
+parseURI("http://foo:8080/bar.html?query#change")
+//-> {
+//  authority: "//foo:8080",
+//  hash: "#change",
+//  host: "foo:8080",
+//  hostname: "foo",
+//  href: "http://foo:8080/bar.html?query#change",
+//  pathname: "/bar.html",
+//  port: "8080",
+//  protocol: "http:",
+//  search: "?query"
+// }
+```
+
+Convert a string into another primitive type with [can-string-to-any]:
+
+```js
+import { stringToAny } from "can";
+stringToAny( "NaN" ); // -> NaN
+stringToAny( "44.4" ); // -> 44.4
+stringToAny( "false" ); // -> false
+```
+
+Convert one string format to another string format with [can-string]:
+
+```js
+import { string } from "can";
+
+string.camelize("foo-bar")) //-> "fooBar"
+string.capitalize("foo")    //-> "Foo"
+string.esc("<div>foo</div>")//-> "&lt;div&gt;foo&lt;/div&gt;"
+string.hyphenate("fooBar")  //-> "foo-bar"
+string.underscore("fooBar") //-> "foo_bar"
+```
+
 Operate on any data type with [can-reflect]:
 
 ```js
-import {Reflect} from "can";
+import { Reflect } from "can";
 
 // Test the type:
 Reflect.isBuiltIn(new Date()) //-> true
@@ -1809,46 +1816,39 @@ Reflect.setKeyValue(obj,"prop","VALUE");
 Reflect.getKeyValue(obj,"prop") //-> "VALUE"
 Reflect.deleteKeyValue(obj,"prop","VALUE");
 
-Reflect.assign(obj, {name: "Payal"});
+Reflect.assign(obj, { name: "Payal" });
 ```
 
-
-Parse a URI into its parts with [can-parse-uri]:
-
-```js
-import {parseURI} from "can";
-
-parseURI("http://foo:8080/bar.html?query#change")
-//-> {
-//  authority: "//foo:8080",
-//  hash: "#change",
-//  host: "foo:8080",
-//  hostname: "foo",
-//  href: "http://foo:8080/bar.html?query#change",
-//  pathname: "/bar.html",
-//  port: "8080",
-//  protocol: "http:",
-//  search: "?query"
-// }
-```
-
-Convert a string into another primitive type with [can-string-to-any]:
+Create types that work with [can-reflect.convert] using [can-type]:
 
 ```js
-import {stringToAny} from "can";
-stringToAny( "NaN" ); // -> NaN
-stringToAny( "44.4" ); // -> 44.4
-stringToAny( "false" ); // -> false
-```
+import { Reflect, type } from "can";
 
-Convert one string format to another string format with [can-string]:
+const MaybeNumber = type.maybe(Number);
 
-```js
-import {string} from "can";
+Reflect.convert(42, MaybeNumber); // -> 42
+Reflect.convert(null, MaybeNumber); // -> null
+Reflect.convert(undefined, MaybeNumber); // -> undefined
+Reflect.convert("hello world", MaybeNumber); // throws!
 
-string.camelize("foo-bar")) //-> "fooBar"
-string.capitalize("foo")    //-> "Foo"
-string.esc("<div>foo</div>")//-> "&lt;div&gt;foo&lt;/div&gt;"
-string.hyphenate("fooBar")  //-> "foo-bar"
-string.underscore("fooBar") //-> "foo_bar"
+const ConvertString = type.convert(String);
+
+Reflect.convert(42, ConvertString); // -> "42"
+Reflect.convert(null, ConvertString); // -> "null"
+Reflect.convert(undefined, ConvertString); // -> "undefined"
+Reflect.convert("hello world", ConvertString); // -> "hello world"
+
+const MaybeConvertBoolean = type.maybeConvert(Boolean);
+
+Reflect.convert("false", MaybeConvertBoolean); // -> false
+Reflect.convert(null, MaybeConvertBoolean); // -> null
+Reflect.convert(undefined, MaybeConvertBoolean); // -> undefined
+Reflect.convert("hello world", MaybeConvertBoolean); // -> true
+
+const StrictNumber = type.check(Number);
+
+Reflect.convert(42, StrictNumber); // -> 42
+Reflect.convert(null, StrictNumber); // throws!
+Reflect.convert(undefined, StrictNumber); // throws!
+Reflect.convert("hello world", StrictNumber); // throws!
 ```
