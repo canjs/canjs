@@ -141,24 +141,25 @@ CanJS tries to create useful names to help identify the objects and
 functions in your application. It uses [can-reflect]’s [can-reflect.getName]
 to return a useful debugger name. By default objects are named using the following convention:
 
-- The name starts with the observable constructor name, ex: [can-define/map/map DefineMap].
+- The name starts with the observable constructor name, ex: [can-observable-object ObservableObject].
 - The constructor name is decorated with the following characters based on its type:
   - `<>`: for value-like observables, ex: `SimpleObservable<>`
-  - `[]`: for list-like observables, ex: `DefineList[]`
-  - `{}`: for map-like observables, ex: `DefineMap{}`
+  - `[]`: for array-like observables, ex: `ObservableArray[]`
+  - `{}`: for object-like observables, ex: `ObservableObject{}`
 - Any property that makes the instance unique (like ids) are printed inside the characters mentioned before.
 
 You can assist by naming your types and functions wherever possible. The follow sections list how:
 
-#### Provide a name to types built with [can-construct]
+#### Provide a name to classes
 
-If you are using [can-map], [can-define/map/map] or any other package that inherits from [can-construct],
-name your function by passing `.extend` a name as the first argument:
+If you are using [can-observable-object], name your class:
 
 ```js
-import { DefineMap } from "can";
+import { ObservableObject } from "can";
 
-export default DefineMap.extend("TheNameOfMyType", { /* ... */ })
+export default class TheNameOfMyType extends ObservableObject {
+  static props = { /* ... */ }
+}
 ```
 
 #### Label instances
@@ -197,14 +198,16 @@ new Observation(function fullName(){
 });
 ```
 
-> **Note:** If your function is a property on an observable map or list like [can-define/map/map],
+> **Note:** If your function is a property on an observable class like [can-observable-object],
 > you don't have to name it. For example, CanJS will name the `fullName` getter in the following example:
 > ```js
-> const Person = DefineMap.extend("Person",{
->   fullName: {
->     get: function(){ return this.first + " " + this.last; }
+> class TheNameOfMyType extends ObservableObject {
+>   static props = {
+>     fullName: {
+>       get () { return this.first + " " + this.last; }	
+>     }
 >   }
-> })
+> }
 > ```
 
 
@@ -264,7 +267,7 @@ was enqueued.
 [can-debug]’s [can-debug.logWhatChangesMe] logs the observables
 that change a value. It logs both:
 
-- observables that mutate the value through CanJS libraries (example: `<component viewModelProp:from="value">`).
+- observables that mutate the value through CanJS libraries (example: `<component prop:from="value">`).
 - observables that are source values from a computed property
   (example: `get fullName(){ return this.first + " " + this.last }`
 
@@ -312,7 +315,7 @@ This can be quite useful when used with [can-view-model]:
 can.viewModel(document.querySelector("my-component")).log();
 ```
 
-CanJS’s observable map-types like [can-define/map/map] can be passed
+CanJS’s observables like [can-observable-object] can be passed
 a property name and log when that property changes:
 
 ```js
@@ -330,13 +333,13 @@ map.log("property");
 
 ```
 Break anytime this part of the template evaluates
-{{debugger()}}
+{{ debugger() }}
 
 Break when condition is truthy
-{{debugger(condition)}}
+{{ debugger(condition) }}
 
 Break when left equals right
-{{debugger(left, right)}}
+{{ debugger(left, right) }}
 ```
 
 When debugger breaks, you have access to the scope and a special `get` function that lets you inspect values in the [can-view-scope scope].
@@ -345,29 +348,32 @@ Stache templates also have access the [can-stache.helpers.console] methods, maki
 easy to log value or even test performance.
 
 ```js
-{{#if tasksPromise.isResolved}}
+{{# if tasksPromise.isResolved }}
   {{ console.log("tasks resolved with", tasksPromise.value) }}
-{{/if}}
+{{/ if}}
 ```
 
 `console` methods will be called whenever the template would normally update the
 DOM. This means that `count` will be logged every second in the following component:
 
 ```js
-const MyCounter = Component.extend({
-    tag: "my-counter",
-    view: `{{console.log(count)}}`,
-    ViewModel: {
-        count: {
-            value({resolve}) {
-                let count = resolve(0);
-                setInterval(() => {
-                    resolve(++count);
-                }, 1000);
-            }
-        }
-    }
-});
+class MyCounter extends StacheElement {
+	static view = `
+		{{ console.log(count) }}
+	`
+
+	static props = {
+		count: {
+			value({resolve}) {
+				let count = resolve(0);
+				setInterval(() => {
+					resolve(++count);
+				}, 1000);
+			}
+		}
+	}
+}
+customElements.define("my-counter", MyCounter);
 ```
 
 ## Installing CanJS Devtools
