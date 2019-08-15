@@ -2,7 +2,7 @@
 @parent guides/recipes/intermediate
 
 @description This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map.  
-You'll learn how to create a [can-component] that integrates with 3rd party widgets.
+You'll learn how to create a [can-stache-element StacheElement] that integrates with 3rd party widgets.
 
 @body
 
@@ -14,8 +14,8 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="GLEoXw" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CTA Bus Map (Medium)">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/GLEoXw/">
+<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="LYPNNxw" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CTA Bus Map (Medium)">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/LYPNNxw/">
   CTA Bus Map (Medium)</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
@@ -37,8 +37,8 @@ The following sections are broken down into the following parts:
 
 __START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED:__:
 
-<p class="codepen" data-height="268" data-theme-id="0" data-default-tab="js" data-user="bitovi" data-slug-hash="pBwgOJ" style="height: 268px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CTA Bus Map (Medium) [Starter]">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/pBwgOJ/">
+<p class="codepen" data-height="268" data-theme-id="0" data-default-tab="js" data-user="bitovi" data-slug-hash="rNBeeJo" style="height: 268px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CTA Bus Map (Medium) [Starter]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/rNBeeJo/">
   CTA Bus Map (Medium) [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
@@ -58,40 +58,41 @@ Please read on to understand the setup.
 
 __A Basic CanJS Setup__
 
-- A basic CanJS setup uses instances of a ViewModel within a [can-component Component] to manage the
+- A basic CanJS setup uses properties within a [can-stache-element StacheElement] to manage the
   behavior of a View as follows:
 
   ```js
-  import { Component } from "can";
+  import { StacheElement } from "can";
 
   // Define the Component
-  Component.extend({
-    // The component custom tag
-    tag: "my-component",
+  class MyComponent extends StacheElement {
     // The component View
-    view: ``,
-    // The component ViewModel
-    ViewModel: {
-      // ...
-    }
-  })
+    static view = ``;
+
+    // The component properties
+    static props = {};
+  }
+
+  // The component custom tag
+  customElements.define("my-component", MyComponent);
   ```
 - The component can be rendered by adding the custom tag to the HTML:
   ```html
   <my-component></my-component>
   ```
 
-- CanJS [can-component Component] uses [can-stache] to render data in a template
-  and keep it live.  Templates can be authored in the component's `view` property like:
+- CanJS [can-stache-element StacheElement] uses [can-stache] to render data in a template
+  and keep it live. Templates can be authored in the component's `view` property like:
 
   ```js
-  import { Component } from "can";
+  import { StacheElement } from "can";
 
   // Define the Component
-  Component.extend({
-    tag: "my-component",
-    view: `TEMPLATE CONTENT`
-  });
+  class MyComponent extends StacheElement {
+    static view = `TEMPLATE CONTENT`;
+  }
+
+  customElements.define("my-component", MyComponent);
   ```
 
   A [can-stache] template uses
@@ -99,15 +100,14 @@ __A Basic CanJS Setup__
   the HTML output like:
 
   ```js
-  import { Component } from "can";
+  import { StacheElement } from "can";
 
   // Define the Component
-  Component.extend({
+  class MyComponent extends StacheElement {
+    static view = `{{something.name}}`;
+  }
 
-    tag: "my-component",
-
-    view: `{{something.name}}`
-  });
+  customElements.define("my-component", MyComponent);
   ```
 
 - Mount the component in the HTML:
@@ -127,7 +127,7 @@ It creates a global `googleAPI` promise that resolves when Google Maps is ready.
 
 ```js
 googleAPI.then(function() {
-    new google.maps.Map( /* ... */ );
+	new google.maps.Map( /* ... */ );
 })
 ```
 
@@ -168,12 +168,12 @@ fetch("https://can-cors.herokuapp.com/"+
 
 In this section, we will:
 
-- Explore the relationship between ViewModel and View.
+- Explore the relationship between component Props and View.
 - Make it so the title of the page changes from `<h1>YOUR TITLE HERE</h1>`
   to `<h1>CHICAGO CTA BUS TRACKER</h1>`.
-- Let us adjust the title simply by changing the viewModel like:
+- Let us adjust the title simply by changing the property like:
   ```js
-  viewModel.title = "TITLE UPDATED"
+  element.title = "TITLE UPDATED"
   ```
 
 ![YOUR TITLE HERE](../../../docs/can-guides/commitment/recipes/cta-bus-map/1-app-title.png)
@@ -187,30 +187,33 @@ In this section, we will:
   the HTML output like:
 
   ```js
-  import { Component } from "can";
+  import { StacheElement } from "can";
 
-  Component.extend({
-    tag: "my-component",
-    view: `{{someValue}}`
-  });
+  class MyComponent extends StacheElement {
+    static view = `{{someValue}}`;
+  }
+
+  customElements.define("my-component", MyComponent);
   ```
 
-  These values come from a ViewModel or Model.
+  These values come from the component properties.
 
-- The ViewModel is an instance of [can-define/map/map] allows you to define a property with a [can-define.types.default default] value like:
+- The StacheElement props allows you to define a property with a [can-observable-object/define/default] value like:
 
   ```js
-  import { Component } from "can";
+  import { StacheElement } from "can";
 
-  Component.extend({
-    tag: "my-component",
-    view: `{{someValue}}`,
-    ViewModel: {
+  class MyComponent extends StacheElement {
+    static view = `{{someValue}}`;
+
+    static props = {
       someValue: {
         default: "This string"
       }
     }
-  });
+  }
+
+  customElements.define("my-component", MyComponent);
   ```
 
 ### How to verify it works
@@ -228,7 +231,7 @@ You should see the title update.
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
-@highlight 14,39-41,only
+@highlight 13,39-41,only
 
 
 ## List bus routes ##
@@ -253,17 +256,20 @@ We will do this by:
 
 ### What you need to know
 
-- The [can-define.types.default] property definition can return the initial value of a property like:
+- The [can-observable-object/define/default] property definition can return the initial value of a property like:
   ```js
-  import { DefineMap } from "can"
+  import { ObservableObject } from "can"
 
-  const AppViewModel = DefineMap.extend({
-    myProperty: {
-      default: function() {
-        return new Promise( /* ... */ );
+  class AppViewModel extends ObservableObject {
+    static props = {
+      myProperty: {
+        get default() {
+          return new Promise( /* ... */ );
+        }
       }
-    }  
-  });
+    };
+  }
+
   new AppViewModel().myProperty //-> Promise
   ```
 - The [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is an easy way to make requests
@@ -303,7 +309,7 @@ We will do this by:
   `{name: "inner"}`:
   ```js
   const resultPromise = outerPromise.then(function(data) {
-      return data.innerData;
+    return data.innerData;
   });
   ```
 
@@ -318,7 +324,7 @@ We will do this by:
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-list-routes.js
-@highlight 15,18-24,39-45,only
+@highlight 14,17-23,39-45,only
 
 
 ## Pick a route and log bus locations ##
@@ -347,11 +353,14 @@ We will do this by:
   ```
 - Use the `"any"` type to define a property of indeterminate type:
   ```js
-  import { DefineMap } from "can";
+  import { ObservableObject, type } from "can";
 
-  const AppViewModel = DefineMap.extend({
-    myProperty: "any"  
-  });
+  class AppViewModel extends ObservableObject {
+    static props = {
+      myProperty: type.Any  
+    };
+  }
+
   const viewModel = new AppViewModel({});
   viewModel.myProperty = ANYTHING;
   ```
@@ -410,7 +419,7 @@ an array of bus routes.
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-pick-route.js
-@highlight 19,28-33,48-60,only
+@highlight 18,27-32,50,53-64,only
 
 
 ## Show when buses are loading and the number of buses ##
@@ -445,10 +454,10 @@ We will do this by:
   with the `reason` as `{name: "inner"}`:
   ```js
   const resultPromise = outerPromise.then(function(data) {
-      return Promise.reject(data.innerData);
+    return Promise.reject(data.innerData);
   });
   resultPromise.catch(function(reason) {
-      reason.name //-> "inner"
+    reason.name //-> "inner"
   });
   ```
 
@@ -456,7 +465,7 @@ We will do this by:
 Update the __JavaScript__ tab to:
 
 @sourceref ./3b-bus-loading.js
-@highlight 16,32-34,37,52,55,59,61,only
+@highlight 15,31-33,36,54,59,65,67,only
 
 
 ## Initialize Google Maps to show Chicago ##
@@ -465,8 +474,7 @@ Update the __JavaScript__ tab to:
 
 In this section, we will:
 
-- Create a custom `<google-map-view/>` element that adds a google
-  map.
+- Create a custom `<google-map-view/>` element that adds a google map.
 - The google map should be added to a `<div class="gmap"/>` element.
 - The google map should be centered on Chicago (latitude: `41.881`, longitude `-87.623`).
 
@@ -474,95 +482,93 @@ In this section, we will:
 
 We will do this by:
 
-- Creating a custom [can-component] element that adds the `<div class="gmap"/>` to its HTML.
+- Creating a custom [can-stache-element StacheElement] that adds the `<div class="gmap"/>` to its HTML.
 - Listens to when the element is in the page and creates a new google map.
 
 ### What you need to know
 
-- Use [can-component] to create custom elements.  Start by [can-component.extend extending]
-  `Component` with the `tag` of the element:
+- Use [can-stache-element StacheElement] to create custom elements.  Start by extending
+  `StacheElement` and then define the custom element with the constructor:
 
   ```js
-  import { Component } from "can";
+  import { StacheElement } from "can";
 
-  Component.extend({
-    tag: "google-map-view"
-  });
+  class GoogleMapView extends StacheElement {};
+  customElements.define("google-map-view", GoogleMapView);
   ```
 
   Next, provide the HTML [can-stache] template with the content you want to insert within
   the element.
 
   ```js
-  import { Component } from "can";
+  import { StacheElement } from "can";
 
-  Component.extend({
-    tag: "google-map-view",
-    view: `<div class="gmap"/>`
-  });
+  class GoogleMapView extends StacheElement {
+    static view = `<div class="gmap"/>`;
+  };
+  customElements.define("google-map-view", GoogleMapView);
   ```
 
-  Any values you want the custom element to hold must be defined on the `ViewModel`. If the `ViewModel`
-  is a plain `Object`, that object will be used to extend [can-define/map/map DefineMap] and create a new
-  type.  The following specifies a `map` property that can be any value:
+  Any values you want the custom element to hold must be defined on [can-stache-element/static.props props]. The following specifies a `map` property that can be any value:
 
   ```js
-  import { Component } from "can";
+  import { StacheElement, type } from "can";
 
-  Component.extend({
-    tag: "google-map-view",
-    view: `<div class="gmap"/>`,
-    ViewModel: {
-      map: "any"
-    }
-  });
+  class GoogleMapView extends StacheElement {
+    static view = `<div class="gmap"/>`;
+
+    static props = {
+      map: type.Any
+    };
+  };
+  customElements.define("google-map-view", GoogleMapView);
   ```
 
-  An element reference [can be passed](https://canjs.com/doc/can-stache-bindings.html#Passanelementtothescope) to the `ViewModel` like the following:
+  An element reference [can be passed](https://canjs.com/doc/can-stache-bindings.html#Passanelementtothescope) to the component like the following:
 
   ```js
-  import { Component } from "can";
+  import { StacheElement } from "can";
 
-  Component.extend({
-    tag: "google-map-view",
-    view: `<div this:to="this.mapElement" class="gmap"/>`,
-    ViewModel: {
-      map: "any"
-      mapElement: HTMLElement
-    }
-  });
+  class GoogleMapView extends StacheElement {
+    static view = `<div this:to="mapElement" class="gmap"/>`;
+
+    static props = {
+      map: type.Any,
+      mapElement: type.maybeConvert(HTMLElement)
+    };
+  }
   ```
 
-  A ViewModel's [can-component/connectedCallback] can be used to know when the component's element is inserted into the document as follows:
+  StacheElement's [can-stache-element/lifecycle-hooks.connected] hook can be used to know when the component's element is inserted into the document as follows:
 
   ```js
-  import { Component } from "can";
+  import { StacheElement, type } from "can";
 
-  Component.extend({
-    tag: "google-map-view",
-    view: `<div this:to="mapElement" class="gmap"/>`,
-    ViewModel: {
-      map: "any",
-      mapElement: HTMLElement,
-      connectedCallback(element) {
-        this // -> the ViewModel instance
-        element // -> the <google-map-view> element
-        this.mapElement // -> the HTML element that renders the map
-      }
+  class GoogleMapView extends StacheElement {
+    static view = `<div this:to="mapElement" class="gmap"/>`;
+
+    static props = {
+      map: type.Any,
+      mapElement: type.maybeConvert(HTMLElement)
+    };
+
+    connected() {
+      this // -> the <google-map-view> element
+      this.mapElement // -> the HTML element that renders the map
     }
-  });
+  };
+  customElements.define("google-map-view", GoogleMapView);
   ```
 
-- To create a google map, use [new google.map.Map( /* ... */ )](https://developers.google.com/maps/documentation/javascript/reference) once the
-  `googleAPI` has completed loading:
+- To create a google map, use [new google.map.Map( /* ... */ )](https://developers.google.com/maps/documentation/javascript/reference) once the `googleAPI` has completed loading:
 
   ```js
   new google.maps.Map(gmapDiv, {
-      zoom: 10,
-      center: {
-          lat: 41.881,
-          lng: -87.623
-      }
+    zoom: 10,
+    center: {
+      lat: 41.881,
+      lng: -87.623
+    };
   })
   ```
 
@@ -571,7 +577,7 @@ We will do this by:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-init-gmaps.js
-@highlight 9-27,57,only
+@highlight 9-30,59,only
 
 ## Set markers for vehicle locations ##
 
@@ -589,28 +595,27 @@ We will do this by:
 
 ### What you need to know
 
-- [can-stache-bindings.toChild childProp:from] can set a component's ViewModel from another value:
+- [can-stache-bindings.toChild childProp:from] can set a component's property from another value:
   ```js
-  <google-map-view viewModelProp:from="scopeValue"/>
+  <google-map-view aProp:from="scopeValue"/>
   ```
-- The `ViewModel` can listen to events on the
-  fired by it's properties like:
+- The component can listen to events fired by its properties like:
 
   ```js
-  import { Component } from "can";
+  import { StacheElement, type } from "can";
 
-  Component.extend({
-    // ...
-    ViewModel: {
+  class MyComponent extends StacheElement {
+    static props = {
       // ...
-      vehicles: "any",
-      connectedCallback(element) {
-        this.listenTo("vehicles", (ev, newVehicles) => {
-          // ...
-        });
-      }
+      vehicles: type.Any
+    };
+
+    connected() {
+      this.listenTo("vehicles", (ev, newVehicles) => {
+        // ...
+      });
     }
-  })
+  }
   ```
 
 - Use [new google.maps.Marker](https://developers.google.com/maps/documentation/javascript/reference#Marker) to
@@ -630,7 +635,7 @@ We will do this by:
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-set-markers.js
-@highlight 15,26-38,71,only
+@highlight 18,32-44,77,only
 
 ## Clean up markers when locations change ##
 
@@ -643,7 +648,7 @@ In this section we will:
 
 We will do this by:
 
-- Storing the active list of markers on the `ViewModel`
+- Storing the active list of markers
 - Clearing the old active markers when the list of vehicles is updated.
 - Calling `pickRoute` when someone clicks on the `route-selected` overlay.
 
@@ -658,14 +663,14 @@ We will do this by:
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-clean-markers.js
-@highlight 28-33,35,71,only
+@highlight 30-35,37,73,only
 
 ## Result
 
 When finished, you should see something like the following CodePen:
 
-<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="GLEoXw" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CTA Bus Map (Medium)">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/GLEoXw/">
+<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="LYPNNxw" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CTA Bus Map (Medium)">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/LYPNNxw/">
   CTA Bus Map (Medium)</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
