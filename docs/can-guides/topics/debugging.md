@@ -158,7 +158,7 @@ If you are using [can-observable-object], name your class:
 import { ObservableObject } from "can";
 
 export default class TheNameOfMyType extends ObservableObject {
-  static props = { /* ... */ }
+  static props = { /* ... */ };
 }
 ```
 
@@ -177,10 +177,10 @@ expressions:
 
 ```js
 // INSTEAD OF THIS:
-map.on("key", function(ev, newVal) { /* ... */ })
+map.on("key", function(ev, newVal) { /* ... */ });
 
 // DO THIS:
-map.on("key", function keyChanged(ev, newVal) { /* ... */ })
+map.on("key", function keyChanged(ev, newVal) { /* ... */ });
 ```
 
 Similarly, if you create [can-compute]s or [can-observation]s yourself, make sure the function
@@ -205,7 +205,7 @@ new Observation(function fullName(){
 >   static props = {
 >     fullName: {
 >       get () { return this.first + " " + this.last; }	
->     }
+>     };
 >   }
 > }
 > ```
@@ -231,7 +231,7 @@ const info = new Observation(function updateInfo(){
 
 info.on(function onInfoChanged(newVal){
     debugger;
-})
+});
 
 person.age = 22;
 ```
@@ -254,7 +254,7 @@ task is enqueued and flushed. Often, you only want to log when
 tasks are run. This can be done with:
 
 ```js
-can.queues.log("flush")
+can.queues.log("flush");
 ```
 
 Both `queues.logStack()` and `queues.log()` log the function
@@ -360,7 +360,7 @@ DOM. This means that `count` will be logged every second in the following compon
 class MyCounter extends StacheElement {
 	static view = `
 		{{ console.log(count) }}
-	`
+	`;
 
 	static props = {
 		count: {
@@ -371,7 +371,7 @@ class MyCounter extends StacheElement {
 				}, 1000);
 			}
 		}
-	}
+	};
 }
 customElements.define("my-counter", MyCounter);
 ```
