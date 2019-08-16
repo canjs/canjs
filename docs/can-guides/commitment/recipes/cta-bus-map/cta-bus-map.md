@@ -1,7 +1,7 @@
 @page guides/recipes/cta-bus-map CTA Bus Map
 @parent guides/recipes/intermediate
 
-@description This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map.  
+@description This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map.
 You'll learn how to create a [can-stache-element StacheElement] that integrates with 3rd party widgets.
 
 @body
@@ -190,7 +190,7 @@ In this section, we will:
   import { StacheElement } from "can";
 
   class MyComponent extends StacheElement {
-    static view = `{{someValue}}`;
+    static view = `{{this.someValue}}`;
   }
 
   customElements.define("my-component", MyComponent);
@@ -204,7 +204,7 @@ In this section, we will:
   import { StacheElement } from "can";
 
   class MyComponent extends StacheElement {
-    static view = `{{someValue}}`;
+    static view = `{{this.someValue}}`;
 
     static props = {
       someValue: {
@@ -530,7 +530,7 @@ We will do this by:
   import { StacheElement } from "can";
 
   class GoogleMapView extends StacheElement {
-    static view = `<div this:to="mapElement" class="gmap"/>`;
+    static view = `<div this:to="this.mapElement" class="gmap"/>`;
 
     static props = {
       map: type.Any,
@@ -545,7 +545,7 @@ We will do this by:
   import { StacheElement, type } from "can";
 
   class GoogleMapView extends StacheElement {
-    static view = `<div this:to="mapElement" class="gmap"/>`;
+    static view = `<div this:to="this.mapElement" class="gmap"/>`;
 
     static props = {
       map: type.Any,

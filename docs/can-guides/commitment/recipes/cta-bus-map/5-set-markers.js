@@ -53,7 +53,7 @@ class BusTracker extends StacheElement {
       <div class="header">
         <h1>{{this.title}}</h1>
         {{# if(this.routesPromise.isPending) }}<p>Loading routes…</p>{{/ if }}
-        {{# if(vehiclesPromise.isPending) }}<p>Loading vehicles…</p>{{/ if }}
+        {{# if(this.vehiclesPromise.isPending) }}<p>Loading vehicles…</p>{{/ if }}
       </div>
       <ul class="routes-list">
         {{# for(route of this.routesPromise.value) }}
@@ -69,12 +69,12 @@ class BusTracker extends StacheElement {
       {{# if(this.route) }}
         <div class="route-selected">
           <small>Route {{ this.route.rt }}:</small> {{ this.route.rtnm }}
-          {{# if(vehiclesPromise.isRejected) }}
+          {{# if(this.vehiclesPromise.isRejected) }}
             <div class="error-message">No vehicles available for this route</div>
           {{/ if }}
         </div>
       {{/ if }}
-      <google-map-view vehicles:from="vehiclesPromise.value"/>
+      <google-map-view vehicles:from="this.vehiclesPromise.value"/>
     </div>
   `;
 
