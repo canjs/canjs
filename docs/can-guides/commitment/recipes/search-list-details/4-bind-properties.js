@@ -1,27 +1,25 @@
-import { Component, observe, route, value } from "//unpkg.com/can@5/ecosystem.mjs";
+import { ObservableObject, route, StacheElement, value } from "//unpkg.com/can@pre/ecosystem.mjs";
 
-Component.extend({
-  tag: "character-search-app",
-
-  view: `
+class CharacterSearchApp extends StacheElement {
+  static view = `
     <div class="header">
-      <img src="https://image.ibb.co/nzProU/rick_morty.png" width="400" height="151">
+      <img src="https://image.ibb.co/nzProU/rick_morty.png" width="300" height="113">
     </div>
 
-    {{# if(routeComponent.isPending) }}
-      Loading…
+    {{# if(this.routeComponent.isPending) }}
+      Loading...
     {{/ if }}
 
-    {{# if(routeComponent.isResolved) }}
-      {{ routeComponent.value }}
+    {{# if(this.routeComponent.isResolved) }}
+      {{ this.routeComponent.value }}
     {{/ if }}
-  `,
+  `;
 
-  ViewModel: {
+  static props = {
     routeData: {
-      default() {
-        const observableRouteData = new observe.Object();
-        route.data = observableRouteData;
+      get default() {
+        const routeData = new ObservableObject({});
+        route.data = routeData;
 
         route.register("", { page: "search" });
         route.register("{page}");
@@ -30,34 +28,39 @@ Component.extend({
 
         route.start();
 
-        return observableRouteData;
+        return routeData;
       }
     },
 
     get routeComponentData() {
-      const viewModelData = {
-        query: value.from(this.routeData, "query")
-      };
+      switch (this.routeData.page) {
+        case "search":
+        case "list":
+          return {
+            query: value.from(this.routeData, "query")
+          };
 
-      if(this.routeData.page === "details") {
-        viewModelData.id = value.from(this.routeData, "characterId");
+        case "details":
+          return {
+            query: value.from(this.routeData, "query"),
+            id: value.from(this.routeData, "characterId")
+          };
       }
-
-      return viewModelData;
     },
 
     get routeComponent() {
       const componentURL =
-        "//unpkg.com/character-search-components@5/character-" +
-        this.routeData.page + ".mjs";
+        "//unpkg.com/character-search-components@6/character-" +
+        this.routeData.page +
+        ".mjs";
 
-      return import(componentURL).then((module) => {
+      return import(componentURL).then(module => {
         const ComponentConstructor = module.default;
 
-        return new ComponentConstructor({
-          viewModel: this.routeComponentData
-        });
+        return new ComponentConstructor().bindings(this.routeComponentData);
       });
     }
-  }
-});
+  };
+}
+
+customElements.define("character-search-app", CharacterSearchApp);
