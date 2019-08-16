@@ -160,7 +160,7 @@ The following is the full example of using cookie-based sessions:
 @codepen 
 
 <p style="text-align: center">
-<img src="../../docs/can-guides/images/managing-sessions/example.gif" style="width:100%; max-width:745px;" />
+<img src="../../docs/can-guides/images/managing-sessions/example.gif" class="bit-docs-screenshot"/>
 </p>
 
 <span id="appHeldTokens"></span>
