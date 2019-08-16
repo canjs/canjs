@@ -1,42 +1,60 @@
-import { Component, route, DefineMap, DefineList, realtimeRestModel } from "//unpkg.com/can@5/core.mjs";
+import {
+    ObservableArray,
+    ObservableObject,
+    realtimeRestModel,
+    route,
+    StacheElement,
+    type,
+} from "//unpkg.com/can@5/core.mjs";
 
-const Message = DefineMap.extend("Message",{
-	id: "number",
-	name: "string",
-	body: "string",
-	created_at: "date"
-});
+import DeepObservable from "can-deep-observable";
 
-Message.List = DefineList.extend("MessageList",{
-	"#": Message
-});
+class Message extends ObservableObject {
+    static props = {
+		id: type.maybeConvert(Number),
+		name: type.maybeConvert(String),
+		body: type.maybeConvert(String),
+		created_at: type.maybeConvert(Date)
+	};
 
-Message.connection = realtimeRestModel({
+    static get propertyDefaults() {
+        return DeepObservable;
+    }
+}
+
+class MessageList extends ObservableArray {
+    static props = {};
+
+    static get items() {
+        return type.maybeConvert(Message);
+    }
+}
+
+const MessageConnection = realtimeRestModel({
 	url: {
 		resource: 'https://chat.donejs.com/api/messages',
 		contentType: 'application/x-www-form-urlencoded'
 	},
 	Map: Message,
-	List: Message.List
+	List: MessageList
 });
 
 const socket = io('https://chat.donejs.com');
 
 socket.on('messages created', function(message){
-	Message.connection.createInstance(message);
+	MessageConnection.createInstance(message);
 });
 socket.on('messages updated', function(message){
-	Message.connection.updateInstance(message);
+	MessageConnection.updateInstance(message);
 });
 socket.on('messages removed', function(message){
-	Message.connection.destroyInstance(message);
+	MessageConnection.destroyInstance(message);
 });
 
-Component.extend({
-	tag: "chat-messages",
-	view: `
+class ChatMessages extends StacheElement {
+    static view = `
 		<h1 class="page-header text-center">
-			 Chat Messages
+				Chat Messages
 		</h1>
 		<h5><a href="{{ routeUrl(page='home') }}">Home</a></h5>
 
@@ -76,34 +94,36 @@ Component.extend({
 			<div class="col-sm-3">
 				<input type="submit" class="btn btn-primary btn-block" value="Send"/>
 			</div>
-		</form>`,
-	ViewModel: {
+		</form>
+	`;
+
+    static props = {
 		// Properties
 		messagesPromise: {
-			default(){
+			get default() {
 				return Message.getList({});
 			}
 		},
-		name: "string",
-		body: "string",
 
-		// Methods
-		send(event) {
-			event.preventDefault();
+		name: type.maybeConvert(String),
+		body: type.maybeConvert(String)
+	};
 
-			new Message({
-				name: this.name,
-				body: this.body
-			}).save().then(() => {
-				this.body = "";
-			});
-		}
-	}
-});
+    send(event) {
+        event.preventDefault();
 
-Component.extend({
-	tag: "chat-app",
-	view: `
+        new Message({
+            name: this.name,
+            body: this.body
+        }).save().then(() => {
+            this.body = "";
+        });
+    }
+}
+customElements.define("chat-messages", ChatMessages);
+
+class ChatApp extends StacheElement {
+    static view = `
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-8 col-sm-offset-2">
@@ -120,23 +140,27 @@ Component.extend({
 					{{/ eq }}
 				</div>
 			</div>
-		</div>`,
-	ViewModel: {
+		</div>
+	`;
+
+    static props = {
 		// Properties
 		message: {
-			type: "string",
+			type: type.maybeConvert(String),
 			default: "Chat Home"
 		},
+
 		routeData: {
-			default(){
+			get default() {
 				route.register("{page}",{page: "home"});
 				route.start();
 				return route.data;
 			}
-		},
-		// Methods
-		addExcitement(){
-			this.message = this.message + "!";
 		}
-	}
-});
+	};
+
+    addExcitement() {
+        this.message = this.message + "!";
+    }
+}
+customElements.define("chat-app", ChatApp);
