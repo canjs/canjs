@@ -7,8 +7,8 @@
 
 The final widget looks like:
 
-<p class="codepen" data-height="426" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="yxJwwJ" style="height: 426px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Search / List / Details - Final">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/yxJwwJ/">
+<p class="codepen" data-height="426" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="NWKNYbL" style="height: 426px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Search / List / Details - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/NWKNYbL/">
   Search / List / Details - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
@@ -24,13 +24,13 @@ The following sections are broken down into the following parts:
 
 ### The problem
 
-In this section, we will fork [this CodePen](https://codepen.io/bitovi/pen/aaNrwO?editors=1000) that contains some starting code that we will modify to have a Search, List, Details flow with lazy-loaded routes.
+In this section, we will fork [this CodePen](https://codepen.io/bitovi/pen/PoYNNgJ?editors=1000) that contains some starting code that we will modify to have a Search, List, Details flow with lazy-loaded routes.
 
 ### What you need to know
 
 This CodePen:
 
-- Loads all of CanJS’s packages. Each package is available as a named export.  For example [can-component] is available as `import { Component } from "can"`.
+- Loads all of CanJS’s packages. Each package is available as a named export. For example [can-stache-element] is available as `import { StacheElement } from "can"`.
 - Creates a basic `<character-search-app>` component.
 - Includes a `<mock-url>` component for interacting with the route of the CodePen page.
 
@@ -40,8 +40,8 @@ __START THIS TUTORIAL BY CLONING THE FOLLOWING CodePen__:
 
 > Click the `EDIT ON CODEPEN` button.  The CodePen will open in a new window. In that new window,  click `FORK`.
 
-<p class="codepen" data-height="316" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="aaNrwO" style="height: 316px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Search / List / Details - Setup">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/aaNrwO/">
+<p class="codepen" data-height="316" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="PoYNNgJ" style="height: 316px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Search / List / Details - Setup">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/PoYNNgJ/">
   Search / List / Details - Setup</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
@@ -64,19 +64,21 @@ We want to support the following URL patterns:
 
 ### What you need to know
 
-- Use [can-define.types.default] to create default values for properties on the `ViewModel`.
+- Use [can-observable-object/define/default] to create default values for component properties:
 
 ```js
-ViewModel: {
+class MyComponent extends StacheElement {
+  static props = {
     dueDate: {
-        default() {
-            return new Date();
-        }
+      get default() {
+        return new Date();
+      }
     }
+  };
 }
 ```
 
-- Use `new observe.Object({ /* ... */ })` to create an [can-observe.Object observable Object].
+- Use `new ObservableObject({ /* ... */ })` to create an [can-observable-object observable object].
 - Set [can-route.data route.data] to the object you want cross-bound to the URL.
 - `route.register( "{abc}" );` will create a URL matching rule.
 
@@ -97,14 +99,14 @@ route.register( "{abc}/{def}" );
 
 You can access the the app's properties using `document.querySelector("character-search-app")` from the console.
 
-You should be able to update properties on the viewModel and see the URL update. Also, updating the URL should update the properties on the viewModel.
+You should be able to update the component properties and see the URL update. Also, updating the URL should update the properties on the component.
 
 ### The solution
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-set-up-routing.js
-@highlight 1,13-27
+@highlight 1,11-25
 
 ## Lazy load components ##
 
@@ -113,35 +115,32 @@ Update the __JavaScript__ tab to:
 In this section, we will load the code for each route when that route is displayed. This technique prevents loading code for routes a user may never visit.
 
 The components we will use for each route are available as ES Modules on [unpkg](https://unpkg.com/):
-- [//unpkg.com/character-search-components@5/character-search.mjs](//unpkg.com/character-search-components@5/character-search.mjs)
-- [//unpkg.com/character-search-components@5/character-list.mjs](//unpkg.com/character-search-components@5/character-list.mjs)
-- [//unpkg.com/character-search-components@5/character-details.mjs](//unpkg.com/character-search-components@5/character-details.mjs)
+- [//unpkg.com/character-search-components@6/character-search.mjs](//unpkg.com/character-search-components@6/character-search.mjs)
+- [//unpkg.com/character-search-components@6/character-list.mjs](//unpkg.com/character-search-components@6/character-list.mjs)
+- [//unpkg.com/character-search-components@6/character-details.mjs](//unpkg.com/character-search-components@6/character-details.mjs)
 
 ### What you need to know
 
-- Use [can-define.types.get] to create virtual properties that will be re-evaluated when an observable property they depend on changes:
+- Use [can-observable-object/define/get] to create virtual properties that will be re-evaluated when an observable property they depend on changes:
 
 ```js
-ViewModel: {
+class Person extends ObservableObject {
+  static props = {
     first: {
-        default() {
-            return "Kevin";
-        }
+      default: "Kevin"
     },
     last: {
-        default() {
-            return "McCallister";
-        }
-    },
-	// The name property will update whenever `first` or `last` changes
-	get name() {
-		return this.first + " " + this.last;
-	}
-},
+      default: "McCallister"
+    }
+  };
+  // The name property will update whenever `first` or `last` changes
+  get name() {
+    return this.first + " " + this.last;
+  }
+}
+
 // make sure to put `name` in the view so that bindings are set up correctly
-view: `
-	{{name}}
-`
+static view = `{{name}}`;
 ```
 
 - Call the `import()` keyword as a function to [dynamically import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#Dynamic_Imports) a module.
@@ -155,7 +154,7 @@ Changing the `routeData.page` property will cause the code for the new route to 
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-lazy-load-components.js
-@highlight 11,31-38
+@highlight 9,29-36
 
 ## Display components ##
 
@@ -169,26 +168,30 @@ Now that the code is loaded for each route, we can create an instance of the loa
 - Promises can be [can-reflect-promise used directly] in the view.
 
 ```js
-ViewModel: {
-	get aPromise() {
-		return new Promise((resolve) => {
-			resolve("Hello");
-		});
-	}
-},
-view: `
-	{{# if(aPromise.isPending) }}
-		The code is still loading
-	{{/ if }}
+class MyComponent extends StacheElement {
+  static view = `
+    {{# if(this.aPromise.isPending) }}
+      The code is still loading
+    {{/ if }}
 
-	{{# if(aPromise.isRejected) }}
-		There was an error loading the code
-	{{/ if }}
+    {{# if(this.aPromise.isRejected) }}
+      There was an error loading the code
+    {{/ if }}
 
-	{{# if(aPromise.isResolved) }}
-		The code is loaded: {{aPromise.value}} -> Hello
-	{{/ if }}
-`
+    {{# if(this.aPromise.isResolved) }}
+      The code is loaded: {{this.aPromise.value}} -> Hello
+    {{/ if }}
+  `;
+  static props = {
+    aPromise: {
+      get default() {
+        return new Promise((resolve) => {
+          resolve("Hello");
+        });
+      }
+    }
+  };
+}
 ```
 
 - `import()` resolves with a module object - `module.default` is the component constructor.
@@ -207,26 +210,24 @@ You can check the devtools Elements Panel for the correct component on each page
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-instantiate-components.js
-@highlight 11-17,42-46
+@highlight 9-15,41-45
 
 ## Pass data to components ##
 
 ### The problem
 
-After the last step, the correct component is displayed for each route, but the components do not work correctly. To make these work, we will pass properties from the main ViewModel into each component.
+After the last step, the correct component is displayed for each route, but the components do not work correctly. To make these work, we will pass properties from the `character-search-app` component into each component.
 
 ### What you need to know
 
-- You can pass a `viewModel` property when instantiating components to pass values to the component’s viewModel and set up bindings.
+- You can pass properties when instantiating components to pass values to the component’s properties and set up bindings.
 - [can-value] can be used to programmatically create observables that are bound to another object.
 
 ```js
-const componentInstance = new ComponentConstructor({
-  viewModel: {
-    givenName: value.from(this, "name.first"),
-    familyName: value.bind(this, "name.last"),
-    fullName: value.to(this, "name.full")
-  }
+const componentInstance = new ComponentConstructor().bindings({
+  givenName: value.from(this, "name.first"),
+  familyName: value.bind(this, "name.last"),
+  fullName: value.to(this, "name.full")
 });
 ```
 
@@ -246,14 +247,14 @@ The app should be fully functional:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-bind-properties.js
-@highlight 1,37-47,58
+@highlight 1,35-49,60
 
 ## Result
 
 When complete, you should have a working Search, List, Details flow like the following CodePen:
 
-<p class="codepen" data-height="426" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="yxJwwJ" style="height: 426px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Search / List / Details - Final">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/yxJwwJ/">
+<p class="codepen" data-height="426" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="NWKNYbL" style="height: 426px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Search / List / Details - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/NWKNYbL/">
   Search / List / Details - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>

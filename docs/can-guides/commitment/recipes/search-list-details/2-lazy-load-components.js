@@ -1,20 +1,18 @@
-import { Component, observe, route } from "//unpkg.com/can@5/ecosystem.mjs";
+import { ObservableObject, route, StacheElement } from "//unpkg.com/can@pre/ecosystem.mjs";
 
-Component.extend({
-  tag: "character-search-app",
-
-  view: `
+class CharacterSearchApp extends StacheElement {
+  static view = `
     <div class="header">
       <img src="https://image.ibb.co/nzProU/rick_morty.png" width="400" height="151">
     </div>
 
     {{ routeComponent }}
-  `,
+  `;
 
-  ViewModel: {
+  static props = {
     routeData: {
-      default() {
-        const observableRouteData = new observe.Object();
+      get default() {
+        const observableRouteData = new ObservableObject;
         route.data = observableRouteData;
 
         route.register("", { page: "search" });
@@ -30,11 +28,12 @@ Component.extend({
 
     get routeComponent() {
       const componentURL =
-        "//unpkg.com/character-search-components@5/character-" +
-        this.routeData.page + ".mjs";
+        "//unpkg.com/character-search-components@6/character-" +
+        this.routeData.page +
+        ".mjs";
 
-      return import(componentURL).then((module) => {
-      });
+      return import(componentURL).then(module => {});
     }
-  }
-});
+  };
+}
+customElements.define("character-search-app", CharacterSearchApp);
