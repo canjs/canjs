@@ -1,28 +1,46 @@
-import { Component, route, DefineMap, DefineList, realtimeRestModel } from "//unpkg.com/can@5/core.mjs";
+import {
+    ObservableArray,
+    ObservableObject,
+    realtimeRestModel,
+    route,
+    StacheElement,
+    type,
+} from "//unpkg.com/can@5/core.mjs";
 
-const Message = DefineMap.extend("Message",{
-	id: "number",
-	name: "string",
-	body: "string",
-	created_at: "date"
-});
+import DeepObservable from "can-deep-observable";
 
-Message.List = DefineList.extend("MessageList",{
-	"#": Message
-});
+class Message extends ObservableObject {
+    static props = {
+		id: type.maybeConvert(Number),
+		name: type.maybeConvert(String),
+		body: type.maybeConvert(String),
+		created_at: type.maybeConvert(Date)
+	};
 
-Message.connection = realtimeRestModel({
+    static get propertyDefaults() {
+        return DeepObservable;
+    }
+}
+
+class MessageList extends ObservableArray {
+    static props = {};
+
+    static get items() {
+        return type.maybeConvert(Message);
+    }
+}
+
+const MessageConnection = realtimeRestModel({
 	url: {
 		resource: 'https://chat.donejs.com/api/messages',
 		contentType: 'application/x-www-form-urlencoded'
 	},
 	Map: Message,
-	List: Message.List
+	List: MessageList
 });
 
-Component.extend({
-	tag: "chat-messages",
-	view: `
+class ChatMessages extends StacheElement {
+    static view = `
 		<h1 class="page-header text-center">
 			Chat Messages
 		</h1>
@@ -55,43 +73,46 @@ Component.extend({
 		<form class="row" on:submit="this.send(scope.event)">
 				<div class="col-sm-3">
 					<input type="text" class="form-control" placeholder="Your name"
-								 value:bind="this.name"/>
+									value:bind="this.name"/>
 				</div>
 				<div class="col-sm-6">
 					<input type="text" class="form-control" placeholder="Your message"
-								 value:bind="this.body"/>
+									value:bind="this.body"/>
 				</div>
 				<div class="col-sm-3">
 					<input type="submit" class="btn btn-primary btn-block" value="Send"/>
 				</div>
-		</form>`,
-	ViewModel: {
-		// Properties
-		messagesPromise: {
-			default(){
-				return Message.getList({});
-			}
-		},
-		name: "string",
-		body: "string",
+		</form>
+	`;
 
-		// Methods
-		send(event) {
-			event.preventDefault();
+    static props = {
+			// Properties
+			messagesPromise: {
+				get default() {
+					return Message.getList({});
+				}
+			},
 
-			new Message({
-				name: this.name,
-				body: this.body
-			}).save().then(() => {
-				this.body = "";
-			});
-		}
-	}
-});
+			name: type.maybeConvert(String),
+			body: type.maybeConvert(String)
+		};
 
-Component.extend({
-	tag: "chat-app",
-	view: `
+    send(event) {
+        event.preventDefault();
+
+        new Message({
+            name: this.name,
+            body: this.body
+        }).save().then(() => {
+            this.body = "";
+        });
+    }
+}
+
+customElements.define("chat-messages", ChatMessages);
+
+class ChatApp extends StacheElement {
+    static view = `
 		<div class="container">
 			<div class="row">
 			<div class="col-sm-8 col-sm-offset-2">
@@ -100,31 +121,35 @@ Component.extend({
 						{{ this.message }}
 					</h1>
 					<a href="{{ routeUrl(page='chat') }}"
-					 class="btn btn-primary btn-block btn-lg">
-						 Start chat
+						class="btn btn-primary btn-block btn-lg">
+							Start chat
 					</a>
 				{{ else }}
-				 <chat-messages/>
+					<chat-messages/>
 				{{/ eq }}
 			</div>
 			</div>
-		</div>`,
-	ViewModel: {
+		</div>
+	`;
+
+    static props = {
 		// Properties
 		message: {
-			type: "string",
+			type: type.maybeConvert(String),
 			default: "Chat Home"
 		},
+
 		routeData: {
-			default(){
+			get default() {
 				route.register("{page}",{page: "home"});
 				route.start();
 				return route.data;
 			}
-		},
-		// Methods
-		addExcitement(){
-			this.message = this.message + "!";
 		}
-	}
-});
+	};
+
+    addExcitement() {
+        this.message = this.message + "!";
+    }
+}
+customElements.define("chat-app", ChatApp);
