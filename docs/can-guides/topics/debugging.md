@@ -223,7 +223,7 @@ functions within [can-queues].
 Consider the following code that derives an info value from the person observable:
 
 ```js
-const person = new observe.Object({name: "Fran", age: 15});
+const person = new observe.Object({ name: "Fran", age: 15 });
 
 const info = new Observation(function updateInfo(){
     return person.name + " is " + person.age;
@@ -348,9 +348,9 @@ Stache templates also have access the [can-stache.helpers.console] methods, maki
 easy to log value or even test performance.
 
 ```js
-{{# if tasksPromise.isResolved }}
+{{# if(tasksPromise.isResolved) }}
   {{ console.log("tasks resolved with", tasksPromise.value) }}
-{{/ if}}
+{{/ if }}
 ```
 
 `console` methods will be called whenever the template would normally update the
@@ -364,7 +364,7 @@ class MyCounter extends StacheElement {
 
 	static props = {
 		count: {
-			value({resolve}) {
+			value({ resolve }) {
 				let count = resolve(0);
 				setInterval(() => {
 					resolve(++count);

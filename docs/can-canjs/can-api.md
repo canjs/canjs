@@ -54,32 +54,32 @@ The following defines a `<my-counter>` widget and includes it in the page:
 <my-counter></my-counter>
 
 <script type="module">
-	import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
+import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
 
-	// Extend StacheElement to define a custom element
-	class Counter extends StacheElement {
-		// The HTML content within the custom element.
-		//  - {{this.count}} is a `stache` magic tag.
-		//  - `on:click` is a `stache` event binding.
-		// Read the VIEWS section below for more details. 👀
-		static view = `
-			Count: <span>{{this.count}}</span>
-			<button on:click="this.increment()">+1</button>
-		`;
+// Extend StacheElement to define a custom element
+class Counter extends StacheElement {
+	// The HTML content within the custom element.
+	//  - {{this.count}} is a `stache` magic tag.
+	//  - `on:click` is a `stache` event binding.
+	// Read the VIEWS section below for more details. 👀
+	static view = `
+		Count: <span>{{this.count}}</span>
+		<button on:click="this.increment()">+1</button>
+	`;
 
-		// Defines the properties used in the view of this custom element.
-		// Read the OBSERVABLES section below for more details. 👀
-		static props = {
-			count: 0
-		};
+	// Defines the properties used in the view of this custom element.
+	// Read the OBSERVABLES section below for more details. 👀
+	static props = {
+		count: 0
+	};
 
-		increment() {
-			this.count++;
-		}
+	increment() {
+		this.count++;
 	}
+}
 
-	// The name of the custom element
-	customElements.define("my-counter", Counter);
+// The name of the custom element
+customElements.define("my-counter", Counter);
 </script>
 ```
 @codepen
