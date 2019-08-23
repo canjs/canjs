@@ -54,32 +54,32 @@ The following defines a `<my-counter>` widget and includes it in the page:
 <my-counter></my-counter>
 
 <script type="module">
-	import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
+import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
 
-	// Extend StacheElement to define a custom element
-	class Counter extends StacheElement {
-		// The HTML content within the custom element.
-		//  - {{this.count}} is a `stache` magic tag.
-		//  - `on:click` is a `stache` event binding.
-		// Read the VIEWS section below for more details. 👀
-		static view = `
-			Count: <span>{{this.count}}</span>
-			<button on:click="this.increment()">+1</button>
-		`;
+// Extend StacheElement to define a custom element
+class Counter extends StacheElement {
+	// The HTML content within the custom element.
+	//  - {{ this.count }} is a `stache` magic tag.
+	//  - `on:click` is a `stache` event binding.
+	// Read the VIEWS section below for more details. 👀
+	static view = `
+		Count: <span>{{ this.count }}</span>
+		<button on:click="this.increment()">+1</button>
+	`;
 
-		// Defines the properties used in the view of this custom element.
-		// Read the OBSERVABLES section below for more details. 👀
-		static props = {
-			count: 0
-		};
+	// Defines the properties used in the view of this custom element.
+	// Read the OBSERVABLES section below for more details. 👀
+	static props = {
+		count: 0
+	};
 
-		increment() {
-			this.count++;
-		}
+	increment() {
+		this.count++;
 	}
+}
 
-	// The name of the custom element
-	customElements.define("my-counter", Counter);
+// The name of the custom element
+customElements.define("my-counter", Counter);
 </script>
 ```
 @codepen
@@ -102,25 +102,34 @@ The following defines a `Todo` type with numerous property behaviors and
 a `toggleComplete` method.
 
 ```js
-import { ObservableObject } from "//unpkg.com/can@pre/core.mjs";
+import { ObservableObject, type } from "//unpkg.com/can@pre/core.mjs";
+
+// -------------------------------
+// Define an observable Owner type:
+// -------------------------------
+class Owner extends ObservableObject {
+  static props = {
+    first: String,
+    last: String
+  };
+}
 
 // -------------------------------
 // Define an observable Todo type:
 // -------------------------------
 class Todo extends ObservableObject {
 	static props = {
-		// `id` is a Number, null, or undefined and
-		// uniquely identifies instances of this type.
+		// `id` is a Number
+		// and uniquely identifies instances of this type.
 		id: { type: Number, identity: true },
 
-		// `complete` is a Boolean, null or undefined
-		// and defaults to `false`.
+		// `complete` is a Boolean and defaults to `false`.
 		complete: {
 			type: Boolean,
 			default: false
 		},
 
-		// `dueDate` is a Date, null or undefined.
+		// `dueDate` is a Date
 		dueDate: Date,
 
 		// `isDueWithin24Hours` property returns if the `.dueDate`
@@ -130,8 +139,8 @@ class Todo extends ObservableObject {
 			return msLeft >= 0 && msLeft <= 24 * 60 * 60 * 1000;
 		},
 
-		// `name` is a String, null or undefined.
-		name: { type: String },
+		// `name` is a String.
+		name: String,
 
 		// `nameChangeCount` increments when `name` changes.
 		nameChangeCount: {
@@ -143,14 +152,10 @@ class Todo extends ObservableObject {
 			}
 		},
 
-		// `owner` is a custom DefineMap with a first and
-		// last property.
-		owner: {
-			Type: {
-				first: String,
-				last: String
-			}
-		},
+		// Owner is a custom ObservableObject with a first and
+		// last property. Whenever `owner` is set, the value
+		// will be converted to the Owner type.
+		owner: type.convert(Owner),
 
 		// `tags` is an observable list of items that
 		// defaults to including "new"
@@ -178,14 +183,20 @@ const todo = new Todo({ name: "Learn Observables" });
 todo.dueDate = new Date(new Date().getTime() + 1000 * 60 * 60);
 
 // Listen to changes
-let handler = function(event, newValue, oldValue) {
-	console.log(newValue); //-> "Learn DefineMap"
+todo.listenTo("nameChangeCount", ({ value }) => {
+	console.log(value); //-> 1
+});
+
+let handler = ({ value }) => {
+	console.log(value); //-> "Learn observables"
 };
 todo.listenTo("name", handler);
-todo.name = "Learn DefineMap";
+
+todo.name = "Learn observables";
 
 // Stop listening to changes
 todo.stopListening("name", handler);
+
 // Stop listening to all registered handlers
 todo.stopListening();
 
@@ -205,8 +216,7 @@ todo.assign({
 console.log(todo.serialize()); //-> {
 //		complete: true,
 //		dueDate: Date,
-//		name: "Learn DefineMap",
-//		nameChangeCount: 1,
+//		name: "Learn observables",
 //		owner: { first: "Justin", last: "Meyer" },
 //		tags: ["new"]
 // }
@@ -251,15 +261,16 @@ console.log(todos[0]); //-> Todo { id: 1, name: "learn observable lists" }
 console.log(todos.complete); //-> TodoList[Todo{ id: 2, name: "mow lawn", complete: true }]
 
 // Listen for changes:
-todos.listenTo("length", (event, newLength, oldLength) => {
-	console.log(newLength); //-> 1
+// TODO
+todos.listenTo("length", ({ value }) => {
+	console.log(value); //-> 1
 });
 
 // Make changes:
 todos.pop();
 
 // Call non-mutating methods
-const areSomeComplete = todos.some(function(todo) {
+const areSomeComplete = todos.some((todo) => {
 	return todo.complete === true;
 });
 console.log(areSomeComplete); //-> false
@@ -270,9 +281,9 @@ console.log(areSomeComplete); //-> false
 <summary>Infrastructure APIs</summary>
 
 ```js
-const fullName = new Observation( function() {
+const fullName = new Observation(() => {
     return person.first + " " + person.last;
-} );
+});
 ```
 
 </details>
@@ -287,7 +298,7 @@ import { stache } from "//unpkg.com/can@pre/core.mjs";
 import Todo from "//canjs.com/demos/api/todo.mjs";
 
 // Create a template / view
-let view = stache(`<p>I need to {{this.name}}</p>`);
+let view = stache(`<p>I need to {{ this.name }}</p>`);
 
 const todo = new Todo({ name: "learn views" });
 
@@ -314,7 +325,7 @@ Common [can-stache] tags and built in helpers:
 <td>
 
 ```html
-<p>{{this.value}}</p>
+<p>{{ this.value }}</p>
 ```
 
 </td>
@@ -337,7 +348,7 @@ Common [can-stache] tags and built in helpers:
 <tr>
 <td>
 
-<div class="code-toolbar"><pre class=" line-numbers language-html"><code class=" language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>&#123;{{this.value}}}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><div class="toolbar"><div class="toolbar-item"><a>Copy</a></div></div></div>
+<div class="code-toolbar"><pre class=" line-numbers language-html"><code class=" language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>&#123;{{ this.value }}}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><div class="toolbar"><div class="toolbar-item"><a>Copy</a></div></div></div>
 
 </td>
 <td>
@@ -361,9 +372,9 @@ Common [can-stache] tags and built in helpers:
 
 ```html
 <p>
-  {{# if( this.value ) }}
+  {{# if(this.value) }}
     Hi
-  {{else}}
+  {{ else }}
     Bye
   {{/ if }}
 </p>
@@ -405,14 +416,14 @@ Common [can-stache] tags and built in helpers:
 
 ```html
 <p>
-  {{# if( this.promise.isPending ) }}
+  {{# if(this.promise.isPending) }}
     Pending
   {{/ if }}
-  {{# if( this.promise.isRejected ) }}
-    Rejected {{promise.reason}}
+  {{# if(this.promise.isRejected) }}
+    Rejected {{ promise.reason }}
   {{/ if }}
-  {{# if( this.promise.isResolved ) }}
-    Resolved {{promise.value}}
+  {{# if(this.promise.isResolved) }}
+    Resolved {{ promise.value }}
   {{/ if }}
 </p>
 ```
@@ -462,9 +473,9 @@ Common [can-stache] tags and built in helpers:
 
 ```html
 <ul>
-  {{# for( todo of this.todos ) }}
+  {{# for(todo of this.todos) }}
     <li>
-      {{todo.name}}-{{this.owner}}
+      {{ todo.name }}-{{ this.owner }}
     </li>
   {{/ for }}
 </ul>
@@ -509,9 +520,9 @@ Common [can-stache] tags and built in helpers:
 
 ```html
 <ul>
-  {{# for( todo of todos ) }}
+  {{# for(todo of todos) }}
     <li> ... </li>
-  {{else}}
+  {{ else }}
     <li>No todos</li>
   {{/ for }}
 </ul>
@@ -553,9 +564,9 @@ Common [can-stache] tags and built in helpers:
 
 ```html
 <p>
-  {{# eq(this.value,22) }}
+  {{# eq(this.value, 22) }}
     YES
-  {{else}}
+  {{ else }}
     NO
   {{/ eq }}
 </p>
@@ -598,8 +609,8 @@ Common [can-stache] tags and built in helpers:
 
 ```html
 <p>
-  {{let first=this.value.first}}
-  {{first}} {{this.value.last}}
+  {{ let first = this.value.first }}
+  {{ first }} {{ this.value.last }}
 </p>
 
 
@@ -647,43 +658,43 @@ Common [can-stache] tags and built in helpers:
 	// Extend StacheElement to define a custom element
 	class StacheExamples extends StacheElement {
 		static view = `
-			<p>{{this.escapeValue}}</p>
-			<p>{{{this.unescapeValue}}}</p>
+			<p>{{ this.escapeValue }}</p>
+			<p>{{{ this.unescapeValue }}}</p>
 			<p>
-				{{# if( this.truthyValue ) }}
+				{{# if(this.truthyValue) }}
 					Hi
-				{{else}}
+				{{ else }}
 					Bye
 				{{/ if }}
 			</p>
 			<p>
-				{{# if( this.promise.isPending ) }}
+				{{# if(this.promise.isPending) }}
 					Pending
 				{{/ if }}
-				{{# if( this.promise.isRejected ) }}
-					Rejected {{this.promise.reason}}
+				{{# if(this.promise.isRejected) }}
+					Rejected {{ this.promise.reason }}
 				{{/ if }}
-				{{# if( this.promise.isResolved ) }}
-					Resolved {{this.promise.value}}
+				{{# if(this.promise.isResolved) }}
+					Resolved {{ this.promise.value }}
 				{{/ if }}
 			</p>
 			<ul>
 				{{# for(todo of this.todos) }}
 					<li>
-						{{todo.name}}-{{this.owner.first}}
+						{{ todo.name }}-{{ this.owner.first }}
 					</li>
 				{{/ for }}
 			</ul>
 			<p>
-				{{# eq(this.eqValue,22) }}
+				{{# eq(this.eqValue, 22) }}
 					YES
-				{{else}}
+				{{ else }}
 					NO
 				{{/ eq }}
 			</p>
 			<p>
-				{{let first=this.owner.first}}
-				{{first}} {{this.owner.last}}
+				{{ let first = this.owner.first }}
+				{{ first }} {{ this.owner.last }}
 			</p>
 		`;
 		static props = {
@@ -908,7 +919,7 @@ Listen to events on elements, read data, write data, or cross-bind data on eleme
 <td>
 
 ```js
-todo.on("name",()=>{
+todo.on("name", () => {
   input.value = todo.name;
 });
 ```
@@ -931,7 +942,7 @@ todo.on("name",()=>{
 <td>
 
 ```js
-input.addEventListener("change",()=>{
+input.addEventListener("change", () => {
   todo.name = input.value;
 });
 ```
@@ -954,7 +965,7 @@ input.addEventListener("change",()=>{
 <td>
 
 ```js
-input.addEventListener("input",()=>{
+input.addEventListener("input", () => {
   todo.name = input.value;
 });
 ```
@@ -980,10 +991,10 @@ input.addEventListener("input",()=>{
 <td>
 
 ```js
-todo.on("name",()=>{
+todo.on("name", () => {
   input.value = todo.name;
 });
-input.addEventListener("change",()=>{
+input.addEventListener("change", () => {
   todo.name = input.value;
 });
 ```
@@ -1021,7 +1032,7 @@ input.onchange = todo.method;
 <td>
 
 ```js
-button.addEventListener("click",()=>{
+button.addEventListener("click", () => {
   todo.priority = 1;
 });
 ```
@@ -1033,7 +1044,7 @@ button.addEventListener("click",()=>{
 <td>
 
 ```js
-<div on:name:by:todo='shake(scope.element)'/>
+<div on:name:by:todo='this.shake(scope.element)'/>
 
 
 
@@ -1044,8 +1055,8 @@ button.addEventListener("click",()=>{
 <td>
 
 ```js
-todo.on("name",function(){
-	viewModel.shake(div);
+todo.on("name", () => {
+	this.shake(div);
 });
 ```
 
@@ -1102,14 +1113,14 @@ class StacheExamples extends StacheElement {
 		<p>Animate the div when the todo's <code>name</code> event fires:
 			<div on:name:by:todo='this.shake(scope.element)'
 				on:animationend='this.removeShake(scope.element)'>
-				{{this.todo.name}}
+				{{ this.todo.name }}
 			</div>
 		</p>
 	`;
 
 	static props = {
 		sayHi() {
-			console.log("the ViewModel says hi");
+			console.log("the element says hi");
 		},
 		shake(element) {
 			element.classList.add("shake");
@@ -1148,19 +1159,19 @@ section:
 
 ```html
 <!-- Listens to when count changes and passes the value to doSomething -->
-<my-counter on:count="doSomething(scope.viewModel.count)"></my-counter>
+<my-counter on:count="this.doSomething(scope.element.count)"></my-counter>
 
 <!-- Starts counting at 3 -->
 <my-counter count:from="3"></my-counter>
 
 <!-- Starts counting at startCount -->
-<my-counter count:from="startCount"></my-counter>
+<my-counter count:from="this.startCount"></my-counter>
 
 <!-- Update parentCount with the value of count -->
-<my-counter count:to="parentCount"></my-counter>
+<my-counter count:to="this.parentCount"></my-counter>
 
 <!-- Cross bind parentCount with count -->
-<my-counter count:bind="parentCount"></my-counter>
+<my-counter count:bind="this.parentCount"></my-counter>
 ```
 
 <div class='hidden-codepen'>
@@ -1174,7 +1185,7 @@ import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
 
 class MyCounter extends StacheElement {
 	static view = `
-		Count: <span>{{this.count}}</span>
+		Count: <span>{{ this.count }}</span>
 		<button on:click='this.increment()'>+1</button>
 	`;
 	static props = {
@@ -1189,15 +1200,15 @@ customElements.define("my-counter", MyCounter);
 class MyApp extends StacheElement {
 	static view = `
 		<p>Calls <code>sayHi</code> when <code>count</code> changes.
-			<my-counter on:count="this.sayHi(scope.viewModel.count)"></my-counter>
+			<my-counter on:count="this.sayHi(scope.element.count)"></my-counter>
 		</p>
 		<p>Start counting at 3.
 			<my-counter count:from="3"></my-counter>
 		</p>
-		<p>Start counting at <code>startCount</code> ({{this.startCount}}).
+		<p>Start counting at <code>startCount</code> ({{ this.startCount }}).
 			<my-counter count:from="this.startCount"></my-counter>
 		</p>
-		<p>Update <code>parentCount</code> ({{this.parentCount}}) with the value of count.
+		<p>Update <code>parentCount</code> ({{ this.parentCount }}) with the value of count.
 			<my-counter count:to="this.parentCount"></my-counter>
 		</p>
 		<p>Update <code>bindCount</code> ({{this.bindCount}}) with the value of count.
@@ -1240,7 +1251,7 @@ import { StacheElement, type, fromAttribute } from "//unpkg.com/can@pre/core.mjs
 
 class MyCounter extends StacheElement {
 	static view = `
-		Count: <span>{{this.count}}</span>
+		Count: <span>{{ this.count }}</span>
 		<button on:click='this.increment()'>+1</button>
 	`;
 	static props = {
@@ -1261,13 +1272,13 @@ customElements.define("my-counter", MyCounter);
 Pass [can-stache.tags.named-partial can-stache renderers] to custom elements to customize layout:
 
 ```js
-{{<incrementButton}}
-	<button on:click="add(5)">ADD 5!</button>
-{{/incrementButton}}
+{{< incrementButton }}
+	<button on:click="this.add(5)">ADD 5!</button>
+{{/ incrementButton }}
 
-{{<countDisplay}}
-	You have counted to {{this.count}}!
-{{/countDisplay}}
+{{< countDisplay }}
+	You have counted to {{ this.count }}!
+{{/ countDisplay }}
 
 <my-counter count:from="5" incrementButton:from="incrementButton" countDisplay:from="countDisplay"></my-counter>
 ```
@@ -1280,15 +1291,15 @@ import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
 
 class MyCounter extends StacheElement {
 	static view = `
-		{{incrementButton(this)}}
-		{{countDisplay(this)}}
+		{{ incrementButton(this) }}
+		{{ countDisplay(this) }}
 	`;
 	static props = {
 		incrementButton() {
 			return `<button on:click="add(1)">+1</button>`;
 		},
 		countDisplay() {
-			return `{{this.count}}`;
+			return `{{ this.count }}`;
 		},
 		count: 0,
 		add(increment) {
@@ -1310,15 +1321,15 @@ import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
 
 class MyCounter extends StacheElement {
 	static view = `
-		{{incrementButton(this)}}
-		{{countDisplay(this)}}
+		{{ incrementButton(this) }}
+		{{ countDisplay(this) }}
 	`;
 	static props = {
 		incrementButton() {
 			return `<button on:click="add(1)">+1</button>`;
 		},
 		countDisplay() {
-			return `{{this.count}}`;
+			return `{{ this.count }}`;
 		},
 		count: 0,
 		add(increment) {
@@ -1330,13 +1341,13 @@ customElements.define("my-counter", MyCounter);
 
 class MyApp extends StacheElement {
 	static view = `
-		{{<incrementButton}}
-			<button on:click="add(5)">ADD 5!</button>
-		{{/incrementButton}}
+		{{< incrementButton }}
+			<button on:click="this.add(5)">ADD 5!</button>
+		{{/ incrementButton }}
 
-		{{<countDisplay}}
-			You have counted to {{this.count}}!
-		{{/countDisplay}}
+		{{< countDisplay }}
+			You have counted to {{ this.count }}!
+		{{/ countDisplay }}
 
 		<my-counter count:from="5" incrementButton:from="incrementButton" countDisplay:from="countDisplay"></my-counter>
 	`;
@@ -1576,14 +1587,14 @@ const todo = new Todo({ name: "make a model"});
 todo.isNew()    //-> true
 
 // Listen to when any todo is created:
-Todo.on("created", function(ev, todo){});
+Todo.on("created", (ev, todo) => {});
 
 let savedPromise = todo.save();
 
 // Return if the todo is being created or updated
 todo.isSaving() //-> true
 
-savedPromise.then(function(){
+savedPromise.then(() => {
     todo.isNew() //-> false
     todo.isSaving() //-> false
 
@@ -1592,7 +1603,7 @@ savedPromise.then(function(){
     // Return if the todo is being destroyed
     todo.isDestroying() //-> true
 
-    destroyedPromise.then(function(){
+    destroyedPromise.then(() => {
         todo.isDestroying() //-> false
     })
 });
@@ -1668,7 +1679,7 @@ route.start();
 
 // Provide access to the route data to your application component
 class MyApp extends StacheElement {
-	static view = '<page-picker page:from="routeData.page"/>';
+	static view = '<page-picker page:from="this.routeData.page"/>';
 
 	static props = {
 		routeData: {
@@ -1687,9 +1698,9 @@ Create responsive links in [can-stache] views with [can-stache-route-helpers]:
 <a href="{{ routeUrl(page='todos') }}"
    class="{{# routeCurrent(page='todos') }}
             inactive
-          {{else}}
+          {{ else }}
             active
-          {{/ routeCurrent}}">Todos
+          {{/ routeCurrent }}">Todos
 </a>
 ```
 
@@ -1733,7 +1744,7 @@ globals.getKeyValue("MutationObserver") //-> MutationObserver
 Read and write nested values with [can-key]:
 
 ```js
-import  { key } from "can";
+import { key } from "can";
 
 const task = {
     name: "learn can-key",
