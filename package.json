@@ -120,7 +120,7 @@
     "can-set-legacy": "1.0.1",
     "can-simple-dom": "1.7.0",
     "can-simple-map": "4.3.2",
-    "can-simple-observable": "2.4.3",
+    "can-simple-observable": "2.5.0",
     "can-stache": "4.17.20",
     "can-stache-bindings": "4.10.9",
     "can-stache-converters": "4.2.6",
