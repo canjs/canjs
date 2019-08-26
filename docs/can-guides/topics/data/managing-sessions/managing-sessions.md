@@ -16,7 +16,8 @@ This guide will explain how:
 - to use [can-connect/can/session/session can/session] with application held tokens 
 - to initialize [can-connect/can/session/session can/session] manually if you know you have an active session
 
-If you prefer a video introduction to this material, the basics of this guide are also covered in a presentation from our monthly online meetup, [available here](https://www.youtube.com/watch?v=sIh0_hCx6WM).
+If you prefer a video introduction to this material, the basics of this guide are also covered in a presentation from our monthly online meetup:
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/sIh0_hCx6WM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Benefits Of The can/session Behavior
 
