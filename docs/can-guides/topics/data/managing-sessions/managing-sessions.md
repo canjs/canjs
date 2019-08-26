@@ -16,6 +16,9 @@ This guide will explain how:
 - to use [can-connect/can/session/session can/session] with application held tokens 
 - to initialize [can-connect/can/session/session can/session] manually if you know you have an active session
 
+If you prefer a video introduction to this material, the basics of this guide are also covered in a presentation from our monthly online meetup:
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/sIh0_hCx6WM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ## Benefits Of The can/session Behavior
 
 [can-connect/can/session/session can/session] makes it easy to access and load the current session. It adds the following properties to the connection model constructor to allow developers to access the current session and any pending request for the current session:
