@@ -12,7 +12,7 @@ export { fromAttribute } from "can-observable-bindings";
 // -> Infrastruture
 export { default as bind } from "./es/can-bind";
 export { mapEventBindings, valueEventBindings } from "./es/can-event-queue";
-export { default as SimpleObservable, AsyncObservable, keyObservable, ResolverObservable, SettableObservable } from "./es/can-simple-observable";
+export { default as SimpleObservable, AsyncObservable, keyObservable, ResolverObservable, SettableObservable, SetterObservable } from "./es/can-simple-observable";
 
 
 // __ Views __
