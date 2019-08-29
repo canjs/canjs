@@ -6,28 +6,23 @@ import {
     StacheElement,
     type,
 } from "//unpkg.com/can@5/core.mjs";
-
 import DeepObservable from "can-deep-observable";
 
 class Message extends ObservableObject {
     static props = {
-		id: type.maybeConvert(Number),
-		name: type.maybeConvert(String),
-		body: type.maybeConvert(String),
-		created_at: type.maybeConvert(Date)
+		id: Number,
+		name: String,
+		body: String,
+		created_at: Date
 	};
 
-    static get propertyDefaults() {
-        return DeepObservable;
-    }
+    static propertyDefaults = DeepObservable;
 }
 
 class MessageList extends ObservableArray {
     static props = {};
 
-    static get items() {
-        return type.maybeConvert(Message);
-    }
+    static items = Message;
 }
 
 const MessageConnection = realtimeRestModel({
@@ -52,7 +47,7 @@ socket.on('messages removed', function(message){
 });
 
 class ChatMessages extends StacheElement {
-    static view = `
+	static view = `
 		<h1 class="page-header text-center">
 				Chat Messages
 		</h1>
@@ -97,7 +92,7 @@ class ChatMessages extends StacheElement {
 		</form>
 	`;
 
-    static props = {
+	static props = {
 		// Properties
 		messagesPromise: {
 			get default() {
@@ -109,21 +104,21 @@ class ChatMessages extends StacheElement {
 		body: type.maybeConvert(String)
 	};
 
-    send(event) {
-        event.preventDefault();
+	send(event) {
+		event.preventDefault();
 
-        new Message({
-            name: this.name,
-            body: this.body
-        }).save().then(() => {
-            this.body = "";
-        });
-    }
+		new Message({
+				name: this.name,
+				body: this.body
+		}).save().then(() => {
+				this.body = "";
+		});
+	}
 }
 customElements.define("chat-messages", ChatMessages);
 
 class ChatApp extends StacheElement {
-    static view = `
+	static view = `
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-8 col-sm-offset-2">
@@ -143,10 +138,10 @@ class ChatApp extends StacheElement {
 		</div>
 	`;
 
-    static props = {
+	static props = {
 		// Properties
 		message: {
-			type: type.maybeConvert(String),
+			type: String,
 			default: "Chat Home"
 		},
 
@@ -159,8 +154,8 @@ class ChatApp extends StacheElement {
 		}
 	};
 
-    addExcitement() {
-        this.message = this.message + "!";
-    }
+	addExcitement() {
+		this.message = this.message + "!";
+	}
 }
 customElements.define("chat-app", ChatApp);

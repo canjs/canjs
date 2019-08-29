@@ -11,7 +11,7 @@ class ChatMessages extends StacheElement {
 customElements.define("chat-messages", ChatMessages);
 
 class ChatApp extends StacheElement {
-    static view = `
+	static view = `
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-8 col-sm-offset-2">
@@ -31,10 +31,10 @@ class ChatApp extends StacheElement {
 		</div>
 	`;
 
-    static props = {
+	static props = {
 		// Properties
 		message: {
-			type: type.maybeConvert(String),
+			type: String,
 			default: "Chat Home"
 		},
 
@@ -47,8 +47,8 @@ class ChatApp extends StacheElement {
 		}
 	};
 
-    addExcitement() {
-        this.message = this.message + "!";
-    }
+	addExcitement() {
+		this.message = this.message + "!";
+	}
 };
 customElements.define("chat-app", ChatApp);

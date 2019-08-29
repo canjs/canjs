@@ -11,9 +11,9 @@
 
 We are building the following functionality:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="YgQXZE" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 Chat - Final">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/YgQXZE/">
-  CanJS 5.0 Chat - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="OJLgEbx" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6.0 Chat - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/OJLgEbx/">
+  CanJS 6.0 Chat - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
@@ -21,9 +21,9 @@ We are building the following functionality:
 
 The easiest way to get started is to _Fork_ the following CodePen by clicking the __Edit On CodePen__ button on the top right:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="VRWLbM" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 Chat - Start">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/VRWLbM/">
-  CanJS 5.0 Chat - Start</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="PoYjaWK" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6.0 Chat - Start">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/PoYjaWK/">
+  CanJS 6.0 Chat - Start</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
@@ -233,7 +233,7 @@ Update the `JavaScript` panel to:
      that represents the loading of all messages using [can-connect/can/map/map.getList].
 
 @sourceref ./4-list-messages/js.js
-@highlight 1-9,11-39,48-80,only
+@highlight 1-9,11-35,39-76,only
 
 When complete, you should see a list of messages in the __chat messages page__.
 
@@ -298,7 +298,7 @@ Update the `<chat-messages>` __props__ to:
 - Define a `send` method on `ChatMessages` that creates a new `Message` and sends it to the server.
 
 @sourceref ./5-create-messages/js.js
-@highlight 73-85,96-109,only
+@highlight 68-80,91-104,only
 
 When complete, you will be able to create messages and have them appear in the list.
 
@@ -323,7 +323,7 @@ Update the `JavaScript` panel to:
   corresponding [can-connect/real-time/real-time] methods.
 
 @sourceref ./6-real-time/js.js
-@highlight 42-52,only
+@highlight 37-47,only
 
 When complete, you can open up the same CodePen in another window, create a
 message, and it will appear in the first CodePen’s messages list.
@@ -340,9 +340,9 @@ awesome!
 
 When finished, you should see something like the following CodePen:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="YgQXZE" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 Chat - Final">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/YgQXZE/">
-  CanJS 5.0 Chat - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="OJLgEbx" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6.0 Chat - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/OJLgEbx/">
+  CanJS 6.0 Chat - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
