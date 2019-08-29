@@ -531,7 +531,7 @@ class App extends StacheElement {
 customElements.define("a-pp", App);
 </script>
 ```
-@highlight 10,21-23,only
+@highlight 9,17-19,only
 @codepen
 
 You can also do this using a "simple setter" directly in the view:
@@ -639,7 +639,7 @@ p {
 }
 </style>
 ```
-@highlight 25-27,36-38,43-45,only
+@highlight 23-25,34-36,41-43,only
 @codepen
 
 Using this technique, it is possible to read each property definition and know exactly how it will behave when this event occurs.
@@ -785,7 +785,7 @@ color-picker button {
 }
 </style>
 ```
-@highlight 88-90,108-117,only
+@highlight 86-88,105-114,only
 @codepen
 
 ## Clean up event listeners
