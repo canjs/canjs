@@ -270,11 +270,11 @@
     "codepen": [
       [
         "\"can\"",
-        "\"//unpkg.com/can@5/core.mjs\""
+        "\"//unpkg.com/can@pre/core.mjs\""
       ],
       [
         "\"can/everything\"",
-        "\"//unpkg.com/can@5/everything.mjs\""
+        "\"//unpkg.com/can@pre/everything.mjs\""
       ],
       [
         "\"can/demos/technology-overview/mock-url\"",

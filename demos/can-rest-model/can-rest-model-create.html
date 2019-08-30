@@ -1,11 +1,11 @@
 <html>
 <head>
-    <style>
-        label {
-            width: 100px;
-            display: inline-block;
-        }
-    </style>
+<style>
+label {
+    width: 100px;
+    display: inline-block;
+}
+</style>
 </head>
 <body>
 <todo-create></todo-create>
@@ -14,24 +14,35 @@
 <script src="../../node_modules/steal/steal.js" dev-bundle></script>
 
 <script type="steal-module" id="demo-source">
-import {restModel, DefineMap, DefineList, Component, fixture} from "can";
-const Todo = DefineMap.extend("Todo",{
-    id: { type: "number", identity: true },
-    complete: { type: "boolean", default: false },
-    dueDate: {type: "date", Default: Date},
-    name: "string",
-    preventSave(){
+import { fixture, ObservableArray, ObservableObject, restModel, StacheElement, type } from "can";
+
+class Todo extends ObservableObject {
+    static props = {
+        id: { type: type.maybe(Number), identity: true },
+        complete: { type: Boolean, default: false },
+
+        dueDate: {
+            type: type.maybeConvert(Date),
+            get default() {
+                return new Date();
+            }
+        },
+
+        name: type.maybe(String)
+    };
+
+    preventSave() {
         return !this.name || this.isSaving();
     }
-});
+}
 
-Todo.List = DefineList.extend("TodoList",{
-    "#": Todo
-});
+class TodoList extends ObservableArray {
+    static items = Todo;
+}
 
 const todoConnection = restModel({
     Map: Todo,
-    List: Todo.List,
+    List: TodoList,
     url: "/api/todos/{id}"
 });
 
@@ -43,7 +54,7 @@ let dayInMS = 24*60*60*1000;
 let lastWeek = new Date() - (7*dayInMS);
 let fourWeeks = new Date().getTime() + (4*7*dayInMS);
 
-let todoStore = fixture.store(100, function(){
+let todoStore = fixture.store(20, function(){
     return {
         complete: fixture.rand([true, false],1)[0],
         dueDate: new Date( fixture.rand(lastWeek, fourWeeks) ).toString(),
@@ -53,9 +64,8 @@ let todoStore = fixture.store(100, function(){
 
 fixture("/api/todos/{id}", todoStore);
 
-Component.extend({
-    tag: "todo-create",
-    view: `
+class TodoCreate extends StacheElement {
+    static view = `
         <form on:submit="createTodo(scope.event)">
             <p>
                 <label>Name</label>
@@ -72,23 +82,28 @@ Component.extend({
             <button disabled:from="todo.preventSave()">Create Todo</button>
             {{# if(todo.isSaving()) }}Creating ....{{/ if }}
         </form>
-    `,
-    ViewModel: {
-        todo: {
-            Default: Todo
-        },
-        createTodo(event) {
-            event.preventDefault();
-            this.todo.save().then((createdTodo) => {
-                this.todo = new Todo();
-            })
-        }
-    }
-});
+    `;
 
-Component.extend({
-    tag: "created-todos",
-    view: `
+    static props = {
+        todo: {
+            get default() {
+                return new Todo();
+            }
+        }
+    };
+
+    createTodo(event) {
+        event.preventDefault();
+        this.todo.save().then((createdTodo) => {
+            this.todo = new Todo();
+        })
+    }
+}
+
+customElements.define("todo-create", TodoCreate);
+
+class CreatedTodos extends StacheElement {
+    static view = `
         <h3>Created Todos</h3>
         <table>
             <tr>
@@ -106,17 +121,23 @@ Component.extend({
                 <tr><td colspan='4'><i>The todos you create will be listed here</i></td></tr>
             {{/ for }}
         </table>
-    `,
-    ViewModel: {
-        todos: {Default: Todo.List},
-        connectedCallback(){
-            this.listenTo(Todo,"created", (ev, created) => {
-                this.todos.unshift(created);
-            })
-        }
-    }
-});
+    `;
 
+    static props = {
+        todos: {
+            get default() {
+                return new TodoList();
+            }
+        }
+    };
+
+    connected() {
+        this.listenTo(Todo,"created", (ev, created) => {
+            this.todos.unshift(created);
+        })
+    }
+}
+customElements.define("created-todos", CreatedTodos);
 </script>
 
 

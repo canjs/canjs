@@ -11,85 +11,103 @@
 <script src="../../node_modules/steal/steal.js"  dev-bundle></script>
 
 <script type="steal-module" id="demo-source">
-import {realtimeRestModel, DefineMap, DefineList, Component, fixture} from "can";
+import {
+    fixture,
+    ObservableArray,
+    ObservableObject,
+    realtimeRestModel,
+    StacheElement,
+    type,
+} from "can";
 
-const Todo = DefineMap.extend("Todo",{
-    id: { type: "number", identity: true },
-    complete: { type: "boolean", default: false },
-    dueDate: {type: "date", Default: Date},
-    name: "string",
-    preventSave(){
+class Todo extends ObservableObject {
+    static props = {
+        id: { type: type.maybeConvert(Number), identity: true },
+        complete: { type: Boolean, default: false },
+
+        dueDate: {
+            type: type.maybeConvert(Date),
+
+            get default() {
+                return new Date();
+            }
+        },
+
+        name: type.maybeConvert(String)
+    };
+
+    preventSave() {
         return !this.name || this.isSaving() || this.isDestroying();
     }
-});
+}
 
-Todo.List = DefineList.extend("TodoList",{
-    "#": Todo
-});
+class TodoListModel extends ObservableArray {
+    static items = Todo;
+}
 
 const todoConnection = realtimeRestModel({
     Map: Todo,
-    List: Todo.List,
+    List: TodoListModel,
     url: "/api/todos/{id}"
 });
 
 mockService();
 
-Component.extend({
-    tag: "todo-list",
-    view: `
-    Sort By: <select value:bind="sort">
-        <option value="">none</option>
-        <option value="name">name</option>
-        <option value="dueDate">dueDate</option>
-    </select>
+class TodoList extends StacheElement {
+    static view = `
+        Sort By: <select value:bind="sort">
+            <option value="">none</option>
+            <option value="name">name</option>
+            <option value="dueDate">dueDate</option>
+        </select>
 
-    Show: <select value:bind="completeFilter">
-        <option value="">All</option>
-        <option value="complete">Complete</option>
-        <option value="incomplete">Incomplete</option>
-    </select>
+        Show: <select value:bind="completeFilter">
+            <option value="">All</option>
+            <option value="complete">Complete</option>
+            <option value="incomplete">Incomplete</option>
+        </select>
 
-    Due: <select value:bind="dueFilter">
-        <option value="">Anytime</option>
-        <option value="today">Today</option>
-        <option value="week">This Week</option>
-    </select>
+        Due: <select value:bind="dueFilter">
+            <option value="">Anytime</option>
+            <option value="today">Today</option>
+            <option value="week">This Week</option>
+        </select>
 
-    Results <select value:bind="count">
-        <option value="">All</option>
-        <option value="10">10</option>
-        <option value="20">20</option>
-    </select>
+        Results <select value:bind="count">
+            <option value="">All</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+        </select>
 
-    <ul>
-        {{# if(todosPromise.isResolved) }}
-            {{# for(todo of todosPromise.value) }}
-                <li>
-                    <input type='checkbox'
-                        checked:bind='todo.complete'
-                        on:change="todo.save()"
-                        disabled:from="todo.preventSave()"/>
-                    <label>{{ todo.name }}</label>
-                    <input type='date'
-                        valueAsDate:bind='todo.dueDate'
-                        on:change="todo.save()"
-                        disabled:from="todo.preventSave()"/>
-                    <button on:click="todo.destroy()"
-                        disabled:from="todo.preventSave()">delete</button>
-                </li>
-            {{/ for }}
-        {{/ if }}
-        {{# if(todosPromise.isPending) }}
-            <li>Loading</li>
-        {{/ if }}
-    </ul>
-    `,
-    ViewModel: {
-        sort: "string",
-        completeFilter: "string",
-        dueFilter: "string",
-        count: {type:"string", default: "10"},
+        <ul>
+            {{# if(todosPromise.isResolved) }}
+                {{# for(todo of todosPromise.value) }}
+                    <li>
+                        <input type='checkbox'
+                            checked:bind='todo.complete'
+                            on:change="todo.save()"
+                            disabled:from="todo.preventSave()"/>
+                        <label>{{ todo.name }}</label>
+                        <input type='date'
+                            valueAsDate:bind='todo.dueDate'
+                            on:change="todo.save()"
+                            disabled:from="todo.preventSave()"/>
+                        <button on:click="todo.destroy()"
+                            disabled:from="todo.preventSave()">delete</button>
+                    </li>
+                {{/ for }}
+            {{/ if }}
+            {{# if(todosPromise.isPending) }}
+                <li>Loading</li>
+            {{/ if }}
+        </ul>
+    `;
+
+    static props = {
+        sort: type.maybe(String),
+        completeFilter: type.maybe(String),
+        dueFilter: type.maybe(String),
+        count: {type: type.convert(String), default: "10"},
         todosPromise: {
             get(){
                 var query = {filter: { }};
@@ -127,12 +145,13 @@ Component.extend({
                 return Todo.getList(query);
             }
         }
-    }
-});
+    };
+}
 
-Component.extend({
-    tag: "todo-create",
-    view: `
+customElements.define("todo-list", TodoList);
+
+class TodoCreate extends StacheElement {
+    static view = `
         <form on:submit="createTodo(scope.event)">
             <p>
                 <label>Name</label>
@@ -149,19 +168,25 @@ Component.extend({
             <button disabled:from="todo.preventSave()">Create Todo</button>
             {{# if(todo.isSaving()) }}Creating ....{{/ if }}
         </form>
-    `,
-    ViewModel: {
+    `;
+
+    static props = {
         todo: {
-            Default: Todo
-        },
-        createTodo(event) {
-            event.preventDefault();
-            this.todo.save().then((createdTodo) => {
-                this.todo = new Todo();
-            })
+            get default() {
+                return new Todo();
+            }
         }
+    };
+
+    createTodo(event) {
+        event.preventDefault();
+        this.todo.save().then((createdTodo) => {
+            this.todo = new Todo();
+        })
     }
-});
+}
+
+customElements.define("todo-create", TodoCreate);
 
 function mockService(){
 	var terms = ["can you","please","","","",""],
@@ -183,7 +208,6 @@ function mockService(){
 	fixture("/api/todos/{id}", todoStore);
 	fixture.delay = 500;
 }
-
 </script>
 
 
