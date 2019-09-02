@@ -1,4 +1,4 @@
-import { route, StacheElement, type } from "//unpkg.com/can@5/core.mjs";
+import { route, StacheElement, type } from "//unpkg.com/can@pre/core.mjs";
 
 class ChatMessages extends StacheElement {
     static view = `

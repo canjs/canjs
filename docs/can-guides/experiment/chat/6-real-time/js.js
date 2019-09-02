@@ -5,8 +5,7 @@ import {
     route,
     StacheElement,
     type,
-} from "//unpkg.com/can@5/core.mjs";
-import DeepObservable from "can-deep-observable";
+} from "//unpkg.com/can@pre/core.mjs";
 
 class Message extends ObservableObject {
     static props = {
