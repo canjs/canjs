@@ -4,25 +4,20 @@
 </div>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { stache, StacheElement } from "can";
-
-const view = stache(`
-    <button on:click="increment()">+1</button>
-    Count: <span>{{ count }}</span>
-`);
+import { StacheElement } from "can";
 
 class MyCounter extends StacheElement {
-    static get view() {
-        return view;
-    }
+    static view = `
+		<button on:click="this.increment()">+1</button>
+		Count: <span>{{ this.count }}</span>
+	`;
 
-    static get props() {
-			return {
-					count: {default: 0},
-					increment() {
-							this.count++;
-					}
-			};
+    static props = {
+		count: {default: 0}
+	};
+
+    increment() {
+		this.count++;
     }
 }
 customElements.define("my-counter", MyCounter);

@@ -85,62 +85,53 @@ CanJS will improve this code in other ways:
 
 In CanJS, widgets are encapsulated with custom elements. Custom elements allow us to put an
 element in our HTML like `<my-counter></my-counter>`, and the widget will spring to life.
-[can-component Component] is used to create custom elements.
+[can-stache-element StacheElement] is used to create custom elements.
 
-The following implementation uses [can-component Component] to create the counter
+The following implementation uses [can-stache-element StacheElement] to create the counter
 functionality above. This implementation:
 
 - Includes a `<my-counter>` element in the page's HTML.
-- Defines a `<my-counter>` [can-component Component].
+- Defines a `<my-counter>` [can-stache-element StacheElement].
 
 ```html
 <!-- Adds the custom element to the page -->
 <my-counter></my-counter>
 
 <script type="module">
-import { Component } from "can";
+import { StacheElement } from "can";
 
 // Extend Component to define a custom element
-Component.extend({
+class MyCounter extends StacheElement {
+  static view = `
+      Count: <span>{{ this.count }}</span>
+      <button on:click='this.increment()'>+1</button>
+  `;
 
-    // The name of the custom element
-    tag: "my-counter",
+  static props = {
+      count: {default: 0}
+  };
 
-    // The HTML content within the custom element.
-    //  - {{count}} is a `stache` magic tag.
-    //  - `on:click` is a `stache` event binding.
-    view: `
-        Count: <span>{{count}}</span>
-        <button on:click='increment()'>+1</button>
-    `,
-
-    // Defines a DefineMap used to control the
-    // logic of this custom element.
-    ViewModel: {
-        count: {default: 0},
-        increment() {
-            this.count++;
-        }
-    }
-});
+  increment() {
+      this.count++;
+  }
+}
+customElements.define("my-counter", MyCounter);
 </script>
 ```
 @codepen
 
 You might have noticed that Components are mostly 2 parts:
 
-- A [can-stache stache] [can-component.prototype.view] that specifies the HTML content within the custom element. In this case, we’re adding a `<span>` and a `<button>` within the `<my-counter>` element.
-- An <span class='obs'>observable</span> [can-component.prototype.ViewModel] that manages the logic and state of the application.
+- A [can-stache stache] [can-stache-element/static.view] that specifies the HTML content within the custom element. In this case, we’re adding a `<span>` and a `<button>` within the `<my-counter>` element.
+- An <span class='obs'>observable</span> [can-stache-element/static.props] that manages the logic and state of the application.
 
 These work together to receive input from the user, update the state of the application, and then update
-the HTML the user sees accordingly. See how in this 2 minute video:
+the HTML the user sees accordingly.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/3zMwoEuyX9g" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-
-[can-component Component] uses [can-stache stache] to update the HTML
+[can-stache-element StacheElement] uses [can-stache stache] to update the HTML
 and [can-stache-bindings stacheBindings] to listen to user interactions and pass data between
 components.  The remainder of this guide breaks down these pieces and goes into more detail
-about how [can-component Component] works and how to use it.
+about how [can-stache-element StacheElement] works and how to use it.
 
 ## Stache templates and bindings
 
@@ -176,37 +167,43 @@ observables. Use it to:
   <my-demo></my-demo>
 
   <script type="module">
-  import { Component } from "can";
+  import { StacheElement } from "can/everything";
 
-  Component.extend({
-      tag: "my-demo",
-      view: `<input on:keyup="doSomething(scope.element.value)"/>`,
-      ViewModel: {
-          doSomething(value) {
-            console.log("You wrote "+value);
-          }
-      }
-  });
+  class MyDemo extends StacheElement {
+    static view = `
+      <input on:keyup="this.doSomething(scope.element.value)"/>
+    `;
+
+    static props = {};
+
+    doSomething(value) {
+      console.log("You wrote "+value);
+    }
+  }
+  customElements.define("my-demo", MyDemo);
   </script>
   ```
   @highlight 8
   @codepen
 
 - Update observables with element attribute and property values.  The following uses [can-stache-bindings.toParent]
-  to send the `<input>`’s _value to_ the [can-component.prototype.ViewModel]’s `count` property when the user presses enter.
+  to send the `<input>`’s _value to_ the [can-stache-element/static.props]’s `count` property when the user presses enter.
   ```html
   <my-demo></my-demo>
 
   <script type="module">
-  import { Component } from "can";
+  import { StacheElement } from "can";
 
-  Component.extend({
-      tag: "my-demo",
-      view: `<input value:to="count"/> Count: {{count}}`,
-      ViewModel: {
-          count: "number"
-      }
-  });
+  class MyDemo extends StacheElement {
+    static view = `
+      <input value:to="this.count"/> Count: {{ this.count }}
+    `;
+
+    static props = {
+      count: Number
+    };
+  }
+  customElements.define("my-demo", MyDemo);
   </script>
   ```
   @highlight 8
@@ -214,64 +211,69 @@ observables. Use it to:
 
 
 - Update element attribute and property values with observable values.  The following uses [can-stache-bindings.toChild]
-  to update the `<input>`’s _value from_  the [can-component.prototype.ViewModel]’s `count` property.
+  to update the `<input>`’s _value from_  the [can-stache-element/static.props]’s `count` property.
   ```html
   <my-demo></my-demo>
 
   <script type="module">
-  import { Component } from "can";
+  import { StacheElement } from "can/everything";
 
-  Component.extend({
-      tag: "my-demo",
-      view: `<input value:from="count"/>`,
-      ViewModel: {
-          count: {
-              // Makes count increase by 1 every
-              // second.
-              value(prop) {
-                  let count = prop.resolve(0);
-                  let timer = setInterval( () => {
-                      prop.resolve(++count);
-                  },1000);
-                  // Return a cleanup function
-                  // that is called when count
-                  // is longer used.
-                  return () => {
-                      clearTimeout(timer);
-                  };
-              }
-          }
+  class MyDemo extends StacheElement {
+    static view = `
+      <input value:from="count"/>
+    `;
+
+    static props = {
+      count: {
+        // Makes count increase by 1 every
+        // second.
+        value(prop) {
+          let count = prop.resolve(0);
+          let timer = setInterval( () => {
+            prop.resolve(++count);
+          },1000);
+          // Return a cleanup function
+          // that is called when count
+          // is longer used.
+          return () => {
+            clearTimeout(timer);
+          };
+        }
       }
-  });
+    };
+  }
+  customElements.define("my-demo", MyDemo);
   </script>
   ```
   @highlight 8
   @codepen
-- Cross bind element attribute and property values with observable values.  The following uses
-  [can-stache-bindings.twoWay] to update the `<input>`’s _value_ from the [can-component.prototype.ViewModel]’s `count` property
+- Cross bind element attribute and property values with observable values. The following uses
+  [can-stache-bindings.twoWay] to update the `<input>`’s _value_ from the [can-stache-element/static.props]’s `count` property
   and vice versa:
   ```html
   <my-demo></my-demo>
 
   <script type="module">
-  import { Component } from "can";
+  import { StacheElement } from "can/everything";
 
-  Component.extend({
-      tag: "my-demo",
-      view: `
-          <input value:bind="count"/> Count: {{count}}
-          <button on:click="increment()">+1</button>
-      `,
-      ViewModel: {
-          count: "number",
-          increment() {
-              this.count++;
-          }
-      }
-  });
+  class MyDemo extends StacheElement {
+    static view = `
+      <input value:bind="this.count"/> Count: {{ this.count }}
+      <button on:click="this.increment()">+1</button>
+    `;
+
+    static props = {
+      count: Number
+    };
+
+    increment() {
+      this.count++;
+    }
+  }
+  customElements.define("my-demo", MyDemo);
   </script>
   ```
-  @highlight 9
+  @highlight 8
   @codepen
 
 The following demo:
@@ -286,31 +288,30 @@ The following demo:
 
 ## Components
 
-The final core __view__ library is [can-component].
+The final core __view__ library is [can-stache-element].
 
 <img src="../../docs/can-guides/experiment/technology/observables-dom.png"
   alt=""
   class='bit-docs-screenshot'/>
 
-[can-component] is used to create customs elements.  Custom elements are used to
+[can-stache-element] is used to create customs elements.  Custom elements are used to
 encapsulate widgets or application logic. For example, you
-might use [can-component] to create a `<percent-slider>` element that creates a
+might use [can-stache-element] to create a `<percent-slider>` element that creates a
 slider widget on the page:
 
 @demo demos/technology-overview/component-slider.html
 @codepen
 
-Or, you might use [can-component] to make a `<task-editor>` that uses `<percent-slider>`
+Or, you might use [can-stache-element] to make a `<task-editor>` that uses `<percent-slider>`
 and manages the application logic around editing a todo:
 
 @demo demos/technology-overview/task-editor.html
 
 
-A [can-component] is a combination of:
+A [can-stache-element] is a combination of:
 
-- a [can-define/map/map DefineMap] observable,
-- a [can-stache] view, and
-- a [can-view-callbacks registered] tag name.
+- a [can-observable-object ObservableObject] observable,
+- a [can-stache] view.
 
 For example, the following demo defines and uses a `<my-counter>` custom element. Hit the <button>+1</button> button
 to see it count.
@@ -322,30 +323,46 @@ The demo defines the `<my-counter>` element with:
 
 - The `Counter` observable constructor as shown in the [Key-Value Observables](technology-overview#Key_ValueObservables) section of the Technology Overview:
   ```js
-  import {DefineMap} from "can";
-  const Counter = DefineMap.extend({
-      count: {default: 0},
+  import { ObservableObject } from "can";
+
+  class Counter extends ObservableObject {
+      static props = {
+        count: { default: 0 }
+      };
+
       increment() {
           this.count++;
       }
-  });
+  };
   ```
 - The [can-stache] view that incremented the counter as shown in the beginning of this guide:
   ```js
-  import {stache} from "can";
+  import { stache } from "can";
+
   const view = stache(`
-    <button on:click='increment()'>+1</button>
-    Count: <span>{{count}}</span>
+    <button on:click='this.increment()'>+1</button>
+    Count: <span>{{ this.count }}</span>
   `);
   ```
-- A [can-component] that combines the `Counter` and `view` as follows:
+- A [can-stache-element] that combines the `Counter` and `view` as follows:
   ```js
-  import {Component} from "can";
-  Component.extend({
-      tag: "my-counter",
-      ViewModel: Counter,
-      view: view
-  });
+  import { StacheElement } from "can";
+
+  class MyCounter extends StacheElement {
+      static view = `
+      <button on:click="this.increment()">+1</button>
+      Count: <span>{{ this.count }}</span>
+    `;
+
+      static props = {
+      count: {default: 0}
+    };
+
+      increment() {
+      this.count++;
+      }
+  }
+  customElements.define("my-counter", MyCounter);
   ```
 
 The demo then creates a `<my-counter>` element like:
@@ -355,46 +372,24 @@ The demo then creates a `<my-counter>` element like:
 ```
 
 So __components__ are just a combination of a [can-stache] __view__ and a
-[can-define/map/map DefineMap] __observable__.  [can-component] calls the observable a
-[can-component.prototype.ViewModel]. This is because CanJS’s observables are typically
+[can-observable-object ObservableObject] __observable__.  [can-stache-element] calls the observable
+[can-stache-element/static.props]. This is because CanJS’s observables are typically
 built within a [Model-View-ViewModel (MVVM) architecture](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel).
 
 <img src="../../docs/can-guides/experiment/technology/can-component.png"
   alt="" class='bit-docs-screenshot'/>
 
-Instead of creating the view and view-model as separate entities, they are
-often created together as follows:
-
-```js
-import {Component} from "can";
-
-Component.extend({
-    tag: "my-counter",
-    view: `
-        <button on:click='increment()'>+1</button>
-        Count: <span>{{count}}</span>
-    `,
-    ViewModel: {
-        count: {default: 0},
-        increment() {
-            this.count++;
-        }
-    }
-});
-```
-
-[can-component] will create a [can-stache] template from a string [can-component.prototype.view] value
-and define a [can-define/map/map DefineMap] type from a plain
-object [can-component.prototype.ViewModel] value. This is a useful short-hand for creating components. __We will use it for all components going forward.__
+[can-stache-element] will create a [can-stache] template from a string [can-component.prototype.view] value
+and define a [can-observable-object ObservableObject] type from a plain
+object [can-stache-element/static.props] value.
 
 ### Passing data to and from components
 
-Components are created by inserting their [can-component.prototype.tag] in the DOM or
-another [can-stache] view. For example, `<my-counter></my-counter>` creates an instance of the
-__ViewModel__ and renders it with the __view__ and inserts the resulting HTML inside the `<my-counter>` tag.
+Components are created by calling [customeElements.define](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define) with the [can-stache-element#DefiningacustomelementwithaStacheElementconstructor]. For example, `<my-counter></my-counter>` creates an instance of the
+__ObservableObject__ and renders it with the __view__ and inserts the resulting HTML inside the `<my-counter>` tag.
 
 [can-stache-bindings] can be used to pass values between
-component ViewModels and [can-stache]’s scope.  For example,
+components and [can-stache]’s scope.  For example,
 we can start the counter's count at 5 with the following:
 
 ```html
@@ -406,8 +401,8 @@ This is shown in the following demo:
 @demo demos/technology-overview/my-counter-5.html
 @codepen
 
-[can-stache]’s scope is usually made up of other component ViewModels.  [can-stache-bindings]
-passes values from one ViewModel to another.  For example, the `<task-editor>` component
+[can-stache]’s scope is usually made up of other component properties.  [can-stache-bindings]
+passes values from one component to another.  For example, the `<task-editor>` component
 connects its `progress` property to the `value` property of the `<my-slider>` with:
 
 ```html
@@ -417,7 +412,7 @@ connects its `progress` property to the `value` property of the `<my-slider>` wi
 @demo demos/technology-overview/task-editor.html
 
 So on a high-level, CanJS applications are composed of components whose logic is managed
-by an observable _view-model_ and whose _views_ create
+by observable _properties_ and whose _views_ create
 other components. The following might be the topology of an example application:
 
 <img src="../../docs/can-guides/experiment/technology/component-architecture-overview.png"
@@ -427,5 +422,5 @@ other components. The following might be the topology of an example application:
 Notice that `<my-app>`’s _view_ will
 render either `<page-login>`, `<page-signup>`,
 `<page-products>`, or `<page-purchase>` based on
-the state of its _view-model_.  Those page-level components
+the state of its _properties_.  Those page-level components
 might use sub-components themselves like `<ui-password>` or `<product-list>`.
