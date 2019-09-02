@@ -1,22 +1,30 @@
 <!-- components/todo-list/todo-list.stache -->
 <ul id="todo-list">
-    {{# for(todo of this.todos) }}
-        <li class="todo {{# if(todo.complete) }}completed{{/ if }}
-            {{# if( todo.isDestroying() ) }}destroying{{/ if }}
-            {{# if(this.isEditing(todo)) }}editing{{/ if }}">
-            <div class="view">
-                <input class="toggle" type="checkbox"
-                    checked:bind="todo.complete"
-                    on:change="todo.save()"
-                    disabled:from="todo.isSaving()" />
-                <label on:dblclick="this.edit(todo)">{{ todo.name }}</label>
-                <button class="destroy" on:click="todo.destroy()"></button>
-            </div>
-            <input class="edit" type="text"
-                value:bind="todo.name"
-                on:enter="this.updateName()"
-                focused:from="this.isEditing(todo)"
-                on:blur="this.cancelEdit()" />
-        </li>
-    {{/ for }}
+  {{# for(todo of this.todos) }}
+    <li
+      class="todo {{# if(todo.complete) }}completed{{/ if }}
+      {{# if( todo.isDestroying() ) }}destroying{{/ if }}
+      {{# if(this.isEditing(todo)) }}editing{{/ if }}"
+    >
+      <div class="view">
+        <input
+          class="toggle"
+          type="checkbox"
+          checked:bind="todo.complete"
+          on:change="todo.save()"
+          disabled:from="todo.isSaving()"
+        >
+        <label on:dblclick="this.edit(todo)">{{ todo.name }}</label>
+        <button class="destroy" on:click="todo.destroy()"></button>
+      </div>
+      <input
+        class="edit"
+        type="text"
+        value:bind="todo.name"
+        on:enter="this.updateName()"
+        focused:from="this.isEditing(todo)"
+        on:blur="this.cancelEdit()"
+      >
+  </li>
+  {{/ for }}
 </ul>

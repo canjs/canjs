@@ -12,12 +12,12 @@ covering CanJS core libraries.
 ### The problem
 
 - Setup steal to load a basic CanJS application.  A basic CanJS application has:
-  - A custom element defined by [can-component] and
-    an instance of that custom element in the page's HTML. That component includes a:
-    - A [can-define/map/map] ViewModel and an instance of that ViewModel.
-    - A [can-stache] view that is rendered with the instance of the ViewModel.
-- In addition, this application should load the [can-todomvc-test](https://www.npmjs.com/package/can-todomvc-test) module version 5.0 and
-  pass it the custom element’s `ViewModel` instance. You will need to declare the version explicitly as different versions of this guide depend on different versions of this package.
+  - A custom element defined by [can-stache-element StacheElement] and
+    an instance of that custom element in the page's HTML. That component includes:
+    - A set of [can-observable-object ObservableObject] like properties.
+    - A [can-stache] view that is rendered with the element properties.
+- In addition, this application should load the [can-todomvc-test](https://www.npmjs.com/package/can-todomvc-test) module version 6.0 and
+  pass it the custom element’s `props`. You will need to declare the version explicitly as different versions of this guide depend on different versions of this package.
 
 ### What you need to know
 
@@ -45,18 +45,17 @@ covering CanJS core libraries.
   }
   ```
 
-- Define a custom element with [can-component]:
+- Define a custom element with [can-stache-element StacheElement]:
 
   ```js
-  import {Component} from "can";
+  import { StacheElement } from "can";
 
-  Component.extend({
-      tag: "todo-mvc",
-      view: "...",
-      ViewModel: {
-         /* ... */
-      }
-  });
+  class TodoMVC extends StacheElement {
+    static view = "...";
+    static props = {};
+  }
+  
+  customElements.define("todo-mvc", TodoMVC);
   ```
 
 - Load a view with the [steal-stache] plugin like:
@@ -76,61 +75,59 @@ covering CanJS core libraries.
 - Use the following HTML that a designer might have provided:
 
   ```html
-  <section id="todoapp">
+    <section id="todoapp">
       <header id="header">
-          <h1>Todos</h1>
-          <input id="new-todo" placeholder="What needs to be done?">
+        <h1>Todos</h1>
+        <input id="new-todo" placeholder="What needs to be done?">
       </header>
       <section id="main" class="">
-          <input id="toggle-all" type="checkbox">
-          <label for="toggle-all">Mark all as complete</label>
-          <ul id="todo-list">
-              <li class="todo">
-                  <div class="view">
-                      <input class="toggle" type="checkbox">
-                      <label>Do the dishes</label>
-                      <button class="destroy"></button>
-                  </div>
-                  <input class="edit" type="text" value="Do the dishes">
-              </li>
-              <li class="todo completed">
-                  <div class="view">
-                      <input class="toggle" type="checkbox">
-                      <label>Mow the lawn</label>
-                      <button class="destroy"></button>
-                  </div>
-                  <input class="edit" type="text" value="Mow the lawn">
-              </li>
-              <li class="todo editing">
-                  <div class="view">
-                      <input class="toggle" type="checkbox">
-                      <label>Pick up dry cleaning</label>
-                      <button class="destroy"></button>
-                  </div>
-                  <input class="edit" type="text" value="Pick up dry cleaning">
-              </li>
-          </ul>
+        <input id="toggle-all" type="checkbox">
+        <label for="toggle-all">Mark all as complete</label>
+        <ul id="todo-list">
+          <li class="todo">
+            <div class="view">
+              <input class="toggle" type="checkbox">
+              <label>Do the dishes</label>
+              <button class="destroy"></button>
+            </div>
+            <input class="edit" type="text" value="Do the dishes">
+          </li>
+          <li class="todo completed">
+            <div class="view">
+              <input class="toggle" type="checkbox">
+              <label>Mow the lawn</label>
+              <button class="destroy"></button>
+            </div>
+            <input class="edit" type="text" value="Mow the lawn">
+          </li>
+          <li class="todo editing">
+            <div class="view">
+              <input class="toggle" type="checkbox">
+              <label>Pick up dry cleaning</label>
+              <button class="destroy"></button>
+            </div>
+            <input class="edit" type="text" value="Pick up dry cleaning">
+          </li>
+        </ul>
       </section>
       <footer id="footer" class="">
-          <span id="todo-count">
-              <strong>2</strong> items left
-          </span>
-          <ul id="filters">
-              <li>
-                  <a class="selected" href="#!">All</a>
-              </li>
-              <li>
-                  <a href="#!active">Active</a>
-              </li>
-              <li>
-                  <a href="#!completed">Completed</a>
-              </li>
-          </ul>
-          <button id="clear-completed">
-              Clear completed (1)
-          </button>
+        <span id="todo-count"> <strong>2</strong> items left </span>
+        <ul id="filters">
+          <li>
+            <a class="selected" href="#!">All</a>
+          </li>
+          <li>
+            <a href="#!active">Active</a>
+          </li>
+          <li>
+            <a href="#!completed">Completed</a>
+          </li>
+        </ul>
+        <button id="clear-completed">
+          Clear completed (1)
+        </button>
       </footer>
-  </section>
+    </section>
   ```
 
 - Use [can-todomvc-test](https://www.npmjs.com/package/can-todomvc-test) to load the application’s
@@ -170,7 +167,7 @@ Install `steal`, `steal-tools`, and CanJS’s core modules:
 
 ```cmd
 npm install steal@2 steal-tools@2 steal-css@1 --save-dev
-npm install can@5 steal-stache@4 --save
+npm install can@6 steal-stache@5 --save-dev
 ```
 
 
@@ -178,7 +175,7 @@ npm install can@5 steal-stache@4 --save
 Add __steal.plugins__ to _package.json_:
 
 @sourceref ./1-setup/package.json
-@highlight 17-21
+@highlight 17-22
 
 
 Create the starting HTML page:
@@ -196,7 +193,7 @@ Create the application template:
 Install the test harness:
 
 ```cmd
-npm install can-todomvc-test@5 --save-dev
+npm install can-todomvc-test@6 --save-dev
 ```
 
 Create the main app
@@ -208,7 +205,7 @@ Create the main app
 ### The problem
 
 - Define a `Todo` type as the export of  _models/todo.js_, where:
-  - It is a [can-define/map/map] type.
+  - It is an [can-observable-object ObservableObject] type.
   - The id or name property values are coerced into a string.
   - Its `complete` property is a `Boolean` that defaults to `false`.
   - It has a `toggleComplete` method that flips `complete` to the opposite value.
@@ -216,7 +213,7 @@ Create the main app
 Example test code:
 
 ```js
-const todo = new Todo({id: 1, name: 2});
+const todo = new Todo({ id: 1, name: 2 });
 QUnit.equal(todo.id, "1", "id is a string");
 QUnit.equal(todo.name, "2", "name is a string");
 QUnit.equal(todo.complete, false, "complete defaults to false");
@@ -226,30 +223,33 @@ QUnit.equal(todo.complete, true, "toggleComplete works");
 
 ### What you need to know
 
-- [DefineMap Basics Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZeUmlrN2p0Yi1qUzg)
-- [can-define/map/map.extend DefineMap.extend] defines a new `Type`.
-- The [can-define.types.type type] behavior defines a property’s type like:
+- [can-observable-object#classextendsObservableObject Extending ObservableObject] defines a new `Type`.
+- The [can-observable-object/object.types.definitionObject] behavior defines a property’s type like:
 
   ```js
-  const CustomType = DefineMap.extend({
-      propertyName: {type: "number"}
-  })
+  class CustomType extends ObservableObject {
+    static props = {
+      propertyName: { type: Number }
+    };
+  }
   ```
 
-- The [can-define.types.default] behavior defines a property’s initial value like:
+- The [can-observable-object/define/default] behavior defines a property’s initial value like:
 
   ```js
-  const CustomType = DefineMap.extend({
-      propertyName: {default: 3}
-  })
+  class CustomType extends ObservableObject {
+    static props = {
+      propertyName: { default: 3 }
+    };
+  }
   ```
 
 - Methods can be defined directly on the prototype like:
 
   ```js
-  const CustomType = DefineMap.extend({
-      methodName: function() {}
-  })
+  class CustomType extends ObservableObject {
+    methodName() {}
+  }
   ```
 
 ### The solution
@@ -263,7 +263,7 @@ Create _models/todo.js_ as follows:
 ### The problem
 
 - Define a `Todo.List` type on the export of  _models/todo.js_, where:
-  - It is a [can-define/list/list] type.
+  - It is an [can-observable-array ObservableArray] type.
   - The enumerable indexes are coerced into `Todo` types.
   - Its `.active` property returns a filtered `Todo.List` of the todos that are __not__ complete.
   - Its `.complete` property returns a filtered `Todo.List` of the todos that are complete.
@@ -288,29 +288,28 @@ QUnit.equal(todos.allComplete, true, "allComplete");
 
 ### What you need to know
 
-- [DefineList Basics Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZeRFUzclNhTlRjMDg)
-- [can-define/list/list.extend DefineList.extend] defines a new `ListType`.
-- The [can-define/list/list.prototype.wildcardItems] property defines the behavior of items in a list like:
+- [can-observable-array#classextendsObservableArray Extending ObservableArray] defines a new `ListType`.
+- The [can-observable-array/static.items items] property defines the behavior of items in a list like:
 
   ```js
-  const List = DefineList.extend({
-      "#": {type: ItemType}
-  })
+  class List extends ObservableArray {
+    static items = ItemType;
+  }
   ```
 
-- The [can-define.types.get] behavior defines observable computed properties like:
+- The [can-observable-object/define/get] behavior defines observable computed properties like:
 
   ```js
-  const CustomType = DefineMap.extend({
-      propertyName: {
-          get: function() {
-              return this.otherProperty;
-          }
+  class CustomType extends ObservableObject {
+    static props = {
+      get propertyName() {
+        return this.otherProperty;
       }
-  })
+    };
+  }
   ```
 
-- [can-define/list/list.prototype.filter] can be used to filter a list into a new list:
+- [can-observable-array/array.prototype.filter] can be used to filter a list into a new list:
 
   ```js
   list = new ListType([
@@ -326,14 +325,14 @@ QUnit.equal(todos.allComplete, true, "allComplete");
 Update _models/todo.js_ to the following:
 
 @sourceref ./3-define-todo-list/todo.js
-@highlight 2,16-31,only
+@highlight 2,19-39,only
 
 ## Render a list of todos (can-stache)
 
 ### The problem
 
-- Add a `todosList` property to the `AppViewModel` whose default
-  value will be a `Todo.List` with the following data:
+- Add a `todosList` property whose default value will be a `Todo.List` with the 
+following data:
 
   ```js
   [
@@ -363,8 +362,8 @@ Update _models/todo.js_ to the following:
   ```html
     {{something.name}}
   ```
-- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in [can-stache].
-- Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in [can-stache].
+- Use [can-stache.helpers.if {{# if(value) }}] to do `if/else` branching in [can-stache].
+- Use [can-stache.helpers.for-of {{# for(of) }}] to do looping in [can-stache].
 
 ### The solution
 
@@ -389,16 +388,16 @@ Update _index.stache_ to the following:
 - [The can-stache-bindings Presentation’s](https://drive.google.com/open?id=0Bx-kNqf-wxZeYUJ3ZVRxUlU2MjQ) _DOM Event Bindings_
 - Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in [can-stache].  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
-   ```html
-   <div on:click="doSomething()"> ... </div>
-   ```
+  ```html
+  <div on:click="doSomething()"> ... </div>
+  ```
 
 ### The solution
 
 Update _index.stache_ to the following:
 
 @sourceref ./5-toggle-event/index.html
-@highlight 14-16,only
+@highlight 17-18,only
 
 ## Toggle a todo’s completed state (data bindings)
 
@@ -411,16 +410,16 @@ Update _index.stache_ to the following:
 - [The can-stache-bindings Presentation’s](https://drive.google.com/open?id=0Bx-kNqf-wxZeYUJ3ZVRxUlU2MjQ) _DOM Data Bindings_
 - Use [can-stache-bindings.twoWay value:bind] to setup a two-way binding in [can-stache].  For example, the following keeps `todo.name` and the input’s `value` in sync:
 
-   ```html
-   <input  value:bind="todo.name" />
-   ```
+  ```html
+  <input  value:bind="todo.name" />
+  ```
 
 ### The solution
 
 Update _index.stache_ to the following:
 
 @sourceref ./6-toggle-data/index.html
-@highlight 14-15,only
+@highlight 14,only
 
 ## Define Todo's identity
 
@@ -437,7 +436,7 @@ Update _index.stache_ to the following:
 Update _models/todo.js_ to the following:
 
 @sourceref ./7-algebra/todo.js
-@highlight 5,only
+@highlight 6,only
 
 ## Simulate the service layer (can-fixture)
 
@@ -541,7 +540,7 @@ Create _models/todos-fixture.js_ as follows:
 ### What you need to know
 
 - [The can-connect Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZebHFWMElNOVEwSlE) up to and including _Migrate 2 can-connect_.
-- [can-connect/can/base-map/base-map] can decorate a [can-define/map/map DefineMap] with methods that connect it to a restful URL like:
+- [can-connect/can/base-map/base-map] can decorate an [can-observable-object ObservableObject] with methods that connect it to a restful URL like:
 
   ```js
   baseMap({
@@ -557,7 +556,7 @@ Create _models/todos-fixture.js_ as follows:
 Update _models/todo.js_ to the following:
 
 @sourceref ./9-connection/todo.js
-@highlight 2,33-37,only
+@highlight 6,46-50,only
 
 ## List todos from the service layer (can-connect use)
 
@@ -630,7 +629,7 @@ changes. Also, disable the checkbox while the update is happening.
 Update _index.stache_ to the following:
 
 @sourceref ./11-toggle-save/index.html
-@highlight 16-17,only
+@highlight 17-18,only
 
 
 ## Delete todos in the page (can-connect use)
@@ -662,7 +661,7 @@ attribute.
 Update _index.stache_ to the following:
 
 @sourceref ./12-connection-destroy/index.html
-@highlight 13,20,only
+@highlight 13,23,only
 
 ## Create todos (can-component)
 
@@ -676,36 +675,41 @@ custom element.
 
 ### What you need to know
 
-- [The can-component presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZeMnlHZzB6ZERUSEk) up to and including how to _define a component_.
-- A [can-component] combines a custom tag name, [can-stache] view and a [can-define/map/map] ViewModel like:
+- A [can-stache-element StacheElement] combines a custom tag name, [can-stache] view and [can-observable-object ObservableObject]-like properties:
 
   ```js
-  import Component from "can-component";
+  import StacheElement from "can-stache-element";
   import view from "./template.stache";
-  const ViewModel = DefineMap.extend({
-    /* ... */
-  });
 
-  Component.extend({
-      tag: "some-component",
-      view: view,
-      ViewModel: ViewModel
-  });
+  class SomeElement extends StacheElement {
+    static view = view;
+
+    static props = {
+      ...
+    };
+  }
   ```
 
 - You can use `on:enter` to listen to when the user hits the __enter__ key.
 - Listening to the `enter` event can be enabled by [can-event-dom-enter/add-global/add-global].
-- The [can-define.types.defaultConstructor] behavior creates a default value by using `new Default` to initialize the value when
-a [can-define/map/map DefineMap] property is read for the first time.
+- The [can-observable-object/define/get-default] behavior creates a default value when
+an [can-observable-object ObservableObject] property is read for the first time.
 
   ```js
-  const SubType = DefineMap.extend({})
-  const Type = DefineMap.extend({
-      property: {Default: SubType}
-  })
+  import { ObservableObject } from "can/everything";
 
-  const map = new Type();
-  map.property instanceof SubType //-> true
+  class Example extends ObservableObject {
+    static props = {
+      prop: {
+        get default() {
+          return [];
+        }
+      }
+    };
+  }
+
+  const ex = new Example();
+  console.log( ex.prop ); //-> []
   ```
 
 - Use [can-view-import] to import a module from a template like:
@@ -781,7 +785,7 @@ Update _index.stache_ to the following:
 @sourceref ./14-component-edit/index.html
 @highlight 3,12,only
 
-## Toggle all todos complete state (DefineMap setter)
+## Toggle all todos complete state
 
 ### The problem
 
@@ -798,22 +802,24 @@ single todo is saving.
 
 ### What you need to know
 
-- Using [can-define.types.set setters] and [can-define.types.get getters] a virtual property
+- Using [can-observable-object/define/set setters] and [can-observable-object/define/get getters] a virtual property
 can be simulated like:
 
   ```js
-  const Person = DefineMap.extend({
-      first: "string",
-      last: "string",
+  class Person extends ObservableObject {
+    static props = {
+      first: String,
+      last: String,
       get fullName() {
-          return this.first + " " + this.last;
+        return this.first + " " + this.last;
       },
       set fullName(newValue) {
-          const parts = newValue.split(" ");
-          this.first = parts[0];
-          this.last = parts[1];
+        const parts = newValue.split(" ");
+        this.first = parts[0];
+        this.last = parts[1];
       }
-  })
+    };
+  }
   ```
 
 ### The solution
@@ -821,7 +827,7 @@ can be simulated like:
 Update _models/todo.js_ to the following:
 
 @sourceref ./15-setter-toggle/todo.js
-@highlight 31-41,only
+@highlight 44-48,51-56,only
 
 Update _index.js_ to the following:
 
@@ -831,7 +837,7 @@ Update _index.js_ to the following:
 Update _index.stache_ to the following:
 
 @sourceref ./15-setter-toggle/index.html
-@highlight 10-12,only
+@highlight 13-14,only
 
 ## Clear completed todo’s (event bindings)
 
@@ -852,12 +858,12 @@ Make the "Clear completed" button work. When the button is clicked, It should de
 Update _models/todo.js_ to the following:
 
 @sourceref ./16-clear-all-completed/todo.js
-@highlight 42-46,only
+@highlight 58-62,only
 
 Update _index.stache_ to the following:
 
 @sourceref ./16-clear-all-completed/index.html
-@highlight 31-32,only
+@highlight 34,only
 
 ## Set up routing (can-route)
 
@@ -875,23 +881,23 @@ be added if they represent the current page.
 
 ### What you need to know
 
-- [can-route] is used to connect a [can-define/map/map DefineMap]’s properties
+- [can-route] is used to connect [can-observable-object ObservableObject]’s properties
   to the URL.  This is done with [can-route.data] like:
 
   ```js
-  route.data = new DefineMap();
+  route.data = new ObservableObject();
   ```
 
 - [can-route] can create pretty routing rules.  For example,
   if `#!login` should set the `page` property of the
-  `AppViewModel` to `"login"`, use `route.register()` like:
+  element  to `"login"`, use `route.register()` like:
 
   ```js
   route.register("{page}");
   ```
 
 - [can-route.start] initializes the connection between the
-  URL and the `AppViewModel`.  After you’ve created all
+  URL and the main element properties.  After you’ve created all
   your application’s pretty routing rules, call it like:
 
   ```js
@@ -899,22 +905,22 @@ be added if they represent the current page.
   ```
 
 - The [can-stache-route-helpers] module provides helpers
-  that use [can-route].  
+  that use [can-route].
 
   [can-stache-route-helpers.routeCurrent]
   returns truthy if the current route matches its first parameters properties.
 
   ```html
-  {{#if(routeCurrent(page='login',true))}}
+  {{# if(routeCurrent(page='login',true)) }}
     You are on the login page.
-  {{/if}}
+  {{/ if }}
   ```
 
   [can-stache-route-helpers.routeUrl] returns a URL that will
   set its first parameters properties:
 
   ```
-  <a href="{{routeUrl(page='login')}}">Login</a>
+  <a href="{{ routeUrl(page='login') }}">Login</a>
   ```
 
 ### The solution

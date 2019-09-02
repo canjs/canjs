@@ -1,17 +1,15 @@
 // index.js
-import {Component} from "can";
+import { StacheElement } from "can";
 import view from "./index.stache";
 
 import test from "can-todomvc-test";
 
-Component.extend({
-	tag: "todo-mvc",
-	view,
-	ViewModel: {
-		appName: {default: "TodoMVC"}
-	}
-});
+class TodoMVC extends StacheElement {
+  static view = view;
 
-const appVM = window.appVM = document.querySelector("todo-mvc");
+  static props = {
+    appName: { default: "TodoMVC" }
+  };
+}
 
-test(appVM);
+test(document.querySelector("todo-mvc"));

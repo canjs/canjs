@@ -1,29 +1,28 @@
 // index.js
-import {Component} from "can";
+import { StacheElement } from "can";
 import view from "./index.stache";
 import Todo from "~/models/todo";
-import "~/models/todos-fixture";
+
 import test from "can-todomvc-test";
+import "~/models/todos-fixture";
 
-Component.extend({
-	tag: "todo-mvc",
-	view,
-	ViewModel: {
-		appName: {default: "TodoMVC"},
-		todosList: {
-			get: function(lastSet, resolve) {
-				Todo.getList({}).then(resolve);
-			}
-		},
-		get allChecked() {
-			return this.todosList && this.todosList.allComplete;
-		},
-		set allChecked(newVal) {
-			this.todosList && this.todosList.updateCompleteTo(newVal);
-		}
-	}
-});
+class TodoMVC extends StacheElement {
+  static view = view;
+  static props = {
+    appName: { default: "TodoMVC" },
+    todosList: {
+      async(resolve) {
+        Todo.getList({}).then(resolve);
+      }
+    },
+    get allChecked() {
+      return this.todosList && this.todosList.allComplete;
+    },
+    set allChecked(newVal) {
+      this.todosList && this.todosList.updateCompleteTo(newVal);
+    }
+  };
+}
+customElements.define("todo-mvc", TodoMVC);
 
-const appVM = window.appVM = document.querySelector("todo-mvc");
-
-test(appVM);
+test(document.querySelector("todo-mvc"));
