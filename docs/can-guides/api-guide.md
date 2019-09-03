@@ -14,21 +14,21 @@ CanJS’s documentation is broken down by pages for:
  - packages and modules and their exports
  - functions, properties, and type definitions (typedefs) related to module exports
 
-For example, [can-define/map/map.prototype.forEach can-define/map/map.prototype.forEach] is a
-method that loops through properties and values on an [can-define/map/map DefineMap]:
+For example, [can-observable-array/array.prototype.filter can-observable-array/array.prototype.filter] is a
+method that filters an array of [can-observable-array ObservableArray]:
 
 ```js
-import DefineMap from 'can-define/map/map';
+import ObservableArray from "can-observable-array";
 
-let map = new DefineMap({name: "Justin"});
+let users = new ObservableArray([{ name: "Justin" }, { name: "Matt" }]);
 
-map.forEach(function(value, property){
-
-});
+const filteredUsers = users.filter(function(item) {
+  return item.name === "Justin";
+}); //-> { name: "Justin: }
 ```
 
-`.forEach` is a function the `prototype` of the [can-define/map/map DefineMap] export of the `can-define/map/map`
-module.  The `can-define/map/map` is part of CanJS’s [can-core] collection.
+`.filter` is a function the `prototype` of the [can-observable-array ObservableArray] export of the `can-observable-array`
+module.  The `can-observable-array` is part of CanJS’s [can-core] collection.
 
 So understanding CanJS’s API pages are about understanding the relationships between:
 
@@ -54,7 +54,7 @@ The [can-core] collection contains the documentation for the libraries that
 are use most commonly and directly within a CanJS application.  This is where the Model-View-ViewModel
 libraries of CanJS are documented.
 
-The [can-ecosystem] collection contains less commonly used libraries or libraries that aren’t quite core ready yet.  The most commonly used libraries here are [can-fixture], [can-stache-converters], and [can-jquery].
+The [can-ecosystem] collection contains less commonly used libraries or libraries that aren’t quite core ready yet.  The most commonly used libraries here are [can-fixture] and [can-stache-converters].
 
 The [can-infrastructure] collection contains the utility libraries that power the core and ecosystem
 collection.  Often, this functionality is used indirectly.  For example, the [can-event] mixin
@@ -79,12 +79,12 @@ development.  Hopefully, you aren’t there very often.
 A package or module documents the "direct" functionality of the export and provides an overview of
 all functionality contained within the module or package.
 
-For example, [can-define/list/list] documents the "direct" functionality of the export, namely
-the [can-define/list/list DefineList] function that is exported.  While  [can-define/list/list.extend DefineList.extend] is the most common starting place when using [can-define/list/list DefineList], the [can-define/list/list DefineList] export method can only be used like `new DefineList()` directly.  This is why `new DefineList()` is documented
-on [can-define/list/list].  
+For example, [can-observable-array] documents the "direct" functionality of the export, namely
+the [can-observable-array ObservableArray] function that is exported.  While  [can-observable-array#classextendsObservableArray classextendsObservableArray] is the most common starting place when using [can-observable-array ObservableArray], the [can-observable-array ObservableArray] export method can only be used like `new ObservableArray()` directly.  This is why `new ObservableArray()` is documented
+on [can-observable-array].  
 
-However, after the `new DefineList()` signature is detailed, [can-define/list/list] has a __#Use__
-section that provides an overview of all functionality contained within the `can-define/list/list`
+However, after the `new ObservableArray()` signature is detailed, [can-observable-array] has a __#Use__
+section that provides an overview of all functionality contained within the `can-observable-array`
 module.
 
 > Look to Package and module pages for details of what is specifically exported and an overview
@@ -106,31 +106,34 @@ Let’s see a few examples and then give an overview of how their content is str
 
 #### prototype
 
-[can-define/list/list.prototype.concat can-define/list/list.prototype.concat] is in
-the _prototype_ group on [can-define/list/list] because `concat` is on
-the `can-define/list/list` export’s `prototype`:
+[can-observable-array.prototype.filter can-observable-array.prototype.filter] is in
+the _prototype_ group on [can-observable-array] because `filter` is on
+the `can-observable-array` export’s `prototype`:
 
 ```js
-import DefineList from 'can-define/list/list';
-DefineList.prototype.concat //-> function
+import ObservableArray from "can-observable-array";
+ObservableArray.prototype.filter //-> function
 ```
 
-Because of how JavaScript works, this means that you can call `.concat` directly on any instance
-of [can-define/list/list DefineList]:
+Because of how JavaScript works, this means that you can call `.filter` directly on any instance
+of [can-observable-array ObservableArray]:
 
 ```js
-let hobbies = new DefineList(["learning"]);
-hobbies.concat(["programming"]);
+let hobbies = new ObservableArray(["learning", "programming"]);
+hobbies.filter(hobby => hobby === "programming");
 ```
 
 #### static
 
-[can-define/map/map.extend] s in
-the _static_ group on [can-define/map/map] because `extend` is a direct property on the `can-define/map/map` export:
+[can-observable-object/object.static.propertyDefaults] in
+the _static_ group on [can-observable-object] because `propertyDefaults` is a [static property](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Class_fields#Public_static_fields) on the `can-observable-object`:
 
 ```js
-import DefineMap from 'can-define/map/map';
-DefineMap.prototype.map //-> function
+import ObservableObject from "can-observable-object";
+
+class Person extends ObservableObject {
+  static propertyDefaults = {}
+}
 ```
 
 #### types
