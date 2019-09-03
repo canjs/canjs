@@ -7,22 +7,22 @@
 <on-focus></on-focus>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component } from "can";
+import { StacheElement } from "can";
 
-Component.extend({
-	tag: "on-focus",
+class OnFocus extends StacheElement {
+    static view = `
+        {{let focusedOnName = null}}
+        <label>
+            <span {{# if(focusedOnName }}class="focused"{{/ if }}>
+                Name:
+            </span>
+            <input type="text" value:bind="this.name" focused:to="focusedOnName">
+        </label>
+    `;
 
-	view: `
-		<label>
-			<span {{# if(scope.vars.focusedOnName }}class="focused"{{/ if }}>
-				Name:
-			</span>
-			<input type="text" value:bind="name" focused:to="scope.vars.focusedOnName">
-		</label>
-	`,
-
-	ViewModel: {
-		name: { default: "Jake" }
-	}
-});
+    static props = {
+        name: "Jake"
+    };
+};
+customElements.define("on-focus", OnFocus);
 </script>

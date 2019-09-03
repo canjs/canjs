@@ -1,7 +1,7 @@
 <my-mmy></my-mmy>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component, ajax, fixture, QueryLogic } from "can";
+import { ajax, fixture, QueryLogic, StacheElement, type } from "can";
 
 fixture.delay = 1200;
 
@@ -34,147 +34,140 @@ fixture("/vehicles", fixture.store([
 { identity: ["id"] }
 ));
 
-Component.extend({
-	tag: "my-mmy",
+class MyMmy extends StacheElement {
+    static view  = `
+        <select value:bind="this.makeId"
+            {{# if(this.makes.isPending) }}disabled{{/ if }}>
+            {{# if(this.makes.isPending) }}
+              <option value=''>Loading...</option>
+            {{ else }}
+              {{^ this.makeId }}
+                <option value=''>Select a Make</option>
+              {{/ this.makeId }}
+              {{# for( make of this.makes.value) }}
+                <option value:from="make.id">{{ make.name }}</option>
+              {{/ for }}
+            {{/ if }}
+        </select>
 
-	view: `
-		<select value:bind="makeId"
-			{{# if(makes.isPending) }}disabled{{/ if }}>
-			{{# if(makes.isPending) }}
-			  <option value=''>Loading...</option>
-			{{ else }}
-			  {{^ makeId }}
-				<option value=''>Select a Make</option>
-			  {{/ makeId }}
-			  {{# for( make of makes.value) }}
-				<option value:from="make.id">{{ make.name }}</option>
-			  {{/ for }}
-			{{/ if }}
-		</select>
+        {{# if(this.modelsPromise) }}
+            {{# if(this.models) }}
+                <select value:bind="this.modelId">
+                    {{^ this.modelId }}
+                        <option value=''>Select a Model</option>
+                    {{/ this.modelId }}
+                    {{# for(model of this.models) }}
+                        <option value:from="model.id">{{ model.name }}</option>
+                    {{/ for }}
+                </select>
+            {{ else }}
+                <select disabled><option>Loading Models</option></select>
+            {{/ if }}
+        {{ else }}
+            <select disabled><option>Models</option></select>
+        {{/ if }}
 
-		{{# if(modelsPromise) }}
-			{{# if(models) }}
-				<select value:bind="modelId">
-					{{^ modelId }}
-						<option value=''>Select a Model</option>
-					{{/ modelId }}
-					{{# for(model of models) }}
-						<option value:from="model.id">{{ model.name }}</option>
-					{{/ for }}
-				</select>
-			{{ else }}
-				<select disabled><option>Loading Models</option></select>
-			{{/ if }}
-		{{ else }}
-			<select disabled><option>Models</option></select>
-		{{/ if }}
+        {{# if(this.years) }}
+            <select value:bind="this.year">
+                {{^ this.year }}
+                    <option value=''>Select a Year</option>
+                {{/ this.year }}
+                {{# for(year of this.years ) }}
+                    <option value:from="year">{{ year }}</option>
+                {{/ for }}
+            </select>
+        {{ else }}
+            <select disabled><option>Years</option></select>
+        {{/ if }}
 
-		{{# if(years) }}
-			<select value:bind="year">
-				{{^ year }}
-					<option value=''>Select a Year</option>
-				{{/ year }}
-				{{# for(year of years ) }}
-					<option value:from="year">{{ year }}</option>
-				{{/ for }}
-			</select>
-		{{ else }}
-			<select disabled><option>Years</option></select>
-		{{/ if }}
+        <div>
+            {{# for(vehicle of this.vehicles) }}
+                <h2>{{ vehicle.name }}</h2>
+                <img src:from="vehicle.thumb" width="200px"/>
+            {{/ for }}
+        </div>
+    `;
 
-		<div>
-			{{# for(vehicle of vehicles) }}
-				<h2>{{ vehicle.name }}</h2>
-				<img src:from="vehicle.thumb" width="200px"/>
-			{{/ for }}
-		</div>
-	`,
+    static props = {
+        makeId: type.maybeConvert(String),
+        makes: {
+            get() {
+                return ajax({
+                    type: "GET",
+                    url: "/makes"
+                }).then(resp => resp.data);
+            }
+        },
+        modelId: {
+            type: String,
+            value({ lastSet, listenTo, resolve }) {
+                listenTo(lastSet, resolve);
 
-	ViewModel: {
-		makeId: "string",
-		makes: {
-			default() {
-				return ajax({
-					type: "GET",
-					url: "/makes"
-				}).then(function(resp) {
-					return resp.data;
-				});
-			}
-		},
-		modelId: {
-			type: "string",
-			value(prop) {
-				prop.listenTo(prop.lastSet, prop.resolve);
+                listenTo("makeId", () => resolve(""));
+            }
+        },
+        get modelsPromise() {
+            let makeId = this.makeId;
+            if( makeId ) {
+                return ajax({
+                    type: "GET",
+                    url: "/models",
+                    data: { filter: { makeId } }
+                }).then(resp => {
+                    return resp.data;
+                });
+            }
+        },
+        models: {
+            async(resolve) {
+                let promise = this.modelsPromise;
+                if(promise) {
+                    promise.then(resolve);
+                }
+            }
+        },
+        get model() {
+            let models = this.models,
+                modelId = this.modelId;
 
-				prop.listenTo("makeId", function() {
-					prop.resolve("");
-				});
-			}
-		},
-		get modelsPromise() {
-			var makeId = this.makeId;
-			if( makeId ) {
-				return ajax({
-					type: "GET",
-					url: "/models",
-					data: { filter: { makeId: makeId } }
-				}).then(function(resp) {
-					return resp.data;
-				});
-			}
-		},
-		models: {
-			get: function(lastSet, resolve) {
-				var promise = this.modelsPromise;
-				if(promise) {
-					promise.then(resolve);
-				}
-			}
-		},
-		get model() {
-			var models = this.models,
-				modelId = this.modelId;
+            if(models && models.length && modelId) {
+                let matched = models.filter(model => {
+                    return modelId == model.id;
+                });
+                return matched[0];
+            }
+        },
+        get years() {
+            let model = this.model;
+            return model && model.years;
+        },
+        year: {
+            type: String,
+            value({ lastSet, listenTo, resolve }) {
+                listenTo(lastSet, resolve);
 
-			if(models && models.length && modelId) {
-				var matched = models.filter(function(model) {
-					return modelId == model.id;
-				});
-				return matched[0];
-			}
-		},
-		get years() {
-			var model = this.model;
-			return model && model.years;
-		},
-		year: {
-			type: "string",
-			value(prop) {
-				prop.listenTo(prop.lastSet, prop.resolve);
+                listenTo("modelId", () => resolve(""));
+            }
+        },
+        vehicles: {
+            async(resolve) {
+                let year = this.year,
+                    modelId = this.modelId;
 
-				prop.listenTo("modelId", function() {
-					prop.resolve("");
-				});
-			}
-		},
-		vehicles: {
-			get: function(lastSet, resolve) {
-				var year = this.year,
-					modelId = this.modelId;
-
-				if(modelId && year) {
-					ajax({
-						type: "GET",
-						url: "/vehicles",
-						data: { filter: { modelId: modelId, year: year } }
-					}).then(function(resp) {
-						resolve(resp.data);
-					});
-				} else {
-					resolve([]);
-				}
-			}
-		}
-	}
-});
+                if(modelId && year) {
+                    ajax({
+                        type: "GET",
+                        url: "/vehicles",
+                        data: { filter: { modelId, year } }
+                    }).then(resp => {
+                        resolve(resp.data);
+                    });
+                } else {
+                    resolve([]);
+                }
+            }
+        }
+    };
+};
+customElements.define("my-mmy", MyMmy);
 </script>

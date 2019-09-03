@@ -1,35 +1,34 @@
 <name-form></name-form>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component } from "can";
+import { StacheElement } from "can";
 
-Component.extend({
-	tag: "name-form",
+class NameForm extends StacheElement {
+    static view = `
+        <form>
+            <p>
+                <label>
+                    First Name:
+                    <input type="text">
+                </label>
+            </p>
+            <p>
+                <label>
+                    Last Name:
+                    <input type="text">
+                </label>
+            </p>
+            <button type="button" on:click="this.handleSubmit(scope.event)">Submit</button>
+        </form>
+    `;
 
-	view: `
-		<form>
-			<p>
-				<label>
-					First Name:
-					<input type="text">
-				</label>
-			</p>
-			<p>
-				<label>
-					Last Name:
-					<input type="text">
-				</label>
-			</p>
-			<button type="button" on:click="handleSubmit(scope.event)">Submit</button>
-		</form>
-	`,
+    static props = {};
 
-	ViewModel: {
-		handleSubmit(event) {
-			event.preventDefault();
+    handleSubmit(event) {
+        event.preventDefault();
 
-			// handle form submission here
-		}
-	}
-});
+        // handle form submission here
+    }
+};
+customElements.define("name-form", NameForm);
 </script>

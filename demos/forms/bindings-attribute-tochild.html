@@ -1,30 +1,29 @@
 <progress-bar></progress-bar>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component } from "can";
+import { StacheElement } from "can";
 
-Component.extend({
-	tag: "progress-bar",
+class ProgressBar extends StacheElement {
+    static view = `
+        <progress value:from="this.progressValue" max="100"></progress>
+    `;
 
-	view: `
-		<progress value:from="progressValue" max="100"></progress>
-	`,
+    static props = {
+        progressValue: {
+            value({ resolve }) {
+                var value = 0;
 
-	ViewModel: {
-		progressValue: {
-			value(prop) {
-				var value = 0;
+                resolve(value);
 
-				prop.resolve(value);
+                setInterval(function makeProgress() {
+                    let newValue = value + Math.floor( Math.random() * 10 );
+                    value = newValue > 100 ? 0 : newValue;
 
-				setInterval(function makeProgress() {
-					var newValue = value + Math.floor( Math.random() * 10 );
-					value = newValue > 100 ? 0 : newValue;
-
-					prop.resolve(value);
-				}, 500);
-			}
-		}
-	}
-});
+                    resolve(value);
+                }, 500);
+            }
+        }
+    };
+};
+customElements.define("progress-bar", ProgressBar);
 </script>

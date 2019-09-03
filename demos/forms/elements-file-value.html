@@ -1,20 +1,19 @@
 <file-value></file-value>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component } from "can";
+import { StacheElement } from "can";
 
-Component.extend({
-	tag: "file-value",
+class FileValue extends StacheElement {
+    static view = `
+        <input type="file" value:to="this.filePath">
+        <p>
+            Selected file: {{ this.filePath }}
+        </p>
+    `;
 
-	view: `
-		<input type="file" value:to="filePath">
-		<p>
-			Selected file: {{ filePath }}
-		</p>
-	`,
-
-	ViewModel: {
-		filePath: { default: "" }
-	}
-});
+    static props = {
+        filePath: ""
+    };
+};
+customElements.define("file-value", FileValue);
 </script>

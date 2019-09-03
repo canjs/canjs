@@ -1,23 +1,22 @@
 <my-checkbox></my-checkbox>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component } from "can";
+import { StacheElement } from "can";
 
-Component.extend({
-	tag: "my-checkbox",
+class MyCheckbox extends StacheElement {
+    static view = `
+        <label>
+            <input type="checkbox" checked:bind="this.isItChecked">
+            checked:bind="this.isItChecked"
+        </label>
+        <p>
+            is it checked? {{ this.isItChecked }}
+        </p>
+    `;
 
-	view: `
-		<label>
-			<input type="checkbox" checked:bind="isItChecked">
-			checked:bind="isItChecked"
-		</label>
-		<p>
-			is it checked? {{ isItChecked }}
-		</p>
-	`,
-
-	ViewModel: {
-		isItChecked: { default: false }
-	}
-});
+    static props = {
+        isItChecked: false
+    };
+};
+customElements.define("my-checkbox", MyCheckbox);
 </script>

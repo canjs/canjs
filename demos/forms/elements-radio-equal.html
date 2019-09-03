@@ -7,35 +7,34 @@ label {
 <checkbox-equal></checkbox-equal>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component, stacheConverters } from "can";
+import { stacheConverters, StacheElement } from "can";
 
-Component.extend({
-	tag: "checkbox-equal",
+class CheckboxEqual extends StacheElement {
+    static view = `
+        <label>
+            <input type="radio" checked:bind="equal(this.favoriteColor, 'Red')">
+            Red
+        </label>
+        <label>
+            <input type="radio" checked:bind="equal(this.favoriteColor, 'Blue')">
+            Blue
+        </label>
+        <label>
+            <input type="radio" checked:bind="equal(this.favoriteColor, 'Green')">
+            Green
+        </label>
+        <label>
+            <input type="radio" checked:bind="equal(this.favoriteColor, 'Yellow')">
+            Yellow
+        </label>
+        <label>
+            Favorite color: {{ this.favoriteColor }}
+        </label>
+    `;
 
-	view: `
-		<label>
-			<input type="radio" checked:bind="equal(favoriteColor, 'Red')">
-			Red
-		</label>
-		<label>
-			<input type="radio" checked:bind="equal(favoriteColor, 'Blue')">
-			Blue
-		</label>
-		<label>
-			<input type="radio" checked:bind="equal(favoriteColor, 'Green')">
-			Green
-		</label>
-		<label>
-			<input type="radio" checked:bind="equal(favoriteColor, 'Yellow')">
-			Yellow
-		</label>
-		<label>
-			Favorite color: {{ favoriteColor }}
-		</label>
-	`,
-
-	ViewModel: {
-		favoriteColor: { default: "" }
-	}
-});
+    static props = {
+        favoriteColor: ""
+    };
+};
+customElements.define("checkbox-equal", CheckboxEqual);
 </script>
