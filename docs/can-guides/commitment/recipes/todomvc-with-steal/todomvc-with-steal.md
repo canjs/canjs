@@ -200,7 +200,7 @@ Create the main app
 
 @sourceref ./1-setup/index.js
 
-## Define Todo type (DefineMap basics)
+## Define Todo type (ObservableObject basics)
 
 ### The problem
 
@@ -258,7 +258,7 @@ Create _models/todo.js_ as follows:
 
 @sourceref ./2-define-todo/todo.js
 
-## Define Todo.List type (DefineList basics)
+## Define Todo.List type (ObservableArray basics)
 
 ### The problem
 
@@ -663,7 +663,7 @@ Update _index.stache_ to the following:
 @sourceref ./12-connection-destroy/index.html
 @highlight 13,23,only
 
-## Create todos (can-component)
+## Create todos (StacheElement)
 
 ### The problem
 
