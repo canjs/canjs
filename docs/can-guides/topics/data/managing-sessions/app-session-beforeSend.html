@@ -5,15 +5,18 @@
     connect,
     connectCanSession,
     fixture,
+    ObservableObject,
     restModel,
-    type,
-    DefineMap,
     StacheElement,
-  } from "//unpkg.com/can@5/ecosystem.mjs";
+    type,
+  } from "//unpkg.com/can@pre/ecosystem.mjs";
 
   setupFixtures();
 
-  const Session = DefineMap.extend('Session', {});
+  class Session extends ObservableObject {
+    static props = {};
+  }
+
   Session.connection = [
     connect.base,
     connect.dataUrl,
@@ -30,10 +33,13 @@
   });
   Session.connection.init();
 
-  const Todo = DefineMap.extend('Todo', {
-    body: 'string',
-    completed: 'boolean'
-  });
+  class Todo extends ObservableObject {
+    static props = {
+      body: String,
+      completed: Boolean
+    };
+  }
+
   Todo.connection = restModel({
     Map: Todo,
     url: {
@@ -48,41 +54,41 @@
 
   class TodoLogin extends StacheElement {
     static view = `
-      {{# if (this.Session.currentPromise.isResolved) }}
-        <p class="welcome-message">
-           Welcome {{ Session.current.email }}.
-           <a href="javascript://" on:click="this.logOut()">Log out</a>
-        </p>
-        <todo-list></todo-list>
-      {{/ if }}
-
-      {{# if (this.Session.currentPromise.isPending) }}
-        Loading User...
-      {{/ if }}
-
-      {{# if (this.Session.currentPromise.isRejected) }}
-        <form on:submit="this.logIn(scope.event)">
-          <h2>Log In</h2>
-
-          <input placeholder="email" value:to="this.email" />
-
-          <input type="password" placeholder="password"
-                 value:to="this.password" />
-
-          <button>Log In</button>
-
-          {{# if (this.logInError) }}
-            <div class="error">{{ this.logInError.message }}</div>
-          {{/ if }}
-
-          <aside>
-             Login with the following account details:<br/>
-             Email: nils@bitovi.com<br/>
-             Password: abc123<br/>
-          </aside>
-        </form>
-      {{/ if }}
-      `;
+ 	 {{# if (this.Session.currentPromise.isResolved) }}
+ 	   <p class="welcome-message">
+ 		  Welcome {{ Session.current.email }}.
+ 		  <a href="javascript://" on:click="this.logOut()">Log out</a>
+ 	   </p>
+ 	   <todo-list></todo-list>
+ 	 {{/ if }}
+ 
+ 	 {{# if (this.Session.currentPromise.isPending) }}
+ 	   Loading User...
+ 	 {{/ if }}
+ 
+ 	 {{# if (this.Session.currentPromise.isRejected) }}
+ 	   <form on:submit="this.logIn(scope.event)">
+ 		 <h2>Log In</h2>
+ 
+ 		 <input placeholder="email" value:to="this.email" />
+ 
+ 		 <input type="password" placeholder="password"
+ 				value:to="this.password" />
+ 
+ 		 <button>Log In</button>
+ 
+ 		 {{# if (this.logInError) }}
+ 		   <div class="error">{{ this.logInError.message }}</div>
+ 		 {{/ if }}
+ 
+ 		 <aside>
+ 			Login with the following account details:<br/>
+ 			Email: nils@bitovi.com<br/>
+ 			Password: abc123<br/>
+ 		 </aside>
+ 	   </form>
+ 	 {{/ if }}
+ 	 `;
 
     static props = {
       email: String,
@@ -116,15 +122,15 @@
 
   class TodoList extends StacheElement {
     static view = `
-      <h3>Todos:</h3>
-      <ol>
-      {{#each (this.todos)}}
-        <li>
-          <input type="checkbox" checked:bind="this.completed" />
-          {{ this.body }}
-        </li>
-      {{/each}}
-      </ol>
+ 	 <h3>Todos:</h3>
+ 	 <ol>
+ 	 {{#each (this.todos)}}
+ 	   <li>
+ 		 <input type="checkbox" checked:bind="this.completed" />
+ 		 {{ this.body }}
+ 	   </li>
+ 	 {{/each}}
+ 	 </ol>
     `;
 
     static props = {

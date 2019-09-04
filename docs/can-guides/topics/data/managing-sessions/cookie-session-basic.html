@@ -1,18 +1,14 @@
 <todo-login></todo-login>
 
 <script type="module">
-  import {
-    connect,
-    connectCanSession,
-    fixture,
-    type,
-    DefineMap,
-    StacheElement,
-  } from "//unpkg.com/can@5/ecosystem.mjs";
+  import { connect, connectCanSession, fixture, ObservableObject, StacheElement, type } from "//unpkg.com/can@pre/ecosystem.mjs";
 
   setupFixtures();
 
-  const Session = DefineMap.extend('Session', {});
+  class Session extends ObservableObject {
+    static props = {};
+  }
+
   Session.connection = [
     connect.base,
     connect.dataUrl,

@@ -72,12 +72,12 @@ The connection that includes the [can-connect/can/session/session can/session] b
 
 A typical example of configuration: 
 @sourceref ./cookie-session-basic.html
-@highlight 23-28,only
+@highlight 19-24,only
 @codepen
 
 An example of a configuration that uses multiple session endpoints:
 @sourceref ./cookie-session-basic-multi-endpoint.html
-@highlight 23-28,only
+@highlight 19-24,only
 @codepen
 
 ## Sessions Via Cookies
@@ -89,7 +89,7 @@ Usually, when storing tokens in cookies, they're stored as an "httponly" cookie,
 
 Thus to verify if there's an ongoing user session, the app should access `Session.currentPromise`, and see if it resolves successfully. There are several places in your application you might need an active session and choose to do this:
   1. in your **view** before rendering components that make requests to restricted services or uses the session metadata
-  2. in the **view model** of a component that makes requests to restricted services or uses the session metadata
+  2. in the **component state** of a component that makes requests to restricted services or uses the session metadata
   3. in the `beforeSend` callback of a **connection** to restricted services
   
 Here, we'll show examples of all three dependencies. The third one is of particular importance to the [application held tokens](#appHeldTokens) section since it's necessary for that case.
@@ -98,16 +98,16 @@ Here, we'll show examples of all three dependencies. The third one is of particu
 
 In a component's view you could depend on `Session.currentPromise` directly like this: 
 @sourceref ./cookie-session-basic.html
-@highlight 34,41,45,only
+@highlight 30,37,41,only
 @codepen
 
 This is a good option when you can make this dependency high in the component hierarchy, toggling several session-dependant components at once. In cases where a rendered component should determine for itself if a session is active, rather than depending on a parent component to check, one of the following two techniques should be used.
 
-#### Depending On Session In A View Model
+#### Depending On Session In Component State
 
-In a components view model, you may use `currentPromise` in computed properties like this:
+In a components properties, you may use `currentPromise` in computed properties like this:
 @sourceref ./cookie-session-vm.html
-@highlight 124-131,only
+@highlight 130-137,only
 @codepen
 
 This is a good option for making a single request dependant on an active session. However, if you use this model (e.g `Todo`) in many places, making this dependency in each place is a lot of extra code. Additionally, application held token scenarios need a way to add the token from the session to the request. In those cases, you should depend on the session as part of the connection. 
@@ -117,10 +117,10 @@ This is a good option for making a single request dependant on an active session
 
 In the `beforeSend` callback for a restricted resource you may depend on `currentPromise` like this:
 @sourceref ./cookie-session-beforeSend.html
-@highlight 37-45,129-134,only
+@highlight 53-51,135-140,only
 @codepen 
 
-One advantage of this option is that it keeps the dependency on the session contained to the definition of the connection. This is cleaner than depending on the session in the view model where the connection is used, or in the view before a component making a request is rendered. In app-held token scenarios, this option must be used since `beforeSend` is where the token is added to the request headers.
+One advantage of this option is that it keeps the dependency on the session contained to the definition of the connection. This is cleaner than depending on the session in the component state where the connection is used, or in the view before a component making a request is rendered. In app-held token scenarios, this option must be used since `beforeSend` is where the token is added to the request headers.
 
 > **Note:** Since `Session.currentPromise` only makes a request the first time it's accessed, all the components that make requests for restricted data can use it without worrying about multiple requests happening unintentionally. 
 
@@ -131,7 +131,7 @@ In all the above examples, after the `currentPromise` resolves, properties like 
 The `can/session` behavior makes it easy to log in and start a session. All you have to do is save a new instance of the session model when the user has provided their login details:
 
 @sourceref ./cookie-session-vm.html
-@highlight 103-105,only
+@highlight 104-107,only
 @codepen 
 
 After the Promise returned by the `.save` method completes `Session.current` is set to the new instance `session` and `Session.currentPromise` is set to a resolved Promise that returns `session`. Any components using `current` or `currentPromise` will notice this change and update their view  or make requests for restricted services.
@@ -141,7 +141,7 @@ After the Promise returned by the `.save` method completes `Session.current` is 
 In the cookie scenario making requests on restricted services requires no special effort. The browser is responsible for sending the cookie containing the token as part of appropriate requests, so requests are made as if it were for any other endpoint:
 
 @sourceref ./cookie-session-vm.html
-@highlight 127,only
+@highlight 133,only
 @codepen 
 
 ### Logging Out
@@ -149,7 +149,7 @@ In the cookie scenario making requests on restricted services requires no specia
 Eventually, a user will want to stop making requests and end their session, this is quite easy as well. When a user initiates the logout code like the following must be run:
 
 @sourceref ./cookie-session-vm.html
-@highlight 91,only
+@highlight 97,only
 @codepen 
 
 After the logout completes `Session.current` will be set to undefined and `Session.currentPromise` will be set to a rejected promise. Due to this change, properties dependent on the session will recalculate and return to a logged out state. A user must then login anew to update `current` & `currentPromise` and resume using the application.
@@ -180,7 +180,7 @@ The use of application held tokens, in general, is considered a hazardous practi
 From a code perspective, the difference from a cookie-based scenario is the requirement to add the token to requests manually, rather than letting the browser do it for you. When initializing an app using app-held tokens you'll typically use the third scenario [described above](#connectionDependency). You'll access `Session.currentPromise` in the `beforeSend` handler of requests for restricted data, which looks something like this:
 
 @sourceref ./app-session-beforeSend.html
-@highlight 43,only
+@highlight 49,only
 @codepen  
 
 With the above configuration every request made via `Todo.connection` (e.g `Todo.getList()`, `newTodo.save()`, etc.) will wait for a session to be available before attempting the request. Once the session is available it will use the token held by the application (as part of the Session instance) and add it via an HTTP header to the outgoing request.

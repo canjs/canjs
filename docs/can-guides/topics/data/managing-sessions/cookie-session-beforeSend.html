@@ -5,15 +5,18 @@
     connect,
     connectCanSession,
     fixture,
+    ObservableObject,
     restModel,
-    type,
-    DefineMap,
     StacheElement,
-  } from "//unpkg.com/can@5/ecosystem.mjs";
+    type,
+  } from "//unpkg.com/can@pre/ecosystem.mjs";
 
   setupFixtures();
 
-  const Session = DefineMap.extend('Session', {});
+  class Session extends ObservableObject {
+    static props = {};
+  }
+
   Session.connection = [
     connect.base,
     connect.dataUrl,
@@ -30,10 +33,13 @@
   });
   Session.connection.init();
 
-  const Todo = DefineMap.extend('Todo', {
-    body: 'string',
-    completed: 'boolean'
-  });
+  class Todo extends ObservableObject {
+    static props = {
+      body: String,
+	  completed: Boolean
+    };
+  }
+
   Todo.connection = restModel({
     Map: Todo,
     url: {
