@@ -159,7 +159,7 @@ After the logout completes `Session.current` will be set to undefined and `Sessi
 The following is the full example of using cookie-based sessions:
 
 @sourceref ./cookie-session-vm.html
-@highlight 16-31, 44, 52, 56, 91, 98-101, 103-105, 124-131, only  
+@highlight 20-34, 50, 58, 62, 97, 104-107, 109-111, 130-137, only  
 @codepen 
 
 <p style="text-align: center">
