@@ -1,16 +1,19 @@
 // models/todo.js
-import {DefineMap} from "can";
+import { ObservableObject, type } from "can";
 
-const Todo = DefineMap.extend("Todo", {
-	id: "string",
-	name: "string",
-	complete: {
-		type: "boolean",
-		default: false
-	},
-	toggleComplete() {
-		this.complete = !this.complete;
-	}
-});
+class Todo extends ObservableObject {
+  static props = {
+    id: { type: type.convert(String) },
+    name: { type: type.convert(String) },
+    complete: {
+      type: type.convert(Boolean),
+      default: false
+    }
+  };
+
+  toggleComplete() {
+    this.complete = !this.complete;
+  }
+}
 
 export default Todo;

@@ -1,49 +1,49 @@
 // index.js
-import {Component, route, DefineMap} from "can";
+import { route, StacheElement } from "can";
 import view from "./index.stache";
 import Todo from "~/models/todo";
-import "~/models/todos-fixture";
-import test from "can-todomvc-test";
 
+import test from "can-todomvc-test";
+import "~/models/todos-fixture";
 
 route.register("{filter}");
 
-Component.extend({
-	tag: "todo-mvc",
-	view,
-	ViewModel: {
-		appName: {default: "TodoMVC"},
-		routeData: {
-			default(){
-				route.start();
-				return route.data;
-			}
-		},
-		allTodos: {
-			get: function(lastSet, resolve) {
-				Todo.getList({}).then(resolve);
-			}
-		},
-		get todosList() {
-			if(this.allTodos) {
-				if(this.routeData.filter === "complete") {
-					return this.allTodos.complete;
-				} else if(this.routeData.filter === "active") {
-					return this.allTodos.active;
-				} else {
-					return this.allTodos;
-				}
-			}
-		},
-		get allChecked() {
-			return this.todosList && this.todosList.allComplete;
-		},
-		set allChecked(newVal) {
-			this.todosList && this.todosList.updateCompleteTo(newVal);
-		}
-	}
-});
+class TodoMVC extends StacheElement {
+  static view = view;
 
-const appVM = window.appVM = document.querySelector("todo-mvc");
+  static props = {
+    appName: { default: "TodoMVC" },
+    routeData: {
+      get default() {
+        route.start();
+        return route.data;
+      }
+    },
+    allTodos: {
+      async(resolve) {
+        Todo.getList({}).then(resolve);
+      }
+    },
+    get todosList() {
+      if (this.allTodos) {
+        if (this.routeData.filter === "complete") {
+          return this.allTodos.complete;
+        } else if (this.routeData.filter === "active") {
+          return this.allTodos.active;
+        } else {
+          return this.allTodos;
+        }
+      }
+    },
+    get allChecked() {
+      return this.todosList && this.todosList.allComplete;
+    },
+    set allChecked(newVal) {
+      this.todosList && this.todosList.updateCompleteTo(newVal);
+    }
+  };
+}
 
-test(appVM);
+customElements.define("todo-mvc", TodoMVC);
+
+test(document.querySelector("todo-mvc"));
