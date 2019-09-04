@@ -14,9 +14,9 @@ In this tutorial, we’ll build a simple to-do app that lets you:
 - Mark to-dos as “completed”
 - Delete to-dos
 
-<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="dBKzBZ" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/dBKzBZ/">
-  CanJS 5 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="yLBPLgw" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6 — Basic Todo App">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/yLBPLgw/">
+  CanJS 6 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p><br>
 
@@ -75,7 +75,7 @@ We mentioned above that CanJS helps you define custom elements.
 Add the following to the **JS** tab in your CodePen:
 
 @sourceref ./2.js
-@highlight 5-19,only
+@highlight 5-15,only
 
 After you add the above code, you’ll see “Today’s to-dos” displayed in the result pane.
 
@@ -92,7 +92,7 @@ Here’s what the different parts mean:
 
 - `import` is a keyword that [loads modules from files](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import).
 - `StacheElement` is the _named export_ from CanJS that lets us [can-stache-element create custom element constructors].
-- `//unpkg.com/can@5/everything.mjs` loads the `everything.mjs` file from CanJS 5; this is explained more thoroughly in the [guides/setup#Explanationofdifferentbuilds setup guide].
+- `//unpkg.com/can@pre/core.mjs` loads the `core.mjs` file from CanJS 6; this is explained more thoroughly in the [guides/setup#Explanationofdifferentbuilds setup guide].
 - `unpkg.com` is a CDN that hosts packages like CanJS ([can](https://www.npmjs.com/package/can)).
 
 ### Defining a custom element
@@ -104,7 +104,7 @@ CanJS is composed of dozens of different packages that are responsible for diffe
 used by the browser.
 
 @sourceref ./2.js
-@highlight 7-19,only
+@highlight 7-15,only
 
 The `StacheElement` class can be extended to define a new custom element. It has two properties:
 
@@ -127,13 +127,13 @@ A custom element’s [can-stache-element/static.view] has access to all the prop
 Let’s update our custom element to be a little more interesting:
 
 @sourceref ./3.js
-@highlight 10,16-18,only
+@highlight 9,13-15,only
 
 Using this custom element will insert the following into the page:
 
 ```html
 <todos-app>
-	<h1>Today’s to-dos!</h1>
+  <h1>Today’s to-dos!</h1>
 </todos-app>
 ```
 
@@ -141,13 +141,13 @@ The next two sections will explain these lines.
 
 ### Defining properties
 
-Each time a custom element is created, each property listed in `define` will be defined on the instance.
+Each time a custom element is created, each property listed in `props` will be defined on the instance.
 
 We’ve added a `title` [getter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get)
-to our `define`, which returns the string `"Today’s to-dos!"`:
+to our `props`, which returns the string `"Today’s to-dos!"`:
 
 @sourceref ./3.js
-@highlight 16-18,only
+@highlight 13-15,only
 
 ### Reading properties in the stache template
 
@@ -155,7 +155,7 @@ Our `view` is a [can-stache stache template]. Whenever stache encounters the [ca
 it looks inside them for an _expression_ to evaluate.
 
 @sourceref ./3.js
-@highlight 10,only
+@highlight 9,only
 
 `this` inside a stache template refers to the custom element, so `{{ this.title }}` makes stache
 read the `title` property on the custom element, which is how `<h1>Today’s to-dos!</h1>` gets rendered in the page!
@@ -180,7 +180,7 @@ In our app, let’s make a request to get all the to-dos sorted alphabetically b
 see any to-dos in our app yet; we’ll get to that in just a little bit!
 
 @sourceref ./4.js
-@highlight 5-7,18-20,only
+@highlight 5-7,15-17,only
 
 The next three sections will explain these lines.
 
@@ -209,13 +209,13 @@ creating, retrieving, updating, and deleting data:
 - `PUT /api/todos/1` to update the to-do with `id=1`
 - `DELETE /api/todos/1` to delete the to-do with `id=1`
 
-`realtimeRestModel()` returns what we call a _connection_. It’s just an object that has a `.Map` property.
+`realtimeRestModel()` returns what we call a _connection_. It’s just an object that has a `.ObjectType` property.
 
 The `Todo` is a new model that has these methods for making API calls:
 
 - `Todo.getList()` calls `GET /api/todos`
 - `new Todo().save()` calls `POST /api/todos`
-- `Todo.get({id: 1})` calls `GET /api/todos/1`
+- `Todo.get({ id: 1 })` calls `GET /api/todos/1`
 
 Additionally, once you have an instance of a `todo`, you can call these methods on it:
 
@@ -230,9 +230,9 @@ Additionally, once you have an instance of a `todo`, you can call these methods 
 Third, we add a new getter to our custom element:
 
 @sourceref ./4.js
-@highlight 18-20,only
+@highlight 15-17,only
 
-`Todo.getList({sort: "name"})` will make a `GET` request to `/api/todos?sort=name`.
+`Todo.getList({ sort: "name" })` will make a `GET` request to `/api/todos?sort=name`.
 It returns a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 that resolves with the data returned by the API.
 
@@ -244,7 +244,7 @@ that resolves with the data returned by the API.
 Now that we’ve learned how to fetch data from an API, let’s render the data in our custom element!
 
 @sourceref ./5.js
-@highlight 13-21,only
+@highlight 12-20,only
 
 This template uses two stache helpers:
 
@@ -269,7 +269,7 @@ Now let’s also:
 - Show a message if there’s an error loading the to-dos
 
 @sourceref ./6.js
-@highlight 13-18,only
+@highlight 12-17,only
 
 This template shows how to read more state and an error from a Promise:
 
@@ -289,7 +289,7 @@ In this section, we’ll add an `<input>` for new to-do names and a button for s
 After a new to-do is created, we’ll reset the input so a new to-do’s name can be entered.
 
 @sourceref ./7.js
-@highlight 20-21,35,43-47,only
+@highlight 19-20,32,39-43,only
 
 The next four sections will explain these lines.
 
@@ -304,7 +304,7 @@ CanJS has one-way and two-way bindings in the form of:
 Let’s examine our code more closely:
 
 @sourceref ./7.js
-@highlight 20,only
+@highlight 19,only
 
 `value:bind="this.newName"` will create a binding between the input’s `value` property and
 the custom element’s `newName` property. When one of them changes, the other will be updated.
@@ -318,7 +318,7 @@ You can listen for events with the [can-stache-bindings.event <child-element on:
 Let’s look at our code again:
 
 @sourceref ./7.js
-@highlight 21,only
+@highlight 20,only
 
 When the button emits a `click` event, the `save()` method on the custom element will be called.
 
@@ -340,7 +340,7 @@ Now we’re going to use [can-observable-object/object.types.property#function__
 a property as a [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String):
 
 @sourceref ./7.js
-@highlight 35,only
+@highlight 32,only
 
 In the code above, we define a new `newName` property on the custom element as a [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String).
 If this property is set to a value that’s not a `String`, CanJS will throw an error.
@@ -357,11 +357,11 @@ and [Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/G
 Now let’s look at the `save()` method on our custom element:
 
 @sourceref ./7.js
-@highlight 43-47,only
+@highlight 39-43,only
 
 This code does three things:
 
-1) Creates a new to-do with the name typed into the `<input>` (`const todo = new Todo({name: this.newName})`).
+1) Creates a new to-do with the name typed into the `<input>` (`const todo = new Todo({ name: this.newName })`).
 2) Saves the new to-do to the backend API (`todo.save()`).
 3) Resets the `<input>` so a new to-do name can be typed in (`this.newName = ""`).
 
@@ -370,15 +370,15 @@ custom element. This is how we can both read and write the custom element’s `n
 
 ### New items are added to the right place in the sorted list
 
-When `Todo.getList({sort: "name"})` is called, CanJS makes a GET request to `/api/todos?sort=name`.
+When `Todo.getList({ sort: "name" })` is called, CanJS makes a GET request to `/api/todos?sort=name`.
 
-When the array of to-dos comes back, CanJS associates that array with the query `{sort: "name"}`.
+When the array of to-dos comes back, CanJS associates that array with the query `{ sort: "name" }`.
 When new to-dos are created, they’re automatically added to the right spot in the list that’s returned.
 
 **Try adding a to-do in your CodePen!** You don’t have to write any code to make sure the new to-do gets inserted
 into the right spot in the list.
 
-CanJS does this for filtering as well. If you make a query with a filter (e.g. `{filter: {complete: true }}`),
+CanJS does this for filtering as well. If you make a query with a filter (e.g. `{ filter: { complete: true } }`),
 when items are added, edited, or deleted that match that filter, those lists will be updated automatically.
 
 > Find something confusing or need help? [Join our Slack](https://bitovi.com/community/slack) and post a question
@@ -393,7 +393,7 @@ We’ll also make it possible to click on a to-do to select it and edit its name
 After either of these changes, we’ll save the to-do to the backend API.
 
 @sourceref ./8.js
-@highlight 5,25-34,45,59-62,only
+@highlight 8,28-37,46,59-62,only
 
 The next five sections will more thoroughly explain the code above.
 
@@ -402,7 +402,7 @@ The next five sections will more thoroughly explain the code above.
 First, we import the [can-type type] module:
 
 @sourceref ./8.js
-@highlight 5,only
+@highlight 8,only
 
 This module gives us helpers for type checking and conversion.
 
@@ -415,7 +415,7 @@ the checkbox is either checked or unchecked, respectively.
 Additionally, when the checkbox is clicked, `todo.complete` is updated to be `true` or `false`.
 
 @sourceref ./8.js
-@highlight 26,only
+@highlight 29,only
 
 We also listen for [change](https://developer.mozilla.org/en-US/docs/Web/Events/change) events with the
 [can-stache-bindings.event on:event] syntax. When the input’s value changes, the
@@ -429,7 +429,7 @@ This section uses two stache helpers:
 - [can-stache.helpers.else {{ else }}] will only render if `#eq()` returns `false`
 
 @sourceref ./8.js
-@highlight 28,30,34,only
+@highlight 31,33,37,only
 
 The code above checks whether `todo` is equal to `this.selected`. We haven’t added `selected`
 to our custom element yet, but we will in the next section!
@@ -442,7 +442,7 @@ also [can-stache-bindings.event#on_VIEW_MODEL_OR_DOM_EVENT__KEY_VALUE_ set prope
 Let’s examine this part of the code:
 
 @sourceref ./8.js
-@highlight 31-33,45,only
+@highlight 34-36,46,only
 
 `on:click="this.selected = todo"` will cause the custom element’s `selected` property to be set
 to the `todo` when the `<span>` is clicked.
@@ -457,7 +457,7 @@ to-do’s name (and immediately give it focus). When the input loses focus, we w
 and the input to be replaced with the span again.
 
 @sourceref ./8.js
-@highlight 29,59-62,only
+@highlight 32,59-62,only
 
 Let’s break down the code above:
 
@@ -474,7 +474,7 @@ Let’s break down the code above:
 Now there’s just one more feature we want to add to our app: deleting to-dos!
 
 @sourceref ./9.js
-@highlight 35,only
+@highlight 38,only
 
 When the `<button>` is clicked, the to-do’s [can-connect/can/map/map.prototype.destroy destroy]
 method is called, which will make a `DELETE /api/todos/{id}` call to delete the to-do in the
@@ -486,9 +486,9 @@ Congrats! You’ve built your first app with CanJS and learned all the basics.
 
 Here’s what your finished CodePen will look like:
 
-<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="dBKzBZ" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/dBKzBZ/">
-  CanJS 5 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="yLBPLgw" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/yLBPLgw/">
+  CanJS 6 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
