@@ -23,7 +23,7 @@ class ManuallyValidatedForm extends StacheElement {
             <p>
                 Phone Number:
                 <input type="text" value:bind="this.userPhoneNumber"
-									{{# if(this.phoneNumberError) }}class="error"{{/ if }}>
+                  {{# if(this.phoneNumberError) }}class="error"{{/ if }}>
             </p>
 
             <input type="submit" disabled:from="this.phoneNumberIsInvalid">
