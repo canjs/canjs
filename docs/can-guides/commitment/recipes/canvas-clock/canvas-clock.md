@@ -14,8 +14,8 @@ In this guide you will learn how to:
 
 The final widget looks like:
 
-<p class="codepen" data-height="495" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="aMYaOO" style="height: 495px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Canvas Clock (Simple) [Finished]">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/aMYaOO/">
+<p class="codepen" data-height="495" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="LYPZjbO" style="height: 495px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Canvas Clock (Simple) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/LYPZjbO/">
   Canvas Clock (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
@@ -31,8 +31,8 @@ The following sections are broken down into the following parts:
 
 __START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED__:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="VRXGep" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Canvas Clock (Simple) [Starter]">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/VRXGep/">
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="oNvpXpV" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Canvas Clock (Simple) [Starter]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/oNvpXpV/">
   Canvas Clock (Simple) [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
@@ -62,21 +62,22 @@ defines the behavior of the `<clock-controls>` element:
 
 @sourceref ./1-setup.js
 
-[can-component] is used to define the behavior of the  `<clock-controls>`
-element. Components are configured with three main properties that define the
-behavior of the element:
+[can-stache-element] is used to define the behavior of the  `<clock-controls>`
+element. Elements are configured with two main properties that define their
+behavior:
 
-- [can-component.prototype.tag] is used to specify the name of the custom element
-  (e.g. `"clock-controls"`).
-- [can-component.prototype.view] is used as the HTML content within the custom
+- [can-stache-element/static.view] is used as the HTML content within the custom
   element; by default, it is a [can-stache] template.
-- [can-component.prototype.ViewModel] provides methods and values to the `view`;
-  by default, the `ViewModel` is a [can-define/map/map].
+- [can-stache-element/static.props] provides values to the `view`.
 
-Here, a `time` property is defined using the [can-define.types.value value behavior].
+Here, a `time` property is defined using the [can-observable-object/define/value value behavior].
 This uses `resolve` to set the value of `time` to be an instance of a
 [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
 and then update the value every second to be a new `Date`.
+
+Finally, the name of the custom element (e.g. `clock-controls`) is added to the
+[custom element registry](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define) so the browser can render the `<clock-controls>` element properly.
+
 
 ## Create a digital clock component ##
 
@@ -90,17 +91,16 @@ In this section, we will:
 
 ### What you need to know
 
-- Use [can-component] to create a custom element.
-  - [can-component.prototype.tag] is used to specify the name of the custom
-    element (hint: `"digital-clock"`).
-  - [can-component.prototype.view] is used as the HTML content within the custom
+- Use [can-stache-element] to create a custom element.
+  - [can-stache-element/static.view] is used as the HTML content within the custom
     element; by default, it is a [can-stache] template (hint: `"Your {{content}}"`).
-  - [can-component.prototype.ViewModel] provides methods and values to the `view`;
-    by default, the `ViewModel` is a [can-define/map/map] that defines properties
-    and functions like:
+  - [can-stache-element/static.props] provides values to the `view` like:
     ```js
-    ViewModel: {
-      property: Type, // hint -> time: Date
+    class MyElement extends StacheElemet {
+      static view = `...`;
+      static props = {
+        property: Type, // hint -> time: Date
+      };
       method() {
         return // ...
       }
@@ -110,7 +110,7 @@ In this section, we will:
   ```
   {{method()}}
   ```
-  These methods are often functions on the `ViewModel`.
+  These methods are often functions on the element.
 - [Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)
   has methods that give you details about that date and time:
   - [date.getSeconds()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getSeconds)
@@ -118,6 +118,8 @@ In this section, we will:
   - [date.getHours()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getHours)
 - Use [padStart](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart)
   to convert a string like `"1"` into `"01"` like `.padStart(2, "00")`.
+- Use [https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define customElements.define] to
+  specify the name of the custom element (hint: `"digital-clock"`).
 
 
 ### The solution
@@ -125,7 +127,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-digital-clock.js
-@highlight 3-19,only
+@highlight 3-24,only
 
 ## Draw a circle in the analog clock component ##
 
@@ -138,14 +140,10 @@ In this section, we will:
 
 ### What you need to know
 
-- Use another [can-component] to define a `<analog-clock>` component.
-- Define the component’s [can-component.prototype.view] to write out a `<canvas>`
+- Use another [can-stache-element custom element] to define a `<analog-clock>` component.
+- Define the component’s [can-stache-element/static.view] to write out a `<canvas>`
   element (hint: `<canvas id="analog" width="255" height="255"></canvas>`).
-- A component’s [can-component.prototype.ViewModel] can be defined as an object
-  which will be passed to [can-define/map/map.extend DefineMap.extend]
-  (hint:`ViewModel: {}`).
-- A viewModel’s [can-component/connectedCallback] will be called when the
-  component is inserted into the page.
+- An element [can-stache-element/lifecycle-hooks.connected connected hook] will be called when the component is inserted into the page.
 - [Pass an element reference to the scope](https://canjs.com/doc/can-stache-bindings.html#Passanelementtothescope), like the following:
 ```html
 <div this:to="key">...</div>
@@ -187,7 +185,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-circle.js
-@highlight 3-28,only
+@highlight 3-32,only
 
 ## Draw the second hand ##
 
@@ -196,28 +194,27 @@ Update the __JavaScript__ tab to:
 In this section, we will:
 
 - Draw the second hand needle when the `time` value changes
-  on the `viewModel`.
+  on the element.
 - The needle should be `2` pixels wide, red (`#FF0000`), and 85% of the
   clock’s radius.
 
 ### What you need to know
 
 - [can-event-queue/map/map.listenTo this.listenTo] can be used in a component’s
-  [can-component/connectedCallback] to listen to changes in the `ViewModel` like:
+  [can-stache-element/lifecycle-hooks.connected connected hook] to listen to changes in the element `props` like:
   ```js
-  import { Component } from "//unpkg.com/can@5/core.mjs";
+  import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
-  Component.extend({
-    tag: "analog-clock",
-    // ...
-    ViewModel: {
-      connectedCallback() {
-        this.listenTo("time", (event, time) => {
-          // ...
-        });
-      }
+  class AnalogClock extends StacheElement {
+    static props = {
+      time: Date
+    },
+    connected() {
+      this.listenTo("time", (event, time) => {
+        // ...
+      });
     }
-  });
+  }
   ```
 
 - Use [canvas.moveTo(x1,y1)](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext/moveTo)
@@ -251,7 +248,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-second-hand.js
-@highlight 3-5,31-58,only
+@highlight 3-4,34-61,only
 
 ## Clear the canvas and create a `drawNeedle` method ##
 ### The problem
@@ -278,15 +275,14 @@ In this section, we will:
   when the time changes.
 - Use [clearRect(x, y, width, height)](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clearRect) to clear
   the canvas.
-- Add a function inside the [can-component/connectedCallback] that will have
-  access to all the variables created above it like:
+- Add a function inside the [can-stache-element/lifecycle-methods.connected connected hook] that will have access to all the variables created above it like:
   ```js
-  ViewModel: {
-    // ...
+  class AnalogClock extends StacheElement {
+    static view = "...";
+    static props = {};
     drawNeedle(length, base60Distance, styles, center) {
-        // ...
+      // ...
     }
-    // ...
   }
   ```
 
@@ -295,7 +291,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-refactor.js
-@highlight 19-28,48-56,only
+@highlight 21-30,50-59,only
 
 
 ## Draw the minute and hour hand ##
@@ -317,14 +313,14 @@ You know everything at this point.  You got this!
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-min-hour-hands.js
-@highlight 60-79,only
+@highlight 61-84,only
 
 ## Result
 
 When finished, you should see something like the following CodePen:
 
-<p class="codepen" data-height="495" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="aMYaOO" style="height: 495px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Canvas Clock (Simple) [Finished]">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/aMYaOO/">
+<p class="codepen" data-height="495" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="LYPZjbO" style="height: 495px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Canvas Clock (Simple) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/LYPZjbO/">
   Canvas Clock (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
