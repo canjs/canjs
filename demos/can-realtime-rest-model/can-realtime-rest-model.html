@@ -80,8 +80,8 @@ class TodoList extends StacheElement {
         </select>
 
         <ul>
-            {{# if(todosPromise.isResolved) }}
-                {{# for(todo of todosPromise.value) }}
+            {{# if(this.todosPromise.isResolved) }}
+                {{# for(todo of this.todosPromise.value) }}
                     <li>
                         <input type='checkbox'
                             checked:bind='todo.complete'
@@ -97,7 +97,7 @@ class TodoList extends StacheElement {
                     </li>
                 {{/ for }}
             {{/ if }}
-            {{# if(todosPromise.isPending) }}
+            {{# if(this.todosPromise.isPending) }}
                 <li>Loading</li>
             {{/ if }}
         </ul>

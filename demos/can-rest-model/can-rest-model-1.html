@@ -9,9 +9,7 @@
 <body>
 <todo-list></todo-list>
 
-<script src="../../node_modules/steal/steal.js" dev-bundle></script>
-
-<script type="steal-module" id="demo-source">
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
 import { fixture, ObservableArray, ObservableObject, restModel, StacheElement, type } from "can";
 
 class Todo extends ObservableObject {
@@ -82,8 +80,8 @@ class TodoList extends StacheElement {
         </select>
 
         <ul>
-            {{# if(todosPromise.isResolved) }}
-                {{# for(todo of todosPromise.value) }}
+            {{# if(this.todosPromise.isResolved) }}
+                {{# for(todo of this.todosPromise.value) }}
                     <li>
                         <input type='checkbox' checked:bind='todo.complete' disabled/>
                         <label>{{ todo.name }}</label>
@@ -91,7 +89,7 @@ class TodoList extends StacheElement {
                     </li>
                 {{/ todo }}
             {{/ if }}
-            {{# if(todosPromise.isPending) }}
+            {{# if(this.todosPromise.isPending) }}
                 <li>Loading</li>
             {{/ if }}
         </ul>

@@ -35,9 +35,9 @@ Let's say you want to create a page that counts clicks like the following: (_cli
 const Component = require("can-component");
 Component.extend({
     tag: "my-counter",
-    view: " Count: <span>{{count}}</span> <button on:click='increment()'>+1</button> ",
+    view: " Count: <span>{{ this.count }}</span> <button on:click='increment()'>+1</button> ",
     ViewModel: {
-        count: {default: 0},
+        count: { default: 0 },
         increment() {
             this.count = this.count + 1;
         }
@@ -108,7 +108,7 @@ class MyCounter extends StacheElement {
   `;
 
   static props = {
-      count: {default: 0}
+      count: 0
   };
 
   increment() {
@@ -120,7 +120,7 @@ customElements.define("my-counter", MyCounter);
 ```
 @codepen
 
-You might have noticed that Components are mostly 2 parts:
+You might have noticed that `StacheElement` custom elements are mostly 2 parts:
 
 - A [can-stache stache] [can-stache-element/static.view] that specifies the HTML content within the custom element. In this case, we’re adding a `<span>` and a `<button>` within the `<my-counter>` element.
 - An <span class='obs'>observable</span> [can-stache-element/static.props] that manages the logic and state of the application.
@@ -130,7 +130,7 @@ the HTML the user sees accordingly.
 
 [can-stache-element StacheElement] uses [can-stache can-stache] to update the HTML
 and [can-stache-bindings can-stache-bindings] to listen to user interactions and pass data between
-components.  The remainder of this guide breaks down these pieces and goes into more detail
+custom elements.  The remainder of this guide breaks down these pieces and goes into more detail
 about how [can-stache-element StacheElement] works and how to use it.
 
 ## Stache templates and bindings
@@ -141,21 +141,21 @@ are the most commonly used tags:
 
 - [can-stache.tags.escaped] - Inserts the result of `expression` in the page.
   ```html
-  Count: <span>{{ count }}</span>
+  Count: <span>{{ this.count }}</span>
   ```
 - [can-stache.helpers.if] - Render the _block_ content if the expression evaluates
   to a _truthy_ value; otherwise, render the _inverse_ content.
   ```html
-  {{# if(count) }} Count not 0 {{ else }} Count is 0 {{/ if }}
+  {{# if(this.count) }} Count not 0 {{ else }} Count is 0 {{/ if }}
   ```
 - [can-stache.helpers.is] - Render the _block_ content if all comma seperated expressions
   evaluate to the same value; otherwise, render the _inverse_ content.
   ```html
-  {{# is(count, 1) }} Count is 1 {{ else }} Count is not 1 {{/ if }}
+  {{# is(this.count, 1) }} Count is 1 {{ else }} Count is not 1 {{/ if }}
   ```
 - [can-stache.helpers.for-of] - Render the _block_ content for each item in the list the expression evaluates to.
   ```html
-  {{# for(item of items) }} {{item.name}} {{/ for }}
+  {{# for(item of this.items) }} {{ item.name }} {{/ for }}
   ```
 
 [can-stache-bindings] are used to pass values between the DOM and observables and call methods on
@@ -167,7 +167,7 @@ observables. Use it to:
   <my-demo></my-demo>
 
   <script type="module">
-  import { StacheElement } from "can/everything";
+  import { StacheElement } from "can";
 
   class MyDemo extends StacheElement {
     static view = `
@@ -177,7 +177,7 @@ observables. Use it to:
     static props = {};
 
     doSomething(value) {
-      console.log("You wrote "+value);
+      console.log("You wrote " + value);
     }
   }
   customElements.define("my-demo", MyDemo);
@@ -187,12 +187,12 @@ observables. Use it to:
   @codepen
 
 - Update observables with element attribute and property values.  The following uses [can-stache-bindings.toParent]
-  to send the `<input>`’s _value to_ the [can-stache-element/static.props]’s `count` property when the user presses enter.
+  to send the `<input>`’s _value to_ the [can-stache-element/static.props]’s `count` property when the user changes the value of the `<input>`.
   ```html
   <my-demo></my-demo>
 
   <script type="module">
-  import { StacheElement } from "can";
+  import { StacheElement, type } from "can";
 
   class MyDemo extends StacheElement {
     static view = `
@@ -200,7 +200,7 @@ observables. Use it to:
     `;
 
     static props = {
-      count: Number
+      count: type.convert(Number)
     };
   }
   customElements.define("my-demo", MyDemo);
@@ -216,7 +216,7 @@ observables. Use it to:
   <my-demo></my-demo>
 
   <script type="module">
-  import { StacheElement } from "can/everything";
+  import { StacheElement } from "can";
 
   class MyDemo extends StacheElement {
     static view = `
@@ -254,7 +254,7 @@ observables. Use it to:
   <my-demo></my-demo>
 
   <script type="module">
-  import { StacheElement } from "can/everything";
+  import { StacheElement, type } from "can";
 
   class MyDemo extends StacheElement {
     static view = `
@@ -263,7 +263,7 @@ observables. Use it to:
     `;
 
     static props = {
-      count: Number
+      count: type.convert(Number)
     };
 
     increment() {
@@ -278,8 +278,8 @@ observables. Use it to:
 
 The following demo:
 
-- Loops through a list of todos with [can-stache.helpers.each] - `{{# for( todo of todos ) }} ... {{/ for }}`.
-- Writes out if all todos are complete with [can-stache.helpers.is] - `{{#is( completeCount, todos.length )}}`.
+- Loops through a list of todos with [can-stache.helpers.for-of] - `{{# for(todo of todos) }} ... {{/ for }}`.
+- Writes out if all todos are complete with [can-stache.helpers.eq] - `{{# eq(completeCount, todos.length) }}`.
 - Updates the `complete` state of a todo when a _checkbox_ is checked and vice-versa with [can-stache-bindings.twoWay] - `checked:bind='complete'`.
 - Completes every todo with [can-stache-bindings.event] - `on:click='completeAll()'`.
 
@@ -327,7 +327,7 @@ The demo defines the `<my-counter>` element with:
 
   class Counter extends ObservableObject {
       static props = {
-        count: { default: 0 }
+        count: 0
       };
 
       increment() {
@@ -350,16 +350,16 @@ The demo defines the `<my-counter>` element with:
 
   class MyCounter extends StacheElement {
       static view = `
-      <button on:click="this.increment()">+1</button>
-      Count: <span>{{ this.count }}</span>
-    `;
+          <button on:click="this.increment()">+1</button>
+          Count: <span>{{ this.count }}</span>
+      `;
 
       static props = {
-      count: {default: 0}
-    };
+          count: 0
+      };
 
       increment() {
-      this.count++;
+          this.count++;
       }
   }
   customElements.define("my-counter", MyCounter);
