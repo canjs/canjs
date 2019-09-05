@@ -61,7 +61,7 @@ const connection = restModel({
 
 ```js
 import { restModel } from "can";
-import { Todo, todoFixture } from "//unpkg.com/can-demo-models@5/index.mjs";
+import { Todo, todoFixture } from "//unpkg.com/can-demo-models@6/index.mjs";
 
 // create mock data
 todoFixture(5);
