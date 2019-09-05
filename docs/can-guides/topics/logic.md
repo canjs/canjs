@@ -16,7 +16,7 @@ The organization of an element props should convey which properties should chang
 * Internal stateful properties - Stateful properties "owned" by this component.
 * Derived properties - Properties derived from stateful properties.
 * Methods - Methods that change stateful properties and dispatch events that can be used in derived properties and side effects.
-* Side effects - Side effects that depend on the [DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction#What_is_the_DOM) should be done in the `connected` method.
+* Side effects - Side effects that depend on the [DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction#What_is_the_DOM) should be done in the [can-stache-element/lifecycle-hooks.connected connected lifecycle hook].
 
 Here is an example (click the "Run in your browser" button to see them in action):
 
@@ -84,7 +84,7 @@ class PropsOrganization extends StacheElement {
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-body">
-            <p>The connected is where side effects should be handled. This will prevent them from happening during unit tests of the props.</p>
+            <p>The connected lifecycle hook is where side effects should be handled. This will prevent them from happening during unit tests of the props.</p>
           </div>
         </div>
       </div>
@@ -96,11 +96,11 @@ class PropsOrganization extends StacheElement {
     heading: type.maybeConvert(String),
 
     // INTERNAL STATEFUL PROPERTIES
-    showExternalStatefulProperties: { default: false },
+    showExternalStatefulProperties: false,
 
-    showInternalStatefulProperties: { default: false },
-    hideDerivedProperties: { default: true },
-    showMethods: { default: false },
+    showInternalStatefulProperties: false,
+    hideDerivedProperties: true,
+    showMethods: false,
 
     // DERIVED PROPERTIES
     get showDerivedProperties () {
@@ -192,10 +192,10 @@ class App extends StacheElement {
 
   static props = {
     // INTERNAL STATEFUL PROPERTIES
-    first: { default: "Kevin" },
+    first: "Kevin",
 
-    last: { default: "McCallister" },
-    name: { default: "Kevin McCallister" }
+    last: "McCallister",
+    name: "Kevin McCallister"
   };
 
   setFirst(first) {
@@ -230,8 +230,8 @@ class App extends StacheElement {
 
   static props = {
     // INTERNAL STATEFUL PROPERTIES
-    first: { default: "Kevin" },
-    last: { default: "McCallister" },
+    first: "Kevin",
+    last: "McCallister",
 
     // DERIVED PROPERTIES
     get name() {
@@ -252,9 +252,13 @@ When using derived properties like this, it can be tempting to add side effects 
 ```js
 static props = {
   // INTERNAL STATEFUL PROPERTIES
-  first: { default: "Kevin" },
-  last: { default: "McCallister" },
-  names: { default: DefineList },
+  first: "Kevin",
+  last: "McCallister",
+  names: {
+    get default() {
+      return new DefineList();
+    }
+  },
 
   // DERIVED PROPERTIES
   get name() {
@@ -264,7 +268,7 @@ static props = {
   }
 }
 ```
-@highlight 8-12
+@highlight 12-16
 
 Doing mutations like this can cause lots of problems, including inifinite loops and stack overflows.
 
@@ -302,7 +306,7 @@ class App extends StacheElement {
 
   static props = {
     // INTERNAL STATEFUL PROPERTIES
-    id: { default: 0 },
+    id: 0,
 
     // DERIVED PROPERTIES
     data: {
@@ -360,8 +364,8 @@ class App extends StacheElement {
 
   static props = {
     // INTERNAL STATEFUL PROPERTIES
-    first: { default: "Kevin" },
-    last: { default: "McCallister" },
+    first: "Kevin",
+    last: "McCallister",
 
     // DERIVED PROPERTIES
     get name() {
@@ -456,8 +460,8 @@ class RangeSlider extends StacheElement {
 
   static props = {
     // INTERNAL STATEFUL PROPERTIES
-    minimum: { default: 50 },
-    maximum: { default: 150 },
+    minimum: 50,
+    maximum: 150,
 
     // DERIVED PROPERTIES
     selectedValue: {
@@ -521,7 +525,7 @@ class App extends StacheElement {
 
   static props = {
     // INTERNAL STATEFUL PROPERTIES
-    day: { default: "Sun" }
+    day: "Sun"
   };
 
   resetDay() {
@@ -564,8 +568,8 @@ If you need to do update more than one stateful property when an event occurs, i
 
   static props = {
     // INTERNAL STATEFUL PROPERTIES
-    day: { default: "Sun" },
-    editing: { default: true },
+    day: "Sun",
+    editing: true,
 
     // METHODS
     resetDay() {
@@ -648,7 +652,7 @@ Using this technique, it is possible to read each property definition and know e
 
 Side effects of properties changing that depend on the [DOM](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction#What_is_the_DOM) being available should be handled in the [can-stache-element/lifecycle-methods.connect]. This will ensure that the props can be tested without the DOM.
 
-The `connected` can use [can-event-queue/map/map.listenTo] to listen to dispatched events or property changes and perform necessary side effects. This example shows how to [play](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play) an `<audio>` element each time a button is pressed:
+The [can-stache-element/lifecycle-hooks.connected connected lifecycle hook] can use [can-event-queue/map/map.listenTo] to listen to dispatched events or property changes and perform necessary side effects. This example shows how to [play](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play) an `<audio>` element each time a button is pressed:
 
 ```html
 <memory-game></memory-game>
@@ -792,9 +796,9 @@ color-picker button {
 
 In most cases, CanJS will automatically clean up event listeners, but there are a few situations where event listeners will need to be cleaned up manually. These are discussed in the following sections.
 
-### Clean up listeners set up in connected
+### Clean up listeners set up in the connected lifecycle hook
 
-Any listeners set up using [can-event-queue/map/map.listenTo] in the `connected` will be cleaned up automatically when the component is torn down:
+Any listeners set up using [can-event-queue/map/map.listenTo] in the [can-stache-element/lifecycle-hooks.connected connected lifecycle hook] will be cleaned up automatically when the component is torn down:
 
 ```js
 static props = {
