@@ -209,18 +209,18 @@ The following creates a component that uses `Todo.getList` to load and list data
 class TodoList extends StacheElement {
     static view = `
         <ul>
-            {{# if(todosPromise.isResolved) }}
-                {{# for(todo of todosPromise.value) }}
+            {{# if(this.todosPromise.isResolved) }}
+                {{# for(todo of this.todosPromise.value) }}
                     <li>
                         <input type='checkbox' checked:bind='todo.complete' disabled/>
-                        <label>{{name}}</label>
+                        <label>{{ todo.name }}</label>
                         <input type='date' valueAsDate:bind='todo.dueDate' disabled/>
                     </li>
                 {{/ for }}
-            {{/ if}}
-            {{# if(todosPromise.isPending) }}
+            {{/ if }}
+            {{# if(this.todosPromise.isPending) }}
                 <li>Loading</li>
-            {{/ if}}
+            {{/ if }}
         </ul>
     `;
 
@@ -278,18 +278,18 @@ class TodoList extends StacheElement {
         </select>
 
         <ul>
-            {{# if(todosPromise.isResolved) }}
-                {{# for( todo of todosPromise.value) }}
+            {{# if(this.todosPromise.isResolved) }}
+                {{# for(todo of this.todosPromise.value) }}
                     <li>
                         <input type='checkbox' checked:bind='todo.complete' disabled/>
-                        <label>{{name}}</label>
+                        <label>{{ todo.name }}</label>
                         <input type='date' valueAsDate:bind='todo.dueDate' disabled/>
                     </li>
                 {{/ for }}
-            {{/ if}}
-            {{# if(todosPromise.isPending) }}
+            {{/ if }}
+            {{# if(this.todosPromise.isPending) }}
                 <li>Loading</li>
-            {{/ if}}
+            {{/ if }}
         </ul>
     `;
     
@@ -454,7 +454,7 @@ class TodoCreate extends StacheElement {
                 <input type='date' valueAsDate:bind='todo.dueDate'/>
             </p>
             <button disabled:from="todo.preventSave()">Create Todo</button>
-            {{# if(todo.isSaving()) }}Creating…{{/ if}}
+            {{# if(todo.isSaving()) }}Creating…{{/ if }}
         </form>
     `;
 
@@ -613,7 +613,7 @@ class TodoUpdate extends StacheElement {
                         name='dueDate' valueAsDate:from='todo.dueDate'/>
                 </p>
                 <button disabled:from="todo.preventSave()">
-                    {{# if(todo.isSaving()) }}Updating{{else}}Update{{/ if}}Todo
+                    {{# if(todo.isSaving()) }}Updating{{else}}Update{{/ if }}Todo
                 </button>
                 <button disabled:from="todo.preventSave()"
                     on:click="cancelEdit()">Cancel</button>
@@ -709,19 +709,19 @@ The following creates a component that uses `Todo.prototype.destroy` to delete d
 class TodoList extends StacheElement {
     static view = `
         <ul>
-            {{# if(todosPromise.isResolved) }}
-                {{# for(todo of todosPromise.value) }}
+            {{# if(this.todosPromise.isResolved) }}
+                {{# for(todo of this.todosPromise.value) }}
                     <li>
                         <input type='checkbox' checked:bind='todo.complete' disabled/>
-                        <label>{{todo.name}}</label>
+                        <label>{{ todo.name }}</label>
                         <input type='date' valueAsDate:bind='todo.dueDate' disabled/>
                         <button on:click="todo.destroy()">delete</button>
                     </li>
                 {{/ for }}
-            {{/ if}}
-            {{# if(todosPromise.isPending) }}
+            {{/ if }}
+            {{# if(this.todosPromise.isPending) }}
                 <li>Loading</li>
-            {{/ if}}
+            {{/ if }}
         </ul>
     `;
 

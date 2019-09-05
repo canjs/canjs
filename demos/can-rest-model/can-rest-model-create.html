@@ -66,21 +66,21 @@ fixture("/api/todos/{id}", todoStore);
 
 class TodoCreate extends StacheElement {
     static view = `
-        <form on:submit="createTodo(scope.event)">
+        <form on:submit="this.createTodo(scope.event)">
             <p>
                 <label>Name</label>
-                <input on:input:value:bind='todo.name'/>
+                <input on:input:value:bind='this.todo.name'/>
             </p>
             <p>
                 <label>Complete</label>
-                <input type='checkbox' checked:bind='todo.complete'/>
+                <input type='checkbox' checked:bind='this.todo.complete'/>
             </p>
             <p>
                 <label>Date</label>
-                <input type='date' valueAsDate:bind='todo.dueDate'/>
+                <input type='date' valueAsDate:bind='this.todo.dueDate'/>
             </p>
-            <button disabled:from="todo.preventSave()">Create Todo</button>
-            {{# if(todo.isSaving()) }}Creating ....{{/ if }}
+            <button disabled:from="this.todo.preventSave()">Create Todo</button>
+            {{# if(this.todo.isSaving()) }}Creating ....{{/ if }}
         </form>
     `;
 

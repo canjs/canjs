@@ -134,16 +134,16 @@ customElements.define("todo-update", TodoUpdate);
 class TodoList extends StacheElement {
     static view = `
         <ul>
-            {{# if(todosPromise.isResolved) }}
-                {{# for(todo of todosPromise.value) }}
+            {{# if(this.todosPromise.isResolved) }}
+                {{# for(todo of this.todosPromise.value) }}
                     <li on:click="this.select(todo)"
-                        class="{{# eq(todo,this.selected) }}selected{{/ eq }}">
+                        class="{{# eq(todo, this.selected) }}selected{{/ eq }}">
                         <input type='checkbox' checked:bind='todo.complete' disabled/>
                         <label>{{ todo.name }}</label>
                     </li>
                 {{/ for }}
             {{/ if }}
-            {{# if(todosPromise.isPending) }}
+            {{# if(this.todosPromise.isPending) }}
                 <li>Loading</li>
             {{/ if }}
         </ul>
