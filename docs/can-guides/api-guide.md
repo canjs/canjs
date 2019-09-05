@@ -27,7 +27,7 @@ const filteredUsers = users.filter(function(item) {
 }); //-> { name: "Justin: }
 ```
 
-`.filter` is a function the `prototype` of the [can-observable-array ObservableArray] export of the `can-observable-array`
+`.filter` is a function on the `prototype` of the [can-observable-array ObservableArray] export of the `can-observable-array`
 module.  The `can-observable-array` is part of CanJS’s [can-core] collection.
 
 So understanding CanJS’s API pages are about understanding the relationships between:
@@ -51,21 +51,18 @@ Each collection page acts as an overview and cheat sheet for the modules and fun
 contained within the collection.
 
 The [can-core] collection contains the documentation for the libraries that
-are use most commonly and directly within a CanJS application.  This is where the Model-View-ViewModel
-libraries of CanJS are documented.
+are use most commonly and directly within a CanJS application.  This is where the custom element, observable, model, and routing libraries of CanJS are documented.
 
 The [can-ecosystem] collection contains less commonly used libraries or libraries that aren’t quite core ready yet.  The most commonly used libraries here are [can-fixture] and [can-stache-converters].
 
 The [can-infrastructure] collection contains the utility libraries that power the core and ecosystem
-collection.  Often, this functionality is used indirectly.  For example, the [can-event] mixin
-is used to add `on`, `off`, and `dispatch` methods to [can-define] and [can-compute].  And, [can-util] contains a wide variety of low-level DOM and JavaScript utilities.
+collection.  Often, this functionality is used indirectly.  For example, the [can-event-queue/map/map] mixin
+is used to add `on`, `off`, and `dispatch` methods to [can-observable-object] and [can-observable-array].
 
 Sometimes [can-infrastructure] is used directly.  The most important examples are:
 
- - [can-event/batch/batch] is used to batch changes for faster performance.
- - [can-util/dom/attr/attr] provides special [can-util/dom/attr/attr.special.focused] and [can-util/dom/attr/attr.special.values] attributes that [can-stache-bindings] can be bound to.
- - [can-util/dom/events/events] provides special [can-util/dom/events/attributes/attributes],
-   [can-util/dom/events/inserted/inserted], and [can-util/dom/events/removed/removed] events.
+ - [can-queues] is used to schedule tasks and [can-queues.batch.start batch] changes for faster performance.
+ - [can-dom-mutate/events/events] provides special `attributes`, `inserted`, and `removed` events.
  - [can-view-callbacks] lets you register behavior for custom elements and attributes.
 
 Finally, the [can-legacy] collection.  This is for libraries that are no longer under active
