@@ -45,41 +45,43 @@ libraries connect observables to backend services. CanJS’s model-layer will ma
 AJAX requests to get, create, update, and delete data.
 
 For example, you
-can connect a `Todo` and `Todo.List` observable to a restful service layer at
+can connect a `Todo` and `TodoList` observable to a restful service layer at
 `/api/todos` with [can-rest-model]:
 
 ```js
-import {restModel, DefineMap, DefineList} from "can";
+import { ObservableArray, ObservableObject, restModel, type } from "can";
 
-const Todo = DefineMap.extend("Todo",{
+class Todo extends ObservableObject {
+    static props = {
+        // `id` uniquely identifies instances of this type.
+        id: { type: type.maybe(Number), identity: true },
 
-    // `id` uniquely identifies instances of this type.
-    id: { type: "number", identity: true },
+        // properties on models can be given types as well as default values
+        complete: { type: Boolean, default: false },
+        dueDate: type.maybeConvert(Date),
+        name: type.maybe(String)
+    };
 
-	// properties on models can be given types as well as default values
-    complete: { type: "boolean", default: false },
-    dueDate: "date",
-    name: "string",
-
-    toggleComplete(){
+    toggleComplete() {
         this.complete = !this.complete;
     }
-});
+}
 
-Todo.List = DefineList.extend("TodoList",{
-    "#": Todo,
-    completeAll(){
+class TodoList extends ObservableArray {
+    static items = Todo;  
+    
+    completeAll() {
         return this.forEach((todo) => { todo.complete = true; });
     }
-});
+}
 
 const todoConnection = restModel({
     Map: Todo,
-    List: Todo.List,
+    List: TodoList,
     url: "/api/todos/{id}"
 });
 ```
-@highlight 25-29
+@highlight 27-31
 @codepen
 
 This allows you to get, create, update and destroy data
@@ -182,8 +184,8 @@ GET /api/todos?
 </table>
 
 `.getList(params)` returns a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-that will eventually resolve to a `Todo.List` of `Todo` instances.  This means that
-properties and methods defined on `Todo.List` and `Todo` will be available:
+that will eventually resolve to a `TodoList` of `Todo` instances.  This means that
+properties and methods defined on `TodoList` and `Todo` will be available:
 
 ```js
 let todosPromise = Todo.getList({});
@@ -204,35 +206,36 @@ todosPromise.then(function(todos){
 The following creates a component that uses `Todo.getList` to load and list data:
 
 ```js
-Component.extend({
-    tag: "todo-list",
-    view: `
-    <ul>
-        {{# if(todosPromise.isResolved) }}
-            {{# for(todo of todosPromise.value) }}
-                <li>
-                    <input type='checkbox' checked:bind='todo.complete' disabled/>
-                    <label>{{name}}</label>
-                    <input type='date' valueAsDate:bind='todo.dueDate' disabled/>
-                </li>
-            {{/ for }}
-        {{/ if}}
-        {{# if(todosPromise.isPending) }}
-            <li>Loading</li>
-        {{/ if}}
-    </ul>
-    `,
-    ViewModel: {
+class TodoList extends StacheElement {
+    static view = `
+        <ul>
+            {{# if(todosPromise.isResolved) }}
+                {{# for(todo of todosPromise.value) }}
+                    <li>
+                        <input type='checkbox' checked:bind='todo.complete' disabled/>
+                        <label>{{name}}</label>
+                        <input type='date' valueAsDate:bind='todo.dueDate' disabled/>
+                    </li>
+                {{/ for }}
+            {{/ if}}
+            {{# if(todosPromise.isPending) }}
+                <li>Loading</li>
+            {{/ if}}
+        </ul>
+    `;
+
+    static props = {
         todosPromise: {
-            default(){
+            get default() {
                 return Todo.getList({});
             }
         }
-    }
-});
+    };
+};
+customElements.define("todo-list", TodoList);
 ```
 
-@highlight 5-6,22,only
+@highlight 4-5,22,only
 
 > **Note:** A promise's values and state can be read in [can-stache] directly via:
 > `promise.value`, `promise.reason`, `promise.isResolved`, `promise.isPending`, and `promise.isRejected`.
@@ -248,53 +251,53 @@ the items retrieved. The following adds inputs to control the filtering,
 sorting, and pagination of the component:
 
 ```js
-Component.extend({
-    tag: "todo-list",
-    view: `
-    Sort By: <select value:bind="sort">
-        <option value="">none</option>
-        <option value="name">name</option>
-        <option value="dueDate">dueDate</option>
-    </select>
+class TodoList extends StacheElement {
+    static view = `
+        Sort By: <select value:bind="sort">
+            <option value="">none</option>
+            <option value="name">name</option>
+            <option value="dueDate">dueDate</option>
+        </select>
 
-    Show: <select value:bind="completeFilter">
-        <option value="">All</option>
-        <option value="complete">Complete</option>
-        <option value="incomplete">Incomplete</option>
-    </select>
+        Show: <select value:bind="completeFilter">
+            <option value="">All</option>
+            <option value="complete">Complete</option>
+            <option value="incomplete">Incomplete</option>
+        </select>
 
-    Due: <select value:bind="dueFilter">
-        <option value="">Anytime</option>
-        <option value="today">Today</option>
-        <option value="week">This Week</option>
-    </select>
+        Due: <select value:bind="dueFilter">
+            <option value="">Anytime</option>
+            <option value="today">Today</option>
+            <option value="week">This Week</option>
+        </select>
 
-    Results <select value:bind="count">
-        <option value="">All</option>
-        <option value="10">10</option>
-        <option value="20">20</option>
-    </select>
+        Results <select value:bind="count">
+            <option value="">All</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+        </select>
 
-    <ul>
-        {{# if(todosPromise.isResolved) }}
-            {{# for( todo of todosPromise.value) }}
-                <li>
-                    <input type='checkbox' checked:bind='todo.complete' disabled/>
-                    <label>{{name}}</label>
-                    <input type='date' valueAsDate:bind='todo.dueDate' disabled/>
-                </li>
-            {{/ for }}
-        {{/ if}}
-        {{# if(todosPromise.isPending) }}
-            <li>Loading</li>
-        {{/ if}}
-    </ul>
-    `,
-    ViewModel: {
-        sort: "string",
-        completeFilter: "string",
-        dueFilter: "string",
-        count: {type:"string", default: "10"},
+        <ul>
+            {{# if(todosPromise.isResolved) }}
+                {{# for( todo of todosPromise.value) }}
+                    <li>
+                        <input type='checkbox' checked:bind='todo.complete' disabled/>
+                        <label>{{name}}</label>
+                        <input type='date' valueAsDate:bind='todo.dueDate' disabled/>
+                    </li>
+                {{/ for }}
+            {{/ if}}
+            {{# if(todosPromise.isPending) }}
+                <li>Loading</li>
+            {{/ if}}
+        </ul>
+    `;
+    
+    static props = {
+        sort: type.maybe(String),
+        completeFilter: type.maybe(String),
+        dueFilter: type.maybe(String),
+        count: {type: String, default: "10"},
         get todosPromise(){
             let query = {filter: {}};
             if(this.sort) {
@@ -330,10 +333,11 @@ Component.extend({
             }
             return Todo.getList(query);
         }
-    }
-});
+    };
+};
+customElements.define("todo-list", TodoList);
 ```
-@highlight 4-26,44-82,only
+@highlight 3-25,44-82,only
 
 See it in action here:
 
@@ -434,9 +438,8 @@ todoPromise.then(function(){
 The following creates a component that uses `Todo.prototype.save` to create data:
 
 ```js
-Component.extend({
-    tag: "todo-create",
-    view: `
+class TodoCreate extends StacheElement {
+    static view = `
         <form on:submit="createTodo(scope.event)">
             <p>
                 <label>Name</label>
@@ -453,22 +456,27 @@ Component.extend({
             <button disabled:from="todo.preventSave()">Create Todo</button>
             {{# if(todo.isSaving()) }}Creating…{{/ if}}
         </form>
-    `,
-    ViewModel: {
+    `;
+
+    static props = {
         todo: {
-            Default: Todo
-        },
-        createTodo(event) {
-            event.preventDefault();
-            this.todo.save().then((createdTodo) => {
-                // Create a new todo instance to receive from data
-                this.todo = new Todo();
-            })
+            get default() {
+                return new Todo();
+            }
         }
+    };
+
+    createTodo(event) {
+        event.preventDefault();
+        this.todo.save().then((createdTodo) => {
+            // Create a new todo instance to receive from data
+            this.todo = new Todo();
+        })
     }
-});
+};
+customElements.define("todo-create", TodoCreate);
 ```
-@highlight 4,27
+@highlight 3,31
 
 See this component in action here:
 
@@ -479,9 +487,8 @@ See this component in action here:
 Note that this demo lists newly created todos by listening to `Todo`’s created event as follows:
 
 ```js
-Component.extend({
-    tag: "created-todos",
-    view: `
+class CreatedTodos extends StacheElement {
+    static view = `
         <h3>Created Todos</h3>
         <table>
             <tr>
@@ -499,18 +506,21 @@ Component.extend({
                 <tr><td colspan='4'><i>The todos you create will be listed here</i></td></tr>
             {{/ for }}
         </table>
-    `,
-    ViewModel: {
-        todos: {Default: Todo.List},
-        connectedCallback(){
-            this.listenTo(Todo,"created", (event, created) => {
-                this.todos.unshift(created);
-            })
-        }
+    `;  
+
+    static props = {
+        todos: {Default: TodoList}
+    };    
+
+    connected() {
+        this.listenTo(Todo,"created", (event, created) => {
+            this.todos.unshift(created);
+        })
     }
-});
+};
+customElements.define("created-todos", CreatedTodos);
 ```
-@highlight 25,only
+@highlight 27,only
 
 When any todo is `created`, `updated`, or `destroyed`, an event is dispatched on the `Todo` type.
 
@@ -527,22 +537,17 @@ Also use [can-connect/can/map/map.prototype.save] to update records.
 <tr class='background'>
 <td>
 
-On an instance that has already been created,
-change its data and call `.save()` to
-update the record.
+On an instance that has already been created, change its data and call `.save()` to update the record.
 
 </td>
 <td>
 
-The instance is [can-define/map/map.prototype.serialize serialized]
-and PUT to the server.
+The instance is [can-define/map/map.prototype.serialize serialized] and PUT to the server.
 
 </td>
 <td>
 
-Server responds with all values on the record. Use
-[can-connect/can/map/map.updateInstanceWithAssignDeep] to
-not require every record value.
+Server responds with all values on the record. Use [can-connect/can/map/map.updateInstanceWithAssignDeep] to not require every record value.
 
 </td>
 </tr>
@@ -588,9 +593,8 @@ For example, the
 following creates a component that uses `Todo.prototype.save` to update data:
 
 ```js
-Component.extend({
-    tag: "todo-update",
-    view: `
+class TodoUpdate extends StacheElement {
+    static view = `
         {{# if(todo) }}
             <h3>Update Todo</h3>
             <form on:submit="updateTodo(scope.element, scope.event)">
@@ -618,24 +622,28 @@ Component.extend({
         {{ else }}
             <i>Click a todo above to edit it here.</i>
         {{/ if }}
-    `,
-    ViewModel: {
-        todo: Todo,
-        updateTodo(form, event) {
-            event.preventDefault();
-            this.todo.assign({
-                name: form.name.value,
-                complete: form.complete.checked,
-                dueDate: form.dueDate.valueAsDate
-            }).save().then(this.cancelEdit.bind(this))
-        },
-        cancelEdit(){
-            this.todo = null;
-        }
+    `;
+
+    static props = {
+        todo: type.maybeConvert(Todo)
+    };
+
+    updateTodo(form, event) {
+        event.preventDefault();
+        this.todo.assign({
+            name: form.name.value,
+            complete: form.complete.checked,
+            dueDate: form.dueDate.valueAsDate
+        }).save().then(this.cancelEdit.bind(this))
     }
-});
+
+    cancelEdit() {
+        this.todo = null;
+    }
+}
+customElements.define("todo-update", TodoUpdate);
 ```
-@highlight 6,34-41
+@highlight 5,36-43
 
 See this in action here:
 
@@ -643,7 +651,6 @@ See this in action here:
 @codepen
 
 ## Destroying records
-
 
 Use [can-connect/can/map/map.prototype.destroy] to delete records.
 
@@ -656,8 +663,7 @@ Use [can-connect/can/map/map.prototype.destroy] to delete records.
 <tr class='background'>
 <td>
 
-On an instance that has already been created,
-call `.destroy()` to delete the record.
+On an instance that has already been created, call `.destroy()` to delete the record.
 
 </td>
 <td>
@@ -667,8 +673,7 @@ A DELETE request is sent with the instance's [can-define.types.identity].
 </td>
 <td>
 
-No response data is necessary. Just
-a successful status code.
+No response data is necessary. Just a successful status code.
 
 </td>
 </tr>
@@ -701,52 +706,52 @@ DELETE /api/todos/22
 The following creates a component that uses `Todo.prototype.destroy` to delete data:
 
 ```js
-Component.extend({
-    tag: "todo-list",
-    view: `
-    <ul>
-        {{# if(todosPromise.isResolved) }}
-            {{# for(todo of todosPromise.value) }}
-                <li>
-                    <input type='checkbox' checked:bind='todo.complete' disabled/>
-                    <label>{{todo.name}}</label>
-                    <input type='date' valueAsDate:bind='todo.dueDate' disabled/>
-                    <button on:click="todo.destroy()">delete</button>
-                </li>
-            {{/ for }}
-        {{/ if}}
-        {{# if(todosPromise.isPending) }}
-            <li>Loading</li>
-        {{/ if}}
-    </ul>
-    `,
-    ViewModel: {
+class TodoList extends StacheElement {
+    static view = `
+        <ul>
+            {{# if(todosPromise.isResolved) }}
+                {{# for(todo of todosPromise.value) }}
+                    <li>
+                        <input type='checkbox' checked:bind='todo.complete' disabled/>
+                        <label>{{todo.name}}</label>
+                        <input type='date' valueAsDate:bind='todo.dueDate' disabled/>
+                        <button on:click="todo.destroy()">delete</button>
+                    </li>
+                {{/ for }}
+            {{/ if}}
+            {{# if(todosPromise.isPending) }}
+                <li>Loading</li>
+            {{/ if}}
+        </ul>
+    `;
+
+    static props = {
         todosPromise: {
-            default(){
+            get default() {
                 return Todo.getList({});
             }
-        },
-        connectedCallback(){
-            this.todosPromise.then((todos)=>{
-                this.listenTo(Todo, "destroyed", function(ev, destroyed){
-                    let index = todos.indexOf(destroyed);
-                    todos.splice(index, 1);
-                });
-            });
         }
-    }
-});
-```
-@highlight 6,11,only
+    };
 
-The following example shows this in action. Click the <button>delete</button> button to delete
-todos and have the todo removed from the list.
+    connected() {
+        this.todosPromise.then((todos)=>{
+            this.listenTo(Todo, "destroyed", function(ev, destroyed){
+                let index = todos.indexOf(destroyed);
+                todos.splice(index, 1);
+            });
+        });
+    }
+};
+customElements.define("todo-list", TodoList);
+```
+@highlight 5,10,only
+
+The following example shows this in action. Click the <button>delete</button> button to delete todos and have the todo removed from the list.
 
 @demo demos/can-rest-model/can-rest-model-destroy.html
 @codepen
 
-This demo works by calling [can-connect/can/map/map.prototype.destroy] when the <button>delete</button> button
-is clicked.
+This demo works by calling [can-connect/can/map/map.prototype.destroy] when the  <button>delete</button> button is clicked.
 
 ```html
 <button on:click="destroy()">delete</button>
@@ -756,7 +761,7 @@ To keep the list of todos up to date, the above demo works by listening
 when any todo is destroyed and removing it from the list:
 
 ```js
-connectedCallback(){
+connected(){
     this.todosPromise.then((todos)=>{
         this.listenTo(Todo, "destroyed", function(ev, destroyed){
             let index = todos.indexOf(destroyed);
@@ -782,7 +787,7 @@ These listeners can be used to update lists similar to how the _Destroying Recor
 example removed lists:
 
 ```js
-connectedCallback(){
+connected(){
     this.todosPromise.then( (todos)=>{
         this.listenTo(Todo, "created", function(ev, created){
             // ADD created to `todos`
@@ -798,65 +803,60 @@ connectedCallback(){
 }
 ```
 
-But this is cumbersome, especially when lists contain
-sorted and filtered results. For example, if you are displaying
-only completed todos, you might not want to add newly created
-incomplete todos. The following only pushes complete todos onto `todos`:
+But this is cumbersome, especially when lists contain sorted and filtered results. For example, if you are displaying only completed todos, you might not want to add newly created incomplete todos. The following only pushes complete todos onto `todos`:
 
 ```js
-ViewModel: {
+static props = {
     todosPromise: {
         default(){
             return Todo.getList({filter: {complete: true}});
         }
     },
-    connectedCallback(){
-        this.todosPromise.then((todos)=>{
-            this.listenTo(Todo, "created", (ev, createdTodo) => {
-                // make sure the todo is complete:
-                if(createdTodo.complete) {
-                    todos.push(complete);
-                }
-            });
+}
+connected(){
+    this.todosPromise.then((todos) => {
+        this.listenTo(Todo, "created", (ev, createdTodo) => {
+            // make sure the todo is complete:
+            if(createdTodo.complete) {
+                todos.push(complete);
+            }
         });
-    }
+    });
 }
 ```
-@highlight 11-13
+@highlight 12-14
 
-Fortunately, [can-realtime-rest-model] using [can-query-logic] can
-automatically update lists for you! If your service layer matches
-what [can-query-logic] expects, you can just replace [can-rest-model] with
-[can-realtime-rest-model] as follows:
+Fortunately, [can-realtime-rest-model] using [can-query-logic] can automatically update lists for you! If your service layer matches what [can-query-logic] expects, you can just replace [can-rest-model] with [can-realtime-rest-model] as follows:
 
 ```js
-import {realtimeRestModel, DefineMap, DefineList} from "can";
+import { ObservableArray, ObservableObject, realtimeRestModel, type } from "can";
 
-const Todo = DefineMap.extend("Todo",{
-    id: { type: "number", identity: true },
-    complete: { type: "boolean", default: false },
-    dueDate: "date",
-    name: "string"
-});
+class Todo extends ObservableObject {
+    static props = {
+        id: { type: type.maybe(Number), identity: true },
+        complete: { type: Boolean, default: false },
+        dueDate: type.maybeConvert(Date),
+        name: type.maybe(String)
+    };
+}
 
-Todo.List = DefineList.extend("TodoList",{
-    "#": Todo
-});
+class TodoList extends ObservableArray {
+    static items = Todo;
+}
 
 const todoConnection = realtimeRestModel({
     Map: Todo,
-    List: Todo.List,
+    List: TodoList,
     url: "/api/todos/{id}"
 });
 ```
-@highlight 1,14
+@highlight 1,16
 
 > **Note:** You can configure [can-query-logic] to match your service layer. Learn
 > more in the [configuration section of can-query-logic](../can-query-logic.html#Configuration).
 
 
-The following uses [can-realtime-rest-model] to create a _filterable_ and _sortable_ grid
-that automatically updates itself when todos are created, updated or destroyed.
+The following uses [can-realtime-rest-model] to create a _filterable_ and _sortable_ grid that automatically updates itself when todos are created, updated or destroyed.
 
 Try out the following use cases that [can-realtime-rest-model] provides automatically:
 
@@ -869,8 +869,7 @@ Try out the following use cases that [can-realtime-rest-model] provides automati
 @demo demos/can-realtime-rest-model/can-realtime-rest-model.html
 @codepen
 
-By default, [can-query-logic] assumes your service layer will match a [can-query-logic/query default query structure]
-that looks like:
+By default, [can-query-logic] assumes your service layer will match a [can-query-logic/query default query structure] that looks like:
 
 ```js
 Todo.getList({
@@ -896,10 +895,8 @@ There's a:
 > __NOTE__: [can-realtime-rest-model] does not follow the rest of the JSONAPI specification. Specifically
 > [can-realtime-rest-model] expects your server to send back JSON data in a different format.
 
-If you control the service layer, we __encourage__ you to make it match the default
-[can-query-logic/query query structure] to avoid configuration.  The default query structure also supports the following [can-query-logic/comparison-operators]: `$eq`, `$gt`, `$gte`, `$in`,
+If you control the service layer, we __encourage__ you to make it match the default [can-query-logic/query query structure] to avoid configuration.  The default query structure also supports the following [can-query-logic/comparison-operators]: `$eq`, `$gt`, `$gte`, `$in`,
 `$lt`, `$lte`, `$ne`, `$nin`.
 
 If you are unable to match the default query structure, or need special behavior, read the
-[configuration section of can-query-logic](../can-query-logic.html#Configuration)
-to learn how to configure a custom query logic.
+[configuration section of can-query-logic](../can-query-logic.html#Configuration) to learn how to configure a custom query logic.
