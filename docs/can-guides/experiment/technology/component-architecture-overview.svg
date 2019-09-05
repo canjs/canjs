@@ -1,0 +1,82 @@
+<svg width="915" height="400" xmlns="http://www.w3.org/2000/svg">
+    <style type="text/css">
+        @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
+        .text-reg {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 21px;
+            font-weight: 400;
+            fill: #000000;
+        }
+        .text-bold {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 21px;
+            font-weight: 700;
+            fill: #000000;
+        }
+        .text-small {
+            font-size: 18px;
+        }
+        .color-three {
+            fill: #4078C0;
+        }
+    </style>
+    <g fill="none" fill-rule="evenodd"><text class="text-reg color-three"
+            transform="translate(71 60)">
+            <tspan x="673.639" y="323.336">view</tspan>
+        </text>
+        <path
+            d="M415.656 62.933a1.5 1.5 0 0 0-.979-2.836l-190.754 65.777-1.95-5.653-9.806 11.294 14.683 2.849-1.949-5.654 190.755-65.777zM788.167 131.515l-10.643-10.511-1.51 5.786-255.468-66.726a1.495 1.495 0 0 0-1.83 1.072c-.21.802.27 1.62 1.072 1.83l255.468 66.727-1.512 5.785 14.423-3.963zM593.297 142.993l-92.287-62.72a1.502 1.502 0 0 0-1.686 2.483l92.287 62.717-3.361 4.947 14.917 1.094-6.51-13.466-3.36 4.945zM445.033 85.29a1.5 1.5 0 0 0-2.09.358l-38.518 54.427-4.88-3.454-1.378 14.894 13.588-6.253-4.88-3.453 38.516-54.428a1.5 1.5 0 0 0-.358-2.091M245.16 302.519l-78.829-96.95a1.5 1.5 0 1 0-2.328 1.892l78.828 96.95-4.639 3.772 13.975 5.332-2.368-14.768-4.64 3.772zM129.898 210.205a1.502 1.502 0 0 0-2.04.578l-50.683 90.693-5.219-2.917.211 14.956 12.847-7.659-5.22-2.917 50.682-90.693a1.5 1.5 0 0 0-.578-2.04M580.097 231.338a1.5 1.5 0 0 0-2.106.246l-55.97 70.838-4.693-3.708-2.161 14.8 13.899-5.526-4.692-3.707 55.97-70.837a1.499 1.499 0 0 0-.247-2.106M808.604 300.555l-.438-89.547a1.503 1.503 0 0 0-1.506-1.493 1.501 1.501 0 0 0-1.493 1.507l.437 89.548-5.98.029 7.543 12.916 7.415-12.99-5.978.03zM471.139 304.106l-88.016-72.748a1.5 1.5 0 0 0-1.912 2.313l88.017 72.748-3.81 4.609 14.749 2.487-5.218-14.017-3.81 4.608z"
+            fill="#CCC" /><text class="text-reg color-three">
+            <tspan x="20" y="362">properties</tspan>
+        </text><text class="text-bold">
+            <tspan x="416.316" y="23.38">&lt;my-app&gt;</tspan>
+        </text><text class="text-reg color-three">
+            <tspan x="423" y="49">properties</tspan>
+        </text><text class="text-reg color-three">
+            <tspan x="423" y="70">view</tspan>
+        </text><text class="text-bold">
+            <tspan x="770.247" y="153">&lt;task-editor&gt;</tspan>
+        </text><text class="text-reg color-three">
+            <tspan x="783" y="179">properties</tspan>
+        </text><text class="text-reg color-three">
+            <tspan x="783" y="200">view</tspan>
+        </text><text class="text-bold">
+            <tspan x="95.174" y="153">&lt;page-home&gt;</tspan>
+        </text><text class="text-reg color-three">
+            <tspan x="106" y="179">properties</tspan>
+        </text><text class="text-reg color-three">
+            <tspan x="106" y="200">view</tspan>
+        </text><text class="text-bold">
+            <tspan x="8.328" y="336">&lt;user-cart&gt;</tspan>
+        </text><text class="text-reg color-three">
+            <tspan x="20" y="383">view</tspan>
+        </text><text class="text-bold">
+            <tspan x="178.755" y="336">&lt;product-list&gt;</tspan>
+        </text><text class="text-reg color-three">
+            <tspan x="190" y="362">properties</tspan>
+        </text><text class="text-reg color-three">
+            <tspan x="190" y="383">view</tspan>
+        </text><text class="text-bold">
+            <tspan x="340.914" y="173">&lt;page-login&gt;</tspan>
+        </text><text class="text-reg color-three">
+            <tspan x="352" y="199">properties</tspan>
+        </text><text class="text-reg color-three">
+            <tspan x="352" y="220">view</tspan>
+        </text><text class="text-bold">
+            <tspan x="547.603" y="173">&lt;page-signup&gt;</tspan>
+        </text><text class="text-reg color-three">
+            <tspan x="559" y="199">properties</tspan>
+        </text><text class="text-reg color-three">
+            <tspan x="559" y="220">view</tspan>
+        </text><text class="text-bold">
+            <tspan x="433.438" y="336">&lt;ui-password&gt;</tspan>
+        </text><text class="text-reg color-three">
+            <tspan x="445" y="362">properties</tspan>
+        </text><text class="text-reg color-three">
+            <tspan x="445" y="383">view</tspan>
+        </text><text class="text-bold">
+            <tspan x="732.659" y="336">&lt;percent-slider&gt;</tspan>
+        </text><text class="text-reg color-three">
+            <tspan x="745" y="362">properties</tspan>
+        </text></g>
+</svg>

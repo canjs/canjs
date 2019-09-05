@@ -128,8 +128,8 @@ You might have noticed that Components are mostly 2 parts:
 These work together to receive input from the user, update the state of the application, and then update
 the HTML the user sees accordingly.
 
-[can-stache-element StacheElement] uses [can-stache stache] to update the HTML
-and [can-stache-bindings stacheBindings] to listen to user interactions and pass data between
+[can-stache-element StacheElement] uses [can-stache can-stache] to update the HTML
+and [can-stache-bindings can-stache-bindings] to listen to user interactions and pass data between
 components.  The remainder of this guide breaks down these pieces and goes into more detail
 about how [can-stache-element StacheElement] works and how to use it.
 
@@ -290,7 +290,7 @@ The following demo:
 
 The final core __view__ library is [can-stache-element].
 
-<img src="../../docs/can-guides/experiment/technology/observables-dom.png"
+<img src="../../docs/can-guides/experiment/technology/observables-dom.svg"
   alt=""
   class='bit-docs-screenshot'/>
 
@@ -371,15 +371,13 @@ The demo then creates a `<my-counter>` element like:
 <my-counter></my-counter>
 ```
 
-So __components__ are just a combination of a [can-stache] __view__ and a
-[can-observable-object ObservableObject] __observable__.  [can-stache-element] calls the observable
-[can-stache-element/static.props]. This is because CanJS’s observables are typically
-built within a [Model-View-ViewModel (MVVM) architecture](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel).
+So __components__ are just a combination of a [can-stache-element/static.view] created with [can-stache] and
+observable [can-stache-element/static.props] similar to a [can-observable-object can-observable-object].
 
-<img src="../../docs/can-guides/experiment/technology/can-component.png"
+<img src="../../docs/can-guides/experiment/technology/can-stache-element.svg"
   alt="" class='bit-docs-screenshot'/>
 
-[can-stache-element] will create a [can-stache] template from a string [can-component.prototype.view] value
+[can-stache-element] will create a [can-stache] template from a string [can-stache-element/static.view] value
 and define a [can-observable-object ObservableObject] type from a plain
 object [can-stache-element/static.props] value.
 
@@ -415,7 +413,7 @@ So on a high-level, CanJS applications are composed of components whose logic is
 by observable _properties_ and whose _views_ create
 other components. The following might be the topology of an example application:
 
-<img src="../../docs/can-guides/experiment/technology/component-architecture-overview.png"
+<img src="../../docs/can-guides/experiment/technology/component-architecture-overview.svg"
   alt=""
   class='bit-docs-screenshot'/>
 

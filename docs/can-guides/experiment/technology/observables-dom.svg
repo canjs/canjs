@@ -1,0 +1,65 @@
+<svg width="425" height="490" xmlns="http://www.w3.org/2000/svg">
+    <style type="text/css">
+        @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
+        .text-reg {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 21px;
+            font-weight: 400;
+            fill: #000000;
+        }
+        .text-bold {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 21px;
+            font-weight: 700;
+            fill: #000000;
+        }
+        .text-small {
+            font-size: 18px;
+        }
+        .color-two {
+            fill: #2E4E85;
+        }
+    </style>
+    <defs>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="a">
+            <stop stop-color="#FFF" offset="0%" />
+            <stop stop-color="gray" offset="100%" />
+        </linearGradient>
+        <radialGradient fx="50%" fy="50%" id="b">
+            <stop stop-color="#FFF" offset="0%" />
+            <stop stop-color="#F0F0F0" offset="96%" />
+            <stop stop-color="#FFF" offset="100%" />
+        </radialGradient>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <g transform="translate(65 322)">
+            <path
+                d="M140 155c-36.724 0-71.387-7.75-97.598-21.859C15.063 118.476 0 98.693 0 77.5c0-21.193 15.063-41.025 42.402-55.69C68.613 7.74 103.328 0 140 0s71.4 7.74 97.611 21.81C264.95 36.474 280 56.246 280 77.5s-15.05 41.025-42.389 55.641C211.4 147.25 176.737 155 140 155z"
+                fill="#666" fill-rule="nonzero" />
+            <ellipse fill="#FFF" fill-rule="nonzero" cx="140.5" cy="78" rx="132.5" ry="70" /><text class="text-bold">
+                <tspan x="76.221" y="53">Observables</tspan>
+            </text><text class="text-reg" font-size="21">
+                <tspan x="32.388" y="77">can-observable-object</tspan>
+            </text><text class="text-reg" font-size="21">
+                <tspan x="37.374" y="101">can-observable-array</tspan>
+            </text></g>
+        <g font-size="18"><text class="text-bold text-small color-two"
+                transform="translate(228 179)">
+                <tspan x="0" y="19">View</tspan>
+            </text><text class="text-reg" transform="translate(228 179)">
+                <tspan x="0" y="43">can-stache</tspan>
+            </text><text class="text-reg" transform="translate(228 179)">
+                <tspan x="0" y="67">can-stache-element</tspan>
+            </text><text class="text-reg" transform="translate(228 179)">
+                <tspan x="0" y="91">can-stache-bindings</tspan>
+            </text></g>
+        <g transform="translate(144 10)">
+            <circle fill="#509444" fill-rule="nonzero" cx="63.08" cy="63.6" r="63" />
+            <circle fill="url(#a)" fill-rule="nonzero" style="mix-blend-mode:multiply" cx="63.08" cy="63.6" r="63" />
+            <circle fill="url(#b)" fill-rule="nonzero" cx="63.08" cy="63.6" r="55" /><text class="text-bold">
+                <tspan x="37" y="70.49">DOM</tspan>
+            </text></g>
+        <path fill="#000" fill-rule="nonzero"
+            d="M209.002 164.537H219L206.495 143 194 164.537h9.988v130.926H194L206.495 317 219 295.463h-9.998z" />
+    </g>
+</svg>
