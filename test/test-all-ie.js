@@ -52,6 +52,8 @@ require('can-stache-converters/test/test');
 
 // Legacy tests
 require('can-compute/can-compute_test');
+require('can-define-realtime-rest-model/can-define-realtime-rest-model-test');
+require('can-define-rest-model/test');
 require('can-list/can-list_test');
 require('can-map/can-map_test');
 require('can-map-define/can-map-define_test');
