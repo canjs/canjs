@@ -12,34 +12,31 @@ function width(el) {
 }
 
 class PercentSlider extends StacheElement {
-    static get view() {
-        return `
-            <div class='slider'
-            style="left: {{ left }}px"
-            on:mousedown='startDrag(scope.event.clientX)'/>`;
-    }
+    static view = `
+		<div class='slider'
+		style="left: {{ this.left }}px"
+		on:mousedown='startDrag(scope.event.clientX)'/>
+	`;
 
-    static get props() {
-        return {
-            start: {type: type.maybeConvert(Number), default: 0},
-            end: {type: type.maybeConvert(Number), default: 100},
+    static props = {
+		start: {type: Number, default: 0},
+		end: {type: Number, default: 100},
 
-            currentValue: {
-                get default() {
-                    return this.value || 0;
-                }
-            },
+		currentValue: {
+			get default() {
+				return this.value || 0;
+			}
+		},
 
-            width: {type: type.maybeConvert(Number), default: 0},
+		width: {type: Number, default: 0},
 
-            get left(){
-                var left = this.currentValue / this.end * this.width;
-                return Math.min( Math.max(0, left), this.width) || 0;
-            },
+		get left(){
+			var left = this.currentValue / this.end * this.width;
+			return Math.min( Math.max(0, left), this.width) || 0;
+		},
 
-            startClientX: type.Any
-        };
-    }
+		startClientX: type.Any
+	};
 
     startDrag(clientX) {
         this.startClientX = clientX;
@@ -80,7 +77,7 @@ class PercentSlider extends StacheElement {
 
         return this.stopListening.bind(this);
     }
-};
+}
 customElements.define("percent-slider", PercentSlider);
 </script>
 <style>
