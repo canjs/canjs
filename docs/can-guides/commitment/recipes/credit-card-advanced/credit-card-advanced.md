@@ -16,8 +16,8 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<p class="codepen" data-height="416" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="jRVaxP" style="height: 416px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Advanced)">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/jRVaxP/">
+<p class="codepen" data-height="416" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="QWLKWQB" style="height: 416px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Advanced)">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/QWLKWQB/">
   Credit Card Guide (Advanced)</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
@@ -61,9 +61,8 @@ but most of the same basic info applies:
 ### The problem
 
 We are going to try an alternate form of the basic CanJS setup.  We
-will have a [can-component component] with `cc-payment` as a custom tag.  
-The component  `ViewModel` should be a plain JavaScript object
-whose properties are all [Kefir.js](https://kefirjs.github.io/kefir/)
+will have an [can-stache-element StacheElement] with `cc-payment` as a custom tag.
+The component properties are all [Kefir.js](https://kefirjs.github.io/kefir/)
 streams.
 
 We will render the static content in the component view, but use a
@@ -117,7 +116,7 @@ Update the __HTML__ tab to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
-@highlight 1-21,only
+@highlight 1-25,only
 
 
 
@@ -135,7 +134,7 @@ and also print back the cleaned card number (the entered number with no dashes).
   Kefir property, but also adds an `emitter` object with with `.value()` and `.error()` methods. The end result is a single object that has methods of a stream and property access to its emitter methods.
 
   ```js
-  import { kefir as Kefir } from "//unpkg.com/can@5/ecosystem.mjs";
+  import { kefir as Kefir } from "//unpkg.com/can@6/ecosystem.mjs";
 
   const age = Kefir.emitterProperty();
 
@@ -165,7 +164,7 @@ and also print back the cleaned card number (the entered number with no dashes).
   by the `<input>` element and writes the `<input>`’s value to `KEY`.
 - [can-kefir] allows you to write to a `emitterProperty`’s with:
   ```html
-  <input value:to="emitterProperty.value"/>
+  <input value:to="emitterProperty.value">
   ```
 
 ### The solution
@@ -173,7 +172,7 @@ and also print back the cleaned card number (the entered number with no dashes).
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-read-card.js
-@highlight 8-9,12,26-36,only
+@highlight 6-7,10,27-40,only
 
 
 
@@ -197,10 +196,10 @@ if the card number is 16 characters.
   ```js
   function validateCard(card) {
     if (!card) {
-        return "There is no card"
+      return "There is no card"
     }
     if (card.length !== 16) {
-        return "There should be 16 characters in a card";
+      return "There should be 16 characters in a card";
     }
   }
   ```
@@ -210,7 +209,7 @@ if the card number is 16 characters.
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-card-error.js
-@highlight 8,35-46,only
+@highlight 6,40-42,45-52,only
 
 
 
@@ -248,12 +247,12 @@ the input in a `userCardNumberBlurred` `emitterProperty`.
   We can promote these to event-like objects with `.map`:
 
   ```js
-  const firstEvents = first.map( (first) => {
-      return {type: "first", value: first}
-  })
-  const lastEvents = first.map( (last) => {
-      return {type: "last", value: last}
-  })
+  const firstEvents = first.map(first => {
+    return { type: "first", value: first };
+  });
+  const lastEvents = first.map(last => {
+    return { type: "last", value: last };
+  });
   // firstEvents: ---{t:"f"}---{t:"f"}X
   // lastEvents:  ------{t:"l"}---{t:"l"}X
   ```
@@ -270,11 +269,14 @@ the input in a `userCardNumberBlurred` `emitterProperty`.
   data:
 
   ```js
-  const state = merged.scan((previous, event) => {
-    const copy = Object.assign({}, previous);
-    copy[event.type] = event.value;
-    return copy;
-  }, {first: "", last: ""});
+  const state = merged.scan(
+    (previous, event) => {
+      const copy = Object.assign({}, previous);
+      copy[event.type] = event.value;
+      return copy;
+    },
+    { first: "", last: "" }
+  );
   // state: ---{first:"Justin", last:""}
   //          -{first:"Justin", last:"Shah"}
   //          -{first:"Ramiya", last:"Shah"}
@@ -284,26 +286,29 @@ the input in a `userCardNumberBlurred` `emitterProperty`.
   The following is a more common structure for the reducer pattern:
 
   ```js
-  const state = merged.scan((previous, event) => {
-      switch( event.type ) {
+  const state = merged.scan(
+    (previous, event) => {
+      switch (event.type) {
         case "first":
-          return Object.assign({}, previous,{
+          return Object.assign({}, previous, {
             first: event.value
           });
         case "last":
-          return Object.assign({}, previous,{
+          return Object.assign({}, previous, {
             last: event.value
           });
         default:
           return previous;
       }
-  }, {first: "", last: ""})
+    },
+    { first: "", last: "" }
+  );
   ```
 
   Finally, we can map this state to another value:
 
   ```js
-  const fullName = state.map( (state) => state.first +" "+ state.last );
+  const fullName = state.map(state => state.first + " " + state.last);
   // fullName: ---Justin
   //             -Justin Shah
   //             -Ramiya Shah
@@ -322,7 +327,7 @@ the input in a `userCardNumberBlurred` `emitterProperty`.
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-card-blur.js
-@highlight 8-10,14-15,32-34,43-48,58-111,only
+@highlight 6-8,12-13,36-40,50-60,71-130,only
 
 
 
@@ -331,7 +336,7 @@ Update the __JavaScript__ tab to:
 
 Let’s make the `expiry` input element just like the `cardNumber`
 element.  The expiry should be entered like `12-17` and be stored as an
-array like `["12","16"]`.  Make sure to:
+array like `["12", "16"]`.  Make sure to:
 
 - validate the expiry
 - show a warning validation message in a `<div class="message">` element
@@ -344,10 +349,10 @@ array like `["12","16"]`.  Make sure to:
   ```js
   function validateExpiry(expiry) {
     if (!expiry) {
-        return "There is no expiry. Format  MM-YY";
+      return "There is no expiry. Format  MM-YY";
     }
     if (expiry.length !== 2 || expiry[0].length !== 2 || expiry[1].length !== 2) {
-        return "Expiry must be formatted like MM-YY";
+      return "Expiry must be formatted like MM-YY";
     }
   }
   ```
@@ -359,7 +364,7 @@ array like `["12","16"]`.  Make sure to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-expiry.js
-@highlight 12-14,22-25,43-48,65-77,87-94,only
+@highlight 10-12,20-22,43-53,81-98,110-121,only
 
 
 
@@ -380,13 +385,13 @@ element.  Make sure to:
   ```js
   function validateCVC(cvc) {
     if (!cvc) {
-        return "There is no CVC code";
+      return "There is no CVC code";
     }
     if (cvc.length !== 3) {
-        return "The CVC must be at least 3 numbers";
+      return "The CVC must be at least 3 numbers";
     }
-    if (isNaN(parseInt(cvc))) {
-        return "The CVC must be numbers";
+    if (Number.isNaN(parseInt(cvc))) {
+      return "The CVC must be numbers";
     }
   }
   ```
@@ -396,7 +401,7 @@ element.  Make sure to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-cvc.js
-@highlight 16-18,31-33,57-62,94-102,121-131,only
+@highlight 14-16,29-31,68-78,120-130,155-165,only
 
 
 
@@ -413,14 +418,16 @@ Let’s disable the __Pay__ button until the card, expiry, and cvc are valid.
   const last = Kefir.sequentially(100, ["Shah", "Meyer"]).delay(50);
   // first: ---Justin---RamiyaX
   // last:  ------Shah__---Meyer_X
-  const fullName = Kefir.combine([first, last], (first, last) => { return first +" "+ last; })
+  const fullName = Kefir.combine([first, last], (first, last) => {
+    return first + " " + last;
+  });
   // fullName: ---Justin Shah
   //             -Ramiya Shah
   //             -Ramiya MeyerX
   ```
 - [can-stache-bindings.toChild childProp:from] can set a property from another value:
   ```js
-  <input checked:from="someKey"/>
+  <input checked:from="someKey">
   ```
 
 ### The solution
@@ -428,7 +435,7 @@ Let’s disable the __Pay__ button until the card, expiry, and cvc are valid.
 Update the __JavaScript__ tab to:
 
 @sourceref ./7-disable-pay.js
-@highlight 35-37,106-111,only
+@highlight 33-35,134-141,only
 
 
 
@@ -476,8 +483,8 @@ we will change the __Pay__ button to say __Paying__.
   streams to a single stream of values.
   ```js
   const count = Kefir.sequentially(100, [1, 2, 3]);
-  const streamOfStreams = count.map( (count) => {
-      return Kefir.interval(40, count).take(4)
+  const streamOfStreams = count.map(count => {
+    return Kefir.interval(40, count).take(4)
   });
   const result = streamOfStreams.flatMap();
   // source:      ----------1---------2---------3X
@@ -504,7 +511,7 @@ we will change the __Pay__ button to say __Paying__.
   });
   resultPromise.then(function(value) {
     // value -> "inner"
-  })
+  });
   ```
 
   In some ways, `outerPromise` is a promise of promises.  Promises flatten
@@ -515,7 +522,7 @@ we will change the __Pay__ button to say __Paying__.
 Update the __JavaScript__ tab to:
 
 @sourceref ./8-pay-button.js
-@highlight 6,36,66-68,117-122,125-136,140-162,165-167,169-172,only
+@highlight 5,34,82-86,149-156,159-174,178-200,203-205,208-211,only
 
 
 
@@ -534,14 +541,14 @@ Let’s prevent the __Pay__ button from being clicked while the payment is proce
 Update the __JavaScript__ tab to:
 
 @sourceref ./9-disable-payments.js
-@highlight 35,169-176,only
+@highlight 33,207-221,only
 
 ## Result
 
 When complete, you should have a working credit card payment form like the following CodePen:
 
-<p class="codepen" data-height="416" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="jRVaxP" style="height: 416px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Advanced)">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/jRVaxP/">
+<p class="codepen" data-height="416" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="QWLKWQB" style="height: 416px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Advanced)">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/QWLKWQB/">
   Credit Card Guide (Advanced)</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
