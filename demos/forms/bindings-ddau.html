@@ -1,32 +1,31 @@
 <my-name></my-name>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component } from "can";
+import { StacheElement } from "can";
 
-Component.extend({
-	tag: "my-name",
+class MyName extends StacheElement {
+    static view = `
+        <label>
+            Name:
+            <input type="text" value:from="this.name" on:change="this.handleAction('set', 'name', scope.element.value)">
+        </label>
 
-	view: `
-		<label>
-			Name:
-			<input type="text" value:from="name" on:change="handleAction('set', 'name', scope.element.value)">
-		</label>
+        <p>Given name: {{ name }}</p>
+    `;
 
-		<p>Given name: {{ name }}</p>
-	`,
+    static props = {
+        name: "Eli"
+    };
 
-	ViewModel: {
-		name: { default: "Eli" },
-
-		handleAction(action, key, value) {
-			switch(action) {
-				case "set":
-					this[key] = value;
-					break;
-				default:
-					break;
-			}
-		}
-	}
-});
+    handleAction(action, key, value) {
+        switch(action) {
+            case "set":
+                this[key] = value;
+                break;
+            default:
+                break;
+        }
+    }
+};
+customElements.define("my-name", MyName);
 </script>

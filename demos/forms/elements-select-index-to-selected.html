@@ -1,53 +1,52 @@
 <month-picker-by-index></month-picker-by-index>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component, stacheConverters } from "can";
+import { stacheConverters, StacheElement } from "can";
 
-Component.extend({
-	tag: "month-picker-by-index",
+class MonthPickerByIndex extends StacheElement {
+    static view = `
+        <label>
+            What month were you born?
+            <select value:bind="index-to-selected(this.selectedMonth, this.months)">
+                <option value="1">Feb</option>
+                <option value="2">March</option>
+                <option value="3">April</option>
+                <option value="4">May</option>
+                <option value="5">June</option>
+                <option value="6">July</option>
+                <option value="7">Aug</option>
+                <option value="8">Sept</option>
+                <option value="9">Oct</option>
+                <option value="10">Nov</option>
+                <option value="11">Dec</option>
+            </select>
+        </label>
 
-	view: `
-		<label>
-			What month were you born?
-			<select value:bind="index-to-selected(selectedMonth, months)">
-				<option value="1">Feb</option>
-				<option value="2">March</option>
-				<option value="3">April</option>
-				<option value="4">May</option>
-				<option value="5">June</option>
-				<option value="6">July</option>
-				<option value="7">Aug</option>
-				<option value="8">Sept</option>
-				<option value="9">Oct</option>
-				<option value="10">Nov</option>
-				<option value="11">Dec</option>
-			</select>
-		</label>
+        <p>Selected month: {{ this.selectedMonth }}</p>
+    `;
 
-		<p>Selected month: {{ selectedMonth }}</p>
-	`,
+    static props = {
+        selectedMonth: "June",
 
-	ViewModel: {
-		selectedMonth: { default: "June" },
-
-		months: {
-			default() {
-				return [
-					"Jan",
-					"Feb",
-					"March",
-					"April",
-					"May",
-					"June",
-					"July",
-					"Aug",
-					"Sept",
-					"Oct",
-					"Nov",
-					"Dec"
-				];
-			}
-		}
-	}
-});
+        months: {
+            get default() {
+                return [
+                    "Jan",
+                    "Feb",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "Aug",
+                    "Sept",
+                    "Oct",
+                    "Nov",
+                    "Dec"
+                ];
+            }
+        }
+    };
+};
+customElements.define("month-picker-by-index", MonthPickerByIndex);
 </script>

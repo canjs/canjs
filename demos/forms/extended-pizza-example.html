@@ -13,190 +13,197 @@ pizza-form > div {
 <pizza-form></pizza-form>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component, DefineList, stacheConverters } from "can";
+import { ObservableArray, stacheConverters, StacheElement, type } from "can";
 
-Component.extend({
-	tag: "select-one",
+class SelectOne extends StacheElement {
+    static view = `
+        <div>
+            <p>Select {{ this.listName }}:</p>
 
-	view: `
-		<div>
-			<p>Select {{ this.listName }}:</p>
+            <select value:from="default"
+                on:change="this.update(this.listName, 'toggle', scope.element.value)">
+                {{# for(option of this.options) }}
+                    <option>{{ option }}</option>
+                {{/ for }}
+            </select>
+        </div>
+    `;
 
-			<select value:from="default"
-				on:change="this.update(this.listName, 'toggle', scope.element.value)">
-				{{# for(option of options) }}
-					<option>{{ option }}</option>
-				{{/ for }}
-			</select>
-		</div>
-	`,
+    static props = {
+        listName: { type: type.maybeConvert(String), default: "one" },
+        options: type.maybeConvert(ObservableArray),
+        default: type.maybeConvert(String),
+        update: Function
+    };
+};
 
-	ViewModel: {
-		listName: { type: "string", default: "one" },
-		options: { Type: DefineList },
-		default: { type: "string" },
-		update: "any" // function
-	}
-});
+customElements.define("select-one", SelectOne);
 
-Component.extend({
-	tag: "select-many",
+class SelectMany extends StacheElement {
+    static view = `
+        <div>
+            <p>Select {{ this.listName }}:</p>
 
-	view: `
-		<div>
-			<p>Select {{ this.listName }}:</p>
+            {{# for(option of this.options) }}
+                <label>
+                    {{ option }}
+                    <input
+                        on:change="this.update(this.listName, 'toggle', option)"
+                        type="checkbox">
+                </label>
+            {{/ for }}
+        </div>
+    `;
 
-			{{# for(option of this.options) }}
-				<label>
-					{{ option }}
-					<input
-						on:change="this.update(this.listName, 'toggle', option)"
-						type="checkbox">
-				</label>
-			{{/ for }}
-		</div>
-	`,
+    static props = {
+        listName: { type: type.maybeConvert(String), default: "many" },
+        options: type.maybeConvert(ObservableArray),
+        update: Function
+    };
+};
 
-	ViewModel: {
-		listName: { type: "string", default: "many" },
-		options: { Type: DefineList },
-		update: { type: "any" } // function
-	}
-});
+customElements.define("select-many", SelectMany);
 
-Component.extend({
-	tag: "meat-picker",
+class MeatPicker extends StacheElement {
+    static view = `
+        {{ let showOptions=null }}
+        <div>
+            <label>
+                Vegetarian
+                <input
+                    checked:bind="not( showOptions )"
+                    on:change="this.update('meats', 'clear')"
+                    type="checkbox">
+            </label>
 
-	view: `
-		{{ let showOptions=null }}
-		<div>
-			<label>
-				Vegetarian
-				{{# if(showOptions) }}
-					<input
-						checked:bind="not( showOptions )"
-						on:change="this.update('meats', 'clear')"
-						type="checkbox">
-				{{ else }}
-					<input
-						checked:bind="not( showOptions )"
-						type="checkbox">
-				{{/ if }}
-			</label>
+            {{# if(showOptions) }}
+                <select-many
+                    update:from="this.update"
+                    listName:raw="meats"
+                    options:from="this.options">
+                </select-many>
+            {{/ if }}
+        </div>
+    `;
 
-			{{# if(showOptions) }}
-				<select-many
-					update:from="update"
-					listName:from="'meats'"
-					options:from="options">
-				</select-many>
-			{{/ if }}
-		</div>
-	`,
+    static props = {
+        update: Function
+    };
+};
 
-	ViewModel: {
-		update: "any" // function
-	}
-});
+customElements.define("meat-picker", MeatPicker);
 
-Component.extend({
-	tag: "pizza-form",
+class PizzaForm extends StacheElement {
+    static view = `
+        <p>
+            Selected Ingredients:
+            {{# for(meat of this.selectedMeats) }}
+                {{ meat }},
+            {{/ for }}
 
-	view: `
-		<p>
-			Selected Ingredients:
-			{{# for(meat of this.selectedMeats) }}
-				{{ meat }},
-			{{/ for }}
+            {{# for(veggie of this.selectedVegetables) }}
+                {{ veggie }},
+            {{/ for }}
 
-			{{# for(veggie of this.selectedVegetables) }}
-				{{ veggie }},
-			{{/ for }}
+            {{# if(this.selectedCheese) }}
+                {{ this.selectedCheese }} cheese
+            {{/ if }}
+        </p>
 
-			{{# if(this.selectedCheese) }}
-				{{ this.selectedCheese }} cheese
-			{{/ if }}
-		</p>
+        <div>
+            <select-one
+                listName:raw="cheese"
+                update:from="this.updateIngredients"
+                default:from="this.selectedCheese"
+                options:from="this.availableCheeses">
+            </select-one>
+        </div>
 
-		<div>
-			<select-one
-				listName:from="'cheese'"
-				update:from="this.updateIngredients"
-				default:from="this.selectedCheese"
-				options:from="this.availableCheeses">
-			</select-one>
-		</div>
+        <div>
+            <meat-picker
+                update:from="this.updateIngredients"
+                options:from="this.availableMeats">
+            </meat-picker>
+        </div>
 
-		<div>
-			<meat-picker
-				update:from="this.updateIngredients"
-				options:from="this.availableMeats">
-			</meat-picker>
-		</div>
+        <div>
+            <select-many
+                listName:raw="vegetables"
+                update:from="this.updateIngredients"
+                options:from="this.availableVegetables">
+            </select-many>
+        </div>
+    `;
 
-		<div>
-			<select-many
-				listName:from="'vegetables'"
-				update:from="this.updateIngredients"
-				options:from="this.availableVegetables">
-			</select-many>
-		</div>
-	`,
+    static props = {
+        availableVegetables: {
+            get default() {
+                return [ "green peppers", "mushrooms", "onion", "tomato" ];
+            }
+        },
 
-	ViewModel: {
-		availableVegetables: {
-			default() {
-				return [ "green peppers", "mushrooms", "onion", "tomato" ];
-			}
-		},
+        availableMeats: {
+            get default() {
+                return [ "chicken", "sausage", "pepperoni" ];
+            }
+        },
 
-		availableMeats: {
-			default() {
-				return [ "chicken", "sausage", "pepperoni" ];
-			}
-		},
+        availableCheeses: {
+            get default() {
+                return [ "cheddar", "mozzarella", "parmesan", "provolone" ];
+            }
+        },
 
-		availableCheeses: {
-			default() {
-				return [ "cheddar", "mozzarella", "parmesan", "provolone" ];
-			}
-		},
+        selectedVegetables: {
+            type: type.maybeConvert(ObservableArray),
 
-		selectedVegetables: { Type: DefineList, Default: DefineList },
-		selectedMeats: { Type: DefineList, Default: DefineList  },
-		selectedCheese: { type: "string", default: "mozzarella" },
+            get default() {
+                return new ObservableArray();
+            }
+        },
 
-		updateIngredients(type, action, ingredient) {
-			var listName = "selected" + type.slice(0, 1).toUpperCase() + type.slice(1);
-			var index = this[listName].indexOf(ingredient);
+        selectedMeats: {
+            type: type.maybeConvert(ObservableArray),
 
-			switch(action) {
-				case "add":
-					if (typeof this[listName] === "string") {
-						this[listName] = ingredient;
-					} else {
-						this[listName].push(ingredient);
-					}
-					break;
-				case "remove":
-					if (typeof this[listName] === "string") {
-						this[listName] = "";
-					} else {
-						this[listName].splice(index, 1);
-					}
-					break;
-				case "toggle":
-					if (index >= 0) {
-						this.updateIngredients(type, "remove", ingredient);
-					} else {
-						this.updateIngredients(type, "add", ingredient);
-					}
-					break;
-				case "clear":
-					this[listName] = [];
-					break;
-			}
-		}
-	}
-});
+            get default() {
+                return new ObservableArray();
+            }
+        },
+
+        selectedCheese: { type: type.maybeConvert(String), default: "mozzarella" }
+    };
+
+    updateIngredients(type, action, ingredient) {
+        let listName = "selected" + type.slice(0, 1).toUpperCase() + type.slice(1);
+        let index = this[listName].indexOf(ingredient);
+
+        switch(action) {
+            case "add":
+                if (typeof this[listName] === "string") {
+                    this[listName] = ingredient;
+                } else {
+                    this[listName].push(ingredient);
+                }
+                break;
+            case "remove":
+                if (typeof this[listName] === "string") {
+                    this[listName] = "";
+                } else {
+                    this[listName].splice(index, 1);
+                }
+                break;
+            case "toggle":
+                if (index >= 0) {
+                    this.updateIngredients(type, "remove", ingredient);
+                } else {
+                    this.updateIngredients(type, "add", ingredient);
+                }
+                break;
+            case "clear":
+                this[listName] = [];
+                break;
+        }
+    }
+};
+customElements.define("pizza-form", PizzaForm);
 </script>

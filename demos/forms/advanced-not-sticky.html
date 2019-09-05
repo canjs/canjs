@@ -1,24 +1,24 @@
 <not-sticky-uppercase></not-sticky-uppercase>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component } from "can";
+import { StacheElement } from "can";
 
-Component.extend({
-	tag: "not-sticky-uppercase",
+class NotStickyUppercase extends StacheElement {
+    static view = `
+        <label>
+            scopeProp:
+            <input type="text" value:from="this.scopeProp"
+              on:change:value:to="this.scopeProp">
+        </label>
 
-	view: `
-		<label>
-			scopeProp:
-			<input type="text" value:from="scopeProp" on:change:value:to="scopeProp">
-		</label>
+        <p>scopeProp: {{ this.scopeProp }}</p>
+    `;
 
-		<p>scopeProp: {{ scopeProp }}</p>
-	`,
-
-	ViewModel: {
-		set scopeProp(val) {
-			return val.toUpperCase();
-		}
-	}
-});
+    static props = {
+        set scopeProp(val) {
+            return val.toUpperCase();
+        }
+    };
+};
+customElements.define("not-sticky-uppercase", NotStickyUppercase);
 </script>

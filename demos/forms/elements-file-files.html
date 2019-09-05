@@ -14,43 +14,42 @@
 <script type="text/stache" id="demo-html"></script>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component, DefineList } from "can";
+import { ObservableArray, StacheElement, type } from "can";
 
-Component.extend({
-	tag: "select-files",
+class SelectFiles extends StacheElement {
+    static view = `
+        <input type="file" on:change="this.handleFiles(scope.element.files)" multiple>
+        <div>
+            Selected files:
+            {{# if(this.selectedFiles.length }}
+                <table>
+                    <thead>
+                        <th>File name</th>
+                        <th>File size</th>
+                        <th>File type</th>
+                    </thead>
+                    <tbody>
+                        {{# for(file of this.selectedFiles) }}
+                            <tr>
+                                <td>{{ file.name }}</td>
+                                <td>{{ file.size }}</td>
+                                <td>{{ file.type }}</td>
+                            </tr>
+                        {{/ for }}
+                    </tbody>
+                </table>
+            {{/ if }}
+        </div>
+    `;
 
-	view: `
-		<input type="file" on:change="this.handleFiles(scope.element.files)" multiple>
-		<div>
-			Selected files:
-			{{# if(this.selectedFiles.length }}
-				<table>
-					<thead>
-						<th>File name</th>
-						<th>File size</th>
-						<th>File type</th>
-					</thead>
-					<tbody>
-						{{# for(file of this.selectedFiles) }}
-							<tr>
-								<td>{{ file.name }}</td>
-								<td>{{ file.size }}</td>
-								<td>{{ file.type }}</td>
-							</tr>
-						{{/ for }}
-					</tbody>
-				</table>
-			{{/ if }}
-		</div>
-	`,
+    static props = {
+        selectedFiles: type.maybeConvert(ObservableArray)
+    };
 
-	ViewModel: {
-		selectedFiles: DefineList,
-
-		handleFiles(files) {
-			// use the Files API to work with the FileList
-			this.selectedFiles = files;
-		}
-	}
-});
+    handleFiles(files) {
+        // use the Files API to work with the FileList
+        this.selectedFiles = files;
+    }
+};
+customElements.define("select-files", SelectFiles);
 </script>

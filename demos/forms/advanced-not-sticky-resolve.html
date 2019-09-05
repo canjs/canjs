@@ -1,30 +1,29 @@
 <not-sticky-odd-number></not-sticky-odd-number>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component } from "can";
+import { StacheElement } from "can";
 
-Component.extend({
-	tag: "not-sticky-odd-number",
+class NotStickyOddNumber extends StacheElement {
+    static view = `
+        <label>
+            Odd numbers only:
+            <input type="number" value:from="this.oddNumber" on:input:value:to="this.oddNumber">
+        </label>
 
-	view: `
-		<label>
-			Odd numbers only:
-			<input type="number" value:from="oddNumber" on:input:value:to="oddNumber">
-		</label>
+        <p>selected number: {{ this.oddNumber }}</p>
+    `;
 
-		<p>selected number: {{ oddNumber }}</p>
-	`,
-
-	ViewModel: {
-		oddNumber: {
-			value({ listenTo, lastSet, resolve }) {
-				listenTo(lastSet, (newVal) => {
-					if (newVal % 2) {
-						resolve(newVal);
-					}
-				});
-			}
-		}
-	}
-});
+    static props = {
+        oddNumber: {
+            value({ listenTo, lastSet, resolve }) {
+                listenTo(lastSet, (newVal) => {
+                    if (newVal % 2) {
+                        resolve(newVal);
+                    }
+                });
+            }
+        }
+    };
+};
+customElements.define("not-sticky-odd-number", NotStickyOddNumber);
 </script>

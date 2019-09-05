@@ -93,11 +93,11 @@ In order to update a value in the scope each time the user types, you could use 
 
 ### Binding to template variables
 
-All of the examples shown so far have used variables from the scope for event and attribute bindings. It can be useful to bind to variables without having to create a property on the scope for things that are purely presentational. To create variables local to the template, you can use [can-stache/keys/scope#scope_vars scope.vars]:
+All of the examples shown so far have used variables from the scope for event and attribute bindings. It can be useful to bind to variables without having to create a property on the scope for things that are purely presentational. To create variables local to the template, you can use [can-stache.helpers.let let variables]:
 
 @demo demos/forms/bindings-scope-vars.html
 
-This example creates a template variable `scope.vars.focusedOnName` that is bound to the [https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Attribute/focused focused attribute] of the text field and uses it to set a class on the associated `<span>`. Since this is used entirely for CSS in the template, it makes sense to make `focusedOnName` a variable local to the template with `scope.vars`.
+This example creates a template variable `focusedOnName` that is bound to the [https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Attribute/focused focused attribute] of the text field and uses it to set a class on the associated `<span>`. Since this is used entirely for CSS in the template, it makes sense to make `focusedOnName` a variable local to the template with `{{ let }}`.
 
 ## Common form elements
 
@@ -196,7 +196,7 @@ This example binds the `checked` attribute to the `equal` converter for each rad
 <input type="number">
 ```
 
-When working with number inputs, it is important to set the [can-define.types.type#_typeName_ type] to `"number"` to ensure that the value is stored as a number in the scope.
+When working with number inputs, it is important to set the [can-observable-object/define/type] to `type.maybeConvert(Number)` to ensure that the value is stored as a number in the scope.
 
 @demo demos/forms/elements-number.html
 
@@ -274,7 +274,7 @@ In the following example, the selector is converting the value selected to a pri
 <select multiple>
 ```
 
-When using a `<select>` element to select multiple values, the `value` attribute will only give the first value that was selected. In order to get a list of all selected values, CanJS provides the custom [can-util/dom/attr/attr.special.values values] attribute. This makes it very easy to work with `<select multiple>` elements:
+When using a `<select>` element to select multiple values, the `value` attribute will only give the first value that was selected. In order to get a list of all selected values, CanJS provides the custom [can-attribute-observable values] attribute. This makes it very easy to work with `<select multiple>` elements:
 
 @demo demos/forms/elements-select-multiple.html
 
@@ -312,15 +312,15 @@ This will prevent the the form from being submitted when the user explicitly cli
 
 ### Form validation
 
-Validating forms in CanJS has two primary steps—validating your view-model and displaying errors.
+Validating forms in CanJS has two primary steps—validating your component and displaying errors.
 
-Separating these responsibilities by validating the view-model directly makes it much easier to unit test your validation rules.
+Separating these responsibilities by validating the component directly makes it much easier to unit test your validation rules.
 
-The following sections show how to do form validation manually, as well as how to do it using a plugin like [can-define-validate-validatejs].
+The following section shows how to do form validation manually.
 
 #### Manual form validation
 
-For forms with a small number of fields, validating input values can be as simple as creating [can-define.types.get#Virtualproperties virtual properties] that represent the validity of each user input.
+For forms with a small number of fields, validating input values can be as simple as creating [can-observable-object/define/get#Virtualproperties virtual properties] that represent the validity of each user input.
 
 When the user input is invalid, errors can be displayed using a CSS class: `{{# if(error) }}class="error"{{/ if }}`.
 
@@ -329,20 +329,6 @@ Also, in this example the submit button is disabled using the `disabled:from="er
 Here is an example showing this kind of manual validation for a phone number:
 
 @demo demos/forms/advanced-manual-validation.html
-
-#### Form validation using a plugin
-
-It is also possible to use [https://validatejs.org/#validators validate.js] or another JavaScript validation library through plugins to [can-define] like [can-define-validate-validatejs]. This makes it easy to have consistent validation throughout your application without having to write your own validation rules.
-
-This plugin works by reading `validate: { /* ... */ }` behaviors from each [can-define.types.propDefinition PropDefinition] of your view-model and using them to build up [https://validatejs.org/#validators validate.js constraints].
-
-It also adds an `errors` method to your view-model for getting a list of invalid properties. The example below also creates a `formatErrors` helper to make working with these errors easier.
-
-Check out the docs for [can-define-validate-validatejs] for more details on this plugin.
-
-Here is the same phone number example using the `can-define-validate-validatejs` plugin:
-
-@demo demos/forms/advanced-validatejs-validation.html
 
 ### Binding conflicts
 
@@ -385,17 +371,17 @@ At this point the `value` attribute of the element and `scopeProp` are no longer
 
 This is because when using `:bind`, CanJS will check for this scenario and update the `value` of the `<input>` element to be in sync with `scopeProp`.
 
-If you are using separate bindings like `value:from="scopeProp" on:change:value:to="scopeProp"`, [this does not happen and the values can become out of sync](https://github.com/canjs/can-stache-bindings/issues/439):
+If you are using separate bindings like `value:from="this.scopeProp" on:change:value:to="this.scopeProp"`, [this does not happen and the values can become out of sync](https://github.com/canjs/can-stache-bindings/issues/439):
 
 @demo demos/forms/advanced-not-sticky.html
 
-With this example it is somewhat complicated to cause the issue; however, there are other scenarios that make it more likely to happen. One of these is when using the [can-define.types.value can-define value behavior] introduced in CanJS 4.0 to _conditionally_ `resolve` with a new value.
+With this example it is somewhat complicated to cause the issue; however, there are other scenarios that make it more likely to happen. One of these is when using the [can-observable-object/define/value value behavior] to _conditionally_ `resolve` with a new value.
 
 The following example sets up a number input that only allows the user to enter odd numbers. It does this by checking the new value whenever `lastSet` changes and only calling `resolve` if the number is odd. Try out this example below to see how this works:
 
 @demo demos/forms/advanced-sticky-resolve.html
 
-Since this example is using `value:bind="oddNumber"`, it works correctly. However, if the binding is changed to `value:from="oddNumber" on:input:value:to="oddNumber"`, the `<input>` can incorrectly end up with even-numbered values:
+Since this example is using `value:bind="this.oddNumber"`, it works correctly. However, if the binding is changed to `value:from="this.oddNumber" on:input:value:to="this.oddNumber"`, the `<input>` can incorrectly end up with even-numbered values:
 
 @demo demos/forms/advanced-not-sticky-resolve.html
 
@@ -425,7 +411,7 @@ The following example has a top-level `<pizza-form>` component that keeps the li
 
 <div>
 	<select-one
-		listName:from="'cheese'"
+		listName:raw="cheese"
 		update:from="this.updateIngredients"
 		default:from="this.selectedCheese"
 		options:from="this.availableCheeses">
@@ -441,7 +427,7 @@ The following example has a top-level `<pizza-form>` component that keeps the li
 
 <div>
 	<select-many
-		listName:from="'vegetables'"
+		listName:raw="vegetables"
 		update:from="this.updateIngredients"
 		options:from="this.availableVegetables">
 	</select-many>
@@ -449,34 +435,29 @@ The following example has a top-level `<pizza-form>` component that keeps the li
 ```
 @highlight 19,28,36,only
 
-The child `<meat-picker>` component uses this function to clear the “meats” list and also passes it to a child of its own:
+The child `<meat-picker>` component uses this function to clear the "meats" list and also passes it to a child of its own:
 
 ```html
+{{ let showOptions=null }}
 <div>
 	<label>
 		Vegetarian?
-		{{# if(scope.vars.showOptions }}
 			<input
 				checked:bind="not( scope.vars.showOptions )"
-				on:change="scope.root.update('meats', 'clear')"
+				on:change="this.update('meats', 'clear')"
 				type="checkbox">
-		{{ else }}
-			<input
-				checked:bind="not( scope.vars.showOptions )"
-				type="checkbox">
-		{{/ if }}
 	</label>
 
-	{{# if(scope.vars.showOptions) }}
+	{{# if(showOptions) }}
 		<select-many
 			update:from="update"
-			listName:from="'meats'"
+			listName:raw="meats"
 			options:from="options">
 		</select-many>
 	{{/ if }}
 </div>
 ```
-@highlight 7,18,only
+@highlight 7,13,only
 
 This strategy means that all updates throughout the application go through the top-level `updateIngredients` function. This makes debugging very easy since it is obvious where to put a breakpoint to trace exactly what is causing a change.
 
@@ -498,29 +479,25 @@ There are many useful techniques for working with related data. Before diving in
 
 #### Loading initial data
 
-In order to load the initial data, the view-model makes a request to the `/makes` API when the page first loads. The view-model uses a [can-define.types.default default value] to make this API call:
+In order to load the initial data, the component makes a request to the `/makes` API when the page first loads. The component uses a [can-observable-object/define/get getter] to make this API call:
 
 ```js
-ViewModel: {
-	makeId: "string",
+static props = {
+	makeId: type.maybeConvert(String),
 	makes: {
-		default() {
+		get() {
 			return ajax({
 				type: "GET",
 				url: "/makes"
-			}).then(function(resp) {
-				return resp.data;
-			});
+			}).then(resp => resp.data);
 		}
 	},
 	modelId: {
-		type: "string",
-		value(prop) {
-			prop.listenTo(prop.lastSet, prop.resolve);
+		type: String,
+		value({ lastSet, listenTo, resolve }) {
+			listenTo(lastSet, resolve);
 
-			prop.listenTo("makeId", function() {
-				prop.resolve("");
-			});
+			listenTo("makeId", () => resolve(""));
 		}
 	},
 	get modelsPromise() {
@@ -529,14 +506,14 @@ ViewModel: {
 			return ajax({
 				type: "GET",
 				url: "/models",
-				data: { makeId: makeId }
-			}).then(function(resp) {
+				data: { makeId }
+			}).then(resp => {
 				return resp.data;
 			});
 		}
 	},
 	models: {
-		get: function(lastSet, resolve) {
+		async(resolve) {
 			let promise = this.modelsPromise;
 			if(promise) {
 				promise.then(resolve);
@@ -548,7 +525,7 @@ ViewModel: {
 			modelId = this.modelId;
 
 		if(models && models.length && modelId) {
-			let matched = models.filter(function(model) {
+			let matched = models.filter(model => {
 				return modelId == model.id;
 			});
 			return matched[0];
@@ -559,17 +536,15 @@ ViewModel: {
 		return model && model.years;
 	},
 	year: {
-		type: "string",
-		value(prop) {
-			prop.listenTo(prop.lastSet, prop.resolve);
+		type: String,
+		value({ lastSet, listenTo, resolve }) {
+			listenTo(lastSet, resolve);
 
-			prop.listenTo("modelId", function() {
-				prop.resolve("");
-			});
+			listenTo("modelId", () => resolve(""));
 		}
 	},
 	vehicles: {
-		get: function(lastSet, resolve) {
+		async(resolve) {
 			let year = this.year,
 				modelId = this.modelId;
 
@@ -577,8 +552,8 @@ ViewModel: {
 				ajax({
 					type: "GET",
 					url: "/vehicles",
-					data: { modelId: modelId, year: year }
-				}).then(function(resp) {
+					data: { modelId, year }
+				}).then(resp => {
 					resolve(resp.data);
 				});
 			} else {
@@ -588,32 +563,32 @@ ViewModel: {
 	}
 }
 ```
-@highlight 3-12,only
+@highlight 3-10,only
 
-This `default` value is initialized the first time the `makes` property is used in the view:
+This value is initialized the first time the `makes` property is used in the view:
 
 ```html
-<select value:bind="makeId"
-	{{# if(makes.isPending) }}disabled{{/ if }}>
-	{{# if(makes.isPending) }}
+<select value:bind="this.makeId"
+	{{# if(this.makes.isPending) }}disabled{{/ if }}>
+	{{# if(this.makes.isPending) }}
 	  <option value=''>Loading…</option>
 	{{ else }}
-	  {{^ makeId }}
+	  {{^ this.makeId }}
 		<option value=''>Select a Make</option>
-	  {{/ makeId }}
-	  {{# for( make of makes.value) }}
+	  {{/ this.makeId }}
+	  {{# for( make of this.makes.value) }}
 		<option value:from="make.id">{{ make.name }}</option>
 	  {{/ for }}
 	{{/ if }}
 </select>
 
-{{# if(modelsPromise) }}
-	{{# if(models) }}
-		<select value:bind="modelId">
-			{{^ modelId }}
+{{# if(this.modelsPromise) }}
+	{{# if(this.models) }}
+		<select value:bind="this.modelId">
+			{{^ this.modelId }}
 				<option value=''>Select a Model</option>
-			{{/ modelId }}
-			{{# for(model of models) }}
+			{{/ this.modelId }}
+			{{# for(model of this.models) }}
 				<option value:from="model.id">{{ model.name }}</option>
 			{{/ for }}
 		</select>
@@ -624,12 +599,12 @@ This `default` value is initialized the first time the `makes` property is used 
 	<select disabled><option>Models</option></select>
 {{/ if }}
 
-{{# if(years) }}
-	<select value:bind="year">
-		{{^ year }}
+{{# if(this.years) }}
+	<select value:bind="this.year">
+		{{^ this.year }}
 			<option value=''>Select a Year</option>
-		{{/ year }}
-		{{# for(year of years ) }}
+		{{/ this.year }}
+		{{# for(year of this.years ) }}
 			<option value:from="year">{{ year }}</option>
 		{{/ for }}
 	</select>
@@ -638,29 +613,13 @@ This `default` value is initialized the first time the `makes` property is used 
 {{/ if }}
 
 <div>
-	{{# for(vehicle of vehicles) }}
+	{{# for(vehicle of this.vehicles) }}
 		<h2>{{ vehicle.name }}</h2>
 		<img src:from="vehicle.thumb" width="200px"/>
 	{{/ for }}
 </div>
 ```
 @highlight 2,only
-
-> **Note:** you could also use a [can-define.types.get getter] for this property. The getter will be called once to get the initial value and will only be called again if an observable it is using changes. Since no observables are being used, using a `get` for the `makes` property will behave the same as using `default`.
-> Using `get` also means that you can use the shorthand [https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get getter syntax] so this:
->```js
-> makes: {
->   get: function() {
->     // ...
->   }
-> }
->```
-> can be written like this:
->```js
-> get makes() {
->   // ...
-> }
->```
 
 #### Using promises
 
@@ -676,27 +635,27 @@ This promise is decorated by [can-reflect-promise] so that in the view you can e
 This also means that in order to get the `makes` data, we need to use the `value` of the promise:
 
 ```html
-<select value:bind="makeId"
-	{{# if(makes.isPending) }}disabled{{/ if }}>
-	{{# if(makes.isPending) }}
+<select value:bind="this.makeId"
+	{{# if(this.makes.isPending) }}disabled{{/ if }}>
+	{{# if(this.makes.isPending) }}
 	  <option value=''>Loading…</option>
 	{{ else }}
-	  {{^ makeId }}
+	  {{^ this.makeId }}
 		<option value=''>Select a Make</option>
-	  {{/ makeId }}
-	  {{# for( make of makes.value) }}
+	  {{/ this.makeId }}
+	  {{# for( make of this.makes.value) }}
 		<option value:from="make.id">{{ make.name }}</option>
 	  {{/ for }}
 	{{/ if }}
 </select>
 
-{{# if(modelsPromise) }}
-	{{# if(models) }}
-		<select value:bind="modelId">
-			{{^ modelId }}
+{{# if(this.modelsPromise) }}
+	{{# if(this.models) }}
+		<select value:bind="this.modelId">
+			{{^ this.modelId }}
 				<option value=''>Select a Model</option>
-			{{/ modelId }}
-			{{# for(model of models) }}
+			{{/ this.modelId }}
+			{{# for(model of this.models) }}
 				<option value:from="model.id">{{ model.name }}</option>
 			{{/ for }}
 		</select>
@@ -707,12 +666,12 @@ This also means that in order to get the `makes` data, we need to use the `value
 	<select disabled><option>Models</option></select>
 {{/ if }}
 
-{{# if(years) }}
-	<select value:bind="year">
-		{{^ year }}
+{{# if(this.years) }}
+	<select value:bind="this.year">
+		{{^ this.year }}
 			<option value=''>Select a Year</option>
-		{{/ year }}
-		{{# for(year of years ) }}
+		{{/ this.year }}
+		{{# for(year of this.years ) }}
 			<option value:from="year">{{ year }}</option>
 		{{/ for }}
 	</select>
@@ -721,7 +680,7 @@ This also means that in order to get the `makes` data, we need to use the `value
 {{/ if }}
 
 <div>
-	{{# for(vehicle of vehicles) }}
+	{{# for(vehicle of this.vehicles) }}
 		<h2>{{ vehicle.name }}</h2>
 		<img src:from="vehicle.thumb" width="200px"/>
 	{{/ for }}
@@ -733,60 +692,58 @@ In order to avoid having to use `.value` every time you want to use the data, it
 
 ```js
 makesPromise: {
-	default() {
+	get() {
 		return ajax({
 			type: "GET",
 			url: "/makes"
-		}).then(function(resp) {
+		}).then(resp => {
 			return resp.data;
 		});
 	}
 },
 makes: {
-	get(lastSet, resolve) {
+	async(resolve) {
 		this.makesPromise.then(resolve);
 	}
 }
 ```
 
-This uses a `default` value for the `makesPromise` and an [can-define.types.get#get_lastSetValue_resolve_value__ asynchronous getter] for the `makes` property.
+This uses a `get` value for the `makesPromise` and an [can-observable-object/define/async asynchronous getter] for the `makes` property.
 
 The asynchronous getter does not return anything, instead it passes the list of `makes` to `resolve`. The code above is the same as:
 
 ```js
-this.makesPromise.then(function(makes) {
+this.makesPromise.then(makes => {
 	resolve(makes);
 });
 ```
-
-> **Note:** when using asynchronous getters, you cannot use the shorthand getter syntax (`get makes() { /* ... */ }`) since JavaScript getters [http://whereswalden.com/2010/08/22/incompatible-es5-change-literal-getter-and-setter-functions-must-now-have-exactly-zero-or-one-arguments/ must have only one argument].
 
 #### Loading new data
 
 In order to load the correct `models` for a make, a request to the `/models` API must be made whenever a make is selected. In order to do this, the make `<select>` element is bound to the `makeId` property:
 
 ```html
-<select value:bind="makeId"
-	{{# if(makes.isPending) }}disabled{{/ if }}>
-	{{# if(makes.isPending) }}
+<select value:bind="this.makeId"
+	{{# if(this.makes.isPending) }}disabled{{/ if }}>
+	{{# if(this.makes.isPending) }}
 	  <option value=''>Loading…</option>
 	{{ else }}
-	  {{^ makeId }}
+	  {{^ this.makeId }}
 		<option value=''>Select a Make</option>
-	  {{/ makeId }}
-	  {{# for( make of makes.value) }}
+	  {{/ this.makeId }}
+	  {{# for( make of this.makes.value) }}
 		<option value:from="make.id">{{ make.name }}</option>
 	  {{/ for }}
 	{{/ if }}
 </select>
 
-{{# if(modelsPromise) }}
-	{{# if(models) }}
-		<select value:bind="modelId">
-			{{^ modelId }}
+{{# if(this.modelsPromise) }}
+	{{# if(this.models) }}
+		<select value:bind="this.modelId">
+			{{^ this.modelId }}
 				<option value=''>Select a Model</option>
-			{{/ modelId }}
-			{{# for(model of models) }}
+			{{/ this.modelId }}
+			{{# for(model of this.models) }}
 				<option value:from="model.id">{{ model.name }}</option>
 			{{/ for }}
 		</select>
@@ -797,12 +754,12 @@ In order to load the correct `models` for a make, a request to the `/models` API
 	<select disabled><option>Models</option></select>
 {{/ if }}
 
-{{# if(years) }}
-	<select value:bind="year">
-		{{^ year }}
+{{# if(this.years) }}
+	<select value:bind="this.year">
+		{{^ this.year }}
 			<option value=''>Select a Year</option>
-		{{/ year }}
-		{{# for(year of years ) }}
+		{{/ this.year }}
+		{{# for(year of this.years ) }}
 			<option value:from="year">{{ year }}</option>
 		{{/ for }}
 	</select>
@@ -811,7 +768,7 @@ In order to load the correct `models` for a make, a request to the `/models` API
 {{/ if }}
 
 <div>
-	{{# for(vehicle of vehicles) }}
+	{{# for(vehicle of this.vehicles) }}
 		<h2>{{ vehicle.name }}</h2>
 		<img src:from="vehicle.thumb" width="200px"/>
 	{{/ for }}
@@ -819,28 +776,24 @@ In order to load the correct `models` for a make, a request to the `/models` API
 ```
 @highlight 1,only
 
-The view-model then uses this property in the `modelsPromise` getter:
+The component then uses this property in the `modelsPromise` getter:
 ```js
-ViewModel: {
-	makeId: "string",
+static props = {
+	makeId: type.maybeConvert(String),
 	makes: {
-		default() {
+		get() {
 			return ajax({
 				type: "GET",
 				url: "/makes"
-			}).then(function(resp) {
-				return resp.data;
-			});
+			}).then(resp => resp.data);
 		}
 	},
 	modelId: {
-		type: "string",
-		value(prop) {
-			prop.listenTo(prop.lastSet, prop.resolve);
+		type: String,
+		value({ lastSet, listenTo, resolve }) {
+			listenTo(lastSet, resolve);
 
-			prop.listenTo("makeId", function() {
-				prop.resolve("");
-			});
+			listenTo("makeId", () => resolve(""));
 		}
 	},
 	get modelsPromise() {
@@ -849,14 +802,14 @@ ViewModel: {
 			return ajax({
 				type: "GET",
 				url: "/models",
-				data: { makeId: makeId }
-			}).then(function(resp) {
+				data: { makeId }
+			}).then(resp => {
 				return resp.data;
 			});
 		}
 	},
 	models: {
-		get: function(lastSet, resolve) {
+		async(resolve) {
 			let promise = this.modelsPromise;
 			if(promise) {
 				promise.then(resolve);
@@ -868,7 +821,7 @@ ViewModel: {
 			modelId = this.modelId;
 
 		if(models && models.length && modelId) {
-			let matched = models.filter(function(model) {
+			let matched = models.filter(model => {
 				return modelId == model.id;
 			});
 			return matched[0];
@@ -879,17 +832,15 @@ ViewModel: {
 		return model && model.years;
 	},
 	year: {
-		type: "string",
-		value(prop) {
-			prop.listenTo(prop.lastSet, prop.resolve);
+		type: String,
+		value({ lastSet, listenTo, resolve }) {
+			listenTo(lastSet, resolve);
 
-			prop.listenTo("modelId", function() {
-				prop.resolve("");
-			});
+			listenTo("modelId", () => resolve(""));
 		}
 	},
 	vehicles: {
-		get: function(lastSet, resolve) {
+		async(resolve) {
 			let year = this.year,
 				modelId = this.modelId;
 
@@ -897,8 +848,8 @@ ViewModel: {
 				ajax({
 					type: "GET",
 					url: "/vehicles",
-					data: { modelId: modelId, year: year }
-				}).then(function(resp) {
+					data: { modelId, year }
+				}).then(resp => {
 					resolve(resp.data);
 				});
 			} else {
@@ -908,7 +859,7 @@ ViewModel: {
 	}
 }
 ```
-@highlight 24,29,only
+@highlight 20,25,only
 
 When the `view` uses the `modelsPromise` property, it will become [can-event-queue/map/map.can.isBound bound], which means it
 
@@ -925,27 +876,27 @@ If the `makeId` property changes, the getter will be called again and a new requ
 Similar to the `makeId`, the `<select>` for models is bound to the `modelId` property:
 
 ```html
-<select value:bind="makeId"
-	{{# if(makes.isPending) }}disabled{{/ if }}>
-	{{# if(makes.isPending) }}
+<select value:bind="this.makeId"
+	{{# if(this.makes.isPending) }}disabled{{/ if }}>
+	{{# if(this.makes.isPending) }}
 	  <option value=''>Loading…</option>
 	{{ else }}
-	  {{^ makeId }}
+	  {{^ this.makeId }}
 		<option value=''>Select a Make</option>
-	  {{/ makeId }}
-	  {{# for( make of makes.value) }}
+	  {{/ this.makeId }}
+	  {{# for( make of this.makes.value) }}
 		<option value:from="make.id">{{ make.name }}</option>
 	  {{/ for }}
 	{{/ if }}
 </select>
 
-{{# if(modelsPromise) }}
-	{{# if(models) }}
-		<select value:bind="modelId">
-			{{^ modelId }}
+{{# if(this.modelsPromise) }}
+	{{# if(this.models) }}
+		<select value:bind="this.modelId">
+			{{^ this.modelId }}
 				<option value=''>Select a Model</option>
-			{{/ modelId }}
-			{{# for(model of models) }}
+			{{/ this.modelId }}
+			{{# for(model of this.models) }}
 				<option value:from="model.id">{{ model.name }}</option>
 			{{/ for }}
 		</select>
@@ -956,12 +907,12 @@ Similar to the `makeId`, the `<select>` for models is bound to the `modelId` pro
 	<select disabled><option>Models</option></select>
 {{/ if }}
 
-{{# if(years) }}
-	<select value:bind="year">
-		{{^ year }}
+{{# if(this.years) }}
+	<select value:bind="this.year">
+		{{^ this.year }}
 			<option value=''>Select a Year</option>
-		{{/ year }}
-		{{# for(year of years ) }}
+		{{/ this.year }}
+		{{# for(year of this.years ) }}
 			<option value:from="year">{{ year }}</option>
 		{{/ for }}
 	</select>
@@ -970,7 +921,7 @@ Similar to the `makeId`, the `<select>` for models is bound to the `modelId` pro
 {{/ if }}
 
 <div>
-	{{# for(vehicle of vehicles) }}
+	{{# for(vehicle of this.vehicles) }}
 		<h2>{{ vehicle.name }}</h2>
 		<img src:from="vehicle.thumb" width="200px"/>
 	{{/ for }}
@@ -980,34 +931,32 @@ Similar to the `makeId`, the `<select>` for models is bound to the `modelId` pro
 
 This works great for selecting a model from the list given for a particular make; however, if the make changes, the selected `modelId` will point to a different model in the list for the new make—or it might not exist at all.
 
-In order to handle this parent-child relationship correctly, the `modelId` property needs to be bound to the value in its own `<select>` element, but it also needs to be cleared when the value of the parent `<select>` element changes. The [can-define.types.value can-define value behavior] makes it possible to define properties that are composed from events of other properties on the map.
+In order to handle this parent-child relationship correctly, the `modelId` property needs to be bound to the value in its own `<select>` element, but it also needs to be cleared when the value of the parent `<select>` element changes. The [can-observable-object/define/value value behavior] makes it possible to define properties that are composed from events of other properties on the map.
 
 In order to define `modelId`, the `value` behavior will
 
-* call `prop.resolve` with the new `modelId` when `prop.lastSet` changes—this is whenever a new model is chosen from the `<select>`
-* call `prop.resolve` with an empty string when `makeId` changes to reset the `<select>` back to the default `<option>`
+* call `resolve` with the new `modelId` when `lastSet` changes—this is whenever a new model is chosen from the `<select>`
+* call `resolve` with an empty string when `makeId` changes to reset the `<select>` back to the default `<option>`
 
 ```js
-ViewModel: {
-	makeId: "string",
+static props = {
+	makeId: String,
 	makes: {
-		default() {
+		get() {
 			return ajax({
 				type: "GET",
 				url: "/makes"
-			}).then(function(resp) {
+			}).then(resp =>
 				return resp.data;
 			});
 		}
 	},
 	modelId: {
-		type: "string",
-		value(prop) {
-			prop.listenTo(prop.lastSet, prop.resolve);
+		type: String,
+		value({ lastSet, listenTo, resolve }) {
+			listenTo(lastSet, resolve);
 
-			prop.listenTo("makeId", function() {
-				prop.resolve("");
-			});
+			listenTo("makeId", () => resolve(""));
 		}
 	},
 	get modelsPromise() {
@@ -1016,14 +965,14 @@ ViewModel: {
 			return ajax({
 				type: "GET",
 				url: "/models",
-				data: { makeId: makeId }
-			}).then(function(resp) {
+				data: { makeId }
+			}).then(resp => {
 				return resp.data;
 			});
 		}
 	},
 	models: {
-		get: function(lastSet, resolve) {
+		async(resolve) {
 			let promise = this.modelsPromise;
 			if(promise) {
 				promise.then(resolve);
@@ -1035,7 +984,7 @@ ViewModel: {
 			modelId = this.modelId;
 
 		if(models && models.length && modelId) {
-			let matched = models.filter(function(model) {
+			let matched = models.filter(model)] => {
 				return modelId == model.id;
 			});
 			return matched[0];
@@ -1046,17 +995,15 @@ ViewModel: {
 		return model && model.years;
 	},
 	year: {
-		type: "string",
-		value(prop) {
-			prop.listenTo(prop.lastSet, prop.resolve);
+		type: String,
+		value({ lastSet, listenTo, resolve }) {
+			listenTo(lastSet, resolve);
 
-			prop.listenTo("modelId", function() {
-				prop.resolve("");
-			});
+			listenTo("modelId", () => resolve(""));
 		}
 	},
 	vehicles: {
-		get: function(lastSet, resolve) {
+		async(resolve) {
 			let year = this.year,
 				modelId = this.modelId;
 
@@ -1064,8 +1011,8 @@ ViewModel: {
 				ajax({
 					type: "GET",
 					url: "/vehicles",
-					data: { modelId: modelId, year: year }
-				}).then(function(resp) {
+					data: { modelId, year }
+				}).then(resp => {
 					resolve(resp.data);
 				});
 			} else {
@@ -1075,9 +1022,9 @@ ViewModel: {
 	}
 }
 ```
-@highlight 15-21,only
+@highlight 15-19,only
 
-Using this technique allows you to easily define the parent-child relationship between `make` and `model` while also keeping all of the code that specifies how `modelId` works within the `modelId` [can-define.types.propDefinition PropDefinition].
+Using this technique allows you to easily define the parent-child relationship between `make` and `model` while also keeping all of the code that specifies how `modelId` works within the `modelId` [can-observable-object/object.types.definitionObject DefinitionObject].
 
 #### Creating and updating data
 

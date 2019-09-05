@@ -3,43 +3,42 @@
 <script type="text/stache" id="demo-html"></script>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component } from "can";
+import { StacheElement } from "can";
 
-Component.extend({
-	tag: "text-fields",
+class TextFields extends StacheElement {
+    static view = `
+        <p>
+            whatYouTyped: {{ this.whatYouTyped }}
+        </p>
+        <p>
+            <label>
+                value:to="this.whatYouTyped"
+                <input type="text" value:to="this.whatYouTyped">
+            </label>
+        </p>
+        <p>
+            <label>
+                value:from="this.whatYouTyped"
+                <input type="text" value:from="this.whatYouTyped">
+            </label>
+        </p>
+        <p>
+            <label>
+                value:bind="this.whatYouTyped"
+                <input type="text" value:bind="this.whatYouTyped">
+            </label>
+        </p>
+        <p>
+            <label>
+                value:from="this.whatYouTyped" on:input:value:to="this.whatYouTyped"
+                <input type="text" value:from="this.whatYouTyped" on:input:value:to="this.whatYouTyped">
+            </label>
+        </p>
+    `;
 
-	view: `
-		<p>
-			whatYouTyped: {{ whatYouTyped }}
-		</p>
-		<p>
-			<label>
-				value:to="whatYouTyped"
-				<input type="text" value:to="whatYouTyped">
-			</label>
-		</p>
-		<p>
-			<label>
-				value:from="whatYouTyped"
-				<input type="text" value:from="whatYouTyped">
-			</label>
-		</p>
-		<p>
-			<label>
-				value:bind="whatYouTyped"
-				<input type="text" value:bind="whatYouTyped">
-			</label>
-		</p>
-		<p>
-			<label>
-				value:from="whatYouTyped" on:input:value:to="whatYouTyped"
-				<input type="text" value:from="whatYouTyped" on:input:value:to="whatYouTyped">
-			</label>
-		</p>
-	`,
-
-	ViewModel: {
-		whatYouTyped: { default: "" }
-	}
-});
+    static props = {
+        whatYouTyped: ""
+    };
+};
+customElements.define("text-fields", TextFields);
 </script>

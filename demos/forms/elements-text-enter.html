@@ -1,25 +1,24 @@
 <text-enter></text-enter>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component, domEvents, enterEvent } from "can";
+import { domEvents, enterEvent, StacheElement } from "can";
 
 domEvents.addEvent(enterEvent);
 
-Component.extend({
-	tag: "text-enter",
+class TextEnter extends StacheElement {
+    static view = `
+        <p>
+            whatYouTyped: {{ this.whatYouTyped }}
+        </p>
+        <label>
+            Type something and then hit the Enter key:
+            <input type="text" value:from="this.whatYouTyped" on:enter:value:to="this.whatYouTyped">
+        </label>
+    `;
 
-	view: `
-		<p>
-			whatYouTyped: {{ whatYouTyped }}
-		</p>
-		<label>
-			Type something and then hit the Enter key:
-			<input type="text" value:from="whatYouTyped" on:enter:value:to="whatYouTyped">
-		</label>
-	`,
-
-	ViewModel: {
-		whatYouTyped: { default: "" }
-	}
-});
+    static props = {
+        whatYouTyped: ""
+    };
+};
+customElements.define("text-enter", TextEnter);
 </script>
