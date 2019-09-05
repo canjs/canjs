@@ -7,18 +7,14 @@
 import { StacheElement } from "can";
 
 class MyCounter extends StacheElement {
-    static get view() {
-        return `
-            <button on:click='increment()'>+1</button>
-            Count: <span>{{ count }}</span>
-        `;
-    }
+    static view = `
+				<button on:click='increment()'>+1</button>
+				Count: <span>{{ count }}</span>
+		`;
 
-    static get props() {
-        return {
-            count: {default: 0}
-        };
-    }
+    static props = {
+				count: 0
+		};
 
     increment() {
         this.count++;

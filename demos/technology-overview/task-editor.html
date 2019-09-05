@@ -7,7 +7,7 @@
 import { ObservableObject, stache, StacheElement } from "can";
 import "can/demos/technology-overview/component-slider";
 
-var Integer = {
+const Integer = {
 	[Symbol.for("can.new")](val) {
 		return parseInt(val);
 	},
@@ -18,39 +18,39 @@ var Integer = {
 
 class TaskEditor extends StacheElement {
     static view = `
-		<h2>Task Editor</h2>
-		<form on:submit='this.save(scope.event)'>
-			Name: {{ this.name }}
-			<p>
-				<input bind='this.name'/>
-			</p>
-			Progress: {{ this.progress }}
-			<p>
-				<percent-slider value:bind='this.progress'/>
-			</p>
-			<button disabled:from="this.isSaving">
-				{{# if(this.isSaving) }}Saving{{ else }}Save{{/ if }}
-			</button>
-		</form>
-	`;
+				<h2>Task Editor</h2>
+				<form on:submit='this.save(scope.event)'>
+					Name: {{ this.name }}
+					<p>
+						<input bind='this.name'/>
+					</p>
+					Progress: {{ this.progress }}
+					<p>
+						<percent-slider value:bind='this.progress'/>
+					</p>
+					<button disabled:from="this.isSaving">
+						{{# if(this.isSaving) }}Saving{{ else }}Save{{/ if }}
+					</button>
+				</form>
+		`;
 
     static props = {
-		taskId: Number,
+				taskId: Number,
 
-		name: {
-			get() {
-				return "Task "+this.taskId;
-			}
-		},
+				name: {
+					get() {
+						return "Task "+this.taskId;
+					}
+				},
 
-		progress: {
-			// makes progress an integer
-			type: Integer,
-			default: 0
-		},
+				progress: {
+					// makes progress an integer
+					type: Integer,
+					default: 0
+				},
 
-		isSaving: {default: false}
-	};
+				isSaving: false
+		};
 
     save(event) {
         event.preventDefault();

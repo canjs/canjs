@@ -8,16 +8,16 @@ import { StacheElement } from "can";
 
 class MyCounter extends StacheElement {
     static view = `
-		<button on:click="this.increment()">+1</button>
-		Count: <span>{{ this.count }}</span>
-	`;
+				<button on:click="this.increment()">+1</button>
+				Count: <span>{{ this.count }}</span>
+		`;
 
     static props = {
-		count: {default: 0}
-	};
+				count: 0
+		};
 
     increment() {
-		this.count++;
+				this.count++;
     }
 }
 customElements.define("my-counter", MyCounter);

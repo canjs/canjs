@@ -1,46 +1,57 @@
 <todos-list></todo-list>
 <script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" dev-bundle>
-import { Reflect, DeepObservable, StacheElement } from "can/everything";
+import { Reflect, ObservableArray, ObservableObject, type, StacheElement } from "can/everything";
+
+class Todo extends ObservableObject {
+	static props = {
+		complete: Boolean,
+		name: String
+	};
+}
+
+class Todos extends ObservableArray {
+	static items = type.convert(Todo);
+}
 
 class TodosList extends StacheElement {
-    static view = `
-		<ul>
-			{{# for(todo of this.todos) }}
-				<li>
-					<input type='checkbox' checked:bind='todo.complete'/>
-					{{ todo.name }}
-				</li>
-			{{/ for }}
-		</ul>
-		There are {{ this.completeCount }} completed todo(s).
-		{{# is(this.completeCount, this.todos.length) }}
-			You completed all the todos!
-		{{ else }}
-			Some todos remain. <button on:click='this.completeAll()'>Complete All</button>
-		{{/ is }}
-	`;
+		static view = `
+				<ul>
+						{{# for(todo of this.todos) }}
+								<li>
+										<input type='checkbox' checked:bind='todo.complete'/>
+										{{ todo.name }}
+								</li>
+						{{/ for }}
+				</ul>
+				There are {{ this.completeCount }} completed todo(s).
+				{{# eq(this.completeCount, this.todos.length) }}
+						You completed all the todos!
+				{{ else }}
+						Some todos remain. <button on:click='this.completeAll()'>Complete All</button>
+				{{/ eq }}
+		`;
 
-    static props = {
-		todos: {
-			get default() {
-				return new Reflect.new(DeepObservable, [
-					{ complete: true, name: "Do the dishes." },
-					{ complete: true, name: "Wash the car." },
-					{ complete: false, name: "Learn CanJS." }
-				]);
-			}
-		},
+		static props = {
+				todos: {
+					get default() {
+						return new Todos([
+								{ complete: true, name: "Do the dishes." },
+								{ complete: true, name: "Wash the car." },
+								{ complete: false, name: "Learn CanJS." }
+						]);
+					}
+				},
 
-		get completeCount(){
-			return this.todos.filter({complete: true}).length
+				get completeCount(){
+					return this.todos.filter({ complete: true }).length;
+				}
+		};
+
+		completeAll() {
+				this.todos.forEach(function(todo){
+						todo.complete = true;
+				});
 		}
-	};
-
-    completeAll() {
-        this.todos.forEach(function(todo){
-            todo.complete = true;
-        })
-    }
 }
 customElements.define("todos-list", TodosList);
 </script>
