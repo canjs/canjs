@@ -5,29 +5,21 @@ import {
     route,
     StacheElement,
     type,
-} from "//unpkg.com/can@5/core.mjs";
-
-import DeepObservable from "can-deep-observable";
+} from "//unpkg.com/can@pre/core.mjs";
 
 class Message extends ObservableObject {
-    static props = {
-		id: type.maybeConvert(Number),
-		name: type.maybeConvert(String),
-		body: type.maybeConvert(String),
+	static props = {
+		id: Number,
+		name: String,
+		body: String,
 		created_at: type.maybeConvert(Date)
 	};
-
-    static get propertyDefaults() {
-        return DeepObservable;
-    }
 }
 
 class MessageList extends ObservableArray {
-    static props = {};
+	static props = {};
 
-    static get items() {
-        return type.maybeConvert(Message);
-    }
+	static items = Message
 }
 
 const MessageConnection = realtimeRestModel({
@@ -40,7 +32,7 @@ const MessageConnection = realtimeRestModel({
 });
 
 class ChatMessages extends StacheElement {
-    static view = `
+	static view = `
 		<h1 class="page-header text-center">
 			Chat Messages
 		</h1>
@@ -85,34 +77,33 @@ class ChatMessages extends StacheElement {
 		</form>
 	`;
 
-    static props = {
-			// Properties
-			messagesPromise: {
-				get default() {
-					return Message.getList({});
-				}
-			},
+	static props = {
+		// Properties
+		messagesPromise: {
+			get default() {
+				return Message.getList({});
+			}
+		},
 
-			name: type.maybeConvert(String),
-			body: type.maybeConvert(String)
-		};
+		name: String,
+		body: String
+	};
 
-    send(event) {
-        event.preventDefault();
+	send(event) {
+		event.preventDefault();
 
-        new Message({
-            name: this.name,
-            body: this.body
-        }).save().then(() => {
-            this.body = "";
-        });
-    }
+		new Message({
+				name: this.name,
+				body: this.body
+		}).save().then(() => {
+				this.body = "";
+		});
+	}
 }
-
 customElements.define("chat-messages", ChatMessages);
 
 class ChatApp extends StacheElement {
-    static view = `
+	static view = `
 		<div class="container">
 			<div class="row">
 			<div class="col-sm-8 col-sm-offset-2">
@@ -132,10 +123,10 @@ class ChatApp extends StacheElement {
 		</div>
 	`;
 
-    static props = {
+	static props = {
 		// Properties
 		message: {
-			type: type.maybeConvert(String),
+			type: String,
 			default: "Chat Home"
 		},
 
@@ -148,8 +139,8 @@ class ChatApp extends StacheElement {
 		}
 	};
 
-    addExcitement() {
-        this.message = this.message + "!";
-    }
+	addExcitement() {
+		this.message = this.message + "!";
+	}
 }
 customElements.define("chat-app", ChatApp);
