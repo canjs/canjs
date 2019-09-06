@@ -771,5 +771,43 @@ In case your application uses [jQuery](https://jquery.com/), [jQuery UI](https:/
 <li on:draginit="doSomething()">...</li>
 ```
 
-The [guides/recipes/playlist-editor] recipe shows using this feature to implement a drag-drop playlist.
+Before CanJS 5.0 we used to use `can-jquery` like the following:
+```js
+var $ = require("can-jquery");
+// Require another module that registers itself with jQuery.event.special,
+// e.g. jQuery++ registers events such as draginit, dragmove, etc.
 
+$(listItemElement).on("draginit", function(){
+    // Will fire after a jQuery draginit event has been fired
+});
+
+// Some other code that fires a jQuery event; this will probably be in the
+// package you’re using…
+$(listItemElement).trigger("draginit");
+```
+
+The example above should be updated to:
+
+```js
+const $ = require("jquery");
+const addJQueryEvents = require("can-dom-events/helpers/add-jquery-events");
+const domEvents = require("can-dom-events");
+// Require another module that registers itself with jQuery.event.special,
+// e.g. jQuery++ registers events such as draginit, dragmove, etc.
+
+const removeJQueryEvents = addJQueryEvents($);
+
+// Listen for an event in code; this might also be accomplished through a
+// can-stache-binding such as <li on:draginit="listener()">
+domEvents.addEventListener(listItemElement, "draginit", function listener() {
+  // Will fire after a jQuery draginit event has been fired
+});
+
+// Some other code that fires a jQuery event; this will probably be in the
+// package you’re using…
+$(listItemElement).trigger("draginit");
+
+// Later in your code… ready to stop listening for those jQuery events? Call
+// the function returned by addJQueryEvents()
+removeJQueryEvents();
+```
