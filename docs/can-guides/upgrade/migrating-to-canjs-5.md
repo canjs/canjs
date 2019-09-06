@@ -763,3 +763,13 @@ Component.extend({
 Notice that `this` remains the `ViewModel` because [can-stache.helpers.for-of] doesn't
 change the context, it only creates a `todo` variable.  Writing stache templates like this
 makes what's going on immediately clear.
+
+### jQuery integration
+In case your application uses [jQuery](https://jquery.com/), [jQuery UI](https://jqueryui.com/), [jQuery plugins](https://plugins.jquery.com/) or [Bootstrap](https://getbootstrap.com/javascript/), [can-dom-events/helpers/add-jquery-events] module allows to listen to all jQuery events directly in [can-stache] like:
+
+```html
+<li on:draginit="doSomething()">...</li>
+```
+
+The [guides/recipes/playlist-editor] recipe shows using this feature to implement a drag-drop playlist.
+
