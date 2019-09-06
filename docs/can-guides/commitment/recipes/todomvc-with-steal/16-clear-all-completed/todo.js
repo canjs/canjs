@@ -6,7 +6,7 @@ import {
   realtimeRestModel
 } from "can";
 
-class Todo extends ObservableObject {
+export default class Todo extends ObservableObject {
   static props = {
     id: { type: type.convert(String), identity: true },
     name: { type: type.convert(String) },
@@ -21,7 +21,7 @@ class Todo extends ObservableObject {
   }
 }
 
-Todo.List = class TodoList extends ObservableArray {
+export class TodoList extends ObservableArray {
   static items = type.convert(Todo);
 
   static props = {
@@ -64,8 +64,6 @@ Todo.List = class TodoList extends ObservableArray {
 
 Todo.connection = realtimeRestModel({
   url: "/api/todos/{id}",
-  Map: Todo,
-  List: Todo.List
+  ObjectType: Todo,
+  ArrayType: TodoList
 });
-
-export default Todo;

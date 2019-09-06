@@ -1,13 +1,13 @@
 // components/todo-list/todo-list.js
 import { StacheElement, type } from "can";
 import view from "./todo-list.stache";
-import Todo from "~/models/todo";
+import Todo, { TodoList } from "~/models/todo";
 
-class TodoList extends StacheElement {
+export default class TodoListElement extends StacheElement {
   static view = view;
 
   static props = {
-    todos: type.convert(Todo.List),
+    todos: type.convert(TodoList),
     editing: type.maybeConvert(Todo),
     backupName: String
   };
@@ -34,4 +34,4 @@ class TodoList extends StacheElement {
   }
 }
 
-customElements.define("todo-list", TodoList);
+customElements.define("todo-list", TodoListElement);

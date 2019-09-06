@@ -11,7 +11,7 @@
       {{# for(todo of this.todosList) }}
         <li class="todo {{# if(todo.complete) }}completed{{/ if }}">
           <div class="view">
-            <input 
+            <input
               class="toggle"
               type="checkbox"
               checked:bind="todo.complete"

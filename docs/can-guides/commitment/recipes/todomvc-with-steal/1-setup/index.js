@@ -12,4 +12,6 @@ class TodoMVC extends StacheElement {
   };
 }
 
+customElements.define("todo-mvc", TodoMVC);
+
 test(document.querySelector("todo-mvc"));
