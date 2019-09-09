@@ -4,26 +4,26 @@
 	import { fixture } from "//unpkg.com/can@pre/core.mjs";
 
 	let entityId = 1;
-	
+
 	const makeEntities = function(parentId, depth) {
 		if (depth > 5) {
 			return [];
 		}
-	
+
 		const entitiesCount = fixture.rand(6);
-	
+
 		const entities = [];
-	
+
 		for (let i = 0; i < entitiesCount; i++) {
 			// The id for this entity
 			const id = "" + entityId++;
-	
+
 			// If the entity is a folder or file
 			const isFolder = Math.random() > 0.3;
-	
+
 			// The children for this folder.
 			const children = isFolder ? makeEntities(id, depth + 1) : [];
-	
+
 			const entity = {
 				id: id,
 				name: (isFolder ? "Folder" : "File") + " " + id,
@@ -38,7 +38,7 @@
 		}
 		return entities;
 	};
-	
+
 	window.rootEntityData = {
 		id: "0",
 		name: "ROOT/",
