@@ -1,7 +1,7 @@
 // index.js
 import { StacheElement } from "can";
 import view from "./index.stache";
-import Todo from "~/models/todo";
+import { TodoList } from "~/models/todo";
 
 import test from "can-todomvc-test";
 
@@ -12,7 +12,7 @@ class TodoMVC extends StacheElement {
     appName: { default: "TodoMVC" },
     todosList: {
       get default() {
-        return new Todo.List([
+        return new TodoList([
           { name: "mow lawn", complete: false, id: 5 },
           { name: "dishes", complete: true, id: 6 },
           { name: "learn canjs", complete: false, id: 7 }

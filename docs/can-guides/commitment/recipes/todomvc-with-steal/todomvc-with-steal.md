@@ -258,27 +258,27 @@ Create _models/todo.js_ as follows:
 
 @sourceref ./2-define-todo/todo.js
 
-## Define Todo.List type (ObservableArray basics)
+## Define TodoList type (ObservableArray basics)
 
 ### The problem
 
-- Define a `Todo.List` type on the export of  _models/todo.js_, where:
+- Define a `TodoList` on _models/todo.js_, where:
   - It is an [can-observable-array ObservableArray] type.
   - The enumerable indexes are coerced into `Todo` types.
-  - Its `.active` property returns a filtered `Todo.List` of the todos that are __not__ complete.
-  - Its `.complete` property returns a filtered `Todo.List` of the todos that are complete.
+  - Its `.active` property returns a filtered `TodoList` of the todos that are __not__ complete.
+  - Its `.complete` property returns a filtered `TodoList` of the todos that are complete.
   - Its `.allComplete` property true if all the todos are complete.
 
 Example test code:
 
 ```js
-QUnit.ok(Todo.List, "Defined a List");
-const todos = new Todo.List([
+QUnit.ok(TodoList, "Defined a List");
+const todos = new TodoList([
   {complete: true},
   {},
   {complete: true}
 ]);
-QUnit.ok(todos[0] instanceof Todo, "each item in a Todo.List is a Todo");
+QUnit.ok(todos[0] instanceof Todo, "each item in a TodoList is a Todo");
 QUnit.equal(todos.active.length, 1);
 QUnit.equal(todos.complete.length, 2);
 QUnit.equal(todos.allComplete, false, "not allComplete");
@@ -331,7 +331,7 @@ Update _models/todo.js_ to the following:
 
 ### The problem
 
-- Add a `todosList` property whose default value will be a `Todo.List` with the 
+- Add a `todosList` property whose default value will be a `TodoList` with the 
 following data:
 
   ```js
@@ -411,7 +411,7 @@ Update _index.stache_ to the following:
 - Use [can-stache-bindings.twoWay value:bind] to setup a two-way binding in [can-stache].  For example, the following keeps `todo.name` and the input’s `value` in sync:
 
   ```html
-  <input  value:bind="todo.name" />
+  <input value:bind="todo.name">
   ```
 
 ### The solution
@@ -426,9 +426,6 @@ Update _index.stache_ to the following:
 ### The problem
 
 - CanJS’s model needs to know what is the unique identifier of a type.
-
-### What you need to know
-
 
 
 ### The solution
@@ -533,7 +530,7 @@ Create _models/todos-fixture.js_ as follows:
 
 - Decorate `Todo` with methods so it can get, create, updated, and delete todos at the `/api/todos` service.  Specifically:
   - `Todo.getList()` which calls `GET /api/todos`
-  - `Todo.get({id: 5})` which calls `GET /api/todos/5`
+  - `Todo.get({ id: 5 })` which calls `GET /api/todos/5`
   - `todo.save()` which calls `POST /api/todos` if `todo` doesn’t have an `id` or `PUT /api/todos/{id}` if the `todo` has an id.
   - `todo.destroy()` which calls `DELETE /api/todos/5`
 
@@ -544,7 +541,7 @@ Create _models/todos-fixture.js_ as follows:
 
   ```js
   baseMap({
-    Map: Type,
+    ObjectType: Type,
     url: "URL",
     algebra: algebra
   })
@@ -570,23 +567,23 @@ Get all `todos` from the service layer using the "connected" `Todo` type.
 - [The can-connect Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZebHFWMElNOVEwSlE) up to and including _Important Interfaces_.
 - [can-connect/can/map/map.getList Type.getList] gets data using the
   [can-connect/connection.getList connection’s getList] and returns a
-  promise that resolves to the `Type.List` of instances:
+  promise that resolves to the `TypeList` of instances:
 
   ```js
   Type.getList({}).then(function(list) {
 
-  })
+  });
   ```
-- An async [can-define.types.get getter] property behavior can be used
+- An async [can-observable-object/define/async getter] property behavior can be used
   to "set" a property to an initial value:
 
   ```js
   property: {
-      get: function(lastSet, resolve) {
-          SOME_ASYNC_METHOD( function callback(data) {
-              resolve(data);
-          });
-      }
+    async(resolve) {
+      SOME_ASYNC_METHOD(function callback(data) {
+        resolve(data);
+      });
+    }
   }
   ```
 
@@ -595,7 +592,7 @@ Get all `todos` from the service layer using the "connected" `Todo` type.
 Update _index.js_ to the following:
 
 @sourceref ./10-connection-list/index.js
-@highlight 5,13-17,only
+@highlight 7,13-17,only
 
 ## Toggling a todo’s checkbox updates service layer (can-connect use)
 
@@ -688,6 +685,8 @@ custom element.
       ...
     };
   }
+
+  customElements.define("some-element", SomeElement);
   ```
 
 - You can use `on:enter` to listen to when the user hits the __enter__ key.
@@ -802,8 +801,7 @@ single todo is saving.
 
 ### What you need to know
 
-- Using [can-observable-object/define/set setters] and [can-observable-object/define/get getters] a virtual property
-can be simulated like:
+- Using [can-observable-object/define/set setters] and [can-observable-object/define/get getters] a virtual property can be simulated like:
 
   ```js
   class Person extends ObservableObject {
@@ -849,9 +847,9 @@ Make the "Clear completed" button work. When the button is clicked, It should de
 - [The can-stache-bindings Presentation’s](https://drive.google.com/open?id=0Bx-kNqf-wxZeYUJ3ZVRxUlU2MjQ) _DOM Event Bindings_
 - Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in [can-stache].  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
-   ```html
-   <div on:click="doSomething()"> ... </div>
-   ```
+  ```html
+  <div on:click="doSomething()"> ... </div>
+  ```
 
 ### The solution
 
@@ -933,7 +931,7 @@ Update _index.js_ to the following:
 Update _index.stache_ to the following:
 
 @sourceref ./17-routing/index.html
-@highlight 4,23-26,29-32,35-38,only
+@highlight 4,26-29,32-35,38-41,only
 
 __Success!__ You’ve completed this guide. Have questions or comments?
 [Join our Slack](https://www.bitovi.com/community/slack) and let us know in the [#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A)

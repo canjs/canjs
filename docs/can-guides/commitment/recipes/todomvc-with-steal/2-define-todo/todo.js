@@ -1,7 +1,7 @@
 // models/todo.js
 import { ObservableObject, type } from "can";
 
-class Todo extends ObservableObject {
+export default class Todo extends ObservableObject {
   static props = {
     id: { type: type.convert(String) },
     name: { type: type.convert(String) },
@@ -15,5 +15,3 @@ class Todo extends ObservableObject {
     this.complete = !this.complete;
   }
 }
-
-export default Todo;
