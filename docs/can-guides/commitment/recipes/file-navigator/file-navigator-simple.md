@@ -3,16 +3,16 @@
 
 @description This beginner guide walks you through building a simple file navigation
 widget.  It takes about 25 minutes to complete.  It was written with
-CanJS 5.22.0. Check out the [guides/recipes/file-navigator-advanced]
-for an example that makes AJAX requests for its data and uses [can-component].
+CanJS 6.0.0. Check out the [guides/recipes/file-navigator-advanced]
+for an example that makes AJAX requests for its data and uses [can-stache-element].
 
 
 @body
 
 The final widget looks like:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="PLRvLw" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator simple [Finished]">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/PLRvLw/">
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="aboqrxK" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator simple [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/aboqrxK/">
   File Navigator simple [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
@@ -24,8 +24,8 @@ Click `ROOT/` to see its files and folders.
 
 __Start this tutorial by cloning the following CodePen__:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="pYLmBw" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator simple [Starter]">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/pYLmBw/">
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="YzKaXGv" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator simple [Starter]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/YzKaXGv/">
   File Navigator simple [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
@@ -55,49 +55,57 @@ folders and files.  It looks like:
   "type": "folder",
   "children": [
     {
-      "id": "1", "name": "File 1",
+      "id": "1",
+      "name": "File 1",
       "parentId": "0",
       "type": "file",
       "hasChildren": false
     },
     {
-      "id": "2", "name": "File 2",
+      "id": "2",
+      "name": "File 2",
       "parentId": "0",
       "type": "file",
       "hasChildren": false
     },
     {
-      "id": "3", "name": "Folder 3",
+      "id": "3",
+      "name": "Folder 3",
       "parentId": "0",
       "type": "folder",
       "hasChildren": true,
       "children": [
         {
-          "id": "4", "name": "File 4",
+          "id": "4",
+          "name": "File 4",
           "parentId": "3",
           "type": "file",
           "hasChildren": false
         },
         {
-          "id": "5", "name": "File 5",
+          "id": "5",
+          "name": "File 5",
           "parentId": "3",
           "type": "file",
           "hasChildren": false
         },
         {
-          "id": "6", "name": "File 6",
+          "id": "6",
+          "name": "File 6",
           "parentId": "3",
           "type": "file",
           "hasChildren": false
         },
         {
-          "id": "7", "name": "File 7",
+          "id": "7",
+          "name": "File 7",
           "parentId": "3",
           "type": "file",
           "hasChildren": false
         },
         {
-          "id": "8", "name": "Folder 8",
+          "id": "8",
+          "name": "Folder 8",
           "parentId": "3",
           "type": "folder",
           "hasChildren": false,
@@ -106,7 +114,8 @@ folders and files.  It looks like:
       ]
     },
     {
-      "id": "9", "name": "File 9",
+      "id": "9",
+      "name": "File 9",
       "parentId": "0",
       "type": "file",
       "hasChildren": false
@@ -130,31 +139,34 @@ Let’s render `rootEntityData` in the page with its immediate children.
 
 ### What you need to know
 
-- CanJS uses [can-component] to render data in a template
-  and keep it updated.  Templates can be authored in the Component `view` property like:
+- CanJS uses [can-stache-element] to render data in a template
+  and keep it updated.  Templates can be authored in the element `view` property like:
 
   ```js
-  Component.extend({
-    tag: "my-component",
-    view: `TEMPLATE CONTENT`
-  });
+  class MyComponent extends StacheElement {
+    static view = `TEMPLATE CONTENT`;
+  }
+  customElements.define("my-component", MyComponent);
   ```
 
-- A Component view is a [can-stache] template that uses
+- A custom element view is a [can-stache] template that uses
   [can-stache.tags.escaped {{key}}] magic tags to insert data into
   the HTML output like:
 
   ```js
-  Component.extend({
-    tag: "my-component",
-    view: `TEMPLATE CONTENT`
-  });
+  class MyComponent extends StacheElement {
+    static view = `{{this.message}}`;
+    static props = {
+      message: "Hello, World"
+    };
+  }
+  customElements.define("my-component", MyComponent);
   ```
 
-- Use [can-define/map/map] to model Component data as [can-component.prototype.ViewModel].
-- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in [can-stache].
-- Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in [can-stache].
-- Use [can-stache.helpers.is {{#eq(value1, value2)}}] to test equality in [can-stache].
+- Use [can-stache-element/static.props] to define the custom element data.
+- Use [can-stache.helpers.if {{# if(value) }}] to do `if/else` branching in [can-stache].
+- Use [can-stache.helpers.for-of {{# for(of) }}] to do looping in [can-stache].
+- Use [can-stache.helpers.is {{# eq(value1, value2) }}] to test equality in [can-stache].
 - [can-stache/keys/current {{./key}}] only returns the value in the current scope.
 - Write a `<ul>` to contain all the files.  Within the `<ul>` there should be:
   - An `<li>` with a className that includes `file` or `folder` and `hasChildren` if the folder has children.
@@ -170,11 +182,10 @@ Update the __HTML__ tab to:
 Update the __JavaScript__ tab to:
 
 ```js
-import { Component } from "//unpkg.com/can@5/core.mjs";
+import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
-Component.extend({
-  tag: "file-navigator",
-  view: `
+class FileNavigator extends StacheElement {
+  static view = `
     <span>{{this.rootEntity.name}}</span>
     <ul>
       {{# for(child of this.rootEntity.children) }}
@@ -187,24 +198,26 @@ Component.extend({
         </li>
       {{/ for }}
     </ul>
-  `,
-  ViewModel: {
-     rootEntity: {
-      default: () => {
+  `;
+
+  static props = {
+    rootEntity: {
+      get default() {
         return rootEntityData;
       }
     }
-  }
-});
+  };
+}
+
+customElements.define("file-navigator", FileNavigator);
 ```
-@highlight 6-17, 20-24, only
+@highlight 5-16,20-24,only
 
 ## Render all the files and folders
 
 ### The Problem
 
-Now let’s render all of the files and folders!  This means we want to render the files and folders recursively.  Every time we
-find a folder, we need to render its contents.
+Now let’s render all of the files and folders!  This means we want to render the files and folders recursively.  Every time we find a folder, we need to render its contents.
 
 ### Things to know
 
@@ -217,10 +230,9 @@ find a folder, we need to render its contents.
 - You can register an inline named partial within the current template [can-stache.tags.named-partial {{<PARTIAL_NAME}}] like the following:
 
   ```js
-  Component.extend({
-    tag: "my-component",
-    view: `{{<partialView}} BLOCK {{/partialView}}`
-  });
+  class MyComponent extends StacheElement {
+    static view = `{{<partialView}} BLOCK {{/partialView}}`;
+  }
   ```
 
 - The registered inline named partial can be called
@@ -233,7 +245,7 @@ find a folder, we need to render its contents.
   {{/ for }}
 {{/recursiveView}}
 
-{{>recursiveView yayRecursion}}`
+{{>recursiveView(yayRecursion)}}`
 ```
 ### The Solution
 
@@ -242,11 +254,10 @@ Update the __JAVSCRIPT__ tab to:
 - Call to an `{{>entities}}` partial.
 
 ```js
-import { Component } from "//unpkg.com/can@5/core.mjs";
+import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
-Component.extend({
-  tag: "file-navigator",
-  view: `
+class FileNavigator extends StacheElement {
+  static view = `
     {{<entities}}
       <span>{{this.name}}</span>
       <ul>
@@ -263,17 +274,20 @@ Component.extend({
     {{/entities}}
 
     {{entities(this.rootEntity)}}
-  `,
-  ViewModel: {
-     rootEntity: {
-      default: () => {
+  `;
+
+  static props = {
+    rootEntity: {
+      get default() {
         return rootEntityData;
       }
-    }
+    };
   }
-});
+}
+
+customElements.define("file-navigator", FileNavigator);
 ```
-@highlight 6-19,21,only
+@highlight 5-18,20,only
 
 ## Make the data observable
 
@@ -284,16 +298,18 @@ we change the data, the UI will automatically change.
 
 ### Things to know
 
-- [can-define/map/map.extend DefineMap.extend] allows you to define a type by defining the type’s
+- [can-observable-object] allows you to define a type by defining the type’s
   properties and the properties’ types like:
 
   ```js
-  import { DefineMap } from "can";
+  import { ObservableObject } from "can";
 
-  const Person = DefineMap.extend("Person", {
-    name: "string",
-    age: "number"
-  })
+  class Person extends ObservableObject {
+    static props = {
+      name: String,
+      age: Number
+    };
+  }
   ```
 
   This lets you create instances of that type and listen to changes like:
@@ -311,32 +327,33 @@ we change the data, the UI will automatically change.
   person.name = "Kevin" //-> logs "entity name changed to Kevin"
   ```
 
-- [can-define/map/map DefineMap] supports an [can-define.types.propDefinition#Array Array shorthand] that allows one to specify a [can-define/list/list DefineList] of typed instances like:
+- [can-observable-object ObservableObject] allows one to specify a property's type
+as an [can-observable-array ObservableArray] of typed instances like:
 
   ```js
-  import { DefineMap } from "can";
+  import { ObservableArray, ObservableObject, type } from "can";
 
-  const Person = DefineMap.extend("Person", {
-    name: "string",
-    age: "number",
-    addresses: [Address]
-  });
+  class Person extends ObservableObject {
+    static props = {
+      name: String,
+      age: Number,
+      addresses: type.convert(ObservableArray.convertsTo(Address))
+    };
+  }
   ```
 
   However, if `Address` wasn’t immediately available, you could do the same thing like:
 
   ```js
-  import { DefineMap } from "can";
+  import { ObservableArray, ObservableObject, type } from "can";
 
-  const Person = DefineMap.extend("Person", {
-    name: "string",
-    age: "number",
-    addresses: [{
-      type: function(rawData) {
-        return new Address(rawData);
-      }
-    }]
-  });
+  class Person extends ObservableObject {
+    static props = {
+      name: String,
+      age: Number,
+      addresses: type.late(() => type.convert(ObservableArray.convertsTo(Address)))
+    };
+  }
   ```
 
 
@@ -349,26 +366,28 @@ Update the __JavaScript__ tab to:
 - Use `rootEntity` to render the template
 
 ```js
-import { Component, DefineMap } from "//unpkg.com/can@5/core.mjs";
+import {
+  ObservableArray,
+  ObservableObject,
+  StacheElement,
+  type
+} from "//unpkg.com/can@6/core.mjs";
 
-const Entity = DefineMap.extend("Entity", {
-  id: "string",
-  name: "string",
-  parentId: "string",
-  hasChildren: "boolean",
-  type: "string",
-  children: [{
-    type: function(entity) {
-      return new Entity(entity)
-    }
-  }]
-});
+class Entity extends ObservableObject {
+  static props = {
+    id: String,
+    name: String,
+    parentId: String,
+    hasChildren: Boolean,
+    type: String,
+    children: type.late(() => type.convert(ObservableArray.convertsTo(Entity)))
+  };
+}
 
 const rootEntity = new Entity(rootEntityData);
 
-Component.extend({
-  tag: "file-navigator",
-  view: `
+class FileNavigator extends StacheElement {
+  static view = `
     {{<entities}}
       <span>{{this.name}}</span>
       <ul>
@@ -385,23 +404,27 @@ Component.extend({
     {{/entities}}
 
     {{entities(this.rootEntity)}}
-  `,
-  ViewModel: {
-     rootEntity: {
-      default: () => {
+  `;
+
+  static props = {
+    rootEntity: {
+      get default() {
         return rootEntity;
       }
     }
-  }
-});
+  };
+}
+
+customElements.define("file-navigator", FileNavigator);
 ```
-@highlight 1,3-14,16,41
+@highlight 2,3,5,8-17,19,44
 
 ### Test it
 
 Run the following the __Console__ tab:
 
 ```js
+var rootEntity = document.querySelector("file-navigator").rootEntity;
 rootEntity.name= "Something New";
 rootEntity.children.pop();
 ```
@@ -417,37 +440,41 @@ We want to be able to toggle if a folder is open or closed.
 
 ### Things to know
 
-- [can-define/map/map DefineMap] can specify a default value and a type:
+- [can-observable-object ObservableObject] can specify a default value and a type:
   ```js
-  import { DefineMap } from "can";
+  import { ObservableObject } from "can";
 
-  const Person = DefineMap.extend({
-    address: Address,
-    age: {default: 33, type: "number"}
-  });
+  class Person extends ObservableObject {
+    static props = {
+      address: Address,
+      age: { default: 33, type: Number }
+    };
+  }
   ```
 
-- [can-define/map/map DefineMap] can also have methods:
+- [can-observable-object ObservableObject] can also have methods:
 
   ```js
-  import { DefineMap } from "can";
+  import { ObservableObject } from "can";
 
-  const Person = DefineMap.extend({
-    address: Address,
-    age: {default: 33, type: "number"},
-    birthday: function(){
-      this.age++;
+  class Person extends ObservableObject {
+    static props = {
+      address: Address,
+      age: { default: 33, type: Number }
+    };
+    birthday() {
+      this.age += 1;
     }
-  });
+  }
   ```
 
-- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in [can-stache].
+- Use [can-stache.helpers.if {{# if(value) }}] to do `if/else` branching in [can-stache].
 
 - Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in [can-stache].  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
-   ```html
-   <div on:click="doSomething()"> ... </div>
-   ```
+  ```html
+  <div on:click="doSomething()"> ... </div>
+  ```
 
 ### The solution
 
@@ -457,33 +484,35 @@ Update the __JavaScript__ tab to:
 - Add a `toggleOpen` method to `Entity`.
 
 ```js
-import { Component, DefineMap } from "//unpkg.com/can@5/core.mjs";
+import {
+  ObservableArray,
+  ObservableObject,
+  StacheElement,
+  type
+} from "//unpkg.com/can@6/core.mjs";
 
-const Entity = DefineMap.extend("Entity", {
-  id: "string",
-  name: "string",
-  parentId: "string",
-  hasChildren: "boolean",
-  type: "string",
-  children: [{
-    type: function(entity) {
-      return new Entity(entity)
-    }
-  }],
-  isOpen: {type: "boolean", default: false},
-  toggleOpen: function(){      
+class Entity extends ObservableObject {
+  static props = {
+    id: String,
+    name: String,
+    parentId: String,
+    hasChildren: Boolean,
+    type: String,
+    children: type.late(() => type.convert(ObservableArray.convertsTo(Entity))),
+    isOpen: { type: Boolean, default: false }
+  };
+  toggleOpen() {
     this.isOpen = !this.isOpen;
   }
-});
+}
 
 const rootEntity = new Entity(rootEntityData);
 
-Component.extend({
-  tag: "file-navigator",
-  view: `
+class FileNavigator extends StacheElement {
+  static view = `
     {{<entities}}
-      <span on:click="toggleOpen()">{{this.name}}</span>
-      {{# if(isOpen) }}
+      <span on:click="this.toggleOpen()">{{this.name}}</span>
+      {{# if(this.isOpen) }}
         <ul>
           {{# for(child of this.children) }}
             <li class="{{child.type}} {{# if(child.hasChildren) }}hasChildren{{/ if }}">
@@ -500,24 +529,27 @@ Component.extend({
 
     {{entities(this.rootEntity)}}
   `,
-  ViewModel: {
-     rootEntity: {
-      default: () => {
+
+  static props = {
+    rootEntity: {
+      get default() {
         return rootEntity;
       }
     }
-  }
-});
+  };
+}
+
+customElements.define("file-navigator", FileNavigator);
 ```
-@highlight 14,15-17,26,27,39,only
+@highlight 16,18-20,28-29,41,only
 
 ## Result
 
 When complete, you should have a working file-navigation widget
 like the following CodePen:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="PLRvLw" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator simple [Finished]">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/PLRvLw/">
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="aboqrxK" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator simple [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/aboqrxK/">
   File Navigator simple [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
