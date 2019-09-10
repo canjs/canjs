@@ -1151,7 +1151,7 @@ customElements.define("stache-examples", StacheExamples);
 ## Custom Element Bindings
 
 Similar to the bindings on normal elements in the previous section &mdash; you can
-listen to events on custom elements, read, write or cross-bind an element's properties with [can-stache-bindings].
+listen to events on custom elements, read, write or cross-bind an element’s properties with [can-stache-bindings].
 
 The following shows examples of passing data to and from
 the `<my-counter>` element in the [api#CustomElementBasics Custom Elements Basics]

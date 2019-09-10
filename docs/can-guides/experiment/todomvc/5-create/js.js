@@ -95,7 +95,7 @@ class TodoMVC extends StacheElement {
                 <label>{{ todo.name }}</label>
                 <button class="destroy" on:click="todo.destroy()"></button>
               </div>
-              <input class="edit" type="text" value="{{todo.name}}">
+              <input class="edit" type="text" value="{{ todo.name }}">
             </li>
           {{/ for }}
         </ul>

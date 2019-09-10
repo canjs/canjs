@@ -154,16 +154,16 @@ class TodoMVC extends StacheElement {
         </span>
         <ul id="filters">
           <li>
-            <a href="{{routeUrl(filter=undefined)}}"
-              {{#routeCurrent(filter=undefined)}}class="selected"{{/routeCurrent}}>All</a>
+            <a href="{{ routeUrl(filter=undefined) }}"
+              {{# routeCurrent(filter=undefined) }}class="selected"{{/ routeCurrent }}>All</a>
           </li>
           <li>
-            <a href="{{routeUrl(filter='active')}}"
-              {{#routeCurrent(filter='active')}}class="selected"{{/routeCurrent}}>Active</a>
+            <a href="{{ routeUrl(filter='active') }}"
+              {{# routeCurrent(filter='active') }}class="selected"{{/ routeCurrent }}>Active</a>
           </li>
           <li>
-            <a href="{{routeUrl(filter='complete')}}"
-              {{#routeCurrent(filter='complete')}}class="selected"{{/routeCurrent}}>Completed</a>
+            <a href="{{ routeUrl(filter='complete') }}"
+              {{# routeCurrent(filter='complete') }}class="selected"{{/ routeCurrent }}>Completed</a>
           </li>
         </ul>
         <button id="clear-completed">

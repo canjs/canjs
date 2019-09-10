@@ -189,11 +189,11 @@ class TodoMVC extends StacheElement {
           </li>
           <li>
             <a href="{{ routeUrl(filter='active') }}"
-              {{# routeCurrent(filter='active') }}class="selected"{{/ routeCurrent}}>Active</a>
+              {{# routeCurrent(filter='active') }}class="selected"{{/ routeCurrent }}>Active</a>
           </li>
           <li>
             <a href="{{ routeUrl(filter='complete') }}"
-              {{# routeCurrent(filter='complete') }}class="selected"{{/ routeCurrent}}>Completed</a>
+              {{# routeCurrent(filter='complete') }}class="selected"{{/ routeCurrent }}>Completed</a>
           </li>
         </ul>
         <button id="clear-completed" on:click="this.todosList.destroyComplete()">
