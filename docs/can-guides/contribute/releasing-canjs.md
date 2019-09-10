@@ -86,6 +86,20 @@ To make a release:
 
 This will run the tests, build, bump the version number accordingly and publish the module to [npm](https://www.npmjs.com/).
 
+#### Making pre-releases
+
+If you’re already a branch being used for pre-releases, you can run the following to make the next pre-release:
+
+```
+npm run release:pre
+```
+
+If you’re making the first pre-release, you can run one of the following commands, depending on how you need to bump the version:
+
+- Major: `npm version premajor --preid=pre && npm publish --tag=pre`
+- Minor: `npm version preminor --preid=pre && npm publish --tag=pre`
+- Patch: `npm version prepatch --preid=pre && npm publish --tag=pre`
+
 #### Publishing release notes
 
 After you have released the project, you will need to update the release on GitHub. Make sure the newly created tag has been pushed to GitHub (`git push --tags`). 
