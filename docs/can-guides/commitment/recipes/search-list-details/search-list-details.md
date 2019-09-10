@@ -30,9 +30,9 @@ In this section, we will fork [this CodePen](https://codepen.io/bitovi/pen/PoYNN
 
 This CodePen:
 
-- Loads all of CanJS’s packages. Each package is available as a named export. For example [can-stache-element] is available as `import { StacheElement } from "can"`.
-- Creates a basic `<character-search-app>` component.
-- Includes a `<mock-url>` component for interacting with the route of the CodePen page.
+- Loads all of CanJS’s packages. Each package is available as a named export. For example [can-stache-element] is available as `import { StacheElement } from "can";`.
+- Creates a basic `<character-search-app>` element.
+- Includes a `<mock-url>` element for interacting with the route of the CodePen page.
 
 ### The solution
 
@@ -52,9 +52,10 @@ __START THIS TUTORIAL BY CLONING THE FOLLOWING CodePen__:
 
 In this section, we will:
 
-- Create an observable key-value object.
-- Cross-bind the observable with the URL.
+- Import [can-route].
+- Define a `routeData` property whose value is [can-route.data route.data].
 - Set up "pretty" routing rules.
+- Initialize [can-route].
 
 We want to support the following URL patterns:
 - `#!`
@@ -64,10 +65,10 @@ We want to support the following URL patterns:
 
 ### What you need to know
 
-- Use [can-observable-object/define/default] to create default values for component properties:
+- Use [can-observable-object/define/default] to create element properties that default to objects:
 
 ```js
-class MyComponent extends StacheElement {
+class MyElement extends StacheElement {
   static props = {
     dueDate: {
       get default() {
@@ -78,8 +79,6 @@ class MyComponent extends StacheElement {
 }
 ```
 
-- Use `new ObservableObject({ /* ... */ })` to create an [can-observable-object observable object].
-- Set [can-route.data route.data] to the object you want cross-bound to the URL.
 - `route.register( "{abc}" );` will create a URL matching rule.
 
 ```js
@@ -97,24 +96,24 @@ route.register( "{abc}/{def}" );
 
 ### How to verify it works
 
-You can access the the app's properties using `document.querySelector("character-search-app")` from the console.
+You can access the the app’s properties using `document.querySelector("character-search-app")` from the console.
 
-You should be able to update the component properties and see the URL update. Also, updating the URL should update the properties on the component.
+You should be able to update the element properties and see the URL update. Also, updating the URL should update the properties on the element.
 
 ### The solution
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-set-up-routing.js
-@highlight 1,11-25
+@highlight 1,11-22
 
-## Lazy load components ##
+## Lazy load elements ##
 
 ### The problem
 
 In this section, we will load the code for each route when that route is displayed. This technique prevents loading code for routes a user may never visit.
 
-The components we will use for each route are available as ES Modules on [unpkg](https://unpkg.com/):
+The elements we will use for each route are available as ES Modules on [unpkg](https://unpkg.com/):
 - [//unpkg.com/character-search-components@6/character-search.mjs](//unpkg.com/character-search-components@6/character-search.mjs)
 - [//unpkg.com/character-search-components@6/character-list.mjs](//unpkg.com/character-search-components@6/character-list.mjs)
 - [//unpkg.com/character-search-components@6/character-details.mjs](//unpkg.com/character-search-components@6/character-details.mjs)
@@ -140,7 +139,7 @@ class Person extends ObservableObject {
 }
 
 // make sure to put `name` in the view so that bindings are set up correctly
-static view = `{{name}}`;
+static view = `{{ name }}`;
 ```
 
 - Call the `import()` keyword as a function to [dynamically import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#Dynamic_Imports) a module.
@@ -153,14 +152,14 @@ Changing the `routeData.page` property will cause the code for the new route to 
 
 Update the __JavaScript__ tab to:
 
-@sourceref ./2-lazy-load-components.js
-@highlight 9,29-36
+@sourceref ./2-lazy-load-elements.js
+@highlight 9,26-33
 
-## Display components ##
+## Display elements ##
 
 ### The problem
 
-Now that the code is loaded for each route, we can create an instance of the loaded component and display it in the view.
+Now that the code is loaded for each route, we can create an instance of the loaded element and display it in the view.
 
 ### What you need to know
 
@@ -168,7 +167,7 @@ Now that the code is loaded for each route, we can create an instance of the loa
 - Promises can be [can-reflect-promise used directly] in the view.
 
 ```js
-class MyComponent extends StacheElement {
+class MyElement extends StacheElement {
   static view = `
     {{# if(this.aPromise.isPending) }}
       The code is still loading
@@ -179,7 +178,7 @@ class MyComponent extends StacheElement {
     {{/ if }}
 
     {{# if(this.aPromise.isResolved) }}
-      The code is loaded: {{this.aPromise.value}} -> Hello
+      The code is loaded: {{ this.aPromise.value }} -> Hello
     {{/ if }}
   `;
   static props = {
@@ -194,12 +193,12 @@ class MyComponent extends StacheElement {
 }
 ```
 
-- `import()` resolves with a module object - `module.default` is the component constructor.
-- Components can be [can-component#Programmaticallyinstantiatingacomponent instantiated programmatically] using `new ComponentConstructor()`.
+- `import()` resolves with a module object - `module.default` is the element constructor.
+- Elements can be instantiated programmatically using `new ElementConstructor()`.
 
 ### How to verify it works
 
-You can check the devtools Elements Panel for the correct component on each page:
+You can check the devtools Elements Panel for the correct element on each page:
 
 - `#!search` -> `<character-search-page>`
 - `#!list` -> `<character-list-page>`
@@ -209,29 +208,29 @@ You can check the devtools Elements Panel for the correct component on each page
 
 Update the __JavaScript__ tab to:
 
-@sourceref ./3-instantiate-components.js
-@highlight 9-15,41-45
+@sourceref ./3-instantiate-elements.js
+@highlight 9-15,38-42
 
-## Pass data to components ##
+## Pass data to elements ##
 
 ### The problem
 
-After the last step, the correct component is displayed for each route, but the components do not work correctly. To make these work, we will pass properties from the `character-search-app` component into each component.
+After the last step, the correct element is displayed for each route, but the elements do not work correctly. To make these work, we will pass properties from the `character-search-app` element into each element.
 
 ### What you need to know
 
-- You can pass properties when instantiating components to pass values to the component’s properties and set up bindings.
+- The [can-stache-element/lifecycle-methods.bindings bindings lifecycle method] can be used to create bindings between an element’s properties and parent observables.
 - [can-value] can be used to programmatically create observables that are bound to another object.
 
 ```js
-const componentInstance = new ComponentConstructor().bindings({
+const elementInstance = new ElementConstructor().bindings({
   givenName: value.from(this, "name.first"),
   familyName: value.bind(this, "name.last"),
   fullName: value.to(this, "name.full")
 });
 ```
 
-- The component for all three pages need a `query` property. The `<character-details-page>` also needs an `id` property.
+- The element for all three pages need a `query` property. The `<character-details-page>` also needs an `id` property.
 
 ### How to verify it works
 
@@ -247,7 +246,7 @@ The app should be fully functional:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-bind-properties.js
-@highlight 1,35-49,60
+@highlight 1,32-46,57
 
 ## Result
 
