@@ -28,7 +28,7 @@ Read [guides/setup] for instructions on alternate CanJS setups.
 ### the problem
 
 In this section, we will define a custom `<todo-mvc>` element and use it
-in the page's HTML.
+in the page’s HTML.
 
 ### the solution
 
@@ -44,8 +44,8 @@ Update the `JavaScript` tab to define the `<todo-mvc>` element by:
  - Setting the [can-stache-element#Defininganelement_sview view] to the html that should be displayed within
    the `<todo-mvc>` element. In this case it is the HTML that was originally in the page.
  - Instead of the hard-coded `<h1>Todos</h1>` title, we will read the title
-   from the element's properties. We'll do this by:
-   - Adding magic tags like `{{this.appName}}` that read `appTitle` from the element's properties.
+   from the element’s properties. We'll do this by:
+   - Adding magic tags like `{{ this.appName }}` that read `appTitle` from the element’s properties.
    - Defining an `appName` property that [can-observable-object/define/default]s to `"TodoMVC"`.
 
 @sourceref ./1-create-template/js.js
@@ -80,16 +80,16 @@ In the `JavaScript` tab:
  - Define a `Todo` type with [can-observable-object ObservableObject].
  - Define a `Todo.List` type along with an `active` and `complete` property with [can-observable-array ObservableArray].
 
-In `<todo-mvc>`'s props:
+In `<todo-mvc>`’s props:
 
  - Create a list of todos and pass those to the template.
 
-In `<todo-mvc>`'s `view`:
+In `<todo-mvc>`’s `view`:
 
 - Use [can-stache.helpers.for-of `{{# for(of) }}`] to loop through every todo.
 - Add `completed` to the `<li>`’s `className` if the `<li>`’s todo is complete.
 - Use [can-stache-bindings.twoWay `checked:bind`] to two-way bind the checkbox’s `checked` property to its todo’s `complete` property.  
-- Use [can-stache.tags.escaped `{{todo.name}}`] to insert the value todo’s `name` as the content of the `<label>` and
+- Use [can-stache.tags.escaped `{{ todo.name }}`] to insert the value todo’s `name` as the content of the `<label>` and
   `value` of the text `<input>`.
 - Insert the active and complete number of todos.
 
@@ -129,13 +129,13 @@ Update the `JavaScript` tab to:
 - Connect the `Todo` and `Todo.List` types to the RESTful `"/api/todos"` endpoint using [can-realtime-rest-model].  This allows you to load, create, update, and destroy todos
 on the server.
 
-In `<todo-mvc>`'s `props`:
+In `<todo-mvc>`’s `props`:
 
 - Use [can-connect/can/map/map.getList] to load a list of all todos on the server. The result
   of `getList` is a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) that resolves to a `Todo.List` with the todos returned from the fake data store.  That [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
   is available to the template as `this.todosPromise`.
 
-In `<todo-mvc>`'s `view`:
+In `<todo-mvc>`’s `view`:
 
  - Use [can-stache.helpers.for-of `{{# for(todo of todosPromise.value) }}`] to loop through the promise’s resolved value, which is the list of todos returned by the server.
  - Read the active and completed number of todos from the promise’s resolved value.
@@ -159,7 +159,7 @@ In this section, we will:
 
 ### the solution
 
-Update `<todo-mvc>`'s `view` to:
+Update `<todo-mvc>`’s `view` to:
 
  - Add `destroying` to the `<li>`’s `className` if the `<li>`’s todo is being destroyed using [can-connect/can/map/map.prototype.isDestroying].
  - Call the `todo`’s [can-connect/can/map/map.prototype.destroy] method when the `<button>` is clicked using [can-stache-bindings.event `on:click`].
@@ -196,7 +196,7 @@ key. The [can-event-dom-enter] event provides this functionality, but it
 is an [can-ecosystem] module.  So to use the enter event we need to:
 
 - Import [can-event-dom-enter enterEvent] from `everything.mjs` (which includes `enterEvent`) instead of `core.mjs`.
-- Import [can-dom-events domEvents] (CanJS's global event registry).
+- Import [can-dom-events domEvents] (CanJS’s global event registry).
 - Add the `enterEvent` to `domEvents`.
 
 Update the `JavaScript` tab to define a `<todo-create>` component with the following:
@@ -208,7 +208,7 @@ Update the `JavaScript` tab to define a `<todo-create>` component with the follo
   - A `todo` property that holds a new `Todo` instance.
   - A `createTodo` method that [can-connect/can/map/map.prototype.save]s the `Todo` instance and replaces it with a new one once saved.
 
-Update `<todo-mvc>`'s `view` to:
+Update `<todo-mvc>`’s `view` to:
 
 - Use the `<todo-create>` component.
 
@@ -240,7 +240,7 @@ Update the `JavaScript` tab to:
 - Define a `<todo-list>` component with:
   - A `todos` property that should be provided by the parent element.
   - A view that loops through a list of `todos` (instead of `todosPromise.value`).
-- In `<todo-mvc>`'s view, create a `<todo-list>` element and set its `todos` property to the resolved value of `todosPromise`
+- In `<todo-mvc>`’s view, create a `<todo-list>` element and set its `todos` property to the resolved value of `todosPromise`
   using [can-stache-bindings.toChild `todos:from='this.todosPromise.value'`].
 
 @sourceref ./6-list/js.js
@@ -260,7 +260,7 @@ In this section, we will:
 
 ### the solution
 
-Update the `<todo-list>`'s `view` to:
+Update the `<todo-list>`’s `view` to:
 
 - Use the `isEditing` method to add `editing` to the `className` of the `<li>` being edited.
 - When the checkbox changes, update the todo on the server with [can-connect/can/map/map.prototype.save],
@@ -271,7 +271,7 @@ Update the `<todo-list>`'s `view` to:
   - Focus the input when `isEditing` is true using the special [can-util/dom/attr/attr.special.focused] attribute.
   - Call `cancelEdit` if the input element loses focus.
 
-Update the `<todo-list>`'s `props` to include the methods and properties needed to edit a todo’s name, including:
+Update the `<todo-list>`’s `props` to include the methods and properties needed to edit a todo’s name, including:
 
    - An `editing` property of type `Todo` that stores which todo is being edited.
    - A `backupName` property that stores the todo’s name before being edited.
@@ -307,20 +307,20 @@ Update the `JavaScript` tab to:
 
 - Import [can-route route].
 
-Update `<todo-mvc>`'s `view` to:
+Update `<todo-mvc>`’s `view` to:
 
 - Set the page links `href`s to a URL that will set the desired properties on [can-route.data route.data] when clicked using
   [can-stache-route-helpers.routeUrl].
 - Add `class='selected'` to the link if the current route matches the current properties on [can-route.data route.data]
   using [can-stache-route-helpers.routeCurrent].
 
-Update `<todo-mvc>`'s `props` to:
+Update `<todo-mvc>`’s `props` to:
 
 - Provide access to the observable [can-route.data route.data] by:
   - Defining a `routeData` property whose value is [can-route.data route.data].
   - Create a pretty routing rule so if the URL looks like `"#!active"`, the `filter` property of
     `route.data` will be set to `"active"` with [can-route.register route.register].
-  - Initialize [can-route.data route.data]'s values with [can-route.start route.start()].
+  - Initialize [can-route.data route.data]’s values with [can-route.start route.start()].
 - Change `todosPromise` to check if `this.routeData.filter` is:
   - `falsy` - then return all todos.
   - `"complete"` - then return all complete todos.
@@ -356,13 +356,13 @@ Add the following to the `Todo.List` model:
 - An `updateCompleteTo` method that updates every todo’s `complete` property to the specified value and updates the compute on the server with [can-connect/can/map/map.prototype.save].
 - A `destroyComplete` method that deletes every complete todo with [can-connect/can/map/map.prototype.destroy].
 
-Update `<todo-mvc>`'s `view` to:
+Update `<todo-mvc>`’s `view` to:
 
-- Cross bind the `toggle-all`’s `checked` property to the `ViewModel`’s `allChecked` property.
+- Cross bind the `toggle-all` `<input>`’s `checked` property to the `<todo-mvc>`’s `allChecked` property.
 - Disable the `toggle-all` button while any todo is saving.
 - Call the `Todo.List`’s `destroyComplete` method when the `clear-completed` button is clicked on.
 
-Update `<todo-mvc>`'s `props` to include:
+Update `<todo-mvc>`’s `props` to include:
 
 - A `todosList` property that gets its value from the `todosPromise` using an [can-observable-object/define/async asynchronous getter].
 - An `allChecked` property that returns `true` if every todo is complete.  The property can also be set to `true` or `false` and it will set every todo to that value.
