@@ -1,4 +1,4 @@
-import { ObservableObject, route, StacheElement, value } from "//unpkg.com/can@pre/ecosystem.mjs";
+import { StacheElement, route, value } from "//unpkg.com/can@pre/ecosystem.mjs";
 
 class CharacterSearchApp extends StacheElement {
   static view = `
@@ -18,9 +18,6 @@ class CharacterSearchApp extends StacheElement {
   static props = {
     routeData: {
       get default() {
-        const routeData = new ObservableObject({});
-        route.data = routeData;
-
         route.register("", { page: "search" });
         route.register("{page}");
         route.register("{page}/{query}");
@@ -28,7 +25,7 @@ class CharacterSearchApp extends StacheElement {
 
         route.start();
 
-        return routeData;
+        return route.data;
       }
     },
 
@@ -55,9 +52,9 @@ class CharacterSearchApp extends StacheElement {
         ".mjs";
 
       return import(componentURL).then(module => {
-        const ComponentConstructor = module.default;
+        const ElementConstructor = module.default;
 
-        return new ComponentConstructor().bindings(this.routeComponentData);
+        return new ElementConstructor().bindings(this.routeComponentData);
       });
     }
   };
