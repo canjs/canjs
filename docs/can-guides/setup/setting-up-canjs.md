@@ -72,13 +72,13 @@ any development environment. This section gives technical details on these items
   - `./core.mjs` - An ESM module with the named exports of each [can-core] package bundled
     together in a single file. This is useful for examples and prototyping in modern browsers that
     support ES modules and for real-world apps that use just what is in core CanJS.
-    It's hosted statically on `unpkg` and can be downloaded [here](https://unpkg.com/can/core.mjs).  
+    It's hosted statically on `unpkg` and can be downloaded [here](https://unpkg.com/can@5/core.mjs).  
 
     You can import directly from the file as follows:
 
     ```html
     <script type="module">
-	import { Component } from "//unpkg.com/can/core.mjs";
+	import { Component } from "//unpkg.com/can@5/core.mjs";
 
 	Component.extend({
 		tag: "my-app",
