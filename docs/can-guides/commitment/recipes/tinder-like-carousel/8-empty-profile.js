@@ -10,7 +10,6 @@ class EvilTinder extends StacheElement {
         <img 
           src="{{ this.currentProfile.img }}"
           draggable="false"
-          touch-action="none"
         >
       </div>
       <div class="next">

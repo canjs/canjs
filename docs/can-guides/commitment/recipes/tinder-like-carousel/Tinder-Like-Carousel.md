@@ -38,10 +38,7 @@ __START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RI
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
-This CodePen loads:
-
-- CanJS (`import { StacheElement } from "//unpkg.com/can@6/core.mjs"`).
-- The [pepjs polyfill](https://www.npmjs.com/package/pepjs-improved) for [pointer events](https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events) support.
+This CodePen loads CanJS (`import { StacheElement } from "//unpkg.com/can@6/core.mjs"`).
 
 ### The problem
 
@@ -316,16 +313,6 @@ entire `document`, we will setup the event binding in the [can-stache-element/li
   this.listenTo(current, "pointerdown", (event) => { /* ... */ })
   ```
 
-  As mobile Safari doesn't support pointer events, we have already installed the
-  [pep pointer event polyfill](https://www.npmjs.com/package/pepjs-improved).
-
-  The polyfill requires that `touch-action="none"` be added to elements that should
-  dispatch pointer events like:
-
-  ```html
-  <img touch-action="none">
-  ```
-
   Drag motions on images in desktop browsers will attempt to drag the image unless
   this behavior is turned off.  It can be turned off with `draggable="false"` like:
 
@@ -361,7 +348,7 @@ entire `document`, we will setup the event binding in the [can-stache-element/li
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-move-current-profile.js
-@highlight 8-14,46,67-78,only
+@highlight 8-13,45,66-77,only
 
 
 ## Show liking animation when you drag to the right
@@ -392,7 +379,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-show-liking.js
-@highlight 6,56-58,only
+@highlight 6,55-57,only
 
 
 
@@ -414,7 +401,7 @@ You know everything you need to know!
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-show-nope.js
-@highlight 6-7,61-63,only
+@highlight 6-7,60-62,only
 
 
 
@@ -454,7 +441,7 @@ And, we will perform the following no matter what state the drag motion ends:
 Update the __JavaScript__ tab to:
 
 @sourceref ./7-release.js
-@highlight 87-98,only
+@highlight 86-97,only
 
 ## Add an empty profile
 
@@ -483,7 +470,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./8-empty-profile.js
-@highlight 49-55,58,62,only
+@highlight 48-54,57,61,only
 
 ## Result
 
