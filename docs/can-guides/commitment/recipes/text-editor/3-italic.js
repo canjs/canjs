@@ -1,11 +1,10 @@
-import { Component } from "//unpkg.com/can@5/core.mjs";
+import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
-Component.extend({
-  tag: "rich-text-editor",
-  view: `
+class RichTextEditor extends StacheElement {
+  static view = `
     <div class="controls">
-      <button on:click="exec('bold')" class="bold">B</button>
-      <button on:click="exec('italic')" class="italic">I</button>
+			<button on:click="this.exec('bold')" class="bold">B</button>
+			<button on:click="this.exec('italic')" class="italic">I</button>
     </div>
     <div class="editbox" contenteditable="true">
       <ol>
@@ -16,14 +15,18 @@ Component.extend({
       </ol>
       <div>Celebrate!</div>
     </div>
-  `,
-  ViewModel: {
-    exec(cmd) {
-      document.execCommand(cmd, false, null);
-    }
+  `;
+
+  static props = {};
+
+  exec(cmd) {
+    document.execCommand(cmd, false, null);
   }
-});
+}
+
+customElements.define("rich-text-editor", RichTextEditor);
 
 function getElementsInRange(range, wrapNodeName) {}
 
 function rangeContains(outer, inner) {}
+
