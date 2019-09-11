@@ -1,48 +1,48 @@
 <signup-login></signup-login>
 
 <script type="module">
-  import { ajax, fixture, type, StacheElement } from "//unpkg.com/can@5/ecosystem.mjs";
+import { ajax, fixture, StacheElement, type } from "//unpkg.com/can@pre/core.mjs";
 
-  fixture("POST /api/session", function(request, response) {
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      const user = JSON.parse(userData);
-      const requestUser = request.data.user;
-      if (
-        user.email === requestUser.email &&
-        user.password === requestUser.password
-      ) {
-        return request.data;
-      } else {
-        response(401, { message: "Unauthorized" }, {}, "unauthorized");
-      }
-    }
-    response(401, { message: "Unauthorized" }, {}, "unauthorized");
-  });
-  fixture("GET /api/session", function(request, response) {
-    const session = localStorage.getItem("session");
-    if (session) {
-      response(JSON.parse(session));
-    } else {
-      response(404, { message: "No session" }, {}, "unauthorized");
-    }
-  });
-  fixture("DELETE /api/session", function() {
-    localStorage.removeItem("session");
-    return {};
-  });
-  fixture("POST /api/users", function(request) {
-    const session = {
-      user: { email: request.data.email }
-    };
-    localStorage.setItem("user", JSON.stringify(request.data));
-    localStorage.setItem("session", JSON.stringify(session));
+fixture("POST /api/session", function(request, response) {
+	const userData = localStorage.getItem("user");
+	if (userData) {
+		const user = JSON.parse(userData);
+		const requestUser = request.data.user;
+		if (
+			user.email === requestUser.email &&
+			user.password === requestUser.password
+		) {
+			return request.data;
+		} else {
+			response(401, { message: "Unauthorized" }, {}, "unauthorized");
+		}
+	}
+	response(401, { message: "Unauthorized" }, {}, "unauthorized");
+});
+fixture("GET /api/session", function(request, response) {
+	const session = localStorage.getItem("session");
+	if (session) {
+		response(JSON.parse(session));
+	} else {
+		response(404, { message: "No session" }, {}, "unauthorized");
+	}
+});
+fixture("DELETE /api/session", function() {
+	localStorage.removeItem("session");
+	return {};
+});
+fixture("POST /api/users", function(request) {
+	const session = {
+		user: { email: request.data.email }
+	};
+	localStorage.setItem("user", JSON.stringify(request.data));
+	localStorage.setItem("session", JSON.stringify(session));
 
-    return session.user;
-  });
+	return session.user;
+});
 
-  class SignupLogin extends StacheElement {
-    static view = `
+class SignupLogin extends StacheElement {
+	static view = `
       {{# if(this.sessionPromise.value) }}
 
           <p class="welcome-message">
@@ -95,63 +95,65 @@
       {{/ if }}
     `;
 
-    static props = {
-      email: String,
-      password: String,
-      page: { type: String, default: 'login' },
-      logInError: type.Any,
-      sessionPromise: {
-        get default() {
-          return ajax({
-            url: "/api/session"
-          });
-        }
-      },
-    };
+	static props = {
+		email: String,
+		password: String,
+		page: { type: String, default: "login" },
+		logInError: type.Any,
+		sessionPromise: {
+			get default() {
+				return ajax({
+					url: "/api/session"
+				});
+			}
+		}
+	};
 
-    signUp(event) {
-      event.preventDefault();
-      this.sessionPromise = ajax({
-        url: "/api/users",
-        type: "post",
-        data: {
-          email: this.email,
-          password: this.password
-        }
-      }).then(function(user) {
-        return {user: user};
-      });
-    }
+	signUp(event) {
+		event.preventDefault();
+		this.sessionPromise = ajax({
+			url: "/api/users",
+			type: "post",
+			data: {
+				email: this.email,
+				password: this.password
+			}
+		}).then(function(user) {
+			return { user: user };
+		});
+	}
 
-    logIn(event) {
-      event.preventDefault();
-      this.sessionPromise = ajax({
-        url: "/api/session",
-        type: "post",
-        data: {
-          user: {
-            email: this.email,
-            password: this.password
-          }
-        }
-      });
+	logIn(event) {
+		event.preventDefault();
+		this.sessionPromise = ajax({
+			url: "/api/session",
+			type: "post",
+			data: {
+				user: {
+					email: this.email,
+					password: this.password
+				}
+			}
+		});
 
-      this.logInError = null;
-      this.sessionPromise.catch(function(error) {
-        this.logInError = error;
-      }.bind(this));
-    }
+		this.logInError = null;
+		this.sessionPromise.catch(
+			function(error) {
+				this.logInError = error;
+			}.bind(this)
+		);
+	}
 
-    logOut() {
-      this.sessionPromise = ajax({
-        url: "/api/session",
-        type: "delete"
-      }).then(function() {
-        return Promise.reject({message: "Unauthorized"});
-      });
-    }
-  }
-  customElements.define("signup-login", SignupLogin);
+	logOut() {
+		this.sessionPromise = ajax({
+			url: "/api/session",
+			type: "delete"
+		}).then(function() {
+			return Promise.reject({ message: "Unauthorized" });
+		});
+	}
+}
+customElements.define("signup-login", SignupLogin);
 </script>
 
 <style type="text/less">
@@ -240,4 +242,3 @@
     background-color: @color-error-light;
   }
 </style>
-

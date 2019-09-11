@@ -1,4 +1,4 @@
-import { ajax, fixture, type, StacheElement } from "//unpkg.com/can@5/ecosystem.mjs";
+import { ajax, fixture, StacheElement, type } from "//unpkg.com/can@pre/core.mjs";
 
 fixture("POST /api/session", function(request, response) {
 	const userData = localStorage.getItem("user");
@@ -47,45 +47,45 @@ class SignupLogin extends StacheElement {
 				<a href="javascript://" on:click="this.logOut()">Log out</a>
 			</p>
 
-		{{ else }}		
-      {{# eq(this.page, "signup") }}
-      
+		{{ else }}
+			{{# eq(this.page, "signup") }}
+
 				<form on:submit="this.signUp(scope.event)">
 					<h2>Sign Up</h2>
-	
+
 					<input placeholder="email" value:to="this.email" />
-	
+
 					<input type="password"
 							 placeholder="password" value:to="this.password" />
-	
+
 					<button>Sign Up</button>
-	
+
 					<aside>
 						Have an account?
-            <a href="javascript://" on:click="this.page = 'login'">Log in</a>
+						<a href="javascript://" on:click="this.page = 'login'">Log in</a>
 					</aside>
 				</form>
 
-      {{ else }}
+			{{ else }}
 
-        <form on:submit="this.logIn(scope.event)">
-          <h2>Log In</h2>
+				<form on:submit="this.logIn(scope.event)">
+					<h2>Log In</h2>
 
-          <input placeholder="email" value:to="this.email" />
+					<input placeholder="email" value:to="this.email" />
 
-          <input type="password"
-                 placeholder="password" value:to="this.password" />
+					<input type="password"
+						placeholder="password" value:to="this.password" />
 
-          <button>Log In</button>
+					<button>Log In</button>
 
-          <aside>
-            Don’t have an account?
-            <a href="javascript://" on:click="this.page = 'signup'">Sign up</a>
-          </aside>
-        </form>
+					<aside>
+						Don’t have an account?
+						<a href="javascript://" on:click="this.page = 'signup'">Sign up</a>
+					</aside>
+				</form>
 
-      {{/ eq }}
-      
+			{{/ eq }}
+
 		{{/ if }}
 	`;
 
@@ -99,7 +99,7 @@ class SignupLogin extends StacheElement {
 					url: "/api/session"
 				});
 			}
-		},
+		}
 	};
 
 	signUp(event) {
@@ -112,7 +112,7 @@ class SignupLogin extends StacheElement {
 				password: this.password
 			}
 		}).then(function(user) {
-			return {user: user};
+			return { user: user };
 		});
 	}
 
@@ -121,7 +121,7 @@ class SignupLogin extends StacheElement {
 			url: "/api/session",
 			type: "delete"
 		}).then(function() {
-			return Promise.reject({message: "Unauthorized"});
+			return Promise.reject({ message: "Unauthorized" });
 		});
 	}
 
