@@ -1,8 +1,7 @@
-import { Component } from "//unpkg.com/can@5/core.mjs";
+import { StacheElement } from "//unpkg.com/can@5/core.mjs";
 
-Component.extend({
-  tag: "rich-text-editor",
-  view: `
+class RichTextEditor extends StacheElement {
+  static view = `
     <div class="editbox" contenteditable="true">
       <ol>
         <li>Learn <b>about</b> CanJS.</li>
@@ -12,8 +11,10 @@ Component.extend({
       </ol>
       <div>Celebrate!</div>
     </div>
-  `
-});
+  `;
+}
+
+customElements.define("rich-text-editor", RichTextEditor);
 
 function getElementsInRange(range, wrapNodeName) {}
 
