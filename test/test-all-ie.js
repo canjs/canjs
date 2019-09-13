@@ -95,7 +95,7 @@ require('can-view-autorender/test/test');
 require('can-connect/test/test-without-proxy');
 require("can-debug/can-debug-test");
 require('can-route/test/test-without-proxy');
-require('can-route-pushstate/test/test');
+require('can-route-pushstate/test/test-ie');
 require('can-stache/test/stache-test');
 
 // Infrastructure tests

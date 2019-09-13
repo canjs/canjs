@@ -620,7 +620,7 @@ CanJS has configuration options for you to control how it makes requests, parses
 ```js
 import { realtimeRestModel } from "can";
 
-const Todo = realtimeRestModel("/api/todos/{id}").Map;
+const Todo = realtimeRestModel("/api/todos/{id}").ObjectType;
 
 // Get todos sorted by name
 const todosPromise = Todo.getList({sort: "name"});
@@ -696,7 +696,7 @@ Save yourself time by not writing code that updates your app’s UI.
 ```js
 import { realtimeRestModel } from "can";
 
-const Todo = realtimeRestModel("/api/todos/{id}").Map;
+const Todo = realtimeRestModel("/api/todos/{id}").ObjectType;
 
 // Get completed todos
 Todo.getList({sort: "name"}).then(todos => {
