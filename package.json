@@ -151,7 +151,7 @@
     "steal-stache": "4.1.5"
   },
   "devDependencies": {
-    "@feathersjs/feathers": "^3.3.1",
+    "@feathersjs/feathers": "^4.3.2",
     "@feathersjs/socketio-client": "^1.2.1",
     "@octokit/rest": "^16.27.3",
     "bit-docs": "0.2.0",
