@@ -38,11 +38,10 @@ any development environment. This section gives technical details on these items
 
 - __The individual packages.__
 
-  CanJS is composed from over 80 individual packages.  For example [can-component Component]
-  is actually the [can-component](https://www.npmjs.com/package/can-component) package, housed
-  in its own [GitHub repository](https://github.com/canjs/can-component). The modules within
-  these packages are written in ES5 JavaScript and CommonJS, so they can be imported by webpack, Browserify,
-  StealJS, and a do not require transpiling.
+  CanJS is composed from over 80 individual packages.  For example [can-stache-element StacheElement]
+  is actually the [can-stache-element](https://www.npmjs.com/package/can-stache-element) package, housed
+  in its own [GitHub repository](https://github.com/canjs/can-stache-element). The modules within
+  these packages are written in ES5 JavaScript and CommonJS, so they can be imported by [webpack](https://webpack.js.org/), [Browserify](http://browserify.org/), [StealJS](https://stealjs.com/), and a do not require transpiling.
 
   Apps that need long-term flexibility should install these packages directly. Direct installation
   means you can upgrade a small part of CanJS when needed.
@@ -56,38 +55,37 @@ any development environment. This section gives technical details on these items
     a ES named export. For example, `can.js` looks like this:
 
     ```js
-    export { default as Component } from "can-component";
+    export { default as StacheElement } from "can-stache-element";
     export { default as restModel } from "can-rest-model";
     // ...
     ```
 
     Most module loaders setups with tree-shaking (ex: webpack 2 and StealJS 2)
-    use this module. Import
-    named exports from the `can` package like this:
+    use this module. Import named exports from the `can` package like this:
 
     ```js
-    import { Component, restModel } from "can";
+    import { StacheElement, restModel } from "can";
     ```
 
   - `./core.mjs` - An ESM module with the named exports of each [can-core] package bundled
     together in a single file. This is useful for examples and prototyping in modern browsers that
     support ES modules and for real-world apps that use just what is in core CanJS.
-    It's hosted statically on `unpkg` and can be downloaded [here](https://unpkg.com/can@5/core.mjs).  
+    It's hosted statically on `unpkg` and can be downloaded [here](https://unpkg.com/can@6/core.mjs).  
 
     You can import directly from the file as follows:
 
     ```html
     <script type="module">
-	import { Component } from "//unpkg.com/can@5/core.mjs";
+	import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
-	Component.extend({
-		tag: "my-app",
-		view: `Hello {{name}}!`,
-		ViewModel: {
-			name: { default: "world" }
-		}
-	});
+  class MyApp extends StacheElement {
+    static view = `Hello {{name}}!`;
+    static props = {
+      name: "world"
+    };
+  }
 
+  customElements.define("my-app", MyApp);
     </script>
     ```
 
@@ -106,16 +104,16 @@ any development environment. This section gives technical details on these items
 
     ```html
     <script type="module">
-	import { Component } from "//unpkg.com/can@5/everything.mjs";
+	import { StacheElement } from "//unpkg.com/can@6/everything.mjs";
 
-    	Component.extend({
-    		tag: "my-app",
-    		view: `Hello {{name}}!`,
-    		ViewModel: {
-    			name: { default: "world" }
-    		}
-    	});
+      class MyApp extends StacheElement {
+        static view = `Hello {{name}}!`;
+        static props = {
+          name: "world"
+        };
+      }
 
+      customElements.define("my-app", MyApp);
     </script>
     ```
 
@@ -154,15 +152,16 @@ The following `HTML` page imports CanJS and uses it to define a custom element:
     <my-app></my-app>
 
     <script type="module">
-    import { Component } from "//unpkg.com/can@5/core.mjs";
+    import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
-    Component.extend({
-    	tag: "my-app",
-    	view: `CanJS {{feels}} modules`,
-    	ViewModel: {
-    		feels: { default: "😍" }
-    	}
-    });
+    class MyApp extends StacheElement {
+      static view = `CanJS {{feels}} modules`;
+      static props = {
+        feels: "😍"
+      };
+    }
+
+    customElements.define("my-app", MyApp);
     </script>
 </body>
 </html>
@@ -174,21 +173,22 @@ older browsers, use the [traditional JavaScript bundle](#IncludingthecoreJavaScr
 This build only includes CanJS’s [can-core] and [can-infrastructure] modules. All modules are exported as named exports. For example, if you want the [can-ajax] infrastructure module, import it as follows:
 
 ```js
-import { Component, ajax } from "//unpkg.com/can@5/core.mjs";
+import { StacheElement, ajax } from "//unpkg.com/can@6/core.mjs";
 
-Component.extend({
-	tag: "my-app",
-	view: `
-        CanJS {{feels}} modules.
-        The server says: {{messagePromise.value}}
-    `,
-	ViewModel: {
-		feels: { default: "😍" },
-        messagePromise: {
-            default: () => ajax({url: "/message"})
-        }
-	}
-});
+class MyApp extends StacheElement {
+  static view = `
+      CanJS {{feels}} modules.
+      The server says: {{messagePromise.value}}
+  `;
+  static props = {
+    feels: "😍",
+    get messagePromise() {
+      return ajax({url: "/message"};
+    }
+  };
+}
+
+customElements.define("my-app", MyApp);
 ```
 @highlight 1
 
@@ -203,29 +203,30 @@ Minified core bundle
 
 
 If you use the core ES module, make sure to switch to
-its minified version (`//unpkg.com/can@5/core.min.mjs`) in production like this:
+its minified version (`//unpkg.com/can@6/core.min.mjs`) in production like this:
 
 ```js
-import { Component, ajax } from "//unpkg.com/can@5/core.min.mjs";
+import { StacheElement, ajax } from "//unpkg.com/can@6/core.min.mjs";
 
-Component.extend({
-	tag: "my-app",
-	view: `
-        CanJS {{feels}} modules.
-        The server says: {{messagePromise.value}}
-    `,
-	ViewModel: {
-		feels: { default: "😍" },
-        messagePromise: {
-            default: () => ajax({url: "/message"})
-        }
-	}
-});
+class MyApp extends StacheElement {
+  static view = `
+      CanJS {{feels}} modules.
+      The server says: {{messagePromise.value}}
+  `;
+  static props = {
+    feels:  "😍",
+    get messagePromise() {
+      return ajax({url: "/message"};
+    }
+  };
+}
+
+customElements.define("my-app", MyApp);
 ```
 
 __NOTE:__ Every use of
-the unminified URL (`//unpkg.com/can@5/core.mjs`) must be updated to
-the minified version (`//unpkg.com/can@5/core.min.mjs`).
+the unminified URL (`//unpkg.com/can@6/core.mjs`) must be updated to
+the minified version (`//unpkg.com/can@6/core.min.mjs`).
 
 </details>
 
@@ -256,48 +257,51 @@ that import CanJS. The following shows putting components into their own modules
   ```
 - __app.mjs__
   ```js
-  import { Component } from "//unpkg.com/can@5/core.mjs";
+  import { StacheElement } from "//unpkg.com/can@6/core.mjs";
   import "./my-greeting.mjs";
   import "./my-counter.mjs";
 
-  Component.extend({
-      tag: "my-app",
-      view: `<my-greeting/><my-counter/>`,
-      ViewModel: {
-          feels: { default: "😍" }
-      }
-  });
+  class MyApp extends StacheElement {
+    static view = `<my-greeting/><my-counter/>`;
+    static props = {
+      feels: "😍"
+    };
+  }
+
+  customElements.define("my-app", MyApp);
   ```
 
 - __my-greeting.mjs__
   ```js
-  import { Component } from "//unpkg.com/can@5/core.mjs";
+  import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
-  Component.extend({
-      tag: "my-greeting",
-      view: `<h1>CanJS {{feels}} modules</h1>`,
-      ViewModel: {
-          feels: { default: "😍" }
-      }
-  });
+  class MyGreeting extends StacheElement {
+    static view = `<h1>CanJS {{feels}} modules</h1>`;
+    static props = {
+      feels: "😍"
+    };
+  }
+
+  customElements.define("my-greetin", MyGreeting);
   ```
 - __my-counter.mjs__
   ```js
-  import { Component } from "//unpkg.com/can@5/core.mjs";
+  import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
-  Component.extend({
-      tag: "my-counter",
-      view: `
-          Count: <span>{{count}}</span>
-          <button on:click='increment()'>+1</button>
-      `,
-      ViewModel: {
-          count: {default: 0},
-          increment() {
-              this.count++;
-          }
-      }
-  });
+  class MyCounter extends StacheElement {
+    static view = `
+        Count: <span>{{count}}</span>
+        <button on:click='increment()'>+1</button>
+    `;
+    static props = {
+      count: 0
+    };
+    increment() {
+      this.count++;
+    }
+  }
+
+  customElements.define("my-counter", MyCounter);
   ```
 
 </details>
@@ -309,7 +313,7 @@ that import CanJS. The following shows putting components into their own modules
 
 The [core ES module bundle](#ImportingthecoreESmodulebundle) only includes CanJS’s
 [can-core] modules.  This doesn't include [can-ecosystem] modules like [can-stache-converters].  The
-everything bundle hosted at `https://unpkg.com/can@5/everything.mjs` includes every CanJS module (except for `can-zone` and `ylem`).
+everything bundle hosted at `https://unpkg.com/can@6/everything.mjs` includes every CanJS module (except for `can-zone` and `ylem`).
 
 The following shows importing and using [can-stache-converters] from `everything.mjs`:
 
@@ -324,23 +328,24 @@ The following shows importing and using [can-stache-converters] from `everything
     <my-app></my-app>
 
     <script type="module">
-    import { Component, stache, stacheConverters } from "//unpkg.com/can@5/everything.mjs";
+    import { StacheElement, stache, stacheConverters, type } from "//unpkg.com/can@6/everything.mjs";
 
     stache.addConverter(stacheConverters);
 
-    Component.extend({
-        tag: "my-app",
-        view: `
-            <p>Enter a value: <input on:input:value:to="string-to-any(enteredValue)"/></p>
-            <p>You've typed a(n) {{enteredType}}</p>
-        `,
-        ViewModel: {
-            enteredValue: "any",
-            get enteredType(){
-                return typeof this.enteredValue;
-            }
+    class MyApp extends StacheElement {
+      static view = `
+          <p>Enter a value: <input on:input:value:to="string-to-any(enteredValue)"/></p>
+          <p>You've typed a(n) {{enteredType}}</p>
+      `;
+      static props = {
+        enteredValue: type.Any,
+        get enteredType(){
+            return typeof this.enteredValue;
         }
-    });
+      };
+    }
+
+    customElements.define("my-app", MyApp);
     </script>
 </body>
 </html>
@@ -383,7 +388,7 @@ __Model Example__
 [After setting up Node.js and npm](#Node_jsandnpm), install `can` and [StealJS](https://stealjs.com) from npm:
 
 ```bash
-npm install can@5 steal@2 --save
+npm install can@6 steal@2 --save
 ```
 
 Next, add the following [steal configuration](https://stealjs.com/docs/StealJS.configuration.html)
@@ -406,7 +411,7 @@ to your `package.json`:
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "can": "^5.0.0",
+    "can": "^6.0.0",
     "steal": "^2.0.0"
   },
   "devDependencies": {
@@ -423,7 +428,7 @@ Next, create an `app.stache` template for your app:
 <h1>{{message}}</h1>
 ```
 
-Next, create an `index.js` module for your application. Import [can-component Component] and
+Next, create an `index.js` module for your application. Import [can-stache-element StacheElement] and
 your template to say “Hello World”:
 
 ```js
@@ -473,7 +478,7 @@ Ready to build an app with CanJS? Check out our [guides/chat] or one of our
 (with [can-stache-loader](https://www.npmjs.com/package/can-stache-loader)) from npm:
 
 ```bash
-npm install can@5 --save
+npm install can@6 --save
 ```
 
 ```bash
@@ -968,7 +973,7 @@ The following `HTML` page includes CanJS and uses it to define a custom element:
 <body>
     <my-app></my-app>
 
-    <script src="//unpkg.com/can@5/dist/global/core.js"></script>
+    <script src="//unpkg.com/can@6/dist/global/core.js"></script>
     <script>
     can.Component.extend({
     	tag: "my-app",
@@ -1009,7 +1014,7 @@ loads every module in CanJS.
 ### Including the everything JavaScript bundle
 
 The [core JavaScript bundle](#IncludingthecoreJavaScriptbundle) only includes CanJS’s
-[can-core] modules.  This doesn't include ecosystem modules like [can-stache-converters].  The everything bundle hosted at `https://unpkg.com/can@5/everything.mjs` includes every CanJS module (except for [can-zone](https://github.com/canjs/can-zone) and [ylem](https://github.com/bitovi/ylem).
+[can-core] modules.  This doesn't include ecosystem modules like [can-stache-converters].  The everything bundle hosted at `https://unpkg.com/can@6/everything.mjs` includes every CanJS module (except for [can-zone](https://github.com/canjs/can-zone) and [ylem](https://github.com/bitovi/ylem).
 
 ```html
 <!doctype html>
@@ -1022,7 +1027,7 @@ The [core JavaScript bundle](#IncludingthecoreJavaScriptbundle) only includes Ca
     <my-app></my-app>
 
     <script type="module">
-    import { Component, stache, stacheConverters } from "//unpkg.com/can@5/everything.mjs";
+    import { Component, stache, stacheConverters } from "//unpkg.com/can@6/everything.mjs";
 
     stache.addConverter(stacheConverters);
 
