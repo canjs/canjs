@@ -183,7 +183,7 @@ class MyApp extends StacheElement {
   static props = {
     feels: "😍",
     get messagePromise() {
-      return ajax({url: "/message"};
+      return ajax({url: "/message"});
     }
   };
 }
@@ -216,7 +216,7 @@ class MyApp extends StacheElement {
   static props = {
     feels:  "😍",
     get messagePromise() {
-      return ajax({url: "/message"};
+      return ajax({url: "/message"});
     }
   };
 }
@@ -368,7 +368,7 @@ __Hello World__
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
-- [CodePen](https://codepen.io/bitovi/pen/pYwJao/?editors=1000)
+- [CodePen](https://codepen.io/matthewp/pen/RwbYrqP?editors=1000)
 - [JSFiddle](https://jsfiddle.net/javascriptmvc/Ldpevngx/5/)
 
 __Routing Example__
@@ -433,18 +433,23 @@ your template to say “Hello World”:
 
 ```js
 // index.js
-import { Component } from "can";
+import { StacheElement } from "can";
 import view from "./app.stache";
 
-Component.extend({
-  tag: "my-app",
-  view,
-  ViewModel: {
-    message: {
-      default: "Hello World"
-    }
+class MyApp extends StacheElement {
+  static get view() {
+    return view;
   }
-});
+
+  static get props() {
+    return {
+      message: {
+        default: "Hello World"
+      }
+    };
+  }
+};
+customElements.define("my-app", MyApp);
 ```
 
 Finally, create an `index.html` page that loads `steal.js` and includes your
@@ -492,23 +497,22 @@ Next, create an `app.stache` template for your app:
 <h1>{{message}}</h1>
 ```
 
-Next, create an `index.js` module for your application. Import [can-component Component]
+Next, create an `index.js` module for your application. Import [can-stache-element StacheElement]
 and your template to say “Hello World”:
 
 ```js
 // index.js
-import { Component } from "can";
+import { StacheElement } from "can";
 import view from "./app.stache";
 
-Component.extend({
-  tag: "my-app",
-  view,
-  ViewModel: {
-    message: {
-      default: "Hello World"
-    }
-  }
-});
+class MyApp extends StacheElement {
+  static view = view;
+
+  static props = {
+    message: "Hello World"
+  };
+};
+customElements.define("my-app", MyApp);
 ```
 
 Next, we will create a `webpack.config.js` that enables tree-shaking in development:
@@ -642,23 +646,23 @@ Using CommonJS to require CanJS’s individual packages
 > [cloning this example repo on GitHub](https://github.com/canjs/browserify-simple-example).
 
 Browserify does not support tree-shaking, so the individual packages must be required.  This means that
-instead of importing [can-component Component] like:
+instead of importing [can-stache-element StacheElement] like:
 
 ```js
-const Component = require("can").Component;
+const StacheElement = require("can").StacheElement;
 ```
 
 You should do it like:
 
 ```js
-const Component = require("can-component");
+const StacheElement = require("can-stache-element");
 ```
 
-[After setting up Node.js and npm](#Node_jsandnpm), install [can-component]
+[After setting up Node.js and npm](#Node_jsandnpm), install [can-stache-element]
 and Browserify from npm:
 
 ```bash
-npm install can-component --save
+npm install can-stache-element --save
 npm install browserify --save-dev
 ```
 
@@ -666,17 +670,16 @@ Next, create a component:
 
 ```js
 // index.js
-const Component = require("can-component");
+const StacheElement = require("can-stache-element");
 
-Component.extend({
-  tag: "my-app",
-  view: `<h1>{{message}}</h1>`,
-  ViewModel: {
-    message: {
-      default: "Hello World"
-    }
-  }
-});
+class MyApp extends StacheElement {
+  static view = `<h1>{{message}}</h1>`;
+
+  static props = {
+    message: "Hello World"
+  };
+};
+customElements.define("my-app", MyApp);
 ```
 
 Next, run Browserify from your terminal:
@@ -714,16 +717,16 @@ Using ES Modules to import CanJS’s individual packages using BabelJS
 > [cloning this example repo on GitHub](https://github.com/canjs/browserify-example).
 
 Browserify does not support tree-shaking, so the individual packages must be imported.  This means that
-instead of importing [can-component Component] like:
+instead of importing [can-stache-element StacheElement] like:
 
 ```js
-import { Component } from "can";
+import { StacheElement } from "can";
 ```
 
 You should do it like:
 
 ```js
-import Component from "can-component";
+import StacheElement from "can-stache-element";
 ```
 
 [After setting up Node.js and npm](#Node_jsandnpm), install [can-component]
@@ -760,7 +763,7 @@ configuration for loading [can-stache] templates:
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "can-component": "^4.0.0"
+    "can-stache-element": "^1.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -786,18 +789,17 @@ and your template to say “Hello World”:
 
 ```js
 // index.js
-import Component from "can-component";
+import StacheElement from "can-stache-element";
 import view from "./app.stache";
 
-Component.extend({
-  tag: "my-app",
-  view,
-  ViewModel: {
-    message: {
-      default: "Hello World"
-    }
-  }
-});
+class MyApp extends StacheElement {
+  static view = view;
+
+  static get props = {
+    message: "Hello World"
+  };
+};
+customElements.define("my-app", MyApp);
 ```
 
 Next, run Browserify from your terminal:
@@ -908,17 +910,18 @@ With CanJS downloaded or installed, use it to create an `index.html` page with a
 </script>
 
 <script type="text/javascript">
-  const template = can.stache.from("app-template");
+  const { stache, StacheElement } = can;
+  const template = stache.from("app-template");
 
-  can.Component.extend({
-    tag: "my-app",
-    view: template,
-    ViewModel: {
-      message: {
-        default: "Hello World"
-      }
-    }
-  });
+  class MyApp extends StacheElement {
+    static view = template;
+
+    static props = {
+      message: "Hello World"
+    };
+  }
+
+  customElements.define("my-app", MyApp);
 </script>
 ```
 @highlight 3
@@ -975,13 +978,15 @@ The following `HTML` page includes CanJS and uses it to define a custom element:
 
     <script src="//unpkg.com/can@6/dist/global/core.js"></script>
     <script>
-    can.Component.extend({
-    	tag: "my-app",
-    	view: `CanJS {{feels}} modules`,
-    	ViewModel: {
-    		feels: { default: "😍" }
-    	}
-    });
+    class MyApp extends can.StachElement {
+      static view = `CanJS {{feels}} modules`;
+
+      static props = {
+        feels: "😍"
+      };
+    }
+
+    customElements.define("my-app", MyApp);
     </script>
 </body>
 </html>
@@ -991,19 +996,21 @@ This build only includes CanJS’s [can-core] and [can-infrastructure] modules a
 `can` object. For example, if you want the [can-ajax] infrastructure module, use it like `can.ajax`:
 
 ```js
-can.Component.extend({
-	tag: "my-app",
-	view: `
-        CanJS {{feels}} modules.
-        The server says: {{messagePromise.value}}
-    `,
-	ViewModel: {
-		feels: { default: "😍" },
-        messagePromise: {
-            default: () => can.ajax({url: "/message"})
-        }
-	}
-});
+class MyApp extends can.StacheElement {
+  static view = `
+      CanJS {{feels}} modules.
+      The server says: {{messagePromise.value}}
+  `;
+
+  static props = {
+    feels: "😍",
+    get messagePromise() {
+      return can.ajax({url: "/message"});
+    }
+  };
+}
+
+customElements.define("my-app", MyApp);
 ```
 @highlight 10
 
@@ -1027,23 +1034,24 @@ The [core JavaScript bundle](#IncludingthecoreJavaScriptbundle) only includes Ca
     <my-app></my-app>
 
     <script type="module">
-    import { Component, stache, stacheConverters } from "//unpkg.com/can@6/everything.mjs";
+    import { stache, stacheConverters, StacheElement, type } from "//unpkg.com/can@6/everything.mjs";
 
     stache.addConverter(stacheConverters);
 
-    Component.extend({
-        tag: "my-app",
-        view: `
+    class MyApp extends StacheElement {
+        static view = `
             <p>Enter a value: <input on:input:value:to="string-to-any(enteredValue)"/></p>
             <p>You've typed a(n) {{enteredType}}</p>
-        `,
-        ViewModel: {
-            enteredValue: "any",
-            get enteredType(){
-                return typeof this.enteredValue;
-            }
-        }
-    });
+        `;
+
+        static props = {
+          enteredValue: type.Any,
+          get enteredType(){
+              return typeof this.enteredValue;
+          }
+        };
+    };
+    customElements.define("my-app", MyApp);
     </script>
 </body>
 </html>
@@ -1067,20 +1075,20 @@ instead of the named exports from the `can` package.
 For example, instead of importing named exports from the `can` module like:
 
 ```js
-import { Component, DefineMap } from "can";
+import { ObservableObject, StacheElement } from "can";
 ```
 
 These packages should be individually installed:
 
 ```bash
-npm install can-component can-define
+npm install can-stache-element can-observable-object
 ```
 
 And they should be imported as follows:
 
 ```js
-import Component from "can-component";
-import DefineMap from "can-define/map/map"
+import StacheElement from "can-stache-define-element";
+import ObservableObject from "can-define-object"
 ```
 
 <details>
@@ -1108,7 +1116,7 @@ For example, after installing the packages you need, you can create `my-can.js` 
 
 ```js
 // my-can.js
-export { default as Component } from "can-component";
+export { default as StachElement } from "can-stache-element";
 export { default as restModel } from "can-rest-model";
 // ...
 ```
@@ -1116,7 +1124,7 @@ export { default as restModel } from "can-rest-model";
 And then import the named exports from "my-can":
 
 ```js
-import { Component, restModel } from "./my-can";
+import { restModel, StacheElement } from "./my-can";
 ```
 
 </details>
@@ -1200,6 +1208,6 @@ The ecosystem packages [can-define-backup] and [can-observe] use other features 
 
 [can-define-backup] uses [WeakMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap), and although `WeakMap` is supported in IE11, there are issues with using [sealed](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal) objects as keys in WeakMaps. [can-define-backup] can be used in IE11 as long as the DefineMap being backed up is not [can-define/map/map.seal sealed], or a polyfill such as the one in [core-js](https://github.com/zloirock/core-js/#weakmap) is used.
 
-[can-observe] is based on the [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) object, which is not supported in IE11 and cannot be polfyilled.
+[can-observable-object], [can-observable-array] and [can-stache-element] are based on the [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) object, which is not supported in IE11 and cannot be polyfilled.
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
