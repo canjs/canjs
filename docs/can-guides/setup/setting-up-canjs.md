@@ -76,16 +76,17 @@ any development environment. This section gives technical details on these items
 
     ```html
     <script type="module">
-	import { StacheElement } from "//unpkg.com/can@6/core.mjs";
+    import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
-  class MyApp extends StacheElement {
-    static view = `Hello {{name}}!`;
-    static props = {
-      name: "world"
-    };
-  }
+    class MyApp extends StacheElement {
+      static view = `Hello {{name}}!`;
 
-  customElements.define("my-app", MyApp);
+      static props = {
+        name: "world"
+      };
+    }
+
+    customElements.define("my-app", MyApp);
     </script>
     ```
 
@@ -104,7 +105,7 @@ any development environment. This section gives technical details on these items
 
     ```html
     <script type="module">
-	import { StacheElement } from "//unpkg.com/can@6/everything.mjs";
+      import { StacheElement } from "//unpkg.com/can@6/everything.mjs";
 
       class MyApp extends StacheElement {
         static view = `Hello {{name}}!`;
@@ -363,7 +364,7 @@ The following are CanJS examples in various online code editors.
 __Hello World__
 
 <p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="pYwJao" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 - Counter">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/pYwJao/">
+  <span>See the Pen <a href="https://codepen.io/matthewp/pen/RwbYrqP/">
   CanJS 5.0 - Counter</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
