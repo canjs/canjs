@@ -369,7 +369,6 @@ __Hello World__
 </p>
 
 - [CodePen](https://codepen.io/matthewp/pen/RwbYrqP?editors=1000)
-- [JSFiddle](https://jsfiddle.net/javascriptmvc/Ldpevngx/5/)
 
 __Routing Example__
 
@@ -377,8 +376,7 @@ __Routing Example__
 
 __Model Example__
 
-- [CodePen](https://codepen.io/bitovi/pen/gERpvd?editors=1000)
-
+- [CodePen](https://codepen.io/matthewp/pen/bGbxpRL?editors=1000)
 
 ## StealJS
 
