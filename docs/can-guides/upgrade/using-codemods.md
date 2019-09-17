@@ -1,5 +1,5 @@
 @page guides/upgrade/using-codemods Using Codemods
-@parent guides/upgrade 3
+@parent guides/upgrade 4
 @description Learn how to migrate your app to CanJS 3 using [can-migrate](https://www.npmjs.com/package/can-migrate).
 
 @body
