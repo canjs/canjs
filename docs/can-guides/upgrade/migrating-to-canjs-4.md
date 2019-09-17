@@ -514,7 +514,7 @@ recipe.backup();
 @highlight 2,7
 
 ### jQuery integration
-In case your application uses [jQuery](https://jquery.com/), [jQuery UI](https://jqueryui.com/), [jQuery plugins](https://plugins.jquery.com/) or [Bootstrap](https://getbootstrap.com/javascript/), [can-dom-events/helpers/add-jquery-events] module allows to listen to all jQuery events directly in [can-stache] like:
+In case your application uses [jQuery](https://jquery.com/), [jQuery UI](https://jqueryui.com/), [jQuery plugins](https://plugins.jquery.com/) or [Bootstrap](https://getbootstrap.com/javascript/), [can-dom-events/helpers/add-jquery-events] module allows you to listen to all jQuery events directly in [can-stache] like:
 
 ```html
 <li on:draginit="doSomething()">...</li>
@@ -522,25 +522,25 @@ In case your application uses [jQuery](https://jquery.com/), [jQuery UI](https:/
 
 Before CanJS 4.0 we used to use `can-jquery` like the following:
 ```js
-var $ = require("can-jquery");
+import $ from "can-jquery";
 // Require another module that registers itself with jQuery.event.special,
 // e.g. jQuery++ registers events such as draginit, dragmove, etc.
 
-$(listItemElement).on("draginit", function(){
+$('.item-list').on("draginit", function(){
     // Will fire after a jQuery draginit event has been fired
 });
 
 // Some other code that fires a jQuery event; this will probably be in the
 // package you’re using…
-$(listItemElement).trigger("draginit");
+$('.item-list').trigger("draginit");
 ```
 
 The example above should be updated to:
 
 ```js
-const $ = require("jquery");
-const addJQueryEvents = require("can-dom-events/helpers/add-jquery-events");
-const domEvents = require("can-dom-events");
+import $ from "jquery";
+import addJQueryEvents from "can-dom-events/helpers/add-jquery-events";
+import domEvents from "can-dom-events";
 // Require another module that registers itself with jQuery.event.special,
 // e.g. jQuery++ registers events such as draginit, dragmove, etc.
 
@@ -548,6 +548,7 @@ const removeJQueryEvents = addJQueryEvents($);
 
 // Listen for an event in code; this might also be accomplished through a
 // can-stache-binding such as <li on:draginit="listener()">
+const listItemElement = document.querySelector('.item-list');
 domEvents.addEventListener(listItemElement, "draginit", function listener() {
   // Will fire after a jQuery draginit event has been fired
 });
