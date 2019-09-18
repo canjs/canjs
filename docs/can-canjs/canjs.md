@@ -32,9 +32,15 @@ h3 {
   color: #282C33;
   margin-bottom: 10px;
 }
-code {
-  border-top: 20px solid #3e7abe;
-  border-radius: 6px 6px 0 0;
+code:before {
+  content: "";
+  background-color: #f5f5f5;
+  height: 25px;
+  width:100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-bottom: solid 1px #dfdfdf;
 }
 p + ul {
   margin-top: 0;
@@ -303,7 +309,7 @@ pre[class*=language-] {
   margin-top: 0;
 }
 pre[class*=language-].line-numbers.line-numbers code {
-  padding: 15px;
+  padding: 40px 15px 15px;
 }
 .social-links {
   display: -webkit-box;
