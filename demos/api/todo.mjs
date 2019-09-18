@@ -45,11 +45,11 @@ class Todo extends ObservableObject {
 			}
 		},
 
-		// `tags` is an observable list of items that
+		// `tags` is an observable array of items that
 		// defaults to including "new"
 		tags: {
 			get default() {
-				return [ "new" ]
+				return new ObservableArray(["new"]);
 			}
 		}
 	};

@@ -157,11 +157,11 @@ class Todo extends ObservableObject {
 		// will be converted to the Owner type.
 		owner: type.convert(Owner),
 
-		// `tags` is an observable list of items that
+		// `tags` is an observable array of items that
 		// defaults to including "new"
 		tags: {
 			get default() {
-				return ["new"];
+				return new ObservableArray(["new"]);
 			}
 		},
 	};
@@ -1370,8 +1370,8 @@ import Todo from "//canjs.com/demos/api/todo.mjs";
 import TodoList from "//canjs.com/demos/api/todo-list.mjs";
 
 const todoConnection = restModel({
-    Map: Todo,
-    List: TodoList,
+    ObjectType: Todo,
+    ArrayType: TodoList,
     url: "/api/todos/{id}"
 });
 ```
@@ -1618,8 +1618,8 @@ import { realtimeRestModel } from "can";
 
 // Define a real time restful model
 const todoConnection = realtimeRestModel({
-    Map: Todo,
-    List: Todo.List,
+    ObjectType: Todo,
+    ArrayType: Todo.List,
     url: "/api/todos/{id}"
 });
 
