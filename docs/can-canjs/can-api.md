@@ -54,7 +54,7 @@ The following defines a `<my-counter>` widget and includes it in the page:
 <my-counter></my-counter>
 
 <script type="module">
-import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
+import { StacheElement } from "can";
 
 // Extend StacheElement to define a custom element
 class Counter extends StacheElement {
@@ -102,7 +102,7 @@ The following defines a `Todo` type with numerous property behaviors and
 a `toggleComplete` method.
 
 ```js
-import { ObservableObject, type } from "//unpkg.com/can@pre/core.mjs";
+import { ObservableObject, ObservableArray, type } from "can";
 
 // -------------------------------
 // Define an observable Owner type:
@@ -226,7 +226,7 @@ console.log(todo.serialize()); //-> {
 Define observable list types with [can-observable-array ObservableArray]:
 
 ```js
-import { ObservableArray, type } from "//unpkg.com/can@pre/core.mjs";
+import { ObservableArray, type } from "can";
 import Todo from "//canjs.com/demos/api/todo.mjs";
 
 // -----------------------------------
@@ -294,7 +294,7 @@ const fullName = new Observation(() => {
 Render a template that updates the page when any data changes using [can-stache]:
 
 ```js
-import { stache } from "//unpkg.com/can@pre/core.mjs";
+import { stache } from "can";
 import Todo from "//canjs.com/demos/api/todo.mjs";
 
 // Create a template / view
@@ -653,7 +653,7 @@ Common [can-stache] tags and built in helpers:
 <stache-examples></stache-examples>
 
 <script type="module">
-	import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
+	import { StacheElement } from "can";
 
 	// Extend StacheElement to define a custom element
 	class StacheExamples extends StacheElement {
@@ -867,7 +867,7 @@ Common [can-stache] expressions:
 <stache-examples></stache-examples>
 
 <script type="module">
-import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
+import { StacheElement } from "can";
 
 // Extend StacheElement to define a custom element
 class StacheExamples extends StacheElement {
@@ -1088,7 +1088,7 @@ todo.on("name", () => {
 }
 </style>
 <script type="module">
-import { StacheElement, ObservableObject } from "//unpkg.com/can@pre/core.mjs";
+import { StacheElement, ObservableObject } from "can";
 
 // Extend StacheElement to define a custom element
 class StacheExamples extends StacheElement {
@@ -1181,7 +1181,7 @@ section:
 <my-app></my-app>
 
 <script type="module">
-import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
+import { StacheElement } from "can";
 
 class MyCounter extends StacheElement {
 	static view = `
@@ -1247,7 +1247,7 @@ You can also pass data to custom elements directly in html using [can-observable
 <my-counter count="5"></my-counter>
 
 <script type="module">
-import { StacheElement, type, fromAttribute } from "//unpkg.com/can@pre/core.mjs";
+import { StacheElement, type, fromAttribute } from "can";
 
 class MyCounter extends StacheElement {
 	static view = `
@@ -1287,7 +1287,7 @@ Use [can-stache/expressions/call call expressions] to call the passed renderer o
 [can-observable-object/define/default default renderers] if one was not provided.
 
 ```js
-import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
+import { StacheElement } from "can";
 
 class MyCounter extends StacheElement {
 	static view = `
@@ -1317,7 +1317,7 @@ customElement.define("my-counter", MyCounter);
 <my-app></my-app>
 
 <script type="module">
-import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
+import { StacheElement } from "can";
 
 class MyCounter extends StacheElement {
 	static view = `
