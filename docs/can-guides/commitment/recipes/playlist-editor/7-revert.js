@@ -1,4 +1,13 @@
-import { addJQueryEvents, Component, Control, DefineList, domData, domEvents, viewCallbacks } from "//unpkg.com/can@5/core.mjs";
+import {
+	addJQueryEvents,
+	Control,
+	StacheElement,
+	domData,
+	domEvents,
+	ObservableArray,
+	type,
+	viewCallbacks
+} from "//unpkg.com/can@6/core.mjs";
 
 addJQueryEvents(jQuery);
 
@@ -26,7 +35,9 @@ const Sortable = Control.extend({
 		for (var i = 0; i < sortables.length; i++) {
 			//check if cursor is past 1/2 way
 			const sortable = $(sortables[i]);
-			if (ev.pageY < Math.floor(sortable.offset().top + sortable.height() / 2)) {
+			if (
+				ev.pageY < Math.floor(sortable.offset().top + sortable.height() / 2)
+			) {
 				// index at which it needs to be inserted before
 				domEvents.dispatch(this.element, {
 					type: eventName,
@@ -56,9 +67,8 @@ viewCallbacks.attr("sortable", function(el) {
 	new Sortable(el);
 });
 
-Component.extend({
-	tag: "playlist-editor",
-	view: `
+class PlaylistEditor extends StacheElement {
+	static view = `
 		{{# if(this.googleApiLoadedPromise.isPending) }}
 			<div>Loading Google API…</div>
 		{{ else }}
@@ -69,7 +79,7 @@ Component.extend({
 			{{/ if }}
 
 			<div>
-				<input value:bind="this.searchQuery" placeholder="Search for videos" />
+				<input value:bind="this.searchQuery" placeholder="Search for videos">
 			</div>
 
 			{{# if(this.searchResultsPromise.isPending) }}
@@ -79,10 +89,10 @@ Component.extend({
 			{{# if(this.searchResultsPromise.isResolved) }}
 				<ul class="source">
 					{{# for(searchResult of this.searchResultsPromise.value) }}
-						<li on:draginit="this.videoDrag(scope.arguments[1])"
-								{{domData("dragData", searchResult)}}>
+						<li on:draginit="this.videoDrag(scope.arguments[1])" 
+								{{ domData("dragData", searchResult) }}>
 							<a draggable="false" href="https://www.youtube.com/watch?v={{ searchResult.id.videoId }}" target="_blank">
-								<img draggable="false" src="{{ searchResult.snippet.thumbnails.default.url }}" width="50px" />
+								<img draggable="false" src="{{ searchResult.snippet.thumbnails.default.url }}" width="50px">
 							</a>
 							{{ searchResult.snippet.title }}
 						</li>
@@ -92,15 +102,16 @@ Component.extend({
 
 			{{# if(this.searchResultsPromise.value.length) }}
 				<div class="new-playlist">
-					<ul sortable
+					<ul
+						sortable
 						on:sortableplaceholderat="this.addDropPlaceholder(scope.event.index, scope.event.dragData)"
 						on:sortableinsertat="this.addVideo(scope.event.index, scope.event.dragData)"
-						on:dropout="this.clearDropPlaceholder()">
-
+						on:dropout="this.clearDropPlaceholder()"
+					>
 						{{# for(videoWithDropPlaceholder of this.videosWithDropPlaceholder) }}
 							<li class="{{# if(videoWithDropPlaceholder.isPlaceholder) }}placeholder{{/ if }}">
 								<a href="https://www.youtube.com/watch?v={{ videoWithDropPlaceholder.video.id.videoId }}" target="_blank">
-									<img src="{{ videoWithDropPlaceholder.video.snippet.thumbnails.default.url }}" width="50px" />
+									<img src="{{ videoWithDropPlaceholder.video.snippet.thumbnails.default.url }}" width="50px">
 								</a>
 
 								{{ videoWithDropPlaceholder.video.snippet.title }}
@@ -112,47 +123,62 @@ Component.extend({
 				</div>
 			{{/ if }}
 		{{/ if }}
-	`,
-	ViewModel: {
+	`;
+
+	static props = {
 		googleApiLoadedPromise: {
-			default: () => googleApiLoadedPromise
+			get default() {
+				return googleApiLoadedPromise;
+			}
 		},
+
 		googleAuth: {
-			get(lastSet, resolve) {
+			async(resolve) {
 				this.googleApiLoadedPromise.then(() => {
 					resolve(gapi.auth2.getAuthInstance());
 				});
 			}
 		},
-		signedIn: "boolean",
+
+		signedIn: Boolean,
+
 		get givenName() {
-			return this.googleAuth &&
-				this.googleAuth.currentUser.get().getBasicProfile().getGivenName();
+			return (
+				this.googleAuth &&
+				this.googleAuth.currentUser
+					.get()
+					.getBasicProfile()
+					.getGivenName()
+			);
 		},
-		searchQuery: {
-			type: "string",
-			default: ""
-		},
-		dropPlaceholderData: "any",
+
+		searchQuery: "",
+
+		dropPlaceholderData: type.Any,
+
 		playlistVideos: {
-			Type: ["any"],
-			Default: DefineList
-		},
-		get searchResultsPromise() {
-			if (this.searchQuery.length > 2) {
-				const results = gapi.client.youtube.search.list({
-					q: this.searchQuery,
-					part: "snippet",
-					type: "video"
-				}).then((response) => {
-					console.info("Search results:", response.result.items);
-					return response.result.items;
-				});
-				return results;
+			get default() {
+				return new ObservableArray();
 			}
 		},
+
+		get searchResultsPromise() {
+			if (this.searchQuery.length > 2) {
+				return gapi.client.youtube.search
+					.list({
+						q: this.searchQuery,
+						part: "snippet",
+						type: "video"
+					})
+					.then(response => {
+						console.info("Search results:", response.result.items);
+						return response.result.items;
+					});
+			}
+		},
+
 		get videosWithDropPlaceholder() {
-			const copy = this.playlistVideos.map((video) => {
+			const copy = this.playlistVideos.map(video => {
 				return {
 					video: video,
 					isPlaceholder: false
@@ -165,37 +191,45 @@ Component.extend({
 				});
 			}
 			return copy;
-		},
-		videoDrag(drag) {
-			drag.ghost().addClass("ghost");
-		},
-		getDragData(drag) {
-			return can.domData.get(drag.element[0], "dragData");
-		},
-		addDropPlaceholder(index, video) {
-			this.dropPlaceholderData = {
-				index: index,
-				video: video
-			};
-		},
-		clearDropPlaceholder() {
-			this.dropPlaceholderData = null;
-		},
-		addVideo(index, video) {
-			this.dropPlaceholderData = null;
-			if (index >= this.playlistVideos.length) {
-				this.playlistVideos.push(video);
-			} else {
-				this.playlistVideos.splice(index, 0, video);
-			}
-		},
-		connectedCallback() {
-			this.listenTo("googleAuth", (ev, googleAuth) => {
-				this.signedIn = googleAuth.isSignedIn.get();
-				googleAuth.isSignedIn.listen((isSignedIn) => {
-					this.signedIn = isSignedIn;
-				});
+		}
+	};
+
+	connected() {
+		this.listenTo("googleAuth", ({ value: googleAuth }) => {
+			this.signedIn = googleAuth.isSignedIn.get();
+			googleAuth.isSignedIn.listen(isSignedIn => {
+				this.signedIn = isSignedIn;
 			});
+		});
+	}
+
+	videoDrag(drag) {
+		drag.ghost().addClass("ghost");
+	}
+
+	getDragData(drag) {
+		return can.domData.get(drag.element[0], "dragData");
+	}
+
+	addDropPlaceholder(index, video) {
+		this.dropPlaceholderData = {
+			index: index,
+			video: video
+		};
+	}
+
+	clearDropPlaceholder() {
+		this.dropPlaceholderData = null;
+	}
+
+	addVideo(index, video) {
+		this.dropPlaceholderData = null;
+		if (index >= this.playlistVideos.length) {
+			this.playlistVideos.push(video);
+		} else {
+			this.playlistVideos.splice(index, 0, video);
 		}
 	}
-});
+}
+
+customElements.define("playlist-editor", PlaylistEditor);

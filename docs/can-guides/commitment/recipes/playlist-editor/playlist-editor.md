@@ -10,9 +10,9 @@ an hour to complete.
 
 The final widget looks like:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="result" data-user="cherifGsoul" data-slug-hash="ywpxyy" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Playlist Editor (Advanced) [Finished]">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/ywpxyy/">
-  Playlist Editor (Advanced) [Finished]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="zYOaXwm" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Playlist Editor (Advanced) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/zYOaXwm">
+  Playlist Editor (Advanced) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
@@ -50,7 +50,7 @@ The following video goes through this recipe:
 In this section, we will:
 
 1. Load Google’s JS API client, `gapi`, and initialize it to make requests on behalf of
-   the registered "CanJS Playlist" app.
+  the registered "CanJS Playlist" app.
 2. Set up a basic CanJS application.
 3. Use the basic CanJS application to show when Google’s JS API has finished loading.
 
@@ -117,23 +117,23 @@ In this section, we will:
 
   CanJS can use promises in its [can-stache] templates.  More on that below.
 
-- A basic CanJS application is a live-bound template (or view) rendered with a component’s ViewModel.
+- A basic CanJS application is a live-bound template (or view) rendered with the component’s [can-stache-element/static.props props].
 
   ```js
-  import { Component } from "can";
+  import { StacheElement } from "can";
 
-  Component.extend({
-    tag: "my-app",
-    view: `<h1>{{ message }}</h1>`,
-    ViewModel: {
-      message: {
-        default: () => "Hello World"
-      }
-    }
-  });
+  class MyApp extends StacheElement {
+    static view = `<h1>{{ message }}</h1>`;
+
+    static props = {
+      message: "Hello World"
+    };
+  }
+
+  customElements.define("my-app", MyApp);
   ```
 
-- Mount a [can-component] by its [can-component.prototype.tag custom tag] like:
+- Mount a [can-stache-element] by its custom tag like:
 
   ```html
   <my-app></my-app>
@@ -141,47 +141,50 @@ In this section, we will:
 
 - Use [can-stache.helpers.if {{# if(value) }}] to do `if/else` branching in [can-stache].
 - [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) are observable with [can-stache].  Given a promise `somePromise`, you can:
-  - Check if the promise is loading like: `{{#if(somePromise.isPending)}}`.
-  - Loop through the resolved value of the promise like: `{{#for(item of somePromise.value)}}`.
+  - Check if the promise is loading like: `{{# if(somePromise.isPending) }}`.
+  - Loop through the resolved value of the promise like: `{{# for(item of somePromise.value) }}`.
 
 
-- [can-define/map/map DefineMap] can be used to define the behavior of observable objects like:
+- [can-observable-object ObservableObject] can be used to define the behavior of observable objects like:
 
   ```js
-  import { DefineMap } from "can";
+  import { ObservableObject } from "can";
 
-  const Type = DefineMap.extend({
-    message: "string"
-  });
+  class Type extends ObservableObject {
+    static props = {
+      message: String
+    };
+  }
   ```
 
-- Instances of these [can-define/map/map DefineMap] types are often used
-  as a ViewModel that controls the behavior of a [can-component].
+- [can-stache-element/static.props] are [can-observable-object ObservableObject] like 
+  properties used to control the behavior of a custom element.
 
   ```js
-  import { Component } from "can";
+  import { StacheElement } from "can";
 
-  Component.extend({
-    tag: "playlist-editor",
-    view: `...`,
-    ViewModel: {
-       message: "string"
-    }
-  });
+  class PlaylistEditor extends StacheElement {
+    static view = `...`;
+    static props = {
+      message: String
+    };
+  }
+
+  customElements.define("playlist-editor", PlaylistEditor);
   ```
 
-- [can-define/map/map DefineMap] can specify a default value and a type:
+- [can-observable-object ObservableObjec]s can specify a default value and a type:
   ```js
-  import { Component } from "can";
+  import { StacheElement } from "can";
 
-  Component.extend({
-    tag: "playlist-editor",
-    view: `...`,
-    ViewModel: {
-       message: "string",
-       default: () => "Hello World"
-    }
-  });
+  class PlaylistEditor extends StacheElement {
+    static view = `...`;
+    static props = {
+      message: { type: String, default: "Hello World" }
+    };
+  }
+
+  customElements.define("playlist-editor", PlaylistEditor);
   ```
 
 
@@ -197,7 +200,7 @@ Update the __HTML__ to:
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
-@highlight 1-17,only
+@highlight 1-21,only
 
 
 
@@ -239,98 +242,99 @@ In this section, we will:
 
 
 - [ES5 Getter Syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get) can
-  be used to define a [can-component.prototype.ViewModel ViewModel] property that changes when another property changes.  For example,
+  be used to define a component property that changes when another property changes.  For example,
   the following defines an `signedOut` property that is the opposite of the `signedIn` property:
 
   ```js
-  import { Component } from "can";
+  import { StacheElement } from "can";
 
-  Component.extend({
-    tag: "playlist-editor",
-    view: `...`,
-    ViewModel: {
-      signedIn: "boolean",
+  class PlaylistEditor extends StacheElement {
+    static view = `...`;
+    static props = {
+      signedIn: Boolean,
       get signedOut() {
         return !this.signedIn;
       }
-    }
-  });
+    };
+  }
+
+  customElements.define("playlist-editor", PlaylistEditor);
   ```
 
-- Use [can-define.types.get asynchronous getters] to get data from asynchronous sources.  For example:
+- Use [can-observable-object/define/async asynchronous getters] to get data from asynchronous sources.  For example:
 
   ```js
-  import { Component } from "can";
+  import { StacheElement } from "can";
 
-  Component.extend({
-    tag: "my-app",
-    view: `...`,
-    ViewModel: {
+  class MyApp extends StacheElement {
+    static view = `...`;
+    static props = {
       property: {
-        get(lastSet, resolve) {
-          apiLoadedPromise.then(function() {
-            resolve( api.getValue() );
-          })
+        async(resolve) {
+          apiLoadedPromise
+            .then(function() {
+              resolve(api.getValue());
+            });
         }
       }
-    }
-  });
+    };
+  }
+  
+  customElements.define("my-app", MyApp);
   ```
 
-- [can-component] [can-component/connectedCallback connectedCallback] method can be used to perform initialization behavior.  For example,
-  the following might initialize `googleApiLoadedPromise`:
+- [can-stache-element] [can-stache-element/lifecycle-hooks.connected connected] hook can be used to perform initialization behavior.  For example, the following might initialize `googleApiLoadedPromise`:
 
   ```js
-  import { Component } from "can";
+  import { StacheElement, type } from "can";
 
-  Component.extend({
-    tag: "playlist-editor",
-    view: `...`,
-    ViewModel: {
-      googleApiLoadedPromise: "any",
-      connectedCallback(element) {
-         this.googleApiLoadedPromise = googleApiLoadedPromise;
-      }
+  class PlaylistEditor extends StacheElement {
+    static view = `...`;
+    static props = {
+      googleApiLoadedPromise: type.Any,
+    };
+    connected() {
+      this.googleApiLoadedPromise = googleApiLoadedPromise;
     }
-  });
+  }
+
+  customElements.define("playlist-editor", PlaylistEditor);
   ```
 
-- [can-define/map/map DefineMap]’s [can-event-queue/map/map.listenTo] lets you listen on changes in a ViewModel.
-  This can be used to change values when other values change.  The following will increment
-  `nameChange` everytime the `name` property changes:
+- [can-observable-object ObservableObject]’s [can-event-queue/map/map.listenTo] lets you listen on changes in a component. This can be used to change values when other values change.  The following will increment
+`nameChange` everytime the `name` property changes:
 
   ```js
-  import { Component } from "can";
+  import { StacheElement } from "can";
 
-  Component.extend({
-    tag: "my-app",
-    view: `...`,
-    ViewModel: {
-      name: "string",
-      nameChange: "number"
-      connectedCallback: function() {
-        this.listenTo("name", () => {
-            this.nameChange++;	  
-        })
-      }
+  class MyApp extends StacheElement {
+    static view = `...`;
+    static props = {
+      name: String,
+      nameChange: Number
+    };
+    connected() {
+      this.listenTo("name", () => {
+        this.nameChange += 1;
+      });
     }
-  });
+  }
   ```
 
   > **Note:** EventStreams provide a much better way of doing this.  Check out [can-define-stream-kefir].
 
 - Use [can-stache-bindings.event on:EVENT] to listen to an event on an element and call a method in [can-stache].  For example, the following calls `sayHi()` when the `<div>` is clicked.
 
-   ```html
-   <div on:click="sayHi()"> <!-- ... --> </div>
-   ```
+  ```html
+  <div on:click="sayHi()"> <!-- ... --> </div>
+  ```
 
 ### The solution
 
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-signin.js
-@highlight 9-13,20-39,only
+@highlight 8-12,23-41,44-51,only
 
 
 
@@ -350,7 +354,7 @@ In this section, we will:
 - Use [can-stache-bindings.twoWay value:bind] to setup a two-way binding in [can-stache].  For example, the following keeps `searchQuery` and the input’s `value` in sync:
 
    ```html
-   <input value:bind="searchQuery" />
+   <input value:bind="searchQuery">
    ```
 
 - Use `gapi.client.youtube.search.list` to search YouTube like:
@@ -391,7 +395,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-search.js
-@highlight 15-34,53-69,only
+@highlight 14-33,64-79,only
 
 
 ## Drag videos ##
@@ -447,21 +451,18 @@ In this section, we will:
   drag.ghost().addClass("ghost");
   ```
 
-- To add a method to a `ViewModel`, just add a function to one of the properties passed
-  to extend:
+- To add a method to a [can-stache-element], just add a function shown below:
 
   ```js
-  import { Component } from "can";
+  import { StacheElement } from "can";
 
-  Component.extend({
-    tag: "playlist-editor",
-    view: `...`,
-    ViewModel: {
-      startedDrag: function() {
-        console.log("you did it!")
-      }
+  class PlaylistEditor extends StacheElement {
+    static view = `...`;
+    static props = { ... };
+    startedDrag() {
+      console.log("you did it!")
     }
-  });
+  }
   ```
 
 - Certain browsers have default drag behaviors for certain elements like `<a>` and `<img>`
@@ -471,7 +472,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-drag.js
-@highlight 1,3,28-30,72-74,only
+@highlight 1,3,27-29,93-95,only
 
 
 ## Drop videos
@@ -490,35 +491,35 @@ In this section, we will:
 
 ### What you need to know
 
-- The `PlaylistVM` should maintain a list of playlist videos (`playlistVideos`) and
+- The `PlaylistEditor` element should maintain a list of playlist videos (`playlistVideos`) and
   the placeholder video (`dropPlaceholderData`) separately.  It can combine these
   two values into a single value (`videosWithDropPlaceholder`) of the videos to display to the
   user.  On a high-level, this might look like:
 
   ```js
-  import { Component, DefineList } from "can";
+  import { StacheElement, type, ObservableArray } from "can";
 
-  Component.extend({
-    tag: "playlist-editor",
-    view: `...`,
-    ViewModel: {
+  class PlaylistEditor extends StacheElement {
+    static view = `...`;
+    static props = {
       // ...
-      // {video: video, index: 0}
-      dropPlaceholderData: "any",
+      // { video: video, index: 0 }
+      dropPlaceholderData: type.Any,
+
       // [video1, video2, ...]
       playlistVideos: {
-        Type: ["any"],
-        Default: DefineList
+        get default() {
+          return new ObservableArray();
+        }
       },
+
       get videosWithDropPlaceholder() {
         const copyOfPlaylistVideos = this.placeListVideos.map( /* ... */ );
-
         // insert this.dropPlaceholderData into copyOfPlaylistVideos
-
         return copyOfPlaylistVideos;
       }
-    }
-  });
+    };
+  }
   ```
 
 - The methods that add a placeholder (`addDropPlaceholder`) and
@@ -560,13 +561,13 @@ In this section, we will:
   - The `drag.element` is the jQuery-wrapped element that the user initiated the
     drag motion upon.
 
-  - CanJS’s [can-stache.helpers.domData {{domData("DATANAME")}}] helper lets you
+  - CanJS’s [can-stache.helpers.domData {{ domData("DATANAME") }}] helper lets you
     associate custom data with an element. The following
     saves the current `context` of the `<li>` as `"dragData"` on the `<li>`:
 
     ```html
     <li on:draginit="this.videoDrag(scope.arguments[1])"
-        {{domData("dragData")}}>
+        {{domData("dragData")}}></li>
     ```
 
   - [can-dom-data.get domData.get()] can access this data like:
@@ -582,7 +583,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-drop.js
-@highlight 29,39-59,100-114,118-137,only
+@highlight 33,43-63,119-133,149-171,only
 
 
 
@@ -595,10 +596,10 @@ In this section, we will:
 
 ### What you need to know
 
-- ViewModels are best left knowing very little about the DOM. This makes them more
-  easily unit-testable.  To make this interaction, we need to know where the mouse
-  is in relation to the playlist’s videos.  This requires a lot of DOM interaction
-  and is best done outside the ViewModel.
+- [can-stache-elements StacheElement]s are best left knowing very little about the DOM. This
+  makes them more easily unit-testable.  To make this interaction, we need to know where the 
+  mouse is in relation to the playlist’s videos.  This requires a lot of DOM interaction
+  and is best done outside the element.
 
   Specifically, we’d like to translate the `dropmove` and `dropon` events
   into other events that let people know where the `dropmove` and `dropon` events
@@ -636,7 +637,7 @@ In this section, we will:
       // do stuff on dropmove like call method:
       this.method();
     },
-    method: function() {
+    method() {
       // do something
     }
   });
@@ -707,7 +708,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-order.js
-@highlight 1,5-44,46-48,86-89,only
+@highlight 3,6,9,14-55,57-59,96-101,only
 
 
 
@@ -730,7 +731,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./7-revert.js
-@highlight 6-9,13,16-20,only
+@highlight 15-17,22,25-28,only
 
 
 
@@ -813,7 +814,7 @@ In this section, we will:
   can be done by listening to `createPlaylistPromise`:
 
   ```js
-  this.listenTo("createPlaylistPromise", function(ev, promise) { /* ... */ })
+  this.listenTo("createPlaylistPromise", function({ value: promise }) { /* ... */ })
   ```
 
 ### The solution
@@ -821,7 +822,7 @@ In this section, we will:
 Update the __JavaScript__ tab to:
 
 @sourceref ./8-create-playlist.js
-@highlight 112-117,147,199-240,248-255,only
+@highlight 122-129,164,216-223,254-296,only
 
 ## Result
 
@@ -829,9 +830,9 @@ Congrats! _You now have your very own YouTube Playlist Editor_.
 
 When finished, you should see something like the following CodePen:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="result" data-user="cherifGsoul" data-slug-hash="ywpxyy" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Playlist Editor (Advanced) [Finished]">
-  <span>See the Pen <a href="https://codepen.io/cherifGsoul/pen/ywpxyy/">
-  Playlist Editor (Advanced) [Finished]</a> by Mohamed Cherif Bouchelaghem (<a href="https://codepen.io/cherifGsoul">@cherifGsoul</a>)
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="zYOaXwm" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Playlist Editor (Advanced) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/zYOaXwm">
+  Playlist Editor (Advanced) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
