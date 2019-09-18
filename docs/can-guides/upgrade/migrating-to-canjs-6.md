@@ -128,10 +128,127 @@ class Todo extends ObservableObject {
 }
 ```
 
+Below are the major differences between ObservableObject / ObservableArray and DefineMap / DefineList.
+
 #### Primitive constructors instead of string types
 
-#### async getter
+In [can-define/map/map DefineMaps] you used string type names like so:
+
+```js
+const Todo = DefineMap.extend("Todo", {
+  dueDate: "date",
+  label: "string",
+  complete: "boolean"
+});
+```
+
+With [can-observable-object ObservableObject] you instead use the primitive constructors to convey the same information.
+
+```js
+class Todo extends ObservableObject {
+  static props = {
+    dueDate: Date,
+    label: String,
+    complete: Boolean
+  };
+}
+```
+
+#### Strict typing is the default
+
+In addition to using primitive constructors, ObservableObject also differs in how it does type conversion. By default types defined for properties are strictly checked. That is, this scenario will throw:
+
+```js
+class Person extends ObservableObject {
+  static props = {
+    name: String,
+    age: Number
+  };
+}
+
+let person = new Person({ name: "Theresa", age: "4" }); // throws!
+```
+
+For more control over type conversion the new [can-type] package was built. The above can be made to be loose using [can-type/convert] like so:
+
+```js
+class Person extends ObservableObject {
+  static props = {
+    name: String,
+    age: type.convert(Number)
+  };
+}
+
+let person = new Person({ name: "Theresa", age: "4" }); // throws!
+```
+@highlight 4
+
+#### Asynchronous getters
+
+In DefineMap you can make a getter be asynchronous by using the `resolve` argument like so:
+
+```js
+const ViewModel = DefineMap.extend("TodoList", {
+  todosPromise: {
+    get() {
+      return Todo.getList();
+    }
+  }
+  todos: {
+    get(lastSet, resolve) {
+      this.todosPromise.then(resolve);
+    }
+  }
+});
+```
+
+In ObservableObject this behavior still exists but is part of its own [can-observable-object/define/async behavior]. The above would be written as:
+
+```js
+class ViewModel extends ObservableObject {
+  static props = {
+    todosPromise: {
+      get() {
+        return Todo.getList();
+      }
+    },
+    todos: {
+      async(resolve) {
+        this.todosPromise.then(resolve);
+      }
+    }
+  };
+}
+```
 
 #### get default instead of default function
 
+In DefineMap you could have a default value be an object by making `default` be a function like so:
+
+```js
+const Configuration = DefineMap.extend("Configuration", {
+  data: {
+    default() {
+      return { admin: false };
+    }
+  }
+});
+```
+
+However this makes it less ergonomic to have the default value of a property be a function itself. With ObservableObject a default value *can* be a function. So in order to have the default value be an object, you can use [can-observable-object/define/get-default] like so:
+
+```js
+class Configuration extends ObservableObject {
+  static props = {
+    data: {
+      get default() {
+        return { admin: false };
+      }
+    }
+  }
+}
+```
+
 ### Migrate to StacheElement
+
+CanJS 6 includes a new base class for creating web components, [can-stache-element StacheElement]. This class shares the same API as [can-observable-object ObservableObject] for defining properties.
