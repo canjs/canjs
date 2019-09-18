@@ -513,6 +513,55 @@ recipe.backup();
 ```
 @highlight 2,7
 
+### jQuery integration
+In case your application uses [jQuery](https://jquery.com/), [jQuery UI](https://jqueryui.com/), [jQuery plugins](https://plugins.jquery.com/) or [Bootstrap](https://getbootstrap.com/javascript/), [can-dom-events/helpers/add-jquery-events] module allows you to listen to all jQuery events directly in [can-stache] like:
+
+```html
+<li on:draginit="doSomething()">...</li>
+```
+
+Before CanJS 4.0 we used to use `can-jquery` like the following:
+```js
+import $ from "can-jquery";
+// Require another module that registers itself with jQuery.event.special,
+// e.g. jQuery++ registers events such as draginit, dragmove, etc.
+
+$('.item-list').on("draginit", function(){
+    // Will fire after a jQuery draginit event has been fired
+});
+
+// Some other code that fires a jQuery event; this will probably be in the
+// package you’re using…
+$('.item-list').trigger("draginit");
+```
+
+The example above should be updated to:
+
+```js
+import $ from "jquery";
+import addJQueryEvents from "can-dom-events/helpers/add-jquery-events";
+import domEvents from "can-dom-events";
+// Require another module that registers itself with jQuery.event.special,
+// e.g. jQuery++ registers events such as draginit, dragmove, etc.
+
+const removeJQueryEvents = addJQueryEvents($);
+
+// Listen for an event in code; this might also be accomplished through a
+// can-stache-binding such as <li on:draginit="listener()">
+const listItemElement = document.querySelector('.item-list');
+domEvents.addEventListener(listItemElement, "draginit", function listener() {
+  // Will fire after a jQuery draginit event has been fired
+});
+
+// Some other code that fires a jQuery event; this will probably be in the
+// package you’re using…
+$(listItemElement).trigger("draginit");
+
+// Later in your code… ready to stop listening for those jQuery events? Call
+// the function returned by addJQueryEvents()
+removeJQueryEvents();
+```
+
 ## Non-breaking warnings
 
 In addition to the above breaking changes, you'll likely see several warnings. It's important not to ignore warnings coming from CanJS, as they often pertain to changes that *will* break in a future release (such as in CanJS 5.0). Clear out as many warnings as you can.
