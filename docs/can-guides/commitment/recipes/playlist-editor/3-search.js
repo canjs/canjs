@@ -1,8 +1,7 @@
-import { Component } from "//unpkg.com/can@5/core.mjs";
+import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
-Component.extend({
-	tag: "playlist-editor",
-	view: `
+class PlaylistEditor extends StacheElement {
+	static view = `
 		{{# if(this.googleApiLoadedPromise.isPending) }}
 			<div>Loading Google API…</div>
 		{{ else }}
@@ -13,7 +12,7 @@ Component.extend({
 			{{/ if }}
 
 			<div>
-				<input value:bind="this.searchQuery" placeholder="Search for videos" />
+				<input value:bind="this.searchQuery" placeholder="Search for videos">
 			</div>
 
 			{{# if(this.searchResultsPromise.isPending) }}
@@ -25,7 +24,7 @@ Component.extend({
 					{{# for(searchResult of this.searchResultsPromise.value) }}
 						<li>
 							<a href="https://www.youtube.com/watch?v={{ searchResult.id.videoId }}" target="_blank">
-								<img src="{{ searchResult.snippet.thumbnails.default.url }}" width="50px" />
+								<img src="{{ searchResult.snippet.thumbnails.default.url }}" width="50px">
 							</a>
 							{{ searchResult.snippet.title }}
 						</li>
@@ -33,47 +32,61 @@ Component.extend({
 				</ul>
 			{{/ if }}
 		{{/ if }}
-	`,
-	ViewModel: {
+	`;
+
+	static props = {
 		googleApiLoadedPromise: {
-			default: () => googleApiLoadedPromise
+			get default() {
+				return googleApiLoadedPromise;
+			}
 		},
+
 		googleAuth: {
-			get(lastSet, resolve) {
+			async(resolve) {
 				this.googleApiLoadedPromise.then(() => {
 					resolve(gapi.auth2.getAuthInstance());
 				});
 			}
 		},
-		signedIn: "boolean",
+
+		signedIn: Boolean,
+
 		get givenName() {
-			return this.googleAuth &&
-				this.googleAuth.currentUser.get().getBasicProfile().getGivenName();
+			return (
+				this.googleAuth &&
+				this.googleAuth.currentUser
+					.get()
+					.getBasicProfile()
+					.getGivenName()
+			);
 		},
-		searchQuery: {
-			type: "string",
-			default: ""
-		},
+
+		searchQuery: "",
+
 		get searchResultsPromise() {
 			if (this.searchQuery.length > 2) {
-				const results = gapi.client.youtube.search.list({
-					q: this.searchQuery,
-					part: "snippet",
-					type: "video"
-				}).then((response) => {
-					console.info("Search results:", response.result.items);
-					return response.result.items;
-				});
-				return results;
+				return gapi.client.youtube.search
+					.list({
+						q: this.searchQuery,
+						part: "snippet",
+						type: "video"
+					})
+					.then(response => {
+						console.info("Search results:", response.result.items);
+						return response.result.items;
+					});
 			}
-		},
-		connectedCallback() {
-			this.listenTo("googleAuth", (ev, googleAuth) => {
-				this.signedIn = googleAuth.isSignedIn.get();
-				googleAuth.isSignedIn.listen((isSignedIn) => {
-					this.signedIn = isSignedIn;
-				});
-			});
 		}
+	};
+
+	connected() {
+		this.listenTo("googleAuth", ({ value: googleAuth }) => {
+			this.signedIn = googleAuth.isSignedIn.get();
+			googleAuth.isSignedIn.listen(isSignedIn => {
+				this.signedIn = isSignedIn;
+			});
+		});
 	}
-});
+}
+
+customElements.define("playlist-editor", PlaylistEditor);

@@ -1,8 +1,7 @@
-import { Component } from "//unpkg.com/can@5/core.mjs";
+import { StacheElement, type } from "//unpkg.com/can@5/core.mjs";
 
-Component.extend({
-	tag: "playlist-editor",
-	view: `
+class PlaylistEditor extends StacheElement {
+	static view = `
 		{{# if(this.googleApiLoadedPromise.isPending) }}
 			<div>Loading Google API…</div>
 		{{ else }}
@@ -12,30 +11,44 @@ Component.extend({
 				<button on:click="this.googleAuth.signIn()">Sign In</button>
 			{{/ if }}
 		{{/ if }}
-	`,
-	ViewModel: {
+	`;
+
+	static props = {
 		googleApiLoadedPromise: {
-			default: () => googleApiLoadedPromise
+			get default() {
+				return googleApiLoadedPromise;
+			}
 		},
+
 		googleAuth: {
-			get(lastSet, resolve) {
+			async(resolve) {
 				this.googleApiLoadedPromise.then(() => {
 					resolve(gapi.auth2.getAuthInstance());
 				});
 			}
 		},
-		signedIn: "boolean",
+
+		signedIn: Boolean,
+
 		get givenName() {
-			return this.googleAuth &&
-				this.googleAuth.currentUser.get().getBasicProfile().getGivenName();
-		},
-		connectedCallback() {
-			this.listenTo("googleAuth", (ev, googleAuth) => {
-				this.signedIn = googleAuth.isSignedIn.get();
-				googleAuth.isSignedIn.listen((isSignedIn) => {
-					this.signedIn = isSignedIn;
-				});
-			});
+			return (
+				this.googleAuth &&
+				this.googleAuth.currentUser
+					.get()
+					.getBasicProfile()
+					.getGivenName()
+			);
 		}
+	};
+
+	connected() {
+		this.listenTo("googleAuth", ({ value: googleAuth }) => {
+			this.signedIn = googleAuth.isSignedIn.get();
+			googleAuth.isSignedIn.listen(isSignedIn => {
+				this.signedIn = isSignedIn;
+			});
+		});
 	}
-});
+}
+
+customElements.define("playlist-editor", PlaylistEditor);
