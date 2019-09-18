@@ -124,8 +124,14 @@ In 6.0 we are taking the next big step, by allowing [JavaScript classes](https:/
 import {ObservableObject} from "can";
 
 class Todo extends ObservableObject {
-  
+
 }
 ```
+
+#### Primitive constructors instead of string types
+
+#### async getter
+
+#### get default instead of default function
 
 ### Migrate to StacheElement
