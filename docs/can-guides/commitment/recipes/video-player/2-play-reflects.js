@@ -1,28 +1,33 @@
-import {Component} from "//unpkg.com/can@5/core.mjs";
+import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
-Component.extend({
-  tag: "video-player",
-  view: `
-    <video controls
-      on:play="play()"
-      on:pause="pause()">
-      <source src="{{ src }}"/>
-    </video>
-    <div>
-      <button>
-        {{# if(playing) }} Pause {{ else }} Play {{/ if }}
-      </button>
-    </div>
-  `,
-  ViewModel: {
-    src: "string",
-    playing: "boolean",
+class VideoPlayer extends StacheElement {
+  static view = `
+		<video
+			controls
+			on:play="this.play()"
+			on:pause="this.pause()"
+		>
+			<source src="{{ this.src }}">
+		</video>
+		<div>
+			<button>
+				{{# if(this.playing) }} Pause {{ else }} Play {{/ if }}
+			</button>
+		</div>
+	`;
 
-    play() {
-      this.playing = true;
-    },
-    pause() {
-      this.playing = false;
-    },
+  static props = {
+    src: String,
+    playing: Boolean
+  };
+
+  play() {
+    this.playing = true;
   }
-});
+
+  pause() {
+    this.playing = false;
+  }
+}
+
+customElements.define("video-player", VideoPlayer);
