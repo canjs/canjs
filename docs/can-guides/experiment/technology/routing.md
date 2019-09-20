@@ -229,8 +229,8 @@ usually done in five steps:
 1. Define the top-level component's [can-stache-element/static.props].
 2. Create an observable key-value object on the component to represent the state of [can-route].
 3. Connect this observable to the routing [can-route.data].
-4. Have the top-level component’s [can-stache-element/static.view] display the current sub-components based on the view-model state.
-5. Register routes that translate between the URL and the application view-model.
+4. Have the top-level component’s [can-stache-element/static.view] display the current sub-components based on its state.
+5. Register routes that translate between the URL and the application state.
 
 ## Connect a component to can-route
 
@@ -286,7 +286,7 @@ class MyApp extends StacheElement {
 
 customElements.define("my-app", MyApp);
 ```
-@highlight 1,6,11-16
+@highlight 1,5,11-16
 
 At this point, changes in the URL will cause changes in the `routeData.page`
 property. See this by clicking the links and the back/refresh buttons below:
