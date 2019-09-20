@@ -34,7 +34,7 @@ the browser’s [location](https://developer.mozilla.org/en-US/docs/Web/API/Loca
 <img 
   alt=""
   class="bit-docs-screenshot"
-  src="../../docs/can-guides/experiment/technology/observable-routing.png" />
+  src="../../docs/can-guides/experiment/technology/observable-routing.svg" />
 
 When the <span class="obs">observable</span> changes, the _URL_ will be updated. When the _URL_ changes
 the <span class="obs">observable</span> will be updated.
@@ -217,9 +217,10 @@ Switching between different components is managed by a `<my-app>` component. The
 the application looks like:
 
 <img
-  src="../../docs/can-guides/experiment/technology/routing-app-overview.png"
+  src="../../docs/can-guides/experiment/technology/routing-app-overview.svg"
   alt="The my-app component on top. The page-home, page-login, task-editor nodes are children of my-app. percent-slider component is a child of task-editor."
-  class="bit-docs-screenshot"  
+  class="bit-docs-screenshot"
+  style="width: 600px"
 />
 
 In most applications, [can-route] is connected to a property on the top-level component. We are
