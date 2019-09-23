@@ -12,3 +12,6 @@ export { default as Component } from './es/can-component';
 
 // Data Models
 export { default as set } from "./es/can-set-legacy";
+
+// DOM Utilities
+export { default as Control } from "./es/can-control";
