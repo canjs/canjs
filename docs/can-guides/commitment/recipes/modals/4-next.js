@@ -1,182 +1,228 @@
-import { Component, value, stacheConverters, stache } from "//unpkg.com/can@5/ecosystem.mjs";
+import {
+	ObservableArray,
+	stache,
+	stacheConverters,
+	StacheElement,
+	type,
+	value
+} from "//unpkg.com/can@pre/ecosystem.mjs";
+
 stache.addConverter(stacheConverters);
 
-const OccupationQuestions = Component.extend({
-	tag: "occupation-questions",
-	view: `
-		<h3>Occupation</h3>
-		<div class='content'>
-			<p>Are you a diva?
-				<input type="radio" checked:bind="equal(isDiva, true)"/> yes
-				<input type="radio"  checked:bind="equal(isDiva, false)"/> no
-			</p>
-			<p>Do you program?
-				<input type="radio" checked:bind="equal(isProgrammer, true)"/> yes
-				<input type="radio" checked:bind="equal(isProgrammer, false)"/> no
-			</p>
-			<p><button on:click="next()">Next</button></p>
-		</div>
-	`,
-	ViewModel: {
-		isDiva: "boolean",
-		isProgrammer: "boolean"
-	}
-});
+class OccupationQuestions extends StacheElement {
+	static view = `
+    <h3>Occupation</h3>
+    <div class="content">
+      <p>
+        Are you a diva?
+        <input id="diva-yes" type="radio" checked:bind="equal(this.isDiva, true)">
+        <label for="diva-yes">yes</label>
 
-const DivaQuestions = Component.extend({
-	tag: "diva-questions",
-	view: `
-		<h3>Diva Questions</h3>
-		<div class='content'>
-			<p>Check all expenses that apply:</p>
-			<p><input type="checkbox"
-					checked:bind="boolean-to-inList('Swagger', divaExpenses)"> Swagger
-			</p>
-			<p><input type="checkbox"
-					checked:bind="boolean-to-inList('Fame', divaExpenses)"> Fame
-			</p>
-			<p><button on:click="next()">Next</button></p>
-		</div>
-    `,
-    ViewModel: {
-        divaExpenses: "any"
-    }
-});
+        <input id="diva-no" type="radio" checked:bind="equal(this.isDiva, false)">
+        <label for="diva-no">no</label>
+      </p>
+      <p>
+        Do you program?
+        <input
+          id="programmer-yes"
+          type="radio"
+          checked:bind="equal(this.isProgrammer, true)"
+        >
+        <label for="programmer-yes">yes</label>
 
-const ProgrammerQuestions = Component.extend({
-	tag: "programmer-questions",
-	view: `
-		<h3>Programmer Questions</h3>
-		<div class='content'>
-			<p>What is your favorite language?</p>
-			<p>
-				<select value:to="programmingLanguage">
-					<option>C</option>
-					<option>C++</option>
-					<option>Java</option>
-					<option>JavaScript</option>
-				</select>
-			</p>
-			<p><button on:click="next()">Next</button></p>
-		</div>
-   `,
-	ViewModel: {
-		programmingLanguage: "string"
-	}
-});
+        <input
+          id="programmer-no"
+          type="radio"
+          checked:bind="equal(this.isProgrammer, false)"
+        >
+        <label for="programmer-no">no</label>
+      </p>
+      <p><button on:click="this.next()">Next</button></p>
+    </div>
+  `;
 
-const IncomeQuestions = Component.extend({
-	tag: "income-questions",
-	view: `
-		<h3>Income</h3>
-		<div class='content'>
-			<p>What do you get paid in?</p>
-			<p>
-				<select value:bind="string-to-any(paymentType)">
-					<option value="undefined">Select a type</option>
-					<option>Peanuts</option>
-					<option>Bread</option>
-					<option>Tamales</option>
-					<option>Cheddar</option>
-					<option>Dough</option>
-				</select>
-			</p>
-			<p><button on:click="next()">Finish</button></p>
-		</div>
-   `,
-	ViewModel: {
-		paymentType: "string"
-	}
-});
+	static props = {
+		isDiva: Boolean,
+		isProgrammer: Boolean
+	};
+}
 
-Component.extend({
-	tag: "my-modals",
-	view: `
-		{{# for(componentData of componentsToShow) }}
-			{{# if(componentData.last) }}
-				<div class='background'></div>
-			{{/ if }}
-			<div class='modal-container'
-				style="margin-top: {{ componentData.position }}px; margin-left: {{ componentData.position }}px">
-				{{ componentData.component }}
-			</div>
-		{{/ for }}
-	`,
-	ViewModel: {
+customElements.define("occupation-questions", OccupationQuestions);
+
+class DivaQuestions extends StacheElement {
+	static view = `
+    <h3>Diva Questions</h3>
+    <div class="content">
+      <p>Check all expenses that apply:</p>
+      <p>
+        <input
+          id="swagger"
+          type="checkbox"
+          checked:bind="boolean-to-inList('Swagger', this.divaExpenses)"
+        >
+        <label for="swagger">Swagger</label>
+      </p>
+      <p>
+        <input
+          id="fame"
+          type="checkbox"
+          checked:bind="boolean-to-inList('Fame', this.divaExpenses)"
+        >
+        <label for="fame">Fame</label>
+      </p>
+      <p><button on:click="this.next()">Next</button></p>
+    </div>
+  `;
+
+	static props = {
+		divaExpenses: type.Any
+	};
+}
+
+customElements.define("diva-questions", DivaQuestions);
+
+class ProgrammerQuestions extends StacheElement {
+	static view = `
+    <h3>Programmer Questions</h3>
+    <div class="content">
+      <p>What is your favorite language?</p>
+      <p>
+        <select value:to="this.programmingLanguage">
+          <option>C</option>
+          <option>C++</option>
+          <option>Java</option>
+          <option>JavaScript</option>
+        </select>
+      </p>
+      <p><button on:click="this.next()">Next</button></p>
+    </div>
+  `;
+
+	static props = {
+		programmingLanguage: String
+	};
+}
+
+customElements.define("programmer-questions", ProgrammerQuestions);
+
+class IncomeQuestions extends StacheElement {
+	static view = `
+    <h3>Income</h3>
+    <div class="content">
+      <p>What do you get paid in?</p>
+      <p>
+        <select value:bind="string-to-any(this.paymentType)">
+          <option value="undefined">Select a type</option>
+          <option>Peanuts</option>
+          <option>Bread</option>
+          <option>Tamales</option>
+          <option>Cheddar</option>
+          <option>Dough</option>
+        </select>
+      </p>
+      <p><button on:click="this.next()">Finish</button></p>
+    </div>
+  `;
+
+	static props = {
+		paymentType: type.maybeConvert(String)
+	};
+}
+
+customElements.define("income-questions", IncomeQuestions);
+
+class MyModals extends StacheElement {
+	static view = `
+    {{# for(component of componentsToShow) }}
+      {{# if(component.last) }}
+        <div class="background"></div>
+      {{/ if }}
+      <div
+        class="modal-container"
+        style="margin-top: {{ component.position }}px; margin-left: {{ component.position }}px"
+      >
+        {{ component.content }}
+      </div>
+    {{/ for }}
+  `;
+
+	static props = {
 		get componentsToShow() {
-			var distance = 20;
-			var count = this.components.length;
-			var start = -150 - (distance / 2) * (count - 1);
+			const distance = 20;
+			const count = this.components.length;
+			const start = -150 - distance / 2 * (count - 1);
 
 			return this.components.map(function(component, i) {
 				return {
 					position: start + i * distance,
-					component: component,
+					content: component,
 					last: i === count - 1
-				}
+				};
 			});
 		}
+	};
+}
 
-	}
-});
+customElements.define("my-modals", MyModals);
 
-Component.extend({
-	tag: "my-app",
-	view: `
-		<my-modals components:from="visibleQuestions"></my-modals>
+class MyApp extends StacheElement {
+	static view = `
+    <my-modals components:from="this.visibleQuestions"></my-modals>
 
-		<p>isDiva: {{ isDiva }}</p>
-		<p>isProgrammer: {{ isProgrammer }}</p>
-		<p>diva expenses: {{ divaExpenses.join(', ') }}</p>
-		<p>programmingLanguage: {{ programmingLanguage }}</p>
-		<p>paymentType: {{ paymentType }}</p>
-   `,
-	ViewModel: {
+    <p>isDiva: {{ this.isDiva }}</p>
+    <p>isProgrammer: {{ this.isProgrammer }}</p>
+    <p>diva expenses: {{ this.divaExpenses.join(', ') }}</p>
+    <p>programmingLanguage: {{ this.programmingLanguage }}</p>
+    <p>paymentType: {{ this.paymentType }}</p>
+  `;
+
+	static props = {
 		// Stateful properties
-		isDiva: { type: "boolean", default: false },
-		divaExpenses: { Default: Array },
-		isProgrammer: { type: "boolean", default: false },
-		programmingLanguage: "string",
-		paymentType: "string",
+		isDiva: { type: Boolean, default: false },
+
+		divaExpenses: {
+			get default() {
+				return new ObservableArray();
+			}
+		},
+
+		isProgrammer: { type: Boolean, default: false },
+		programmingLanguage: type.maybeConvert(String),
+		paymentType: String,
 
 		occupationQuestions: {
-			default() {
-				return new OccupationQuestions({
-					viewModel: {
-						isDiva: value.bind(this, "isDiva"),
-						isProgrammer: value.bind(this, "isProgrammer"),
-						next: this.next.bind(this)
-					}
+			get default() {
+				return new OccupationQuestions().bindings({
+					isDiva: value.bind(this, "isDiva"),
+					isProgrammer: value.bind(this, "isProgrammer"),
+					next: this.next.bind(this)
 				});
 			}
 		},
+
 		divaQuestions: {
-			default() {
-				return new DivaQuestions({
-					viewModel: {
-						divaExpenses: value.bind(this, "divaExpenses"),
-						next: this.next.bind(this)
-					}
+			get default() {
+				return new DivaQuestions().bindings({
+					divaExpenses: value.bind(this, "divaExpenses"),
+					next: this.next.bind(this)
 				});
 			}
 		},
+
 		programmerQuestions: {
-			default() {
-				return new ProgrammerQuestions({
-					viewModel: {
-						programmingLanguage: value.bind(this, "programmingLanguage"),
-						next: this.next.bind(this)
-					}
+			get default() {
+				return new ProgrammerQuestions().bindings({
+					programmingLanguage: value.bind(this, "programmingLanguage"),
+					next: this.next.bind(this)
 				});
 			}
 		},
+
 		incomeQuestions: {
-			default() {
-				return new IncomeQuestions({
-					viewModel: {
-						paymentType: value.bind(this, "paymentType"),
-						next: this.next.bind(this)
-					}
+			get default() {
+				return new IncomeQuestions().bindings({
+					paymentType: value.bind(this, "paymentType"),
+					next: this.next.bind(this)
 				});
 			}
 		},
@@ -187,22 +233,25 @@ Component.extend({
 		get allQuestions() {
 			var forms = [this.occupationQuestions];
 			if (this.isDiva) {
-				forms.push(this.divaQuestions)
+				forms.push(this.divaQuestions);
 			}
 			if (this.isProgrammer) {
-				forms.push(this.programmerQuestions)
+				forms.push(this.programmerQuestions);
 			}
 			forms.push(this.incomeQuestions);
 
-			return forms;
-		},
-		get visibleQuestions() {
-			return this.allQuestions.slice(this.questionIndex).reverse();
+			return new ObservableArray(forms);
 		},
 
-		// Methods
-		next() {
-			this.questionIndex++;
+		get visibleQuestions() {
+			return this.allQuestions.slice(this.questionIndex).reverse();
 		}
+	};
+
+	// Methods
+	next() {
+		this.questionIndex += 1;
 	}
-});
+}
+
+customElements.define("my-app", MyApp);
