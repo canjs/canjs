@@ -1,6 +1,6 @@
 {
   "name": "can",
-  "version": "6.0.0-pre.15",
+  "version": "6.0.0-pre.16",
   "main": "can.js",
   "module": "core.mjs",
   "scripts": {
