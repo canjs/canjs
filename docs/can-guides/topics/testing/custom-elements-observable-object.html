@@ -1,0 +1,92 @@
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@6/mocha.css" />
+<script src="//unpkg.com/mocha@6/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4/chai.js" type="text/javascript"></script>
+<script type="module">
+import { StacheElement } from "can";
+
+// Mocha / Chai Setup
+mocha.setup("bdd");
+const assert = chai.assert;
+
+class NameForm extends StacheElement {
+	static view = `
+		<div>
+			<label>
+				First: <input value:bind="this.first">
+			</label>
+			<label>
+				Last: <input value:bind="this.last">
+			</label>
+
+			<p>
+				<button on:click="this.setName('Kevin McCallister')">Pick Random Name</button>
+			</p>
+
+			<p>Name: {{ this.name }}</p>
+		</div>
+	`;
+
+	static props = {
+		first: String,
+		last: String,
+
+		get name() {
+			return `${this.first || ""} ${this.last || ""}`.trim();
+		}
+	};
+
+	setName(val) {
+		const parts = val.split(" ");
+		this.first = parts[0];
+		this.last = parts[1];
+	}
+}
+
+customElements.define("name-form", NameForm);
+
+describe("NameForm Custom Element", () => {
+	it("name", () => {
+		// 1. Create an instance of the custom element
+		const nameForm = new NameForm();
+
+		// 2. Test the custom element’s default values
+		assert.equal(nameForm.name, "", "default `name` is correct");
+
+		// 3. Set properties (or call functions) on the custom element
+		nameForm.first = "Kevin";
+		// 4. Test the custom element’s property values
+		assert.equal(
+			nameForm.name,
+			"Kevin",
+			"setting `first` updates `name` correctly"
+		);
+
+		// 3. Set properties (or call functions) on the custom element
+		nameForm.last = "McCallister";
+		// 4. Test the custom element’s property values
+		assert.equal(
+			nameForm.name,
+			"Kevin McCallister",
+			"setting `first` updates `name` correctly"
+		);
+
+		// 3. Set custom element properties (or call custom element functions)
+		nameForm.setName("Marv Merchants");
+		// 4. Test values of the custom element’s properties
+		assert.equal(
+			nameForm.first,
+			"Marv",
+			"`setName` updates `first` correctly"
+		);
+		assert.equal(
+			nameForm.last,
+			"Merchants",
+			"`setName` updates `last` correctly"
+		);
+	});
+});
+
+// start Mocha
+mocha.run();
+</script>

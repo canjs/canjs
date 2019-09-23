@@ -1,0 +1,55 @@
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@6/mocha.css" />
+<script src="//unpkg.com/mocha@6/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4/chai.js" type="text/javascript"></script>
+<script type="module">
+import { StacheElement } from "can";
+
+// Mocha / Chai Setup
+mocha.setup("bdd");
+const assert = chai.assert;
+
+function DatePicker(el) {
+	this.el = el;
+	el.classList.add("date-picker");
+}
+
+DatePicker.prototype.teardown = function() {
+	this.el.classList.remove("date-picker");
+};
+
+class DateRange extends StacheElement {
+	static view = `<p class="start-date">This is the Date Picker</p>`;
+
+	connected() {
+		const startDate = new DatePicker(this.querySelector(".start-date"));
+
+		return () => {
+			startDate.teardown();
+		};
+	}
+}
+
+customElements.define("date-range", DateRange);
+
+describe("DateRange Component connectedCallback", () => {
+	it("should set up DatePicker", () => {
+		const dateRange = new DateRange();
+
+		document.body.appendChild(dateRange);
+
+		const startDate = dateRange.querySelector(".start-date");
+
+		assert.ok(
+			startDate.classList.contains("date-picker"),
+			"start date DatePicker set up"
+		);
+
+		// clean up element
+		document.body.removeChild(document.querySelector("date-range"));
+	});
+});
+
+// start Mocha
+mocha.run();
+</script>

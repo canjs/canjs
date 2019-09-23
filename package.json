@@ -277,6 +277,10 @@
         "\"//unpkg.com/can@pre/core.mjs\""
       ],
       [
+        "\"can/ecosystem\"",
+        "\"//unpkg.com/can@pre/ecosystem.mjs\""
+      ],
+      [
         "\"can/everything\"",
         "\"//unpkg.com/can@pre/everything.mjs\""
       ],
