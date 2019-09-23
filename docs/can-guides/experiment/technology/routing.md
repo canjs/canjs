@@ -9,16 +9,18 @@ work with the browser’s back and forward buttons.
 
 <style>
 table.panels .background td {
-    background: #f4f4f4;
-    padding: 5px 5px 5px 5px;
-    border: solid 1px white;
-    margin: 1px;
-    vertical-align: top;
+  background: #f4f4f4;
+  padding: 5px 5px 5px 5px;
+  border: solid 1px white;
+  margin: 1px;
+  vertical-align: top;
 }
 table.panels pre {
-    margin-top: 0px;
+  margin-top: 0px;
 }
-.obs {color: #800020;}
+.obs {
+  color: #800020;
+}
 </style>
 
 ## Overview
@@ -29,9 +31,10 @@ is easier to setup. Pushstate routing requires server-support. Use [can-route-pu
 [can-route] is used to setup a bi-directional relationship with an <span class="obs">observable</span> and
 the browser’s [location](https://developer.mozilla.org/en-US/docs/Web/API/Location) (the _URL_).
 
-<img src="../../docs/can-guides/experiment/technology/observable-routing.png"
+<img 
   alt=""
-  class="bit-docs-screenshot"/>
+  class="bit-docs-screenshot"
+  src="../../docs/can-guides/experiment/technology/observable-routing.svg" />
 
 When the <span class="obs">observable</span> changes, the _URL_ will be updated. When the _URL_ changes
 the <span class="obs">observable</span> will be updated.
@@ -51,9 +54,9 @@ see the cross-binding in action, try:
 
 3. Click the back button (`⇦`). Notice the observable state updates.
 
-<p class="codepen" data-height="388" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="KEqpqj" style="height: 388px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS5 - routing two-way binding">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/KEqpqj/">
-  CanJS5 - routing two-way binding</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="388" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="wvwQzGZ" style="height: 388px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6 - routing two-way binding">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/wvwQzGZ/">
+  CanJS 6 - routing two-way binding</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
@@ -64,13 +67,13 @@ calling [can-route.start route.start()] as follows:
 <mock-url></mock-url>
 <p>observable’s state:</p>
 <bit-json-editor></bit-json-editor>
-<script src="//unpkg.com/mock-url@^5.0.0" type="module"></script>
-<script src="//unpkg.com/bit-json-editor@^5.0.0" type="module"></script>
+<script src="//unpkg.com/mock-url@^6.0.0" type="module"></script>
+<script src="//unpkg.com/bit-json-editor@^6.0.0" type="module"></script>
 
 <script type="module">
-import { DefineMap, route } from "//unpkg.com/can@5/core.mjs";
+import { ObservableObject, route } from "//unpkg.com/can@6/core.mjs";
 
-var observable = new DefineMap();
+var observable = new ObservableObject();
 
 route.data = observable;
 route.start();
@@ -81,14 +84,14 @@ document.querySelector("bit-json-editor").data = observable;
 
 <style>
 bit-json-editor {
-	height: 200px;
+  height: 200px;
 }
 </style>
 ```
 @highlight 12-13
 @codepen
 
-<br/>
+<br>
 
 
 Often, the observable is an instance of a custom type. For example, you can connect the `myCounter` observable from
@@ -98,26 +101,28 @@ the [guides/technology-overview#Key_ValueObservables Technology Overview’s Key
 <mock-url></mock-url>
 
 <script type="module">
-// Imports the <mock-url> element that provides
-// a fake back, forward, and URL controls.
-import "//unpkg.com/mock-url@^5.0.0";
+  // Imports the <mock-url> element that provides
+  // a fake back, forward, and URL controls.
+  import "//unpkg.com/mock-url@^6.0.0";
 
-import { DefineMap, route } from "can";
+  import { route, ObservableObject } from "can";
 
-const Counter = DefineMap.extend({
-    count: { default: 0 },
+  class Counter extends ObservableObject {
+    static props = {
+      count: 0
+    };
     increment() {
-        this.count++;
+      this.count += 1;
     }
-});
+  }
 
-window.myCounter = new Counter();
+  window.myCounter = new Counter();
 
-route.data = myCounter;
-route.start();
+  route.data = myCounter;
+  route.start();
 </script>
 ```
-@highlight 19-20
+@highlight 21-22
 @codepen
 
 This will add `#!&count=0` to the [location](https://developer.mozilla.org/en-US/docs/Web/API/Location) hash.
@@ -195,8 +200,8 @@ route.register("", { count: 0 });
 
 ## Routing and the root component
 
-Understanding how to use [can-route] within an application comprised of [can-component]s
-and their [can-stache] views and observable view-models can be tricky.
+Understanding how to use [can-route] within an application comprised of [can-stache-element]s
+and their [can-stache] views and [can-observable-object observable] properties can be tricky.
 
 We’ll use the following example to help make sense of it:
 
@@ -211,71 +216,78 @@ to tasks in a upcoming service layer section._)
 Switching between different components is managed by a `<my-app>` component. The topology of
 the application looks like:
 
-<img src="../../docs/can-guides/experiment/technology/routing-app-overview.png"
+<img
+  src="../../docs/can-guides/experiment/technology/routing-app-overview.svg"
   alt="The my-app component on top. The page-home, page-login, task-editor nodes are children of my-app. percent-slider component is a child of task-editor."
-  class="bit-docs-screenshot"/>
+  class="bit-docs-screenshot"
+  style="width: 600px"
+/>
 
-In most applications, [can-route] is connected to a property on the top-level component’s
-[can-component.prototype.ViewModel]. We are going to go through the process of
-building `<my-app>` and connecting it
-to [can-route]. This is usually done in five steps:
+In most applications, [can-route] is connected to a property on the top-level component. We are
+going to go through the process of building `<my-app>` and connecting it to [can-route]. This is
+usually done in five steps:
 
-1. Define the top-level component’s view-model (sometimes called _application view-model_; typically, this is a [can-define/map/map DefineMap]).
-2. Create an observable key-value object on the view-model to represent the state of [can-route].
+1. Define the top-level component's [can-stache-element/static.props].
+2. Create an observable key-value object on the component to represent the state of [can-route].
 3. Connect this observable to the routing [can-route.data].
-4. Have the top-level component’s [can-component.prototype.view] display the current sub-components based on the view-model state.
-5. Register routes that translate between the URL and the application view-model.
+4. Have the top-level component’s [can-stache-element/static.view] display the current sub-components based on its state.
+5. Register routes that translate between the URL and the application state.
 
-## Connect a component’s view-model to can-route
+## Connect a component to can-route
 
-To connect a component’s view-model to can-route, we first need to create a basic
-component. The following creates a `<my-app>` component that includes links that will change the route’s page property:
+To connect a component to can-route, we first need to create a basic component. The
+following creates a `<my-app>` component that includes links that will change the
+route’s page property:
 
 ```js
-import { Component, stacheRouteHelpers } from "can";
+import { StacheElement, stacheRouteHelpers } from "can";
 
-Component.extend({
-    tag: "my-app",
-    view: `
-        <a href="{{ routeUrl(page='home') }}">Home</a>
-        <a href="{{ routeUrl(page='tasks') }}">Tasks</a>
-    `,
-    ViewModel: {
-    }
-});
+class MyApp extends StacheElement {
+  static view = `
+    The current page is .
+    <a href="{{ routeUrl(page='home') }}">Home</a>
+    <a href="{{ routeUrl(page='tasks') }}">Tasks</a>
+  `;
+
+  static props = {};
+}
+
+customElements.define("my-app", MyApp);
 ```
 
 > __NOTE:__ Your html needs a `<my-app></my-app>` element to be able to see the
 > component’s content. It should say "The current page is .".
 
-To connect the component’s VM to the url, we:
+To connect the component to the url, we:
 
-- create a property on the ViewModel to hold the [can-route.data route.data] key-value observable.
+- add a property to the component `props` object to hold the [can-route.data route.data] key-value observable.
 - call [can-route.start route.start] to bind the observable key-value object to the URL.
 
 We also display the `routeData.page` property.
 
 ```js
-import { Component, DefineMap, route, stacheRouteHelpers } from "can";
+import { route, StacheElement, stacheRouteHelpers } from "can";
 
-Component.extend({
-    tag: "my-app",
-    view: `
-        The current page is {{routeData.page}}.
-        <a href="{{ routeUrl(page='home') }}">Home</a>
-        <a href="{{ routeUrl(page='tasks') }}">Tasks</a>
-    `,
-    ViewModel: {
-		routeData: {
-			default() {
-				route.start();
-				return route.data;
-			}
-		}
+class MyApp extends StacheElement {
+  static view = `
+    The current page is {{ this.routeData.page }}.
+    <a href="{{ routeUrl(page='home') }}">Home</a>
+    <a href="{{ routeUrl(page='tasks') }}">Tasks</a>
+  `;
+
+  static props = {
+    routeData: {
+      get default() {
+        route.start();
+        return route.data;
+      }
     }
-});
+  };
+}
+
+customElements.define("my-app", MyApp);
 ```
-@highlight 1,6,11-16
+@highlight 1,5,11-16
 
 At this point, changes in the URL will cause changes in the `routeData.page`
 property. See this by clicking the links and the back/refresh buttons below:
@@ -285,97 +297,100 @@ property. See this by clicking the links and the back/refresh buttons below:
 
 ## Display the right sub-components
 
-[can-component#Programmaticallyinstantiatingacomponent Programmatically instatiated components] can be used to create an instance of the component that should be displayed for each route. We’ll use an [can-stache.tags.escaped] to display a `componentToShow` property that we will implement in the [can-component.prototype.ViewModel]:
+Programmatically instatiated components can be used to create an instance of the
+component that should be displayed for each route. We’ll use an [can-stache.tags.escaped] 
+to display a `componentToShow` property that we will implement in the component [can-stache-element/static.props props]:
 
 ```js
-import { Component, DefineMap, route, stacheRouteHelpers } from "can";
+import { route, StacheElement, stacheRouteHelpers } from "can";
 
-Component.extend({
-    tag: "my-app",
-    view: `
-		{{componentToShow}}
-    `,
-    ViewModel: {
-		routeData: {
-			default() {
-				const observableRouteData = new DefineMap();
-				route.data = observableRouteData;
-				route.start();
-				return observableRouteData;
-			}
-		}
+class MyApp extends StacheElement {
+  static view: `
+    {{ this.componentToShow }}
+  `;
+
+  static props = {
+    routeData: {
+      get default() {
+        route.start();
+        return route.data;
+      }
     }
-});
+  };
+}
+
+customElements.define("my-app", MyApp);
 ```
-@highlight 6,only
+@highlight 5,only
 
 The `componentToShow` getter will return an instance of the component that should be shown.
 
-The first step toward making this possible is to import the constructors for each [can-component]:
+The first step toward making this possible is to import the constructors for each [can-stache-element]:
 
 ```js
-import { Component, DefineMap, route, stacheRouteHelpers } from "can";
+import { route, StacheElement, stacheRouteHelpers } from "can";
 import { PageHome, PageLogin, TaskEditor } from "can/demos/technology-overview/route-mini-app-components";
 
-Component.extend({
-    tag: "my-app",
-    view: `
-		{{componentToShow}}
-    `,
-    ViewModel: {
-		routeData: {
-			default() {
-				const observableRouteData = new DefineMap();
-				route.data = observableRouteData;
-				route.start();
-				return observableRouteData;
-			}
-		}
+class MyApp extends StacheElement {
+  static view: `
+    {{ this.componentToShow }}
+  `;
+
+  static props = {
+    routeData: {
+      get default() {
+        route.start();
+        return route.data;
+      }
     }
-});
+  };
+}
+
+customElements.define("my-app", MyApp);
 ```
 @highlight 2,only
 
 Once the component constructors are imported, they can be used to create an instance of the correct component in the `componentToShow` getter:
 
 ```js
-import { Component, DefineMap, route, stacheRouteHelpers } from "can";
+import { route, StacheElement, stacheRouteHelpers } from "can";
 import { PageHome, PageLogin, TaskEditor } from "can/demos/technology-overview/route-mini-app-components";
 
-Component.extend({
-    tag: "my-app",
-    view: `
-		{{componentToShow}}
-    `,
-    ViewModel: {
-		routeData: {
-			default() {
-				const observableRouteData = new DefineMap();
-				route.data = observableRouteData;
-				route.start();
-				return observableRouteData;
-			}
-		},
-        get componentToShow() {
-            if(!this.isLoggedIn) {
-                return new PageLogin({ });
-            }
+class MyApp extends StacheElement {
+  static view = `
+    {{ this.componentToShow }}
+  `;
 
-            switch(this.page) {
-                case "home":
-                    return new PageHome({ });
-                case "tasks":
-                    return new TaskEditor({ });
-                default:
-                    var page404 = document.createElement("h2");
-                    page404.innerHTML = "Page Missing";
-                    return page404;
-            }
-        }
+  static props = {
+    routeData: {
+      get default() {
+        route.start();
+        return route.data;
+      }
+    },
+
+    get componentToShow() {
+      if (!this.isLoggedIn) {
+        return new PageLogin();
+      }
+
+      switch(this.page) {
+        case "home":
+          return new PageHome();
+        case "tasks":
+          return new TaskEditor();
+        default:
+          const page404 = document.createElement("h2");
+          page404.innerHTML = "Page Missing";
+          return page404;
+      }
     }
-});
+  };
+}
+
+customElements.define("my-app", MyApp);
 ```
-@highlight 18-33,only
+@highlight 17-32,only
 
 ## Pass data to sub-components
 
@@ -383,167 +398,160 @@ Now the correct components will be displayed; however, the application will not 
 
 The Login page needs a property `isLoggedIn` that represents whether the user is logged in. Since the login page handles logging in, it will need to be able to update this value, so we use [can-value.bind value.bind] to two-way bind this property.
 
-To hook this up, we implement the `isLoggedIn` property on the ViewModel and pass it to the Login page through the `viewModel` option of the component constructor:
+To hook this up, we implement the `isLoggedIn` property on the `my-app` component and pass it to the
+`Login` page through `can-stache-element` [can-stache-element/lifecycle-methods.bindings bindings]:
 
 ```js
-import { Component, DefineMap, route, stacheRouteHelpers, value } from "can";
+import { route, StacheElement, stacheRouteHelpers, value } from "can";
 import { PageHome, PageLogin, TaskEditor } from "can/demos/technology-overview/route-mini-app-components";
 import "can/demos/technology-overview/mock-url";
 
-Component.extend({
-    tag: "my-app",
-    view: `
-        {{componentToShow}}
-    `,
-    ViewModel: {
-        routeData: {
-            default() {
-                const observableRouteData = new DefineMap();
-                route.data = observableRouteData;
-                route.start();
-                return observableRouteData;
-            }
-        },
-        get componentToShow(){
-            if(!this.isLoggedIn) {
-                return new PageLogin({
-                    viewModel: {
-                        isLoggedIn: value.bind(this, "isLoggedIn")
-                    }
-                });
-            }
+class MyApp extends StacheElement {
+  static view = `
+    {{ this.componentToShow }}
+  `;
 
-            switch(this.routeData.page) {
-                case "home":
-                    return new PageHome({ });
-                case "tasks":
-                    return new TaskEditor({ });
-                default:
-                    var page404 = document.createElement("h2");
-                    page404.innerHTML = "Page Missing";
-                    return page404;
-            }
-        },
-        isLoggedIn: { default: false, type: "boolean" }
-    }
-});
+  static props = {
+    routeData: {
+      get default() {
+        route.start();
+        return route.data;
+      }
+    },
 
+    get componentToShow() {
+      if (!this.isLoggedIn) {
+        return new PageLogin().bindings({
+          isLoggedIn: value.bind(this, "isLoggedIn")
+        });
+      }
+
+      switch (this.routeData.page) {
+        case "home":
+          return new PageHome();
+        case "tasks":
+          return new TaskEditor();
+        default:
+          const page404 = document.createElement("h2");
+          page404.innerHTML = "Page Missing";
+          return page404;
+      }
+    },
+
+    isLoggedIn: false
+  };
+}
+
+customElements.define("my-app", MyApp);
 ```
-@highlight 1,22-24,39,only
+@highlight 1,20-22,37,only
 
 The `TaskEditor` page also needs to know the id of the task that is being edited. This property can be bound directly to the `routeData` object:
 
 ```js
-import { Component, DefineMap, route, stacheRouteHelpers, value } from "can";
+import { route, StacheElement, stacheRouteHelpers, value } from "can";
 import { PageHome, PageLogin, TaskEditor } from "can/demos/technology-overview/route-mini-app-components";
 import "can/demos/technology-overview/mock-url";
 
-Component.extend({
-    tag: "my-app",
-    view: `
-        {{componentToShow}}
-    `,
-    ViewModel: {
-        routeData: {
-            default() {
-                const observableRouteData = new DefineMap();
-                route.data = observableRouteData;
-                route.start();
-                return observableRouteData;
-            }
-        },
-        get componentToShow(){
-            if(!this.isLoggedIn) {
-                return new PageLogin({
-                    viewModel: {
-                        isLoggedIn: value.bind(this, "isLoggedIn")
-                    }
-                });
-            }
+class MyApp extends StacheElement {
+  static view = `
+    {{ this.componentToShow }}
+  `;
 
-            switch(this.routeData.page) {
-                case "home":
-                    return new PageHome({ });
-                case "tasks":
-                    return new TaskEditor({
-						viewModel: {
-							id: value.bind(this.routeData, "taskId")
-						}
-					});
-                default:
-                    var page404 = document.createElement("h2");
-                    page404.innerHTML = "Page Missing";
-                    return page404;
-            }
-        },
-        isLoggedIn: { default: false, type: "boolean" }
-    }
-});
+  static props = {
+    routeData: {
+      get default() {
+        route.start();
+        return route.data;
+      }
+    },
 
+    get componentToShow() {
+      if (!this.isLoggedIn) {
+        return new PageLogin().bindings({
+          isLoggedIn: value.bind(this, "isLoggedIn")
+        });
+      }
+
+      switch (this.routeData.page) {
+        case "home":
+          return new PageHome();
+        case "tasks":
+          return new TaskEditor().bindings({
+            id: value.bind(this.routeData, "taskId")
+          });
+        default:
+          const page404 = document.createElement("h2");
+          page404.innerHTML = "Page Missing";
+          return page404;
+      }
+    },
+
+    isLoggedIn: false
+  };
+}
+
+customElements.define("my-app", MyApp);
 ```
-@highlight 33-35,only
+@highlight 29-31,only
 
 Lastly, a `logout` function needs to be passed to the `PageHome` and `TaskEditor` components. Since this is a function and is not observable, it can be passed directly to these components without using [can-value].
 
-> **Note:** make sure to use [Function.prototype.bind()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind) so that the `this` will correctly be the ViewModel, even when called from a child component.
+> **Note:** make sure to use [Function.prototype.bind()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind) so that the `this` will correctly be the element, even when called from a child component.
 
 ```js
-import { Component, DefineMap, route, stacheRouteHelpers, value } from "can";
+import { route, StacheElement, stacheRouteHelpers, value } from "can";
 import { PageHome, PageLogin, TaskEditor } from "can/demos/technology-overview/route-mini-app-components";
 import "can/demos/technology-overview/mock-url";
 
-Component.extend({
-    tag: "my-app",
-    view: `
-        {{componentToShow}}
-    `,
-    ViewModel: {
-        routeData: {
-            default() {
-                const observableRouteData = new DefineMap();
-                route.data = observableRouteData;
-                route.start();
-                return observableRouteData;
-            }
-        },
-        get componentToShow(){
-            if(!this.isLoggedIn) {
-                return new PageLogin({
-                    viewModel: {
-                        isLoggedIn: value.bind(this, "isLoggedIn")
-                    }
-                });
-            }
+class MyApp extends StacheElement {
+  static view = `
+    {{ this.componentToShow }}
+  `;
 
-            switch(this.routeData.page) {
-                case "home":
-                    return new PageHome({
-                        viewModel: {
-                            logout: this.logout.bind(this)
-                        }
-		    });
-                case "tasks":
-                    return new TaskEditor({
-                        viewModel: {
-                            id: value.bind(this.routeData, "taskId"),
-                            logout: this.logout.bind(this)
-                        }
-                    });
-                default:
-                    var page404 = document.createElement("h2");
-                    page404.innerHTML = "Page Missing";
-                    return page404;
-            }
-        },
-        isLoggedIn: { default: false, type: "boolean" },
-        logout() {
-            this.isLoggedIn = false;
-        }
-    }
-});
+  static props = {
+    routeData: {
+      get default() {
+        route.start();
+        return route.data;
+      }
+    },
 
+    get componentToShow() {
+      if (!this.isLoggedIn) {
+        return new PageLogin().bindings({
+          isLoggedIn: value.bind(this, "isLoggedIn")
+        });
+      }
+
+      switch (this.routeData.page) {
+        case "home":
+          return new PageHome().bindings({
+            logout: this.logout.bind(this)
+          });
+        case "tasks":
+          return new TaskEditor().bindings({
+            id: value.bind(this.routeData, "taskId"),
+            logout: this.logout.bind(this)
+          });
+        default:
+          const page404 = document.createElement("h2");
+          page404.innerHTML = "Page Missing";
+          return page404;
+      }
+    },
+
+    isLoggedIn: false
+  };
+
+  logout() {
+    this.isLoggedIn = false;
+  }
+}
+
+customElements.define("my-app", MyApp);
 ```
-@highlight 24,36,46-48,only
+@highlight 27-29,33,45-47,only
 
 ## Register routes
 
@@ -568,66 +576,62 @@ route.register("tasks/{taskId}", { page: "tasks" });
 Register these routes just before calling `route.start`:
 
 ```js
-import { Component, DefineMap, route, stacheRouteHelpers, value } from "can";
+import { route, StacheElement, stacheRouteHelpers, value } from "can";
 import { PageHome, PageLogin, TaskEditor } from "can/demos/technology-overview/route-mini-app-components";
 import "can/demos/technology-overview/mock-url";
 
-Component.extend({
-    tag: "my-app",
-    view: `
-        {{componentToShow}}
-    `,
-    ViewModel: {
-        routeData: {
-            default() {
-                route.register("{page}", { page: "home" });
-                route.register("tasks/{taskId}", { page: "tasks" });
-                route.start();
-                return route.data;
-            }
-        },
-        get componentToShow(){
-            if(!this.isLoggedIn) {
-                return new PageLogin({
-                    viewModel: {
-                        isLoggedIn: value.bind(this, "isLoggedIn")
-                    }
-                });
-            }
+class MyApp extends StacheElement {
+  static view = `
+    {{ this.componentToShow }}
+  `;
 
-            switch(this.routeData.page) {
-                case "home":
-                    return new PageHome({
-                        viewModel: {
-                            logout: this.logout.bind(this)
-                        }
-		    });
-                case "tasks":
-                    return new TaskEditor({
-                        viewModel: {
-                            id: value.bind(this.routeData, "taskId"),
-                            logout: this.logout.bind(this)
-                        }
-                    });
-                default:
-                    var page404 = document.createElement("h2");
-                    page404.innerHTML = "Page Missing";
-                    return page404;
-            }
-        },
-        isLoggedIn: { default: false, type: "boolean" },
-        logout() {
-            this.isLoggedIn = false;
-        }
-    }
-});
+  static props = {
+    routeData: {
+      get default() {
+        route.register("{page}", { page: "home" });
+        route.register("tasks/{taskId}", { page: "tasks" });
+        route.start();
+        return route.data;
+      }
+    },
 
+    get componentToShow() {
+      if (!this.isLoggedIn) {
+        return new PageLogin().bindings({
+          isLoggedIn: value.bind(this, "isLoggedIn")
+        });
+      }
+
+      switch (this.routeData.page) {
+        case "home":
+          return new PageHome();
+        case "tasks":
+          return new TaskEditor().bindings({
+            id: value.bind(this.routeData, "taskId"),
+            logout: this.logout.bind(this)
+          });
+        default:
+          const page404 = document.createElement("h2");
+          page404.innerHTML = "Page Missing";
+          return page404;
+      }
+    },
+
+    isLoggedIn: false
+  };
+
+  logout() {
+    this.isLoggedIn = false;
+  }
+}
+
+customElements.define("my-app", MyApp);
 ```
 @highlight 13-14,only
 
 Now the mini application is able to translate changes in the URL to
-properties on the `routeData` property of the component’s view-model. When the component’s view-model
-changes, the view updates the page.
+properties on the `routeData` property of the component. When the component’s 
+property changes, the view updates the page.
 
 @demo demos/technology-overview/route-mini-app.html
 @codepen
@@ -643,136 +647,130 @@ When using progressive loading, the code for each route will be imported using a
 Dynamic imports return a promise that will resolve once the code is loaded, so the `componentToShow` property will become a promise. The [can-reflect-promise] package makes it easy to use promises directly in [can-stache]. The view can be updated to display the `value` of the promise once it is resolved:
 
 ```js
-import { Component, DefineMap, route, stacheRouteHelpers, value } from "can";
+import { route, StacheElement, stacheRouteHelpers, value } from "can";
 import "can/demos/technology-overview/mock-url";
 
-Component.extend({
-    tag: "my-app",
-    view: `
-		{{# if(componentToShow.isResolved) }}
-			{{componentToShow.value}}
-		{{/ if }}
-    `,
-    ViewModel: {
-        routeData: {
-            default() {
-                const observableRouteData = new DefineMap();
-                route.data = observableRouteData;
-                route.register("{page}", { page: "home" });
-                route.register("tasks/{taskId}", { page: "tasks" });
-                route.start();
-                return observableRouteData;
-            }
-        },
-        get componentToShow(){
-            if(!this.isLoggedIn) {
-                return new PageLogin({
-                    viewModel: {
-                        isLoggedIn: value.bind(this, "isLoggedIn")
-                    }
-                });
-            }
+class MyApp extends StacheElement {
+  static view = `
+    {{# if(this.componentToShow.isResolved) }}
+      {{ this.componentToShow.value }}
+    {{/ if }}
+  `;
 
-            switch(this.routeData.page) {
-                case "home":
-                    return new PageHome({
-                        viewModel: {
-                            logout: this.logout.bind(this)
-                        }
-		    });
-                case "tasks":
-                    return new TaskEditor({
-                        viewModel: {
-                            id: value.bind(this.routeData, "taskId"),
-                            logout: this.logout.bind(this)
-                        }
-                    });
-                default:
-                    var page404 = document.createElement("h2");
-                    page404.innerHTML = "Page Missing";
-                    return page404;
-            }
-        },
-        isLoggedIn: { default: false, type: "boolean" },
-        logout() {
-            this.isLoggedIn = false;
-        }
-    }
-});
+  static props = {
+    routeData: {
+      get default() {
+        route.register("{page}", { page: "home" });
+        route.register("tasks/{taskId}", { page: "tasks" });
+        route.start();
+        return route.data;
+      }
+    },
 
+    get componentToShow() {
+      if (!this.isLoggedIn) {
+        return new PageLogin().bindings({
+          isLoggedIn: value.bind(this, "isLoggedIn")
+        });
+      }
+
+      switch (this.routeData.page) {
+        case "home":
+          return new PageHome().bindings({
+            logout: this.logout.bind(this)
+          });
+        case "tasks":
+          return new TaskEditor().bindings({
+            id: value.bind(this.routeData, "taskId"),
+            logout: this.logout.bind(this)
+          });
+        default:
+          const page404 = document.createElement("h2");
+          page404.innerHTML = "Page Missing";
+          return page404;
+      }
+    },
+
+    isLoggedIn: false
+  };
+
+  logout() {
+    this.isLoggedIn = false;
+  }
+}
+
+customElements.define("my-app", MyApp);
 ```
-@highlight 7-9,only
+@highlight 6-8,only
 
 > Note, [can-reflect-promise] also adds `isPending` and `isRejected` properties to promises so that the view can handle these states as well.
 
 Then update the `componentToShow` getter to import the correct module. The value passed to the promise’s [then](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then) method will be a module object with a property for each of the module’s exports. In this example, the component constructor is the default export, so an instance of the component can be created using `new module.default({ /* ... */ })`. Returning the instances from the `then` method will set `componentToShow.value` to the component instance:
 
 ```js
-import { Component, DefineMap, route, stacheRouteHelpers, value } from "can";
+import { route, StacheElement, stacheRouteHelpers, value } from "can";
 import "can/demos/technology-overview/mock-url";
 
-Component.extend({
-    tag: "my-app",
-    view: `
-		{{# if(componentToShow.isResolved) }}
-			{{componentToShow.value}}
-		{{/ if }}
-    `,
-    ViewModel: {
-        routeData: {
-            default() {
-                const observableRouteData = new DefineMap();
-                route.data = observableRouteData;
-                route.register("{page}", { page: "home" });
-                route.register("tasks/{taskId}", { page: "tasks" });
-                route.start();
-                return observableRouteData;
-            }
-        },
-        get componentToShow(){
-			if(!this.isLoggedIn) {
-                return import("can/demos/technology-overview/page-login")
-                    .then((module) => {
-                        return new module.default({
-                            viewModel: {
-                                isLoggedIn: value.bind(this, "isLoggedIn")
-                            }
-                        });
-                    });
-            }
+class MyApp extends StacheElement {
+  static view = `
+    {{# if(this.componentToShow.isResolved) }}
+      {{ this.componentToShow.value }}
+    {{/ if }}
+  `;
 
-            return import(`can/demos/technology-overview/page-${this.routeData.page}`)
-                .then((module) => {
-                    switch(this.routeData.page) {
-                        case "home":
-                            return new module.default({
-                                viewModel: {
-                                    logout: this.logout.bind(this)
-                                }
-                            });
-                        case "tasks":
-                            return new module.default({
-                                viewModel: {
-                                    id: value.from(this.routeData, "taskId"),
-                                    logout: this.logout.bind(this)
-                                }
-                            });
-                        default:
-                            var page404 = document.createElement("h2");
-                            page404.innerHTML = "Page Missing";
-                            return page404;
-                    }
-                });
-        },
-        isLoggedIn: { default: false, type: "boolean" },
-        logout() {
-            this.isLoggedIn = false;
+  static props = {
+    routeData: {
+      get default() {
+        route.register("{page}", { page: "home" });
+        route.register("tasks/{taskId}", { page: "tasks" });
+        route.start();
+        return route.data;
+      }
+    },
+
+    get componentToShow() {
+      if (!this.isLoggedIn) {
+        return import("can/demos/technology-overview/page-login").then(
+          module => {
+            return new module.default().bindings({
+              isLoggedIn: value.bind(this, "isLoggedIn")
+            });
+          }
+        );
+      }
+
+      return import(
+        `can/demos/technology-overview/page-${this.routeData.page}`
+      ).then(module => {
+        switch (this.routeData.page) {
+          case "home":
+            return new module.default().bindings({
+              logout: this.logout.bind(this)
+            });
+          case "tasks":
+            return new module.default().bindings({
+              id: value.from(this.routeData, "taskId"),
+              logout: this.logout.bind(this)
+            });
+          default:
+            const page404 = document.createElement("h2");
+            page404.innerHTML = "Page Missing";
+            return page404;
         }
-    }
-});
+      });
+    },
 
+    isLoggedIn: false
+  };
+
+  logout() {
+    this.isLoggedIn = false;
+  }
+}
+
+customElements.define("my-app", MyApp);
 ```
-@highlight 24-25,26,30,34-35,38,45,56,only
+@highlight 23-25,29,32-34,37,41,50,only
 
 The application is now progressively loading the code for each route:
 @demo demos/technology-overview/route-mini-app-progressive.html

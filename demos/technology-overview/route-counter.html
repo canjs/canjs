@@ -8,21 +8,21 @@ import { ObservableObject, route, stache, stacheBindings, type } from "can";
 import "can/demos/technology-overview/mock-url";
 
 class Counter extends ObservableObject {
-    static get props() {
-        return {
-            count: {
-                default: 0,
-                type: type.maybeConvert(Number),
-                set(newValue){
-                    return newValue || 0;
-                }
-            }
-        };
-    }
+	static get props() {
+		return {
+			count: {
+				default: 0,
+				type: type.convert(Number),
+				set(newValue) {
+					return newValue || 0;
+				}
+			}
+		};
+	}
 
-    increment() {
-        this.count++;
-    }
+	increment() {
+		this.count += 1;
+	}
 }
 
 window.myCounter = new Counter();
@@ -30,8 +30,8 @@ route.data = myCounter;
 route.start();
 
 const view = stache(`
-  <button on:click='increment()'>+1</button>
-  Count: <span>{{ count }}</span>
+	<button on:click="this.increment()">+1</button>
+	Count: <span>{{ this.count }}</span>
 `);
 
 document.body.appendChild( view(myCounter) );

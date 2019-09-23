@@ -1,85 +1,91 @@
 <body>
 <mock-url></mock-url>
 <my-app></my-app>
-<script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" dev-bundle>
-import { ObservableObject, route, StacheElement, stacheRouteHelpers, type, value } from "can";
-import { PageHome, PageLogin, TaskEditor } from "can/demos/technology-overview/route-mini-app-components";
+<script id="demo-source" main="@empty" src="../../node_modules/steal/steal.js" dev-bundle>import {
+	ObservableObject,
+	route,
+	StacheElement,
+	stacheRouteHelpers,
+	type,
+	value
+} from "can";
+
+import {
+	PageHome,
+	PageLogin,
+	TaskEditor
+} from "can/demos/technology-overview/route-mini-app-components";
+
 import "can/demos/technology-overview/mock-url";
 
 class MyApp extends StacheElement {
-    static get view() {
-        return `
-            {{ componentToShow }}
-        `;
-    }
+	static get view() {
+		return `
+			{{ componentToShow }}
+		`;
+	}
 
-    static get props() {
-        return {
-            routeData: {
-                get default() {
-                    route.register("{page}", { page: "home" });
-                    route.register("tasks/{taskId}", { page: "tasks" });
-                    route.start();
-                    return route.data;
-                }
-            },
+	static get props() {
+		return {
+			routeData: {
+				get default() {
+					route.register("{page}", { page: "home" });
+					route.register("tasks/{taskId}", { page: "tasks" });
+					route.start();
+					return route.data;
+				}
+			},
 
-            get componentToShow(){
-                if(!this.isLoggedIn) {
-                    return new PageLogin({
-                        viewModel: {
-                            isLoggedIn: value.bind(this, "isLoggedIn")
-                        }
-                    });
-                }
+			get componentToShow() {
+				if (!this.isLoggedIn) {
+					return new PageLogin().bindings({
+						isLoggedIn: value.bind(this, "isLoggedIn")
+					});
+				}
 
-                switch(this.routeData.page) {
-                    case "home":
-                        return new PageHome({
-                            viewModel: {
-                                logout: this.logout.bind(this)
-                            }
-                        });
-                    case "tasks":
-                        return new TaskEditor({
-                            viewModel: {
-                                id: value.from(this.routeData, "taskId"),
-                                logout: this.logout.bind(this)
-                            }
-                        });
-                    default:
-                        var page404 = document.createElement("h2");
-                        page404.innerHTML = "Page Missing";
-                        return page404;
-                }
-            },
+				switch (this.routeData.page) {
+					case "home":
+						return new PageHome().bindings({
+							logout: this.logout.bind(this)
+						});
+					case "tasks":
+						return new TaskEditor().bindings({
+							id: value.from(this.routeData, "taskId"),
+							logout: this.logout.bind(this)
+						});
+					default:
+						var page404 = document.createElement("h2");
+						page404.innerHTML = "Page Missing";
+						return page404;
+				}
+			},
 
-            isLoggedIn: { default: false, type: type.maybeConvert(Boolean) }
-        };
-    }
+			isLoggedIn: false
+		};
+	}
 
-    logout() {
-        this.isLoggedIn = false;
-    }
-};
+	logout() {
+		this.isLoggedIn = false;
+	}
+}
 customElements.define("my-app", MyApp);
 </script>
 <style>
 .slider {
-    border: solid 1px blue;
-    background-color: red;
-    height: 20px;
-    width: 20px;
-    cursor: ew-resize;
-    position: relative;
+	border: solid 1px blue;
+	background-color: red;
+	height: 20px;
+	width: 20px;
+	cursor: ew-resize;
+	position: relative;
 }
 percent-slider {
-    border: solid 1px black;
-    padding: 2px;
-    display: block;
+	border: solid 1px black;
+	padding: 2px;
+	display: block;
 }
 p {
-    margin: 0px 0px 20px 0px;
+	margin: 0px 0px 20px 0px;
 }
 </style>
 <style>
