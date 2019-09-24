@@ -1,0 +1,66 @@
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@6/mocha.css" />
+<script src="//unpkg.com/mocha@6/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4/chai.js" type="text/javascript"></script>
+<script type="module">
+import { route, RouteMock, StacheElement } from "can/ecosystem";
+
+// Mocha / Chai Setup
+mocha.setup("bdd");
+const assert = chai.assert;
+
+class Application extends StacheElement {
+	static view = `{{ this.elementToShow }}`;
+
+	static props = {
+		routeData: {
+			get default() {
+				route.register("{page}", { page: "home" });
+				route.register("list/{id}", { page: "list" });
+				route.start();
+				return route.data;
+			}
+		}
+	};
+}
+
+customElements.define("app-component", Application);
+
+describe("Application", () => {
+	it("routeData updates when URL changes", () => {
+		const routeMock = new RouteMock();
+		route.urlData = routeMock;
+
+		const vm = new Application();
+
+		assert.equal(vm.routeData.page, "home", "`page` defaults to 'home'");
+
+		routeMock.value = "#!list/5";
+
+		assert.equal(vm.routeData.page, "list", "#!list/5 sets `page` to 'list'");
+		assert.equal(vm.routeData.id, 5, "#!list/5 sets `id` to 5");
+	});
+
+	it("URL updates when routeData changes", done => {
+		const routeMock = new RouteMock();
+		route.urlData = routeMock;
+
+		const vm = new Application();
+
+		assert.equal(routeMock.value, "");
+
+		routeMock.on(() => {
+			assert.equal(routeMock.value, "list/10");
+			done();
+		});
+
+		vm.routeData.update({
+			page: "list",
+			id: 10
+		});
+	});
+});
+
+// start Mocha
+mocha.run();
+</script>

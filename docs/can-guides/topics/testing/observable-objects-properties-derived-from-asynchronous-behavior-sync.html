@@ -1,0 +1,59 @@
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@6/mocha.css" />
+<script src="//unpkg.com/mocha@6/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4/chai.js" type="text/javascript"></script>
+<script type="module">
+import { ObservableObject } from "can";
+
+// Mocha / Chai Setup
+mocha.setup("bdd");
+const assert = chai.assert;
+
+class ViewModel extends ObservableObject {
+	static props = {
+		todoCount: {
+			async(resolve, lastSet) {
+				this.todoCountPromise.then(response => {
+					resolve(response.metadata.count);
+				});
+			}
+		},
+
+		todoCountPromise: {
+			get(lastSet) {
+				if (lastSet) {
+					return lastSet;
+				}
+
+				return todoConnection.getList({});
+			}
+		}
+	};
+}
+
+describe("Todos", () => {
+	it("todoCount", () => {
+		const todoResponse = {
+			metadata: { count: 150 },
+			data: []
+		};
+
+		const testTodoCountPromise = {
+			then(resolve) {
+				resolve(todoResponse);
+			}
+		};
+
+		const vm = new ViewModel({
+			todoCountPromise: testTodoCountPromise
+		});
+
+		vm.listenTo("todoCount", () => {});
+
+		assert.equal(vm.todoCount, 150, "`todoCount` === 150");
+	});
+});
+
+// start Mocha
+mocha.run();
+</script>

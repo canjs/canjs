@@ -1,31 +1,30 @@
 <throttled-input></throttled-input>
 <script id="demo-source" src="../../node_modules/steal/steal.js" dev-bundle>
-import { Component } from "can";
+import { StacheElement } from "can";
 
-Component.extend({
-  tag: "throttled-input",
-  
-  view: `
-    <input value:from="text" on:input:value:to="text" placeholder="Type Here, Then Wait">
-    <p>value: {{ text }}</p>
-  `,
-  
-  ViewModel: {
-    text: {
-      value({ listenTo, lastSet, resolve }) {
-        let latest = "",
-            timeoutId = null;
-        
-        listenTo(lastSet, (val) => {
-          latest = val;
-          timeoutId = clearTimeout(timeoutId);
-          
-          timeoutId = setTimeout(() => {
-            resolve(latest);
-          }, 500);
-        });
-      }
-    }
-  }
-});
+class ThrottledInput extends StacheElement {
+	static view = `
+		<input on:input:value:to="text" placeholder="Type Here, Then Wait" value:from="text" />
+		<p>value: {{ text }}</p>
+	`;
+
+	static props = {
+		text: {
+			value({ lastSet, listenTo, resolve }) {
+				let latest = "";
+				let timeoutId = null;
+
+				listenTo(lastSet, (val) => {
+					latest = val;
+					timeoutId = clearTimeout(timeoutId);
+
+					timeoutId = setTimeout(() => {
+						resolve(latest);
+					}, 500);
+				});
+			}
+		}
+	};
+}
+customElements.define("throttled-input", ThrottledInput);
 </script>

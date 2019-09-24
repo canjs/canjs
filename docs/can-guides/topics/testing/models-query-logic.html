@@ -1,0 +1,72 @@
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@6/mocha.css" />
+<script src="//unpkg.com/mocha@6/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4/chai.js" type="text/javascript"></script>
+<script type="module">
+import {
+	ObservableArray,
+	ObservableObject,
+	QueryLogic,
+	restModel,
+	type
+} from "can";
+
+// Mocha / Chai Setup
+mocha.setup("bdd");
+const assert = chai.assert;
+
+class Todo extends ObservableObject {
+	static props = {
+		id: Number,
+		complete: Boolean,
+		name: String
+	};
+}
+
+class TodoList extends ObservableArray {
+	static items = type.convert(Todo);
+}
+
+Todo.connection = restModel({
+	ArrayType: TodoList,
+	ObjectType: Todo,
+	url: "/api/todos/{id}"
+});
+
+describe("TodoModel query logic", () => {
+	it("filterMembers", () => {
+		const todoQueryLogic = new QueryLogic(Todo);
+
+		const completeTodos = [{ id: 2, name: "mow lawn", complete: true }];
+
+		const incompleteTodos = [{ id: 1, name: "do dishes", complete: false }];
+
+		const allTodos = [...completeTodos, ...incompleteTodos];
+
+		const completeTodosFilter = { filter: { complete: false } };
+
+		const queryLogicIncompleteTodos = todoQueryLogic.filterMembers(
+			completeTodosFilter,
+			allTodos
+		);
+
+		assert.deepEqual(queryLogicIncompleteTodos, incompleteTodos);
+	});
+
+	it("isMember", () => {
+		const todoQueryLogic = new QueryLogic(Todo);
+
+		const completeTodosFilter = { filter: { complete: false } };
+
+		const becomingAnAstronautIsIncomplete = todoQueryLogic.isMember(
+			completeTodosFilter,
+			{ id: 5, name: "become an astronaut", complete: false }
+		);
+
+		assert.ok(becomingAnAstronautIsIncomplete);
+	});
+});
+
+// start Mocha
+mocha.run();
+</script>

@@ -1,0 +1,65 @@
+<div id="mocha"></div>
+<link rel="stylesheet" href="//unpkg.com/mocha@6/mocha.css" />
+<script src="//unpkg.com/mocha@6/mocha.js" type="text/javascript"></script>
+<script src="//unpkg.com/chai@4/chai.js" type="text/javascript"></script>
+<script type="module">
+import { ObservableObject } from "can";
+
+// Mocha / Chai Setup
+mocha.setup("bdd");
+const assert = chai.assert;
+
+class Person extends ObservableObject {
+	static props = {
+		first: String,
+		last: String,
+
+		get name() {
+			return `${this.first || ""} ${this.last || ""}`.trim();
+		}
+	};
+
+	setName(val) {
+		const parts = val.split(" ");
+		this.first = parts[0];
+		this.last = parts[1];
+	}
+}
+
+describe("Person", () => {
+	it("name", () => {
+		// 1. Create an instance of the ObservableObject
+		const vm = new Person({});
+
+		// 2. Test values of the ObservableObject’s default values
+		assert.equal(vm.name, "", "default `name` is correct");
+
+		// 3. Set ObservableObject properties (or call ObservableObject functions)
+		vm.first = "Kevin";
+		// 4. Test values of the ObservableObject’s properties
+		assert.equal(
+			vm.name,
+			"Kevin",
+			"setting `first` updates `name` correctly"
+		);
+
+		// 3. Set ObservableObject properties (or call ObservableObject functions)
+		vm.last = "McCallister";
+		// 4. Test values of the ObservableObject’s properties
+		assert.equal(
+			vm.name,
+			"Kevin McCallister",
+			"setting `last` updates `name` correctly"
+		);
+
+		// 3. Set ObservableObject properties (or call ObservableObject functions)
+		vm.setName("Marv Merchants");
+		// 4. Test values of the ObservableObject’s properties
+		assert.equal(vm.first, "Marv", "`setName` updates `first` correctly");
+		assert.equal(vm.last, "Merchants", "`setName` updates `last` correctly");
+	});
+});
+
+// start Mocha
+mocha.run();
+</script>
