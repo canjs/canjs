@@ -252,3 +252,138 @@ class Configuration extends ObservableObject {
 ### Migrate to StacheElement
 
 CanJS 6 includes a new base class for creating web components, [can-stache-element StacheElement]. This class shares the same API as [can-observable-object ObservableObject] for defining properties.
+
+Here are some of the major differences between [can-stache-element] and [can-component]:
+
+#### Based on JavaScript classes
+
+Like with [can-observable-object] you create elements using `class Component extends` rather than [can-component.extend]. Because of this you need to use the separate [customElements.define](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define) call to register the class as a custom element.
+
+```js
+import {StacheElement} from "can";
+
+class MyElement extends StacheElement {
+
+}
+
+customElements.define("my-element", MyElement);
+```
+
+Replaces:
+
+```js
+import {Component} from "can";
+
+Component.extend({
+  tag: "my-element"
+});
+```
+
+#### No events object
+
+In [can-component] an [can-component.prototype.events events] object can be used to attach event listeners. This was deprecated in 4.0 and StacheElement doesn't support it.
+
+It's recommended to instead use [can-stache-bindings.event] in the template *or* [can-event-queue/map/map.listenTo] in the element's [can-stache-element/lifecycle-hooks.connected] lifecycle hook.
+
+```js
+import {Component} from "can";
+
+Component.extend({
+  tag: "my-element",
+  view: `<button>Increment {{count}}</button>`,
+  ViewModel: {
+    count: {
+      default: 0
+    }
+  },
+
+  events: {
+      "button click": function() {
+        this.viewModel.count++;
+      }
+  }
+});
+```
+
+Instead do it this way:
+
+```js
+import {StacheElement} from "can";
+
+class MyElement extends StacheElement {
+  static view = `<button on:click="this.increment()">Increment {{count}}</button>`;
+  static props = {
+    count: 0
+  };
+
+  increment() {
+    this.count++;
+  }
+}
+
+customElements.define("my-element", MyElement);
+```
+
+When listening to properties on the element for side-effects you can use listenTo like so:
+
+```js
+import {StacheElement} from "can";
+
+class MyElement extends StacheElement {
+  static view = `<button on:click="this.increment()">Increment {{count}}</button>`;
+  static props = {
+    count: 0
+  };
+
+  increment() {
+    this.count++;
+  }
+
+  connected() {
+    this.listenTo("count", () => {
+      console.log("Count is now", this.count);
+    });
+  }
+}
+
+customElements.define("my-element", MyElement);
+```
+
+#### No content element
+
+[can-component] supported a `<content/>` element as a way to inserting light DOM content from a parent component like so:
+
+```js
+import {Compoent} from "can";
+
+Component.extend({
+  tag: "my-child",
+  view: `<content />`
+});
+
+Component.extend({
+  tag: "my-parent",
+  view: `<my-child>Hello from the parent</my-child>`
+});
+```
+
+With improvements to [can-stache] it's not possible to pass templates through properties. This gives more flexibility.
+
+```js
+import {StacheElement} from "can";
+
+class MyChild extends StacheElement {
+  static view = `{{ this.content() }}`;
+}
+customElements.define("my-child", MyChild);
+
+class MyParent extends StacheElement {
+  static view = `
+    {{< content }}
+      Hello from the parent
+    {{/ content }}
+    <my-child content:from="content" />
+  `
+}
+customElements.define("my-parent", MyParent);
+```
