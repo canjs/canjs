@@ -8,14 +8,20 @@
 
 ## Why Upgrade
 
-CanJS 6.0:
+CanJS 6.0 is a major step forward for CanJS, fully embracing [JavaScript classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes), [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) and other modern features. The highlights of the release include:
+
+  - __[can-observable-object ObservableObject]__ and __[can-observable-array ObservableArray]__ as new simplified replacements for [can-define/map/map DefineMap] and [can-define/list/list DefineList] based on JavaScript class syntax.
+  - __[can-stache-element StacheElement]__, a new base class for creating __web components__, a standard way to share components that works in any framework.
+  - New package __[can-type]__ brings a high level of flexibility to defining property types on [can-observable-object] and [can-stache-element].
   - Internet Explorer 11 support (still!)
 
 ## Breaking Changes
 
+The following are the breaking changes in CanJS 6.
+
 ### No more nodeLists
 
-__TODO How does this affect upgrades?__
+One of the major pain points in developing advanced [can-stache stache helpers] has always been managing nodeLists.
 
 ### route.data
 
@@ -109,6 +115,8 @@ Todo.connection = restModel({
 
 connectTag("todo-model", Todo.connection);
 ```
+
+### DefineMap / DefineList
 
 ## Recommended Changes
 
