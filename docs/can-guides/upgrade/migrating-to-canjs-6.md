@@ -10,20 +10,72 @@
 
 CanJS 6.0 is a major step forward for CanJS, fully embracing [JavaScript classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes), [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) and other modern features. The highlights of the release include:
 
-  - __[can-observable-object ObservableObject]__ and __[can-observable-array ObservableArray]__ as new simplified replacements for [can-define/map/map DefineMap] and [can-define/list/list DefineList] based on JavaScript class syntax.
-  - __[can-stache-element StacheElement]__, a new base class for creating __web components__, a standard way to share components that works in any framework.
-  - New package __[can-type]__ brings a high level of flexibility to defining property types on [can-observable-object] and [can-stache-element].
+  - __[can-observable-object ObservableObject]__ and __[can-observable-array ObservableArray]__ as new simplified replacements for [can-define/map/map DefineMap] and [can-define/list/list DefineList] based on JavaScript class syntax. These new types use [proxies](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) so they can react to changes even if properties are not predefined.
+    ```js
+    import {ObservableObject} from "can";
+
+    class Person extends ObservableObject {
+      get fullName() {
+        return this.first + " " + this.last;
+      }
+    }
+
+    let person = new Person();
+    person.on("fullName", (ev, fullName) => {
+      console.log("Full name is", fullName);
+    });
+
+    person.first = "Ada";
+    person.last = "Lovelace";
+    ```
+    @codepen
+  - __[can-stache-element StacheElement]__, a new base class for creating *web components*, a standard way to share components that works in any framework. StacheElement has the same API as [can-observable-object ObservableObject] so you only need to know the one API to use for both [guides/data models] and components.
+    ```js
+    import {StacheElement} from "can";
+
+    class HelloWorld extends StacheElement {
+      static view = `Hello {{name}}!`;
+    }
+
+    customElements.define("hello-world", HelloWorld);
+
+    let el = new HelloWorld();
+    el.name = "world";
+    document.body.append(el);
+    ```
+    @codepen
+
+  - New package __[can-type]__ brings a high level of flexibility to defining property types on [can-observable-object] and [can-stache-element]. It allows defining [can-type/check strict types], [can-type/maybe types that can be null/undefined] and more.
+    ```js
+    import {ObservableObject, type} from "can-type";
+
+    class Person extends ObservableObject {
+      static props = {
+        age: type.maybe(Number)
+      };
+    }
+
+    let person = new Person({ age: null });
+    console.log(person.age); // null
+
+    person.age = 11;
+    console.log(person.age); // 11
+
+    person.age = "14"; // throws!!
+    ```
   - Internet Explorer 11 support (still!)
 
 ## Breaking Changes
 
 The following are the breaking changes in CanJS 6.
 
-### No more nodeLists
+### Removal of can-view-nodelist
 
-One of the major pain points in developing advanced [can-stache stache helpers] has always been managing nodeLists.
+The package [can-view-nodelist](https://www.npmjs.com/package/can-view-nodelist) was used in previous versions of CanJS primarily for tracking when DOM nodes were removed from the page and doing necessary cleanup (such as removing event listeners). Using nodeLists was cumbersome, so in 6.0 we made it a priority to remove the need for them.
 
-### route.data
+nodeLists have been completely removed from CanJS, but because several packages depended on them in the past these changes represent a breaking change. However it should have no affect on your codebase, and simply upgrading all of your packages is all you need to do.
+
+### route.data is now an ObservableObject
 
 In 5.0 we changed [can-route.data route.data] to be a [can-define/map/map DefineMap] that was automatically connected to the route's properties. This meant you could use dot notation to listen to changes in route properties like so:
 
@@ -63,9 +115,6 @@ route.ready();
 ```
 @highlight 11
 
-
-__TODO Explain how to map to the definemap version for IE11 compat. How do we show this?__
-
 ### beforeremove event removed
 
 The event [can-component/beforeremove] was deprecated as part of CanJS 4.0 and is no longer available at all. This event was fired synchronously before the element was removed from the page.
@@ -95,7 +144,7 @@ Component.extend({
 });
 ```
 
-### can-connect/can/tag
+### can-connect/can/tag moved to an ecosystem package
 
 The module `can-connect/can/tag` has been moved to its own package at [can-connect-tag]. You can import and use it like so:
 
@@ -116,7 +165,9 @@ Todo.connection = restModel({
 connectTag("todo-model", Todo.connection);
 ```
 
-### DefineMap / DefineList
+### DefineMap / DefineList moved to ecosystem
+
+[can-define/map/map] and [can-define/list/list] are no longer part of core, but are still available as [can-ecosystem ecosystem] packages. This will only affect you if you were using the `core.mjs` or `dist/global/core.js` bundles. Use either `ecosystem.mjs` or `dist/globale/ecosystem.js` instead.
 
 ## Recommended Changes
 
