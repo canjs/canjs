@@ -772,3 +772,23 @@ An example is the [can-stache-converters.string-to-any] converter, which convert
 	<option value="32">Magic Johnson</option>
 </select>
 ```
+
+### Use bracket syntax in route definitions.
+
+CanJS 3 routes use the `{part}` syntax instead of `:part`. Replace the use of the colon syntax which is deprecated and will be removed in a future release.
+
+Replace:
+
+```js
+import route from "can-route";
+
+route(":page", { page: "home" });
+```
+
+with:
+
+```js
+import route from "can-route";
+
+route("{page}", { page: "home" });
+```
