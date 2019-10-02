@@ -173,6 +173,28 @@ connectTag("todo-model", Todo.connection);
 
 The following are suggested changes to make sure your application is compatible beyond 6.0.
 
+### Map, List in connections renamed
+
+The property `Map` and `List` which are used to configure the instance and list types to create, has been renamed. Most likely this is used in configuration of [can-rest-model] or [can-realtime-rest-model], but it also might be used with [can-connect] directly. These have been renamed to `ObjectType` and `ArrayType` respectfully. This is to keep in line with the new class-based [can-observable-object] and [can-observable-array] types.
+
+```js
+Todo.connection = restModel({
+  Map: TodoList,
+  List: Todo,
+  url: "/api/todos/{id}"
+});
+```
+
+becomes:
+
+```js
+Todo.connection = restModel({
+  ArrayType: TodoList,
+  ObjectType: Todo,
+  url: "/api/todos/{id}"
+});
+```
+
 ### Migrate to ObservableObject and ObservableArray for models
 
 In CanJS 3.0 the [can-define/map/map DefineMap] and [can-define/list/list DefineList] were added as the preferred ways to build models. This allowed CanJS observables to work with the dot operator.

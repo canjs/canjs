@@ -89,7 +89,7 @@ Usually, when storing tokens in cookies, they're stored as an "httponly" cookie,
 
 Thus to verify if there's an ongoing user session, the app should access `Session.currentPromise`, and see if it resolves successfully. There are several places in your application you might need an active session and choose to do this:
   1. in your **view** before rendering components that make requests to restricted services or uses the session metadata
-  2. in the **view model** of a component that makes requests to restricted services or uses the session metadata
+  2. in the **component state** of a component that makes requests to restricted services or uses the session metadata
   3. in the `beforeSend` callback of a **connection** to restricted services
 
 Here, we'll show examples of all three dependencies. The third one is of particular importance to the [application held tokens](#appHeldTokens) section since it's necessary for that case.
@@ -103,7 +103,7 @@ In a component's view you could depend on `Session.currentPromise` directly like
 
 This is a good option when you can make this dependency high in the component hierarchy, toggling several session-dependant components at once. In cases where a rendered component should determine for itself if a session is active, rather than depending on a parent component to check, one of the following two techniques should be used.
 
-#### Depending On Session In A View Model
+#### Depending On Session In A Component State
 
 In a component's props, you may use `currentPromise` in computed properties like this:
 @sourceref ./cookie-session-vm.html
@@ -120,7 +120,7 @@ In the `beforeSend` callback for a restricted resource you may depend on `curren
 @highlight 40-48,132-137,only
 @codepen
 
-One advantage of this option is that it keeps the dependency on the session contained to the definition of the connection. This is cleaner than depending on the session in the view model where the connection is used, or in the view before a component making a request is rendered. In app-held token scenarios, this option must be used since `beforeSend` is where the token is added to the request headers.
+One advantage of this option is that it keeps the dependency on the session contained to the definition of the connection. This is cleaner than depending on the session in the component state where the connection is used, or in the view before a component making a request is rendered. In app-held token scenarios, this option must be used since `beforeSend` is where the token is added to the request headers.
 
 > **Note:** Since `Session.currentPromise` only makes a request the first time it's accessed, all the components that make requests for restricted data can use it without worrying about multiple requests happening unintentionally.
 
