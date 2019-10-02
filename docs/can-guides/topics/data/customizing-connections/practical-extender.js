@@ -1,24 +1,26 @@
-import { connect, restModel, QueryLogic, DefineMap } from "//unpkg.com/can@5/core.mjs";
+import { connect, restModel, QueryLogic, ObservableObject } from "//unpkg.com/can@pre/core.mjs";
 
-const Todo = DefineMap.extend({
-	id: {
-		identity: true,
-		type: 'number'
-	},
-	userId: 'number',
-	title: 'string',
-	completed: 'boolean',
-	lastAccessedDate: 'string',
-});
+class Todo extends ObservableObject {
+  static props = {
+    id: {
+      identity: true,
+      type: Number
+    },
+    userId: Number,
+    title: String,
+    completed: Boolean,
+    lastAccessedDate: String,
+  }
+}
 
 const updateLastAccessed = connect.behavior(
 	'update-last-accessed',
 	(previousBehavior) => {
 		function updateLastAccessed(instance) {
-			instance.lastAccessedDate = new Date().toISOString(); 
+			instance.lastAccessedDate = new Date().toISOString();
 			instance.save().then(() => console.log('Updated last accessed time for: ', instance));
 		};
-		
+
 		return {
 			get() {
 				return previousBehavior.get.apply(this, arguments).then((instance) => {
@@ -39,7 +41,7 @@ const updateLastAccessed = connect.behavior(
 const connectionOptions = {
 	url: 'https://jsonplaceholder.typicode.com/todos/',
 	queryLogic: new QueryLogic(Todo),
-	Map: Todo,
+	ObjectType: Todo,
 };
 
 const connection = updateLastAccessed(restModel(connectionOptions));

@@ -1,5 +1,5 @@
 <script type="module">
-	import { connect, ObservableObject, QueryLogic, realtimeRestModel, stache, type } from "//unpkg.com/can@5/everything.mjs";
+	import { connect, ObservableObject, QueryLogic, realtimeRestModel, stache, type } from "//unpkg.com/can@pre/everything.mjs";
 
     class Todo extends ObservableObject {
         static get props() {
@@ -52,7 +52,7 @@
     const connectionOptions = {
 		url: 'https://jsonplaceholder.typicode.com/todos/',
 		queryLogic: new QueryLogic(Todo),
-		Map: Todo,
+		ObjectType: Todo,
 		websocket: mockWebsocket,
 	};
     const connection = websocketSidechannel(realtimeRestModel(connectionOptions));

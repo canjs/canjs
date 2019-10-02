@@ -6,13 +6,13 @@
     connectCanSession,
     fixture,
     type,
-    DefineMap,
+    ObservableObject,
     StacheElement,
-  } from "//unpkg.com/can@5/ecosystem.mjs";
+  } from "//unpkg.com/can@pre/ecosystem.mjs";
 
   setupFixtures();
 
-  const Session = DefineMap.extend('Session', {});
+	class Session extends ObservableObject {}
   Session.connection = [
     connect.base,
     connect.dataUrl,
@@ -20,7 +20,7 @@
     connect.canMap,
     connectCanSession
   ].reduce((conn, behavior) => behavior(conn), {
-    Map: Session,
+    ObjectType: Session,
     url: {
       resource: '/api/session', // endpoint
       getData: '/api/session', // endpoint when validating

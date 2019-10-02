@@ -1,4 +1,4 @@
-import { connect, QueryLogic } from "//unpkg.com/can@5/core.mjs";
+import { connect, QueryLogic } from "//unpkg.com/can@pre/core.mjs";
 
 const connectionOptions = {
 	url: 'https://jsonplaceholder.typicode.com/todos/{id}',

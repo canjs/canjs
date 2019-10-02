@@ -69,15 +69,15 @@ class Todo extends ObservableObject {
 
 class TodoList extends ObservableArray {
     static items = Todo;  
-    
+
     completeAll() {
         return this.forEach((todo) => { todo.complete = true; });
     }
 }
 
 const todoConnection = restModel({
-    Map: Todo,
-    List: TodoList,
+    ObjectType: Todo,
+    ArrayType: TodoList,
     url: "/api/todos/{id}"
 });
 ```
@@ -292,7 +292,7 @@ class TodoList extends StacheElement {
             {{/ if }}
         </ul>
     `;
-    
+
     static props = {
         sort: type.maybe(String),
         completeFilter: type.maybe(String),
@@ -845,8 +845,8 @@ class TodoList extends ObservableArray {
 }
 
 const todoConnection = realtimeRestModel({
-    Map: Todo,
-    List: TodoList,
+    ObjectType: Todo,
+    ArrayType: TodoList,
     url: "/api/todos/{id}"
 });
 ```
