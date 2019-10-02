@@ -91,10 +91,10 @@ Runs all the `can-migrate` transforms for upgrading to CanJS 4.0 on the files th
 can-migrate '**/*.js' --can-version 4 --apply
 ```
 
-Runs the `can-stache/route-helpers` transform on the files that match the `**/*.js` glob:
+Runs the `can-stache/route-helpers` transform on the files that match the `**/*.stache` glob:
 
 ```bash
-can-migrate '**/*.js' --transform can-stache/route-helpers.js --apply
+can-migrate '**/*.stache' --transform can-stache/route-helpers.js --apply
 ```
 
 You can find a [complete list of version-4 transforms on GitHub](https://github.com/canjs/can-migrate/tree/master/src/transforms/version-4).
@@ -306,7 +306,7 @@ can.route.start();
 To run [all of the version-4/can-stache transforms](https://github.com/canjs/can-migrate/tree/master/src/transforms/version-4/can-stache) listed below:
 
 ```bash
-can-migrate '**/*.js' -t version-4/can-stache/ -a
+can-migrate '**/*.stache' -t version-4/can-stache/ -a
 ```
 
 #### attr-from
@@ -314,7 +314,7 @@ can-migrate '**/*.js' -t version-4/can-stache/ -a
 Running this transform:
 
 ```bash
-can-migrate '**/*.js' -t version-4/can-stache/attr-from.js -a
+can-migrate '**/*.stache' -t version-4/can-stache/attr-from.js -a
 ```
 
 …will transform the following:
@@ -352,7 +352,7 @@ can-migrate '**/*.js' -t version-4/can-stache/attr-from.js -a
 Running this transform:
 
 ```bash
-can-migrate '**/*.js' -t version-4/can-stache/console-log.js -a
+can-migrate '**/*.stache' -t version-4/can-stache/console-log.js -a
 ```
 
 …will transform the following:
@@ -372,7 +372,7 @@ can-migrate '**/*.js' -t version-4/can-stache/console-log.js -a
 Running this transform:
 
 ```bash
-can-migrate '**/*.js' -t version-4/can-stache/route-helpers.js -a
+can-migrate '**/*.stache' -t version-4/can-stache/route-helpers.js -a
 ```
 
 …will transform the following:
@@ -404,7 +404,7 @@ const routeHelpers = require('can-stache-route-helpers');
 Running this transform:
 
 ```bash
-can-migrate '**/*.js' -t version-4/can-stache/scope.js -a
+can-migrate '**/*.stache' -t version-4/can-stache/scope.js -a
 ```
 
 …will transform the following:
