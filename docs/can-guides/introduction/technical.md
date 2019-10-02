@@ -32,7 +32,7 @@ The Angular 2’s Hello World app, provided by the angular-cli, is ~100KB minifi
 
 CanJS is maintained in independent repositories,
 each with its own npm package and [semantic version](http://semver.org/) number.
-Organizing CanJS into individual repositories and packages has many benefits.  
+Organizing CanJS into individual repositories and packages has many benefits.
 
 The obvious advantage is that pieces can be used without the whole. You can choose to use CanJS’s observables or [can-fixture] without the rest of the framework. You could even mix and match CanJS libraries with other libraries like React quite easily.
 
@@ -98,12 +98,12 @@ CanJS has two powerful observable systems that are the foundation for many of th
 core libraries:
 
  - [can-value] - Observable values and derived observable values.
- - [can-define] - Observable objects.
+ - [can-observable-object] - Observable objects.
 
 This section shows examples using [can-value.returnedBy value.returnedBy()].  However,
-as [can-define] uses `returnedBy()` internally for [computed getter properties](#Computedgetterproperties)
+as [can-obserable-object] and [can-observable-array] use `returnedBy()` internally for [computed getter properties](#Computedgetterproperties)
 and [asynchronous computed getter properties](##Asynccomputedgetterproperties), the benefits
-of computes extend to [can-define]. In a few examples cases, we’ll use [computed getter properties](#Computedgetterproperties) to
+of computes extend to [can-observable-object] and [can-observable-array]. In a few examples cases, we’ll use [computed getter properties](#Computedgetterproperties) to
 show the advantages of computes.
 
 [can-value.returnedBy value.returnedBy()] is used in similar situations as event streams libraries like RXJS and Bacon.js. It is
@@ -112,15 +112,15 @@ used to transform a set of observable values into another observable value.  Whi
 For example, the following compute keeps the completed count of todos in a list:
 
 ```js
-import {DefineMap, DefineList, value} from "can";
+import { ObservableArray, value } from "can";
 
-let todoList = new DefineList([
-    {name: "dishes",  complete: true},
-    {name: "laundry", complete: false}
+let todoList = new ObservableArray([
+    { name: "dishes",  complete: true },
+    { name: "laundry", complete: false }
 ]);
 
-let completedCount = value.returnedBy(function(){
-    return todoList.filter(function(todo){
+let completedCount = value.returnedBy(() => {
+    return todoList.filter((todo) => {
         return todo.complete;
     });
 })
@@ -135,7 +135,7 @@ todoList[0].complete = false;
 Or a todo is added to or removed from the list like:
 
 ```js
-todoList.push({name: "learn about computes", complete: true})
+todoList.push({ name: "learn about computes", complete: true });
 ```
 
 `completedCount` automatically listens to all of these changes because
@@ -151,7 +151,7 @@ In event stream libraries or other computed libraries, you must declare your
 dependencies like:
 
 ```js
-let fullNameStream = Kefir.combine(firstNameStream, lastNameStream, function(firstName, lastName){
+let fullNameStream = Kefir.combine(firstNameStream, lastNameStream, (firstName, lastName) => {
     return firstName + " " + lastName;
 });
 ```
@@ -159,20 +159,20 @@ let fullNameStream = Kefir.combine(firstNameStream, lastNameStream, function(fir
 or like:
 
 ```js
-fullName: Ember.computed('firstName', 'lastName', function() {
-	return this.get('firstName')+" "+this.get('lastName');
+fullName: Ember.computed("firstName", "lastName", function() {
+	return this.get("firstName") + " " + this.get("lastName");
 });
 ```
 
 [can-value.returnedBy value.returnedBy()] infers its own dependencies without needing to explicitly declare them, therefore requiring less boilerplate code. This means you can write `fullName` like:
 
 ```js
-import {value} from "can";
+import { value } from "can";
 
 let firstName = value.with("Payal");
 let lastName = value.with("Meyer");
 
-let fullName = value.returnedBy(function(){
+let fullName = value.returnedBy(() => {
     return firstName.value + " " + lastName.value;
 });
 ```
@@ -180,13 +180,15 @@ let fullName = value.returnedBy(function(){
 or like:
 
 ```js
-const Person = DefineMap.extend({
-    firstName: "string",
-    lastName: "string",
-    get fullName() {
-        return this.firstName + " " +this.lastName;
-    }
-});
+class Person extends ObservableObject {
+    static props = {
+        firstName: String,
+        lastName: String,
+        get fullName() {
+            return this.firstName + " " +this.lastName;
+        }
+    };
+}
 ```
 
 This ability is especially useful when the dependencies are dynamic as in the
@@ -194,13 +196,13 @@ following `completedCount` example:
 
 
 ```js
-let todoList = new DefineList([
-    {name: "dishes",  complete: true},
-    {name: "laundry", complete: false}
+let todoList = new ObservableArray([
+    { name: "dishes",  complete: true },
+    { name: "laundry", complete: false }
 ]);
 
-let completedCount = value.returnedBy(function(){
-    return todoList.filter(function(todo){
+let completedCount = value.returnedBy(() => {
+    return todoList.filter((todo) => {
         return todo.complete;
     });
 })
@@ -220,14 +222,14 @@ In the following example, before `fullName` is bound,
 its value is recalculated only when a dependent value changes.
 
 ```js
-import {value} from "can";
+import { value } from "can";
 
 let firstName = value.with("Payal");
 let lastName = value.with("Meyer");
 
-let fullName = value.returnedBy(function(){
+let fullName = value.returnedBy(() => {
     console.log("Calculating fullName.");
-    return firstName.value+" "+lastName.value;
+    return firstName.value + " " + lastName.value;
 });
 
 fullName.value // console.logs "Calculating fullName."
@@ -236,7 +238,7 @@ fullName.value // console.logs "Calculating fullName."
 fullName.value // console.logs "Calculating fullName."
                //-> "Payal Meyer"
 
-fullName.on(function(){}) // console.logs "Calculating fullName."
+fullName.on(() => {}) // console.logs "Calculating fullName."
 
 fullName.value //-> "Payal Meyer"
 fullName.value //-> "Payal Meyer"
@@ -247,7 +249,7 @@ fullName.value //-> "Ramiya Meyer"
 ```
 @codepen
 
-Using cached values improves performance in situations where a computed value is frequently read by multiple parts of the application.  
+Using cached values improves performance in situations where a computed value is frequently read by multiple parts of the application.
 
 ### Synchronous
 
@@ -258,18 +260,18 @@ The following example shows how you can
 change the `firstName` value and immediately check the consequences of that change:
 
 ```js
-import {stache, value} from 'can';
+import { stache, value } from "can";
 
 let template = stache("<h1>Welcome {{ fullName }}</h1>");
 
 let firstName = value.with("Justin");
 let lastName = value.with("Meyer");
 
-let fullName = value.returnedBy(function(){
-    return firstName.value+" "+lastName.value;
+let fullName = value.returnedBy(() => {
+    return firstName.value + " " + lastName.value;
 });
 
-let fragment = template({fullName: fullName});
+let fragment = template({ fullName: fullName });
 
 assert.equal(fragment.firstChild.innerHTML, "Welcome Payal Meyer");
 
@@ -295,7 +297,7 @@ Wrapping this in a batch makes `{{ fullName }}` update only once:
 
 
 ```js
-import {queues} from 'can';
+import { queues } from "can";
 
 queue.batch.start();
 firstName.value = "Payal";
@@ -310,26 +312,26 @@ Consider the performance of a `completeAll` method that completes every todo in 
 and a `completeCount` compute that calculates the number of complete todos:
 
 ```js
-let todoList = new DefineList([
-    {name: "dishes",  complete: false},
-    {name: "laundry", complete: false}
+let todoList = new ObservableArray([
+    { name: "dishes",  complete: false },
+    { name: "laundry", complete: false }
 ]);
 
-let completeAll = function(){
-    todoList.forEach(function(todo){
+let completeAll = () => {
+    todoList.forEach((todo) => {
         console.log("completing", todo.name)
         todo.complete = true;
     });
 };
 
-let completedCount = compute(function(){
-    return todoList.filter(function(todo){
+let completedCount = compute(() => {
+    return todoList.filter((todo) => {
         console.log("  checking", todo.name);
         return todo.complete;
     });
 });
 
-completedCount.on("change", function(ev, newVal){
+completedCount.on("change", (ev, newVal) => {
     console.log("completedCount is", newVal);
 });
 ```
@@ -354,9 +356,9 @@ through every todo.
 However, changing `completeAll` to use `batch.start` and `batch.stop` like:
 
 ```js
-let completeAll = function(){
+let completeAll = function() {
     batch.start();
-    todoList.forEach(function(todo){
+    todoList.forEach((todo) => {
         console.log("completing", todo.name)
         todo.complete = true;
     });
@@ -380,87 +382,114 @@ can improve performance by preventing compute recalculations.
 
 ## Outstanding Observable Objects
 
-[can-define] is used to create observable [Models](#MalleableModels) and [ViewModels](#VeraciousViewModels) like:
+[can-observable-object] and [can-observable-array] is used to create observable [Models](#MalleableModels) and [ViewModels](#VeraciousViewModels) like:
 
 ```js
-import {DefineMap} from 'can';
+import { ObservableObject } from "can";
 
-const Person = DefineMap.extend({
-    first: "string",
-    last: "string",
-    get fullName(){
-        return this.first + " " + this.last;
-    }
-})
+class Person extends ObservableObject {
+    static props = {
+        first: String,
+        last: String,
+        get fullName() {
+            return this.first + " " + this.last;
+        }
+    };
+}
 ```
 
-[can-define] uses [can-value] internally to support [computed getter properties](##Computedgetterproperties) like the previous example’s `fullName`, so make sure to read about the benefits of [cool computes](#CoolComputedValues).
+[can-observable-object] and [can-observable-array] uses [can-value] internally to support [computed getter properties](##Computedgetterproperties) like the previous example’s `fullName`, so make sure to read about the benefits of [cool computes](#CoolComputedValues).
 
-As [can-define] powers almost everything in a CanJS application, it has grown to be
+As [can-observable-object] and [can-observable-array] powers almost everything in a CanJS application, it has grown to be
 quite powerful, performant and flexible.  Read on to explore some of its best characteristics.
 
 ### Expressive property definition syntax
 
-[can-define] supports an expressive, powerful syntax for defining properties on observable objects and lists. It supports [can-define.types.get getter], [can-define.types.set setter],
-initial [can-define.types.default], and [can-define.types.type] conversion, [can-define.types.serialize]
-and [can-define-stream.stream] behaviors.
+[can-observable-object] and [can-observable-array] supports an expressive, powerful syntax for defining properties on observable objects and lists. It supports [can-observable-object/define/get getter], [can-observable-object/define/set setter],
+initial [can-observable-object/define/default], and [can-observable-object/define/type] conversion, and [can-observable-object/define/serialize] behaviors.
 
 The following illustrates the signatures of these behaviors:
 
 ```js
-DefineMap.extend({
-    propertyName: {
-        get: function(lastSetValue, resolve){ /* ... */ },
-        set: function(newValue, resolve){ /* ... */ },
-        type: function(newValue, propertyName){ /* ... */ },
-        Type: Constructor,
-        default: function(){ /* ... */ },
-        Default: Constructor,
-        serialize: function(){ /* ... */ },
-        stream: function(setStream){ /* ... */ }
-    }
-})
+class Obj extends ObservableObject {
+    static props = {
+        propertyName: {
+					type:
+								TypeObject |
+								PrimitiveFunction |
+								ConstructorFunction |
+								FunctionFunction
+
+					default:
+								Primitive |
+								Function |
+								Object
+
+					get default() { /* ... */ }
+
+					get() {}
+					set(newVal,lastSet) { /* ... */ }
+					async(resolve) { /* ... */ }
+					value({resolve, listenTo, stopListening, lastSet}) { /* ... */ },
+
+					required: Boolean=false,
+					enumerable: Boolean,
+					serialize(value):{ /* ... */ }
+        }
+    };
+}
 ```
 
-[can-define] also supports a wide variety of short hands for setting up these
+[can-observable-object] and [can-observable-array] also supports a wide variety of short hands for setting up these
 behaviors. The following illustrates some of these behaviors:
 
 ```js
-DefineMap.extend({
-    propertyA: Object      -> PropertyDefinition
-    propertyB: String      -> {type: String}
-    propertyC: Constructor -> {Type: Constructor}
-    propertyD: [PropDefs]  -> {Type: DefineList.extend({"#": PropDefs})>}
-    get propertyE(){ /* ... */ }   -> {get: propertyE(){ /* ... */ }}
-    set propertyF(){ /* ... */ }   -> {get: propertyF(){ /* ... */ }}
-    method: Function
-})
+class Obj extends ObservableObject {
+		static props = {
+				static props = {
+				propertyA: Object      -> PropertyDefinition
+				propertyB: Primitive   -> { default: Primitive }
+				propertyC: String      -> { type: String }
+				propertyD: Constructor -> { type: Constructor }
+				get propertyE() { /* ... */ }   -> { get: propertyE() { /* ... */  } }
+				set propertyF() { /* ... */ }   -> { get: propertyF() { /* ... */  } }
+				method: Function
+		};
+}
 ```
 
 Putting it together, the following defines an `Address` and `Person` type with some nifty features:
 
 ```js
 // Address has a street, city, and state property
-const Address = DefineMap.extend({
-    street: "string",
-    city: "string",
-    state: "string"
-})
+class Address extends ObservableObject {
+    static get props() {
+        return {
+            street: String,
+            city: String,
+            state: String
+        };
+    }
+}
 
-const Person = DefineMap.extend({
-    // first is a string
-    first: {type: "string"},
-    // last is a string
-    last: "string",
-    // fullName is the combination of first and last
-    get fullName(){
-        return this.first+" "+this.last;
-    },
-    // age is a number that defaults to `0`
-    age: {default: 0, type: "number"},
-    // addresses is a DefineList of Address types
-    addresses: [Address]
-});
+class Person extends ObservableObject {
+    static get props() {
+        return {
+            // first is a string
+            first: { type: String },
+            // last is a string
+            last: String,
+            // fullName is the combination of first and last
+            get fullName() {
+                return this.first + " " + this.last;
+            },
+            // age is a number that defaults to `0`
+            age: { default: 0, type: Number },
+            // addresses is a DefineList of Address types
+            addresses: [Address]
+        };
+    }
+}
 ```
 
 ### Object-oriented and functional
@@ -475,12 +504,12 @@ form of [declarative programming](https://en.wikipedia.org/wiki/Declarative_prog
 changing state and mutable data.  It treats programming as math.  This eliminates side effects,
 making it easier to predict the behavior of an application.
 
-> Programming is, at its best, a branch of formal mathematics and applied logic.   
+> Programming is, at its best, a branch of formal mathematics and applied logic.
 > __Edsger Dijkstra__ - _1 March 1999 at the ACM Symposium on Applied Computing at San Antonio, TX_
 
 However, [object-oriented](https://en.wikipedia.org/wiki/Object-oriented_programming) APIs often feel more natural.
 
-> Object-oriented programming leverages the fact that humans have millions of years of evolution invested in conceiving of the world in terms of things, which have properties, and associated methods of doing things with them. A salt shaker has a property of the amount of salt in it, and can be shaken.  
+> Object-oriented programming leverages the fact that humans have millions of years of evolution invested in conceiving of the world in terms of things, which have properties, and associated methods of doing things with them. A salt shaker has a property of the amount of salt in it, and can be shaken.
 > [Tim Boudreau, Oracle Labs](https://www.quora.com/Why-did-Dijkstra-say-that-%E2%80%9CObject-oriented-programming-is-an-exceptionally-bad-idea-which-could-only-have-originated-in-California-%E2%80%9D)
 
 We agree with both of these ideas! The following object-oriented `SaltShaker` API feels intuitive - any
@@ -489,11 +518,11 @@ developer can immediately understand it.
 ```js
 const saltShaker = new SaltShaker();
 
-saltShaker.fill();  
+saltShaker.fill();
 
 saltShaker.shake() //-> "salt"
-saltShaker.shake() //-> "salt"  
-saltShaker.shake() //-> null   
+saltShaker.shake() //-> "salt"
+saltShaker.shake() //-> null
 
 saltShaker.empty   //-> true
 ```
@@ -501,30 +530,37 @@ saltShaker.empty   //-> true
 To satisfy this API, `SaltShaker` could be implemented as follows:
 
 ```js
-import {DefineMap} from "can";
+import { ObservableObject } from "can";
 
-const SaltShaker = DefineMap.extend({
-    saltCount: {type: "number", default: 0},
-    fill: function(){
+class SaltShaker extends ObservableObject {
+    static get props() {
+        return {
+            saltCount: { type: Number, default: 0 },
+
+            get empty() {
+                return ! this.saltCount;
+            }
+        };
+    }
+
+    fill() {
         this.saltCount = 2;
-    },
-    shake: function(){
+    }
+
+    shake() {
         let hasSalt = this.saltCount;
         this.saltCount = hasSalt ? this.saltCount - 1 : 0;
         return hasSalt ? "salt" : null;
-    },
-    get empty() {
-        return ! this.saltCount;
     }
-});
+}
 
 const saltShaker = new SaltShaker();
 
-saltShaker.fill();  
+saltShaker.fill();
 
 console.log( saltShaker.shake() ) //-> "salt"
-console.log( saltShaker.shake() ) //-> "salt"  
-console.log( saltShaker.shake() ) //-> null   
+console.log( saltShaker.shake() ) //-> "salt"
+console.log( saltShaker.shake() ) //-> null
 
 console.log( saltShaker.empty )   //-> true
 ```
@@ -532,165 +568,112 @@ console.log( saltShaker.empty )   //-> true
 
 While `empty` is implemented [declaratively](https://en.wikipedia.org/wiki/Declarative_programming),
 notice how both `fill` and `shake` mutate the state of `saltCount`.  In a more complex type,
-this can easily lead to bugs. Instead, the [can-define.types.value] property behavior can
+this can easily lead to bugs. Instead, the [can-observable-object/define/value] property behavior can
 derive property values from changes in other property values.  For example, the following
-uses [can-define.types.value] to make `saltCount` a function of the calls to `fill` and `shake`.
+uses [can-observable-object/define/value] to make `saltCount` a function of the calls to `fill` and `shake`.
 
 ```js
-import {DefineMap} from "can";
+import { ObservableObject } from "can";
 
-const SaltShaker = DefineMap.extend({
-	saltCount: {
-		value({listenTo, resolve}){
-			var saltCount = resolve(0);
-			listenTo("fill", ()=>{
-				resolve(saltCount = 2);
-			});
-			listenTo("shake", ()=>{
-				resolve(--saltCount);
-			});
-		}
-	},
-	fill: function(){
-		this.dispatch("fill");
-	},
-	shake: function(){
-		let hadSalt = this.saltCount;
-		this.dispatch("shake");
-		return hadSalt ? "salt" : null;
-	},
-	get empty() {
-		return ! this.saltCount;
-	}
-});
+class SaltShaker extends ObservableObject {
+    static get props() {
+        return {
+            saltCount: {
+                value({ listenTo, resolve }) {
+                    var saltCount = resolve(0);
+                    listenTo("fill", ()=>{
+                        resolve(saltCount = 2);
+                    });
+                    listenTo("shake", ()=>{
+                        resolve(--saltCount);
+                    });
+                }
+            },
+
+            get empty() {
+                return ! this.saltCount;
+            }
+        };
+    }
+
+    fill() {
+        this.dispatch("fill");
+    }
+
+    shake() {
+        let hadSalt = this.saltCount;
+        this.dispatch("shake");
+        return hadSalt ? "salt" : null;
+    }
+}
 
 const saltShaker = new SaltShaker();
 
 // Bind on saltCount or any property that reads saltCount
-saltShaker.on("saltCount",()=>{});
+saltShaker.on("saltCount", () => {});
 
-saltShaker.fill();  
+saltShaker.fill();
 
 console.log( saltShaker.shake() ) //-> "salt"
-console.log( saltShaker.shake() ) //-> "salt"  
-console.log( saltShaker.shake() ) //-> null   
+console.log( saltShaker.shake() ) //-> "salt"
+console.log( saltShaker.shake() ) //-> null
 
 console.log( saltShaker.empty )   //-> true
 ```
 @codepen
 
-If you want even more expressive APIs that help derive one values from other values,
-the following uses [can-define-stream] and
-[functional reactive programming](https://en.wikipedia.org/wiki/Functional_reactive_programming)
-to make `saltCount` a function of the calls to `fill` and `shake`:
+CanJS provides three powerful functional helpers on [can-observable-object] and [can-observable-array] that will explore in the following sections:
 
-```js
-const SaltShaker = DefineMap.extend({
-    saltCount: {
-        stream: function() {
-            return this.stream("fill")
-					.merge(this.stream("shake"))
-					.scan(function(prev, event){
-				if(event.type === "fill") {
-					return 2;
-				} else {
-					return prev > 0 ? prev - 1 :  0;
-				}
-			},0);
-        }
-    },
-    fill: function() {
-        this.dispatch("fill");
-    },
-    shake: function() {
-		let hadSalt = this.saltCount;
-        this.dispatch("shake");
-        return hadSalt ? "salt" : null;
-    },
-    get empty() {
-        return !this.saltCount;
-    }
-});
-```
-
-CanJS provides three powerful functional helpers on [can-define/map/map] and [can-define/list/list] that will explore in the following sections:
-
- - [can-define.types.get computed getter properties]
- - [can-define.types.get async computed getter properties]
- - [can-define-stream-kefir streamed properties]
+ - [can-observable-object/define/get computed getter properties]
+ - [can-observable-object/define/async async computed getter properties]
 
 ### Computed getter properties
 
-[can-define.types.get Computed getters] are the easiest way to declaratively transform
+[can-observable-object/define/get Computed getters] are the easiest way to declaratively transform
 stateful values into derived values.  For example, the following defines a `completedCount`
 property on instances of the `TodoList` type:
 
 ```js
-const TodoList = DefineList.extend({
-	"#": Todo,
-	get completedCount(){
-		return this.filter({complete: true}).length
-	}
-});
+class TodoList extends ObservableArray {
+    static get props() {
+        return {
+            get completedCount() {
+                return this.filter({ complete: true }).length;
+            }
+        };
+    }
 
-let todos = new TodoList([{complete: true}, {complete:false}]);
+    static get items() {
+        return Todo;
+    }
+}
+
+let todos = new TodoList([{ complete: true }, { complete:false }]);
 todos.completedCount //-> 1
 ```
 
-These [can-define.types.get getters] are made with [can-compute], so they
+These [can-observable-object/define/get getters] are made with [can-compute], so they
 [infer dependencies](#Inferreddependencies), [cache their values](#Cachedvalues), and are [synchronous](#Synchronous).
 
 ### Async computed getter properties
 
 It’s common to load data asynchronously given some state. For example, given
 a `todoId`, you might need to load a `todo` from the server.  This `todo` property
-can be described using [can-define.types.get asynchronous computed getters] as follows:
+can be described using [can-observable-object/define/async asynchronous computed getters] as follows:
 
 ```js
-const EditTodoVM = DefineMap.extend({
-    todoId: "number",
-    todo: {
-        get: function(lastSetValue, resolve){
-            Todo.get(this.todoId).then(resolve);
-        }
-    }    
-});
-```
-
-### Streamed properties
-
-When the behavior of properties can’t be described with computes,
-the [can-define-stream] module adds the ability to work with event
-streams.  For example, `lastValidName` keeps track of `Person`’s
-last `name` property that includes a space.
-
-```js
-const Person = DefineMap.extend({
-  name: "string",
-  lastValidName: {
-    stream: function(){
-      return this.stream(".name").filter(function(name){
-        return name.indexOf(" ") >= 0;
-      })
+class EditTodoVM extends ObservableObject {
+    static get props() {
+        return {
+            todoId: Number,
+            todo: {
+                async(resolve) {
+                    Todo.get(this.todoId).then(resolve);
+                }
+            }
+        };
     }
-  }
-});
-
-const me = new Person({name: "James"});
-
-me.on("lastValidName", function(lastValid) {
-  console.log(lastValid)
-});
-
-me.name = "JamesAtherton"; // No change
-
-me.name = "James Atherton";
-//-> console.logs "James Atherton";
-
-me.name = "JustinMeyer"; // No change
-
-me.name = "Justin Meyer";
-//-> console.logs "Justin Meyer";
+}
 ```
 
 ## Maintainable MVVM
@@ -708,7 +691,7 @@ produces [easily testable](#Easily_testable), [compose-able](#Compose_able) modu
 
 On the highest level, CanJS applications are broken down into 2 parts:
 
-- **Custom Elements** that manage a particular part of the application.  
+- **Custom Elements** that manage a particular part of the application.
 - [Models](#MalleableModels) that handle data requests to and from the server.
 
 For example, consider the following order page from [place-my-order](http://place-my-order.com):
@@ -741,23 +724,23 @@ All of these parts, _Custom Elements_, _Models_,
 _View Models_, and _Views_, are __mostly__ written using just
 a couple APIs:
 
-- [can-define] observables for _ViewModels_ and _Models_.
+- [can-observable-object] and [can-observable-array] observables for _ViewModels_ and _Models_.
 - [can-stache] templates with [can-stache-bindings] for _Views_.
 
 The rest of the core APIs are just decorators, used
-to turn [can-define] observables and [can-stache] templates
+to turn [can-observable-object] and [can-observable-array] observables and [can-stache] templates
 into something more:
 
- - [can-component] combines a [can-define] observable
+ - [can-component] combines a [can-observable-object] and [can-observable-array] observable
    and [can-stache] template into a _Custom Element_.
- - [can-route] two-way binds a [can-define] observable
+ - [can-route] two-way binds a [can-observable-object] and [can-observable-array] observable
    with the browser’s URL.
- - [can-connect] adds methods to a [can-define] observable,
+ - [can-connect] adds methods to a [can-observable-object] and [can-observable-array] observable,
    enabling it to create, read, update, and delete data on
    a RESTful URL.
 
 CanJS is straightforward because it’s just about building
-custom elements and models with just a small set of tools -  [can-define]
+custom elements and models with just a small set of tools -  [can-observable-object] and [can-observable-array]
 and [can-stache].
 
 ### Independent
@@ -787,32 +770,44 @@ into individual and independent modules and files that look like:
 The __Model__, in _models/todo.js_, looks like:
 
 ```js
-import {DefineMap, DefineList, realtimeRestModel} from "can";
+import { ObservableArray, ObservableObject, realtimeRestModel } from "can";
 
 // Defines the type of data we get back from the server.
-const Todo = DefineMap.extend({
-  id: {type: "number", identity: true},
-  name: "string",
-  complete: {type: "boolean", default: false}
-});
+class Todo extends ObservableObject {
+  static get props() {
+    return {
+      id: { type: Number, identity: true },
+      name: String,
+      complete: { type: Boolean, default: false }
+    };
+  }
+}
 
 // Defines methods or properties on lists
 // we get back from the server.
-Todo.List = DefineList.extend({
-  "#": Todo,
-  get active(){
-    return this.filter({complete: false});
-  },
-  get complete(){
-    return this.filter({complete: true});
+class TodoList extends ObservableArray {
+  static get props() {
+    return {
+      get active() {
+        return this.filter({ complete: false });
+      },
+
+      get complete() {
+        return this.filter({ complete: true });
+      }
+    };
   }
-});
+
+  static get items() {
+    return Todo;
+  }
+}
 
 // Connects the types above to a RESTful url.
 Todo.connection = realtimeRestModel({
   url: "/api/todos",
-  Map: Todo,
-  List: Todo.List
+  ObjectType: Todo,
+  ArrayType: TodoList
 });
 
 export default Todo;
@@ -822,56 +817,58 @@ This model can independently make requests to a RESTful service layer.
 
 - [can-connect/can/map/map.getList Get a list] of Todos
   ```js
-  Todo.getList({ filter: {complete: true} }).then(function(todos){})
+  Todo.getList({ filter: { complete: true } }).then((todos) => {})
   ```
 - [can-connect/can/map/map.get Get] a single Todo
   ```js
-  Todo.get({_id: 6}).then(function(todo){})
+  Todo.get({ _id: 6 }).then((todo) => {})
   ```
 - [can-connect/can/map/map.prototype.save Create] a Todo
   ```js
-  const todo = new Todo({name: "do dishes", complete: false})
-  todo.save().then(function(todo){})
+  const todo = new Todo({ name: "do dishes", complete: false })
+  todo.save().then((todo) => {})
   ```
 - [can-connect/can/map/map.prototype.save Update] an [can-connect/can/map/map.prototype.isNew already created] Todo
   ```js
   todo.complete = true;
-  todo.save().then(function(todo){})
+  todo.save().then((todo) => {})
   ```
 - [can-connect/can/map/map.prototype.destroy Delete] a Todo
   ```js
-  todo.destroy().then(function(todo){})
+  todo.destroy().then((todo) => {})
   ```
 
 The __ViewModel__, in _components/todo-list/view-model.js_, looks like:
 
 ```js
-import {DefineMap} from "can";
+import { ObservableObject } from "can";
 import Todo from "../models/todo";
 
-export default DefineMap.extend({
-  todos: Todo.List,
-  editing: Todo,
-  backupName: "string",
+export default class Model extends ObservableObject {
+  static props = {
+    todos: Todo.List,
+    editing: Todo,
+    backupName: String
+  };
 
   // Returns true if the current todo is being edited.
-  isEditing(todo){
+  isEditing(todo) {
     return todo === this.editing;
-  },
+  }
 
   // Marks a todo as being edited.
-  edit(todo){
+  edit(todo) {
     this.backupName = todo.name;
     this.editing = todo;
-  },
+  }
 
   // Cancels that todo as being edited.
-  cancelEdit(){
+  cancelEdit() {
     if(this.editing) {
       this.editing.name = this.backupName;
     }
     this.editing = null;
-  },
+  }
 
   // Updates the todo being edited on
   // the server.
@@ -879,11 +876,11 @@ export default DefineMap.extend({
     this.editing.save();
     this.editing = null;
   }
-});
+}
 ```
 
 This _ViewModel_ will be tested independent of the view in the
-[testable](#Testable) section.  
+[testable](#Testable) section.
 
 The __View__, in _components/todo-list/view.stache_, looks like:
 
@@ -929,15 +926,20 @@ Finally, the component file in _components/todo-list/todo-list.js_ puts
 everything together:
 
 ```js
-import {Component} from "can";
-import ViewModel from './view-model';
-import view from './view.stache!';
+import { StacheElement } from "can";
+import ViewModel from "./view-model";
+import view from "./view.stache!";
 
-Component.extend({
-  tag: 'todo-list',
-  ViewModel: ViewModel,
-  view: view
-});
+class TodoList extends StacheElement {
+  static get view() {
+    return view;
+  }
+
+  static get props() {
+    return ViewModel;
+  }
+}
+customElements.define("todo-list", TodoList);
 ```
 
 Read on to see how CanJS’s independence results in easily testable, flexible,
@@ -953,23 +955,23 @@ The following shows examples of testing each part.
 Testing the __Model__’s `active` and `complete` properties:
 
 ```js
-test("Todo active and complete", function(){
+test("Todo active and complete", () => {
     let list = new Todo.List([
-        {name: "dishes", complete: false},
-        {name: "lawn", complete: true}
+        { name: "dishes", complete: false },
+        { name: "lawn", complete: true }
     ]);
-    assert.deepEqual(list.active.get(), [{name: "dishes", complete: false}], "one active");
-    assert.deepEqual(list.complete.get(), [{name: "lawn", complete: true}], "one complete")
+    assert.deepEqual(list.active.get(), [{ name: "dishes", complete: false }], "one active");
+    assert.deepEqual(list.complete.get(), [{ name: "lawn", complete: true }], "one complete")
 });
 ```
 
 Testing the __ViewModel__’s `edit` and `cancelEdit` methods:
 
 ```js
-test("TodoListVM cancelEdit", function(){
+test("TodoListVM cancelEdit", () => {
     let todos = new Todo.List([
-        {name: "mow lawn", complete: false},
-        {name: "dishes", complete: true},
+        { name: "mow lawn", complete: false },
+        { name: "dishes", complete: true },
     ]);
 
     let todoListVM = new TodoListVM({
@@ -990,31 +992,31 @@ following, using [can-fixture], tests that the component can edit a
 todo’s name.
 
 ```js
-test("<todo-list> can update todo name", function(done){
+test("<todo-list> can update todo name", (done) => {
 
-    fixture("PUT /api/todos/{id}", function(request){
+    fixture("PUT /api/todos/{id}", (request) => {
         assert.equal(request.data.name, "MOW YARD", "update");
         done();
     });
 
     let todos = new Todo.List([
-        {name: "mow lawn", complete: false, id: 22},
-        {name: "dishes", complete: true, id: 23},
+        { name: "mow lawn", complete: false, id: 22 },
+        { name: "dishes", complete: true, id: 23 },
     ]);
 
-    let template = stache("<todo-list todos:from='todos'/>");
-    let todoListElement = template({todos: todos}).firstChild;
+    let template = stache("<todo-list todos:from='todos' />");
+    let todoListElement = template({ todos: todos }).firstChild;
 
     // double click todo
-    todosListElement.querySelector(".todo label").dispatch( new MouseEvent('dblclick') );
+    todosListElement.querySelector(".todo label").dispatch( new MouseEvent("dblclick") );
 
     // change its value to MOW YARD by hitting enter (which causes a change first)
     let input = todoListElement.querySelector(".todo input.edit");
     input.value = "MOW YARD";
 
-    input.dispatchEvent( new Event('change') );
+    input.dispatchEvent( new Event("change") );
 
-    input.dispatchEvent( new KeyboardEvent("keyup",{code: "Enter", keyCode: 13}) );
+    input.dispatchEvent( new KeyboardEvent("keyup",{ code: "Enter", keyCode: 13 }) );
 });
 ```
 
@@ -1045,7 +1047,7 @@ architecture.  While we think this architecture creates more work than necessary
 developers, it’s possible by:
 
  - Having a single, ApplicationViewModel that contains all state, derived using
-   [can-define-stream] from events dispatched on the ApplicationViewModel.
+   [can-observable-object/define/value] from events dispatched on the ApplicationViewModel.
  - Enforcing that parent-to-child communication only uses one-way
    [can-stache-bindings.toChild] bindings like:
    ```html
@@ -1090,7 +1092,7 @@ becomes an implicit dependency of every component in the application. This creat
 
 ## Veracious ViewModels
 
-CanJS’s ViewModels are [can-define] observables that manage the state of a [can-component].
+CanJS’s ViewModels are [can-observable-object] and [can-observable-array] observables that manage the state of a [can-component].
 As ViewModels are observables, CanJS’s ViewModels have all the benefits of
 CanJS’s outstanding observable objects, namely:
 
@@ -1098,7 +1100,6 @@ CanJS’s outstanding observable objects, namely:
  - [Object-oriented and functional](#Objectorientedandfunctional)
  - [Computed getter properties](#Computedgetterproperties)
  - [Async computed getter properties](#Asynccomputedgetterproperties)
- - [Streamed properties](#Streamedproperties)
 
 In CanJS, the ViewModel is its own layer, completely independent from the
 template and the component. This is why ViewModels are largely responsible for
@@ -1236,23 +1237,23 @@ Before custom HTML elements existed, to add a date picker to your page, you woul
 1. Add a placeholder HTML element
 
    ```html
-   <div class='datepicker' />
+   <div class="datepicker" />
    ```
 
 2. Add JavaScript code to instantiate your datepicker:
 
    ```js
-   $('.datepicker').datepicker(task.dueDate)
+   $(".datepicker").datepicker(task.dueDate)
    ```
 
 3. Wire up the datepicker to update the rest of your application and vice-versa:
 
    ```js
-   task.on("dueDate", function(ev, dueDate){
-       $('.datepicker').datepicker(dueDate)
+   task.on("dueDate", (ev, dueDate) => {
+       $(".datepicker").datepicker(dueDate)
    })
 
-   $('.datepicker').on("datechange", function(ev, dueDate){
+   $(".datepicker").on("datechange", (ev, dueDate) => {
        task.dueDate = dueDate;
    });
    ```
@@ -1273,7 +1274,7 @@ Custom HTML elements are one aspect of [Web Components](https://www.webcomponent
 __Application assembly clarity__
 
 Custom elements make it easier to tell how an application was assembled. This is because you
-can inspect the DOM and see the custom elements and their bindings.  
+can inspect the DOM and see the custom elements and their bindings.
 
 The
 following shows inspecting the [guides/todomvc]’s _“What needs to be done?”_ input element.  Notice how it’s easy to tell that its behavior is provided by the
@@ -1335,17 +1336,20 @@ To understand how these strategies are used, consider a template like:
 And rendered with `viewModel` like:
 
 ```js
-const ViewModel = DefineMap.extend({
-    tasks: Todo.List,
-    completeTodos: function(){
-        return this.tasks.filter({complete: false});
+class ViewModel extends ObservableObject {
+    static props = {
+        tasks: Todo.List
+    };
+
+    completeTodos() {
+        return this.tasks.filter({ complete: false });
     }
-});
+}
 
 const viewModel = new ViewModel({
     tasks: new Todo.List([
-        {name: "dishes", complete: true},
-        {name: "lawn", complete: false}
+        { name: "dishes", complete: true },
+        { name: "lawn", complete: false }
     ])
 })
 ```
@@ -1372,12 +1376,12 @@ make one array match another.  This means that if a new task is added to the
 list of `tasks` like:
 
 ```js
-viewModel.tasks.push({name: "Understand diffing", complete: true})
+viewModel.tasks.push({ name: "Understand diffing", complete: true });
 ```
 
 This change will be observed, and a new array will be returned from
 `completeTodos()`.  The `#for` helper will [can-diff/list/list diff] this new array to the
-original array, and only create a single new `<div>` for the new todo.  
+original array, and only create a single new `<div>` for the new todo.
 
 
 ### Template minification
@@ -1389,7 +1393,7 @@ chore to correctly integrate into the build tool chain. The [steal-stache] libra
 
 ```js
 import todosStache from "todos.stache"
-todosStache([{name: "dishes"}]) //-> <documentFragment>
+todosStache([{ name: "dishes" }]); //-> <documentFragment>
 ```
 
 When the build is run, this import statement will tell StealJS that "todos.stache" is a dependency, and will include an already parsed representation in the build result.
@@ -1415,12 +1419,12 @@ A template may load or conditionally load a module after the initial page load. 
 This feature, when used with [steal-stache](../../steal-stache.html), signals to the build that the enclosed section’s dependencies should be dynamically loaded at runtime.
 
 ```html
-{{# eq(location, 'home') }}
+{{# eq(location, "home") }}
 <can-import from="components/home">
   <my-home/>
 </can-import>
 {{/ eq }}
-{{# eq(location, 'away') }}
+{{# eq(location, "away") }}
 <can-import from="components/chat">
   <my-chat/>
 </can-import>
@@ -1457,42 +1461,47 @@ This separation of concerns and powerful mixin behavior is accomplished by encap
 Let’s look at an example of how we would define a `Todo` type and a list of todos:
 
 ```js
-import {DefineList, DefineMap} from 'can';
+import { ObservableArray, ObservableObject } from "can";
 
-const Todo = DefineMap.extend({
-	id: {identity: true, type: "number"},
-	complete: "boolean",
-	name: "string"
-});
+class Todo extends ObservableObject {
+    static props = {
+        id: { identity: true, type: Number },
+        complete: Boolean,
+        name: String
+    };
+}
 
-Todo.List = DefineList.extend({
-	"#": Todo,
-	completeCount: function(){
-		return this.filter({complete: true}).length;
-	}
-})
+class TodoList extends ObservableArray {
+    static props = {};
+
+    completeCount() {
+        return this.filter({ complete: true }).length;
+    }
+
+    static items = Todo;
+}
 ```
 
-This example uses [can-define/map/map] to create a type definition for a `Todo`; each instance of `Todo` has a boolean `complete` property and a string `name` property.
+This example uses [can-observable-object] to create a type definition for a `Todo`; each instance of `Todo` has a boolean `complete` property and a string `name` property.
 
-This example also uses [can-define/list/list] to define a type for an array of `Todo` instances; the list has a `completeCount` method for easily determining how many todos in the list have been completed.
+This example also uses [can-observable-array] to define a type for an array of `Todo` instances; the list has a `completeCount` method for easily determining how many todos in the list have been completed.
 
 Using [can-rest-model], we’ll create a connection between a RESTful `/api/todos` service and our `Todo` instances and `TodoList` lists:
 
 ```js
-import {restModel} from "can";
+import { restModel } from "can";
 
 Todo.connection = restModel({
 	url: "/api/todos",
-	Map: Todo,
-	List: TodoList
+	ObjectType: Todo,
+	ArrayType: TodoList
 });
 ```
 
 That connection can be used to get a `Todo.List` of `Todo`s:
 
 ```js
-Todo.getList({}).then(function(todos) {
+Todo.getList({}).then((todos) =>  {
 	// Do what you’d like with the `todos`
 });
 ```
@@ -1504,27 +1513,27 @@ Let’s continue with our todo app example and imagine that we want to show two 
 First, let’s fetch the incomplete todos:
 
 ```js
-Todo.getList({filter: {completed: false}}).then(function(incompleteTodos) {});
+Todo.getList({ filter: { completed: false } }).then((incompleteTodos) =>  {});
 ```
 
 `incompleteTodos` might look like this:
 
     [
-      {id: 2, completed: false, name: "Finish docs", priority: "high"},
-      {id: 3, completed: false, name: "Publish release", priority: "medium"}
+      { id: 2, completed: false, name: "Finish docs", priority: "high" },
+      { id: 3, completed: false, name: "Publish release", priority: "medium" }
     ]
 
 Next, let’s fetch a list of high-priority todos:
 
 ```js
-Todo.getList({filter: {priority: "high"}}).then(function(urgentTodos) {});
+Todo.getList({ filter: { priority: "high" } }).then((urgentTodos) =>  {});
 ```
 
 `urgentTodos` might look like this:
 
     [
-      {id: 1, completed: true, name: "Finish code", priority: "high"},
-      {id: 2, completed: false, name: "Finish docs", priority: "high"}
+      { id: 1, completed: true, name: "Finish code", priority: "high" },
+      { id: 2, completed: false, name: "Finish docs", priority: "high" }
     ]
 
 Note that the “Finish docs” todo appears in both lists. If we make a change to the todo (e.g. changing its name), we want that change to appear in both lists.
@@ -1538,7 +1547,7 @@ Let’s look at both of these points in more detail.
 
 #### Duplicate instances
 
-The instance store prevents duplicate instances from being created by storing each model object by its [can-define.types.identity]. When a model object is fetched from the server, CanJS checks its `identity` to see if it’s already in the instance store; if it is, then CanJS will reuse the same object.
+The instance store prevents duplicate instances from being created by storing each model object by its [can-observable-object/define/identity]. When a model object is fetched from the server, CanJS checks its `identity` to see if it’s already in the instance store; if it is, then CanJS will reuse the same object.
 
 In our example, CanJS puts the “Finish docs” todo in the instance store when `incompleteTodos` is fetched. When `urgentTodos` is retrieved, CanJS sees the “Finish docs” todo with the same `id`, so it reuses the instance of “Finish docs” that is already in the instance store.
 
@@ -1552,7 +1561,7 @@ CanJS solves this potential problem by keeping track of which objects are observ
 
 The reference count for each object increases in two ways:
 
-- __Explicitly:__ if you use [can-connect/constructor/store/store.addInstanceReference] or call `.on()` on an instance (e.g. `todo.on('name', function(){})`)
+- __Explicitly:__ if you use [can-connect/constructor/store/store.addInstanceReference] or call `.on()` on an instance (e.g. `todo.on("name", () => {})`)
 
 - __Implicitly:__ if properties of the instance are bound to via live-binding in a view, e.g. `Name: {{ name }}` in a [can-stache] template
 
@@ -1577,15 +1586,15 @@ Let’s continue with our incomplete and urgent todo example from the previous s
 `incompleteTodos` looks like this:
 
     [
-      {id: 2, completed: false, name: "Finish docs", priority: "high"},
-      {id: 3, completed: false, name: "Publish release", priority: "medium"}
+      { id: 2, completed: false, name: "Finish docs", priority: "high" },
+      { id: 3, completed: false, name: "Publish release", priority: "medium" }
     ]
 
 `urgentTodos` looks like this:
 
     [
-      {id: 1, completed: true, name: "Finish code", priority: "high"},
-      {id: 2, completed: false, name: "Finish docs", priority: "high"}
+      { id: 1, completed: true, name: "Finish code", priority: "high" },
+      { id: 2, completed: false, name: "Finish docs", priority: "high" }
     ]
 
 In the UI, there’s a checkbox next to each urgent todo that toggles the `completed` property:
@@ -1609,15 +1618,15 @@ just have to call the [can-connect/real-time/real-time.createInstance],
 when updates happen similar to the following:
 
 ```js
-let socket = io('https://example.com');
+let socket = io("https://example.com");
 
-socket.on('todo created', function(todo){
+socket.on("todo created", (todo) => {
     Todo.connection.createInstance(todo)
 });
-socket.on('todo updated', function(todo){
+socket.on("todo updated", (todo) => {
     Todo.connection.updateInstance(todo)
 });
-socket.on('todo removed', function(todo){
+socket.on("todo removed", (todo) => {
     Todo.connection.destroyInstance(todo)
 });
 ```
@@ -1627,13 +1636,13 @@ socket.on('todo removed', function(todo){
 When you make a request for `incompleteTodos` like the one below:
 
 ```js
-Todo.getList({filter: {completed: false}}).then(function(incompleteTodos) {});
+Todo.getList({ filter: { completed: false } }).then((incompleteTodos) =>  {});
 ```
 
-The `{filter: {completed: false}}` object is passed to the server as parameters and represents all incomplete todos.
+The `{ filter: { completed: false } }` object is passed to the server as parameters and represents all incomplete todos.
 If your server expects a different format, it can be configured with [can-query-logic].
 
-The `{filter: {completed: false}}` parameters are associated with `incompleteTodos` so `can-connect` knows that `incompleteTodos` should contain _any_ todo with a `false` `completed` property. By understanding what
+The `{ filter: {completed: false } }` parameters are associated with `incompleteTodos` so `can-connect` knows that `incompleteTodos` should contain _any_ todo with a `false` `completed` property. By understanding what
 the parameters used to request data mean, all sorts of interesting behaviors and performance optimizations
 can happen, including:
 
@@ -1675,7 +1684,7 @@ In most other frameworks, you would probably decide to have some parent componen
 
 With CanJS, you don’t have to choose between maintainability and performance. You can decide to have each component fetch its data independently and [can-connect] will intelligently combine the two requests into one.
 
-This is made possible by the [can-set] algebra we discussed earlier. [can-connect] sees the outgoing requests, can determine that requests for `Todo.getList({filter: {completed: true}, sort: 'completedDate'})` and `Todo.getList({filter: {completed: false}, sort: 'priority'})` are equivalent to just one `Todo.getList({})` request, then make that single request and return the correct sorted data to each call.
+This is made possible by the [can-set] algebra we discussed earlier. [can-connect] sees the outgoing requests, can determine that requests for `Todo.getList({ filter: { completed: true }, sort: "completedDate" })` and `Todo.getList({ filter: { completed: false }, sort: "priority" })` are equivalent to just one `Todo.getList({})` request, then make that single request and return the correct sorted data to each call.
 
 This [can-connect/data/combine-requests/combine-requests configurable behavior] is extremely powerful because it abstracts network request complexity away from how you create and compose your application.
 
@@ -1711,7 +1720,7 @@ But a request like `GET /api/todos/2?$populate=projectRef` might return:
 For example, without populating the project data:
 
 ```js
-Todo.get({id: 2}).then(function(todo){
+Todo.get({ id: 2 }).then((todo) => {
   todo.projectRef.id //-> 2
 });
 ```
@@ -1719,7 +1728,7 @@ Todo.get({id: 2}).then(function(todo){
 With populating the project data:
 
 ```js
-Todo.get({id: 2, populate: "projectRef"}).then(function(todo){
+Todo.get({ id: 2, populate: "projectRef" }).then((todo) => {
   todo.projectRef.id //-> 2
 });
 ```
@@ -1729,7 +1738,7 @@ The values of other properties and methods on the [can-connect/can/ref/ref.Map.R
 For example, `value`, which points to the referenced instance, will be populated if the reference was populated:
 
 ```js
-Todo.get({id: 2, populate: "projectRef"}).then(function(todo){
+Todo.get({ id: 2, populate: "projectRef" }).then((todo) => {
   todo.projectRef.value.name //-> “Release”
 });
 ```
@@ -1752,7 +1761,7 @@ Additionally, if multiple todos have the same project, only one request will be 
 ## jQuery integration
 
 By default, CanJS’s [can-core] works without jQuery.  However, the [can-dom-events/helpers/add-jquery-events]
-module integrates jQuery’s events into CanJS's events.  This allows you to listen to
+module integrates jQuery’s events into CanJS’s events.  This allows you to listen to
 jQuery custom events like `draginit` directly in [can-stache] like:
 
 ```html
