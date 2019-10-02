@@ -1,4 +1,4 @@
-import { connect } from "//unpkg.com/can@5/core.mjs";
+import { connect } from "//unpkg.com/can@pre/core.mjs";
 
 // two behaviors that implement the `getListData` method of the `Data Interface`
 
@@ -7,20 +7,20 @@ const xhrData = connect.behavior('xhr-data', (previousPrototype) => {
 		getListData() {
 			return new Promise((resolve, reject) => {
 				const request = new XMLHttpRequest();
-				request.addEventListener("load", function() { 
+				request.addEventListener("load", function() {
 					resolve(JSON.parse(this.responseText));
 				});
 				request.open("GET", this.url);
 				request.send();
 			});
 		}
-		// ... an actual DataInterface implementation would also implement: 
+		// ... an actual DataInterface implementation would also implement:
 		//     getData, createData, updateData, destroyData
 	};
 });
 
 const fetchData = connect.behavior(
-	'fetch-data', 
+	'fetch-data',
 	(previousPrototype) => {
 		return {
 			getListData() {
@@ -39,9 +39,9 @@ const connectionOptions = {
 const xhrConn = xhrData(connectionOptions);
 const fetchConn = fetchData(connectionOptions);
 
-xhrConn.getListData({}).then(data => 
+xhrConn.getListData({}).then(data =>
 	console.log(`Used XHR to load ${data.length} todos.`)
 );
-fetchConn.getListData({}).then(data => 
+fetchConn.getListData({}).then(data =>
 	console.log(`Used fetch to load ${data.length} todos.`)
 );

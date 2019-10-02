@@ -7,13 +7,13 @@
     fixture,
     restModel,
     type,
-    DefineMap,
+    ObservableObject,
     StacheElement,
-  } from "//unpkg.com/can@5/ecosystem.mjs";
+  } from "//unpkg.com/can@pre/ecosystem.mjs";
 
   setupFixtures();
 
-  const Session = DefineMap.extend('Session', {});
+	class Session extends ObservableObject {}
   Session.connection = [
     connect.base,
     connect.dataUrl,
@@ -21,7 +21,7 @@
     connect.canMap,
     connectCanSession
   ].reduce((conn, behavior) => behavior(conn), {
-    Map: Session,
+    ObjectType: Session,
     url: {
       resource: '/api/session',
       getData: '/api/session',
@@ -30,12 +30,15 @@
   });
   Session.connection.init();
 
-  const Todo = DefineMap.extend('Todo', {
-    body: 'string',
-    completed: 'boolean'
-  });
+	class Todo extends ObservableObject {
+		static props = {
+			body: String,
+			completed: Boolean
+		};
+	}
+
   Todo.connection = restModel({
-    Map: Todo,
+    ObjectType: Todo,
     url: {
       resource: '/api/todo',
       beforeSend: (xhr) => {

@@ -1,19 +1,22 @@
-import { DefineMap, QueryLogic, connect } from "//unpkg.com/can@5/core.mjs";
+import { ObservableObject, QueryLogic, connect } from "//unpkg.com/can@pre/core.mjs";
 
-const Todo = DefineMap.extend('Todo', {
-	id: {
-		identity: true,
-		type: "number"
-	},
-	userId: 'number',
-	title: "string",
-	completed: "boolean"
-});
+class Todo extends ObservableObject {
+  static props = {
+    id: {
+      identity: true,
+      type: Number
+    },
+    userId: Number,
+    title: String,
+    completed: Boolean,
+    lastAccessedDate: String,
+  }
+}
 
-// a behavior that extends the `getData` method of the `Data Interface`, to add 
+// a behavior that extends the `getData` method of the `Data Interface`, to add
 // logging whenever a single instance is loaded
 const loggingBehavior = connect.behavior(
-	'data-logging', 
+	'data-logging',
 	(previousPrototype) => {
 		return {
 			getData(query) {
@@ -31,7 +34,7 @@ const loggingBehavior = connect.behavior(
 const connectionOptions = {
 	url: 'https://jsonplaceholder.typicode.com/todos/{id}',
 	queryLogic: new QueryLogic(Todo),
-	Map: Todo,
+	ObjectType: Todo,
 };
 
 const connection = connect.constructor(loggingBehavior(connect.dataUrl(connect.base(

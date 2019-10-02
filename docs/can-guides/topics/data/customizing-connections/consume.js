@@ -1,19 +1,22 @@
-import { DefineMap, QueryLogic, connect } from "//unpkg.com/can@5/core.mjs";
+import { ObservableObject, QueryLogic, connect } from "//unpkg.com/can@pre/core.mjs";
 
-const Todo = DefineMap.extend({
-	id: {
-		identity: true,
-		type: "number"
-	},
-	userId: 'number',
-	title: "string",
-	completed: "boolean"
-});
+class Todo extends ObservableObject {
+  static props = {
+    id: {
+      identity: true,
+      type: Number
+    },
+    userId: Number,
+    title: String,
+    completed: Boolean,
+    lastAccessedDate: String,
+  }
+}
 
-// a behavior that implements the `getList` method of the `Instance Interface`, 
+// a behavior that implements the `getList` method of the `Instance Interface`,
 // consumes from `getListData`
 const todoConstructor = connect.behavior(
-	'todo-constructor', 
+	'todo-constructor',
 	(previousPrototype) => {
 		return {
 			get(query) {

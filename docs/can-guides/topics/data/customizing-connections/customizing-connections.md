@@ -86,20 +86,20 @@ To be a method ***implementer***, a behavior just needs to include that method a
 Being a method ***consumer*** just means calling a method on the connection. Here the behavior is consuming the [can-connect/data/url/url.getData <code>getData</code>] method:
 
 @sourceref ./consume.js
-@highlight 15-26,only
+@highlight 18-29,only
 @codepen   
 
 <a id="extend"></a>
 ***Extending*** is a bit more complicated. Property access on a connection works like any ordinary JavaScript object, the property is first searched for on the "base" object instance, before searching up the objects on the base object's prototype chain. Since behaviors are instances on that chain, a behavior can override an implementation of a method from a behavior higher in the prototype chain. That feature, with behaviors being able to reference the prototype higher than them in the chain, is what allows them to extend interface methods. This is done by overriding a method and calling the previous implementation as part of that overriding implementation. The following extends [can-connect/data/url/url.getData <code>getData</code>] to add some logging:
 
 @sourceref ./extend.js
-@highlight 15-29, only
+@highlight 18-32, only
 @codepen
 
 ### Calling From Root vs Calling On Previous Behavior
- 
+
 As we've explained, ***extender*** and ***consumers*** both make calls to interface methods within the connection, but there's a distinction regarding *how* they make those calls that's worth highlighting. Typically when ***consumers*** call an interface method they call it on the connection object, which looks like `this.getData()`. That causes a lookup for [can-connect/connection.getData <code>getData</code>] starting at the "root" of the connection prototype chain. In contrast, when an ***extender*** calls the method they're extending, they call it on the behavior above them in the prototype chain e.g `previousBehavior.getData()`. This causes a lookup on the portion of the prototype chain higher than the current behavior.
- 
+
 ## Interface Index
 
 A listing of the interfaces of [can-connect] and their most commonly used methods:
@@ -189,7 +189,7 @@ A listing of the behaviors provided by [can-connect] and a short description of 
 				[can-connect/cache-requests/cache-requests <code>cache-requests</code>]
 			</td>
 			<td>Cache response data and use it for future requests.</td>
-		</tr>	
+		</tr>
 		<tr>
 			<td>
 				[can-local-store <code>can-local-store</code>]
@@ -273,7 +273,7 @@ A listing of the behaviors provided by [can-connect] and a short description of 
 
 ## Ordering Behaviors
 
-When placing a custom behavior in the prototype chain it's important to know what interface methods you intend to implement and those you intend to extend. You may not be the only implementer of a method and for your implementation to be executed, your behavior will need to be lower in the prototype chain. When extending an interface method you may want your extension to run before all other extensions, after all extensions, or at some point between particular extensions. Behaviors lower in the chain execute before extensions higher in the chain. 
+When placing a custom behavior in the prototype chain it's important to know what interface methods you intend to implement and those you intend to extend. You may not be the only implementer of a method and for your implementation to be executed, your behavior will need to be lower in the prototype chain. When extending an interface method you may want your extension to run before all other extensions, after all extensions, or at some point between particular extensions. Behaviors lower in the chain execute before extensions higher in the chain.
 
 The built-in behaviors of `can-connect` have a canonical order to ensure they function. Understanding this order may help you better understand where your custom behavior should be ordered:
 
@@ -340,7 +340,7 @@ The built-in behaviors of `can-connect` have a canonical order to ensure they fu
 				[can-connect/data/worker/worker <code>data/worker</code>]
 			</td>
 			<td>
-			  Implements the data fetching methods of the `Data Interface` to redirect calls to them to a worker thread. This behavior should come lower in the prototype chain than the behaviors extending the data fetching methods. This is so that the calls are redirected to the worker as early as possible, keeping all processing related to the data fetching methods isolated to the worker. 
+			  Implements the data fetching methods of the `Data Interface` to redirect calls to them to a worker thread. This behavior should come lower in the prototype chain than the behaviors extending the data fetching methods. This is so that the calls are redirected to the worker as early as possible, keeping all processing related to the data fetching methods isolated to the worker.
 			</td>
 		</tr>		
 		<tr>
@@ -434,13 +434,13 @@ The built-in behaviors of `can-connect` have a canonical order to ensure they fu
 ## Combining Behaviors
 
 The combining of behaviors by chaining functions (as shown in the [Behaviors Overview](#behaviors-overview)) is very straightforward but can be tedious to read when combining many behaviors. [can-connect] offers the [can-connect#connect_behaviors_options_ <code>connect</code>] function to assemble behaviors, but to make it clearer to users how connections are assembled we now suggest that users deviating from the pre-built connections (e.g [can-rest-model ]) assemble their behaviors themselves.
- 
+
  One way behaviors can be assembled cleanly is by using the [`reduce`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce) method of arrays which iterates over the elements of an array, assembling a result:  
 
-> ***Note:*** the `init` function must be called after creating the connection to initialize some behaviors. When using the [can-connect#connect_behaviors_options_ <code>connect</code>] function this is called automatically. 
+> ***Note:*** the `init` function must be called after creating the connection to initialize some behaviors. When using the [can-connect#connect_behaviors_options_ <code>connect</code>] function this is called automatically.
 
 @sourceref ./combine.js
-@highlight 13-18, 25-28, only
+@highlight 16-21, 28-31, only
 @codepen
 
 
@@ -453,7 +453,7 @@ The following is an ***implementer*** behavior that implements the same function
 @codepen
 
 ### WebSocket update channel
-The following is a ***consumer*** behavior that uses the API of [can-connect/real-time/real-time <code>real-time</code>] to allow real-time updates of models from a web socket connection. A behavior like this may be useful if your API allows you to subscribe via WebSocket to receive notifications of changes to models. 
+The following is a ***consumer*** behavior that uses the API of [can-connect/real-time/real-time <code>real-time</code>] to allow real-time updates of models from a web socket connection. A behavior like this may be useful if your API allows you to subscribe via WebSocket to receive notifications of changes to models.
 @sourceref ./practical-consumer.html
 @codepen
 
@@ -487,25 +487,25 @@ div.spaced > ol > li {
 </style>
 <div class='spaced'>
 
-1. A user calls [can-connect/can/map/map.prototype.save <code>save</code>] on an instance of one of their [can-connect ]'d models: 
+1. A user calls [can-connect/can/map/map.prototype.save <code>save</code>] on an instance of one of their [can-connect ]'d models:
 	```js
-	const Todo = DefineMap.extend( /* ... */ );
+	class Todo extends ObservableObject { /* ... */ }
 	Todo.connection = restModel({
-		Map: Todo,
+		ObjectType: Todo,
 		...
 	});
 	const todoInstance = new Todo({ value: 'say hello to world' });
 	todoInstance.save().then( /* ... */ )
 	```
 	@highlight 7
-	
+
     `todoInstance.save()` returns a promise that resolves when all the connection's promise handlers for the request are completed (in step 9).
 
-2. The [can-connect/can/map/map.prototype.save <code>save</code>] method is not a default part of CanJS Map instances, rather it is added to the Todo prototype by the [can-connect/can/map/map <code>can/map</code>] behavior during the creation of the connection. The implementation of [can-connect/can/map/map.prototype.save <code>save</code>] in [can-connect/can/map/map <code>can/map</code>] calls the [can-connect/connection.save <code>save</code>] method of the connection with the instance:
+2. The [can-connect/can/map/map.prototype.save <code>save</code>] method is not a default part of CanJS observable instances, rather it is added to the Todo prototype by the [can-connect/can/map/map <code>can/map</code>] behavior during the creation of the connection. The implementation of [can-connect/can/map/map.prototype.save <code>save</code>] in [can-connect/can/map/map <code>can/map</code>] calls the [can-connect/connection.save <code>save</code>] method of the connection with the instance:
 	```js
 	connection.save(instance);
 	```  
-	
+
 3. At this point the lowest behavior with an implementation of [can-connect/InstanceInterface <code>InstanceInterface</code>] [can-connect/connection.save <code>save</code>] in the connection prototype chain is called. In this case it's the [can-connect/constructor/constructor <code>constructor</code>] behavior. This implementation checks to see if the instance already has an identity value, which means it existed before this request. If it did already exist, an update request is made to the backend by calling the [can-connect/DataInterface <code>Data Interface</code>] method [can-connect/connection.updateData <code>updateData</code>], otherwise [can-connect/connection.createData <code>createData</code>] which happens in this case. The promise returned from [can-connect/connection.createData <code>createData</code>] has a handler added which will execute in step 7.
 
 4. [can-connect/connection.createData <code>createData</code>] is called on [can-connect/data/parse/parse <code>data/parse</code>]. This behavior is an extension that reformats the response returned by the implementation of [can-connect/connection.createData <code>createData</code>]. It calls [can-connect/connection.createData <code>createData</code>] on the behaviors higher in the chain and attaches a promise handler which will execute in step 6.
@@ -519,5 +519,5 @@ div.spaced > ol > li {
 8. [can-connect/can/map/map <code>can/map</code>] is the lowest behavior in the prototype chain that has a [can-connect/can/map/map.createdInstance <code>createdInstance</code>] callback, so it's called first. It updates the instance that was passed to `connection.save` with any new data in the response and emits a `created` event on the Map constructor. [can-connect/can/map/map <code>can/map</code>] is an implementer of [can-connect/can/map/map.createdInstance <code>createdInstance</code>] not an extender, so at this point [can-connect/constructor/constructor.createdInstance <code>createdInstance</code>] callbacks are finished running.
 
 9. Now that the [can-connect/constructor/constructor.createdInstance <code>createdInstance</code>] callbacks initiated by [can-connect/constructor/constructor <code>constructor</code>] are finished, we resume the execution of [can-connect/connection.save <code>save</code>] promise handlers. The only remaining handlers are any attached to the promise returned from [can-connect/can/map/map.prototype.save <code>instance.save()</code>]. The connection execution is now complete and that user-facing promise is resolved.
- 
+
 </div>

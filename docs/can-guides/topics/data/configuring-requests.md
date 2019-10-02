@@ -69,7 +69,7 @@ todoFixture(5);
 // define the connection
 const connection = restModel({
   url: "/api/todos/{id}",
-  Map: Todo
+  ObjectType: Todo
 });
 
 // load data
