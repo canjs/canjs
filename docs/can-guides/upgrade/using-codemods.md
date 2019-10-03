@@ -1,6 +1,6 @@
 @page guides/upgrade/using-codemods Using Codemods
 @parent guides/upgrade 4
-@description Learn how to migrate your app to CanJS 3 using [can-migrate](https://www.npmjs.com/package/can-migrate).
+@description Learn how to migrate your app to CanJS 6 using [can-migrate](https://www.npmjs.com/package/can-migrate).
 
 @body
 
@@ -9,48 +9,79 @@
 A codemod is a transformation script that parses the [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree)
 of source code in order to do a code-aware find-and-replace refactor across
 multiple files. [can-migrate](https://www.npmjs.com/package/can-migrate)
-is a CLI utility for running codemods that can help migrate your app to CanJS 3.
+is a CLI utility for running codemods that can help migrate your app to CanJS 6.
 
-For example, the following CanJS 3.0 code:
+For example, the following CanJS 5.0 code:
 
 ```js
-import DefineMap from "can-define/map/map";
-import route from "can-route";
-import "can-stache/helpers/route";
+import { Component } from "can";
 
-const VM = DefineMap.extend({
-    page: {
-        value: "home"
+Component.extend({
+  tag: "person-form",
+  view: `
+    <form>
+      <input value:bind="this.first">
+      <input value:bind="this.last">
+      <input value:bind="this.first" type="number">
+    </form>
+  `,
+  ViewModel: {
+    first: "string",
+    last: "string",
+    age: "number",
+    description: {
+      get() {
+        return `${this.first} ${this.last} age ${this.age}`;
+      }
     }
+  }
 });
-
-route.register(":page", { page: "home" });
-route.ready();
 ```
 
 …can be transformed to this:
 
 ```js
-import DefineMap from "can-define/map/map";
-import route from "can-route";
-import "can-stache-route-helpers";
+import { StacheElement, type } from "can";
+import DeepObservable from "can-deep-observable";
 
-const VM = DefineMap.extend({
-    page: {
-        default: "home"
-    }
-});
+class PersonForm extends StacheElement {
+  static get view() {
+    return `
+      <form>
+        <input value:bind="this.first">
+        <input value:bind="this.last">
+        <input value:bind="this.first" type="number">
+      </form>
+    `;
+  }
 
-route.register("{page}", { page: "home" });
-route.start();
+  static get props() {
+    return {
+      first: type.maybeConvert(String),
+      last: type.maybeConvert(String),
+      age: type.maybeConvert(Number),
+      description: {
+        get() {
+          return `${this.first} ${this.last} age ${this.age}`;
+        }
+      }
+    };
+  }
+
+  static get propertyDefaults() {
+    return DeepObservable;
+  }
+
+  static get seal() {
+    return true;
+  }
+}
+customElements.define("person-form", PersonForm);
 ```
-@highlight 3,7,11,12
 
-Using this CLI will get you about 85% of the way to having your codebase
+Using this CLI will get you most of the way to having your codebase
 migrated; it’s not a complete solution for a seamless migration, but it will get
 you significantly closer than doing the migration by hand.
-
-> For information on using codemods to upgrade from CanJS 2.3 to CanJS 3.0, check out [https://v3.canjs.com/doc/guides/upgrade/using-codemods.html v3.canjs.com].
 
 ## Install
 
@@ -88,349 +119,350 @@ Options
 Runs all the `can-migrate` transforms for upgrading to CanJS 4.0 on the files that match the `**/*.js` glob:
 
 ```bash
-can-migrate '**/*.js' --can-version 4 --apply
+can-migrate '**/*.js' --can-version 6 --apply
 ```
 
-Runs the `can-stache/route-helpers` transform on the files that match the `**/*.js` glob:
+Runs the `can-stache-element/can-stache-element` transform on the files that match the `**/*.js` glob:
 
 ```bash
-can-migrate '**/*.js' --transform can-stache/route-helpers.js --apply
+can-migrate '**/*.js' --transform can-stache-element/can-stache-element.js --apply
 ```
 
-You can find a [complete list of version-4 transforms on GitHub](https://github.com/canjs/can-migrate/tree/master/src/transforms/version-4).
+You can find a [complete list of version-6 transforms on GitHub](https://github.com/canjs/can-migrate/tree/master/src/transforms/version-6).
 
-## List of CanJS 4 Transform Scripts
+## List of CanJS 6 Transform Scripts
 
-### can-define
+All of the transforms below will update code in a way that is most backward compatibile with how the APIs in CanJS 5.0 work and in a way that is compatible with most web browsers.
 
-To run [all of the version-4/can-define transforms](https://github.com/canjs/can-migrate/tree/master/src/transforms/version-4/can-define) listed below:
+This means they will:
 
-```bash
-can-migrate '**/*.js' -t version-4/can-define/ -a
-```
+- use getters for class properties like [http://localhost/canjs/doc/can-stache-element/static.view#staticgetview_function_____ view] and [http://localhost/canjs/doc/can-stache-element/static.props#staticgetprops___return_______ props]
+- make all nested objects and arrays [can-deep-observable observable]
+- [can-observable-object/object.static.seal seal] all observables
+- make all types [can-type#type_maybeConvert non-strict]
 
-#### default
+Being cautious like this can lead to having more code in the transformed version than in the original, but it will reduce the risk of causing bugs by upgrading. The extra code can be removed over time as work is done on the transformed components.
 
-Running this transform:
+### Component -> StacheElement
 
-```bash
-can-migrate '**/*.js' -t version-4/can-define/default.js -a
-```
-
-…will transform the following:
+`can-migrate` will transform all [can-component]s into [can-stache-element]s so this:
 
 ```js
-import DefineMap from "can-define/map/map";
+import { Component } from "can";
 
-const VM = DefineMap.extend({
-	name: {
-		value: "Justin"
-	}
+Component.extend({
+  tag: "my-el",
+  view: ``,
+  ViewModel: {}
 });
 ```
-@highlight 5
 
-…to this:
-
-```js
-import DefineMap from "can-define/map/map";
-
-const VM = DefineMap.extend({
-	name: {
-		default: "Justin"
-	}
-});
-```
-@highlight 5
-
-#### for-each
-
-Running this transform:
-
-```bash
-can-migrate '**/*.js' -t version-4/can-define/for-each.js -a
-```
-
-…will transform code like this:
+...will be transformed into this:
 
 ```js
-import DefineMap from 'can-define/map/map';
+import { StacheElement } from "can";
+import DeepObservable from "can-deep-observable";
 
-const VM = DefineMap.extend({
-    first: {
-        default: 'Kevin'
-    },
-    last: {
-        default: 'McCallister'
-    },
-    uppercaseAll: function() {
-        this.each((value, prop) => {
-            this[prop] = value.toUpperCase();
-        });
+class MyEl extends StacheElement {
+  static get view() {
+    return ``;
+  }
+
+  static get props() {
+    return {};
+  }
+
+  static get propertyDefaults() {
+    return DeepObservable;
+  }
+
+  static get seal() {
+    return true;
+  }
+}
+customElements.define("my-el", MyEl);
+```
+
+### DefineMap -> ObservableObject
+
+`can-migrate` will convert all [can-define/map/map#newDefineMap__props__ instances] and [can-define/map/map.extend extended] `DefineMap`s into `ObservableObject`s.
+
+This:
+
+```js
+import { DefineMap } from "can";
+
+const MyMap = DefineMap.extend("MyMapConstructor", {
+  prop: {
+    default() {
+      return new DefineMap({});
     }
+  }
 });
 ```
-@highlight 11
 
-…to this:
+...will be transformed into this:
 
 ```js
-import DefineMap from 'can-define/map/map';
+import { ObservableObject } from "can";
+import DeepObservable from "can-deep-observable";
 
-const VM = DefineMap.extend({
-    first: {
-        default: 'Kevin'
-    },
-    last: {
-        default: 'McCallister'
-    },
-    uppercaseAll: function() {
-        this.forEach((value, prop) => {
-            this[prop] = value.toUpperCase();
-        });
+class MyMap extends ObservableObject {
+  static get props() {
+    return {
+      prop: {
+        get default() {
+          return new ObservableObject({});
+        }
+      }
+    };
+  }
+
+  static get propertyDefaults() {
+    return DeepObservable;
+  }
+
+  static get seal() {
+    return true;
+  }
+}
+```
+
+### DefineList -> ObservableArray
+
+`can-migrate` will convert all [can-define/list/list#newDefineList__props__ instances] and [can-define/list/list.extend extended] `DefineList`s into `ObservableArray`s.
+
+This:
+
+```js
+import { DefineMap, DefineList } from "can";
+
+const MyMap = DefineMap.extend("MyMapConstructor", {
+  prop: {
+    default() {
+      return new DefineMap({});
     }
+  }
+});
+
+const MyList = DefineList.extend("MyListConstructor", {
+  "#": MyMap,
+
+  selected: {
+    default() {
+      return new DefineList([]);
+    }
+  }
 });
 ```
-@highlight 11
 
-### can-queues
-
-To run [all of the version-4/can-queues transforms](https://github.com/canjs/can-migrate/tree/master/src/transforms/version-4/can-queues) listed below:
-
-```bash
-can-migrate '**/*.js' -t version-4/can-queues/ -a
-```
-
-#### batch
-
-Running this transform:
-
-```bash
-can-migrate '**/*.js' -t version-4/can-queues/batch.js -a
-```
-
-…will transform the following:
+...will be transformed into this:
 
 ```js
-import canBatch from "can-event/batch/batch";
+import { ObservableArray, ObservableObject, type } from "can";
+import DeepObservable from "can-deep-observable";
 
-canBatch.start();
-this.first = "Matthew";
-this.last = "Phillips";
-canBatch.stop();
+class MyMap extends ObservableObject {
+  static get props() {
+    return {
+      prop: {
+        get default() {
+          return new ObservableObject({});
+        }
+      }
+    };
+  }
+
+  static get propertyDefaults() {
+    return DeepObservable;
+  }
+
+  static get seal() {
+    return true;
+  }
+}
+
+class MyList extends ObservableArray {
+  static get props() {
+    return {
+      selected: {
+        get default() {
+          return new ObservableArray([]);
+        }
+      }
+    };
+  }
+
+  static get items() {
+    return type.maybeConvert(MyMap);
+  }
+}
 ```
-@highlight 1,3,6
 
-…to this:
+### Property Definitions
+
+`can-migrate` will handle converting all property [can-observable-object/object.types.definitionObject definitions] and [can-observable-object/object.types.property shorthands] to syntax compatible with `ObservableObject`. This makes several minor changes.
+
+This:
 
 ```js
-import queues from "can-queues";
+import { DefineMap } from "can";
 
-queues.batch.start();
-this.first = "Matthew";
-this.last = "Phillips";
-queues.batch.stop();
+const MyMap = DefineMap.extend("MyMapConstructor", {
+  aString: "string",
+  aNumber: "number",
+  aBoolean: "boolean",
+  aDate: "date",
+  anything: "any",
+  anObjectType: { Type: Thing },
+  anObject: { Defaul: Thing },
+  anotherString: { type: "string" },
+  anotherNumber: { type: "number" },
+  anotherBoolean: { type: "boolean" },
+  anotherDate: { type: "date" },
+  anotherAnything: { type: "any" },
+  doNotSerialize: { serialize: false },
+  anotherObject: {
+    default() {
+      return { /* ... */ };
+    }
+  },
+  aGetter: {
+    get() { /* ... */ }
+  },
+  anAsyncGetter: {
+    get(lastSet, resolve) { /* ... */ }
+  }
+});
 ```
-@highlight 1,3,6
 
-### can-route
-
-To run [all of the version-4/can-route transforms](https://github.com/canjs/can-migrate/tree/master/src/transforms/version-4/can-route) listed below:
-
-```bash
-can-migrate '**/*.js' -t version-4/can-route/ -a
-```
-
-#### template
-
-Running this transform:
-
-```bash
-can-migrate '**/*.js' -t version-4/can-route/template.js -a
-```
-
-…will transform the following:
+...will be transformed to this:
 
 ```js
-can.route(":page", { page: "home" });
+import { ObservableObject, type } from "can";
+
+class MyMap extends ObservableObject {
+  static get props() {
+    return {
+      aString: type.maybeConvert(String),
+      aNumber: type.maybeConvert(Number),
+      aBoolean: type.maybeConvert(Boolean),
+      aDate: type.maybeConvert(Date),
+      anything: type.Any,
+      anObjectType: { type: type.maybeConvert(Thing) },
+      anObject: { Defaul: Thing },
+      anotherString: { type: type.maybeConvert(String) },
+      anotherNumber: { type: type.maybeConvert(Number) },
+      anotherBoolean: { type: type.maybeConvert(Boolean) },
+      anotherDate: { type: type.maybeConvert(Date) },
+      anotherAnything: { type: type.Any },
+      doNotSerialize: { enumerable: false },
+      anotherObject: {
+        get default() {
+          return { /* ... */ };
+        }
+      },
+      aGetter: {
+        get() { /* ... */ }
+      },
+      anAsyncGetter: {
+        async(resolve, lastSet) { /* ... */ }
+      }
+    };
+  }
+}
 ```
 
-…to this:
+### Component Events
+
+The [can-component.prototype.events] object on [can-component Component] will be replaced with a [can-control] that is instantiated in the [can-stache-element/lifecycle-hooks.connected connected hook].
+
+This:
 
 ```js
-can.route("{page}", { page: "home" });
+import { Component } from "can";
+
+Component.extend({
+  tag: "my-element",
+  view: `<button>Increment {{ this.count }}</button>`,
+  ViewModel: {
+    count: {
+      default: 0
+    }
+  },
+
+  events: {
+      "button click": function() {
+        this.viewModel.count++;
+      }
+  }
+});
 ```
 
-#### register
-
-Running this transform:
-
-```bash
-can-migrate '**/*.js' -t version-4/can-route/register.js -a
-```
-
-…will transform the following:
+...becomes this:
 
 ```js
-can.route("{page}", { page: "home" });
+import { StacheElement, Control } from "can/everything";
+
+class MyElement extends StacheElement {
+  static view = `<button>Increment {{ this.count }}</button>`;
+  static props = {
+    count: 0
+  };
+  connected() {
+    const EventsControl = Control.extend({
+      "button click": function() {
+        this.element.count++;
+      }
+    });
+    new EventsControl(this);
+  }
+}
+customElements.define("my-element", MyElement);
 ```
 
-…to this:
+### Map and List on restModel and realTimeRestModel
+
+The `Map` and `List` options will be replaced when passed as options to [can-rest-model] (or [can-realtime-rest-model]):
 
 ```js
-can.route.register("{page}", { page: "home" });
+Todo.connection = restModel({
+  Map: TodoList,
+  List: Todo,
+  url: "/api/todos/{id}"
+});
 ```
 
-#### start
-
-Running this transform:
-
-```bash
-can-migrate '**/*.js' -t version-4/can-route/start.js -a
-```
-
-…will transform the following:
+...becomes:
 
 ```js
-can.route.ready();
+Todo.connection = restModel({
+  ArrayType: TodoList,
+  ObjectType: Todo,
+  url: "/api/todos/{id}"
+});
 ```
 
-…to this:
+The properties returned by the `restModel` and `realtimeRestModel` functions will also be renamed. This:
 
 ```js
-can.route.start();
+const Todo = realtimeRestModel("/api/todos/{id}").Map;
 ```
 
-### can-stache
-
-To run [all of the version-4/can-stache transforms](https://github.com/canjs/can-migrate/tree/master/src/transforms/version-4/can-stache) listed below:
-
-```bash
-can-migrate '**/*.js' -t version-4/can-stache/ -a
-```
-
-#### attr-from
-
-Running this transform:
-
-```bash
-can-migrate '**/*.js' -t version-4/can-stache/attr-from.js -a
-```
-
-…will transform the following:
-
-```html
-<input type="checkbox" checked>
-<my-element
-	prop3="something"
-	on:click="setFoo()"
-	prop4:from="foo"
-	prop5:to="bar"
-	prop5:bind="baz"
-></my-element>
-<a href="{{routeUrl page='away'}}">Away</a>
-```
-@highlight 3
-
-…to this:
-
-```html
-<input type="checkbox" checked>
-<my-element
-	prop3:from='"something"'
-	on:click="setFoo()"
-	prop4:from="foo"
-	prop5:to="bar"
-	prop5:bind="baz"
-></my-element>
-<a href="{{routeUrl page='away'}}">Away</a>
-```
-@highlight 3
-
-#### console-log
-
-Running this transform:
-
-```bash
-can-migrate '**/*.js' -t version-4/can-stache/console-log.js -a
-```
-
-…will transform the following:
-
-```html
-{{log}}
-```
-
-…to this:
-
-```html
-{{console.log(this)}}
-```
-
-#### route-helpers
-
-Running this transform:
-
-```bash
-can-migrate '**/*.js' -t version-4/can-stache/route-helpers.js -a
-```
-
-…will transform the following:
+...becomes:
 
 ```js
-const routeHelpers = require('can-stache/helpers/route');
+const Todo = realtimeRestModel("/api/todos/{id}").ObjectType;
 ```
 
-…to this:
+...and this:
 
 ```js
-const routeHelpers = require('can-stache-route-helpers');
+const TodoList = realtimeRestModel("/api/todos/{id}").List;
 ```
 
-...and this...
+...becomes:
 
-```html
-<can-import from="can-stache/helpers/route" />
+```js
+const TodoList = realtimeRestModel("/api/todos/{id}").ArrayType;
 ```
-
-…to this:
-
-```html
-<can-import from="can-stache-route-helpers" />
-```
-
-#### scope
-
-Running this transform:
-
-```bash
-can-migrate '**/*.js' -t version-4/can-stache/scope.js -a
-```
-
-…will transform the following:
-
-```html
-<p>
-  {{%index}}
-  {{%key}}
-  {{%element}}
-  {{%event}}
-  {{%viewModel}}
-  {{%arguments}}
-</p>
-```
-@highlight 2-7
-
-…to this:
-
-```html
-<p>
-  {{scope.index}}
-  {{scope.key}}
-  {{scope.element}}
-  {{scope.event}}
-  {{scope.viewModel}}
-  {{scope.arguments}}
-</p>
-```
-@highlight 2-7
