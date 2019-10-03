@@ -12,7 +12,7 @@ CanJS 6.0 is a major step forward for CanJS, fully embracing [JavaScript classes
 
   - __[can-observable-object ObservableObject]__ and __[can-observable-array ObservableArray]__ as new simplified replacements for [can-define/map/map DefineMap] and [can-define/list/list DefineList] based on JavaScript class syntax. These new types use [proxies](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) so they can react to changes even if properties are not predefined.
     ```js
-    import {ObservableObject} from "can";
+    import { ObservableObject } from "can";
 
     class Person extends ObservableObject {
       get fullName() {
@@ -21,8 +21,8 @@ CanJS 6.0 is a major step forward for CanJS, fully embracing [JavaScript classes
     }
 
     let person = new Person();
-    person.on("fullName", (ev, fullName) => {
-      console.log("Full name is", fullName);
+    person.on("fullName", ({ value }) => {
+      console.log("Full name is", value);
     });
 
     person.first = "Ada";
@@ -31,12 +31,11 @@ CanJS 6.0 is a major step forward for CanJS, fully embracing [JavaScript classes
     @codepen
   - __[can-stache-element StacheElement]__, a new base class for creating *web components*, a standard way to share components that works in any framework. StacheElement has the same API as [can-observable-object ObservableObject] so you only need to know the one API to use for both [guides/data models] and components.
     ```js
-    import {StacheElement} from "can";
+    import { StacheElement } from "can";
 
     class HelloWorld extends StacheElement {
-      static view = `Hello {{name}}!`;
+      static view = `Hello {{ this.name }}!`;
     }
-
     customElements.define("hello-world", HelloWorld);
 
     let el = new HelloWorld();
@@ -47,7 +46,7 @@ CanJS 6.0 is a major step forward for CanJS, fully embracing [JavaScript classes
 
   - New package __[can-type]__ brings a high level of flexibility to defining property types on [can-observable-object] and [can-stache-element]. It allows defining [can-type/check strict types], [can-type/maybe types that can be null/undefined] and more.
     ```js
-    import {ObservableObject, type} from "can-type";
+    import { ObservableObject, type } from "can";
 
     class Person extends ObservableObject {
       static props = {
@@ -63,7 +62,12 @@ CanJS 6.0 is a major step forward for CanJS, fully embracing [JavaScript classes
 
     person.age = "14"; // throws!!
     ```
+
   - Internet Explorer 11 support (still!)
+
+Although [can-stache-element StacheElement], [can-observable-object ObservableObject], and [can-observable-array ObservableArray] use features such as [classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes) and [proxies](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) that are not supported in IE11, you can continue to use [can-component Component] and [can-define DefineMap and DefineList] if your application needs to be compatible with IE11.
+
+See the [guides/setup#IE11Support Setup Guide] for more details.
 
 ## Breaking Changes
 
@@ -80,7 +84,7 @@ nodeLists have been completely removed from CanJS, but because several packages 
 In 5.0 we changed [can-route.data route.data] to be a [can-define/map/map DefineMap] that was automatically connected to the route's properties. This meant you could use dot notation to listen to changes in route properties like so:
 
 ```js
-import {DefineMap, route} from "can";
+import { DefineMap, route } from "can";
 
 const ApplicationViewModel = DefineMap.extend("ApplicationViewModel", {
   page: {
@@ -99,7 +103,7 @@ Now `route.data` is instead an [can-observable-object ObservableObject]. Unless 
 If you want to continue to use a [can-define/map/map DefineMap] you can set `route.data` before any calls to [can-route.register]:
 
 ```js
-import {DefineMap, route} from "can";
+import { DefineMap, route } from "can/everything";
 
 const ApplicationViewModel = DefineMap.extend("ApplicationViewModel", {
   page: {
@@ -122,21 +126,21 @@ The event [can-component/beforeremove] was deprecated as part of CanJS 4.0 and i
 In 6.0 this event was removed. Instead use [can-component/connectedCallback] with a return function. This function will be called when the ViewModel is torn down.
 
 ```js
-import {Component} from "can";
+import { Component } from "can";
 
 Component.extend({
   tag: "my-component",
   view: `
-      <p>Name changed: {{nameChanged}}</p>
-      <p>Name: <input value:bind="name"/></p>
+      <p>Name changed: {{ this.nameChanged }}</p>
+      <p>Name: <input value:bind="this.name"/></p>
   `,
   ViewModel: {
-      nameChanged: {type: "number", default: 0},
+      nameChanged: { type: "number", default: 0 },
       name: "string",
-      connectedCallback( element ) {
-          this.listenTo( "name", function() {
+      connectedCallback(element) {
+          this.listenTo("name", () => {
               this.nameChanged++;
-          } );
+          });
           const disconnectedCallback = this.stopListening.bind( this );
           return disconnectedCallback;
       }
@@ -149,13 +153,13 @@ Component.extend({
 The module `can-connect/can/tag` has been moved to its own package at [can-connect-tag]. You can import and use it like so:
 
 ```js
-import {connectTag, restModel, DefineMap, DefineList} from "can";
+import { connectTag, restModel, DefineMap, DefineList } from "can/everything";
 
 const Todo = DefineMap.extend({
-    id: {identity: true, type: "number"},
+    id: { identity: true, type: "number" },
     name: "string"
 });
-Todo.List = DefineList.extend({"#": Todo});
+Todo.List = DefineList.extend({ "#": Todo });
 
 Todo.connection = restModel({
     url: "/todos/{id}",
@@ -165,9 +169,9 @@ Todo.connection = restModel({
 connectTag("todo-model", Todo.connection);
 ```
 
-### DefineMap / DefineList moved to ecosystem
+### Component / DefineMap / DefineList moved to legacy
 
-[can-define/map/map] and [can-define/list/list] are no longer part of core, but are still available as [can-ecosystem ecosystem] packages. This will only affect you if you were using the `core.mjs` or `dist/global/core.js` bundles. Use either `ecosystem.mjs` or `dist/globale/ecosystem.js` instead.
+[can-component], [can-define/map/map], and [can-define/list/list] are no longer part of core, but are still available as [can-legacy legacy] packages. This will only affect you if you were using the `core.mjs` or `dist/global/core.js` bundles. Use either `everything.mjs` or `dist/globale/everything.js` instead.
 
 ## Recommended Changes
 
@@ -175,7 +179,7 @@ The following are suggested changes to make sure your application is compatible 
 
 ### Map, List in connections renamed
 
-The property `Map` and `List` which are used to configure the instance and list types to create, has been renamed. Most likely this is used in configuration of [can-rest-model] or [can-realtime-rest-model], but it also might be used with [can-connect] directly. These have been renamed to `ObjectType` and `ArrayType` respectfully. This is to keep in line with the new class-based [can-observable-object] and [can-observable-array] types.
+The `Map` and `List` properties which are used to configure the instance and list types to create, have been renamed. Most likely this is used in configuration of [can-rest-model] or [can-realtime-rest-model], but it also might be used with [can-connect] directly. These have been renamed to `ObjectType` and `ArrayType`, respectively. This is to keep in line with the new class-based [can-observable-object] and [can-observable-array] types.
 
 ```js
 Todo.connection = restModel({
@@ -202,7 +206,7 @@ In CanJS 3.0 the [can-define/map/map DefineMap] and [can-define/list/list Define
 In 6.0 we are taking the next big step, by allowing [JavaScript classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes) to be used as models through the new [can-observable-object ObservableObject] and [can-observable-array ObservableArray] base classes. You can extend them using the [extends](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/extends) keywork like so:
 
 ```js
-import {ObservableObject} from "can";
+import { ObservableObject } from "can";
 
 class Todo extends ObservableObject {
 
@@ -274,7 +278,7 @@ const ViewModel = DefineMap.extend("TodoList", {
     get() {
       return Todo.getList();
     }
-  }
+  },
   todos: {
     get(lastSet, resolve) {
       this.todosPromise.then(resolve);
@@ -341,19 +345,18 @@ Here are some of the major differences between [can-stache-element] and [can-com
 Like with [can-observable-object] you create elements using `class Component extends` rather than [can-component.extend]. Because of this you need to use the separate [customElements.define](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define) call to register the class as a custom element.
 
 ```js
-import {StacheElement} from "can";
+import { StacheElement } from "can";
 
 class MyElement extends StacheElement {
 
 }
-
 customElements.define("my-element", MyElement);
 ```
 
 Replaces:
 
 ```js
-import {Component} from "can";
+import { Component } from "can";
 
 Component.extend({
   tag: "my-element"
@@ -367,11 +370,11 @@ In [can-component] an [can-component.prototype.events events] object can be used
 It's recommended to instead use [can-stache-bindings.event] in the template *or* [can-event-queue/map/map.listenTo] in the element's [can-stache-element/lifecycle-hooks.connected] lifecycle hook.
 
 ```js
-import {Component} from "can";
+import { Component } from "can";
 
 Component.extend({
   tag: "my-element",
-  view: `<button>Increment {{count}}</button>`,
+  view: `<button>Increment {{ this.count }}</button>`,
   ViewModel: {
     count: {
       default: 0
@@ -389,10 +392,10 @@ Component.extend({
 Instead do it this way:
 
 ```js
-import {StacheElement} from "can";
+import { StacheElement } from "can";
 
 class MyElement extends StacheElement {
-  static view = `<button on:click="this.increment()">Increment {{count}}</button>`;
+  static view = `<button on:click="this.increment()">Increment {{ this.count }}</button>`;
   static props = {
     count: 0
   };
@@ -401,17 +404,16 @@ class MyElement extends StacheElement {
     this.count++;
   }
 }
-
 customElements.define("my-element", MyElement);
 ```
 
 When listening to properties on the element for side-effects you can use listenTo like so:
 
 ```js
-import {StacheElement} from "can";
+import { StacheElement } from "can";
 
 class MyElement extends StacheElement {
-  static view = `<button on:click="this.increment()">Increment {{count}}</button>`;
+  static view = `<button on:click="this.increment()">Increment {{ this.count }}</button>`;
   static props = {
     count: 0
   };
@@ -426,7 +428,28 @@ class MyElement extends StacheElement {
     });
   }
 }
+customElements.define("my-element", MyElement);
+```
 
+If the options above do not work for you, you can replace your `events` object with a [can-control] like:
+
+```js
+import { StacheElement, Control } from "can/everything";
+
+class MyElement extends StacheElement {
+  static view = `<button>Increment {{ this.count }}</button>`;
+  static props = {
+    count: 0
+  };
+  connected() {
+    const EventsControl = Control.extend({
+      "button click": function() {
+        this.element.count++;
+      }
+    });
+    new EventsControl(this);
+  }
+}
 customElements.define("my-element", MyElement);
 ```
 
@@ -435,7 +458,7 @@ customElements.define("my-element", MyElement);
 [can-component] supported a `<content/>` element as a way to inserting light DOM content from a parent component like so:
 
 ```js
-import {Compoent} from "can";
+import { Compoent } from "can";
 
 Component.extend({
   tag: "my-child",
@@ -448,10 +471,10 @@ Component.extend({
 });
 ```
 
-With improvements to [can-stache] it's not possible to pass templates through properties. This gives more flexibility.
+With improvements to [can-stache], it's now possible to pass templates through properties. This gives more flexibility.
 
 ```js
-import {StacheElement} from "can";
+import { StacheElement } from "can";
 
 class MyChild extends StacheElement {
   static view = `{{ this.content() }}`;
@@ -464,7 +487,32 @@ class MyParent extends StacheElement {
       Hello from the parent
     {{/ content }}
     <my-child content:from="content" />
-  `
+  `;
 }
 customElements.define("my-parent", MyParent);
 ```
+@codepen
+
+You can also use the [can-stache-element#Passingtemplates_customizinglayout_ <can-template>] tag to pass templates that have access to the same scope as the component they are being passed to:
+
+```js
+import { StacheElement } from "can";
+
+class MyChild extends StacheElement {
+  static view = `{{ this.content() }}`;
+}
+customElements.define("my-child", MyChild);
+
+class MyParent extends StacheElement {
+  static view = `
+    {{ let where = "the parent" }}
+    <my-child>
+      <can-template name="content">
+        Hello from {{ where }}
+      </can-template>
+    </my-child>
+  `;
+}
+customElements.define("my-parent", MyParent);
+```
+@codepen
