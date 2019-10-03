@@ -62,7 +62,12 @@ CanJS 6.0 is a major step forward for CanJS, fully embracing [JavaScript classes
 
     person.age = "14"; // throws!!
     ```
+
   - Internet Explorer 11 support (still!)
+
+Although [can-stache-element StacheElement], [can-observable-object ObservableObject], and [can-observable-array ObservableArray] use features such as [classes](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes) and [proxies](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) that are not supported in IE11, you can continue to use [can-component Component] and [can-define DefineMap and DefineList] if your application needs to be compatible with IE11.
+
+See the [guides/setup#IE11Support Setup Guide] for more details.
 
 ## Breaking Changes
 
