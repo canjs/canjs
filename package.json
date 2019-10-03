@@ -126,7 +126,7 @@
     "can-stache-converters": "4.2.6",
     "can-stache-element": "0.8.1",
     "can-stache-key": "1.4.3",
-    "can-stache-route-helpers": "1.2.1",
+    "can-stache-route-helpers": "2.0.0",
     "can-stream": "1.1.1",
     "can-stream-kefir": "1.2.1",
     "can-string": "1.1.0",
