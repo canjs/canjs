@@ -113,7 +113,7 @@
     "can-reflect-dependencies": "1.1.2",
     "can-reflect-promise": "2.2.1",
     "can-rest-model": "1.1.1",
-    "can-route": "4.4.9",
+    "can-route": "5.0.0",
     "can-route-hash": "1.0.2",
     "can-route-mock": "1.0.2",
     "can-route-pushstate": "5.0.14",
