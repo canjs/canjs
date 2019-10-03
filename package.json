@@ -274,19 +274,19 @@
     "codepen": [
       [
         "\"can\"",
-        "\"//unpkg.com/can@pre/core.mjs\""
+        "\"//unpkg.com/can@6/core.mjs\""
       ],
       [
         "\"can/ecosystem\"",
-        "\"//unpkg.com/can@pre/ecosystem.mjs\""
+        "\"//unpkg.com/can@6/ecosystem.mjs\""
       ],
       [
         "\"can/everything\"",
-        "\"//unpkg.com/can@pre/everything.mjs\""
+        "\"//unpkg.com/can@6/everything.mjs\""
       ],
       [
         "\"can/demos/technology-overview/mock-url\"",
-        "\"//unpkg.com/mock-url@^5.0.0/mock-url.mjs\""
+        "\"//unpkg.com/mock-url@^6.0.0/mock-url.mjs\""
       ],
       [
         "\"can/demos/technology-overview/route-mini-app-components\"",
