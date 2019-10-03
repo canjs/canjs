@@ -1,33 +1,39 @@
 // models/todo.js
-import {DefineMap, DefineList} from "can";
+import { ObservableArray, ObservableObject, type } from "can";
 
-const Todo = DefineMap.extend("Todo", {
-	id: "string",
-	name: "string",
-	complete: {
-		type: "boolean",
-		default: false
-	},
-	toggleComplete() {
-		this.complete = !this.complete;
-	}
-});
+export default class Todo extends ObservableObject {
+  static props = {
+    id: { type: type.convert(String) },
+    name: { type: type.convert(String) },
+    complete: {
+      type: type.maybeConvert(Boolean),
+      default: false
+    }
+  };
 
-Todo.List = DefineList.extend("TodoList", {
-	"#": Todo,
-	get active() {
-		return this.filter({
-			complete: false
-		});
-	},
-	get complete() {
-		return this.filter({
-			complete: true
-		});
-	},
-	get allComplete() {
-		return this.length === this.complete.length;
-	}
-});
+  toggleComplete() {
+    this.complete = !this.complete;
+  }
+}
 
-export default Todo;
+export class TodoList extends ObservableArray {
+  static items = type.convert(Todo);
+
+  static props = {
+    get active() {
+      return this.filter({
+        complete: false
+      });
+    },
+
+    get complete() {
+      return this.filter({
+        complete: true
+      });
+    },
+
+    get allComplete() {
+      return this.length === this.complete.length;
+    }
+  };
+}

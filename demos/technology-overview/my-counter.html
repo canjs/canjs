@@ -4,25 +4,23 @@
 </div>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component, DefineMap, stache } from "can";
+import { StacheElement } from "can";
 
-const Counter = DefineMap.extend({
-    count: {default: 0},
+class MyCounter extends StacheElement {
+    static view = `
+				<button on:click="this.increment()">+1</button>
+				Count: <span>{{ this.count }}</span>
+		`;
+
+    static props = {
+				count: 0
+		};
+
     increment() {
-        this.count++;
+				this.count++;
     }
-});
-
-const view = stache(`
-    <button on:click="increment()">+1</button>
-    Count: <span>{{ count }}</span>
-`);
-
-Component.extend({
-    tag: "my-counter",
-    ViewModel: Counter,
-    view: view
-});
+}
+customElements.define("my-counter", MyCounter);
 </script>
 
 </body>

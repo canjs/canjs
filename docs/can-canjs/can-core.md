@@ -1,18 +1,18 @@
 @page can-core Core
 @parent api 10
 @templateRender <% %>
-@description The best, most hardened and generally useful libraries in CanJS.  
+@description The best, most hardened and generally useful libraries in CanJS.
 
 @body
 
 ## Use
 
-CanJS’s core libraries are the best, most hardened and generally useful modules.  
+CanJS’s core libraries are the best, most hardened and generally useful modules.
 Each module is part of an independent package, so you
 should install the ones you use directly:
 
 ```
-npm install can-value can-component can-realtime-rest-model can-define can-route can-route-pushstate --save
+npm install can-value can-stache-element can-realtime-rest-model can-observable-object can-observable-array can-route can-route-pushstate --save
 ```
 
 
@@ -20,119 +20,205 @@ Let’s explore each module a bit more.
 
 ## can-value
 
-[can-value]s represent an observable value.  A compute can contain its
+[can-value]s represent an observable value.  A value can contain its
 own value and notify listeners of changes like:
 
 ```js
+import { value } from "can";
 
-import value from 'can-value';
-
-let name = value.fromValue("Justin");
+let name = value.with("Justin");
 
 // read the value
-name.value //-> "Justin"
+console.log(name.value); //-> "Justin"
 
-name.on(function(newVal, oldVal){
-	newVal //-> "Matthew"
-	oldVal //-> "Justin"
+name.on((newVal, oldVal) => {
+    console.log(newVal); //-> "Matthew"
+    console.log(oldVal); //-> "Justin"
 });
 
 name.value = "Matthew";
 ```
+@codepen
 
-More commonly, a compute derives its value from other observables.  The following
-`info` compute derives its value from a `person` map, `hobbies` list, and `age`
-compute:
+More commonly, a value derives its value from other observables.  The following
+`info` compute derives its value from a `person` object, `hobbies` array, and `age`
+value:
 
 ```js
-import DefineMap from 'can-define/map/map';
-import DefineList from 'can-define/list/list';
-import value from 'can-value';
+import { ObservableObject, ObservableArray, value } from "can";
 
-let person = new DefineMap({first: "Justin", last: "Meyer"}),
-	hobbies = new DefineList(["js","bball"]),
-	age = value.fromValue(33);
+let person = new ObservableObject({ first: "Justin", last: "Meyer" }),
+    hobbies = new ObservableArray(["js", "bball"]),
+    age = value.with(33);
 
 let info = value.returnedBy(function(){
-	return person.first +" "+ person.last+ " is "+age()+
-		"and like "+hobbies.join(", ")+".";
+    return person.first +" "+ person.last + " is " + age.value +
+        "and likes " + hobbies.join(", ") + ".";
 });
 
-info.value //-> "Justin Meyer is 33 and likes js, bball."
+console.log(info.value); //-> "Justin Meyer is 33 and likes js, bball."
 
-info.on(function(ev, newVal){
-	newVal //-> "Justin Meyer is 33 and likes js."
+info.on((newVal) => {
+    console.log(newVal); //-> "Justin Meyer is 33 and likes js."
 });
 
 hobbies.pop();
 ```
+@codepen
 
 
-## can-define
+## can-observable-object and can-observable-array
 
-[can-define/map/map] and [can-define/list/list] allow you to create observable
-maps and lists with well-defined properties.  You can
-[can-define.types.propDefinition define a property’s type initial value, enumerability, getter-setters and much more].
-For example, you can define the behavior of a `Todo` type and a `TodoList` type as follows:
+[can-observable-object] and [can-observable-array] allow you to create observable
+objects and arrays with well-defined properties.  You can
+[can-observable-object/object.types.definitionObject define a property’s type initial value, enumerability, getter-setters and much more].
+For example, you can define the behavior of a `Todo` type and a `TodoArray` type as follows:
 
 ```js
-import DefineMap from 'can-define/map/map';
-import DefineList from 'can-define/list/list';
+import { ObservableObject, ObservableArray, type } from "can";
 
-const Todo = DefineMap.extend({           // A todo has a:
-  name: "string",                       // .name that’s a string
-  complete: {                           // .complete that’s
-	type: "boolean",                    //        a boolean
-	default: false                      //        initialized to false
-  },                                    
-  dueDate: "date",                      // .dueDate that’s a date
-  get isPastDue(){                      // .pastDue that returns if the
-	return new Date() > this.dueDate;   //        dueDate is before now
-  },
-  toggleComplete: function(){           // .toggleComplete method that
-    this.complete = !this.complete;     //        changes .complete
+class Todo extends ObservableObject {
+  static props = {
+      // A todo has a:
+      // .name that’s a string
+      name: String,
+
+      complete: {                           // .complete that’s
+          type: Boolean,                    //        a boolean
+          default: false                    //        initialized to false
+      },
+
+      // .dueDate that’s a date
+      dueDate: Date,
+
+      get isPastDue(){                      // .pastDue that returns if the
+          return new Date() > this.dueDate; //        dueDate is before now
+      }
+  };
+
+  toggleComplete() {                        // .toggleComplete method that
+    this.complete = !this.complete;         //        changes .complete
   }
-});
+}
 
-const TodoList = DefineList.extend({      // A list of todos:     
-  "#": Todo,                            // has numeric properties
-                                        //         as todos
+class TodoArray extends ObservableArray {
+  static props = {
+      get completeCount(){                  // has .completeCount
+          return this.filter(               //         that returns
+            (todo) => todo.complete         //         # of
+          )                                 //         complete todos
+          .length;
+      }
+  };
 
-  get completeCount(){                  // has .completeCount that
-    return this.filter("complete")      //         returns # of
-	           .length;                 //         complete todos
-  }
-});
+  static items = type.convert(Todo);       // has numeric properties
+                                           //         as todos
+}
 ```
+@codepen
 
 This allows you to create a Todo, read its properties, and
-call back its methods like:
+call its methods like:
 
 ```js
+import { ObservableObject } from "can";
+
+class Todo extends ObservableObject {
+  static props = {
+      // A todo has a:
+      // .name that’s a string
+      name: String,
+
+      complete: {                           // .complete that’s
+          type: Boolean,                    //        a boolean
+          default: false                    //        initialized to false
+      },
+
+      // .dueDate that’s a date
+      dueDate: Date,
+
+      get isPastDue(){                      // .pastDue that returns if the
+          return new Date() > this.dueDate; //        dueDate is before now
+      }
+  };
+
+  toggleComplete() {                        // .toggleComplete method that
+    this.complete = !this.complete;         //        changes .complete
+  }
+}
 const dishes = new Todo({
 	name: "do dishes",
 	// due yesterday
-	dueDate: new Date() - 1000 * 60 * 60 * 24
+	dueDate: new Date(new Date() - 1000 * 60 * 60 * 24)
 });
-dishes.name      //-> "do dishes"
-dishes.isPastDue //-> true
-dishes.complete  //-> false
-dishes.toggleComplete()  
-dishes.complete  //-> true
+console.log(dishes.name);      //-> "do dishes"
+console.log(dishes.isPastDue); //-> true
+console.log(dishes.complete);  //-> false
+dishes.toggleComplete();
+console.log(dishes.complete);  //-> true
 ```
+@highlight 26-35,only
+@codepen
 
-And it allows you to create a `TodoList`, access its items and properties
+And it allows you to create a `TodoArray`, access its items and properties
 like:
 
 ```js
-const todos = new TodoList( dishes, {name: "mow lawn", dueDate: new Date()});
-todos.length         //-> 2
-todos[0].complete    //-> true
-todos.completeCount //-> 1
+import { ObservableObject, ObservableArray, type } from "can";
+
+class Todo extends ObservableObject {
+  static props = {
+      // A todo has a:
+      // .name that’s a string
+      name: String,
+
+      complete: {                           // .complete that’s
+          type: Boolean,                    //        a boolean
+          default: false                    //        initialized to false
+      },
+
+      // .dueDate that’s a date
+      dueDate: Date,
+
+      get isPastDue(){                      // .pastDue that returns if the
+          return new Date() > this.dueDate; //        dueDate is before now
+      }
+  };
+
+  toggleComplete() {                        // .toggleComplete method that
+    this.complete = !this.complete;         //        changes .complete
+  }
+}
+
+class TodoArray extends ObservableArray {
+  static props = {
+      get completeCount(){                  // has .completeCount
+          return this.filter(               //         that returns
+            (todo) => todo.complete         //         # of
+          )                                 //         complete todos
+          .length;
+      }
+  };
+
+  static items = type.convert(Todo);       // has numeric properties
+                                           //         as todos
+}
+const dishes = new Todo({
+	name: "do dishes",
+	// due yesterday
+	dueDate: new Date(new Date() - 1000 * 60 * 60 * 24)
+});
+dishes.toggleComplete();
+const todos = new TodoArray([dishes, { name: "mow lawn", dueDate: new Date() }]);
+console.log(todos.length);         //-> 2
+console.log(todos[0].complete);    //-> true
+console.log(todos.completeCount);  //-> 1
 ```
+@highlight 46-49,only
+@codepen
 
 These observables provide the foundation
-for data connection (models), view-models and even routing in your application.
+for data connection (models), component properties and even routing in your application.
 
 ## can-set
 
@@ -143,10 +229,10 @@ simulated service layers.
 A `todosAlgebra` set algebra for a `GET /api/todos` service might look like:
 
 ```js
-import set from 'can-set';
+import set from "can-set";
 let todosAlgebra = new set.Algebra(
     // specify the unique identifier property on data
-    set.prop.id("_id"),  
+    set.prop.id("_id"),
     // specify that completed can be true, false or undefined
     set.prop.boolean("complete"),
     // specify the property that controls sorting
@@ -178,81 +264,61 @@ In the next section will use `todoAlgebra` to build a model with [can-connect].
 
 ## can-connect
 
-[can-connect] connects a data type, typically a `DefineMap` and its `DefineList`,
+[can-connect] connects a data type, typically an `ObservableObject` and associated `ObservableArray`,
 to a service layer. This is often done via the
-[can-connect/can/base-map/base-map] module which bundles many common behaviors
+[can-rest-model] module which bundles many common behaviors
 into a single api:
 
 ```js
-import baseMap from 'can-connect/can/base-map/base-map';
-import DefineMap from 'can-define/map/map';
-import DefineList from 'can-define/list/list';
-import set from 'can-set';
+import { ObservableObject, ObservableArray, restModel } from "can";
 
-const Todo = DefineMap.extend({
-	// ...
-});
-const TodosList = DefineMap.extend({
-	"#": Todo,
-	// ...
-});
-const todosAlgebra = new set.Algebra({
-	// ...
-});
+class Todo extends ObservableObject {
+    static props = {
+        // ...
+    };
+}
 
-const connection = baseMap({
+class TodoArray extends ObservableObject {
+    static props = {
+        // ...
+    };
+
+    static items = Todo;
+}
+
+const connection = restModel({
 	url: "/api/todos",
-	Map: Todo,
-	List: TodoList,
-	algebra: todosAlgebra,
-	name: "todo"
+	ObjectType: Todo,
+	ArrayType: TodoArray
 });
 ```
+@codepen
 
-`baseMap` extends the `Map` type, in this case, `Todo`, with
+`baseMap` extends the Object type, in this case, `Todo`, with
 the ability to make requests to the service layer.
 
  - [can-connect/can/map/map.getList Get a list] of Todos
    ```js
-   Todo.getList({complete: true}).then(function(todos){})
+   Todo.getList({ complete: true }).then((todos) => {});
    ```
  - [can-connect/can/map/map.get Get] a single Todo
    ```js
-   Todo.get({_id: 6}).then(function(todo){})
+   Todo.get({ _id: 6 }).then((todo) => {});
    ```
  - [can-connect/can/map/map.prototype.save Create] a Todo
    ```js
-   const todo = new Todo({name: "do dishes", complete: false})
-   todo.save().then(function(todo){})
+   const todo = new Todo({ name: "do dishes", complete: false });
+   todo.save().then((todo) => {});
    ```
  - [can-connect/can/map/map.prototype.save Update] an [can-connect/can/map/map.prototype.isNew already created] Todo
    ```js
    todo.complete = true;
-   todo.save().then(function(todo){})
+   todo.save().then((todo) => {});
    ```
  - [can-connect/can/map/map.prototype.destroy Delete] a Todo
    ```js
-   todo.destroy().then(function(todo){})
+   todo.destroy().then((todo) => {});
    ```
-
-[can-connect] is also middleware, so custom connections can
-be assembled too:
-
-```js
-import base from 'can-connect/base/base';
-import dataUrl from 'can-connect/data-url/data-url';
-import constructor from 'can-connect/constructor/constructor';
-import map from 'can-connect/can/map/map';
-
-const options = {
-	url: "/api/todos",
-	Map: Todo,
-	List: TodoList,
-	algebra: todosAlgebra,
-	name: "todo"
-}
-const connection = map(constructor(dataUrl(base(options))));
-```
 
 ## can-stache
 
@@ -262,15 +328,35 @@ you can create a template programmatically that lists out todos within a
 promise loaded from `Todo.getList` like:
 
 ```js
-import stache from 'can-stache';
+import { stache, ObservableObject, ObservableArray, restModel } from "can";
+
+class Todo extends ObservableObject {
+    static props = {
+        // ...
+    };
+}
+
+class TodoArray extends ObservableObject {
+    static props = {
+        // ...
+    };
+
+    static items = Todo;
+}
+
+const connection = restModel({
+	url: "/api/todos",
+	ObjectType: Todo,
+	ArrayType: TodoArray
+});
 
 // Creates a template
 let template = stache(`
 	<ul>
-		{{#if(todos.isPending)}}<li>Loading…</li>{{/if}}
-		{{#if(todos.isResolved)}}
-			{{#for(todo of todos.value)}}
-				<li class="{{#todo.complete}}complete{{/}}">{{todo.name}}</li>
+		{{# if(this.todos.isPending) }}<li>Loading…</li>{{/ if }}
+		{{# if(this.todos.isResolved) }}
+			{{# for(todo of this.todos.value) }}
+				<li class="{{# todo.complete }}complete{{/ todo.complete }}">{{ todo.name }}</li>
 			{{else}}
 				<li>No todos</li>
 			{{/for}}
@@ -286,60 +372,86 @@ let fragment = template({
 // Inserts the result into the page
 document.body.appendChild(fragment);
 ```
+@codepen
+@highlight 23-43, only
 
 [can-stache] templates use magic tags like `{{}}` to control what
 content is rendered. The most common forms of those magic tags are:
 
  - [can-stache.tags.escaped {{key}}] - Insert the value at `key` in the page. If `key` is a function or helper, run it and insert the result.
- - [can-stache.tags.section {{#key}}...{{/key}}] - Render the content between magic tags based on some criteria.  
+ - [can-stache.tags.section {{#key}}...{{/key}}] - Render the content between magic tags based on some criteria.
 
 [can-stache] templates return document fragments that update whenever
 their source data changes.
 
-## can-component
+## can-stache-element
 
-[can-component] creates custom elements with unit-testable view models. It
-combines a view model created by [can-define/map/map] with a template
+[can-stache-element] creates custom elements with unit-testable properties. It
+combines a view model created by [can-observable-object] with a template
 created by [can-stache].
 
-```js
-import Component from 'can-component';
-import DefineMap from 'can-define/map/map';
-import stache from 'can-stache';
+```html
+<todos-list></todos-list>
 
-// Defines the todos-list view model
-let TodosListVM = DefineMap.extend({
-	// An initial value that is a promise containing the
-	// list of all todos.
-	todos: {
-		default: function(){
-			return Todo.getList({});
-		}
-	},
-	// A method that toggles a todo’s complete property
-	// and updates the todo on the server.
-	toggleComplete: function(todo){
-		todo.complete = !todo.complete;
-		todo.save();
-	}
+<script type="module">
+import { StacheElement, stache, ObservableObject, ObservableArray, restModel } from "can";
+
+class Todo extends ObservableObject {
+    static props = {
+        // ...
+    };
+}
+
+class TodoArray extends ObservableObject {
+    static props = {
+        // ...
+    };
+
+    static items = Todo;
+}
+
+const connection = restModel({
+	url: "/api/todos",
+	ObjectType: Todo,
+	ArrayType: TodoArray
 });
 
-Component.extend({
-	tag: "todos-list",
-	ViewModel: TodosVM,
-	view: `
-		<ul>
-			{{#if(todos.isPending)}}<li>Loading…</li>{{/if}}
-			{{#if(todos.isResolved)}}
-				{{#for(todo of todos.value)}}
-					"<li class='{{#todo.complete}}complete{{/}}'>{{todo.name}}</li>
-				{{else}}
-					<li>No todos</li>
-				{{/for}}
-			{{/if}}
-		</ul>`
-});
+class TodosList extends StacheElement {
+    static view = `
+			<ul>
+				{{# if(this.todos.isPending) }}<li>Loading…</li>{{/ if }}
+				{{# if(this.todos.isResolved) }}
+					{{# for(todo of this.todos.value) }}
+						<li class="{{# todo.complete }}complete{{/ todo.complete }}">{{ todo.name }}</li>
+					{{else}}
+						<li>No todos</li>
+					{{/for}}
+				{{/if}}
+			</ul>
+    `;
+
+    // Defines the todos-list component’s properties
+    static props = {
+        // An initial value that is a promise containing the
+        // list of all todos.
+        todos: {
+            get default() {
+                return Todo.getList({});
+            }
+        },
+        // A method that toggles a todo’s complete property
+        // and updates the todo on the server.
+        toggleComplete(todo) {
+            todo.complete = !todo.complete;
+            todo.save();
+        }
+    };
+}
+customElements.define("todos-list", TodosList);
+</script>
 ```
+@highlight 26-57, only
+@codepen
 
 ## can-stache-bindings
 
@@ -395,33 +507,34 @@ Bindings look like:
 
 ## can-route and can-route-pushstate
 
-[can-route] connects a `DefineMap`’s properties to values in the
-url. Create a map type, [canjs/doc/can-route.map connect it to the url], and [can-route.ready begin routing] like:
+[can-route] connects an `ObservableObject`’s properties to values in the
+url. Create an object type, [can-route.data connect it to the url], and [can-route.start begin routing] like:
 
 ```js
-import route from 'can-route';
-import DefineMap from 'can-define/map/map';
+import { ObservableObject, route } from "can";
 
-const AppViewModel = DefineMap.extend({
-	seal: false
-},{
-	// Sets the default type to string
-	"#": "string",
-	todoId: "string",
-	todo: {
-		get: function(){
-			if(this.todoId) {
-				return Todo.get({_id: this.todoId})
-			}
-		}
-	}
-});
+class AppViewModel extends ObservableObject {
+    static props = {
+        // Sets the default type to string
+        todoId: String,
+        todo: {
+            get: function(){
+                if(this.todoId) {
+                    return Todo.get({_id: this.todoId})
+                }
+            }
+        }
+    };
+
+    static items = String;
+}
 
 const appViewModel = new AppViewModel();
-route.map(appViewModel);
+route.data = appViewModel;
 
 route.start();
 ```
+@codepen
 
 When the url changes, to something like `#!&todoId=5`, so will the
 `appViewModel`’s `todoId` and `todo` property:
@@ -443,7 +556,7 @@ The hash will be updated:
 window.location.hash //-> "#!&todoId=6"
 ```
 
-The `route` function can be used to specify pretty routing rules that
+The [can-route.register route.register] function can be used to specify pretty routing rules that
 translate property changes to a url and a url to property changes. For example,
 
 ```js
@@ -457,12 +570,13 @@ window.location.hash = "#!todo/7";
 appViewModel.serialize() //-> {route: "todo/{todoId}", todoId: "7"}
 ```
 
-[can-route-pushstate] adds [pushstate](https://developer.mozilla.org/en-US/docs/Web/API/History_API) support. It
-mixes in this behavior so you just need to import the module:
+[can-route-pushstate] adds [pushstate](https://developer.mozilla.org/en-US/docs/Web/API/History_API) support.
+To use it, set [can-route.urlData route.urlData] to an instance of `RoutePushstate`:
 
 ```js
-import route from 'can-route';
-import 'can-route-pushstate';
+import { route, RoutePushstate } from "can";
+
+route.urlData = new RoutePushstate();
 ```
 
 

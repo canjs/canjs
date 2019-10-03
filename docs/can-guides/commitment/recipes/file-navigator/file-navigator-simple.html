@@ -1,49 +1,49 @@
 <file-navigator></file-navigator>
-<script src="//unpkg.com/can@5/dist/global/can.all.js"></script>
-<script>
-    let entityId = 1;
 
-    const makeEntities = function(parentId, depth) {
-        if (depth > 5) {
-            return [];
-        }
+<script type="module">
+	import { fixture } from "//unpkg.com/can@pre/core.mjs";
 
-        const entitiesCount = can.fixture.rand(6);
+	let entityId = 1;
 
-        const entities = [];
+	const makeEntities = function(parentId, depth) {
+		if (depth > 5) {
+			return [];
+		}
 
-        for (let i = 0; i < entitiesCount; i++) {
+		const entitiesCount = fixture.rand(6);
 
-            // The id for this entity
-            const id = "" + (entityId++);
+		const entities = [];
 
-            // If the entity is a folder or file
-            const isFolder = Math.random() > 0.3;
+		for (let i = 0; i < entitiesCount; i++) {
+			// The id for this entity
+			const id = "" + entityId++;
 
-            // The children for this folder.
-            const children = isFolder ? makeEntities(id, depth + 1) : [];
+			// If the entity is a folder or file
+			const isFolder = Math.random() > 0.3;
 
-            const entity = {
-                id: id,
-                name: (isFolder ? "Folder" : "File") + " " + id,
-                parentId: parentId,
-                type: (isFolder ? "folder" : "file"),
-                hasChildren: children.length ? true : false
-            };
-            entities.push(entity);
-            if (isFolder) {
-                entity.children = children;
-            }
+			// The children for this folder.
+			const children = isFolder ? makeEntities(id, depth + 1) : [];
 
-        }
-        return entities;
-    };
+			const entity = {
+				id: id,
+				name: (isFolder ? "Folder" : "File") + " " + id,
+				parentId: parentId,
+				type: isFolder ? "folder" : "file",
+				hasChildren: children.length ? true : false
+			};
+			entities.push(entity);
+			if (isFolder) {
+				entity.children = children;
+			}
+		}
+		return entities;
+	};
 
-    window.rootEntityData = {
-        id: "0",
-        name: "ROOT/",
-        hasChildren: true,
-        type: "folder",
-        children: makeEntities("0", 0)
-    };
+	window.rootEntityData = {
+		id: "0",
+		name: "ROOT/",
+		hasChildren: true,
+		type: "folder",
+		children: makeEntities("0", 0)
+	};
 </script>

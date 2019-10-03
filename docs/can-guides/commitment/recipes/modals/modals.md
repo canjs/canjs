@@ -8,9 +8,9 @@
 
 The final widget looks like:
 
-<p class="codepen" data-height="426" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="oVwgOz" style="height: 426px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 - Multiple Modals - Final">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/oVwgOz/">
-  CanJS 5.0 - Multiple Modals - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="426" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="pozKzZo" style="height: 426px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6.0 - Multiple Modals - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/pozKzZo/">
+  CanJS 6.0 - Multiple Modals - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
@@ -26,7 +26,7 @@ The following sections are broken down the following parts:
 
 ### The problem
 
-In this section, we will fork [this CodePen](https://codepen.io/bitovi/pen/eXRmaw?editors=1000) that contains some starting code that we will modify to use modals instead of adding
+In this section, we will fork [this CodePen](https://codepen.io/bitovi/pen/OJLdJvj?editors=1000) that contains some starting code that we will modify to use modals instead of adding
 each form directly in the page.
 
 ### What you need to know
@@ -52,16 +52,16 @@ __START THIS TUTORIAL BY CLONING THE FOLLOWING CODEPEN__:
 
 > Click the `EDIT ON CODEPEN` button.  The CodePen will open in a new window. In that new window,  click `FORK`.
 
-<p class="codepen" data-height="316" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="eXRmaw" style="height: 316px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 - Multiple Modals - Setup">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/eXRmaw/">
-  CanJS 5.0 - Multiple Modals - Setup</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="316" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="OJLdJvj" style="height: 316px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6.0 - Multiple Modals - Setup">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/OJLdJvj/">
+  CanJS 6.0 - Multiple Modals - Setup</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
 This CodePen:
 
-- Loads all of CanJS’s packages. Each package is available as a named export.  For example [can-component]
-  is available as `import {Component} from "can"`.
+- Loads all of CanJS’s packages. Each package is available as a named export.  For example [can-stache-element]
+  is available as `import { StacheElement } from "can"`.
 
 
 
@@ -87,10 +87,10 @@ In this section, we will:
   an `<h1>` element:
 
   ```js
-  Component.extend({
-      tag: "custom-element",
-      view: `<h1><content></content></h1>`
-  })
+  class CustomElement extends StacheElement {
+    static view = `<h1><content></content></h1>`;
+  }
+  customElements.define("custom-element", CustomElement);
   ```
 
 ### How to verify it works
@@ -103,7 +103,7 @@ form should appear.
 Update the `JS` tab to:
 
 @sourceref ./1-simple-modal.js
-@highlight 92-100,109-111,only
+@highlight 133-142,153-157,only
 
 ## Pass a component instance ##
 
@@ -116,63 +116,59 @@ in a modal instead of "light DOM".
 
 ### What you need to know
 
-- Use `{default(){ /* ... */ }}` to create a default value for a property:
+- Use `{ get default() { /* ... */ }}` to create a default value for a property:
 
   ```js
-  ViewModel: {
+  class MyComponent extends StacheElement {
+    static props = {
       dueDate: {
-          default(){
-              return new Date();
-          }
+        get default(){
+          return new Date();
+        }
       }
+    };
   }
   ```
 
 - Component instances can be created like:
   ```js
-  let component = new ProgrammerQuestions({
-      viewModel: {
-          programmingLanguage: "JS"
-      }
+  const component = new ProgrammerQuestions().initialize({
+    programmingLanguage: "JS"
   });
   ```
 
   This is roughly equivalent to:
 
   ```html
-  <programmer-questions programmingLanguage:from="'JS'"/>
+  <programmer-questions programmingLanguage:from="'JS'" />
   ```
 
-- Use [can-value] to setup a two-way binding from one component to another:
+- Use [can-value] and [can-stache-element/lifecycle-methods.bindings] to setup a two-way binding from one component to another:
 
   ```js
-  ViewModel: {
-      programmerQuestions: {
-          default(){
-              return let component = new ProgrammerQuestions({
-                  viewModel: {
-                      programmingLanguage: value.bind(this, "programmingLanguage")
-                  }
-              });
-          }
-      }
-  }
+  static props = {
+    get default() {
+      return new ProgrammerQuestions().bindings({
+        programmingLanguage: value.bind(this, "programmingLanguage")
+      });
+    }
+  };
   ```
 
   This is roughly equivalent to:
 
   ```html
-  <programmer-questions programmingLanguage:bind="programmingLanguage"/>
+  <programmer-questions programmingLanguage:bind="this.programmingLanguage" />
   ```
 
-- Render a component instance with `{{component}}`.
+- Render a component instance with `{{ component }}`.
 
 ### The solution
 
 Update the `JS` tab to:
 
 @sourceref ./2-passing-components.js
-@highlight 97,110,128-136,only
+@highlight 137,154,179-185,only
 
 
 ## Show multiple modals in the window ##
@@ -191,29 +187,26 @@ We will do this by:
 
 - Changing `<my-modals>` to:
   - take an array of component instances.
-  - position the component instances within `<div class='modal-container'>` elements
+  - position the component instances within `<div class="modal-container">` elements
     20 pixels apart.
 - Changing `<my-app>` to:
   - create instances for the `OccupationQuestions`, `ProgrammerQuestions`, and
   `IncomeQuestions` components.
   - create a `visibleQuestions` array that contains only the instances that
-    should be presented to the user.  
+    should be presented to the user.
 
 ### What you need to know
 
-- Use ES5 getters to transform stateful properties on a ViewModel to
-  new values.  For example, the following returns `true` if someone is a
-  diva and a programmer:
+- Use ES5 getters to transform component's stateful properties to new values.  For example, the following returns `true` if someone is a diva and a programmer:
 
   ```js
-  ViewModel: {
-      isDiva: "boolean",
-      isProgrammer: "boolean",
-
-      get isDivaAndProgrammer(){
-          return this.isDiva && this.isProgrammer;
-      }
-  }
+  static props = {
+    isDiva: Boolean,
+    isProgrammer: Boolean,
+    get isDivaAndProgrammer() {
+      return this.isDiva && this.isProgrammer;
+    }
+  };
   ```
 
   This can be used to derive the `visibleQuestions` array.
@@ -224,7 +217,7 @@ We will do this by:
 Update the `JS` tab to:
 
 @sourceref ./3-multiple-modals.js
-@highlight 94-120,126-132,142-151,161-195,only
+@highlight 134-162,169-175,192-199,209-241,only
 
 ## Next should move to the next window ##
 
@@ -241,12 +234,15 @@ questions should be returned by `visibleQuestions`.
 The following creates a counting index and a method that increments it:
 
 ```js
-ViewModel: {
-    questionIndex: { default: 0 },
+class MyModals extends StacheElement {
+  // ...
+  static props = {
+    questionIndex: { default: 0 }
+  };
 
-    next(){
-        this.questionIndex++;
-    }
+  next() {
+    this.questionIndex += 1;
+  }
 }
 ```
 
@@ -254,26 +250,24 @@ To pass the `next` function to a component, you must make sure that the right `t
 is preserved.  You can do that with `function.bind` like:
 
 ```js
-new ProgrammerQuestions({
-    viewModel: {
-        programmingLanguage: value.bind(this, "programmingLanguage"),
-        next: this.next.bind(this)
-    }
+new ProgrammerQuestions().bindings({
+  programmingLanguage: value.bind(this, "programmingLanguage"),
+  next: this.next.bind(this)
 });
 ```
 
 ### The solution
 
 @sourceref ./4-next.js
-@highlight 148,158,168,178,184,200,204-206,only
+@highlight 198,207,216,225,230,247,252-254,only
 
 ## Result
 
 When complete, you should have a working multiple modal form like the following CodePen:
 
-<p class="codepen" data-height="426" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="oVwgOz" style="height: 426px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 - Multiple Modals - Final">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/oVwgOz/">
-  CanJS 5.0 - Multiple Modals - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="426" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="pozKzZo" style="height: 426px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6.0 - Multiple Modals - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/pozKzZo/">
+  CanJS 6.0 - Multiple Modals - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 

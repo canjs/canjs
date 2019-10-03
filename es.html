@@ -6,13 +6,18 @@
 <my-app></my-app>
 
 <script type="module">
-	import { Component, fixture, realtimeRestModel } from "//unpkg.com/can@pre/core.mjs";
+	import { fixture, realtimeRestModel, StacheElement } from "//unpkg.com/can@pre/core.mjs";
 
-	Component.extend({
-		tag: "my-app",
-		view: `CanJS {{ feels }} modules`,
-		ViewModel: {
-			feels: { default: "😍" }
-		}
-	});
+    class MyApp extends StacheElement {
+        static get view() {
+            return `CanJS {{ feels }} modules`;
+        }
+
+        static get props() {
+            return {
+                feels: { default: "😍" }
+            };
+        }
+    };
+    customElements.define("my-app", MyApp);
 </script>

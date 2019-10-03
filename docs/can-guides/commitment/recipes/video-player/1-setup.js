@@ -1,13 +1,15 @@
-import {Component} from "//unpkg.com/can@5/core.mjs";
+import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
-Component.extend({
-  tag: "video-player",
-  view: `
-    <video controls>
-      <source src="{{ src }}"/>
-    </video>
-  `,
-  ViewModel: {
-    src: "string",
-  }
-});
+class VideoPlayer extends StacheElement {
+	static view = `
+		<video controls>
+			<source src="{{ this.src }}">
+		</video>
+	`;
+
+	static props = {
+		src: String
+	};
+}
+
+customElements.define("video-player", VideoPlayer);

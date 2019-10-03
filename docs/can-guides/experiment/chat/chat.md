@@ -11,9 +11,9 @@
 
 We are building the following functionality:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="YgQXZE" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 Chat - Final">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/YgQXZE/">
-  CanJS 5.0 Chat - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="OJLgEbx" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6.0 Chat - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/OJLgEbx/">
+  CanJS 6.0 Chat - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
@@ -21,9 +21,9 @@ We are building the following functionality:
 
 The easiest way to get started is to _Fork_ the following CodePen by clicking the __Edit On CodePen__ button on the top right:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="VRWLbM" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 Chat - Start">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/VRWLbM/">
-  CanJS 5.0 Chat - Start</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="PoYjaWK" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6.0 Chat - Start">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/PoYjaWK/">
+  CanJS 6.0 Chat - Start</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
@@ -34,7 +34,7 @@ The CodePen also importing [guides/setup##ImportingthecoreESmodulebundle core.mj
 you can import different APIs into your app:
 
 ```js
-import {DefineMap, Component} from "//unpkg.com/can@5/core.mjs"
+import {ObservableObject, StacheElement} from "//unpkg.com/can@5/core.mjs";
 ```
 
 Read [guides/setup] for instructions on how to set up CanJS in a real app.
@@ -59,18 +59,18 @@ In your CodePen, update the `HTML` panel to:
 
 Update the `JavaScript` panel to:
 
- - Define an application component (`chat-app`) by extending [can-component]. Its definition includes:
-   - A `tag` that is the name of the custom element being defined.
+ - Define an application class (`chat-app`) by extending [can-stache-element] class. Its definition includes:
    - A [can-stache] `view` that contains the contents of the `chat-app` element.  This view:
      - Inserts a `message` value within a responsive Bootstrap container using [can-stache.tags.escaped].
      - Listen for `click` events and call `addExcitement` with [can-stache-bindings.event].
-   - A [can-define/map/map] `ViewModel` definition.  This definition includes:
+   - A [can-observable-object] `props` definition.  This definition includes:
      - A `message` property that is a [can-define.types string]
        value [can-define.types.default initialized] to `"Chat Home"`.
-     - An `addExcitement` method that adds `"!"` to the end of the `message` property.
+   - An `addExcitement` method that adds `"!"` to the end of the `message` property.
+	 - Register the customElement.
 
 @sourceref ./1-hello-world/js.js
-@highlight 1,3-26
+@highlight 1,3-28
 
 When complete, you should see a large “Chat Home” title in the `Output` panel.  Click on it and
 things will get really exciting!
@@ -80,24 +80,23 @@ things will get really exciting!
    <source src="../../docs/can-guides/experiment/chat/1-hello-world/completed.ogg" type="video/ogg">
 </video>
 
-This step sets up the essential basics of a CanJS application — a [can-component]
-custom element with a [can-stache] view and [can-define/map/map] ViewModel.
+This step sets up the essential basics of a CanJS application — a [can-stache-element]
+custom element with a [can-stache] view and [can-observable-object] props.
 
-The properties and methods the `view` uses are defined in the `ViewModel`
-type.  We defined a `message` and an `addExcitement` method.
+The properties and methods the `view` uses are defined in the `props` and on the `class`.  We defined a `message` and an `addExcitement` method.
 
 The templates are a dialect of [mustache](https://github.com/janl/mustache.js) and [handlebars](https://github.com/wycats/handlebars.js/) syntax.  The
 mustache syntax allows a very terse writing style for the most common
 patterns within templates:
 
  - inserting data with [can-stache.tags.escaped]
- - looping with [can-stache.helpers.each]
+ - looping with [can-stache.helpers.for-of]
  - branching with [can-stache.helpers.if] or [can-stache.helpers.is]
 
 
 
-> __Key take-away:__ You define `ViewModel` method and property behaviors.
-> The `ViewModel` methods can be called by [can-stache] `view`s.  The `ViewModel`
+> __Key take-away:__ You define method and property behaviors.
+> The methods can be called by [can-stache] `view`s.  The `StacheElement`
 > properties can be observed by [can-stache] `view`s.
 
 
@@ -110,13 +109,13 @@ In this section we will:
 
 Update the `JavaScript` panel to:
 
-- Update the `chat-app` component's `view` to:
-  - Check if the `ViewModel`’s `routeData.page` property is `"home"`.  If it is, render the __home
+- Update the `chat-app` `view` to:
+  - Check if the `StacheElement`’s `routeData.page` property is `"home"`.  If it is, render the __home
     page__’s content.  If it’s not, it will render the __chat messages page__’s content with the   [can-stache.helpers.else] helper.
   - Use [can-stache-route-helpers.routeUrl] to create the right link URLs so that `page`
     will be set on [can-route.data route.data] to either `"home"` or `"chat"`.
-- Update the `chat-app` component's `ViewModel` to:
-  - Setup a connection between the [can-route.data route.data] state and the `ViewModel`’s `routeData` property by:
+- Update the `chat-app` `props` to:
+  - Setup a connection between the [can-route.data route.data] state and the `props` `routeData` property by:
     - Defining a `routeData` property with a [can-define.types.default] value
 	  that returns the [can-route.data route.data].
     - Create a pretty routing rule so if the URL looks like `"#!chat"`, the `page` property of
@@ -127,7 +126,7 @@ Update the `JavaScript` panel to:
 
 
 @sourceref ./2-routing/js.js
-@highlight 1,9-22,32-38,only
+@highlight 1,8-21,35-40,only
 
 When complete, you should be able to toggle between the two pages.  If you type:
 
@@ -139,18 +138,18 @@ in CodePen’s console tab after clicking a new page, you will be able to see th
 
 
 This step sets up basic routing between different “pages” in an application.
-CanJS’s routing is based on the values accessible to the application ViewModel.  When
+CanJS’s routing is based on the values accessible to the application `props`.  When
 those properties change, different content is shown.  
 
-We connected the application ViewModel to the routing system by having the
-ViewModel's `routeData` property return [can-route.data can-route.data].
+We connected the application `props` to the routing system by having the
+`props`'s `routeData` property return [can-route.data can-route.data].
 We initialized that connection between [can-route.data can-route.data] and the url with [can-route.start can-route.start].
 
 This makes it so if the `routeData.page` property changes, the browser’s URL will change.  If the browser’s URL changes, the `routeData.page` property changes.  
 
 > __Key take-away:__  [can-route] two-way binds changes in the browser’s URL to
-the application ViewModel and vice versa.  Use changes in
-the application ViewModel to control which content is shown.
+the application `props` and vice versa.  Use changes in
+the application `props` to control which content is shown.
 
 
 ## Chat Messages Component
@@ -161,12 +160,12 @@ In this section, we will:
 
 Update the `JavaScript` panel to:
 
-- Define a `<chat-messages>` custom element with [can-component].  It's `view` will
+- Define a `<chat-messages>` custom element with [can-stache-element].  It's `view` will
   contain the content of the __chat messages page__.
 - Update `<chat-app>`’s `view` to create a `<chat-messages>` element.
 
 @sourceref ./3-chat-messages/js.js
-@highlight 3-10,27,only
+@highlight 3-11,27,only
 
 When complete, you should see the same behavior as the previous step. You should
 be able to click back and forth between the two different pages.
@@ -199,13 +198,12 @@ to work together like:
 Breaking down an application into many isolated and potentially reusable components
 is a critical piece of CanJS software architecture.
 
-Custom elements are defined with [can-component].  Components render their `view`
-with a `ViewModel` instance.  By default, their `view` only
-has access to the data in the `ViewModel`.  You can use [can-stache-bindings event and data bindings]
+Custom elements are defined with [can-stache-element].  By default, their `view` only
+has access to the data in the `props`.  You can use [can-stache-bindings event and data bindings]
 like [can-stache-bindings.toChild] and [can-stache-bindings.twoWay] to pass data
 between custom elements.
 
-> __Key take-away:__  [can-component] makes custom elements. Break down your application
+> __Key take-away:__  [can-stache-element] makes custom elements. Break down your application
 into many bite-sized custom elements.
 
 ## List Messages
@@ -219,8 +217,8 @@ In this section, we will:
 
 Update the `JavaScript` panel to:
 
- - Define a `Message` type with [can-define/map/map].
- - Define a `Message.List` type that contains `Message` items.
+ - Define a `Message` type with [can-observable-object].
+ - Define a `MessageList` type that contains `Message` items.
  - Connect the `Message` and `Message.List` type to
    the RESTful messages service at `https://chat.donejs.com/api/messages`
    using [can-realtime-rest-model].
@@ -229,13 +227,13 @@ Update the `JavaScript` panel to:
    - Check if the messages failed to load and display the reason for the failure.
    - If messages successfully loaded, list each message’s name and body.  If there
       are no messages, write out “No messages”.
- - Update the `<chat-messages>`’s `ViewModel` to:
-   - Define a `messagesPromise` property on `ChatMessagesVM` that’s
-     [can-define.types.default] is initialized to a   [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+ - Update the `<chat-messages>`’s `props` to:
+   - Define a `messagesPromise` property on `ChatMessages` that’s
+     [can-define.types.default] is initialized to a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
      that represents the loading of all messages using [can-connect/can/map/map.getList].
 
 @sourceref ./4-list-messages/js.js
-@highlight 1,3-21,30-60,only
+@highlight 1-9,11-35,39-76,only
 
 When complete, you should see a list of messages in the __chat messages page__.
 
@@ -290,17 +288,17 @@ In this section, we will:
 Update the `<chat-messages>` __view__ to:
 
  - Create a form to enter a message’s `name` and `body`.
- - When the form is submitted, call `send` on the `ChatMessagesVM` with [can-stache-bindings.event].
- - Connect the first `<input>`’s `value` to the `ChatMessagesVM`’s `name` property with [can-stache-bindings.twoWay].
- - Connect the second `<input>`’s `value` to the `ChatMessagesVM`’s `body` property with [can-stache-bindings.twoWay].
+ - When the form is submitted, call `send` on the `ChatMessages` with [can-stache-bindings.event].
+ - Connect the first `<input>`’s `value` to the `ChatMessages`’s `name` property with [can-stache-bindings.twoWay].
+ - Connect the second `<input>`’s `value` to the `ChatMessages`’s `body` property with [can-stache-bindings.twoWay].
 
-Update the `<chat-messages>` __ViewModel__ to:
+Update the `<chat-messages>` __props__ to:
 
-- Define a `name` and `body` property on `ChatMessagesVM`.
-- Define a `send` method on `ChatMessagesVM` that creates a new `Message` and sends it to the server.
+- Define a `name` and `body` property on `ChatMessages`.
+- Define a `send` method on `ChatMessages` that creates a new `Message` and sends it to the server.
 
 @sourceref ./5-create-messages/js.js
-@highlight 55-67,75-88,only
+@highlight 68-80,91-104,only
 
 When complete, you will be able to create messages and have them appear in the list.
 
@@ -325,7 +323,7 @@ Update the `JavaScript` panel to:
   corresponding [can-connect/real-time/real-time] methods.
 
 @sourceref ./6-real-time/js.js
-@highlight 23-33,only
+@highlight 37-47,only
 
 When complete, you can open up the same CodePen in another window, create a
 message, and it will appear in the first CodePen’s messages list.
@@ -342,9 +340,9 @@ awesome!
 
 When finished, you should see something like the following CodePen:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="YgQXZE" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 Chat - Final">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/YgQXZE/">
-  CanJS 5.0 Chat - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="OJLgEbx" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6.0 Chat - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/OJLgEbx/">
+  CanJS 6.0 Chat - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 

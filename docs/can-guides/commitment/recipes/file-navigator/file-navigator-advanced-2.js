@@ -1,4 +1,4 @@
-import { fixture } from "//unpkg.com/can@5/core.mjs";
+import { fixture } from "//unpkg.com/can@6/core.mjs";
 
 // Stores the next entity id to use.
 let entityId = 1;
@@ -16,28 +16,26 @@ const makeEntities = function(parentId, depth) {
   const entities = [];
 
   for (let i = 0; i < entitiesCount; i++) {
-
     // The id for this entity
-    const id = "" + (entityId++);
+    const id = "" + entityId++;
 
     // If the entity is a folder or file
     const isFolder = Math.random() > 0.3;
 
     // The children for this folder.
-    const children = isFolder ? makeEntities(id, depth+1) : [];
+    const children = isFolder ? makeEntities(id, depth + 1) : [];
 
     const entity = {
       id: id,
       name: (isFolder ? "Folder" : "File") + " " + id,
       parentId: parentId,
-      type: (isFolder ? "folder" : "file"),
+      type: isFolder ? "folder" : "file",
       hasChildren: children.length > 0
     };
     entities.push(entity);
 
     // Add the children of a folder
-    [].push.apply(entities,  children)
-
+    [].push.apply(entities, children);
   }
   return entities;
 };

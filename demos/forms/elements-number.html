@@ -1,44 +1,44 @@
 <number-inputs></number-inputs>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component } from "can";
+import { StacheElement, type } from "can";
 
-Component.extend({
-	tag: "number-inputs",
+class NumberInputs extends StacheElement {
+    static view = `
+        <label>
+            Number (type: "number"):
+            <input type="number" value:from="this.favoriteNumber" on:input:value:to="this.favoriteNumber">
+        </label>
+        <p>
+            Number (type:"number"):
+             {{# eq(typeof(this.favoriteNumber), "string" }}
+                 "{{ this.favoriteNumber }}"
+             {{ else }}
+                 {{ this.favoriteNumber }}
+             {{/ eq }}
+        </p>
+        <label>
+            Number (type: "any"):
+            <input type="number" value:from="this.favoriteNumberAnyType" on:input:value:to="this.favoriteNumberAnyType">
+        </label>
+        <p>
+            Number (type: "any"):
+             {{# eq(typeof(this.favoriteNumberAnyType), "string" }}
+                 "{{ this.favoriteNumberAnyType }}"
+             {{ else }}
+                 {{ this.favoriteNumberAnyType }}
+             {{/ eq }}
+        </p>
+    `;
 
-	view: `
-		<label>
-			Number (type: "number"):
-			<input type="number" value:from="favoriteNumber" on:input:value:to="favoriteNumber">
-		</label>
-		<p>
-			Number (type:"number"):
-			 {{# eq(typeof(favoriteNumber), "string" }}
-				 "{{ favoriteNumber }}"
-			 {{ else }}
-				 {{ favoriteNumber }}
-			 {{/ eq }}
-		</p>
-		<label>
-			Number (type: "any"):
-			<input type="number" value:from="favoriteNumberAnyType" on:input:value:to="favoriteNumberAnyType">
-		</label>
-		<p>
-			Number (type:"any"):
-			 {{# eq(typeof(favoriteNumberAnyType), "string" }}
-				 "{{ favoriteNumberAnyType }}"
-			 {{ else }}
-				 {{ favoriteNumberAnyType }}
-			 {{/ eq }}
-		</p>
-	`,
+    static props = {
+        favoriteNumber: type.maybeConvert(Number),
+        favoriteNumberAnyType: type.Any
+    };
 
-	ViewModel: {
-		favoriteNumber: { type: "number" },
-		favoriteNumberAnyType: { type: "any" },
-		typeof(val) {
-			return typeof val;
-		}
-	}
-});
+    typeof(val) {
+        return typeof val;
+    }
+};
+customElements.define("number-inputs", NumberInputs);
 </script>

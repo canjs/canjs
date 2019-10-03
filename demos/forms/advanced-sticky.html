@@ -1,24 +1,23 @@
 <sticky-uppercase></sticky-uppercase>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component } from "can";
+import { StacheElement } from "can";
 
-Component.extend({
-	tag: "sticky-uppercase",
+class StickyUppercase extends StacheElement {
+    static view = `
+        <label>
+            scopeProp:
+            <input type="text" value:bind="this.scopeProp">
+        </label>
 
-	view: `
-		<label>
-			scopeProp:
-			<input type="text" value:bind="scopeProp">
-		</label>
+        <p>scopeProp: {{ this.scopeProp }}</p>
+    `;
 
-		<p>scopeProp: {{ scopeProp }}</p>
-	`,
-
-	ViewModel: {
-		set scopeProp(val) {
-			return val.toUpperCase();
-		}
-	}
-});
+    static props = {
+        set scopeProp(val) {
+            return val.toUpperCase();
+        }
+    };
+};
+customElements.define("sticky-uppercase", StickyUppercase);
 </script>

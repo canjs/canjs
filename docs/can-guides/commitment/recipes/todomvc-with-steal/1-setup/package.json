@@ -16,10 +16,11 @@
   },
   "steal": {
     "plugins": [
-      "steal-css","can"
+      "steal-css",
+      "can"
     ]
   },
   "dependencies": {
-    "can": "^5.2.2"
+    "can": "^6.0.0"
   }
 }

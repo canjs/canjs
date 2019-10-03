@@ -1,29 +1,28 @@
 <name-form></name-form>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component } from "can";
+import { StacheElement } from "can";
 
-Component.extend({
-	tag: "name-form",
+class NameForm extends StacheElement {
+    static view = `
+        <form>
+            <p>
+                <label>
+                    First Name:
+                    <input type="text">
+                </label>
+            </p>
+            <p>
+                <label>
+                    Last Name:
+                    <input type="text">
+                </label>
+            </p>
+            <input type="submit">
+        </form>
+    `;
 
-	view: `
-		<form>
-			<p>
-				<label>
-					First Name:
-					<input type="text">
-				</label>
-			</p>
-			<p>
-				<label>
-					Last Name:
-					<input type="text">
-				</label>
-			</p>
-			<input type="submit">
-		</form>
-	`,
-
-	ViewModel: {}
-});
+    static props = {};
+};
+customElements.define("name-form", NameForm);
 </script>

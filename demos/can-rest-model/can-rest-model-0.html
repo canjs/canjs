@@ -1,36 +1,35 @@
 <html>
 <head>
-    <style>
-        [type=date] {
-            border: none;
-        }
-    </style>
+<style>
+[type=date] {
+    border: none;
+}
+</style>
 </head>
 <body>
 <todo-list></todo-list>
 
-<script src="../../node_modules/steal/steal.js" dev-bundle></script>
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
+import { fixture, ObservableArray, ObservableObject, restModel, StacheElement, type } from "can";
 
-<script type="steal-module" id="demo-source">
-import {restModel, DefineMap, DefineList, Component, fixture} from "can";
+class Todo extends ObservableObject {
+    static props = {
+        // `id` uniquely identifies instances of this type.
+        id: { type: type.maybe(Number), identity: true },
 
-const Todo = DefineMap.extend("Todo",{
+        complete: { type: Boolean, default: false },
+        dueDate: type.maybeConvert(Date),
+        name: type.maybe(String)
+    };
+}
 
-    // `id` uniquely identifies instances of this type.
-    id: { type: "number", identity: true },
-
-    complete: { type: "boolean", default: false },
-    dueDate: "date",
-    name: "string"
-});
-
-Todo.List = DefineList.extend("TodoList",{
-    "#": Todo
-});
+class TodoListModel extends ObservableArray {
+    static items = Todo;
+}
 
 const todoConnection = restModel({
     Map: Todo,
-    List: Todo.List,
+    List: TodoListModel,
     url: "/api/todos/{id}"
 });
 
@@ -52,33 +51,33 @@ let todoStore = fixture.store(20, function(){
 
 fixture("/api/todos/{id}", todoStore);
 
-Component.extend({
-    tag: "todo-list",
-    view: `
-    <ul>
-        {{# if(todosPromise.isResolved) }}
-            {{# for( todo of todosPromise.value) }}
-                <li>
-                    <input type='checkbox' checked:bind='todo.complete' disabled/>
-                    <label>{{ todo.name }}</label>
-                    <input type='date' valueAsDate:bind='todo.dueDate' disabled/>
-                </li>
-            {{/ for }}
-        {{/ if }}
-        {{# if(todosPromise.isPending) }}
-            <li>Loading</li>
-        {{/ if }}
-    </ul>
-    `,
-    ViewModel: {
+class TodoList extends StacheElement {
+    static view = `
+        <ul>
+            {{# if(this.todosPromise.isResolved) }}
+                {{# for(todo of this.todosPromise.value) }}
+                    <li>
+                        <input type='checkbox' checked:bind='todo.complete' disabled/>
+                        <label>{{ todo.name }}</label>
+                        <input type='date' valueAsDate:bind='todo.dueDate' disabled/>
+                    </li>
+                {{/ for }}
+            {{/ if }}
+            {{# if(this.todosPromise.isPending) }}
+                <li>Loading</li>
+            {{/ if }}
+        </ul>
+    `;
+
+    static props = {
         todosPromise: {
-            default(){
+            get default() {
                 return Todo.getList({});
             }
         }
-    }
-});
-
+    };
+}
+customElements.define("todo-list", TodoList);
 </script>
 
 

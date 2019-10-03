@@ -1,17 +1,19 @@
 // Creates a mock backend with 3 todos
-import { todoFixture } from "//unpkg.com/can-demo-models@5/index.mjs";
+import { todoFixture } from "//unpkg.com/can-demo-models@6/index.mjs";
 todoFixture(3);
 
-import { Component } from "//unpkg.com/can@5/core.mjs";
+import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
-Component.extend({
-	tag: "todos-app",
-	view: `
-		<h1>{{ this.title }}</h1>
-	`,
-	ViewModel: {
-		get title() {
-			return "Today’s to-dos!";
-		}
-	}
-});
+class TodosApp extends StacheElement {
+  static view = `
+    <h1>{{ this.title }}</h1>
+  `;
+
+  static props = {
+    get title() {
+      return "Today’s to-dos!";
+    }
+  };
+}
+
+customElements.define("todos-app", TodosApp);

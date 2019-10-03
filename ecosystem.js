@@ -8,14 +8,8 @@ export { default as observe } from "./es/can-observe";
 export { default as stream } from "./es/can-stream";
 export { default as streamKefir } from "./es/can-stream-kefir";
 export { default as makeMapCompat } from "./es/can-map-compat";
-export { default as ObservableObject } from "./es/can-observable-object";
-export { default as DefineObject } from "./es/can-observable-object"; // legacy
-export { default as ObservableArray } from "./es/can-observable-array";
-export { default as DefineArray } from "./es/can-observable-array"; // legacy
 
 // Views
-export { default as StacheElement } from "./es/can-stache-element";
-export { default as StacheDefineElement } from "./es/can-stache-element"; // legacy
 export { default as stacheConverters } from "./es/can-stache-converters";
 export { default as viewAutorender } from "./es/can-view-autorender";
 
@@ -40,7 +34,7 @@ export { default as RouteMock } from "./es/can-route-mock";
 export { default as defineValidateValidatejs } from "./es/can-define-validate-validatejs";
 export { default as validate } from "./es/can-validate";
 export { default as validateValidatejs } from "./es/can-validate-validatejs";
-export { default as type } from "./es/can-type";
+export { default as DeepObservable } from "./es/can-deep-observable";
 
 // DOM Utilities
 export { default as radioChangeEvent } from "./es/can-event-dom-radiochange";

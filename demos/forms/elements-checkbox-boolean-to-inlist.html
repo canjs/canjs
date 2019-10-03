@@ -7,37 +7,38 @@ label {
 <checkbox-inlist></checkbox-inlist>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component, DefineList, stacheConverters } from "can";
+import { ObservableArray, stacheConverters, StacheElement, type } from "can";
 
-Component.extend({
-	tag: "checkbox-inlist",
+class CheckboxInlist extends StacheElement {
+    static view = `
+        {{# for(number of this.availableNumbers }}
+        <label>
+            <input type="checkbox"
+                checked:bind="boolean-to-inList(number, this.selectedNumbers)">
+                checked:bind="boolean-to-inList({{ number }}, numbers)"
+        </label>
+        {{/ for }}
+        <p>
+            selected numbers: {{# for(number of this.selectedNumbers) }}{{ number }} {{/ for }}
+        </p>
+    `;
 
-	view: `
-		{{# for(number of availableNumbers }}
-		<label>
-			<input type="checkbox"
-				checked:bind="boolean-to-inList(number, this.selectedNumbers)">
-				checked:bind="boolean-to-inList({{ number }}, numbers)"
-		</label>
-		{{/ for }}
-		<p>
-			selected numbers: {{# for(number of selectedNumbers) }}{{ number }} {{/ for }}
-		</p>
-	`,
+    static props = {
+        availableNumbers: {
+            type: type.maybeConvert(ObservableArray),
 
-	ViewModel: {
-		availableNumbers: {
-			Type: DefineList,
-			default() {
-				return [ "one", "two", "three" ];
-			}
-		},
-		selectedNumbers: {
-			Type: DefineList,
-			default() {
-				return [];
-			}
-		}
-	}
-});
+            get default() {
+                return [ "one", "two", "three" ];
+            }
+        },
+        selectedNumbers: {
+            type: type.maybeConvert(ObservableArray),
+
+            get default() {
+                return [];
+            }
+        }
+    };
+};
+customElements.define("checkbox-inlist", CheckboxInlist);
 </script>

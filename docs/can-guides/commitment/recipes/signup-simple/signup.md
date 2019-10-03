@@ -13,8 +13,8 @@ In this guide, you will learn how to:
 The final widget looks like:
 
 <p>
-  <div class="codepen" data-height="500" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="OaOxEW" style="height: 500px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Signup and Login (Simple) [Finished]">
-    <span>See the Pen <a href="https://codepen.io/bitovi/pen/OaOxEW/">
+  <div class="codepen" data-height="580" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="NWKMdYb" style="height: 580px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Signup and Login (Simple) [Finished]">
+    <span>See the Pen <a href="https://codepen.io/bitovi/pen/NWKMdYb/">
     Signup and Login (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
     on <a href="https://codepen.io">CodePen</a>.</span>
   </div>
@@ -30,11 +30,11 @@ To use the widget:
 __Start this tutorial by clicking the “Run in your browser” button below:__
 @sourceref ./0-skeleton.html
 @highlight only
-@codepen 
+@codepen
 
 This starter code includes:
 
-- CanJS (`import { ajax, fixture, type, StacheElement } from "//unpkg.com/can@5/core.mjs"` imports [can-ajax], [can-fixture], [can-type] and [can-stache-element])
+- CanJS (`import { ajax, fixture, StacheElement, type } from "//unpkg.com/can@5/core.mjs"` imports [can-ajax], [can-fixture], [can-stache-element], and [can-type])
 - Pre-made styles so the app looks pretty 😍
 - A mock service layer
 
@@ -185,8 +185,8 @@ To define a custom element, create a class that extends [can-stache-element]. Th
 For example, we will use `<signup-login>` as our custom tag:
 
 ```js
-  class SignupLogin extends StacheElement {}
-  customElements.define("signup-login", SignupLogin);
+class SignupLogin extends StacheElement {}
+customElements.define("signup-login", SignupLogin);
 ```
 
 But this doesn’t do anything. Components created with [can-stache-element] add their own HTML through their [can-stache-element/static.view view] property like this:
@@ -228,10 +228,8 @@ signupLogin.sessionPromise = Promise.resolve({user: {email: "someone@email.com"}
 - The [can-stache-element/static.props props] property on a [can-stache-element StacheElement] class specifies well-defined properties for each element instance via [can-observable-object]:
   ```js
   class SignupLogin extends StacheElement {
-  	static view = `
-  	  {{this.myProperty}}
-    `;  
-	  static props = {
+    static view = `{{ this.myProperty }}`;  
+    static props = {
       myProperty: String
     }
   }
@@ -240,13 +238,11 @@ signupLogin.sessionPromise = Promise.resolve({user: {email: "someone@email.com"}
 - The [can-observable-object/define/get-default default] property can return the initial value of a property:
   ```js
   class SignupLogin extends StacheElement {
-  	static view = `
-      {{this.myProperty}} <!-- renders “This string” -->
-    `;  
-	  static props = {
+    static view = `{{ this.myProperty }} <!-- renders “This string” -->`;
+    static props = {
       myProperty: {
         get default() {
-          return "This string"
+          return "This string";
         }
       }
     }
@@ -465,7 +461,7 @@ We’ll do this by `catch`ing the create-session request. If the request fails, 
   const source = Promise.reject({message: "foo"})
   source.catch(function(reason) {
 	  reason //-> {message: "foo"}
-  })
+  });
   ```
   @highlight 2
 
@@ -493,6 +489,6 @@ Update the __JavaScript__ tab to:
 When finished, you should have something like the following code:
 
 @sourceref ./final.html
-@codepen 
+@codepen
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>

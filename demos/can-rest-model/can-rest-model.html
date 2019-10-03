@@ -1,10 +1,10 @@
 <html>
 <head>
-    <style>
-        [type=date] {
-            border: none;
-        }
-    </style>
+<style>
+[type=date] {
+    border: none;
+}
+</style>
 </head>
 <body>
 <todo-list></todo-list>
@@ -12,25 +12,50 @@
 <script src="../../node_modules/steal/steal.js"  id="demo-source"></script>
 
 <script type="steal-module">
-import {restModel, DefineMap, DefineList, Component, fixture, stache, Reflect} from "can";
+import {
+    fixture,
+    ObservableArray,
+    ObservableObject,
+    Reflect,
+    restModel,
+    stache,
+    StacheElement,
+    type,
+} from "can";
 
-const Todo = DefineMap.extend("Todo",{
+import DeepObservable from "can-deep-observable";
 
-    // `id` uniquely identifies instances of this type.
-    id: { type: "number", identity: true },
+class Todo extends ObservableObject {
+    static get props() {
+        return {
 
-    complete: { type: "boolean", default: false },
-    dueDate: "date",
-    name: "string"
-});
+            // `id` uniquely identifies instances of this type.
+            id: { type: type.maybeConvert(Number), identity: true },
 
-Todo.List = DefineList.extend("TodoList",{
-    "#": Todo
-});
+            complete: { type: Boolean, default: false },
+            dueDate: type.maybeConvert(Date),
+            name: type.maybeConvert(String)
+        };
+    }
+
+    static get propertyDefaults() {
+        return DeepObservable;
+    }
+}
+
+class TodoListModel extends ObservableArray {
+    static get props() {
+        return {};
+    }
+
+    static get items() {
+        return type.maybeConvert(Todo);
+    }
+}
 
 const todoConnection = restModel({
     Map: Todo,
-    List: Todo.List,
+    List: TodoListModel,
     url: "/api/todos/{id}"
 });
 
@@ -54,87 +79,85 @@ let todoStore = fixture.store(30, function(){
 
 fixture("/api/todos/{id}", todoStore);
 
-Component.extend({
-    tag: "todo-list",
-    view: `
-    Sort By: <select value:bind="sort">
-        <option value="">none</option>
-        <option value="name">name</option>
-        <option value="dueDate">dueDate</option>
-    </select>
+class TodoList extends StacheElement {
+    static get view() {
+        return `
+        Sort By: <select value:bind="sort">
+            <option value="">none</option>
+            <option value="name">name</option>
+            <option value="dueDate">dueDate</option>
+        </select>
 
-    Show: <select value:bind="completeFilter">
-        <option value="">All</option>
-        <option value="complete">Complete</option>
-        <option value="incomplete">Incomplete</option>
-    </select>
+        Show: <select value:bind="completeFilter">
+            <option value="">All</option>
+            <option value="complete">Complete</option>
+            <option value="incomplete">Incomplete</option>
+        </select>
 
-    Due: <select value:bind="dueFilter">
-        <option value="">Anytime</option>
-        <option value="today">Today</option>
-        <option value="week">This Week</option>
-    </select>
+        Due: <select value:bind="dueFilter">
+            <option value="">Anytime</option>
+            <option value="today">Today</option>
+            <option value="week">This Week</option>
+        </select>
 
-    <ul>
-        {{# if(todosPromise.isResolved) }}
-            {{# for(todo of todosPromise.value) }}
-                <li>
-                    <input type='checkbox' checked:bind='todo.complete' disabled/>
-                    <label>{{ todo.name }}</label>
-                    <input type='date' valueAsDate:bind='todo.dueDate' disabled/>
-                </li>
-            {{/ for }}
-        {{/ if }}
-        {{# if(todosPromise.isPending) }}
-            <li>Loading</li>
-        {{/ if }}
-    </ul>
-    `,
-    ViewModel: {
-        sort: "string",
-        completeFilter: "string",
-        dueFilter: "string",
+        <ul>
+            {{# if(todosPromise.isResolved) }}
+                {{# for(todo of todosPromise.value) }}
+                    <li>
+                        <input type='checkbox' checked:bind='todo.complete' disabled/>
+                        <label>{{ todo.name }}</label>
+                        <input type='date' valueAsDate:bind='todo.dueDate' disabled/>
+                    </li>
+                {{/ for }}
+            {{/ if }}
+            {{# if(todosPromise.isPending) }}
+                <li>Loading</li>
+            {{/ if }}
+        </ul>
+        `;
+    }
 
-        todosPromise: {
-            get(){
-                let query = {filter: { }};
-                if(this.sort) {
-                    query.sort =  this.sort;
-                }
-                if(this.completeFilter) {
-                    query.filter.complete = this.completeFilter === "complete";
-                }
-                if(this.dueFilter) {
-                    let day = 24*60*60*1000;
-                    let now = new Date();
-                    let today = new Date(now.getFullYear(), now.getMonth(), now.getDate() );
-                    if(this.dueFilter === "today") {
+    static get props() {
+        return {
+            sort: type.maybe(String),
+            completeFilter: type.maybe(String),
+            dueFilter: type.maybe(String),
 
-                        query.filter.dueDate = {
-                            $gte: now.toString(),
-                            $lt: new Date(now.getTime() + day).toString()
+            todosPromise: {
+                get(){
+                    let query = {filter: { }};
+                    if(this.sort) {
+                        query.sort =  this.sort;
+                    }
+                    if(this.completeFilter) {
+                        query.filter.complete = this.completeFilter === "complete";
+                    }
+                    if(this.dueFilter) {
+                        let day = 24*60*60*1000;
+                        let now = new Date();
+                        let today = new Date(now.getFullYear(), now.getMonth(), now.getDate() );
+                        if(this.dueFilter === "today") {
+
+                            query.filter.dueDate = {
+                                $gte: now.toString(),
+                                $lt: new Date(now.getTime() + day).toString()
+                            }
+                        }
+                        if(this.dueFilter === "week") {
+                            let start = today.getTime() - (today.getDay() * day);
+                            query.filter.dueDate = {
+                                $gte: new Date(start).toString(),
+                                $lt: new Date(start + 7*day).toString()
+                            };
                         }
                     }
-                    if(this.dueFilter === "week") {
-                        let start = today.getTime() - (today.getDay() * day);
-                        query.filter.dueDate = {
-                            $gte: new Date(start).toString(),
-                            $lt: new Date(start + 7*day).toString()
-                        };
-                    }
+                    return Todo.getList(query);
                 }
-                return Todo.getList(query);
             }
-        }
+        };
     }
-});
-
+}
+customElements.define("todo-list", TodoList);
 </script>
-
-<script type="steal-module">
-
-
-</script>
-
 </body>
 </html>

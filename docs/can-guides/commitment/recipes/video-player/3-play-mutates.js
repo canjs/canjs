@@ -1,41 +1,47 @@
-import {Component} from "//unpkg.com/can@5/core.mjs";
+import { StacheElement } from "//unpkg.com/can@5/core.mjs";
 
-Component.extend({
-  tag: "video-player",
-  view: `
-    <video controls
-      on:play="play()"
-      on:pause="pause()">
-      <source src="{{ src }}"/>
-    </video>
-    <div>
-      <button on:click="togglePlay()">
-        {{# if(playing) }} Pause {{ else }} Play {{/ if }}
-      </button>
-    </div>
-  `,
-  ViewModel: {
-    src: "string",
-    playing: "boolean",
+class VideoPlayer extends StacheElement {
+	static view = `
+		<video 
+			controls
+			on:play="this.play()"
+			on:pause="this.pause()"
+		>
+			<source src="{{ this.src }}">
+		</video>
+		<div>
+			<button on:click="this.togglePlay()">
+				{{# if(this.playing) }} Pause {{ else }} Play {{/ if }}
+			</button>
+		</div>
+	`;
 
-    play() {
-      this.playing = true;
-    },
-    pause() {
-      this.playing = false;
-    },
-    togglePlay() {
-      this.playing = !this.playing;
-    },
+	static props = {
+		src: String,
+		playing: Boolean
+	};
 
-    connectedCallback(element) {
-      this.listenTo("playing", function(event, isPlaying) {
-        if (isPlaying) {
-          element.querySelector("video").play();
-        } else {
-          element.querySelector("video").pause();
-        }
-      });
-    }
-  }
-});
+	connected() {
+		this.listenTo("playing", function({ value }) {
+			if (value) {
+				this.querySelector("video").play();
+			} else {
+				this.querySelector("video").pause();
+			}
+		});
+	}
+
+	play() {
+		this.playing = true;
+	}
+
+	pause() {
+		this.playing = false;
+	}
+
+	togglePlay() {
+		this.playing = !this.playing;
+	}
+}
+
+customElements.define("video-player", VideoPlayer);

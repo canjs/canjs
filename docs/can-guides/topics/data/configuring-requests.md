@@ -61,7 +61,7 @@ const connection = restModel({
 
 ```js
 import { restModel } from "can";
-import { Todo, todoFixture } from "//unpkg.com/can-demo-models@5/index.mjs";
+import { Todo, todoFixture } from "//unpkg.com/can-demo-models@6/index.mjs";
 
 // create mock data
 todoFixture(5);
@@ -69,7 +69,7 @@ todoFixture(5);
 // define the connection
 const connection = restModel({
   url: "/api/todos/{id}",
-  Map: Todo
+  ObjectType: Todo
 });
 
 // load data
@@ -97,6 +97,7 @@ const connection = restModel({
   }
 });
 ```
+Requests can be modified more extensively via the `url` argument object than what is shown above. In particular, a <code>[can-connect/data/url/url.url#beforeSend beforeSend]</code> hook function can be included. This function runs before a request is made, either modifying the outgoing request or performing additional tasks using the content of the request. See this and more in the full documentation for the `url` argument [can-connect/data/url/url.url here].  
 
 ### Implementing the DataInterface yourself
 

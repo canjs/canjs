@@ -1,4 +1,4 @@
-import { ajax, fixture, type, StacheElement } from "//unpkg.com/can@5/ecosystem.mjs";
+import { ajax, fixture, StacheElement, type } from "//unpkg.com/can@pre/core.mjs";
 
 fixture("POST /api/session", function(request, response) {
 	const userData = localStorage.getItem("user");

@@ -1,4 +1,11 @@
 <!DOCTYPE html>
 <title>CanJS tests</title>
+<script>
+	steal = {
+		paths: {
+			"can-route/src/routedata": "node_modules/can-route/src/routedata-definemap.js"
+		}
+	};
+</script>
 <script src="../node_modules/steal/steal-with-promises.js" main="can/test/test-all-ie" env="canjs-test"></script>
 <div id="qunit-fixture"></div>

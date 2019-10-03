@@ -1,22 +1,21 @@
-import { can, Component, DefineMap } from "../../../core.js";
+import { can, StacheElement } from "../../../core.js";
 
 window.can = can;
 
-const HelloWorldVM = DefineMap.extend("HelloWorld", {
-	name: "string"
+customElements.define("hello-world", class extends StacheElement {
+	static get props() {
+		return {
+			name: String
+		};
+	}
+
+	static get view() {
+		return `<p>Hello <strong id="hw-name">{{name}}</strong>!</p>`;
+	}
 });
 
-Component.extend({
-	tag: "hello-world",
-	view: `
-		<p>Hello <strong id="hw-name">{{name}}</strong>!</p>
-	`,
-	ViewModel: HelloWorldVM
-});
-
-Component.extend({
-	tag: "my-app",
-	view: `
-		<hello-world name:raw="World"></hello-world>
-	`
+customElements.define("my-app", class extends StacheElement {
+	static get view() {
+		return `<hello-world name:raw="World"></hello-world>`;
+	}
 });

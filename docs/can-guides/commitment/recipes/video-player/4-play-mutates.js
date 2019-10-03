@@ -1,62 +1,70 @@
-import {Component} from "//unpkg.com/can@5/core.mjs";
+import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
-Component.extend({
-  tag: "video-player",
-  view: `
-    <video controls
-      on:play="play()"
-      on:pause="pause()"
-      on:timeupdate="updateTimes(scope.element)"
-      on:loadedmetadata="updateTimes(scope.element)">
-      <source src="{{ src }}"/>
-    </video>
-    <div>
-      <button on:click="togglePlay()">
-        {{# if(playing) }} Pause {{ else }} Play {{/ if }}
-      </button>
-      <span>{{ formatTime(currentTime) }}</span> /
-      <span>{{ formatTime(duration) }} </span>
-    </div>
-  `,
-  ViewModel: {
-    src: "string",
-    playing: "boolean",
-    duration: "number",
-    currentTime: "number",
+class VideoPlayer extends StacheElement {
+	static view = `
+		<video 
+			controls
+			on:play="this.play()"
+			on:pause="this.pause()"
+			on:timeupdate="this.updateTimes(scope.element)"
+			on:loadedmetadata="this.updateTimes(scope.element)"
+		>
+			<source src="{{ this.src }}">
+		</video>
+		<div>
+			<button on:click="this.togglePlay()">
+				{{# if(this.playing) }} Pause {{ else }} Play {{/ if }}
+			</button>
+			<span>{{ this.formatTime(this.currentTime) }}</span> /
+			<span>{{ this.formatTime(this.duration) }} </span>
+		</div>
+	`;
 
-    updateTimes(videoElement) {
-      this.currentTime = videoElement.currentTime || 0;
-      this.duration = videoElement.duration;
-    },
-    formatTime(time) {
-      if (time === null || time === undefined) {
-        return "--";
-      }
-      const minutes = Math.floor(time / 60);
-      let seconds = Math.floor(time - minutes * 60);
-      if (seconds < 10) {
-        seconds = "0" + seconds;
-      }
-      return minutes + ":" + seconds;
-    },
-    play() {
-      this.playing = true;
-    },
-    pause() {
-      this.playing = false;
-    },
-    togglePlay() {
-      this.playing = !this.playing;
-    },
+	static props = {
+		src: String,
+		playing: Boolean,
+		duration: Number,
+		currentTime: Number
+	};
 
-    connectedCallback(element) {
-      this.listenTo("playing", function(event, isPlaying) {
-        if (isPlaying) {
-          element.querySelector("video").play();
-        } else {
-          element.querySelector("video").pause();
-        }
-      });
-    }
-  }
-});
+	connected() {
+		this.listenTo("playing", function({ value }) {
+			if (value) {
+				this.querySelector("video").play();
+			} else {
+				this.querySelector("video").pause();
+			}
+		});
+	}
+
+	updateTimes(videoElement) {
+		this.currentTime = videoElement.currentTime || 0;
+		this.duration = videoElement.duration;
+	}
+
+	formatTime(time) {
+		if (time === null || time === undefined) {
+			return "--";
+		}
+		const minutes = Math.floor(time / 60);
+		let seconds = Math.floor(time - minutes * 60);
+		if (seconds < 10) {
+			seconds = "0" + seconds;
+		}
+		return minutes + ":" + seconds;
+	}
+
+	play() {
+		this.playing = true;
+	}
+
+	pause() {
+		this.playing = false;
+	}
+
+	togglePlay() {
+		this.playing = !this.playing;
+	}
+}
+
+customElements.define("video-player", VideoPlayer);

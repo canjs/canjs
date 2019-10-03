@@ -1,14 +1,17 @@
-import { DefineMap, QueryLogic, connect } from "//unpkg.com/can@5/core.mjs";
+import { ObservableObject, QueryLogic, connect } from "//unpkg.com/can@pre/core.mjs";
 
-const Todo = DefineMap.extend({
-	id: {
-		identity: true,
-		type: "number"
-	},
-	userId: 'number',
-	title: "string",
-	completed: "boolean"
-});
+class Todo extends ObservableObject {
+  static props = {
+    id: {
+      identity: true,
+      type: Number
+    },
+    userId: Number,
+    title: String,
+    completed: Boolean,
+    lastAccessedDate: String,
+  }
+}
 
 const behaviors = [
 	connect.base,
@@ -23,7 +26,7 @@ const connectionOptions = {
 };
 
 const connection = behaviors.reduce(
-	(connection, behavior) => behavior(connection), 
+	(connection, behavior) => behavior(connection),
 	connectionOptions
 );
 connection.init();

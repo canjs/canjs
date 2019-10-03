@@ -1,0 +1,62 @@
+<svg width="510" height="275" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <style type="text/css">
+        @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
+        .text-reg {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 21px;
+            font-weight: 400;
+            fill: #000000;
+        }
+        .text-bold {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 21px;
+            font-weight: 700;
+            fill: #000000;
+        }
+        .text-small {
+            font-size: 18px;
+        }
+        .color-two {
+            fill: #2E4E85;
+        }
+    </style><defs>
+        <path id="a" d="M0 .5h216v72H0z" />
+        <path id="c" d="M0 0h216v72H0z" />
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <path
+            d="M238.58 55.715a506.458 506.458 0 0 0-4.678-3.22c-36.634 33.717-66.544 71.03-89.411 109.914a431.97 431.97 0 0 0-9.247-4.582c.15 8.353.419 16.689.804 25.004a446.627 446.627 0 0 1 21.969-13.201 420.072 420.072 0 0 0-8.958-4.852c22.92-38.627 52.87-75.657 89.52-109.063M271.355 55.715a520.357 520.357 0 0 1 4.678-3.22c36.635 33.717 66.545 71.03 89.412 109.915a429.673 429.673 0 0 1 9.247-4.583 898.728 898.728 0 0 1-.804 25.004 446.658 446.658 0 0 0-21.97-13.201 422.515 422.515 0 0 1 8.958-4.852c-22.921-38.627-52.87-75.657-89.521-109.063"
+            fill="#2F9C0A" />
+        <g transform="translate(147 10)">
+            <mask id="b" fill="#fff">
+                <use xlink:href="#a" />
+            </mask>
+            <path fill="#4078C0" mask="url(#b)" d="M216 72.5V.5H0v72z" />
+        </g>
+        <path fill="#FFF" d="M152.5 76.5h205v-60h-205z" />
+        <path fill="#4078C0" d="M10 264h216v-72H10z" />
+        <path fill="#FFF" d="M15.5 258h205v-60h-205z" /><text class="text-reg text-small" transform="translate(10 192)">
+            <tspan x="62.956" y="31.5">can-stache</tspan>
+        </text>
+        <g>
+            <g transform="translate(284 192)">
+                <mask id="d" fill="#fff">
+                    <use xlink:href="#c" />
+                </mask>
+                <path fill="#4078C0" mask="url(#d)" d="M216 72V0H0v72z" />
+            </g>
+            <path fill="#FFF" d="M289.5 258h205v-60h-205z" /><text class="text-reg text-small" transform="translate(284 192)">
+                <tspan x="16.333" y="32">can-observable-object </tspan>
+                <tspan x="20.178" y="56">can-observable-array</tspan>
+            </text>
+        </g><text class="text-bold color-two" letter-spacing="-.067"
+            fill="#4078C0">
+            <tspan x="372" y="126">static props</tspan>
+        </text><text class="text-bold color-two" letter-spacing="-1.127"
+            fill="#4078C0">
+            <tspan x="33" y="126">static view</tspan>
+        </text><text class="text-reg text-small">
+            <tspan x="172.563" y="43">can-stache-element</tspan>
+        </text>
+    </g>
+</svg>

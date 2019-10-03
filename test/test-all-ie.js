@@ -44,7 +44,6 @@ require('can-validate-interface/test');
 // require('can-view-callbacks/test/callbacks-test'); in dev-only
 require('can-view-live/test/test');
 require('can-view-model/test/test');
-require('can-view-nodelist/test/can-view-nodelist-test');
 require('can-view-parser/test/can-view-parser-test');
 require('can-view-scope/test/scope-test');
 require('can-view-target/test/test');
@@ -53,6 +52,8 @@ require('can-stache-converters/test/test');
 
 // Legacy tests
 require('can-compute/can-compute_test');
+require('can-define-realtime-rest-model/can-define-realtime-rest-model-test');
+require('can-define-rest-model/test');
 require('can-list/can-list_test');
 require('can-map/can-map_test');
 require('can-map-define/can-map-define_test');
@@ -94,7 +95,7 @@ require('can-view-autorender/test/test');
 require('can-connect/test/test-without-proxy');
 require("can-debug/can-debug-test");
 require('can-route/test/test-without-proxy');
-require('can-route-pushstate/test/test');
+require('can-route-pushstate/test/test-ie');
 require('can-stache/test/stache-test');
 
 // Infrastructure tests

@@ -578,7 +578,7 @@ Here’s a list of all the paths in CanJS 2.3 that now have separate modules in 
 - `can/view/import/import` — [can-view-import]
 - `can/view/live/live` — [can-view-live]
 - `can/view/mustache/mustache` — [can-mustache](https://github.com/canjs/can-mustache)
-- `can/view/node_lists/node_lists` — [can-view-nodelist]
+- `can/view/node_lists/node_lists` — [can-view-nodelist](https://github.com/canjs/can-view-nodelist)
 - `can/view/parser/parser` — [can-view-parser]
 - `can/view/scope/scope` — [can-view-scope]
 - `can/view/stache/stache` — [can-stache]
@@ -771,4 +771,24 @@ An example is the [can-stache-converters.string-to-any] converter, which convert
 	<option value="23">Michael Jordan</option>
 	<option value="32">Magic Johnson</option>
 </select>
+```
+
+### Use bracket syntax in route definitions.
+
+CanJS 3 routes use the `{part}` syntax instead of `:part`. Replace the use of the colon syntax which is deprecated and will be removed in a future release.
+
+Replace:
+
+```js
+import route from "can-route";
+
+route(":page", { page: "home" });
+```
+
+with:
+
+```js
+import route from "can-route";
+
+route("{page}", { page: "home" });
 ```

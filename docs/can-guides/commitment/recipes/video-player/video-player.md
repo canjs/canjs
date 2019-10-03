@@ -18,9 +18,9 @@ custom video player will:
 
 The final player looks like:
 
-<p class="codepen" data-height="366" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="ZPyGLE" style="height: 366px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 Video Player - Final">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/ZPyGLE/">
-  CanJS 5.0 Video Player - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="366" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="WNeJpeZ" style="height: 366px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6.0 Video Player - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/WNeJpeZ/">
+  CanJS 6.0 Video Player - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
@@ -37,16 +37,16 @@ __START THIS TUTORIAL BY Forking THE FOLLOWING CodePen__:
 
 > Click the `Edit in CodePen` button.  The CodePen will open in a new window. Click the `Fork` button.
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="gERpgz" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 Video Player - Start">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/gERpgz/">
-  CanJS 5.0 Video Player - Start</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="jONeZQK" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6.0 Video Player - Start">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/jONeZQK/">
+  CanJS 6.0 Video Player - Start</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
 This CodePen:
 
 - Creates a `<video>` element that loads a video. _Right click and select “Show controls” to see the video’s controls_.
-- Loads CanJS’s custom element library: [can-component Component].
+- Loads CanJS’s custom element library: [can-stache-element StacheElement].
 
 
 
@@ -74,13 +74,13 @@ tab instead of the native `<video>` element.
 To set up a basic CanJS application (or widget), you define a custom element in JavaScript and
 use the custom element in your page’s `HTML`.
 
-To define a custom element, extend [can-component Component] with a [can-component.prototype.tag]
+To define a custom element, extend [can-stache-element StacheElement] and [register a tag](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define)
 that matches the name of your custom element.  For example:
 
 ```js
-Component.extend({
-  tag: "video-player"
-})
+class VideoPlayer extends StacheElement {
+}
+customElements.define("video-player", VideoPlayer);
 ```
 
 Then you can use this tag in your HTML page:
@@ -89,30 +89,32 @@ Then you can use this tag in your HTML page:
 <video-player></video-player>
 ```
 
-But this doesn’t do anything ... yet.  Components add their own HTML through their [can-component.prototype.view]
-property:
+But this doesn’t do anything ... yet.  Components add their own HTML through their [can-stache-element/static.view] property:
 
 ```js
-Component.extend({
-  tag: "video-player",
-  view: `<h2>I am a player!</h2>`
-});
+class VideoPlayer extends StacheElement {
+  static view = `<h2>I am a player!</h2>`;
+}
+customElements.define("video-player", VideoPlayer);
 ```
 
-A component’s [can-component.prototype.view] is rendered with its [can-component.prototype.ViewModel]. For example, we can make a `<video>` display `"http://bit.ly/can-tom-n-jerry"` by defining a `src` property on the `ViewModel` and using it in the [can-component.prototype.view] like:
+A component’s [can-stache-element/static.view] is rendered with its [can-stache-element/static.props]. For example, we can make a `<video>` display `"http://bit.ly/can-tom-n-jerry"` by defining a `src` property and using it in the view like:
 
 ```js
-Component.extend({
-  tag: "video-player",
-  view: `
+class VideoPlayer extends StacheElement {
+  static view = `
     <video>
-      <source src="{{src}}"/>
+      <source src="{{ this.src }}">
     </video>
-  `,
-  ViewModel: {
-    src: {type: "string", default: "http://bit.ly/can-tom-n-jerry"}
-  }
-});
+  `;
+  static props = {
+    src: {
+      type: String,
+      default: "http://bit.ly/can-tom-n-jerry"
+    }
+  };
+}
+customElements.define("video-player", VideoPlayer);
 ```
 
 But we want the `<video-player>` to take a `src` attribute value itself and use that for the
@@ -120,24 +122,24 @@ But we want the `<video-player>` to take a `src` attribute value itself and use 
 we wanted the video to play `"http://dl3.webmfiles.org/big-buck-bunny_trailer.webm"` instead of `"http://bit.ly/can-tom-n-jerry"`, we would:
 
 1. Update `<video-player>` to pass `"http://dl3.webmfiles.org/big-buck-bunny_trailer.webm"` with [can-stache-bindings.raw]:
-   ```html
-   <video-player src:raw="http://dl3.webmfiles.org/big-buck-bunny_trailer.webm"/>
+  ```html
+  <video-player src:raw="http://dl3.webmfiles.org/big-buck-bunny_trailer.webm"/>
+  ```
+2. Update the `VideoPlayer` element to define a `src` property like:
+  ```js
+  class VideoPlayer extends StacheElement {
+    static view = `
+      <video>
+        <source src="{{ this.src }}">
+      </video>
+    `;
+    static props = {
+      src: String
+    };
+   }
+   customElements.define("video-player", VideoPlayer);
    ```
-2. Update the [can-component.prototype.ViewModel] to define a `src` property like:
-   ```js
-   Component.extend({
-     tag: "video-player",
-     view: `
-       <video>
-         <source src="{{src}}"/>
-       </video>
-     `,
-     ViewModel: {
-       src: "string"
-     }
-   });
-   ```
-   @highlight 5
+   @highlight 4
 
 Finally, to have a `<video>` element show the _native_ controls, add a `controls`
 attribute like:
@@ -151,7 +153,7 @@ attribute like:
 Update the __JS__ tab to:
 
 @sourceref ./1-setup.js
-@highlight 3-13
+@highlight 3-15
 
 Update the __HTML__ to:
 
@@ -184,26 +186,28 @@ We want the button to be within a `<div>` after the video element like:
 
 - To change the HTML content of the page, use [can-stache.helpers.if] and [can-stache.helpers.else] like:
   ```html
-  <button>{{#if(playing)}} Pause {{else}} Play {{/if}}</button>
+  <button>{{# if(playing) }} Pause {{ else }} Play {{/ if }}</button>
   ````
-- The [can-component.prototype.view] responds to values in the [can-component.prototype.ViewModel].  To create a `boolean` value in the [can-component.prototype.ViewModel] do:
+- The [can-stache-element/static.view] responds to values in the [can-stache-element/static.props] object.  To create a `boolean` value, add it to the [can-stache-element/static.props] object like:
   ```js
-  ViewModel: {
-    // ...
-    playing: "boolean",
+  class VideoPlayer extends StacheElement {
+    static props = {
+      // ...
+      playing: Boolean
+    };
   }
   ```
-- Methods can be used to change the [can-component.prototype.ViewModel].  The following might create methods that change the `playing` value:
+- Methods can be used to change values in [can-stache-element/static.props].  The following might create methods that change the `playing` value:
 
   ```js
-  ViewModel: {
+  class VideoPlayer extends StacheElement {
     // ...
     play() {
       this.playing = true;
-    },
+    }
     pause() {
       this.playing = false;
-    },
+    }
   }
   ```
 - You can listen to events on the DOM with [can-stache-bindings.event].  For example, the following might
@@ -221,7 +225,7 @@ We want the button to be within a `<div>` after the video element like:
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-play-reflects.js
-@highlight 7-8,11-15,19,21-25
+@highlight 7-8,12-16,21,24-30
 
 
 ## Make clicking the play/pause button play or pause the video ##
@@ -233,15 +237,15 @@ either play or pause the video.
 
 ### What you need to know
 
-CanJS prefers to manage the state of your application in [can-component.prototype.ViewModel]. The `<video>` player has state, such as
-if the video is `playing`.  When the _play/pause_ button is clicked, we want to update the state
-of the [can-component.prototype.ViewModel] and have the [can-component.prototype.ViewModel] update the state of the video player as a side effect.
+The `<video>` player has state, such as if the video is `playing`.  When the _play/pause_ 
+button is clicked, we want to update the state of the element `props` and have the element `props`
+update the state of the video player as a side effect.
 
 What this means is that instead of something like:
 
 ```js
 togglePlay() {
-  if ( videoElement.paused ) {
+  if (videoElement.paused) {
     videoElement.play()
   } else {
     videoElement.pause()
@@ -260,8 +264,8 @@ togglePlay() {
 And listen to when `playing` changes and update the `video` element like:
 
 ```js
-viewModel.listenTo("playing", function(event, isPlaying) {
-  if ( isPlaying ) {
+element.listenTo("playing", function({ value }) {
+  if (value) {
     videoElement.play()
   } else {
     videoElement.pause()
@@ -272,35 +276,36 @@ viewModel.listenTo("playing", function(event, isPlaying) {
 
 This means that you need to:
 
-1. Listen to when the `<button>` is clicked and call a ViewModel method that updates the `playing` state.
+1. Listen to when the `<button>` is clicked and call a method that updates the `playing` state.
 2. Listen to when the `playing` state changes and update the state of the `<video>` element.
 
 You already know everything you need to know for step __#1__.  (Have the button call a `togglePlay` method with `on:click="togglePlay()"` and make the `togglePlay()` method toggle the state of the `playing` property.)
 
-For step __#2__, you need to use the [can-component/connectedCallback] lifecycle hook. This
-hook gives you access to the component’s element and is a good place to do side-effects. Its use looks
-like this:
+For step __#2__, you need to use the [can-stache-element/lifecycle-hooks.connected] lifecycle hook. This
+hook is a good place to do side-effects. Its use looks like this:
 
 ```js
-ViewModel: {
-  // ...
-  connectedCallback(element) {
+class MyComponent extends StacheElement {
+  static view = `...`;
+  static props = { /* ... */ };
+  connected() {
+    // `this` points to the element
     // perform mischief
   }
 }
 ```
 
-`connectedCallback` gets called once the component’s `element` is in the page. You can use
-[can-event-queue/map/map.listenTo] to listen to changes in the [can-component.prototype.ViewModel]’s properties and
-perform side-effects. The following listens to when `playing` changes:
+The `connected` hook gets called once the component’s `element` is in the page. You can
+use [can-event-queue/map/map.listenTo] to listen to changes in the element's properties
+and perform side-effects. The following listens to when `playing` changes:
 
 ```js
-ViewModel: {
-  // ...
-  connectedCallback(element) {
-    this.listenTo("playing", function(event, isPlaying) {
-
-    })
+class VideoPlayer extends StacheElement {
+  static view = `...`;
+  static props = { /* ... */ };
+  connected() {
+    this.listenTo("playing", ({ value }) => {
+    });
   }
 }
 ```
@@ -319,7 +324,7 @@ element.querySelector("video")
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-play-mutates.js
-@highlight 12,27-30,31-39
+@highlight 13,24-32,42-44
 
 
 ## Show current time and duration ##
@@ -340,46 +345,49 @@ formatted like: `mm:SS`. They should be presented within two spans like:
 1. Methods can be used to format values in [can-stache]. For example, you can uppercase values like  this:
 
    ```html
-   <span>{{upper(value)}}</span>
+   <span>{{ upper(value) }}</span>
    ```
 
    With a method like:
 
-   ```js
-   ViewModel: {
-     // ...
-     upper(value) {
-       return value.toString().toUpperCase();
-     }
+  ```js
+  class MyComponent extends StacheElement {
+    static view = `...`;
+    static props = { /* ... */ };
+    upper(value) {
+      return value.toString().toUpperCase();
+    }
    }
    ```
 
    The following can be used to format time:
 
-   ```js
-   formatTime(time) {
-       if (time === null || time === undefined) {
-         return "--";
-       }
-       const minutes = Math.floor(time / 60);
-       let seconds = Math.floor(time - minutes * 60);
-       if (seconds < 10) {
-         seconds = "0" + seconds;
-       }
-       return minutes + ":" + seconds;
-   }
-   ```
+  ```js
+  formatTime(time) {
+    if (time === null || time === undefined) {
+      return "--";
+    }
+    const minutes = Math.floor(time / 60);
+    let seconds = Math.floor(time - minutes * 60);
+    if (seconds < 10) {
+      seconds = "0" + seconds;
+    }
+    return minutes + ":" + seconds;
+  }
+  ```
 
 2. Time is given as a number. Use the following to create a number property on
-   the [can-component.prototype.ViewModel]:
+   the element:
 
-   ```js
-   ViewModel: {
-     // ...
-     duration: "number",
-     currentTime: "number"
-   }
-   ```
+  ```js
+  class VideoPlayer {
+    static view = `...`;
+    static props = {
+      duration: Number,
+      currentTime: Number
+    };
+  }
+  ```
 
 3. `<video>` elements emit a [loadmetadata event](https://developer.mozilla.org/en-US/docs/Web/Events/loadedmetadata) when they know how long
    the video is. They also emit a [timeupdate event](https://developer.mozilla.org/en-US/docs/Web/Events/timeupdate) when the video’s current play position
@@ -390,7 +398,7 @@ formatted like: `mm:SS`. They should be presented within two spans like:
 4. You can get the element in an stache `on:event` binding with [can-stache/keys/scope#scope_element scope.element] like:
 
    ```html
-   <video on:timeupdate="updateTimes(scope.element)"/>
+   <video on:timeupdate="updateTimes(scope.element)"></video>
    ```
 
 
@@ -400,23 +408,23 @@ formatted like: `mm:SS`. They should be presented within two spans like:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-play-mutates.js
-@highlight 9,10,17,18,24-41
+@highlight 9,10,18,19,26,27,40-55
 
 
 ## Make range show position slider at current time ##
 
 ### The problem
 
-Create a `<input type="range"/>` element that changes its position as
-the video playing position changes.
+Create a `<input type="range">` element that changes its position as the video
+playing position changes.
 
-The `<input type="range"/>` element should be after the `<button>` and before the
+The `<input type="range">` element should be after the `<button>` and before the
 `currentTime` span like:
 
 ```html
 </button>
-<input type="range"/>
-<span>{{formatTime(currentTime)}}</span> /
+<input type="range">
+<span>{{ formatTime(currentTime) }}</span> /
 ```
 @highlight 2
 
@@ -426,24 +434,27 @@ The `<input type="range"/>` element should be after the `<button>` and before th
   specified like:
 
   ```html
-  <input type="range" value="0" max="1" step="any"/>
+  <input type="range" value="0" max="1" step="any">
   ```
 
 - The range will have values from 0 to 1.  We will need to translate the currentTime to
-  a number between 0 and 1. We can do this with a [can-define.types.get computed getter property] like:
+  a number between 0 and 1. We can do this with a [can-observable-object/define/get computed getter property] like:
 
   ```js
-  ViewModel: {
-    // ...
-    get percentComplete() {
-      return this.currentTime / this.duration;
-    },
+  class SomeElement extends StacheElement {
+    static view = `...`;
+    static props = {
+      // ...
+      get percentComplete() {
+        return this.currentTime / this.duration;
+      }
+    };
   }
   ```
 
-- Use [can-stache-bindings.toChild] to update a value from a [can-component.prototype.ViewModel] property like:
+- Use [can-stache-bindings.toChild] to update a value from a custom element property like:
   ```html
-  <input value:from="percentComplete"/>
+  <input value:from="percentComplete">
   ```
 
 ### The solution
@@ -451,7 +462,7 @@ The `<input type="range"/>` element should be after the `<button>` and before th
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-play-mutates.js
-@highlight 17-18,29-31
+@highlight 18,30-32
 
 
 ## Make sliding the range update the current time ##
@@ -470,25 +481,28 @@ Similar to when we [made the play/pause button play or pause the video](#Makecli
 element’s `currentTime` as a _side-effect_.
 
 This time, we need to translate the sliders values between 0 and 1 to `currentTime`
-values. We can do this by creating a `percentComplete` [can-define.types.set setter] that updates `currentTime` like:
+values. We can do this by creating a `percentComplete` [can-observable-object/define/set setter] that updates `currentTime` like:
 
 ```js
-ViewModel: {
-  // ...
-  get percentComplete() {
-    return this.currentTime / this.duration;
-  },
-  set percentComplete(newVal) {
-    this.currentTime = newVal * this.duration;
-  },
-  // ...
+class VideoPlayer extends StacheElement {
+  static view = `...`;
+  static props = {
+    // ...
+    get percentComplete() {
+      return this.currentTime / this.duration;
+    },
+    set percentComplete(newVal) {
+      this.currentTime = newVal * this.duration;
+    },
+    // ...
+  };
 }
 ```
 
-Use [can-stache-bindings.twoWay] to two-way bind a value to a [can-component.prototype.ViewModel] property:
+Use [can-stache-bindings.twoWay] to two-way bind a value to a custom element property:
 
 ```html
-<input value:bind="someViewModelProperty"/>
+<input value:bind="someProperty">
 ```
 
 
@@ -497,15 +511,15 @@ Use [can-stache-bindings.twoWay] to two-way bind a value to a [can-component.pro
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-play-mutates.js
-@highlight 6,18,32-34,69-74
+@highlight 5,17,36-38,42-47
 
 ## Result
 
 When finished, you should see something like the following JS Bin:
 
-<p class="codepen" data-height="366" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="ZPyGLE" style="height: 366px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 Video Player - Final">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/ZPyGLE/">
-  CanJS 5.0 Video Player - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="366" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="WNeJpeZ" style="height: 366px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6.0 Video Player - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/WNeJpeZ/">
+  CanJS 6.0 Video Player - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 

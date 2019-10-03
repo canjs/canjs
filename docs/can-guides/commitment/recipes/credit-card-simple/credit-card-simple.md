@@ -18,8 +18,8 @@ In this guide, you will learn how to:
 
 The final widget looks like:
 
-<p class="codepen" data-height="360" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="GexXdG" style="height: 360px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Simple) [Finished]">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/GexXdG/">
+<p class="codepen" data-height="360" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="LYPRYmN" style="height: 360px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Simple) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/LYPRYmN/">
   Credit Card Guide (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
@@ -58,26 +58,30 @@ The following sections are broken down into:
 
 ### The problem
 
-Let’s create a `cc-payment` component with a ViewModel, which will have
-an `amount` property that defaults to `9.99`.  When complete, we
-should be able update the displayed “pay amount”.
+Let’s create a `cc-payment` component, which will have an `amount` property that 
+defaults to `9.99`.  When complete, we should be able update the displayed “pay amount”.
 
 ### What you need to know
 
 
 - To use Stripe, you must call [Stripe.setPublishableKey](https://stripe.com/docs/stripe.js/v2#setting-publishable-key).
 
-- A basic CanJS setup uses instances of a [can-component], which glues a ViewModel
- to a View in order to manage it's behavior as follows:
+- A basic CanJS setup uses instances of a [can-stache-element StacheElement], which
+ glues [can-observable-object ObservableObject]-like properties to a `view` in order
+ to manage its behavior as follows:
 
   ```js
-  import { Component } from "can";
+  import { StacheElement } from "can";
+
   // Define the Component
-  const CCPayment = Component.extend({
-    tag: "cc-payment",
-    view: "...",
-    ViewModel: {}
-  });
+  class CCPayment extends StacheElement {
+    static view = "...";
+
+    static props = {};
+  }
+
+  // Define the custom element tag
+  customElements.define("cc-payment", CCPayment);
   ```
 
 - CanJS component will be mounted in the DOM by adding the the component tag in the HTML page:
@@ -87,29 +91,17 @@ should be able update the displayed “pay amount”.
 
 - CanJS component uses [can-stache] to render data in a template and keep it live.
 
-- The ViewModel is an instance of [can-define/map/map] allows you to define a property with a default value like:
+- The properties defined in the [can-stache-element/static.props `props`] object can have default values like:
 
   ```js
-  const ProductVM = DefineMap.extend("ProductVM", {
-    age: {default: 34}
-  })
+  class MyComponent extends StacheElement {
+    static props = {
+      age: {
+        default: 34
+      }
+    };
+  }
   ```
-
-  This lets you create instances of that type, get & set those properties, and listen to changes like:
-
-  ```js
-  const productVM = new ProductVM({});
-
-  productVM.age //-> 34
-
-  productVM.on("age", function(ev, newAge){
-    console.log("person age changed to ", newAge);
-  });
-
-  productVM.age = 35 //-> logs "person age changed to 35"
-  ```
-
-
 
 ### The solution
 
@@ -129,10 +121,10 @@ Update the __JavaScript__ tab to:
 
 ### The problem
 
-Let’s send the form values to the ViewModel so we
+Let’s send the form values to the `cc-payment` element so we
 can process and validate them.  In this step, we’ll
-send the form values to the ViewModel and print out
-the values to make sure the ViewModel has them correctly.
+send the form values to the element and print out
+the values to make sure the element has them correctly.
 
 
 Print out the exported values like:
@@ -144,22 +136,24 @@ Print out the exported values like:
 ### What you need to know
 
 - Use [can-stache-bindings.twoWay value:bind] to set up a two-way binding in
-  [can-stache].  For example, the following keeps `email` on the ViewModel and
-  the input’s `value` in sync:
+  [can-stache].  For example, the following keeps `email` on the element `props` 
+  and the input’s `value` in sync:
 
     ```html
     <input value:bind="email"/>
     ```
 
-- [can-define/map/map.extend DefineMap.extend] allows you to define a property by defining its type like so:
+- [can-observable-object] allows you to define a property by defining its type like so:
 
   ```js
-  import { DefineMap } from "can";
+  import { ObservableObject } from "can";
 
-  const Person = DefineMap.extend("Person", {
-    name: "string",
-    age: "number"
-  })
+  class Person extends ObservableObject {
+    static props = {
+      name: String,
+      age: Number
+    };
+  }
   ```
 
 ### The solution
@@ -167,7 +161,7 @@ Print out the exported values like:
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-read-form.js
-@highlight 10-17,21,30,32,34,only
+@highlight 8-16,19,28,30,32,only
 
 
 ## Format form values
@@ -191,17 +185,20 @@ So that we can print out the values like:
 ### What you need to know
 
 - [ES5 Getter Syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get) can
-  be used to define a [can-define/map/map DefineMap] property that changes when another property changes.  For example,
+  be used to define an [can-observable-object ObservableObject] property that changes when another property changes.  For example,
   the following defines a `firstName` property that always has the
   first word of the `fullName` property:
 
   ```js
-  const Person = DefineMap.extend({
-    fullName: "string",
-    get firstName(){
-      return this.fullName.split(" ")[0];
-    }
-  });
+  class Person extends ObservableObject {
+    static props = {
+      fullName: String,
+
+      get firstName() {
+        return this.fullName.splice(" ")[0];
+      }
+    };
+  }
   ```
 
 ### The solution
@@ -209,7 +206,7 @@ So that we can print out the values like:
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-format.js
-@highlight 22,32-34,37-49,52-55,only
+@highlight 20,31-33,37-51,55-57,only
 
 
 
@@ -234,9 +231,9 @@ their respective form property:
   - `Stripe.card.validateExpiry(month, year)`
   - `Stripe.card.validateCVC(cvc)`
 
-- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in [can-stache].
+- Use [can-stache.helpers.if {{# if(value) }}] to do `if/else` branching in [can-stache].
   ```html
-  {{#if(error)}}class="is-error"{{/if}}
+  {{# if(error) }}class="is-error"{{/ if }}
   ```
 
 ### The solution
@@ -244,7 +241,7 @@ their respective form property:
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-validate-values.js
-@highlight 11,15,19,36-40,56-61,68-72,only
+@highlight 9,13,17,36-40,60-67,75-79,only
 
 
 
@@ -269,7 +266,7 @@ After submitting the form, you should see an alert like:
 - Use [can-stache-bindings.event] to listen to an event on an element and call a method in [can-stache].  For example, the following calls `doSomething()` when the `<div>` is clicked:
 
    ```html
-   <div on:click="doSomething(scope.event)"> ... </div>
+   <div on:click="this.doSomething(scope.event)"> ... </div>
    ```
 
    Notice that it also passed the event object with [can-stache/keys/scope#scope_event scope.event].
@@ -297,7 +294,7 @@ After submitting the form, you should see an alert like:
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-payment.js
-@highlight 8,73-94,only
+@highlight 7,82-106,only
 
 
 ## Validate the form
@@ -308,7 +305,7 @@ We need to show a warning message when information
 is entered incorrectly and disable the form until
 they have entered it correctly.
 
-To do that, we’ll add the following properties to the ViewModel:
+To do that, we’ll add the following properties to the `cc-payment` element:
 
 - `isCardValid` - returns true if the card is valid
 - `isCardInvalid` - returns true if the card is invalid
@@ -320,7 +317,7 @@ To do that, we’ll add the following properties to the ViewModel:
 - Use [can-stache-bindings.toChild disabled:from] to make an input disabled, like:
 
   ```html
-  <button disabled:from="isCardInvalid">...
+  <button disabled:from="this.isCardInvalid">...
   ```
 
 ### The solution
@@ -328,14 +325,14 @@ To do that, we’ll add the following properties to the ViewModel:
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-validate-form.js
-@highlight 10-12,26,97-107,only
+@highlight 8-10,24,82-96,only
 
 ## Result
 
 When complete, you should have a working credit card payment form like the following CodePen:
 
-<p class="codepen" data-height="360" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="GexXdG" style="height: 360px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Simple) [Finished]">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/GexXdG/">
+<p class="codepen" data-height="360" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="LYPRYmN" style="height: 360px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Credit Card Guide (Simple) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/LYPRYmN/">
   Credit Card Guide (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>

@@ -1,23 +1,21 @@
 <my-counter></my-counter>
 
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
-import { Component } from "can";
+import { StacheElement } from "can";
 
-Component.extend({
-	tag: "my-counter",
+class MyCounter extends StacheElement {
+    static view = `
+        <p>{{ this.count }}</p>
+        <button on:click="this.plusOne()">Click Here</button>
+    `;
 
-	view: `
-		<p>{{ count }}</p>
-		<button on:click="plusOne()">Click Here</button>
-	`,
+    static props = {
+        count: 0
+    };
 
-	ViewModel: {
-		count: {
-			default: 0
-		},
-		plusOne() {
-			this.count += 1;
-		}
-	}
-});
+    plusOne() {
+        this.count += 1;
+    }
+};
+customElements.define("my-counter", MyCounter);
 </script>

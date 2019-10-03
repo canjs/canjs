@@ -12,8 +12,8 @@ for an example that doesn't make data requests.
 
 The final widget looks like:
 
-<p class="codepen" data-height="404" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="EJNmyB" style="height: 404px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator advanced [Finished]">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/EJNmyB/">
+<p class="codepen" data-height="404" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="rNBMNrX" style="height: 404px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator advanced [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/rNBMNrX/">
   File Navigator advanced [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
@@ -23,8 +23,8 @@ The final widget looks like:
 
 __START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED__:
 
-<p class="codepen" data-height="136" data-theme-id="0" data-default-tab="js" data-user="bitovi" data-slug-hash="Pgbmwp" style="height: 136px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator Guide (Advanced) [Starter]">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/Pgbmwp/">
+<p class="codepen" data-height="136" data-theme-id="0" data-default-tab="js" data-user="bitovi" data-slug-hash="jONYePW" style="height: 136px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator Guide (Advanced) [Starter]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/jONYePW/">
   File Navigator Guide (Advanced) [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p><br>
@@ -81,10 +81,12 @@ The first level files and folders should have a `parentId` of `"0"`.
   ```js
   fixture("/api/entities", function(request) {
     // request.data.folderId -> "1"
-    return {data: [
-      // ...
-    ]}
-  })
+    return {
+      data: [
+        // ...
+      ]
+    };
+  });
   ```
 
 - [can-fixture.store] can be used to automatically filter records using the query string:
@@ -116,13 +118,13 @@ stored on our fake server.
 requests to use that `store`:
 
 @sourceref ./file-navigator-advanced-2.js
-@highlight 3-55,only
+@highlight 3-53,only
 
 ## Create the `Entity` Model
 
 ### The problem
 
-When we load entities from the server, it’s useful to convert them into `Entity` type instances.  We will want to create an observable `Entity` type using [can-define/map/map] so we can do:
+When we load entities from the server, it’s useful to convert them into `Entity` type instances.  We will want to create an observable `Entity` type using [can-observable-object] so we can do:
 
 ```js
 const entity = new Entity({
@@ -142,23 +144,26 @@ entity.name = "cats" //-> logs "entity name changed to cats"
 
 ### Things to know
 
-You can create a [can-define/map/map DefineMap] type using [can-define/map/map.extend DefineMap.extend] with the type’s properties and the properties’ types like:
+You can create an [can-observable-object ObservableObject] type with the type’s 
+properties and the properties’ types like:
 
 ```js
-import { DefineMap } from "can";
-const Type = DefineMap.extend({
-  id: "string",
-  hasChildren: "boolean",
-  // ...
-});
+import { ObservableObject } from "can";
+class Type extends ObservableObject {
+  static props = {
+    id: String,
+    hasChildren: Boolean
+    // ...
+  };
+}
 ```
 
 ### The solution
 
-Extend [can-define/map/map DefineMap] with each property and its type as follows:
+Extend [can-observable-object ObservableObject] with each property and its type as follows:
 
 @sourceref ./file-navigator-advanced-3.js
-@highlight 1,57-63,only
+@highlight 1,55-63,only
 
 ## Connect the `Entity` model to the service layer
 
@@ -167,19 +172,18 @@ Extend [can-define/map/map DefineMap] with each property and its type as follows
 We want to be able to load a list of `Entity` instances from `GET /api/entities` with:
 
 ```js
-Entity.getList({parentId: "0"}).then(function(entities) {
-    console.log(entities.get()) //-> [ Entity{id: "1", parentId: "0", ...}, ...]
+Entity.getList({ parentId: "0" }).then(function(entities) {
+  console.log(entities.get()); //-> [ Entity{id: "1", parentId: "0", ...}, ...]
 });
 ```
 
 ### Things to know
 
-[can-rest-model restModel()] can connect a `Map` type to
-a `url` like:
+[can-rest-model restModel()] can connect an `ObjectType` type to a `url` like:
 
 ```js
 restModel({
-  Map: Entity,
+  ObjectType: Entity,
   url: "URL"
 });
 ```
@@ -189,7 +193,7 @@ restModel({
 Use `restModel` to connect `Entity` to `/api/entities` like:
 
 @sourceref ./file-navigator-advanced-4.js
-@highlight 1,65-68,only
+@highlight 4,69-72,only
 
 ## Create the ROOT entity and render it
 
@@ -202,17 +206,18 @@ in the same way it’s expected by the designer.
 
 ### Things to know
 
-- CanJS [can-component Component] uses [can-stache] to render data in a template
+- CanJS [can-stache-element StacheElement] uses [can-stache] to render data in a template
   and keep it live.  Templates can be authored in `view` property like:
 
   ```js
-  import { Component } from "can";
+  import { StacheElement } from "can";
 
-  Component.extend({
-    tag: 'my-component',
-    view: `TEMPLATE CONTENT`,
-    ViewModel: {}
-  });
+  class MyComponent extends StacheElement {
+    static view = `TEMPLATE CONTENT`;
+    static props = {};
+  }
+
+  customElements.define("my-component", MyComponent);
   ```
 
   A [can-stache] template uses
@@ -220,19 +225,20 @@ in the same way it’s expected by the designer.
   the HTML output like:
 
   ```js
-  import { Component } from "can";
+  import { StacheElement } from "can";
 
-  Component.extend({
-    tag: 'my-component',
-    view: `{{something.name}}`,
-    ViewModel: {}
-  });
+  class MyComponent extends StacheElement {
+    static view = `{{something.name}}`;
+    static props = {};
+  }
+  
+  customElements.define("my-component", MyComponent);
   ```
 
-- Mount the component into the page with it's custom tag:
+- Mount the component into the page with its custom tag:
 
   ```html
-  <my-component />
+  <my-component></my-component>
   ```
 
 - You can create an `Entity` instance as follows:
@@ -257,12 +263,13 @@ Update the __JavaScript__ tab to:
 
 1. Define a component with `a-folder` custom tag
 2. Write the component view template that displays the `folder` `Entity` `name`.
-3. Write the component `ViewModel` that has the following properties:
+3. Add the following properties to the component:
   - `folder` which references the folder being displayed.
   - `entitiesPromise` which will be a promise of all files for that folder.
-4. Set the component `ViewModel` values with [can-view-model can-view-model] `set` function
+4. Set the component initial props values with the `assign` function
+
 @sourceref ./file-navigator-advanced-5.js
-@highlight 1,70-78,80-87,only
+@highlight 2,75-85,87-94,only
 
 ## Render the ROOT entities children
 
@@ -287,14 +294,14 @@ In this section, we’ll list the files and folders within the root folder.
 
 Update the __JavaScript__ tab to:
 
-- Add `entitiesPromise` property to the `ViewModel`.  `entitiesPromise`
+- Add `entitiesPromise` property to the component.  `entitiesPromise`
 will contain the files and folders that are directly within the root folder.
 
 - Use `entitiesPromise` to write `<div class="loading">Loading</div>` while
 the promise is pending, and then writes out an `<li>` for each entity in the resolved `entitiesPromise`
 
 @sourceref ./file-navigator-advanced-6.js
-@highlight 74-88,92-96,only
+@highlight 78-92,97-101,only
 
 ## Manage `<a-folder>` custom element behavior
 
@@ -304,70 +311,80 @@ Now we want to make all the folders able to open and close.
 
 ### Things to know
 
-- CanJS uses [guides/technology-overview#Key_ValueObservables ViewModels] to manage the behavior
-  of views.  ViewModels can have their own state, such as if a folder `isOpen` and should be showing
-  its children. `ViewModels` are constructor functions created with [can-define/map/map DefineMap].
+- CanJS uses [can-observable-object ObservableObject]-like properties to manage the behavior
+  of views.  Components can have their own state, such as if a folder `isOpen` and should be showing
+  its children.
 
-- [can-define/map/map DefineMap] can detail the type of a property with another type like:
+- [can-observable-object ObservableObject]s can detail the type of a property with another type like:
   ```js
-  import { DefineMap } from "can";
-  const Address = DefineMap.extend({
-    street: "string",
-    city: "string"
-  });
-  const Person = DefineMap.extend({
-    address: Address
-  });
+  import { ObservableObject } from "can";
+  class Address extends ObservableObject {
+    static props = {
+      street: String,
+      city: String
+    };
+  }
+  class Person extends ObservableObject {
+    static props = {
+      address: Address
+    };
+  }
   ```
 
-- [can-define/map/map DefineMap] can also specify default values:
+- [can-observable-object ObservableObject]s can also specify default values:
   ```js
-  const Person = DefineMap.extend({
-    address: Address,
-    age: {default: 33}
-  });
+  class Person extends ObservableObject {
+    static props = {
+      address: Address
+      age: { default: 33 }
+    };
+  }
   ```
 
-- [can-define/map/map DefineMap] can also specify a default value and a type:
+- [can-observable-object ObservableObject]s can also specify a default value and a type:
   ```js
-  const Person = DefineMap.extend({
-    address: Address,
-    age: {default: 33, type: "number"}
-  });
+  class Person extends ObservableObject {
+    static props = {
+      address: Address
+      age: { type: Number, default: 33 }
+    };
+  }
   ```
 
-- [can-define/map/map DefineMap] can also have methods:
+- [can-observable-object ObservableObject]s can also have methods:
 
   ```js
-  const Person = DefineMap.extend({
-    address: Address,
-    age: {default: 33, type: "number"},
-    birthday: function() {
+  class Person extends ObservableObject {
+    static props = {
+      address: Address
+      age: { type: Number, default: 33 }
+    };
+    birthday() {
       this.age++;
     }
-  });
+  }
   ```
 
 - Use [can-stache-bindings.event] to listen to an event on an element and call a method in [can-stache].  For example, the following calls `doSomething()` when the `<div>` is clicked.
 
-   ```html
-   <div on:click="doSomething()"> ... </div>
-   ```
+  ```html
+  <div on:click="doSomething()"> ... </div>
+  ```
 
 
 ### The solution
 
 The following:
 
-3. Define `ViewModel` properties that will manage the UI state around a folder.:
-   - `isOpen` which tracks if the folder’s children should be displayed.
-   - `toggleOpen` which changes `isOpen`.
+3. Define component properties that will manage the UI state around a folder.:
+  - `isOpen` which tracks if the folder’s children should be displayed.
+  - `toggleOpen` which changes `isOpen`.
 4. Recursively renders each child folder with `<a-folder folder:from="entity" />`.
-5. Set the root folder `isOpen` property to `true` in the `ViewModel` mounting invocation (`root.viewModel.assign`).
+5. Set the root folder `isOpen` property to `true` in the component mounting invocation (`root.assign`).
 
 
 @sourceref ./file-navigator-advanced-7.js
-@highlight 73-74,85,91,95,101-103,only
+@highlight 77-78,89,95,100,108-110,only
 
 
 
@@ -376,8 +393,8 @@ The following:
 When complete, you should have a working file-navigation widget
 like the following CodePen:
 
-<p class="codepen" data-height="404" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="EJNmyB" style="height: 404px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator advanced [Finished]">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/EJNmyB/">
+<p class="codepen" data-height="404" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="rNBMNrX" style="height: 404px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="File Navigator advanced [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/rNBMNrX/">
   File Navigator advanced [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>

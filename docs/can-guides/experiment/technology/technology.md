@@ -60,29 +60,30 @@ guides.
 
 ## Key-Value Observables
 
-The [can-define/map/map DefineMap] and
-[can-define/list/list DefineList] <span class='obs'>observables</span> define the logic and state
-in your application. For example, the following uses [can-define/map/map DefineMap] to:
+The [can-observable-object ObservableObject] and
+[can-observable-array ObservableArray] <span class='obs'>observables</span> define the logic and state
+in your application. For example, the following uses [can-observable-object ObservableObject] to:
 
 - Model a simple `Counter` type.
 - Create instances of `Counter`, call its methods, and inspect its state.
 
 
 ```js
-import {DefineMap} from "can";
+import {ObservableObject} from "can";
 
-// Extend DefineMap to create a custom observable type.
-const Counter = DefineMap.extend({
-
+// Extend ObservableObject to create a custom observable type.
+class Counter extends ObservableObject {
+  static props = {
     // Defines a `count` property that defaults to 0.
-    count: {default: 0},
+    count: 0
+  }
 
-    // Defines an `increment` method that increments
-    // the `count` property.
-    increment() {
-        this.count++;
-    }
-});
+  // Defines an `increment` method that increments
+  // the `count` property.
+  increment() {
+    this.count++;
+  }
+}
 
 // Create an instance of the Counter observable type.
 const myCounter = new Counter();
@@ -108,67 +109,72 @@ its state changes.  The following uses [can-event-queue/map/map.listenTo]
 to log each time the [can-define/map/map/PropertyNameEvent count] changes:
 
 ```js
-import {DefineMap} from "can";
+import {ObservableObject} from "can";
 
-const Counter = DefineMap.extend({
-    count: {default: 0},
-    increment() {
-        this.count++;
-    }
-});
+class Counter extends ObservableObject {
+  static props = {
+    count: 0
+  }
+
+  increment() {
+    this.count++;
+  }
+}
 
 const myCounter = new Counter();
 
-myCounter.listenTo("count", function(event, newCount){
-    console.log(newCount); // logs 1, 10, then 11
+myCounter.listenTo("count", (event, newCount) => {
+  console.log(newCount); // logs 1, 10, then 11
 });
 
 myCounter.increment();
 myCounter.count = 10;
 myCounter.increment();
 ```
-@highlight 12-14
+@highlight 15-17
 @codepen
 
 
 
-[can-define/list/list DefineList] creates <span class='obs'>observable</span> lists. Observable lists are most commonly
+[can-observable-array ObservableArray] creates <span class='obs'>observable</span> lists. Observable lists are most commonly
 used with the [service layer](#Observablesandtheservicelayer). The following
 defines a `Counters` list type. Instances of `Counters` will have a `sum` property that returns the sum of
 each `Counter` within the list:
 
 ```js
-import {DefineMap, DefineList} from "can";
+import {ObservableObject, ObservableArray, type} from "can";
 
-const Counter = DefineMap.extend({
-    count: {default: 0},
-    increment() {
-        this.count++;
-    }
-});
+class Counter extends ObservableObject {
+  static props = {
+    count: 0
+  }
 
-// Extend DefineList to create a custom observable list type.
-const Counters = DefineList.extend({
-    // "#" specifies the type of items in the list.
-    // Plain objects will be converted to Counter instances.
-    "#": Counter,
+  increment() {
+    this.count++;
+  }
+}
 
-    // Defines a getter for sum
-    get sum(){
-        // Loop through each counter and sum its count;
-        let sum = 0;
-        this.forEach( (counter) => sum += counter.count );
-        return sum;
-    }
-});
+class Counters extends ObservableArray {
+  // Specifies the type of items in the list.
+  // Plain objects will be converted to Counter instances.
+  static items = type.convert(Counter)
+
+  // Defines a getter for sum
+  get sum(){
+    // Loop through each counter and sum its count;
+    let sum = 0;
+    this.forEach( (counter) => sum += counter.count );
+    return sum;
+  }
+}
 
 // Create an instance of Counters
 let myCounters = new Counters([
-    new Counter(),
-    // Initializes count with value 3
-    new Counter({count: 3}),
-    // Plain objects will be converted to Counter instances.
-    {count: 4}
+  new Counter(),
+  // Initializes count with value 3
+  new Counter({count: 3}),
+  // Plain objects will be converted to Counter instances.
+  {count: 4}
 ]);
 
 console.log( myCounters[0].count ) //-> 0
@@ -181,21 +187,17 @@ console.log( myCounters.sum )      //-> 8
 @codepen
 
 
-
-
-> __NOTE:__ CanJS application logic is coded within instances of [can-define/map/map DefineMap] and [can-define/list/list DefineList].
+> __NOTE:__ CanJS application logic is coded within instances of [can-observable-object ObservableObject] and [can-observable-array ObservableArray].
 > You often don’t need the DOM for unit testing!
 
-[can-define/map/map DefineMap] and [can-define/list/list DefineList] have a wide variety of features and shorthands for defining property behavior. For more information about how to write logic within
-CanJS’s observables read the [can-define/map/map#Use DefineMap Use section] and the
-[can-define.types.propDefinition PropDefinition documentation].
-
-
+[can-observable-object ObservableObject] and [can-observable-array ObservableArray] have a wide variety of features and shorthands for defining property behavior. For more information about how to write logic within
+CanJS’s observables read the [can-observable-object#Use ObservableObject Use section] and the
+[can-observable-object/object.types.definitionObject DefinitionObject documentation].
 
 ## Observables and HTML elements
 
-CanJS applications use [can-component Components] to connect <span class='obs'>observables</span>
-to a page's HTML elements. We can use [can-component Component] to create a counting widget
+CanJS applications use [can-stache-element Components] to connect <span class='obs'>observables</span>
+to a page's HTML elements. We can use [can-stache-element StacheElement] to create a counting widget
 for the `Counter` <span class='obs'>observables</span> we just created.
 
 The following widget counts the number of times the <button>+1</button> button is clicked:
@@ -213,33 +215,33 @@ a Component's [can-component.prototype.ViewModel] and view are typically defined
 <my-counter></my-counter>
 
 <script type="module">
-import { Component } from "can";
+import { StacheElement } from "can";
 
-Component.extend({
-    tag: "my-counter",
-    view: `
-        Count: <span>{{count}}</span>
-        <button on:click='increment()'>+1</button>
-    `,
-    // If `ViewModel` is set to an Object,
-    // that Object is used to extend [can-define/map/map DefineMap].
-    ViewModel: {
-        count: {default: 0},
-        increment() {
-            this.count++;
-        }
-    }
-});
+class MyCounter extends StacheElement {
+  static view = `
+    Count: <span>{{this.count}}</span>
+    <button on:click='this.increment()'>+1</button>
+  `
+
+  static props = {
+    count: 0
+  }
+
+  increment() {
+    this.count++;
+  }
+}
+customElements.define("my-counter", MyCounter);
 </script>
 ```
 @codepen
 
-You might have noticed that Components are mostly 2 parts:
+You might have noticed that StacheElements are mostly 2 parts:
 
-- A [can-component.prototype.view] that specifies the HTML content within the custom element. In this case, we’re adding a `<span>` and a `<button>` within the `<my-counter>` element. Magic tags
+- A [can-stache-element/static.view] that specifies the HTML content within the custom element. In this case, we’re adding a `<span>` and a `<button>` within the `<my-counter>` element. Magic tags
 like `{{count}}` are provided by [can-stache stache] and bindings like `on:click` are provided by
 [can-stache-bindings stacheBindings].
-- An observable [can-component.prototype.ViewModel] that manages the logic and state of the application.
+- [can-observable-object/object.static.props Properties] that manages the logic and state of the application.
 
 These work together to receive input from the user, update the state of the application, and then update
 the HTML the user sees accordingly. See how in this 2 minute video:
@@ -260,11 +262,11 @@ The following example shows that:
 - When the URL changes, the observable state updates.
 
 ```js
-import {route, DefineMap} from "//unpkg.com/can@5/core.mjs";
+import {route, ObservableObject} from "can";
 
 location.hash = "#!&page=todos&id=1";
 
-route.data = new DefineMap({});
+route.data = new ObservableObject();
 route.start();
 
 // The route data matches what's in the hash.
@@ -300,8 +302,7 @@ Notice how the URL changes when you click the `+1` button AND the _Count_ change
 forward and back button are clicked.
 
 
-The following connects the `<my-counter>`’s observable [can-component.prototype.ViewModel]
-to the browser's URL:
+The following connects the `<my-counter>` to the browser's URL:
 
 ```html
 <mock-url></mock-url>
@@ -312,29 +313,31 @@ to the browser's URL:
 // a fake back, forward, and URL controls.
 import "//unpkg.com/mock-url@5";
 
-import {route, Component} from "can";
+import {route, StacheElement} from "can";
 
-Component.extend({
-    tag: "my-counter",
-    view: `
-        Count: <span>{{count}}</span>
-        <button on:click='increment()'>+1</button>
-    `,
-    ViewModel: {
-        count: {default: 0},
-        increment() {
-            this.count++;
-        }
-    }
-});
+class MyCounter extends StacheElement {
+  static view = `
+    Count: <span>{{this.count}}</span>
+    <button on:click='this.increment()'>+1</button>
+  `
+
+  static props = {
+    count: 0
+  }
+
+  increment() {
+    this.count++;
+  }
+}
+customElements.define("my-counter", MyCounter);
 
 // The `.data` property specifies the observable to cross
 // bind the URL to.
-route.data = document.querySelector("my-counter").viewModel;
+route.data = document.querySelector("my-counter");
 route.start();
 </script>
 ```
-@highlight 27-28
+@highlight 29-30
 @codepen
 
 
@@ -352,21 +355,23 @@ the following changes the URLs to look like `#!1`, `#!2`, `#!3`:
 // a fake back, forward, and URL controls.
 import "//unpkg.com/mock-url@^5.0.0";
 
-import {route, Component} from "can";
+import {route, StacheElement} from "can";
 
-Component.extend({
-    tag: "my-counter",
-    view: `
-        Count: <span>{{count}}</span>
-        <button on:click='increment()'>+1</button>
-    `,
-    ViewModel: {
-        count: {default: 0},
-        increment() {
-            this.count++;
-        }
-    }
-});
+class MyCounter extends StacheElement {
+  static view = `
+    Count: <span>{{this.count}}</span>
+    <button on:click='this.increment()'>+1</button>
+  `
+
+  static props = {
+    count: 0
+  }
+
+  increment() {
+    this.count++;
+  }
+}
+customElements.define("my-counter", MyCounter);
 
 // Register rules that translate from the URL to
 // setting properties on the cross-bound observable.
@@ -375,7 +380,7 @@ route.data = document.querySelector("my-counter");
 route.start();
 </script>
 ```
-@highlight 27
+@highlight 29
 @codepen
 
 
@@ -412,35 +417,36 @@ The following loads this list of data and logs it to the console by:
   the todos from the server and log them to the console.
 
 ```js
-import {restModel, DefineMap, DefineList } from "can";
+import {restModel, ObservableObject, ObservableArray, type } from "can";
 import mockTodosService from "//unpkg.com/todos-fixture@1";
 
 // Defines the observable Todo type and its properties
-const Todo = DefineMap.extend("Todo",{
-
+class Todo extends ObservableObject {
+  static props = {
     // `identity: true` specifies that `id` values must be unique.
-    id: { type: "number", identity: true },
-    complete: { type: "boolean", default: false },
-    dueDate: "date",
-    name: "string"
-});
+    id: { type: Number, identity: true },
+    complete: false,
+    dueDate: type.convert(Date),
+    name: String
+  }
+}
 
 // Defines an observable list of Todo instances and its methods
-Todo.List = DefineList.extend("TodoList",{
-    "#": Todo,
+Todo.List = class extends ObservableArray {
+  static items = type.convert(Todo)
 
-    // A helper method to complete every todo in the list.
-    completeAll(){
-        return this.forEach((todo) => { todo.complete = true; });
-    }
-});
+  // A helper method to complete every todo in the list.
+  completeAll(){
+    return this.forEach((todo) => { todo.complete = true; });
+  }
+}
 
 // Mixes in methods on `Todo` useful for
 // creating, retrieving, updating and deleting
 // data at the URL provided.
 restModel({
-    Map: Todo,
-    url: "/api/todos/{id}"
+  Map: Todo,
+  url: "/api/todos/{id}"
 });
 
 // Call to setup the mock server before we make a request.
@@ -449,12 +455,12 @@ mockTodosService(20);
 // Gets a Promise that resolves to a `Todo.List` of `Todo` instances.
 let todosPromise = Todo.getList();
 todosPromise.then(function(todos){
-    // .get() converts the Todo instances back to plain JS objects
-    // for easier to read logging.
-    console.log(todos.get())
+  // .get() converts the Todo instances back to plain JS objects
+  // for easier to read logging.
+  console.log(todos.get())
 });
 ```
-@highlight 27-30,36-41
+@highlight 28-31,37-42
 @codepen
 
 
@@ -469,56 +475,58 @@ that:
 <todo-list></todo-list>
 
 <script type='module'>
-import {restModel, DefineMap, DefineList } from "can";
+import {restModel, ObservableObject, ObservableArray, StacheElement, type } from "can";
 import mockTodosService from "//unpkg.com/todos-fixture@1";
 
-const Todo = DefineMap.extend("Todo",{
-    id: { type: "number", identity: true },
-    complete: { type: "boolean", default: false },
-    dueDate: "date",
-    name: "string"
-});
+class Todo extends ObservableObject {
+  static props = {
+    id: { type: Number, identity: true },
+    complete: false,
+    dueDate: type.convert(Date),
+    name: String
+  }
+}
 
-Todo.List = DefineList.extend("TodoList",{
-    "#": Todo,
-    completeAll(){
-        return this.forEach((todo) => { todo.complete = true; });
-    }
-});
+Todo.List = class extends ObservableArray {
+  static items = Todo;
+
+  completeAll(){
+    return this.forEach((todo) => { todo.complete = true; });
+  }
+}
 
 restModel({
-    Map: Todo,
-    url: "/api/todos/{id}"
-})
+  Map: Todo,
+  url: "/api/todos/{id}"
+});
 
 mockTodosService(20);
 
-import { Component } from "can";
+class TodoListElement extends StacheElement {
+  static view = `
+    <ul>
+      {{# for(todo of this.todosPromise.value) }}
+        <li>
+          <input type='checkbox' checked:from='todo.complete' disabled/>
+          <label>{{todo.name}}</label>
+          <input type='date' valueAsDate:from='todo.dueDate' disabled/>
+        </li>
+      {{/ for }}
+    </ul>
+  `
 
-Component.extend({
-    tag: "todo-list",
-    view: `
-        <ul>
-            {{# for(todo of todosPromise.value) }}
-                <li>
-                    <input type='checkbox' checked:from='todo.complete' disabled/>
-                    <label>{{todo.name}}</label>
-                    <input type='date' valueAsDate:from='todo.dueDate' disabled/>
-                </li>
-            {{/ for }}
-        </ul>
-    `,
-    ViewModel: {
-        todosPromise: {
-            default(){
-                return Todo.getList({})
-            }
-        }
+  static props = {
+    todosPromise: {
+      get default() {
+        return Todo.getList({});
+      }
     }
-});
+  }
+}
+customElements.define("todo-list", TodoListElement);
 </script>
 ```
-@highlight 30-50
+@highlight 31-52
 @codepen
 
 You can do a lot more with CanJS’s data layer besides showing a list of data. Read

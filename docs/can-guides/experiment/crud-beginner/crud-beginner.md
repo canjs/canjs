@@ -14,9 +14,9 @@ In this tutorial, we’ll build a simple to-do app that lets you:
 - Mark to-dos as “completed”
 - Delete to-dos
 
-<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="dBawyZ" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/dBawyZ/">
-  CanJS 5 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="yLBPLgw" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6 — Basic Todo App">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/yLBPLgw/">
+  CanJS 6 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p><br>
 
@@ -70,12 +70,12 @@ but you can learn more in the [can-fixture] documentation.
 
 ## Defining a custom element with CanJS
 
-We mentioned above that CanJS helps you define custom elements. We call these [can-component components].
+We mentioned above that CanJS helps you define custom elements.
 
 Add the following to the **JS** tab in your CodePen:
 
 @sourceref ./2.js
-@highlight 5-14,only
+@highlight 5-15,only
 
 After you add the above code, you’ll see “Today’s to-dos” displayed in the result pane.
 
@@ -91,57 +91,60 @@ With one line of code, we load CanJS from a CDN and import one of its modules:
 Here’s what the different parts mean:
 
 - `import` is a keyword that [loads modules from files](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import).
-- `Component` is the _named export_ from CanJS that lets us [can-component define custom elements].
-- `//unpkg.com/can@5/core.mjs` loads the `core.mjs` file from CanJS 5; this is explained more thoroughly in the [guides/setup#Explanationofdifferentbuilds setup guide].
+- `StacheElement` is the _named export_ from CanJS that lets us [can-stache-element create custom element constructors].
+- `//unpkg.com/can@pre/core.mjs` loads the `core.mjs` file from CanJS 6; this is explained more thoroughly in the [guides/setup#Explanationofdifferentbuilds setup guide].
 - `unpkg.com` is a CDN that hosts packages like CanJS ([can](https://www.npmjs.com/package/can)).
 
-### Defining a component
+### Defining a custom element
 
-The `Component` _named export_ comes from CanJS’s [can-component can-component] package.
+The `StacheElement` _named export_ comes from CanJS’s [can-stache-element can-stache-element] package.
 
 CanJS is composed of dozens of different packages that are responsible for different features.
-[can-component can-component] is responsible for letting us define custom elements that can be
+[can-stache-element can-stache-element] is responsible for letting us define custom elements that can be
 used by the browser.
 
 @sourceref ./2.js
-@highlight 7-14,only
+@highlight 7-15,only
 
-Calling [can-component.extend Component.extend()] defines a custom element. It takes three arguments:
+The `StacheElement` class can be extended to define a new custom element. It has two properties:
 
-- [can-component.prototype.tag `tag`] is the name of the custom element.
-- [can-component.prototype.view `view`] is a [can-stache stache template] that gets parsed by CanJS and inserted into the custom element; more on that later.
-- [can-component.prototype.ViewModel `ViewModel`] is an object (with properties and methods) from which the _view_ gets its _model_ data.
+- [can-stache-element/static.view `static view`] is a [can-stache stache template] that gets parsed by CanJS and inserted into the custom element; more on that later.
+- [can-stache-element/static.props `static props`] is an object that defines the properties available to the view.
+
+After calling [customElements.define()](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define)
+with the custom element’s tag name and constructor, a new instance of the `TodosApp` class will be instantiated every time
+`<todos-app>` is used.
 
 The `view` is pretty boring right now; it just renders `<h1>Today’s to-dos</h1>`. In the next section, we’ll make it more interesting!
 
 > Find something confusing or need help? [Join our Slack](https://bitovi.com/community/slack) and post a question
 > in the [#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A). We answer every question and we’re eager to help!
 
-## Rendering a template with a ViewModel
+## Rendering a template with data
 
-A component’s [can-component.prototype.view] gets rendered with a [can-component.prototype.ViewModel].
+A custom element’s [can-stache-element/static.view] has access to all the properties in the [can-stache-element/static.props] object.
 
-Let’s update our component to be a little more interesting:
+Let’s update our custom element to be a little more interesting:
 
 @sourceref ./3.js
-@highlight 10,13-15,only
+@highlight 9,13-15,only
 
-Using this component will insert the following into the page:
+Using this custom element will insert the following into the page:
 
 ```html
 <todos-app>
-	<h1>Today’s to-dos!</h1>
+  <h1>Today’s to-dos!</h1>
 </todos-app>
 ```
 
 The next two sections will explain these lines.
 
-### Defining properties on the ViewModel
+### Defining properties
 
-Every time a component’s custom element is used, a new instance of the component’s `ViewModel` is created.
+Each time a custom element is created, each property listed in `props` will be defined on the instance.
 
-We’ve added a `title` [can-define.types.propDefinition#GETTER getter]
-to our `ViewModel`, which returns the string `"Today’s to-dos!"`:
+We’ve added a `title` [getter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get)
+to our `props`, which returns the string `"Today’s to-dos!"`:
 
 @sourceref ./3.js
 @highlight 13-15,only
@@ -152,10 +155,10 @@ Our `view` is a [can-stache stache template]. Whenever stache encounters the [ca
 it looks inside them for an _expression_ to evaluate.
 
 @sourceref ./3.js
-@highlight 10,only
+@highlight 9,only
 
-`this` inside a stache template refers to the ViewModel instance created for that component, so `{{ this.title }}` makes stache
-read the `title` property on the component’s ViewModel instance, which is how `<h1>Today’s to-dos!</h1>` gets rendered in the page!
+`this` inside a stache template refers to the custom element, so `{{ this.title }}` makes stache
+read the `title` property on the custom element, which is how `<h1>Today’s to-dos!</h1>` gets rendered in the page!
 
 > Find something confusing or need help? [Join our Slack](https://bitovi.com/community/slack) and post a question
 > in the [#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A). We answer every question and we’re eager to help!
@@ -169,7 +172,7 @@ CanJS provides abstractions for connecting to backend APIs so you can:
 
 - Use a standard interface for creating, retrieving, updating, and deleting data.
 - Avoid writing the requests yourself.
-- Convert raw data from the server to typed data, with properties and methods, _just like a ViewModel_.
+- Convert raw data from the server to typed data with properties and methods, _just like a custom element’s properties and methods_.
 - Have your UI update whenever the model data changes.
 - Prevent multiple instances of a given object or multiple lists of a given set from being created.
 
@@ -206,13 +209,13 @@ creating, retrieving, updating, and deleting data:
 - `PUT /api/todos/1` to update the to-do with `id=1`
 - `DELETE /api/todos/1` to delete the to-do with `id=1`
 
-`realtimeRestModel()` returns what we call a _connection_. It’s just an object that has a `.Map` property.
+`realtimeRestModel()` returns what we call a _connection_. It’s just an object that has a `.ObjectType` property.
 
 The `Todo` is a new model that has these methods for making API calls:
 
 - `Todo.getList()` calls `GET /api/todos`
 - `new Todo().save()` calls `POST /api/todos`
-- `Todo.get({id: 1})` calls `GET /api/todos/1`
+- `Todo.get({ id: 1 })` calls `GET /api/todos/1`
 
 Additionally, once you have an instance of a `todo`, you can call these methods on it:
 
@@ -224,12 +227,12 @@ Additionally, once you have an instance of a `todo`, you can call these methods 
 
 ### Fetching all the to-dos
 
-Third, we add a new getter to our ViewModel:
+Third, we add a new getter to our custom element:
 
 @sourceref ./4.js
 @highlight 15-17,only
 
-`Todo.getList({sort: "name"})` will make a `GET` request to `/api/todos?sort=name`.
+`Todo.getList({ sort: "name" })` will make a `GET` request to `/api/todos?sort=name`.
 It returns a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
 that resolves with the data returned by the API.
 
@@ -238,10 +241,10 @@ that resolves with the data returned by the API.
 
 ## Rendering a list of items
 
-Now that we’ve learned how to fetch data from an API, let’s render the data in our component!
+Now that we’ve learned how to fetch data from an API, let’s render the data in our custom element!
 
 @sourceref ./5.js
-@highlight 13-21,only
+@highlight 12-20,only
 
 This template uses two stache helpers:
 
@@ -266,7 +269,7 @@ Now let’s also:
 - Show a message if there’s an error loading the to-dos
 
 @sourceref ./6.js
-@highlight 13-18,only
+@highlight 12-17,only
 
 This template shows how to read more state and an error from a Promise:
 
@@ -286,7 +289,7 @@ In this section, we’ll add an `<input>` for new to-do names and a button for s
 After a new to-do is created, we’ll reset the input so a new to-do’s name can be entered.
 
 @sourceref ./7.js
-@highlight 20-21,32,36-40,only
+@highlight 19-20,32,39-43,only
 
 The next four sections will explain these lines.
 
@@ -294,19 +297,19 @@ The next four sections will explain these lines.
 
 CanJS has one-way and two-way bindings in the form of:
 
-- [can-stache-bindings.twoWay <child-element property:bind="key">] (two-way binding a property on child element and parent ViewModel)
+- [can-stache-bindings.twoWay <child-element property:bind="key">] (two-way binding a property on child element and parent element)
 - [can-stache-bindings.toChild <child-element property:from="key">] (one-way binding to a child element’s property)
-- [can-stache-bindings.toParent <child-element property:to="key">] (one-way binding to the parent ViewModel)
+- [can-stache-bindings.toParent <child-element property:to="key">] (one-way binding to the parent element)
 
 Let’s examine our code more closely:
 
 @sourceref ./7.js
-@highlight 20,only
+@highlight 19,only
 
 `value:bind="this.newName"` will create a binding between the input’s `value` property and
-the ViewModel’s `newName` property. When one of them changes, the other will be updated.
+the custom element’s `newName` property. When one of them changes, the other will be updated.
 
-If you’re wondering where we’ve defined the `newName` in the ViewModel… we’ll get there in just a moment. 😊
+If you’re wondering where we’ve defined the `newName` in the custom element… we’ll get there in just a moment. 😊
 
 ### Listening for events
 
@@ -315,62 +318,67 @@ You can listen for events with the [can-stache-bindings.event <child-element on:
 Let’s look at our code again:
 
 @sourceref ./7.js
-@highlight 21,only
+@highlight 20,only
 
-When the button emits a `click` event, the `save()` method on the ViewModel will be called.
+When the button emits a `click` event, the `save()` method on the custom element will be called.
 
-Again, you might be wondering where we’ve defined the `save()` method in the ViewModel… we’ll get there in just a moment. 😊
+Again, you might be wondering where we’ve defined the `save()` method in the custom element… we’ll get there in just a moment. 😊
 
 ### Defining custom properties
 
-Earlier we said that a:
+Earlier we said that:
 
-> [can-component.prototype.ViewModel `ViewModel`] is an object (with properties and methods) from which the _view_ gets its _model_ data.
+> [can-stache-element/static.props `static props`] is an object that defines the properties available to the view.
 
-This is true, although there’s more information to be known. A component’s ViewModel is actually an instance of
-[can-define/map/map DefineMap], which is an observable data type used throughout CanJS.
+This is true, although there’s more information to be known. The `static props` object is made up of [can-observable-object ObservableObject]-like
+property definitions that explicitly configure how a custom element’s properties are defined.
 
-We’ve been defining properties and methods on the ViewModel with the
+We’ve been defining properties and methods on the custom element with the
 [standard JavaScript getter and method syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions#Defining_method_functions).
-Now we’re going to use [can-define.types.propDefinition#String DefineMap’s string syntax] to define
-a property as a string:
+
+Now we’re going to use [can-observable-object/object.types.property#function__ ObservableObject’s constructor syntax] to define
+a property as a [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String):
 
 @sourceref ./7.js
 @highlight 32,only
 
-In the code above, we define a new `newName` property on the ViewModel. When this property is set,
-if the new value is not `null` or `undefined`, CanJS will convert the new value into a string.
+In the code above, we define a new `newName` property on the custom element as a [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String).
+If this property is set to a value that’s not a `String`, CanJS will throw an error.
+If you instead want the value to be converted to a string, you could use [can-type/convert type.convert(String)].
 
-CanJS supports many different types, including `boolean`, `date`, `number`, and more. You can find the
-[can-define.types full list of types here].
+You can specify any [built-in](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects)
+types that you want, including
+[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean),
+[Date](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date),
+and [Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number).
 
 ### Saving new items to the backend API
 
-Now let’s look at the `save()` method on our ViewModel:
+Now let’s look at the `save()` method on our custom element:
 
 @sourceref ./7.js
-@highlight 36-40,only
+@highlight 39-43,only
 
 This code does three things:
 
-1) Creates a new to-do with the name typed into the `<input>` (`const todo = new Todo({name: this.newName})`).
+1) Creates a new to-do with the name typed into the `<input>` (`const todo = new Todo({ name: this.newName })`).
 2) Saves the new to-do to the backend API (`todo.save()`).
 3) Resets the `<input>` so a new to-do name can be typed in (`this.newName = ""`).
 
 You’ll notice that just like within the stache template, `this` inside the `save()` method refers to the
-component’s ViewModel instance. This is how we can both read and write the ViewModel’s `newName` property.
+custom element. This is how we can both read and write the custom element’s `newName` property.
 
 ### New items are added to the right place in the sorted list
 
-When `Todo.getList({sort: "name"})` is called, CanJS makes a GET request to `/api/todos?sort=name`.
+When `Todo.getList({ sort: "name" })` is called, CanJS makes a GET request to `/api/todos?sort=name`.
 
-When the array of to-dos comes back, CanJS associates that array with the query `{sort: "name"}`.
+When the array of to-dos comes back, CanJS associates that array with the query `{ sort: "name" }`.
 When new to-dos are created, they’re automatically added to the right spot in the list that’s returned.
 
 **Try adding a to-do in your CodePen!** You don’t have to write any code to make sure the new to-do gets inserted
 into the right spot in the list.
 
-CanJS does this for filtering as well. If you make a query with a filter (e.g. `{filter: {complete: true }}`),
+CanJS does this for filtering as well. If you make a query with a filter (e.g. `{ filter: { complete: true } }`),
 when items are added, edited, or deleted that match that filter, those lists will be updated automatically.
 
 > Find something confusing or need help? [Join our Slack](https://bitovi.com/community/slack) and post a question
@@ -385,9 +393,18 @@ We’ll also make it possible to click on a to-do to select it and edit its name
 After either of these changes, we’ll save the to-do to the backend API.
 
 @sourceref ./8.js
-@highlight 25-34,42,51-54,only
+@highlight 8,28-37,46,59-62,only
 
-The next four sections will more thoroughly explain the code above.
+The next five sections will more thoroughly explain the code above.
+
+### Importing type
+
+First, we import the [can-type type] module:
+
+@sourceref ./8.js
+@highlight 8,only
+
+This module gives us helpers for type checking and conversion.
 
 ### Binding to checkbox form elements
 
@@ -398,7 +415,7 @@ the checkbox is either checked or unchecked, respectively.
 Additionally, when the checkbox is clicked, `todo.complete` is updated to be `true` or `false`.
 
 @sourceref ./8.js
-@highlight 26,only
+@highlight 29,only
 
 We also listen for [change](https://developer.mozilla.org/en-US/docs/Web/Events/change) events with the
 [can-stache-bindings.event on:event] syntax. When the input’s value changes, the
@@ -412,10 +429,10 @@ This section uses two stache helpers:
 - [can-stache.helpers.else {{ else }}] will only render if `#eq()` returns `false`
 
 @sourceref ./8.js
-@highlight 28,30,34,only
+@highlight 31,33,37,only
 
 The code above checks whether `todo` is equal to `this.selected`. We haven’t added `selected`
-to our ViewModel yet, but we will in the next section!
+to our custom element yet, but we will in the next section!
 
 ### Setting the selected to-do
 
@@ -425,14 +442,13 @@ also [can-stache-bindings.event#on_VIEW_MODEL_OR_DOM_EVENT__KEY_VALUE_ set prope
 Let’s examine this part of the code:
 
 @sourceref ./8.js
-@highlight 31-33,42,only
+@highlight 34-36,46,only
 
-`on:click="this.selected = todo"` will cause the ViewModel’s `selected` property to be set
+`on:click="this.selected = todo"` will cause the custom element’s `selected` property to be set
 to the `todo` when the `<span>` is clicked.
 
-Additionally, we add [can-define.types.propDefinition#function__ `selected: Todo`]
-to the ViewModel. In our app, we only ever set `selected` to an instance of a `Todo`,
-but if we were to set it to a plain object, a new `Todo` instance would be created with that object.
+Additionally, we add [can-type/maybe `selected: type.maybe(Todo)`] to the custom element.
+This allows us to set `selected` to either an instance of `Todo` or `null`.
 
 ### Editing to-do names
 
@@ -441,14 +457,14 @@ to-do’s name (and immediately give it focus). When the input loses focus, we w
 and the input to be replaced with the span again.
 
 @sourceref ./8.js
-@highlight 29,51-54,only
+@highlight 32,59-62,only
 
 Let’s break down the code above:
 
 - `focused:from="true"` will set the input’s `focused` attribute to `true`, immediately giving the input focus
-- `on:blur="this.saveTodo(todo)"` listens for the [blur event](https://developer.mozilla.org/en-US/docs/Web/API/Element/blur_event) (the input losing focus) so the ViewModel’s `saveTodo()` method is called
+- `on:blur="this.saveTodo(todo)"` listens for the [blur event](https://developer.mozilla.org/en-US/docs/Web/API/Element/blur_event) (the input losing focus) so the custom element’s `saveTodo()` method is called
 - `value:bind="todo.name"` binds the input’s value to the `name` property on the `todo`
-- `saveTodo(todo)` in the ViewModel will call [can-connect/can/map/map.prototype.save `save()`] on the `todo` and reset the ViewModel’s `selected` property (so the input will disappear and just the to-do’s name is displayed)
+- `saveTodo(todo)` in the custom element will call [can-connect/can/map/map.prototype.save `save()`] on the `todo` and reset the custom element’s `selected` property (so the input will disappear and just the to-do’s name is displayed)
 
 > Find something confusing or need help? [Join our Slack](https://bitovi.com/community/slack) and post a question
 > in the [#canjs channel](https://bitovi-community.slack.com/messages/CFC22NZ8A). We answer every question and we’re eager to help!
@@ -458,7 +474,7 @@ Let’s break down the code above:
 Now there’s just one more feature we want to add to our app: deleting to-dos!
 
 @sourceref ./9.js
-@highlight 35,only
+@highlight 38,only
 
 When the `<button>` is clicked, the to-do’s [can-connect/can/map/map.prototype.destroy destroy]
 method is called, which will make a `DELETE /api/todos/{id}` call to delete the to-do in the
@@ -470,9 +486,9 @@ Congrats! You’ve built your first app with CanJS and learned all the basics.
 
 Here’s what your finished CodePen will look like:
 
-<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="dBawyZ" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/dBawyZ/">
-  CanJS 5 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="yLBPLgw" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/yLBPLgw/">
+  CanJS 6 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 

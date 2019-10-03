@@ -620,7 +620,7 @@ CanJS has configuration options for you to control how it makes requests, parses
 ```js
 import { realtimeRestModel } from "can";
 
-const Todo = realtimeRestModel("/api/todos/{id}").Map;
+const Todo = realtimeRestModel("/api/todos/{id}").ObjectType;
 
 // Get todos sorted by name
 const todosPromise = Todo.getList({sort: "name"});
@@ -696,7 +696,7 @@ Save yourself time by not writing code that updates your app’s UI.
 ```js
 import { realtimeRestModel } from "can";
 
-const Todo = realtimeRestModel("/api/todos/{id}").Map;
+const Todo = realtimeRestModel("/api/todos/{id}").ObjectType;
 
 // Get completed todos
 Todo.getList({sort: "name"}).then(todos => {
@@ -733,8 +733,8 @@ Below is an entire app that shows off some of the best features of CanJS:
 - `isPending`, `isRejected`, `isResolved`, and `value` helpers for directly reading the state of a Promise.
 - When you add a to-do, it automatically gets inserted into the list in the right position.
 
-<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="dBawyZ" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/dBawyZ/">
+<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="dBKzBZ" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/dBKzBZ/">
   CanJS 5 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>

@@ -16,12 +16,6 @@ var platforms = [{
 	commandTimeout: commandTimeout,
 	idleTimeout: idleTimeout
 }, {
-	browserName: 'MicrosoftEdge',
-	platform: 'Windows 10',
-	maxDuration: maxDuration,
-	commandTimeout: commandTimeout,
-	idleTimeout: idleTimeout
-}, {
 	browserName: 'firefox',
 	platform: 'Windows 10',
 	version: 'latest',
@@ -58,7 +52,7 @@ if (platformFilter) {
 
 testSauceLabs({
 	urls: [{
-		name: "canjs",
+		name: "CanJS",
 		url : 'http://canjs.test:3000/test/index-ie.html?hidepassed',
 		platforms: [{
 			browserName: 'internet explorer',
@@ -69,7 +63,17 @@ testSauceLabs({
 			idleTimeout: idleTimeout
 		}]
 	}, {
-		name: "canjs",
+		name: "CanJS with CustomElements polyfill",
+		url : 'http://canjs.test:3000/test/index-edge.html?hidepassed',
+		platforms: [{
+			browserName: 'MicrosoftEdge',
+			platform: 'Windows 10',
+			maxDuration: maxDuration,
+			commandTimeout: commandTimeout,
+			idleTimeout: idleTimeout
+		}]
+	}, {
+		name: "CanJS",
 		url : 'http://canjs.test:3000/test/index.html?hidepassed',
 		platforms: platforms
 	}],

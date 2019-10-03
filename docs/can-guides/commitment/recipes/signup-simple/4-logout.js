@@ -1,4 +1,4 @@
-import { ajax, fixture, type, StacheElement } from "//unpkg.com/can@5/ecosystem.mjs";
+import { ajax, fixture, StacheElement, type } from "//unpkg.com/can@pre/core.mjs";
 
 fixture("POST /api/session", function(request, response) {
 	const userData = localStorage.getItem("user");
@@ -77,7 +77,7 @@ class SignupLogin extends StacheElement {
 					url: "/api/session"
 				});
 			}
-		},
+		}
 	};
 
 	signUp(event) {
@@ -90,7 +90,7 @@ class SignupLogin extends StacheElement {
 				password: this.password
 			}
 		}).then(function(user) {
-			return {user: user};
+			return { user: user };
 		});
 	}
 
@@ -99,7 +99,7 @@ class SignupLogin extends StacheElement {
 			url: "/api/session",
 			type: "delete"
 		}).then(function() {
-			return Promise.reject({message: "Unauthorized"});
+			return Promise.reject({ message: "Unauthorized" });
 		});
 	}
 }

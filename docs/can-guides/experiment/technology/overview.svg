@@ -1,4 +1,4 @@
-<svg viewBox="0 0 700 700" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg viewBox="0 0 725 700" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <style type="text/css">
         @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,700);
         .text-reg {
@@ -20,97 +20,82 @@
             fill: #2E4E85;
         }
     </style>
-    <title>CanJS Observables Overview</title>
-    <desc>CanJS Observables Overview</desc>
     <defs>
-        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="linearGradient-1">
-            <stop stop-color="#FFFFFF" offset="0%"></stop>
-            <stop stop-color="#808080" offset="100%"></stop>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="a">
+            <stop stop-color="#FFF" offset="0%" />
+            <stop stop-color="gray" offset="100%" />
         </linearGradient>
-        <radialGradient cx="50%" cy="50%" fx="50%" fy="50%" r="50%" id="radialGradient-2">
-            <stop stop-color="#FFFFFF" offset="0%"></stop>
-            <stop stop-color="#F0F0F0" offset="96%"></stop>
-            <stop stop-color="#FFFFFF" offset="100%"></stop>
+        <radialGradient fx="50%" fy="50%" id="b">
+            <stop stop-color="#FFF" offset="0%" />
+            <stop stop-color="#F0F0F0" offset="96%" />
+            <stop stop-color="#FFF" offset="100%" />
         </radialGradient>
     </defs>
-    <g id="oveview" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="SL-group" transform="translate(31.000000, 571.000000)">
-            <circle id="Oval" fill="#509444" fill-rule="nonzero" cx="63" cy="63" r="63"></circle>
-            <circle id="Oval" fill="url(#linearGradient-1)" fill-rule="nonzero" style="mix-blend-mode: multiply;" cx="63" cy="63" r="63"></circle>
-            <circle id="Oval" fill="url(#radialGradient-2)" fill-rule="nonzero" cx="63" cy="63" r="55"></circle>
-            <text id="Service-Layer" fill="#000000" class="text-bold">
+    <g fill="none" fill-rule="evenodd">
+        <g transform="translate(31 571)">
+            <circle fill="#509444" fill-rule="nonzero" cx="63" cy="63" r="63" />
+            <circle fill="url(#a)" fill-rule="nonzero" style="mix-blend-mode:multiply" cx="63" cy="63" r="63" />
+            <circle fill="url(#b)" fill-rule="nonzero" cx="63" cy="63" r="55" /><text fill="#000"
+                font-family="OpenSans-Bold, Open Sans" font-size="21" font-weight="bold">
                 <tspan x="24" y="63">Service</tspan>
-                <tspan x="32.315918" y="84">Layer</tspan>
-            </text>
-        </g>
-        <g id="modeling-group" transform="translate(68.000000, 453.000000)">
-            <text id="Data-Modeling" class="text-bold color-two text-small">
+                <tspan x="32.316" y="84">Layer</tspan>
+            </text></g>
+        <g><text class="text-bold text-small" fill="#2E4E85"
+                transform="translate(68 453)">
                 <tspan x="0" y="19">Data Modeling</tspan>
-            </text>
-            <text id="can-connect" class="text-reg text-small">
+            </text><text class="text-reg" transform="translate(68 453)">
                 <tspan x="0" y="43">can-connect</tspan>
-            </text>
-            <text id="can-set" class="text-reg text-small">
+            </text><text class="text-reg" transform="translate(68 453)">
                 <tspan x="0" y="67">can-set</tspan>
-            </text>
-        </g>
-        <g id="WL-group" transform="translate(544.000000, 571.000000)">
-            <circle id="Oval" fill="#509444" fill-rule="nonzero" cx="63" cy="63" r="63"></circle>
-            <circle id="Oval" fill="url(#linearGradient-1)" fill-rule="nonzero" style="mix-blend-mode: multiply;" cx="63" cy="63" r="63"></circle>
-            <circle id="Oval" fill="url(#radialGradient-2)" fill-rule="nonzero" cx="63" cy="63" r="55"></circle>
-            <text id="window.-location" fill="#000000" class="text-bold">
+            </text></g>
+        <g transform="translate(544 571)">
+            <circle fill="#509444" fill-rule="nonzero" cx="63" cy="63" r="63" />
+            <circle fill="url(#a)" fill-rule="nonzero" style="mix-blend-mode:multiply" cx="63" cy="63" r="63" />
+            <circle fill="url(#b)" fill-rule="nonzero" cx="63" cy="63" r="55" /><text fill="#000"
+                font-family="OpenSans-Bold, Open Sans" font-size="21" font-weight="bold">
                 <tspan x="18" y="63">window.</tspan>
-                <tspan x="19.6098633" y="84">location</tspan>
-            </text>
-        </g>
-        <g id="routing-group" transform="translate(526.000000, 453.000000)">
-            <text id="Routing" class="text-bold text-small color-two">
+                <tspan x="19.61" y="84">location</tspan>
+            </text></g>
+        <g><text class="text-bold text-small" fill="#2E4E85"
+                transform="translate(526 453)">
                 <tspan x="0" y="19">Routing</tspan>
-            </text>
-            <text id="can-route" class="text-reg text-small">
+            </text><text class="text-reg" transform="translate(526 453)">
                 <tspan x="0" y="43">can-route</tspan>
-            </text>
-            <text id="can-route-pushstate" class="text-reg text-small">
+            </text><text class="text-reg" transform="translate(526 453)">
                 <tspan x="0" y="67">can-route-pushstate</tspan>
-            </text>
-        </g>
-        <g id="observables-group" transform="translate(243.000000, 320.000000)">
-            <path d="M108,156 C79.67,156 52.93,148.2 32.71,134 C11.62,119.24 0,99.33 0,78 C0,56.67 11.62,36.71 32.71,21.95 C52.93,7.79 79.71,0 108,0 C136.29,0 163.08,7.79 183.3,21.95 C204.39,36.71 216,56.61 216,78 C216,99.39 204.39,119.29 183.3,134 C163.08,148.2 136.34,156 108,156 Z" id="Path" fill="#666666" fill-rule="nonzero"></path>
-            <ellipse id="Oval" fill="#FFFFFF" fill-rule="nonzero" cx="108" cy="78" rx="100" ry="70"></ellipse>
-            <text id="Observables" fill="#000000" class="text-bold">
-                <tspan x="43.2209473" y="60">Observables</tspan>
-            </text>
-            <text id="can-define" class="text-reg">
-                <tspan x="56.4638672" y="84">can-define</tspan>
-            </text>
-            <text id="can-observe" class="text-reg">
-                <tspan x="48.2248535" y="108">can-observe</tspan>
-            </text>
-        </g>
-        <g id="view-group" transform="translate(373.000000, 171.000000)" font-size="18">
-            <text id="View" class="text-bold text-small color-two">
+            </text></g>
+        <g transform="translate(210 314)">
+            <path
+                d="M140 155c-36.724 0-71.387-7.75-97.598-21.859C15.063 118.476 0 98.693 0 77.5c0-21.193 15.063-41.025 42.402-55.69C68.613 7.74 103.328 0 140 0s71.4 7.74 97.611 21.81C264.95 36.474 280 56.246 280 77.5s-15.05 41.025-42.389 55.641C211.4 147.25 176.737 155 140 155z"
+                fill="#666" fill-rule="nonzero" />
+            <ellipse fill="#FFF" fill-rule="nonzero" cx="140.5" cy="78" rx="132.5" ry="70" /><text fill="#000"
+                font-family="OpenSans-Bold, Open Sans" font-size="21" font-weight="bold">
+                <tspan x="76.221" y="53">Observables</tspan>
+            </text><text class="text-reg" font-size="21">
+                <tspan x="32.388" y="77">can-observable-object</tspan>
+            </text><text class="text-reg" font-size="21">
+                <tspan x="37.374" y="101">can-observable-array</tspan>
+            </text><text class="text-reg" font-size="21">
+                <tspan x="81.225" y="125">can-observe</tspan>
+            </text></g>
+        <g><text class="text-bold text-small" fill="#2E4E85"
+                transform="translate(373 171)">
                 <tspan x="0" y="19">View</tspan>
-            </text>
-            <text id="can-stache" class="text-reg text-small">
+            </text><text class="text-reg" transform="translate(373 171)">
                 <tspan x="0" y="43">can-stache</tspan>
-            </text>
-            <text id="can-component" class="text-reg text-small">
-                <tspan x="0" y="67">can-component</tspan>
-            </text>
-            <text id="can-stache-bindings" class="text-reg text-small">
+            </text><text class="text-reg" transform="translate(373 171)">
+                <tspan x="0" y="67">can-stache-element</tspan>
+            </text><text class="text-reg" transform="translate(373 171)">
                 <tspan x="0" y="91">can-stache-bindings</tspan>
-            </text>
-        </g>
-        <g id="DOM-group" transform="translate(289.000000, 2.000000)">
-            <circle id="Oval" fill="#509444" fill-rule="nonzero" cx="63.08" cy="63.6" r="63"></circle>
-            <circle id="Oval" fill="url(#linearGradient-1)" fill-rule="nonzero" style="mix-blend-mode: multiply;" cx="63.08" cy="63.6" r="63"></circle>
-            <circle id="Oval" fill="url(#radialGradient-2)" fill-rule="nonzero" cx="63.08" cy="63.6" r="55"></circle>
-            <text id="DOM" fill="#000000" class="text-bold">
+            </text></g>
+        <g transform="translate(289 2)">
+            <circle fill="#509444" fill-rule="nonzero" cx="63.08" cy="63.6" r="63" />
+            <circle fill="url(#a)" fill-rule="nonzero" style="mix-blend-mode:multiply" cx="63.08" cy="63.6" r="63" />
+            <circle fill="url(#b)" fill-rule="nonzero" cx="63.08" cy="63.6" r="55" /><text fill="#000"
+                font-family="OpenSans-Bold, Open Sans" font-size="21" font-weight="bold">
                 <tspan x="37" y="70.49">DOM</tspan>
-            </text>
-        </g>
-        <polygon id="arrow-left" fill="#000000" fill-rule="nonzero" points="239.016945 466.462786 231.986379 459.43222 256 453 249.56778 477.013621 242.537214 469.983055 149.993027 562.537214 157.013621 569.56778 133 576 139.442192 551.986379 146.462786 559.016945"></polygon>
-        <polygon id="arrow-right" fill="#000000" fill-rule="nonzero" points="463.984432 466.462786 471.005595 459.43222 447 453 453.432741 477.013621 460.453904 469.983055 553.015568 562.537214 545.984432 569.56778 570 576 563.567259 551.986379 556.536123 559.016945"></polygon>
-        <polygon id="arrow-top" fill="#000000" fill-rule="nonzero" points="354.002006 156.536777 364 156.536777 351.494986 135 339 156.536777 348.987966 156.536777 348.987966 287.463223 339 287.463223 351.494986 309 364 287.463223 354.002006 287.463223"></polygon>
+            </text></g>
+        <path fill="#000" fill-rule="nonzero"
+            d="M239.017 466.463l-7.03-7.03L256 453l-6.432 24.014-7.03-7.03-92.545 92.553 7.02 7.03L133 576l6.442-24.014 7.02 7.03zM463.984 466.463l7.022-7.03L447 453l6.433 24.014 7.02-7.03 92.563 92.553-7.032 7.03L570 576l-6.433-24.014-7.03 7.03zM354.002 156.537H364L351.495 135 339 156.537h9.988v130.926H339L351.495 309 364 287.463h-9.998z" />
     </g>
 </svg>

@@ -22,9 +22,9 @@ In this guide you will learn how to:
 
 The final widget looks like:
 
-<p class="codepen" data-height="332" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="XGgbdb" style="height: 332px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 Text Editor">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/XGgbdb/">
-  CanJS 5 Text Editor</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="332" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="BaBxJJm" style="height: 332px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6 Text Editor">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/BaBxJJm/">
+  CanJS 6 Text Editor</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
@@ -39,23 +39,23 @@ The following sections are broken down into the following parts:
 
 __START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED__:
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="ywXNOd" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 Text Editor">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/ywXNOd/">
-  CanJS 5 Text Editor</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="YzKLLeG" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6 Text Editor">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/YzKLLeG/">
+  CanJS 6 Text Editor</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
 This CodePen:
 
-- Loads CanJS (`import { Component } from "//unpkg.com/can@5/core.mjs"`).
+- Loads CanJS (`import { StacheElement } from "//unpkg.com/can@6/core.mjs"`).
 - Implements 3 helper functions we will use later: `siblingThenParentUntil`, `splitRangeStart` and `splitRangeEnd`. These are hidden out of sight in the `HTML` tab.
 - Mocks out the signature for helper functions we will implement later: `getElementsInRange` and `rangeContains`. These are in the `JS` tab.
 
 ### The problem
 
 - Set up a basic CanJS app by creating a `<rich-text-editor>` element.
-- The `<rich-text-editor>` element should add a [contenteditable](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Editable_content) `<div/>` with an `editbox`
-  [class name](https://developer.mozilla.org/en-US/docs/Web/API/Element/className) to the page. The `<div/>` should have the following default __inner__ content:
+- The `<rich-text-editor>` element should add a [contenteditable](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Editable_content) `<div>` with an `editbox`
+  [class name](https://developer.mozilla.org/en-US/docs/Web/API/Element/className) to the page. The `<div>` should have the following default __inner__ content:
   ```html
   <ol>
     <li>Learn <b>about</b> CanJS.</li>
@@ -76,13 +76,12 @@ I’m sorry; your browser doesn’t support HTML5 video in WebM with VP8/VP9 or 
 To set up a basic CanJS application, you define a custom element in JavaScript and
 use the custom element in your page’s `HTML`.
 
-To define a custom element, extend [can-component] with a [can-component.prototype.tag]
-that matches the name of your custom element.  For example:
+To define a custom element, extend [can-stache-element] and [register it](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define) 
+with a tag name that matches the name of your custom element.  For example:
 
 ```js
-Component.extend({
-  tag: "rich-text-editor"
-});
+class RichTextEditor extends StacheElement {}
+customElements.define("rich-text-editor", RichTextEditor);
 ```
 
 Then you can use this tag in your HTML page:
@@ -91,14 +90,16 @@ Then you can use this tag in your HTML page:
 <rich-text-editor></rich-text-editor>
 ```
 
-But this doesn’t do anything.  Components add their own HTML through their [can-component.prototype.view]
+But this doesn’t do anything.  Components add their own HTML through their [can-stache-element/static.view]
 property:
 
 ```js
-Component.extend({
-  tag: "rich-text-editor",
-  view: `<h2>I am a rich-text-editor!</h2>`
-});
+class RichTextEditor extends StacheElement {
+  static view = `
+    <h2>I am a rich-text-editor!</h2>
+  `;
+}
+customElements.define("rich-text-editor", RichTextEditor);
 ```
 
 Now the `H2` element in the `view` will show up within the `<rich-text-editor>` element:
@@ -107,8 +108,9 @@ Now the `H2` element in the `view` will show up within the `<rich-text-editor>` 
 <rich-text-editor><h2>I am a rich-text-editor!</h2></rich-text-editor>
 ```
 
-To make an element editable, set the [contenteditable](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/contenteditable) property to `"true"`.  Once an element’s content is editable, the user can change the text and HTML structure
-of that element by typing and copying and pasting text.
+To make an element editable, set the [contenteditable](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/contenteditable) 
+property to `"true"`.  Once an element’s content is editable, the user can change
+the text and HTML structure of that element by typing and copying and pasting text.
 
 
 ### The solution
@@ -116,7 +118,7 @@ of that element by typing and copying and pasting text.
 Update the __JavaScript__ tab to:
 
 @sourceref ./1-setup.js
-@highlight 3-16,only
+@highlight 3-17,only
 
 Update the __HTML__ `<body>` element to:
 
@@ -144,18 +146,16 @@ I’m sorry; your browser doesn’t support HTML5 video in WebM with VP8/VP9 or 
   <button on:click="doSomething('bold')"></button>
   ```
 
-- Those functions (example: `doSomething`) are usually methods on the Component’s [can-component.prototype.ViewModel].  For example, the following creates a `doSomething` method on the ViewModel:
+- Those functions (example: `doSomething`) can be added to the component like this:
 
   ```js
-  Component.extend({
-    tag: "some-element",
-    view: `<button on:click="doSomething('bold')"></button>`,
-    ViewModel: {
-      doSomething(cmd) {
-        alert("doing " + cmd);
-      }
+  class SomeElement extends StacheElement {
+    static view = `<button on:click="this.doSomething('bold')"></button>`;
+    doSomething(cmd) {
+      alert("doing " + cmd);
     }
-  })
+  }
+  customElements.define("some-element", SomeElement);
   ```
 
 - To bold text selected in a _contenteditable_ element, use [document.execCommand](https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand):
@@ -169,7 +169,7 @@ I’m sorry; your browser doesn’t support HTML5 video in WebM with VP8/VP9 or 
 Update the __JavaScript__ tab to:
 
 @sourceref ./2-bold.js
-@highlight 6-8,18-23,only
+@highlight 5-7,21-23,only
 
 
 
@@ -200,7 +200,7 @@ document.execCommand("italic", false, null)
 Update the __JavaScript__ tab to:
 
 @sourceref ./3-italic.js
-@highlight 8,only
+@highlight 7,only
 
 
 
@@ -224,37 +224,10 @@ I’m sorry; your browser doesn’t support HTML5 video in WebM with VP8/VP9 or 
 
 ### What you need to know
 
-- To make <button>Copy All</button> work, we need to give the `ViewModel` access to
-  the `<rich-text-editor>` element.  Usually, `ViewModel`s should not access DOM elements
-  directly. However, for this widget, there’s important state (what the user has typed) that
-  we need to access.
-
-  So to make the component’s `element` available to the ViewModel, use the following pattern:
-
-  ```js
-  Component.extend({
-    tag: "some-element",
-    view: `...`,
-    ViewModel: {
-      element: "any",
-      connectedCallback(el) {
-        this.element = el;
-      }
-    }
-  })
-  ```
-
-  `element: "any"` declares the element property can be of any value.
-
-  [can-component/connectedCallback] is a lifecycle hook that gets called when the component is inserted
-  into the page. This pattern saves the `element` property on the `ViewModel`.
-
-  > **HINT:** This allows you to use `this.element` within your `copyAll()` function.
-
 - Use [querySelector](https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector) to get an element by a CSS selector:
 
   ```js
-  this.element.querySelector(".someClassName")
+  this.querySelector(".someClassName")
   ```
 
   > **HINT:** You’ll want to get the `editbox` element.
@@ -317,7 +290,7 @@ into a text editor.
 Update the __JavaScript__ tab to:
 
 @sourceref ./4-copy.js
-@highlight 9,25-39,only
+@highlight 8,25-35,only
 
 
 
@@ -332,8 +305,7 @@ Update the __JavaScript__ tab to:
 - Add a <button>Funky</button> `<button>` that (when clicked) will add `funky` to the [class name](https://developer.mozilla.org/en-US/docs/Web/API/Element/className) of the content selected
   in the editable area.
 - The button should have a [class name](https://developer.mozilla.org/en-US/docs/Web/API/Element/className) of `funky`.
-- We are only concerned with `Funk-ify` text selected within a single element. We will make the <button>Funky</button>
-  button able to `Funk-ify` text selected across elements later.
+- We are only concerned with `Funk-ify` text selected within a single element. We will make the <button>Funky</button> button able to `Funk-ify` text selected across elements later.
 
 <video controls class="bit-docs-screenshot">
 <source src="../../../docs/can-guides/commitment/recipes/text-editor/5-funky-text.webm" type="video/webm">
@@ -439,7 +411,7 @@ __Other stuff you need to know__
 Update the __JavaScript__ tab to:
 
 @sourceref ./5-funky-text.js
-@highlight 10,41-49,53-59,only
+@highlight 9,38-46,51-57,only
 
 
 
@@ -452,8 +424,7 @@ Update the __JavaScript__ tab to:
 ### The problem
 
 As shown in the previous step’s video, selecting text outside the editable area and
-clicking the <button>Funky</button> button will make that text <button>Funky</button>. In this step, we will
-only `funk-ify` the text in the `editbox`.
+clicking the <button>Funky</button> button will make that text <button>Funky</button>. In this step, we will only `funk-ify` the text in the `editbox`.
 
 <video controls class="bit-docs-screenshot">
 <source src="../../../docs/can-guides/commitment/recipes/text-editor/6-funky-only.webm" type="video/webm">
@@ -513,7 +484,7 @@ __Other stuff you need to know__
 Update the __JavaScript__ tab to:
 
 @sourceref ./6-funky-only.js
-@highlight 42-44,49,53,67-72,only
+@highlight 39-41,46,50,65-70,only
 
 
 
@@ -765,15 +736,15 @@ const startLine = siblingThenParentUntil(
 Update the __JavaScript__ tab to:
 
 @sourceref ./7-funky-range.js
-@highlight 62-81,85-120,only
+@highlight 60-78,82-117,only
 
 ## Result
 
 When finished, you should see something like the following CodePen:
 
-<p class="codepen" data-height="332" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="XGgbdb" style="height: 332px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 Text Editor">
-  <span>See the Pen <a href="https://codepen.io/bitovi/pen/XGgbdb/">
-  CanJS 5 Text Editor</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="332" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="BaBxJJm" style="height: 332px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6 Text Editor">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/BaBxJJm/">
+  CanJS 6 Text Editor</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 

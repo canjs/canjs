@@ -1,4 +1,9 @@
-import { Component, DefineMap, fixture, restModel } from "//unpkg.com/can@5/core.mjs";
+import {
+  Component,
+  DefineMap,
+  fixture,
+  restModel
+} from "//unpkg.com/can@5/core.mjs";
 
 // Stores the next entity id to use.
 let entityId = 1;
@@ -16,28 +21,26 @@ const makeEntities = function(parentId, depth) {
   const entities = [];
 
   for (let i = 0; i < entitiesCount; i++) {
-
     // The id for this entity
-    const id = "" + (entityId++);
+    const id = "" + entityId++;
 
     // If the entity is a folder or file
     const isFolder = Math.random() > 0.3;
 
     // The children for this folder.
-    const children = isFolder ? makeEntities(id, depth+1) : [];
+    const children = isFolder ? makeEntities(id, depth + 1) : [];
 
     const entity = {
       id: id,
       name: (isFolder ? "Folder" : "File") + " " + id,
       parentId: parentId,
-      type: (isFolder ? "folder" : "file"),
+      type: isFolder ? "folder" : "file",
       hasChildren: children.length > 0
     };
     entities.push(entity);
 
     // Add the children of a folder
-    [].push.apply(entities,  children)
-
+    [].push.apply(entities, children);
   }
   return entities;
 };
@@ -54,22 +57,23 @@ fixture("/api/entities", entitiesStore);
 // Make requests to /api/entities take 1 second
 fixture.delay = 1000;
 
-const Entity = DefineMap.extend({
-  id: {type: "string", identity: true},
-  name: "string",
-  parentId: "string",
-  hasChildren: "boolean",
-  type: "string"
-});
+class Entity extends ObservableObject {
+  static props = {
+    id: { type: String, identity: true },
+    name: String,
+    parentId: String,
+    hasChildren: Boolean,
+    type: String
+  };
+}
 
 Entity.connection = restModel({
-  Map: Entity,
+  ObjectType: Entity,
   url: "/api/entities"
 });
 
-Component.extend({
-  tag: "a-folder",
-  view: `
+class AFolder extends StacheElement {
+  static view = `
     <span>{{ this.folder.name }}</span>
     {{# if(this.entitiesPromise.isPending) }}
       <div class="loading">Loading</div>
@@ -86,18 +90,21 @@ Component.extend({
         {{/ for }}
       </ul>
     {{/ if }}
-  `,
-  ViewModel: {
+  `;
+
+  static props = {
     folder: Entity,
     get entitiesPromise() {
       if (this.folder) {
-        return Entity.getList({ filter: { parentId: this.folder.id }});
+        return Entity.getList({ filter: { parentId: this.folder.id } });
       }
     }
-  }
-});
+  };
+}
 
-root.viewModel.assign({
+customElements.define("a-folder", AFolder);
+
+root.assign({
   folder: new Entity({
     id: "0",
     name: "ROOT/",
