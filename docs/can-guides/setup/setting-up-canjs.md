@@ -20,7 +20,7 @@ want. The following lists common scenarios and provides links to
 the guide(s) that most closely satisfy that scenario.
 
 - I just want to play, make a demo, or learn CanJS right now! 👉 Use the [ES module bundle](#ImportingthecoreESmodulebundle) or an [online code editor](#OnlineCodeEditors).
-- I use webpack 👉 [Webpack](#Webpack)
+- I use webpack 👉 [webpack](#webpack)
 - I use StealJS 👉 [StealJS](#StealJS)
 - I use Browserify 👉 [Browserify](#Browserify)
 - I want server-side rendering, progressive loading, continuous integration, testing,
@@ -382,7 +382,7 @@ __Model Example__
 ## StealJS
 
 > You can skip these instructions by
-> [cloning this example repo on GitHub](https://github.com/canjs/stealjs-example).
+> [cloning this example repo on GitHub](https://github.com/canjs/stealjs-example/tree/can-6).
 
 [After setting up Node.js and npm](#Node_jsandnpm), install `can` and [StealJS](https://stealjs.com) from npm:
 
@@ -404,6 +404,9 @@ to your `package.json`:
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "steal": {
+    "babelOptions": {
+      "plugins": ["transform-class-properties"]
+    },
     "plugins": ["can"]
   },
   "keywords": [],
@@ -418,7 +421,7 @@ to your `package.json`:
   }
 }
 ```
-@highlight 10-12,only
+@highlight 10-15,only
 
 Next, create an `app.stache` template for your app:
 
@@ -436,17 +439,13 @@ import { StacheElement } from "can";
 import view from "./app.stache";
 
 class MyApp extends StacheElement {
-  static get view() {
-    return view;
-  }
+  static view = view;
 
-  static get props() {
-    return {
-      message: {
-        default: "Hello World"
-      }
-    };
-  }
+  static props = {
+    message: {
+      default: "Hello World"
+    }
+  };
 };
 customElements.define("my-app", MyApp);
 ```
@@ -473,10 +472,10 @@ Ready to build an app with CanJS? Check out our [guides/chat] or one of our
 [guides/recipes]!
 
 
-## Webpack
+## webpack
 
 > You can skip these instructions by
-> [cloning the can-5 branch of this example repo on GitHub](https://github.com/canjs/webpack-example/tree/can-5).
+> [cloning the can-5 branch of this example repo on GitHub](https://github.com/canjs/webpack-example/tree/can-6).
 
 [After setting up Node.js and npm](#Node_jsandnpm), install `can`, [webpack](https://webpack.js.org)
 (with [can-stache-loader](https://www.npmjs.com/package/can-stache-loader)) from npm:
@@ -642,7 +641,7 @@ Using CommonJS to require CanJS’s individual packages
 </summary>
 
 > You can skip these instructions by
-> [cloning this example repo on GitHub](https://github.com/canjs/browserify-simple-example).
+> [cloning this example repo on GitHub](https://github.com/canjs/browserify-simple-example/tree/can-6).
 
 Browserify does not support tree-shaking, so the individual packages must be required.  This means that
 instead of importing [can-stache-element StacheElement] like:
@@ -713,7 +712,7 @@ Using ES Modules to import CanJS’s individual packages using BabelJS
 </summary>
 
 > You can skip these instructions by
-> [cloning this example repo on GitHub](https://github.com/canjs/browserify-example).
+> [cloning this example repo on GitHub](https://github.com/canjs/browserify-example/tree/can-6).
 
 Browserify does not support tree-shaking, so the individual packages must be imported.  This means that
 instead of importing [can-stache-element StacheElement] like:
@@ -1192,21 +1191,119 @@ npm start
 When the server starts, it’ll tell you the addresses you can open in your
 browser to see your project. They will be similar to [http://localhost:8080/].
 
-Next, you can choose to use [StealJS](#StealJS), [webpack](#Webpack), or
+Next, you can choose to use [StealJS](#StealJS), [webpack](#webpack), or
 [Browserify](#Browserify) to load your project.
 
-## IE11 Support
+## IE 11 Support
 
-CanJS 4+ is compatible with Internet Explorer 11 with a few caveats that are discussed below.
+CanJS is compatible with Internet Explorer 11, with a few caveats that are discussed below.
 
-CanJS uses [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), which are not supported in IE11. A Promise polyfill such as the one in [core-js](https://www.npmjs.com/package/core-js#ecmascript-6-promise) or the many others available on [NPM](https://www.npmjs.com/search?q=promise%20polyfill) can be used to enable Promise support in any environment or setup.
+### Promises
 
-If using StealJS 1.x, a promise polyfill is included by default. With StealJS 2.x, a promise polyfill can be added by using the `steal-with-promises.js` or the `bundlePromisePolyfill` [build option](https://stealjs.com/docs/steal-tools.BuildOptions.html).
+CanJS uses [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise), which are not supported in IE 11. A Promise polyfill such as the one in [core-js](https://www.npmjs.com/package/core-js#ecmascript-6-promise) or the many others available on [npm](https://www.npmjs.com/search?q=promise%20polyfill) can be used to enable Promise support in any environment or setup.
 
-The ecosystem packages [can-define-backup] and [can-observe] use other features that are not fully supported by IE11.
+If using StealJS 1.x, a promise polyfill is included by default. With StealJS 2.x, a Promise polyfill can be added by using the `steal-with-promises.js` or the `bundlePromisePolyfill` [build option](https://stealjs.com/docs/steal-tools.BuildOptions.html):
 
-[can-define-backup] uses [WeakMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap), and although `WeakMap` is supported in IE11, there are issues with using [sealed](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal) objects as keys in WeakMaps. [can-define-backup] can be used in IE11 as long as the DefineMap being backed up is not [can-define/map/map.seal sealed], or a polyfill such as the one in [core-js](https://github.com/zloirock/core-js/#weakmap) is used.
+```js
+const stealTools = require("steal-tools");
 
-[can-observable-object], [can-observable-array] and [can-stache-element] are based on the [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) object, which is not supported in IE11 and cannot be polyfilled.
+stealTools.build({
+  config: __dirname + "/package.json!npm"
+}, {
+  bundlePromisePolyfill: true
+});
+```
+@highlight 6,only
+
+### New packages
+
+The following packages are new in CanJS 6 and are based on the [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) object, which is not supported in IE 11 and cannot be polyfilled:
+
+- [can-observable-array]
+- [can-observable-object]
+- [can-stache-element]
+
+Instead, you should use [can-component] and [can-define], both of which continue to support IE 11.
+
+### Updated packages
+
+The following packages have been updated to use the new packages mentioned above:
+
+- [can-realtime-rest-model]
+- [can-rest-model]
+- [can-route]
+
+If you’re using [can-define], you’ll need to:
+
+- Use [can-define-realtime-rest-model] instead of [can-realtime-rest-model]
+- Use [can-define-rest-model] instead of [can-rest-model]
+- Map [can-route] to use a different default [can-route.data]
+
+Below are directions for how to map the default [can-route.data] with different module loaders:
+
+#### StealJS
+
+> **Note:** [This repo on GitHub](https://github.com/canjs/stealjs-example/tree/can-6-ie)
+> is a working example of the instructions below.
+
+Add the following configuration to your `package.json`:
+
+```js
+{
+  "name": "my-canjs-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server -c-1",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "steal": {
+    "babelOptions": {
+      "plugins": ["transform-class-properties"]
+    },
+    "paths": {
+      "can-route*src/routedata": "node_modules/can-route/src/routedata-definemap.js"
+    },
+    "plugins": ["can"]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "can": "^6.0.0",
+    "steal": "^2.0.0"
+  },
+  "devDependencies": {
+    "http-server": "^0.11.0"
+  }
+}
+```
+@highlight 14-16,only
+
+If you have HTML pages that read their configuration from something other than your `package.json`,
+you may add a `<script>` element before including `steal-with-promises.js` in your HTML page:
+
+```html
+<script>
+  steal = {
+    paths: {
+      "can-route*src/routedata": "node_modules/can-route/src/routedata-definemap.js"
+    }
+  };
+</script>
+<script src="node_modules/steal/steal-with-promises.js" main></script>
+```
+@highlight 1-7
+
+#### webpack
+
+#### Browserify
+
+### Other caveats
+
+The ecosystem packages [can-define-backup] and [can-observe] use other features that are not fully supported by IE 11.
+
+[can-define-backup] uses [WeakMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap), and although `WeakMap` is supported in IE 11, there are issues with using [sealed](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal) objects as keys in WeakMaps. [can-define-backup] can be used in IE 11 as long as the DefineMap being backed up is not [can-define/map/map.seal sealed], or a polyfill such as the one in [core-js](https://github.com/zloirock/core-js/#weakmap) is used.
 
 <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
