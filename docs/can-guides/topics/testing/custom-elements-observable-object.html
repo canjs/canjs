@@ -45,35 +45,35 @@ class NameForm extends StacheElement {
 
 customElements.define("name-form", NameForm);
 
-describe("NameForm Custom Element", () => {
+describe("NameForm component", () => {
 	it("name", () => {
-		// 1. Create an instance of the custom element
+		// 1. Create an instance of the component
 		const nameForm = new NameForm();
 
-		// 2. Test the custom element’s default values
+		// 2. Test the component’s default values
 		assert.equal(nameForm.name, "", "default `name` is correct");
 
-		// 3. Set properties (or call functions) on the custom element
+		// 3. Set properties (or call functions) on the component
 		nameForm.first = "Kevin";
-		// 4. Test the custom element’s property values
+		// 4. Test the component’s property values
 		assert.equal(
 			nameForm.name,
 			"Kevin",
 			"setting `first` updates `name` correctly"
 		);
 
-		// 3. Set properties (or call functions) on the custom element
+		// 3. Set properties (or call functions) on the component
 		nameForm.last = "McCallister";
-		// 4. Test the custom element’s property values
+		// 4. Test the component’s property values
 		assert.equal(
 			nameForm.name,
 			"Kevin McCallister",
 			"setting `first` updates `name` correctly"
 		);
 
-		// 3. Set custom element properties (or call custom element functions)
+		// 3. Set component properties (or call component functions)
 		nameForm.setName("Marv Merchants");
-		// 4. Test values of the custom element’s properties
+		// 4. Test values of the component’s properties
 		assert.equal(
 			nameForm.first,
 			"Marv",

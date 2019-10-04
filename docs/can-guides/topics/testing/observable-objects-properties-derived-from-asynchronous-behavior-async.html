@@ -9,7 +9,7 @@ import { ObservableObject } from "can";
 mocha.setup("bdd");
 const assert = chai.assert;
 
-class ViewModel extends ObservableObject {
+class Todos extends ObservableObject {
 	static props = {
 		todoCount: {
 			async(resolve, lastSet) {
@@ -38,12 +38,12 @@ describe("Todos", () => {
 			data: []
 		};
 
-		const vm = new ViewModel({
+		const todos = new Todos({
 			todoCountPromise: Promise.resolve(todoResponse)
 		});
 
-		vm.listenTo("todoCount", () => {
-			assert.equal(vm.todoCount, 150, "`todoCount` === 150");
+		todos.listenTo("todoCount", () => {
+			assert.equal(todos.todoCount, 150, "`todoCount` === 150");
 			done();
 		});
 	});
