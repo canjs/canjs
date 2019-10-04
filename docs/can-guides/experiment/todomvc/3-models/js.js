@@ -5,7 +5,7 @@ import {
   realtimeRestModel,
   StacheElement,
   type
-} from "//unpkg.com/can@pre/core.mjs";
+} from "//unpkg.com/can@6/core.mjs";
 
 class Todo extends ObservableObject {
   static props = {

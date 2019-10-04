@@ -1,4 +1,4 @@
-import { connect } from "//unpkg.com/can@pre/core.mjs";
+import { connect } from "//unpkg.com/can@6/core.mjs";
 
 // a behavior that implements the `getListData` method of the `Data Interface`
 const fetchData = connect.behavior(

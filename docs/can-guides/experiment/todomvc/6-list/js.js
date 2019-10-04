@@ -7,7 +7,7 @@ import {
 	type,
   domEvents,
   enterEvent
-} from "//unpkg.com/can@pre/everything.mjs";
+} from "//unpkg.com/can@6/everything.mjs";
 
 domEvents.addEvent(enterEvent);
 

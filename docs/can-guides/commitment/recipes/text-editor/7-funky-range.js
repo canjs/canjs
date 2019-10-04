@@ -1,4 +1,4 @@
-import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
+import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
 class RichTextEditor extends StacheElement {
   static view = `

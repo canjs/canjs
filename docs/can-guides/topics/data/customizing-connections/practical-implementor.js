@@ -1,4 +1,4 @@
-import { connect, key } from "//unpkg.com/can@pre/core.mjs";
+import { connect, key } from "//unpkg.com/can@6/core.mjs";
 
 function _getRequestURLAndMethod(connUrl, requestName, params) {
 	let url = null;

@@ -5,7 +5,7 @@ import {
     route,
     StacheElement,
     type,
-} from "//unpkg.com/can@pre/core.mjs";
+} from "//unpkg.com/can@6/core.mjs";
 
 class Message extends ObservableObject {
 	static props = {

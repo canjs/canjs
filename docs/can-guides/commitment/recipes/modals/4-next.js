@@ -5,7 +5,7 @@ import {
 	StacheElement,
 	type,
 	value
-} from "//unpkg.com/can@pre/ecosystem.mjs";
+} from "//unpkg.com/can@6/ecosystem.mjs";
 
 stache.addConverter(stacheConverters);
 

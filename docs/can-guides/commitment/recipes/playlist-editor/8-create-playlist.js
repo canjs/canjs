@@ -7,7 +7,7 @@ import {
   StacheElement,
   type,
   viewCallbacks
-} from "//unpkg.com/can@pre/core.mjs";
+} from "//unpkg.com/can@6/core.mjs";
 
 addJQueryEvents(jQuery);
 

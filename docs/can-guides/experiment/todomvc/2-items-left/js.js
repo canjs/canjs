@@ -1,4 +1,4 @@
-import { ObservableArray, ObservableObject, StacheElement, type } from "//unpkg.com/can@pre/core.mjs";
+import { ObservableArray, ObservableObject, StacheElement, type } from "//unpkg.com/can@6/core.mjs";
 
 class Todo extends ObservableObject {
   static props = {

@@ -1,4 +1,4 @@
-import { connect } from "//unpkg.com/can@pre/core.mjs";
+import { connect } from "//unpkg.com/can@6/core.mjs";
 
 // two behaviors that implement the `getListData` method of the `Data Interface`
 
