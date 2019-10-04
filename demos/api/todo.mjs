@@ -1,4 +1,4 @@
-import { ObservableObject, ObservableArray, type } from "//unpkg.com/can@pre/core.mjs";
+import { ObservableObject, ObservableArray, type } from "//unpkg.com/can@6/core.mjs";
 
 // -------------------------------
 // Define an observable Todo type:

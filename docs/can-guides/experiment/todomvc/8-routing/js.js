@@ -8,7 +8,7 @@ import {
   domEvents,
   enterEvent,
   route
-} from "//unpkg.com/can@pre/everything.mjs";
+} from "//unpkg.com/can@6/everything.mjs";
 
 domEvents.addEvent(enterEvent);
 

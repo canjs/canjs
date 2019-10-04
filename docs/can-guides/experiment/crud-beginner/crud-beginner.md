@@ -92,7 +92,7 @@ Here’s what the different parts mean:
 
 - `import` is a keyword that [loads modules from files](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import).
 - `StacheElement` is the _named export_ from CanJS that lets us [can-stache-element create custom element constructors].
-- `//unpkg.com/can@pre/core.mjs` loads the `core.mjs` file from CanJS 6; this is explained more thoroughly in the [guides/setup#Explanationofdifferentbuilds setup guide].
+- `//unpkg.com/can@6/core.mjs` loads the `core.mjs` file from CanJS 6; this is explained more thoroughly in the [guides/setup#Explanationofdifferentbuilds setup guide].
 - `unpkg.com` is a CDN that hosts packages like CanJS ([can](https://www.npmjs.com/package/can)).
 
 ### Defining a custom element

@@ -1,4 +1,4 @@
-import { connect, restModel, QueryLogic, ObservableObject } from "//unpkg.com/can@pre/core.mjs";
+import { connect, restModel, QueryLogic, ObservableObject } from "//unpkg.com/can@6/core.mjs";
 
 class Todo extends ObservableObject {
   static props = {

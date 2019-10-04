@@ -1,4 +1,4 @@
-import { StacheElement } from "//unpkg.com/can@pre/core.mjs";
+import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
 const proxyUrl = "https://can-cors.herokuapp.com/";
 const token = "?key=piRYHjJ5D2Am39C9MxduHgRZc&format=json";

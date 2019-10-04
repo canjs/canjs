@@ -1,4 +1,4 @@
-import { StacheElement, route, value } from "//unpkg.com/can@pre/ecosystem.mjs";
+import { StacheElement, route, value } from "//unpkg.com/can@6/ecosystem.mjs";
 
 class CharacterSearchApp extends StacheElement {
   static view = `

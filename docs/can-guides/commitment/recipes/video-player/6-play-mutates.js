@@ -1,4 +1,4 @@
-import { fromAttribute, StacheElement } from "//unpkg.com/can@pre/core.mjs";
+import { fromAttribute, StacheElement } from "//unpkg.com/can@6/core.mjs";
 
 class VideoPlayer extends StacheElement {
 	static view = `
