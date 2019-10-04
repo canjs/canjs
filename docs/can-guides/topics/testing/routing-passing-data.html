@@ -64,7 +64,7 @@ class Application extends StacheElement {
 customElements.define("app-component", Application);
 
 describe("Application", () => {
-	it("elementToShow viewModel", () => {
+	it("elementToShow component", () => {
 		const routeData = new ObservableObject({
 			id: null,
 			page: "home"
@@ -89,7 +89,7 @@ describe("Application", () => {
 		assert.equal(
 			idBinding.value,
 			10,
-			"routeData.id is passed to elementToShow viewModel"
+			"routeData.id is passed to elementToShow component"
 		);
 
 		routeData.id = 20;

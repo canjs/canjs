@@ -45,7 +45,7 @@ class NameForm extends StacheElement {
 
 customElements.define("name-form", NameForm);
 
-describe("NameForm Custom Element Events", () => {
+describe("NameForm component DOM events", () => {
 	it("first name updated when user types in <input>", () => {
 		// 1. Creating an instance of the Component
 		const nameForm = new NameForm();
@@ -53,7 +53,7 @@ describe("NameForm Custom Element Events", () => {
 		// 2. Calling render() on the instance
 		nameForm.render();
 
-		// 3. Finding the event target through the custom element
+		// 3. Finding the event target through the component
 		const input = nameForm.querySelector("input.first");
 
 		// 4. Using domEvents.dispatch to dispatch the event

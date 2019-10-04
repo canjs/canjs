@@ -9,7 +9,7 @@ import { ObservableObject } from "can";
 mocha.setup("bdd");
 const assert = chai.assert;
 
-class ViewModel extends ObservableObject {
+class Todos extends ObservableObject {
 	static props = {
 		completeFilter: Boolean,
 		todoConnection: {
@@ -44,26 +44,26 @@ describe("Todos", () => {
 			}
 		};
 
-		const vm = new ViewModel({
+		const todos = new Todos({
 			todoConnection: testTodoConnection
 		});
 
-		vm.listenTo("todoCountPromise", () => {});
+		todos.listenTo("todoCountPromise", () => {});
 
 		assert.equal(
-			vm.todoCountPromise,
+			todos.todoCountPromise,
 			testPromise,
 			"todoCountPromise is the promise returned by getList"
 		);
 
-		vm.completeFilter = true;
+		todos.completeFilter = true;
 		assert.equal(
 			getListOptions.complete,
 			true,
 			"completeFilter: true is passed to getList"
 		);
 
-		vm.completeFilter = false;
+		todos.completeFilter = false;
 		assert.equal(
 			getListOptions.complete,
 			false,

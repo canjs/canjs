@@ -12,18 +12,20 @@ This guide does not focus on how to write applications in a maintainable, testab
 
 > **Note:** All of the examples in this guide use the [Mocha](https://mochajs.org/) test framework and [Chai](http://www.chaijs.com/) assertion library, but none of the examples are specific to Mocha/Chai and should work with any setup.
 
-## ObservableObjects
+## Observables
 
-ObservableObjects contain a majority of the logic in CanJS applications, so it is very important that they are well-tested. Since CanJS ObservableObjects act mostly like normal JavaScript objects, testing them usually works just like working with normal objects—set a property (or call a function) then check the value of other properties. This setup is shown below, followed by a few techniques for making it easier to test more complex ObservableObjects.
+Observables contain a majority of the logic in CanJS applications, so it is very important that they are well-tested. Since CanJS observables act mostly like normal JavaScript objects, testing them usually works just like working with normal objects—set a property (or call a function) then check the value of other properties. This setup is shown below, followed by a few techniques for making it easier to test more complex observables.
+
+> Note: The examples below show how to test an [can-observable-object ObservableObject], but the same techniques also work with an [can-observable-array ObservableArray].
 
 ### Basic setup
 
-The basic setup for testing an ObservableObject is:
+The basic setup for testing an observable is:
 
-1. Create an instance of the ObservableObject
-2. Test values of the ObservableObject’s default values
-3. Set ObservableObject properties (or call ObservableObject functions)
-4. Test values of the ObservableObject’s properties
+1. Create an instance of the observable
+2. Test default values of the observable’s properties
+3. Set properties (or call functions) on the observable
+4. Test values of the observable’s properties
 5. Repeat 3 & 4
 
 @sourceref ./observable-objects-basic-setup.html
@@ -39,7 +41,7 @@ The following example uses `listenTo` to capture the value whenever you type int
 @demo demos/testing/throttled-input.html
 @codepen
 
-The difficulty in testing this ObservableObject is knowing when to run assertions. One approach to testing this code is:
+The difficulty in testing this observable is knowing when to run assertions. One approach to testing this code is:
 
 - Set the `text` property
 - Wait 500ms
@@ -72,7 +74,7 @@ Here is how this is done for this example:
 It is often useful to use an [can-observable-object/define/async asynchronous property] to load data from a model or service layer. It can be difficult to test this without also testing the model. The async property might look something like this:
 
 ```js
-class ViewModel extends ObservableObject {
+class Todos extends ObservableObject {
 	static props = {
 		todoCount: {
 			async(resolve) {
@@ -85,7 +87,7 @@ class ViewModel extends ObservableObject {
 }
 ```
 
-The primary logic in this code is responsible for reading the `metadata.count` property from the service layer response and setting it as the `todoCount` property on the ObservableObject. The way this code is written makes it very difficult to test this logic.
+The primary logic in this code is responsible for reading the `metadata.count` property from the service layer response and setting it as the `todoCount` property on the observable. The way this code is written makes it very difficult to test this logic.
 
 In order to make it easier, first **split** this property into two properties:
 
@@ -93,7 +95,7 @@ In order to make it easier, first **split** this property into two properties:
 - the promise returned by the Model
 
 ```js
-class ViewModel extends ObservableObject {
+class Todos extends ObservableObject {
 	static props = {
 		todoCount: {
 			async(resolve) {
@@ -139,7 +141,7 @@ const testTodoCountPromise = {
 	}
 };
 
-const vm = new ViewModel({
+const todos = new Todos({
 	todoCountPromise: testTodoCountPromise
 });
 ```
@@ -164,7 +166,7 @@ Specifically, we did not test:
 ```js
 import todoConnection from "models/todo";
 
-class ViewModel extends ObservableObject {
+class Todos extends ObservableObject {
 	static props = {
 		todoCountPromise: {
 			get(lastSet) {
@@ -177,14 +179,14 @@ class ViewModel extends ObservableObject {
 
 @highlight 6-8,only
 
-This could be tested using [can-fixture], but doing this would also test any logic in the `todoConnection` itself. A unit test of the ObservableObject should just test the code in the ObservableObject; testing the model should be handled by tests specifically created to test the model and/or in integration tests. Both of these will be discussed later in this guide.
+This could be tested using [can-fixture], but doing this would also test any logic in the `todoConnection` itself. A unit test of the observable should just test the code in the observable; testing the model should be handled by tests specifically created to test the model and/or in integration tests. Both of these will be discussed later in this guide.
 
-To test the `todoCountPromise`, you can store the `todoConnection` as a property on the ObservableObject and then use `this.todoConnection` instead of the `todoConnection` that was imported:
+To test the `todoCountPromise`, you can store the `todoConnection` as a property on the observable and then use `this.todoConnection` instead of the `todoConnection` that was imported:
 
 ```js
 import todoConnection from "models/todo";
 
-class ViewModel extends ObservableObject {
+class Todos extends ObservableObject {
 	static props = {
 		todoConnection: {
 			get default() {
@@ -202,7 +204,7 @@ class ViewModel extends ObservableObject {
 
 @highlight 5-9,12,only
 
-Using this technique allows you to set a new value of `todoConnection` by passing it as a default value to the ObservableObject constructor. You can then test that the `getList` function was called (as well as test the arguments passed to it) and also test that the getter returned the correct value.
+Using this technique allows you to set a new value of `todoConnection` by passing it as a default value to the [can-observable-object ObservableObject] constructor. You can then test that the `getList` function was called (as well as test the arguments passed to it) and also test that the getter returned the correct value.
 
 @sourceref ./observable-objects-properties-derived-from-models.html
 @codepen
@@ -210,15 +212,15 @@ Using this technique allows you to set a new value of `todoConnection` by passin
 
 This technique is useful for testing code using models, but it can be used to test any code that uses a function or property _exported directly_ from another module.
 
-## Custom elements
+## Components
 
-Custom elements are the glue that holds CanJS applications together—connecting ObservableObjects to the DOM, handling events triggered by user interaction, interfacing with third-party libraries, and many other things.
+Components are the glue that holds CanJS applications together—connecting observables to the DOM, handling events triggered by user interaction, interfacing with third-party libraries, and many other things.
 
 There are different challenges to testing each of these responsibilities. These are discussed in the sections below.
 
-### ObservableObject
+### Properties
 
-All of the techniques described in [guides/testing#ObservableObjects Testing ObservableObjects] can be used for testing a StacheElement by creating an instance of the custom element:
+All of the techniques described in [guides/testing#Observables Testing Observables] can be used for testing a component’s properties by creating an instance of the component:
 
 @sourceref ./custom-elements-observable-object.html
 @highlight 12,30-43,51,only
@@ -226,14 +228,14 @@ All of the techniques described in [guides/testing#ObservableObjects Testing Obs
 
 ### DOM Events
 
-DOM events handled through [can-stache-bindings], like `value:bind="first"`, can be tested through the custom element directly as shown in [guides/testing#Basicsetup Testing ObservableObjects]. However, they can also be tested by:
+DOM events handled through [can-stache-bindings], like `value:bind="first"`, can be tested through the component directly as shown in [guides/testing#Basicsetup Testing Observables]. However, they can also be tested by:
 
-1. Creating an instance of the custom element
-2. Calling [can-stache-element/lifecycle-methods.render] on the instance
-3. Finding the event target through the custom element
+1. Creating an instance of the component
+2. Calling [can-stache-element/lifecycle-methods.render] on the instance to render the component’s view into its `innerHTML`
+3. Finding the event target through the component
 4. Using [can-dom-events.dispatch domEvents.dispatch] to dispatch the event
 
-> **Note:** Tests like this will work even if the custom element is not in the document.
+> **Note:** Tests like this will work even if the component is not in the document.
 
 @sourceref ./custom-elements-dom-events-form.html
 @highlight 49-64,only
@@ -247,9 +249,9 @@ This strategy can also be used to test events using `listenTo` in a [can-observa
 
 Another place you might use `listenTo` is in [can-stache-element/lifecycle-methods.connect]. The same testing procedure can be used in this scenario, but you need to make sure `connect` is called, which is discussed in the next section.
 
-### connect
+### connected
 
-[can-stache-element/lifecycle-methods.connect] is a good place to put code that is expected to run once a custom element is in the document. To test this code, obviously `connect` needs to be called. One way to do this is to call it manually:
+The [can-stache-element/lifecycle-hooks.connected connected hook] is a good place to put code that is expected to run once a component is in the document. To test this code, the [can-stache-element/lifecycle-methods.connect connect method] needs to be called. One way to do this is to call it manually:
 
 @sourceref ./custom-elements-connect-manually.html
 @highlight 39,only
@@ -269,11 +271,11 @@ If the code relies on the element actually being in the document, you can add th
 
 Routing in CanJS applications has three primary responsibilities:
 
-1. Connecting a custom element to [can-route]
-2. Displaying the corrent custom element based on the route
-3. Passing data to the displayed custom element
+1. Connecting a component to [can-route]
+2. Displaying the corrent component based on the route
+3. Passing data to the displayed component
 
-Separating these into three separate properties on the custom element means that they can each be tested independently. This will be shown in the following sections.
+Separating these into three separate properties on the component means that they can each be tested independently. This will be shown in the following sections.
 
 ### Route data
 
@@ -315,11 +317,11 @@ You can also make changes to the `routeData` and check that the URL is updated c
 @highlight 44-61,only
 @codepen
 
-### Displaying the correct custom element
+### Displaying the correct component
 
-Testing that the correct custom element is displayed based on the `routeData` can be done completely independently from `can-route` when `routeData` is defined as a [can-observable-object/define/get-default default value] as shown above.
+Testing that the correct component is displayed based on the `routeData` can be done completely independently from `can-route` when `routeData` is defined as a [can-observable-object/define/get-default default value] as shown above.
 
-The custom element can be defined using a [can-observable-object/getter getter] that reads `routeData` and creates an instance of the correct type of custom element:
+The component can be defined using a [can-observable-object/getter getter] that reads `routeData` and creates an instance of the correct type of component:
 
 @sourceref ./routing-displaying-custom-elements.html
 @highlight 28-34,only
@@ -331,21 +333,21 @@ In order to test this, create an observable and pass it to the ObservableObject 
 @highlight 51-58,only
 @codepen
 
-This will override what is set up in the `default() {}` and allow you to make changes to the `routeData` object and verify that the correct custom element is created:
+This will override what is set up in the `default() {}` and allow you to make changes to the `routeData` object and verify that the correct component is created:
 
 @sourceref ./routing-displaying-custom-elements.html
 @highlight 60-71,only
 @codepen
 
-### Passing data to the custom element
+### Passing data to the component
 
-Data that needs to be passed to the custom element being displayed can also be tested independently if it is created as a separate property on the ObservableObject that is derived from the `routeData` property:
+Data that needs to be passed to the component being displayed can also be tested independently if it is created as a separate property on the ObservableObject that is derived from the `routeData` property:
 
 @sourceref ./routing-passing-data.html
 @highlight 6,43-51,only
 @codepen
 
-With the custom element data set up like this, you can make changes to `routeData` and confirm that the child custom element will get the correct values by verifying the `value` of the observable passed through the `elementToShowBindings`:
+With the component data set up like this, you can make changes to `routeData` and confirm that the child component will get the correct values by verifying the `value` of the observable passed through the `elementToShowBindings`:
 
 @sourceref ./routing-passing-data.html
 @highlight 83-93,only

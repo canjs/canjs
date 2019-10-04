@@ -9,7 +9,7 @@ import { ObservableObject } from "can";
 mocha.setup("bdd");
 const assert = chai.assert;
 
-class ViewModel extends ObservableObject {
+class ThrottledText extends ObservableObject {
 	static props = {
 		text: {
 			value({ lastSet, listenTo, resolve }) {
@@ -31,14 +31,14 @@ class ViewModel extends ObservableObject {
 
 describe("ThrottledText", () => {
 	it("text", done => {
-		const vm = new ViewModel({});
+		const throttled = new ThrottledText({});
 
-		vm.listenTo("text", () => {
-			assert.equal(vm.text, "Hi there!", "text updated correctly");
+		throttled.listenTo("text", () => {
+			assert.equal(throttled.text, "Hi there!", "text updated correctly");
 			done();
 		});
 
-		vm.text = "Hi there!";
+		throttled.text = "Hi there!";
 	});
 });
 
