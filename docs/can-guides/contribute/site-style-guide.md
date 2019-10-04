@@ -117,6 +117,17 @@ npm install can --save
 
 @sourceref ../experiment/crud-beginner/1.js
 
+### Expand button
+
+#### Copy button only
+@sourceref ../experiment/crud-beginner/2.js
+@highlight 7-14,only
+
+#### Copy and Run buttons
+@sourceref ../experiment/crud-beginner/2.js
+@highlight 7-14,only
+@codepen
+
 ## Text elements
 
 The following is a very long sentence that will hopefully go across many lines because it
