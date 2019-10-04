@@ -1298,7 +1298,11 @@ you may add a `<script>` element before including `steal-with-promises.js` in yo
 
 #### webpack
 
+Coming soon!
+
 #### Browserify
+
+Coming soon!
 
 ### Other caveats
 
