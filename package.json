@@ -57,7 +57,7 @@
     "can-cid": "1.3.1",
     "can-component": "5.0.0",
     "can-compute": "4.1.1",
-    "can-connect": "4.0.0",
+    "can-connect": "4.0.1",
     "can-connect-feathers": "5.0.1",
     "can-connect-ndjson": "1.0.1",
     "can-connect-tag": "2.0.0",
@@ -75,7 +75,7 @@
     "can-define-stream": "1.1.1",
     "can-define-stream-kefir": "1.1.1",
     "can-define-validate-validatejs": "1.1.1",
-    "can-deparam": "1.2.1",
+    "can-deparam": "1.2.2",
     "can-diff": "1.5.0",
     "can-dom-data": "1.0.3",
     "can-dom-data-state": "1.1.2",
@@ -142,7 +142,7 @@
     "can-validate-interface": "1.0.3",
     "can-validate-legacy": "2.0.1",
     "can-validate-validatejs": "1.0.1",
-    "can-value": "1.1.1",
+    "can-value": "1.1.2",
     "can-vdom": "4.4.2",
     "can-view-autorender": "6.0.0",
     "can-view-callbacks": "5.0.0",
@@ -309,15 +309,15 @@
   "bundlesize": [
     {
       "path": "./core.min.mjs",
-      "maxSize": "104.62 kB"
+      "maxSize": "104.64 kB"
     },
     {
       "path": "./core.mjs",
-      "maxSize": "310.82 kB"
+      "maxSize": "310.83 kB"
     },
     {
       "path": "./dist/global/core.js",
-      "maxSize": "194.87 kB"
+      "maxSize": "194.82 kB"
     }
   ]
 }
