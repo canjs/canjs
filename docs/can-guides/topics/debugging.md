@@ -43,7 +43,7 @@ If you are using the [core](guides/setup.html#ImportingthecoreESmodulebundle) or
 Debugging is not enabled automatically with the minified ES module bundles. To enable it, you will need to import [can-debug] from the ecosystem bundle and enable it yourself:
 
 ```js
-import { debug } from "//unpkg.com/can@5/ecosystem.min.mjs";
+import { debug } from "//unpkg.com/can@6/ecosystem.min.mjs";
 debug();
 ```
 

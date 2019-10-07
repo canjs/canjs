@@ -34,7 +34,7 @@ The CodePen also importing [guides/setup##ImportingthecoreESmodulebundle core.mj
 you can import different APIs into your app:
 
 ```js
-import {ObservableObject, StacheElement} from "//unpkg.com/can@5/core.mjs";
+import { ObservableObject, StacheElement } from "//unpkg.com/can@6/core.mjs";
 ```
 
 Read [guides/setup] for instructions on how to set up CanJS in a real app.

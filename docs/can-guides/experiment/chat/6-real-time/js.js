@@ -29,8 +29,8 @@ const MessageConnection = realtimeRestModel({
 		resource: 'https://chat.donejs.com/api/messages',
 		contentType: 'application/x-www-form-urlencoded'
 	},
-	Map: Message,
-	List: MessageList
+	ObjectType: Message,
+	ArrayType: MessageList
 });
 
 const socket = io('https://chat.donejs.com');
