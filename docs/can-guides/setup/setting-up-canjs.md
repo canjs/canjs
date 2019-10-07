@@ -79,7 +79,7 @@ any development environment. This section gives technical details on these items
     import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
     class MyApp extends StacheElement {
-      static view = `Hello {{name}}!`;
+      static view = `Hello {{ this.name }}!`;
 
       static props = {
         name: "world"
@@ -108,7 +108,7 @@ any development environment. This section gives technical details on these items
       import { StacheElement } from "//unpkg.com/can@6/everything.mjs";
 
       class MyApp extends StacheElement {
-        static view = `Hello {{name}}!`;
+        static view = `Hello {{ this.name }}!`;
         static props = {
           name: "world"
         };
@@ -156,7 +156,7 @@ The following `HTML` page imports CanJS and uses it to define a custom element:
     import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
     class MyApp extends StacheElement {
-      static view = `CanJS {{feels}} modules`;
+      static view = `CanJS {{ this.feels }} modules`;
       static props = {
         feels: "😍"
       };
@@ -178,13 +178,13 @@ import { StacheElement, ajax } from "//unpkg.com/can@6/core.mjs";
 
 class MyApp extends StacheElement {
   static view = `
-      CanJS {{feels}} modules.
-      The server says: {{messagePromise.value}}
+      CanJS {{ this.feels }} modules.
+      The server says: {{ this.messagePromise.value }}
   `;
   static props = {
     feels: "😍",
     get messagePromise() {
-      return ajax({url: "/message"});
+      return ajax({ url: "/message" });
     }
   };
 }
@@ -211,13 +211,13 @@ import { StacheElement, ajax } from "//unpkg.com/can@6/core.min.mjs";
 
 class MyApp extends StacheElement {
   static view = `
-      CanJS {{feels}} modules.
-      The server says: {{messagePromise.value}}
+      CanJS {{ this.feels }} modules.
+      The server says: {{ this.messagePromise.value }}
   `;
   static props = {
     feels:  "😍",
     get messagePromise() {
-      return ajax({url: "/message"});
+      return ajax({ url: "/message" });
     }
   };
 }
@@ -277,7 +277,7 @@ that import CanJS. The following shows putting components into their own modules
   import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
   class MyGreeting extends StacheElement {
-    static view = `<h1>CanJS {{feels}} modules</h1>`;
+    static view = `<h1>CanJS {{ this.feels }} modules</h1>`;
     static props = {
       feels: "😍"
     };
@@ -291,8 +291,8 @@ that import CanJS. The following shows putting components into their own modules
 
   class MyCounter extends StacheElement {
     static view = `
-        Count: <span>{{count}}</span>
-        <button on:click='increment()'>+1</button>
+        Count: <span>{{ this.count }}</span>
+        <button on:click="this.increment()">+1</button>
     `;
     static props = {
       count: 0
@@ -335,8 +335,8 @@ The following shows importing and using [can-stache-converters] from `everything
 
     class MyApp extends StacheElement {
       static view = `
-          <p>Enter a value: <input on:input:value:to="string-to-any(enteredValue)"/></p>
-          <p>You've typed a(n) {{enteredType}}</p>
+          <p>Enter a value: <input on:input:value:to="string-to-any(this.enteredValue)"/></p>
+          <p>You've typed a(n) {{ this.enteredType }}</p>
       `;
       static props = {
         enteredValue: type.Any,
@@ -363,13 +363,13 @@ The following are CanJS examples in various online code editors.
 
 __Hello World__
 
-<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="pYwJao" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5.0 - Counter">
-  <span>See the Pen <a href="https://codepen.io/matthewp/pen/RwbYrqP/">
-  CanJS 5.0 - Counter</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="bGGNgyx" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6.0 - Counter">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/bGGNgyx">
+  CanJS 6.0 - Counter</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
 
-- [CodePen](https://codepen.io/matthewp/pen/RwbYrqP?editors=1000)
+- [CodePen](https://codepen.io/bitovi/pen/bGGNgyx?editors=1000)
 
 __Routing Example__
 
@@ -427,7 +427,7 @@ Next, create an `app.stache` template for your app:
 
 ```html
 {{! app.stache }}
-<h1>{{message}}</h1>
+<h1>{{ this.message }}</h1>
 ```
 
 Next, create an `index.js` module for your application. Import [can-stache-element StacheElement] and
@@ -474,7 +474,7 @@ Ready to build an app with CanJS? Check out our [guides/chat] or one of our reci
 ## webpack
 
 > You can skip these instructions by
-> [cloning the can-5 branch of this example repo on GitHub](https://github.com/canjs/webpack-example/tree/can-6).
+> [cloning the can-6 branch of this example repo on GitHub](https://github.com/canjs/webpack-example/tree/can-6).
 
 [After setting up Node.js and npm](#Node_jsandnpm), install `can`, [webpack](https://webpack.js.org)
 (with [can-stache-loader](https://www.npmjs.com/package/can-stache-loader)) from npm:
@@ -491,7 +491,7 @@ Next, create an `app.stache` template for your app:
 
 ```html
 {{! app.stache }}
-<h1>{{message}}</h1>
+<h1>{{ this.message }}</h1>
 ```
 
 Next, create an `index.js` module for your application. Import [can-stache-element StacheElement]
@@ -671,7 +671,7 @@ const StacheElement = require("can-stache-element");
 
 class MyApp extends StacheElement {
   static get view() {
-      return `<h1>{{message}}</h1>`;
+      return `<h1>{{ this.message }}</h1>`;
   }
 
   static get props() {
@@ -784,10 +784,10 @@ Next, create an `app.stache` template for your app:
 
 ```html
 {{! app.stache }}
-<h1>{{message}}</h1>
+<h1>{{ this.message }}</h1>
 ```
 
-Next, create an `index.js` module for your application. Import [can-component]
+Next, create an `index.js` module for your application. Import [can-stache-element]
 and your template to say “Hello World”:
 
 ```js
@@ -909,7 +909,7 @@ With CanJS downloaded or installed, use it to create an `index.html` page with a
 <my-app></my-app>
 
 <script type="text/stache" id="app-template">
-  <h1>{{message}}</h1>
+  <h1>{{ this.message }}</h1>
 </script>
 
 <script type="text/javascript">
@@ -933,19 +933,19 @@ With CanJS downloaded or installed, use it to create an `index.html` page with a
 This build only includes CanJS’s [can-core] and [can-infrastructure] modules and all of CanJS’s named exports are available on the [can-namespace can] object. For example, if you want the [can-ajax] infrastructure module, use it like `can.ajax`:
 
 ```js
-can.Component.extend({
-	tag: "my-app",
-	view: `
-        CanJS {{feels}} modules.
-        The server says: {{messagePromise.value}}
-    `,
-	ViewModel: {
-		feels: { default: "😍" },
-        messagePromise: {
-            default: () => can.ajax({url: "/message"})
-        }
-	}
-});
+class MyApp extends can.StacheElement {
+  static view = `
+    CanJS {{ this.feels }} modules.
+    The server says: {{ this.messagePromise.value }}
+  `;
+  static props = {
+    feels: { default: "😍" },
+    get messagePromise() {
+      return can.ajax({ url: "/message" });
+    }
+  };
+}
+customElements.define("my-app", MyApp);
 ```
 @highlight 10
 
@@ -982,7 +982,7 @@ The following `HTML` page includes CanJS and uses it to define a custom element:
     <script src="//unpkg.com/can@6/dist/global/core.js"></script>
     <script>
     class MyApp extends can.StachElement {
-      static view = `CanJS {{feels}} modules`;
+      static view = `CanJS {{ this.feels }} modules`;
 
       static props = {
         feels: "😍"
@@ -1001,14 +1001,14 @@ This build only includes CanJS’s [can-core] and [can-infrastructure] modules a
 ```js
 class MyApp extends can.StacheElement {
   static view = `
-      CanJS {{feels}} modules.
-      The server says: {{messagePromise.value}}
+      CanJS {{ this.feels }} modules.
+      The server says: {{ this.messagePromise.value }}
   `;
 
   static props = {
     feels: "😍",
     get messagePromise() {
-      return can.ajax({url: "/message"});
+      return can.ajax({ url: "/message" });
     }
   };
 }
@@ -1043,8 +1043,8 @@ The [core JavaScript bundle](#IncludingthecoreJavaScriptbundle) only includes Ca
 
     class MyApp extends StacheElement {
         static view = `
-            <p>Enter a value: <input on:input:value:to="string-to-any(enteredValue)"/></p>
-            <p>You've typed a(n) {{enteredType}}</p>
+            <p>Enter a value: <input on:input:value:to="string-to-any(this.enteredValue)"/></p>
+            <p>You've typed a(n) {{ this.enteredType }}</p>
         `;
 
         static props = {
