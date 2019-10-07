@@ -468,8 +468,7 @@ see “Hello World” on the page—if you don’t,
 and we can help you figure out what
 went wrong.
 
-Ready to build an app with CanJS? Check out our [guides/chat] or one of our
-[guides/recipes]!
+Ready to build an app with CanJS? Check out our [guides/chat] or one of our recipes!
 
 
 ## webpack
@@ -671,12 +670,17 @@ Next, create a component:
 const StacheElement = require("can-stache-element");
 
 class MyApp extends StacheElement {
-  static view = `<h1>{{message}}</h1>`;
+  static get view() {
+      return `<h1>{{message}}</h1>`;
+  }
 
-  static props = {
-    message: "Hello World"
-  };
+  static get props() {
+    return {
+      message: "Hello World"
+    };
+  }
 };
+
 customElements.define("my-app", MyApp);
 ```
 
@@ -692,7 +696,7 @@ your `<my-app>` component:
 ```html
 <!doctype html>
 <title>CanJS and Browserify</title>
-<script src="./dist/bundle.js" type="text/javascript"></script>
+<script src="./dist/bundle.js"></script>
 <my-app></my-app>
 ```
 @highlight 3-4
@@ -764,10 +768,11 @@ configuration for loading [can-stache] templates:
     "can-stache-element": "^1.0.0"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.0",
-    "babelify": "^8.0.0",
-    "browserify": "^16.1.0",
+    "@babel/core": "^7.6.2",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/preset-env": "^7.6.2",
+    "babelify": "^10.0.0",
+    "browserify": "^16.5.0",
     "http-server": "^0.11.0",
     "stringify": "^5.2.0"
   }
@@ -827,7 +832,7 @@ went wrong.
 
 
 Ready to build an app with CanJS? Check out our [guides/chat] or one of our
-[guides/recipes]!
+recipes!
 
 
 
@@ -1215,6 +1220,12 @@ stealTools.build({
 ```
 @highlight 6,only
 
+If you are using [webpack](https://webpack.js.org) you can import [core-js](https://www.npmjs.com/package/core-js) to include the polyfill. Be sure to import it at the top of your main JavaScript module like so:
+
+```js
+import "core-js/stable";
+```
+
 ### New packages
 
 The following packages are new in CanJS 6 and are based on the [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) object, which is not supported in IE 11 and cannot be polyfilled:
@@ -1300,9 +1311,27 @@ you may add a `<script>` element before including `steal-with-promises.js` in yo
 
 Coming soon!
 
+In [webpack](https://webpack.js.org) you should use [NormalModuleReplacementPlugin](https://webpack.js.org/plugins/normal-module-replacement-plugin/) to replace the [can-observable-object ObservableObject] version of [can-route.data route.data] with a [can-define/map/map] implmentation:
+
+__webpack.config.js__
+
+```js
+module.exports = {
+  plugins: [
+    new webpack.NormalModuleReplacementPlugin(
+      /can-route\/src\/routedata/,
+      "./routedata-definemap.js"
+    )
+    // ...
+  ]
+}
+```
+
+[See this starter app](https://github.com/canjs/webpack-example/tree/can-6-ie) for the full configuration.
+
 #### Browserify
 
-Coming soon!
+See [this example repo](https://github.com/canjs/browserify-example/tree/can-6-ie) for configruation on using Browserify with CanJS 6. Since with Browserify we recommend using the individual packages, it's as simple as using the correct package versions.
 
 ### Other caveats
 
