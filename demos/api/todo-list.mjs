@@ -1,4 +1,4 @@
-import { ObservableArray, type } from "//unpkg.com/can@5/core.mjs";
+import { ObservableArray, type } from "//unpkg.com/can@6/core.mjs";
 import Todo from "./todo.mjs";
 
 class TodoList extends ObservableArray {

@@ -1,10 +1,10 @@
-import {restModel, fixture, QueryLogic} from "//unpkg.com/can@5/core.mjs";
+import {restModel, fixture, QueryLogic} from "//unpkg.com/can@6/core.mjs";
 import Todo from "./todo.mjs";
 import TodoList from "./todo-list.mjs";
 
 Todo.connection = restModel({
-    Map: Todo,
-    List: TodoList,
+    ObjectType: Todo,
+    ArrayType: TodoList,
     url: "/api/todos/{id}"
 });
 

@@ -34,7 +34,7 @@ __Start this tutorial by clicking the “Run in your browser” button below:__
 
 This starter code includes:
 
-- CanJS (`import { ajax, fixture, StacheElement, type } from "//unpkg.com/can@5/core.mjs"` imports [can-ajax], [can-fixture], [can-stache-element], and [can-type])
+- CanJS (`import { ajax, fixture, StacheElement, type } from "//unpkg.com/can@6/core.mjs"` imports [can-ajax], [can-fixture], [can-stache-element], and [can-type])
 - Pre-made styles so the app looks pretty 😍
 - A mock service layer
 

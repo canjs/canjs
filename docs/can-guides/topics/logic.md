@@ -657,7 +657,7 @@ The [can-stache-element/lifecycle-hooks.connected connected lifecycle hook] can 
 ```html
 <memory-game></memory-game>
 <script type="module">
-import { ObservableArray, StacheElement, type } from "//unpkg.com/can@5/core.mjs";
+import { ObservableArray, StacheElement, type } from "//unpkg.com/can@6/core.mjs";
 
 class ColorPicker extends StacheElement {
   static view = `

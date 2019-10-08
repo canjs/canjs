@@ -1,4 +1,4 @@
-import { StacheElement, type } from "//unpkg.com/can@5/core.mjs";
+import { StacheElement, type } from "//unpkg.com/can@6/core.mjs";
 
 class PlaylistEditor extends StacheElement {
 	static view = `

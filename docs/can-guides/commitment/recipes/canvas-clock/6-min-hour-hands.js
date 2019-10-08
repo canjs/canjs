@@ -1,11 +1,11 @@
-import { StacheElement } from "//unpkg.com/can@5/core.mjs";
+import { StacheElement } from "//unpkg.com/can@6/core.mjs";
 
 // 60 = 2π
 const base60ToRadians = base60Number => 2 * Math.PI * base60Number / 60;
 
 class AnalogClock extends StacheElement {
   static view = `
-    <canvas this:to="canvasElement" id="analog" width="255" height="255"></canvas>
+    <canvas this:to="this.canvasElement" id="analog" width="255" height="255"></canvas>
   `;
 
   static props = {
@@ -89,7 +89,7 @@ class AnalogClock extends StacheElement {
 customElements.define("analog-clock", AnalogClock);
 
 class DigitalClock extends StacheElement {
-  static view = "{{ hh() }}:{{ mm() }}:{{ ss() }}";
+  static view = "{{ this.hh() }}:{{ this.mm() }}:{{ this.ss() }}";
 
   static props = {
     time: Date
@@ -113,9 +113,9 @@ customElements.define("digital-clock", DigitalClock);
 
 class ClockControls extends StacheElement {
   static view = `
-    <p>{{ time }}</p>
-    <digital-clock time:from="time"/>
-    <analog-clock time:from="time"/>
+    <p>{{ this.time }}</p>
+    <digital-clock time:from="this.time"/>
+    <analog-clock time:from="this.time"/>
   `;
 
   static props = {

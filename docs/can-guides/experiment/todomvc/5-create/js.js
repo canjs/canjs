@@ -47,8 +47,8 @@ fixture.delay = 200;
 
 realtimeRestModel({
   url: "/api/todos",
-  Map: Todo,
-  List: TodoListModel
+  ObjectType: Todo,
+  ArrayType: TodoListModel
 });
 
 class TodoCreate extends StacheElement {

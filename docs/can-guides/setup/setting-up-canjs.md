@@ -981,7 +981,7 @@ The following `HTML` page includes CanJS and uses it to define a custom element:
 
     <script src="//unpkg.com/can@6/dist/global/core.js"></script>
     <script>
-    class MyApp extends can.StachElement {
+    class MyApp extends can.StacheElement {
       static view = `CanJS {{ this.feels }} modules`;
 
       static props = {
@@ -1119,7 +1119,7 @@ For example, after installing the packages you need, you can create `my-can.js` 
 
 ```js
 // my-can.js
-export { default as StachElement } from "can-stache-element";
+export { default as StacheElement } from "can-stache-element";
 export { default as restModel } from "can-rest-model";
 // ...
 ```
