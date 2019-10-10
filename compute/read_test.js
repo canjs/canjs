@@ -139,5 +139,11 @@ steal("can/compute", "can/test", "can/map", "steal-qunit", function () {
 		read = can.compute.read(map, can.compute.read.reads("expandoProp") );
 		equal(read.value,"val", "got expando prop");
 	});
+
+	test("read works on primitive objects", function(){
+		var read = can.compute.read('foo', can.compute.read.reads('bar'));
+		
+		equal(read.value, undefined);
+	});
 	
 });

@@ -209,7 +209,8 @@ steal("can/util", function(can){
 			// this is the default
 			test: function(){return true;},
 			read: function(value, prop){
-				if(value == null) {
+				var valueType = typeof value;
+				if(value == null || (valueType !== 'object' && valueType !== 'function')) {
 					return undefined;
 				} else {
 					if(prop.key in value) {
