@@ -103,7 +103,7 @@
     "can-ndjson-stream": "1.0.2",
     "can-observable-array": "1.0.1",
     "can-observable-bindings": "1.2.1",
-    "can-observable-mixin": "1.0.1",
+    "can-observable-mixin": "1.0.2",
     "can-observable-object": "1.0.1",
     "can-observation": "4.2.0",
     "can-observation-recorder": "1.3.1",
