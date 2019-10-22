@@ -174,7 +174,7 @@
     "qunit": "^2.9.2",
     "semver": "^6.1.1",
     "socket.io-client": "^2.2.0",
-    "steal": "^2.0.0",
+    "steal": "^2.2.4",
     "steal-conditional": "^0.4.0",
     "steal-css": "^1.2.4",
     "steal-qunit": "^2.0.0",
