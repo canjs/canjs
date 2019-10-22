@@ -1,0 +1,30 @@
+<date-inputs></date-inputs>
+
+<script src="../../node_modules/steal/steal.js" dev-bundle main="@empty" id="demo-source">
+import { StacheElement, type } from "can";
+
+class DateInputs extends StacheElement {
+	static view = `
+		<h4>One way from input</h4>
+		<input type="date" valueAsDate:to="this.firstDate">
+		<p>
+			Date: {{ this.firstDate }}
+		</p>
+
+		<h4>Two way</h4>
+		<input type="date" valueAsDate:bind="this.secondDate">
+		<p>
+			Date: {{ this.secondDate }}
+		</p>
+	`;
+
+	static props = {
+		firstDate: type.maybe(Date),
+		secondDate: {
+			type: Date,
+			get default() { return new Date() }
+		}
+	};
+}
+customElements.define("date-inputs", DateInputs);
+</script>
