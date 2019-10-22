@@ -216,6 +216,16 @@ The `files` property cannot be accessed through an attribute binding (since it i
 
 You could also use `on:change="scope.set('selectedFiles', scope.element.files)"` as described in the [guides/forms#Datadown_actionsup Data down, actions up] section if you only need to display the data, but it is more likely that you would want to use the [https://developer.mozilla.org/en-US/docs/Web/API/FileList FileList object] along with the File JavaScript API.
 
+### Date input
+
+```html
+<input type="date">
+```
+
+When using a date input, the `valueAsDate` property can be used to bind a `Date` property on the component to the input.
+
+@demo demos/forms/elements-date.html
+
 ### Select
 
 ```html
