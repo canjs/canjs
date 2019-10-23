@@ -101,9 +101,9 @@
     "can-memory-store": "1.0.2",
     "can-namespace": "1.0.0",
     "can-ndjson-stream": "1.0.2",
-    "can-observable-array": "1.0.2",
+    "can-observable-array": "1.0.3",
     "can-observable-bindings": "1.3.0",
-    "can-observable-mixin": "1.0.3",
+    "can-observable-mixin": "1.0.4",
     "can-observable-object": "1.0.1",
     "can-observation": "4.2.0",
     "can-observation-recorder": "1.3.1",
@@ -309,7 +309,7 @@
   "bundlesize": [
     {
       "path": "./core.min.mjs",
-      "maxSize": "105.02 kB"
+      "maxSize": "105.08 kB"
     },
     {
       "path": "./core.mjs",
@@ -317,7 +317,7 @@
     },
     {
       "path": "./dist/global/core.js",
-      "maxSize": "195.76 kB"
+      "maxSize": "195.83 kB"
     }
   ]
 }
