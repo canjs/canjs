@@ -25,7 +25,7 @@
     "release:major": "npm version major && npm run build && npm publish",
     "build": "node build.js",
     "build-tests": "node test/build.js",
-    "build-webpack-test": "webpack -o test/builders/webpack/bundle.js test/builders/webpack/index.js",
+    "build-webpack-test": "webpack --mode=production -o test/builders/webpack/bundle.js test/builders/webpack/index.js",
     "document": "./pre-document.sh && npm run deps-bundle && bit-docs",
     "document:force": "./pre-document.sh && npm run deps-bundle && bit-docs -fd",
     "deps-bundle": "node build-dev-bundle"
