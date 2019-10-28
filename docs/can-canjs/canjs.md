@@ -32,7 +32,7 @@ h3 {
   color: #282C33;
   margin-bottom: 10px;
 }
-code:before {
+code[class*=language-]:before {
   content: "";
   background-color: #f5f5f5;
   height: 25px;
