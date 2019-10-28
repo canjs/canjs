@@ -1,4 +1,4 @@
-import { can, StacheElement } from "../../../core.js";
+import { can, StacheElement } from "../../../can.js";
 
 window.can = can;
 
