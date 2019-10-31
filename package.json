@@ -308,7 +308,7 @@
   "bundlesize": [
     {
       "path": "./core.min.mjs",
-      "maxSize": "105.10 kB"
+      "maxSize": "105.2 kB"
     },
     {
       "path": "./core.mjs",
