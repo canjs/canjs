@@ -1331,7 +1331,7 @@ module.exports = {
 
 #### Browserify
 
-See [this example repo](https://github.com/canjs/browserify-example/tree/can-6-ie) for configruation on using Browserify with CanJS 6. Since with Browserify we recommend using the individual packages, it's as simple as using the correct package versions.
+See [this example repo](https://github.com/canjs/browserify-example/tree/can-6-ie) for configuration on using Browserify with CanJS 6. Since with Browserify we recommend using the individual packages, it's as simple as using the correct package versions.
 
 ### Other caveats
 
