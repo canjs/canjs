@@ -312,11 +312,11 @@
     },
     {
       "path": "./core.mjs",
-      "maxSize": "312.02 kB"
+      "maxSize": "312.5 kB"
     },
     {
       "path": "./dist/global/core.js",
-      "maxSize": "195.88 kB"
+      "maxSize": "196.00 kB"
     }
   ]
 }
