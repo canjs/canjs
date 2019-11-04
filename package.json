@@ -1,6 +1,6 @@
 {
   "name": "can",
-  "version": "6.2.3",
+  "version": "6.2.4",
   "main": "can.js",
   "scripts": {
     "preversion": "npm test",
@@ -101,7 +101,7 @@
     "can-namespace": "1.0.0",
     "can-ndjson-stream": "1.0.2",
     "can-observable-array": "1.0.4",
-    "can-observable-bindings": "1.3.0",
+    "can-observable-bindings": "1.3.2",
     "can-observable-mixin": "1.0.4",
     "can-observable-object": "1.0.1",
     "can-observation": "4.2.0",
@@ -312,11 +312,11 @@
     },
     {
       "path": "./core.mjs",
-      "maxSize": "312.02 kB"
+      "maxSize": "312.5 kB"
     },
     {
       "path": "./dist/global/core.js",
-      "maxSize": "195.88 kB"
+      "maxSize": "196.00 kB"
     }
   ]
 }
