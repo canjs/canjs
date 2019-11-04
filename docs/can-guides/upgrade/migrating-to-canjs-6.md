@@ -69,6 +69,24 @@ Although [can-stache-element StacheElement], [can-observable-object ObservableOb
 
 See the [guides/setup#IE11Support Setup Guide] for more details.
 
+## Using Codemods
+
+This guide will help you understand all of the changes in CanJS 6. We recommend you read it in full before starting the migration process.
+
+Once you have read this guide, using codemods is a good way to take care of *many* of the changes described below. If you haven't already, read the [guides/upgrade/using-codemods] guide, which explains what codemods are and how the [can-migrate](https://www.npmjs.com/package/can-migrate) CLI tool works.
+
+Even if you have already installed `can-migrate` in the past, you need to upgrade to a version that supports CanJS 6.
+
+```shell
+npm install -g can-migrate@2
+```
+
+Once installed, you can run all of the CanJS 6 codemods on your code:
+
+```shell
+can-migrate '**/*.js' --can-version 6 --apply
+```
+
 ## Breaking Changes
 
 The following are the breaking changes in CanJS 6.
@@ -183,8 +201,8 @@ The `Map` and `List` properties which are used to configure the instance and lis
 
 ```js
 Todo.connection = restModel({
-  Map: TodoList,
-  List: Todo,
+  List: TodoList,
+  Map: Todo,
   url: "/api/todos/{id}"
 });
 ```
