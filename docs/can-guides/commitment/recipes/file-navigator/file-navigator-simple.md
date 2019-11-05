@@ -35,9 +35,9 @@ getting the application to look right.
 
 The following sections are broken down into:
 
-- Problem - A description of what the section is trying to accomplish.
-- Things to know - Information about CanJS that is useful for solving the problem.
-- Solution - The solution to the problem.
+- __The problem__ — A description of what the section is trying to accomplish.
+- __What you need to know__ — Information about CanJS that is useful for solving the problem.
+- __The solution__ — The solution to the problem.
 - Test it (uncommon) - How to make sure the solution works.
 
 
@@ -219,7 +219,7 @@ customElements.define("file-navigator", FileNavigator);
 
 Now let’s render all of the files and folders!  This means we want to render the files and folders recursively.  Every time we find a folder, we need to render its contents.
 
-### Things to know
+### What you need to know
 
 - A template can call out to another registered _partial_ template with [can-stache.tags.partial {{>PARTIAL_NAME}}] like the following:
 
@@ -296,7 +296,7 @@ customElements.define("file-navigator", FileNavigator);
 For rich behavior, we need to convert the raw JS data into typed observable data.  When
 we change the data, the UI will automatically change.
 
-### Things to know
+### What you need to know
 
 - [can-observable-object] allows you to define a type by defining the type’s
   properties and the properties’ types like:
@@ -438,7 +438,7 @@ You should see the page change automatically.
 
 We want to be able to toggle if a folder is open or closed.
 
-### Things to know
+### What you need to know
 
 - [can-observable-object ObservableObject] can specify a default value and a type:
   ```js

@@ -313,11 +313,11 @@ We will do this by:
   });
   ```
 
-- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in [can-stache].
-- Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in [can-stache].
+- Use [can-stache.helpers.if {{# if(value) }}] to do `if/else` branching in [can-stache].
+- Use [can-stache.helpers.for-of {{# for(of) }}] to do looping in [can-stache].
 - [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) are observable in [can-stache].  Given a promise `somePromise`, you can:
-  - Check if the promise is loading like: `{{#if(somePromise.isPending)}}`.
-  - Loop through the resolved value of the promise like: `{{#for(item of somePromise.value)}}`.
+  - Check if the promise is loading like: `{{# if(somePromise.isPending) }}`.
+  - Loop through the resolved value of the promise like: `{{# for(item of somePromise.value) }}`.
 
 ### The solution
 

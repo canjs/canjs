@@ -2,7 +2,7 @@ const yqlURL = "https://query.yahooapis.com/v1/public/yql?";
 
 const WeatherViewModel = can.DefineMap.extend({
   location: "string",
-  get placesPromise() {
+  get forecastPromise() {
     if (this.location && this.location.length > 2) {
       return fetch(
         yqlURL +
@@ -10,9 +10,9 @@ const WeatherViewModel = can.DefineMap.extend({
           q: 'select * from geo.places where text="' + this.location + '"',
           format: "json"
         })
-      ).then(function(response) {
+      ).then(response => {
         return response.json();
-      }).then(function(data) {
+      }).then(data => {
         console.log(data);
         if (Array.isArray(data.query.results.place)) {
           return data.query.results.place;
@@ -24,8 +24,8 @@ const WeatherViewModel = can.DefineMap.extend({
   },
   places: {
     get: function(lastSet, resolve) {
-      if (this.placesPromise) {
-        this.placesPromise.then(resolve);
+      if (this.forecastPromise) {
+        this.forecastPromise.then(resolve);
       }
     }
   },
@@ -62,9 +62,9 @@ const WeatherViewModel = can.DefineMap.extend({
           q: 'select * from weather.forecast where woeid=' + this.place.woeid,
           format: "json"
         })
-      ).then(function(response) {
+      ).then(response => {
         return response.json();
-      }).then(function(data) {
+      }).then(data => {
         console.log("forecast data", data);
         const forecast = data.query.results.channel.item.forecast;
 

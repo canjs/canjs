@@ -1,0 +1,41 @@
+<weather-report></weather-report>
+
+<script>
+	const appKey = "17ba01d3931252096b4ab03df56891cd";
+
+	function transformData(data) {
+		let forecasts = [];
+		const today = new Date();
+
+		const transformedForecast = data.list.map(item => {
+			return {
+				date: new Date(item.dt_txt),
+				high: item.main.temp_max,
+				icon: item.weather[0].icon,
+				low: item.main.temp_min,
+				text: item.weather[0].description
+			};
+		});
+
+		const todayForecasts = transformedForecast.filter(forecast => {
+			const forecastDate = forecast.date;
+			return today.getDate() === forecastDate.getDate();
+		});
+
+		if (todayForecasts.length) {
+			forecasts.push(todayForecasts[0]);
+		}
+
+		const nextDaysForecasts = transformedForecast.filter(forecast => {
+			const forecastDate = forecast.date;
+			return (
+				today.getDate() !== forecastDate.getDate() &&
+				forecastDate.getHours() === 12
+			);
+		});
+
+		forecasts = forecasts.concat(nextDaysForecasts);
+
+		return forecasts;
+	}
+</script>

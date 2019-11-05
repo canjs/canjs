@@ -9,14 +9,16 @@ Error: {{ geoLocationError.message }}
     </p>
   {{/ if }}
 
-  <div class="location-entry">
-    <label for="location">Enter Your location:</label>
-    <input id="location" value:to="location" type="text" />
-  </div>
+  {{# if(showEnterLocation) }}
+    <div class="location-entry">
+      <label for="location">Enter your location:</label>
+      <input id="location" type="text" value:to="this.location" />
+    </div>
+  {{/ if }}
 
-  {{# if(placesPromise.isPending) }}
+  {{# if(forecastPromise.isPending) }}
     <p class="loading-message">
-      Loading places…
+      Loading forecast…
     </p>
   {{/ if }}
 
@@ -24,7 +26,7 @@ Error: {{ geoLocationError.message }}
     <div class="location-options">
       <label>Pick your place:</label>
       <ul>
-        {{# for(place of placesPromise.value) }}
+        {{# for(place of forecastPromise.value) }}
           <li on:click="this.pickPlace(place)">{{ place.name }}, {{ place.admin1.content }},
               {{ place.country.code }} ({{ place.placeTypeName.content }})</li>
         {{/ for }}

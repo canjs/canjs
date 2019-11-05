@@ -38,34 +38,8 @@ const WeatherViewModel = can.DefineMap.extend({
       });
     }
   },
-  geoPlace: {
-    get: function(lastSet, resolve) {
-      if (this.geoLocation) {
-        fetch("https://api.flickr.com/services/rest/?" +
-          can.param({
-            method: "flickr.places.findByLatLon",
-            api_key: "df0a221bb43ecbc2abb03426bd84e598",
-            lat: this.geoLocation.coords.latitude,
-            lon: this.geoLocation.coords.longitude,
-            format: "json",
-            nojsoncallback: 1
-          })
-        ).then(function(response) {
-          return response.json();
-        }).then(function(responseJSON) {
-          return responseJSON.places.place[0];
-        }).then(resolve);
-      }
-    }
-  },
-  get showEnableGeoLocationMessage() {
-    return !this.geoLocation && !this.geoLocationError;
-  },
-  get showEnterLocation() {
-    return !!this.geoLocationError;
-  },
   location: "string",
-  get placesPromise() {
+  get forecastPromise() {
     if (this.location && this.location.length > 2) {
       return fetch(
         yqlURL +
@@ -73,9 +47,9 @@ const WeatherViewModel = can.DefineMap.extend({
           q: 'select * from geo.places where text="' + this.location + '"',
           format: "json"
         })
-      ).then(function(response) {
+      ).then(response => {
         return response.json();
-      }).then(function(data) {
+      }).then(data => {
         console.log(data);
         if (Array.isArray(data.query.results.place)) {
           return data.query.results.place;
@@ -87,8 +61,8 @@ const WeatherViewModel = can.DefineMap.extend({
   },
   places: {
     get: function(lastSet, resolve) {
-      if (this.placesPromise) {
-        this.placesPromise.then(resolve);
+      if (this.forecastPromise) {
+        this.forecastPromise.then(resolve);
       }
     }
   },
@@ -110,8 +84,7 @@ const WeatherViewModel = can.DefineMap.extend({
 
       return onePlaceResultStream
       .merge(setStream)
-      .merge(resetStream)
-      .merge(this.toStream(".geoPlace"));
+      .merge(resetStream);
     }
   },
   pickPlace: function(place) {
@@ -126,9 +99,9 @@ const WeatherViewModel = can.DefineMap.extend({
           q: 'select * from weather.forecast where woeid=' + this.place.woeid,
           format: "json"
         })
-      ).then(function(response) {
+      ).then(response => {
         return response.json();
-      }).then(function(data) {
+      }).then(data => {
         console.log("forecast data", data);
         const forecast = data.query.results.channel.item.forecast;
 

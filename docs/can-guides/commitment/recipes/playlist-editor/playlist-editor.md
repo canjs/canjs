@@ -36,7 +36,7 @@ __START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RI
 The following sections are broken down into:
 
 - Problem — A description of what the section is trying to accomplish.
-- Things to know — Information about CanJS that is useful for solving the problem.
+- What you need to know — Information about CanJS that is useful for solving the problem.
 - Solution — The solution to the problem.
 
 The following video goes through this recipe:
@@ -241,7 +241,7 @@ In this section, we will:
 
 
 
-- [ES5 Getter Syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get) can
+- [ES5 getter syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get) can
   be used to define a component property that changes when another property changes.  For example,
   the following defines an `signedOut` property that is the opposite of the `signedIn` property:
 

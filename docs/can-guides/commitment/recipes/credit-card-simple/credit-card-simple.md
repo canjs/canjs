@@ -58,7 +58,7 @@ The following sections are broken down into:
 
 ### The problem
 
-Let’s create a `cc-payment` component, which will have an `amount` property that 
+Let’s create a `cc-payment` component, which will have an `amount` property that
 defaults to `9.99`.  When complete, we should be able update the displayed “pay amount”.
 
 ### What you need to know
@@ -67,7 +67,7 @@ defaults to `9.99`.  When complete, we should be able update the displayed “pa
 - To use Stripe, you must call [Stripe.setPublishableKey](https://stripe.com/docs/stripe.js/v2#setting-publishable-key).
 
 - A basic CanJS setup uses instances of a [can-stache-element StacheElement], which
- glues [can-observable-object ObservableObject]-like properties to a `view` in order
+ glues [can-observable-object ObservableObject]-like properties to a [can-stache-element/static.view `view`] in order
  to manage its behavior as follows:
 
   ```js
@@ -84,12 +84,12 @@ defaults to `9.99`.  When complete, we should be able update the displayed “pa
   customElements.define("cc-payment", CCPayment);
   ```
 
-- CanJS component will be mounted in the DOM by adding the the component tag in the HTML page:
+- CanJS components will be mounted in the DOM by adding the component tag in the HTML page:
   ```html
   <cc-payment></cc-payment>
   ```
 
-- CanJS component uses [can-stache] to render data in a template and keep it live.
+- CanJS components use [can-stache] to render data in a template and keep it live.
 
 - The properties defined in the [can-stache-element/static.props `props`] object can have default values like:
 
@@ -136,7 +136,7 @@ Print out the exported values like:
 ### What you need to know
 
 - Use [can-stache-bindings.twoWay value:bind] to set up a two-way binding in
-  [can-stache].  For example, the following keeps `email` on the element `props` 
+  [can-stache].  For example, the following keeps `email` on the element `props`
   and the input’s `value` in sync:
 
     ```html
@@ -184,7 +184,7 @@ So that we can print out the values like:
 
 ### What you need to know
 
-- [ES5 Getter Syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get) can
+- [ES5 getter syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get) can
   be used to define an [can-observable-object ObservableObject] property that changes when another property changes.  For example,
   the following defines a `firstName` property that always has the
   first word of the `fullName` property:

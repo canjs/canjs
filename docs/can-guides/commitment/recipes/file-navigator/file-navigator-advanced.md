@@ -34,9 +34,9 @@ getting the application to look right.
 
 The following sections are broken down into:
 
-- Problem - A description of what the section is trying to accomplish.
-- Things to know - Information about CanJS that is useful for solving the problem.
-- Solution - The solution to the problem.
+- __The problem__ — A description of what the section is trying to accomplish.
+- __What you need to know__ — Information about CanJS that is useful for solving the problem.
+- __The solution__ — The solution to the problem.
 
 ## Build a service layer with fixtures
 
@@ -74,7 +74,7 @@ This should return the list of folders and files directly within that folder lik
 
 The first level files and folders should have a `parentId` of `"0"`.
 
-### Things to know
+### What you need to know
 
 - [can-fixture] is used to trap AJAX requests like:
 
@@ -142,7 +142,7 @@ entity.on("name", function(ev, newName) {
 entity.name = "cats" //-> logs "entity name changed to cats"
 ```
 
-### Things to know
+### What you need to know
 
 You can create an [can-observable-object ObservableObject] type with the type’s 
 properties and the properties’ types like:
@@ -177,7 +177,7 @@ Entity.getList({ parentId: "0" }).then(function(entities) {
 });
 ```
 
-### Things to know
+### What you need to know
 
 [can-rest-model restModel()] can connect an `ObjectType` type to a `url` like:
 
@@ -204,7 +204,7 @@ rendering it in a template.  We’ll start slow by rendering the `root` parent f
 in the same way it’s expected by the designer.
 
 
-### Things to know
+### What you need to know
 
 - CanJS [can-stache-element StacheElement] uses [can-stache] to render data in a template
   and keep it live.  Templates can be authored in `view` property like:
@@ -277,14 +277,14 @@ Update the __JavaScript__ tab to:
 
 In this section, we’ll list the files and folders within the root folder.
 
-### Things to know
+### What you need to know
 
-- Use [can-stache.helpers.if {{#if(value)}}] to do `if/else` branching in [can-stache].
-- Use [can-stache.helpers.for-of {{#for(of)}}] to do looping in [can-stache].
+- Use [can-stache.helpers.if {{# if(value) }}] to do `if/else` branching in [can-stache].
+- Use [can-stache.helpers.for-of {{# for(of) }}] to do looping in [can-stache].
 - Use [can-stache.helpers.is {{#eq(value1, value2)}}] to test equality in [can-stache].
 - [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) are observable in [can-stache].  Given a promise `somePromise`, you can:
-  - Check if the promise is loading like: `{{#if(somePromise.isPending)}}`.
-  - Loop through the resolved value of the promise like: `{{#for(item of somePromise.value)}}`.
+  - Check if the promise is loading like: `{{# if(somePromise.isPending) }}`.
+  - Loop through the resolved value of the promise like: `{{# for(item of somePromise.value) }}`.
 - Write `<div class="loading">Loading</div>` when files are loading.
 - Write a `<ul>` to contain all the files.  Within the `<ul>` there should be:
   - An `<li>` with a class attribute that includes `file` or `folder` and `hasChildren` if the folder has children.
@@ -309,7 +309,7 @@ the promise is pending, and then writes out an `<li>` for each entity in the res
 
 Now we want to make all the folders able to open and close.
 
-### Things to know
+### What you need to know
 
 - CanJS uses [can-observable-object ObservableObject]-like properties to manage the behavior
   of views.  Components can have their own state, such as if a folder `isOpen` and should be showing

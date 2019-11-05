@@ -304,7 +304,7 @@ This happens because the form is being submitted, which performs a GET request f
 
 @demo demos/forms/elements-submit.html
 
-This will prevent the the form from being submitted when the user explicitly clicks the submit button or presses the Enter key while focused on one of the text fields; however, there are times when a form can be [https://www.w3.org/TR/html5/single-page.html#implicit-submission implicitly submitted] that this `click` handler might not catch. In order to handle these cases in all browsers, use an `on:submit="..."` handler directly on the `<form>` element:
+This will prevent the form from being submitted when the user explicitly clicks the submit button or presses the Enter key while focused on one of the text fields; however, there are times when a form can be [https://www.w3.org/TR/html5/single-page.html#implicit-submission implicitly submitted] that this `click` handler might not catch. In order to handle these cases in all browsers, use an `on:submit="..."` handler directly on the `<form>` element:
 
 @demo demos/forms/elements-submit-form.html
 

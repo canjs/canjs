@@ -2,11 +2,11 @@
 @parent guides/recipes/advanced
 @hide
 
-@description This advanced guides you through extending the [guides/recipes/weather-report-simple Simple Weather Report Guide] to
+@description This advanced guides you through extending the [guides/recipes/weather-report-simple Beginner Weather Report Guide] to
 remove imperative code and automatically look up the user’s location using the
 browser’s [geolocation API](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation).  Both of these will be done with event streams.
 
-This guide continues where the [guides/recipes/weather-report-simple Simple Weather Report Guide] left off.  It takes about 25 minutes to complete.  It was written with CanJS 4.1.
+This guide continues where the [guides/recipes/weather-report-simple Beginner Weather Report Guide] left off.  It takes about 25 minutes to complete.  It was written with CanJS 4.1.
 
 @body
 
@@ -18,12 +18,12 @@ __Start this tutorial by cloning the following JS Bin__:
 
 <a class="jsbin-embed" href="https://jsbin.com/jiwabof/1/embed?html,js,output">JS Bin on jsbin.com</a>
 
-This is the ending JS Bin for the [guides/recipes/weather-report-simple Simple Weather Report Guide] with [Kefir.js](https://kefirjs.github.io/kefir/) added.
+This is the ending JS Bin for the [guides/recipes/weather-report-simple Beginner Weather Report Guide] with [Kefir.js](https://kefirjs.github.io/kefir/) added.
 
 The following sections are broken down into:
 
 - Problem — A description of what the section is trying to accomplish.
-- Things to know — Information about CanJS that is useful for solving the problem.
+- What you need to know — Information about CanJS that is useful for solving the problem.
 - Solution — The solution to the problem.
 
 ## Removing Imperative Code
@@ -73,7 +73,7 @@ const WeatherViewModel = can.DefineMap.extend({
 
 We want to define the behavior of `place` so that it becomes `null` when `location` changes.
 
-### Things to know
+### What you need to know
 
 - [can-define/map/map DefineMap] [can-define.types.get getters] can only derive a value from other values.  They can’t
   derive a value from the change in other values.  However, event-stream libraries like [KefirJS](https://kefirjs.github.io/kefir/)
@@ -241,7 +241,7 @@ Update the __JavaScript__ tab to:
    - the set `.place` value.
 3. Mix [can-define-stream-kefir] into the `WeatherViewModel`.
 
-@sourceref ./advanced-1/js.js
+@sourceref ./1.js
 @highlight 4,35-52,79,only
 
 ## Get the geoLocation’s latitude and longitude
@@ -361,12 +361,12 @@ We will do this by:
 
 Update the __JavaScript__ tab:
 
-@sourceref ./advanced-2/js.js
+@sourceref ./2.js
 @highlight 3-21,24-40,only
 
 Update the __HTML__ tab:
 
-@sourceref ./advanced-2/html.html
+@sourceref ./2.html
 @highlight 1-3,only
 
 ## Find the user’s place by latitude and longitude
@@ -392,7 +392,7 @@ fetch("https://api.flickr.com/services/rest/?"+
         format: "json",
         nojsoncallback: 1
     })
-).then(function(response) {
+).then(response => {
     return response.json()
 }).then(function(responseJSON) {
     return responseJSON.places.place[0];
@@ -403,7 +403,7 @@ fetch("https://api.flickr.com/services/rest/?"+
 
 Update the __JavaScript__ tab:
 
-@sourceref ./advanced-3/js.js
+@sourceref ./3.js
 @highlight 41-60,108,only
 
 ## Add "Enable Location Services" message
