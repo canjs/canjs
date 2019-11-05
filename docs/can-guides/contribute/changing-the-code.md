@@ -22,7 +22,7 @@ Replace `your-branch-name` with the name of your feature branch, e.g. `git check
 
 ## Style guide
 
-Where possible, our code generally follows [jQuery’s coding conventions](https://contribute.jquery.org/style-guide/js/).
+Our code generally follows [jQuery’s coding conventions](https://contribute.jquery.org/style-guide/js/).
 
 Where possible, CanJS code uses:
 
@@ -30,6 +30,153 @@ Where possible, CanJS code uses:
 - JSHint
 - CommonJS not ES6
 - jQuery’s [coding conventions](https://contribute.jquery.org/style-guide/js/)
+
+Below are some other recommendations for how to write/document CanJS code.
+
+### Use `this` in stache expressions
+
+Write:
+
+```html
+Count: <span>{{ this.count }}</span>
+<button on:click='this.increment()'>+1</button>
+```
+
+…instead of:
+
+```html
+Count: <span>{{ count }}</span>
+<button on:click='increment()'>+1</button>
+```
+
+### Name classes
+
+Write:
+
+```js
+class MyCounter extends StacheElement { }
+customElements.define("my-counter", MyCounter);
+```
+
+…instead of:
+
+```js
+customElements.define("my-counter", class extends StacheElement {
+});
+```
+
+### Use class fields for static properties
+
+Write:
+
+```js
+class MyCounter extends StacheElement {
+  static view = `
+  `;
+  static props = {
+  };
+}
+```
+
+…instead of:
+
+```js
+class MyCounter extends StacheElement {
+  static get view() {
+    return `
+    `;
+  }
+  static get props() {
+    return {
+    };
+  }
+}
+```
+
+### Order classes
+
+1. view
+2. props
+3. lifecycle methods
+4. other methods
+
+```js
+class MyCounter extends StacheElement {
+  static view = `
+  `;
+  static props = {
+  };
+  connected() {
+  }
+  myMethod() {
+  }
+}
+```
+
+### Use `for(of)` instead of `each` and scope walking
+
+Write:
+
+```js
+static view = `
+  {{# for(item of items) }}
+    {{# for(subitem of item.subitems) }}
+      {{ this.query }}
+    {{/ for }}
+  {{/ for }}
+`;
+```
+
+…instead of:
+
+```js
+  {{# each(items) }}
+    {{# each(this.subitems) }}
+      {{ ../../query }}
+    {{/ each }}
+  {{/ each }}
+```
+
+### Use the “strictest” type possible
+
+The CanJS 6 codemods will change all types to use `type.maybeConvert` because this matches the behavior of `can-define`. Usually we can be more strict than this and use either the raw type (like `id: Number`), `type.convert`, or `type.maybe`.
+
+### Space out your stache
+
+https://canjs.com/doc/can-stache.html#Spacingandformatting
+
+**TLDR:**
+
+- Put a space after opening stache tags (`{{`, `{{{`, `{{#`,`{{/`, `{{<`, `{{!`, `{{^`, `{{>`)
+- Put a space before closing stache tags (`}}`, `}}}`)
+
+### Don’t use propertyDefaults unless it is necessary
+
+The codemods add this to ObservableObjects and StacheElements:
+
+```js
+static get propertyDefaults() {
+  return DeepObservable;
+}
+```
+
+This is added because this reproduces the behavior of `DefineMap`; however, this should not be needed by most of our guides. This is only needed in cases where a property is set to an object or array that has nested objects or arrays that need to be observable, otherwise it should be removed.
+
+### Replace `(event, newValue)` with `({ value })`
+
+This:
+
+```js
+listenTo("event", ( event, value ) => {
+});
+```
+
+…can now be this:
+
+```js
+listenTo("event", ({ value }) => {
+});
+```
 
 ## Updating tests
 
