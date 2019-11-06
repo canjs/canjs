@@ -638,7 +638,7 @@ todo on the server and remove the todo’s element from the page. While
 the todo is being destroyed, add `destroying` to the todo’s `<li>`’s `class`
 attribute.
 
-### Things to know
+### What you need to know
 
 - The remaining parts of the [can-connect Presentation](https://drive.google.com/open?id=0Bx-kNqf-wxZebHFWMElNOVEwSlE), with an emphasis on how [can-connect/real-time/real-time] behavior works.
 - Delete a record on the server with [can-connect/can/map/map.prototype.destroy] like:

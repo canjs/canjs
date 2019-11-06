@@ -1,15 +1,16 @@
 <link href="https://fonts.googleapis.com/css?family=Dosis:300,400" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="weather-report.css">
+<link rel="stylesheet" type="text/css" href="../weather-report.css">
+<!-- eedfc9671818be40 -->
 <script id="app-template" type="text/stache">
   <div class="weather-widget">
     <div class="location-entry">
-      <label for="location">Enter Your location:</label>
-      <input id="location" value:to="location" type="text" />
+      <label for="location">Enter your location:</label>
+      <input id="location" type="text" value:to="this.location" />
     </div>
 
-	{{# if(placesPromise.isPending) }}
+	{{# if(forecastPromise.isPending) }}
       <p class="loading-message">
-        Loading places...
+        Loading forecast…
       </p>
     {{/ if }}
 
@@ -17,7 +18,7 @@
       <div class="location-options">
         <label>Pick your place:</label>
         <ul>
-          {{# for(place of placesPromise.value) }}
+          {{# for(place of forecastPromise.value) }}
             <li on:click="this.pickPlace(place)">{{ place.name }}, {{ place.admin1.content }},
                 {{ place.country.code }} ({{ place.placeTypeName.content }})</li>
           {{/ for }}
@@ -43,11 +44,22 @@
 
   </div>
 </script>
+<script src="https://cdn.jsdelivr.net/kefir/3.6.0/kefir.js"></script>
+<script>
+  steal = {
+    instantiated: {
+      "kefir" : Kefir
+    }
+  }
+</script>
+<script src="../../../../../../node_modules/steal/steal.js" dev-bundle main="@empty">
+import can from 'can/all';
+import defineStreamKefir from 'can-define-stream-kefir';
+import Kefir from 'kefir';
 
-<script src="../../../../../node_modules/steal/steal.js" dev-bundle main="@empty">
-import can from 'can/can';
+can.defineStreamKefir = defineStreamKefir;
 
-const yqlURL = "https://query.yahooapis.com/v1/public/yql?";
+const yqlURL = "//query.yahooapis.com/v1/public/yql?";
 
 const WeatherViewModel = can.DefineMap.extend({
   location: {
@@ -56,7 +68,7 @@ const WeatherViewModel = can.DefineMap.extend({
       this.place = null;
     }
   },
-  get placesPromise() {
+  get forecastPromise() {
     if (this.location && this.location.length > 2) {
 	  return fetch(
 		  yqlURL+
@@ -64,9 +76,9 @@ const WeatherViewModel = can.DefineMap.extend({
 	        q: 'select * from geo.places where text="'+this.location+'"',
 	        format: "json"
 	      })
-	  ).then(function(response) {
+	  ).then(response => {
 		  return response.json();
-	  }).then(function(data) {
+	  }).then(data => {
 		  console.log(data);
           if (Array.isArray(data.query.results.place)) {
             return data.query.results.place;
@@ -78,8 +90,8 @@ const WeatherViewModel = can.DefineMap.extend({
   },
   places: {
     get: function(lastSet, resolve) {
-      if (this.placesPromise) {
-        this.placesPromise.then(resolve);
+      if (this.forecastPromise) {
+        this.forecastPromise.then(resolve);
       }
     }
   },
@@ -109,9 +121,9 @@ const WeatherViewModel = can.DefineMap.extend({
   	        q: 'select * from weather.forecast where woeid='+this.place.woeid,
   	        format: "json"
   	      })
-  	  ).then(function(response) {
+  	  ).then(response => {
   		  return response.json();
-  	  }).then(function(data) {
+  	  }).then(data => {
         console.log("forecast data", data);
         const forecast = data.query.results.channel.item.forecast;
 

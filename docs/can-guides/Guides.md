@@ -280,6 +280,11 @@ We encourage everyone to take a look at:
 <img src="../docs/can-guides/commitment/recipes/canvas-clock/canvas-clock.png"/>
 </td>
 
+<td class='right'>[guides/recipes/weather-report-simple]
+<p><%this.[guides/recipes/weather-report-simple].description%></p>
+<img src="../docs/can-guides/commitment/recipes/weather-report/beginner/weather-report.png"/>
+</td>
+
 <td class='right'>[guides/recipes/cta-bus-map]
 <p><%this.[guides/recipes/cta-bus-map].description%></p>
 <img src="../docs/can-guides/commitment/recipes/cta-bus-map/cta-bus-map.png"/></td>

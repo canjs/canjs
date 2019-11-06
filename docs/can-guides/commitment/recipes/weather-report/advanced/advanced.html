@@ -15,14 +15,14 @@ Error: {{ geoLocationError.message }}
 
   {{# if(showEnterLocation) }}
   <div class="location-entry">
-    <label for="location">Enter Your location:</label>
-    <input id="location" value:to="location" type="text" />
+    <label for="location">Enter your location:</label>
+    <input id="location" type="text" value:to="this.location" />
   </div>
   {{/ if }}
 
-  {{# if(placesPromise.isPending) }}
+  {{# if(forecastPromise.isPending) }}
     <p class="loading-message">
-      Loading places…
+      Loading forecast…
     </p>
   {{/ if }}
 
@@ -30,7 +30,7 @@ Error: {{ geoLocationError.message }}
     <div class="location-options">
       <label>Pick your place:</label>
       <ul>
-        {{# for(place of placesPromise.value) }}
+        {{# for(place of forecastPromise.value) }}
           <li on:click="this.pickPlace(place)">{{ place.name }}, {{ place.admin1.content }},
               {{ place.country.code }} ({{ place.placeTypeName.content }})</li>
         {{/ for }}
@@ -138,8 +138,8 @@ const WeatherViewModel = can.DefineMap.extend({
 						format: "json",
 						nojsoncallback: 1
 					})
-        ).then(function(response) {
-                    const place = response.json().then(function(response) {
+        ).then(response => {
+                    const place = response.json().then(response => {
                         return response.places.place[0];
                     });
                     place.then(console.log);
@@ -154,7 +154,7 @@ const WeatherViewModel = can.DefineMap.extend({
 			this.place = null;
 		}
 	},
-	get placesPromise() {
+	get forecastPromise() {
 		if (this.location && this.location.length > 2) {
 			return fetch(
 				yqlURL +
@@ -162,9 +162,9 @@ const WeatherViewModel = can.DefineMap.extend({
 					q: 'select * from geo.places where text="' + this.location + '"',
 					format: "json"
 				})
-			).then(function(response) {
+			).then(response => {
 				return response.json();
-			}).then(function(data) {
+			}).then(data => {
 				console.log(data);
 				if (Array.isArray(data.query.results.place)) {
 					return data.query.results.place;
@@ -176,8 +176,8 @@ const WeatherViewModel = can.DefineMap.extend({
 	},
 	places: {
 		get: function(lastSet, resolve) {
-			if (this.placesPromise) {
-				this.placesPromise.then(resolve);
+			if (this.forecastPromise) {
+				this.forecastPromise.then(resolve);
 			}
 		}
 	},
@@ -215,9 +215,9 @@ const WeatherViewModel = can.DefineMap.extend({
 					q: 'select * from weather.forecast where woeid=' + this.place.woeid,
 					format: "json"
 				})
-			).then(function(response) {
+			).then(response => {
 				return response.json();
-			}).then(function(data) {
+			}).then(data => {
 				console.log("forecast data", data);
 				const forecast = data.query.results.channel.item.forecast;
 

@@ -55,7 +55,7 @@ This brittleness can be avoided by using an [can-event-queue/map/map.listenTo ev
 - Wait for the `text` property to change
 - Test that the value of the `text` property is correct
 
-Since the event listener needs to be set up before the the property is changed, in practice this approach becomes:
+Since the event listener needs to be set up before the property is changed, in practice this approach becomes:
 
 - Create an event listener for when the `text` property changes
 - Set the `text` property

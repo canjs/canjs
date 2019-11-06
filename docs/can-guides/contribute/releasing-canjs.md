@@ -130,7 +130,7 @@ with respect to the [can-core] and [can-infrastructure] collections. If a
 new [can-ecosystem] or [can-legacy] package is added to `can`, it’s treated as a `MINOR` changes to `can`,
 any subsequent releases of those packages are treated as `PATCH` changes to `can`.
 
-When making a release, review the the version number changes and collection of all packages that have changed within the release.  Then run `npm run release:<versiontype>`.
+When making a release, review the version number changes and collection of all packages that have changed within the release.  Then run `npm run release:<versiontype>`.
 
 For example, the following would be a `PATCH` release:
 
