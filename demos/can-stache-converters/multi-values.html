@@ -28,11 +28,10 @@ select[multiple] {
 </style>
 <my-demo></my-demo>
 <script src="../../node_modules/steal/steal.js" dev-bundle id="demo-source" main="@empty">
-import { Component, stacheConverters } from "can";
+import { StacheElement, stacheConverters } from "can";
 
-Component.extend({
-	tag: "my-demo",
-	view: `
+class MyDemo extends StacheElement {
+	static view = `
 		<select multiple values:bind="this.colors" size="7">
 			<option value="red">Red</option>
 			<option value="orange">Orange</option>
@@ -47,10 +46,15 @@ Component.extend({
 			{{# for(color of colors) }}
 				<li>{{ color }}</li>
 			{{/ for }}
-		</ul>
-	`,
-	ViewModel: {
-		colors: { default: () => ["green"] }
-	}
-});
+		</ul>	
+	`;
+	static props = {
+		colors: {
+			get default() {
+				return ["green"];
+			} 
+		}
+	};
+}
+customElements.define('my-demo', MyDemo);
 </script>

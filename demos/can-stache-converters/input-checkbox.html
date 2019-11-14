@@ -1,34 +1,39 @@
 <div id="out"></div>
 <my-demo></my-demo>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
-import { Component, stacheConverters } from "can";
+import { StacheElement, DeepObservable, stacheConverters } from "can";
 
-Component.extend({
-	tag: "my-demo",
-	view: `
+class MyDemo extends StacheElement {
+	static view = `
 		{{# for(item of this.items) }}
 			<label>
 				<input type='checkbox' checked:bind='boolean-to-inList(item, this.person.owns)' />
 				{{ upper(item) }}
 			</label>
 		{{/ for }}
-		<p>You own: {{ this.ownership() }}</p>
-	`,
-	ViewModel: {
+		<p>You own: {{ this.ownership }}</p>
+	`;
+	static props = {
 		person: {
-			default: function(){
+			type: DeepObservable,
+			get default() {
 				return { owns: ["bike"] };
 			}
 		},
-		items: {default: () => ["bike", "car", "sled"]},
-		ownership: function(){
-			var list = this.person.owns;
+		items: {
+			get default() {
+				return ["bike", "car", "sled"];
+			}
+		},
+		get ownership(){
+			const list = this.person.owns;
 			return list.length ? list.join(" and ") : "nothing";
 		},
 		upper: function(item) {
-			var first = item[0].toUpperCase();
+			const first = item[0].toUpperCase();
 			return first + item.substr(1);
 		}
-	}
-});
+	};
+}
+customElements.define('my-demo', MyDemo);
 </script>
