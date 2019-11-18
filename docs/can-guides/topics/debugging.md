@@ -293,7 +293,7 @@ Finally, [using CanJS Devtools](#UsingtheCanJSDevtoolsBindingsGraph) these relat
   alt="A visual representation of an observable's dependency graph"
   width="600px"/>
 
-## Access a component's Observable Properties.
+## Access a component's observable properties.
 
 Use [can-view-model] to access a component's observable propeties:
 
@@ -425,7 +425,7 @@ If a component is selected in the Elements Panel, it will automatically be selec
 
 ### Observable Properties Editor
 
-As mentioned above, once a component is selected, its Observable Properties will be displayed in the Observable Properties Editor in the sidebar.
+As mentioned above, once a component is selected, its observable properties will be displayed in the Observable Properties Editor in the sidebar.
 
 Maps and Lists can be expanded in the Editor by clicking on a key that has a dropdown, or by clicking the dropdown directly.
 
@@ -462,7 +462,7 @@ New properties can also be added to objects by clicking anywhere inside the obje
   alt="The CanJS Devtools Panel Observable Properties Editor New Key Value Editor"
   width="600px"/>
 
-Once changes have been made, they can be applied back to the source Observable Properties, by clicking the "Apply Changes" button.
+Once changes have been made, they can be applied back to the source observable properties, by clicking the "Apply Changes" button.
 
 <img src="../../docs/can-guides/images/devtools/viewmodel-editor-apply-changes.png"
   class="bit-docs-screenshot"
@@ -471,7 +471,7 @@ Once changes have been made, they can be applied back to the source Observable P
 
 ### Observable Properties Mutations Breakpoints
 
-The CanJS Devtools Panel also allows you to create breakpoints for when mutations happen to Component Observable Properties.
+The CanJS Devtools Panel also allows you to create breakpoints for when mutations happen to Component properties.
 
 The Observable Properties Mutation Breakpoints sidebar can be expanded by clicking on the header:
 
@@ -571,14 +571,14 @@ Then, depending on the size of the Developer Tools window, the CanJS Bindings Gr
   alt="The Chrome Developer Tools Sidebar Overflow Menu"
   width="600px"/>
 
-If the element that is selected has a Observable Properties, the graph will show the relationships for a property of the Observable Properties:
+If the element that is selected has a observable properties, the graph will show the relationships for a property:
 
 <img src="../../docs/can-guides/images/devtools/bindings-graph-viewmodel.png"
   class="bit-docs-screenshot"
   alt="The CanJS Devtools Bindings Graph"
   width="600px"/>
 
-By default, the property selected will be the _first_ property on the Observable Properties alphabetically. Another property can be selected by clicking on the header:
+By default, the property selected will be the _first_ property on the observable properties alphabetically. Another property can be selected by clicking on the header:
 
 <img src="../../docs/can-guides/images/devtools/bindings-graph-viewmodel-click.png"
   class="bit-docs-screenshot"
@@ -592,7 +592,7 @@ A dropdown of all of the available properties will be displayed:
   alt="The CanJS Devtools Bindings Graph Property Selection Dropdown"
   width="600px"/>
 
-If the element selected does not have a Observable Properties, the graph will show the relationships for the element itself:
+If the element selected does not have a observable properties, the graph will show the relationships for the element itself:
 
 <img src="../../docs/can-guides/images/devtools/bindings-graph-element.png"
   class="bit-docs-screenshot"
@@ -601,7 +601,7 @@ If the element selected does not have a Observable Properties, the graph will sh
 
 ## Using the standalone CanJS Devtools Observable Properties Editor
 
-Similar to the Bindings Graph, a sidebar is added for the CanJS Observable Properties Editor. The Observable Properties Editor will be shown for the selected element &mdash; or the closest parent element that has a Observable Properties:
+Similar to the Bindings Graph, a sidebar is added for the CanJS Observable Properties Editor. The Observable Properties Editor will be shown for the selected element &mdash; or the closest parent element that has a observable properties:
 
 <img src="../../docs/can-guides/images/devtools/standalone-viewmodel-editor.png"
   class="bit-docs-screenshot"
