@@ -5,11 +5,10 @@
 <body>
 <my-demo></my-demo>
 <script src="../../node_modules/steal/steal.js" dev-bundle main="@empty">
-import { Component } from "can/everything";
+import { StacheElement, stacheConverters } from "can/everything";
 
-Component.extend({
-	tag: "my-demo",
-	view: `
+class MyDemo extends StacheElement {
+	static view = `
 		<select value:bind="index-to-selected(this.person, this.people)">
 
 			{{# for(name of people) }}
@@ -19,17 +18,18 @@ Component.extend({
 		</select>
 		<div>
 		  <h2>{{ person }}</h2>
-		</div>
-	`,
-	ViewModel: {
-		person: {default: "Anne"},
+		</div>	
+	`;
+	static props = {
+		person: { default: "Anne" },
 		people: {
-			default: () => [
-				"Matthew", "Anne", "Wilbur"
-			]
+			get default() {
+				return ["Matthew", "Anne", "Wilbur"];	
+			}
 		}
-	}
-});
+	};
+}
+customElements.define('my-demo', MyDemo);
 </script>
 </body>
 </html>
