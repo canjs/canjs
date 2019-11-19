@@ -571,7 +571,7 @@ Then, depending on the size of the Developer Tools window, the CanJS Bindings Gr
   alt="The Chrome Developer Tools Sidebar Overflow Menu"
   width="600px"/>
 
-If the element that is selected has a observable properties, the graph will show the relationships for a property:
+If the element that is selected has observable properties, the graph will show the relationships for a property:
 
 <img src="../../docs/can-guides/images/devtools/bindings-graph-viewmodel.png"
   class="bit-docs-screenshot"
