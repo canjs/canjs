@@ -601,7 +601,7 @@ If the element selected does not have a observable properties, the graph will sh
 
 ## Using the standalone CanJS Devtools Observable Properties Editor
 
-Similar to the Bindings Graph, a sidebar is added for the CanJS Observable Properties Editor. The Observable Properties Editor will be shown for the selected element &mdash; or the closest parent element that has a observable properties:
+Similar to the Bindings Graph, a sidebar is added for the CanJS Observable Properties Editor. The Observable Properties Editor will be shown for the selected element &mdash; or the closest parent element that has observable properties:
 
 <img src="../../docs/can-guides/images/devtools/standalone-viewmodel-editor.png"
   class="bit-docs-screenshot"
