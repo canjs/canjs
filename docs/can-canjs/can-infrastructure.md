@@ -39,7 +39,8 @@ me.dispatch("name");
 
 ## can-queues
 
-[can-queues.batch] has event batching abilities.
+- A light weight queue system for scheduling tasks.
+- [can-queues.batch] adds task queue batching abilities .
 
 ## can-observation
 
