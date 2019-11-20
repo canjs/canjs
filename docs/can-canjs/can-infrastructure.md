@@ -12,22 +12,21 @@ be used by applications directly.
 
 Let’s explore what’s available.
 
-## can-event
+## can-event-queues/map/map
 
-[can-event] is a mixin that adds event dispatching and listening functionality
+[can-event-queues/map/map] is a mixin that adds event dispatching and listening functionality
 on your objects. The following shows creating a `Person` constructor function
 whose instances can produce events that can be listened to.
 
 ```js
-import canEvent from 'can-event';
-import assign from 'can-util/js/assign/assign';
+import mixinMapBindings from 'can-event-queues/map/map';
 
 // Create the Person type
 function Person(){ /* ... */ };
 Person.prototype.method = function(){ /* ... */ };
 
 // Add event mixin:
-assign(Person.prototype, canEvent);
+mixinMapBindings(Person.prototype);
 
 // Create an instance
 const me = new Person();
@@ -38,8 +37,9 @@ me.addEventListener("name", function(){ /* ... */ });
 me.dispatch("name");
 ```
 
-[can-event/batch/batch] adds event batching abilities to the [can-event] event system.
-[can-event/async/async] adds asynchronous batched event dispatching to the [can-event] event system.
+## can-queues
+
+[can-queues.batch] has event batching abilities.
 
 ## can-observation
 
