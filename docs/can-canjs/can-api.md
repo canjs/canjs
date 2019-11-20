@@ -91,6 +91,12 @@ customElements.define("my-counter", Counter);
 
 Also, the [api#ElementBindings Element Bindings] section shows how to pass data between components.
 
+ [customElements.define](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define) allows developers to define a new custom HTML tags by taking a custom element tag name and a JavaScript class:
+ 
+ ```js
+ customElements.define("my-counter", Counter);
+ ```
+
 
 ## Observables
 
@@ -223,7 +229,8 @@ console.log(todo.serialize()); //-> {
 ```
 @codepen
 
-Define observable list types with [can-observable-array ObservableArray]:
+<details>
+<summary>Define observable list types with [can-observable-array ObservableArray]:</summary>
 
 ```js
 import { ObservableArray, type } from "can";
@@ -277,17 +284,56 @@ console.log(areSomeComplete); //-> false
 ```
 @codepen
 
-<details>
-<summary>Infrastructure APIs</summary>
-
-```js
-const fullName = new Observation(() => {
-    return person.first + " " + person.last;
-});
-```
-
 </details>
 
+## Value types
+
+[can-type] is helpful to define typed properties for models and components by doing the following:
+- Validates properties value types
+- Converts a value to a type
+- Allows `undefined` / `null` to be values 
+- Converts a value to the correct type if not `null` / `undefined`
+
+Also, you can use the defined custom types as value types, for example the following defines a `User` type 
+that has a `person` property with `Person` type:
+
+```js
+import { ObservableObject, type } from "can";
+
+class Person extends ObservableObject {
+  static props = {
+    first: type.check(String),  // type checking is the default behavior
+    last: type.maybe(String),   // maybe null, undefined or string
+    age: type.convert(Number),  // converts the value to number
+    birthday: type.maybeConvert(Date) // converts the value to date if is defined 
+  };
+};
+
+class User extends ObservableObject {
+  static props = {
+    username: type.check(String, requried: true),
+    password: type.check(String, required: true),
+    lastLogin: type.maybeConvert(Date)
+    person: type.check(Person)
+  }
+};
+
+const aPerson = new Person({
+  first: "Fibonacci",
+  last: null,
+  age: "80",
+  birthday: undefined
+})
+
+const fib = new User({
+  username: "fib",
+  password: "011235",
+  lastLogin: null,
+  person: aPerson
+});
+
+console.log(fib); // ->User{ ... }
+```
 
 ## Views
 
