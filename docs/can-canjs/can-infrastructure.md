@@ -12,9 +12,9 @@ be used by applications directly.
 
 Let’s explore what’s available.
 
-## can-event-queues/map/map
+## can-event-queues
 
-[can-event-queues/map/map] is a mixin that adds event dispatching and listening functionality
+[can-event-queue/map/map] is a mixin that adds event dispatching and listening functionality
 on your objects. The following shows creating a `Person` constructor function
 whose instances can produce events that can be listened to.
 
@@ -39,8 +39,20 @@ me.dispatch("name");
 
 ## can-queues
 
-- A light weight queue system for scheduling tasks.
-- [can-queues.batch] adds task queue batching abilities .
+A light weight queue system for scheduling tasks, it runs tasks in one of the following queues:
+
+1. [can-queues.notifyQueue] - Tasks that notify observables "deriving" observables that a source value has changed.
+2. [can-queues.deriveQueue] - Tasks that update the value of a "deriving" observable.
+3. [can-queues.domUIQueue] - Tasks that update the DOM.
+4. [can-queues.mutateQueue] - Tasks that might cause other mutations that add tasks to one of the previous queues.
+
+```js
+import queues from "can-queues";
+
+queues.batch.start();
+queues.mutateQueue.enqueue( console.log, console, [ "say hi" ] );
+queues.batch.stop();
+```
 
 ## can-observation
 
@@ -51,8 +63,7 @@ The following makes the `Person` type’s `getName()` observable:
 
 ```js
 import Observation from 'can-observation';
-import canEvent from 'can-event';
-import assign from 'can-util/js/assign/assign';
+import mixinMapBindings from 'can-event-queues/map/map';
 
 // Create the Person type
 function Person(){};
@@ -87,21 +98,18 @@ greetingObservation.value //-> "Justin says hi!"
 person.setName("Matt") //-> console.logs "Matt says hi!";
 ```
 
-## can-util
-
-[can-util] is a collection of many different modules that provide letious JavaScript
-and DOM related utilities.
+## Utilities
 
 ### DOM Utilities
 
 The DOM utilities consist of:
 
- - Node and Element helpers: [can-util/dom/child-nodes/child-nodes], [can-util/dom/class-name/class-name], [can-util/dom/data/data], [can-util/dom/frag/frag].
- - Event helpers: [can-util/dom/dispatch/dispatch], [can-util/dom/events/delegate/delegate], [can-util/dom/events/attributes/attributes], [can-util/dom/events/inserted/inserted], [can-util/dom/events/removed/removed].
- - Ajax helpers: [can-util/dom/ajax/ajax].
- - Environment identification helpers: [can-util/dom/document/document].
+ - Node and Element helpers: [can-child-nodes],  [can-dom-data], [can-fragment].
+ - Event helpers: [can-event-dom-enter], [can-event-dom-radiochange].
+ - Ajax helpers: [can-ajax].
+ - Environment identification helpers: [can-globals/document/document].
 
-And the [can-util/dom/mutate/mutate] helper which should be used to manipulate DOM
+And the [can-dom-mutate] helper which should be used to manipulate DOM
 nodes in elements that do not support [MutationObservers](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver).  
 
 
@@ -109,15 +117,14 @@ nodes in elements that do not support [MutationObservers](https://developer.mozi
 
 The JS utilities consist of:
 
-- Functional helpers: [can-util/js/each/each], [can-util/js/assign/assign], [can-util/js/deep-assign/deep-assign], [can-util/js/make-array/make-array].
-- Type detection helpers: [can-util/js/is-array-like/is-array-like],  [can-util/js/is-empty-object/is-empty-object], [can-util/js/is-function], [can-util/js/is-plain-object/is-plain-object], [can-util/js/is-promise/is-promise], [can-util/js/is-string/is-string], [can-util/js/types/types].
-- Environment detection helpers: [can-util/js/is-browser-window/is-browser-window], [can-util/js/is-node/is-node], [can-util/js/is-web-worker/is-web-worker].
-- Environment identification helpers: [can-util/js/global/global], [can-util/js/import/import], [can-util/js/base-url/base-url].
-- Polyfills - [can-util/js/set-immediate/set-immediate].
-- URL helpers: [can-param], [can-deparam], [can-util/js/join-uris/join-uris].
-- Diffing helpers: [can-util/js/diff/diff], [can-util/js/diff-object/diff-object].
-- String helpers: [can-util/js/string/string], [can-util/js/string-to-any/string-to-any].
-- Object identification helpers: [can-util/js/cid/cid].
+- Functional helpers: [can-assign], [can-define-lazy-value], [can-make-map].
+- Type detection helpers: [can-reflect.isConstructorLike], [can-reflect.isFunctionLike], [can-reflect.isIteratorLike],[can-reflect.isListLike], [can-reflect.isMapLike], ,[can-reflect.isObservableLike], [can-reflect.isPlainObject],  [can-reflect.isPromise], [can-reflect.isPrimitive], [can-types].
+- Environment detection helpers: [can-globals/is-browser-window/is-browser-window], [can-globals/is-node/is-node], [ccan-globals/is-browser-window/is-web-worker].
+- Environment identification helpers: [can-global], [can-globals].
+- URL helpers: [can-param], [can-deparam], [can-join-uris].
+- Diffing helper: [can-diff].
+- String helpers: [can-string], [can-string-to-any].
+- Object identification helpers: [can-cid].
 
 
 ## can-view-callbacks
@@ -140,7 +147,7 @@ Sets up a live-binding between the DOM and a compute.
 ```js
 import live from 'can-view-live';
 import compute from 'can-compute';
-import frag from 'can-util/dom/frag/frag';
+import frag from 'can-frag';
 
 let message = compute("World");
 
