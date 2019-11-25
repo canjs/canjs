@@ -293,13 +293,18 @@ Finally, [using CanJS Devtools](#UsingtheCanJSDevtoolsBindingsGraph) these relat
   alt="A visual representation of an observable's dependency graph"
   width="600px"/>
 
-## Access a component's view-model.
+## Access a component's observable properties.
 
-Use [can-view-model] to access a component's viewModel:
+Use [can-view-model] to access a component's observable propeties:
 
 ```js
 can.viewModel(document.querySelector("my-component"));
 ```
+
+> **Note:** If you are using [can-stache-element], you can just access properties on the element directly:
+> ```js
+> document.querySelector("my-component").prop
+> ```
 
 ## Log when an observable changes.
 
@@ -413,62 +418,62 @@ Clicking on a component in the tree will select it:
 
 <img src="../../docs/can-guides/images/devtools/panel-component-selected.png"
   class="bit-docs-screenshot"
-  alt="The CanJS Devtools Panel ViewModel Editor"
+  alt="The CanJS Devtools Panel Observable Properties Editor"
   width="600px"/>
 
 If a component is selected in the Elements Panel, it will automatically be selected in the CanJS Panel. If an element that is not a component is selected, its closest parent component will be selected automatically, if there is one.
 
-### ViewModel Editor
+### Observable Properties Editor
 
-As mentioned above, once a component is selected, its ViewModel will be displayed in the ViewModel Editor in the sidebar.
+As mentioned above, once a component is selected, its observable properties will be displayed in the Observable Properties Editor in the sidebar.
 
 Maps and Lists can be expanded in the Editor by clicking on a key that has a dropdown, or by clicking the dropdown directly.
 
 <img src="../../docs/can-guides/images/devtools/viewmodel-editor.png"
   class="bit-docs-screenshot"
-  alt="The CanJS Devtools Panel ViewModel Editor Expanding Object"
+  alt="The CanJS Devtools Panel Observable Properties Editor Expanding Object"
   width="600px"/>
 
 A property's value can be edited by clicking on it:
 
 <img src="../../docs/can-guides/images/devtools/viewmodel-editor-edit-strings.png"
   class="bit-docs-screenshot"
-  alt="The CanJS Devtools Panel ViewModel Editor Edit Property Value"
+  alt="The CanJS Devtools Panel Observable Properties Editor Edit Property Value"
   width="600px"/>
 
 Boolean values can also be edited using the quick toggle checkbox:
 
 <img src="../../docs/can-guides/images/devtools/viewmodel-editor-edit-booleans.png"
   class="bit-docs-screenshot"
-  alt="The CanJS Devtools Panel ViewModel Editor Edit Boolean Property Value"
+  alt="The CanJS Devtools Panel Observable Properties Editor Edit Boolean Property Value"
   width="600px"/>
 
 When hovering over a property, options will be shown on the right. All properties can be removed by clicking the &minus; icon. If the property is an object, new properties can be added by clicking the &plus; icon:
 
 <img src="../../docs/can-guides/images/devtools/viewmodel-editor-add-remove-options.png"
   class="bit-docs-screenshot"
-  alt="The CanJS Devtools Panel ViewModel Editor Property Value Options"
+  alt="The CanJS Devtools Panel Observable Properties Editor Property Value Options"
   width="600px"/>
 
 New properties can also be added to objects by clicking anywhere inside the object:
 
 <img src="../../docs/can-guides/images/devtools/viewmodel-editor-new-key-value.png"
   class="bit-docs-screenshot"
-  alt="The CanJS Devtools Panel ViewModel Editor New Key Value Editor"
+  alt="The CanJS Devtools Panel Observable Properties Editor New Key Value Editor"
   width="600px"/>
 
-Once changes have been made, they can be applied back to the source ViewModel, by clicking the "Apply Changes" button.
+Once changes have been made, they can be applied back to the source observable properties, by clicking the "Apply Changes" button.
 
 <img src="../../docs/can-guides/images/devtools/viewmodel-editor-apply-changes.png"
   class="bit-docs-screenshot"
-  alt="The CanJS Devtools Panel ViewModel Editor Apply Changes"
+  alt="The CanJS Devtools Panel Observable Properties Editor Apply Changes"
   width="600px"/>
 
-### ViewModel Mutations Breakpoints
+### Observable Properties Mutations Breakpoints
 
-The CanJS Devtools Panel also allows you to create breakpoints for when mutations happen to Component ViewModels.
+The CanJS Devtools Panel also allows you to create breakpoints for when mutations happen to Component properties.
 
-The ViewModel Mutation Breakpoints sidebar can be expanded by clicking on the header:
+The Observable Properties Mutation Breakpoints sidebar can be expanded by clicking on the header:
 
 <img src="../../docs/can-guides/images/devtools/panel-breakpoints-expanded.png"
   class="bit-docs-screenshot"
@@ -566,14 +571,14 @@ Then, depending on the size of the Developer Tools window, the CanJS Bindings Gr
   alt="The Chrome Developer Tools Sidebar Overflow Menu"
   width="600px"/>
 
-If the element that is selected has a ViewModel, the graph will show the relationships for a property of the ViewModel:
+If the element that is selected has observable properties, the graph will show the relationships for a property:
 
 <img src="../../docs/can-guides/images/devtools/bindings-graph-viewmodel.png"
   class="bit-docs-screenshot"
   alt="The CanJS Devtools Bindings Graph"
   width="600px"/>
 
-By default, the property selected will be the _first_ property on the ViewModel alphabetically. Another property can be selected by clicking on the header:
+By default, the property selected will be the _first_ property on the observable properties alphabetically. Another property can be selected by clicking on the header:
 
 <img src="../../docs/can-guides/images/devtools/bindings-graph-viewmodel-click.png"
   class="bit-docs-screenshot"
@@ -587,20 +592,20 @@ A dropdown of all of the available properties will be displayed:
   alt="The CanJS Devtools Bindings Graph Property Selection Dropdown"
   width="600px"/>
 
-If the element selected does not have a ViewModel, the graph will show the relationships for the element itself:
+If the element selected does not have a observable properties, the graph will show the relationships for the element itself:
 
 <img src="../../docs/can-guides/images/devtools/bindings-graph-element.png"
   class="bit-docs-screenshot"
   alt="The CanJS Devtools Bindings Graph for Element"
   width="600px"/>
 
-## Using the standalone CanJS Devtools ViewModel Editor
+## Using the standalone CanJS Devtools Observable Properties Editor
 
-Similar to the Bindings Graph, a sidebar is added for the CanJS ViewModel Editor. The ViewModel Editor will be shown for the selected element &mdash; or the closest parent element that has a ViewModel:
+Similar to the Bindings Graph, a sidebar is added for the CanJS Observable Properties Editor. The Observable Properties Editor will be shown for the selected element &mdash; or the closest parent element that has observable properties:
 
 <img src="../../docs/can-guides/images/devtools/standalone-viewmodel-editor.png"
   class="bit-docs-screenshot"
-  alt="The Chrome Developer Tools Standalone ViewModel Editor"
+  alt="The Chrome Developer Tools Standalone Observable Properties Editor"
   width="600px"/>
 
-The standalone ViewModel Editor has the same features as the Editor in the [CanJS Panel](#ViewModelEditor).
+The standalone Observable Properties Editor has the same features as the Editor in the [CanJS Panel](#ViewModelEditor).
