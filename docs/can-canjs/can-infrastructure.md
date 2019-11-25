@@ -12,14 +12,14 @@ be used by applications directly.
 
 Let’s explore what’s available.
 
-## can-event-queues
+## can-event-queue
 
 [can-event-queue/map/map] is a mixin that adds event dispatching and listening functionality
 on your objects. The following shows creating a `Person` constructor function
 whose instances can produce events that can be listened to.
 
 ```js
-import mixinMapBindings from 'can-event-queues/map/map';
+import mixinMapBindings from 'can-event-queue/map/map';
 
 // Create the Person type
 function Person(){ /* ... */ };
@@ -41,7 +41,7 @@ me.dispatch("name");
 
 A light weight queue system for scheduling tasks, it runs tasks in one of the following queues:
 
-1. [can-queues.notifyQueue] - Tasks that notify observables "deriving" observables that a source value has changed.
+1. [can-queues.notifyQueue] - Tasks that notify "deriving" observables that a source value has changed.
 2. [can-queues.deriveQueue] - Tasks that update the value of a "deriving" observable.
 3. [can-queues.domUIQueue] - Tasks that update the DOM.
 4. [can-queues.mutateQueue] - Tasks that might cause other mutations that add tasks to one of the previous queues.
@@ -63,10 +63,14 @@ The following makes the `Person` type’s `getName()` observable:
 
 ```js
 import Observation from 'can-observation';
-import mixinMapBindings from 'can-event-queues/map/map';
+import mixinMapBindings from 'can-event-queue/map/map';
 
 // Create the Person type
 function Person(){};
+
+// Add event mixin:
+mixinMapBindings(Person.prototype);
+
 Person.prototype.setName = function(newName){
 	let oldName = this.name;
 	this.name = newName;
