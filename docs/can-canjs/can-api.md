@@ -78,7 +78,7 @@ class Counter extends StacheElement {
 	}
 }
 
-// The name of the custom element
+// Make <my-counter></my-counter> custom element works in the HTML
 customElements.define("my-counter", Counter);
 </script>
 ```
@@ -88,14 +88,7 @@ customElements.define("my-counter", Counter);
 
 - [can-stache-element/static.props properties] are defined with the [api#Observables Observables] APIs documented below.
 - [can-stache-element/static.view view] is defined with the [api#Views Views] APIs documented below.
-
-Also, the [api#ElementBindings Element Bindings] section shows how to pass data between components.
-
- [customElements.define](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define) allows developers to define a new custom HTML tags by taking a custom element tag name and a JavaScript class:
- 
- ```js
- customElements.define("my-counter", Counter);
- ```
+- tag name is defined with [customElements.define](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define).
 
 
 ## Observables
@@ -108,7 +101,7 @@ The following defines a `Todo` type with numerous property behaviors and
 a `toggleComplete` method.
 
 ```js
-import { ObservableObject, ObservableArray, type } from "can";
+import { ObservableObject, type } from "can";
 
 // -------------------------------
 // Define an observable Owner type:
@@ -123,6 +116,30 @@ class Owner extends ObservableObject {
 // -------------------------------
 // Define an observable Todo type:
 // -------------------------------
+class Todo extends ObservableObject {
+  static props = {
+    name: string,
+    complete: false
+  };
+
+    // `toggleComplete` is a method
+    toggleComplete() {
+        this.complete = !this.complete;
+    }
+}
+
+// Create a todo instance:
+const todo = new Todo({ name: "Learn Observables" });
+```
+@codepen
+
+<details>
+<summary>Define Observable and observable list types with [can-observable-object ObservableObject] and [can-observable-array ObservableArray]:</summary>
+
+```js
+import { ObservableArray, type } from "can";
+import Todo from "//canjs.com/demos/api/todo.mjs";
+
 class Todo extends ObservableObject {
 	static props = {
 		// `id` is a Number
@@ -226,15 +243,6 @@ console.log(todo.serialize()); //-> {
 //		owner: { first: "Justin", last: "Meyer" },
 //		tags: ["new"]
 // }
-```
-@codepen
-
-<details>
-<summary>Define observable list types with [can-observable-array ObservableArray]:</summary>
-
-```js
-import { ObservableArray, type } from "can";
-import Todo from "//canjs.com/demos/api/todo.mjs";
 
 // -----------------------------------
 // Define an observable TodoList type:
@@ -286,10 +294,10 @@ console.log(areSomeComplete); //-> false
 
 </details>
 
-## Value types
+## Typed properties
 
 [can-type] is helpful to define typed properties for models and components by doing the following:
-- Validates properties value types
+- Validates properties `value` types
 - Converts a value to a type
 - Allows `undefined` / `null` to be values 
 - Converts a value to the correct type if not `null` / `undefined`
