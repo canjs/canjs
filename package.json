@@ -125,7 +125,7 @@
     "can-simple-map": "4.3.3",
     "can-simple-observable": "2.5.0",
     "can-stache": "5.0.0",
-    "can-stache-bindings": "5.0.1",
+    "can-stache-bindings": "5.0.3",
     "can-stache-converters": "5.0.0",
     "can-stache-element": "1.0.2",
     "can-stache-key": "1.4.3",
@@ -308,7 +308,7 @@
   "bundlesize": [
     {
       "path": "./core.min.mjs",
-      "maxSize": "105.3 kB"
+      "maxSize": "105.5 kB"
     },
     {
       "path": "./core.mjs",
@@ -316,7 +316,7 @@
     },
     {
       "path": "./dist/global/core.js",
-      "maxSize": "196.2 kB"
+      "maxSize": "196.5 kB"
     }
   ]
 }
