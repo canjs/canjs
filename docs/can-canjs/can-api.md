@@ -97,21 +97,10 @@ Define custom observable key-value types with [can-observable-object ObservableO
 `ObservableObject` is used to organize the logic of both your [can-stache-element StacheElement] props and your [api#DataModeling Data Models]. The logic
 is expressed as properties and methods.
 
-The following defines a `Todo` type with numerous property behaviors and
-a `toggleComplete` method.
+The following defines a `Todo` type with `toggleComplete` method.
 
 ```js
 import { ObservableObject, type } from "can";
-
-// -------------------------------
-// Define an observable Owner type:
-// -------------------------------
-class Owner extends ObservableObject {
-  static props = {
-    first: String,
-    last: String
-  };
-}
 
 // -------------------------------
 // Define an observable Todo type:
@@ -134,12 +123,25 @@ const todo = new Todo({ name: "Learn Observables" });
 @codepen
 
 <details>
-<summary>Define Observable and observable list types with [can-observable-object ObservableObject] and [can-observable-array ObservableArray]:</summary>
+<summary>Expand to see a larger example with numerous property behaviors:</summary>
 
 ```js
 import { ObservableArray, type } from "can";
 import Todo from "//canjs.com/demos/api/todo.mjs";
 
+// -------------------------------
+// Define an observable Owner type:
+// -------------------------------
+class Owner extends ObservableObject {
+  static props = {
+    first: String,
+    last: String
+  };
+}
+
+// -------------------------------
+// Define an observable Todo type:
+// -------------------------------
 class Todo extends ObservableObject {
 	static props = {
 		// `id` is a Number
@@ -296,13 +298,10 @@ console.log(areSomeComplete); //-> false
 
 ## Typed properties
 
-[can-type] is helpful to define typed properties for models and components by doing the following:
-- Validates properties `value` types
-- Converts a value to a type
-- Allows `undefined` / `null` to be values 
-- Converts a value to the correct type if not `null` / `undefined`
-
-Also, you can use the defined custom types as value types, for example the following defines a `User` type 
+[can-type] can be used to define typed properties in [ObservableObject] and [StacheElement]
+- Types are strict by default, which means an error will be thrown if a property is set to a value of the wrong type.
+- [can-type/convert] can be used to create a property that will always convert its value to a specific type.
+- [can-type/maybe] can be  used to create a property that can be `null` or `undefined` as well as whatever valid values the type allows
 that has a `person` property with `Person` type:
 
 ```js
@@ -312,35 +311,21 @@ class Person extends ObservableObject {
   static props = {
     first: type.check(String),  // type checking is the default behavior
     last: type.maybe(String),   // maybe null, undefined or string
-    age: type.convert(Number),  // converts the value to number
+    age: Number,                // type checking
     birthday: type.maybeConvert(Date) // converts the value to date if is defined 
   };
 };
 
-class User extends ObservableObject {
-  static props = {
-    username: type.check(String, requried: true),
-    password: type.check(String, required: true),
-    lastLogin: type.maybeConvert(Date)
-    person: type.check(Person)
-  }
-};
-
-const aPerson = new Person({
-  first: "Fibonacci",
+const farah = new Person({
+  first: 'Farah',
   last: null,
-  age: "80",
+  age: '4',
   birthday: undefined
-})
-
-const fib = new User({
-  username: "fib",
-  password: "011235",
-  lastLogin: null,
-  person: aPerson
 });
 
-console.log(fib); // ->User{ ... }
+// Uncaught Error: "4" (string) is not of type Number.
+// Property age is using "type: Number". Use "age: type.convert(Number)"
+// to automatically convert values to Numbers when setting the "age" property.
 ```
 
 ## Views
