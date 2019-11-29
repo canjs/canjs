@@ -111,10 +111,10 @@ class Todo extends ObservableObject {
     complete: false
   };
 
-    // `toggleComplete` is a method
-    toggleComplete() {
-        this.complete = !this.complete;
-    }
+  // `toggleComplete` is a method
+  toggleComplete() {
+    this.complete = !this.complete;
+  }
 }
 
 // Create a todo instance:
@@ -126,7 +126,7 @@ const todo = new Todo({ name: "Learn Observables" });
 <summary>Expand to see a larger example with numerous property behaviors:</summary>
 
 ```js
-import { ObservableArray, type } from "can";
+import { ObservableObject, type } from "can";
 import Todo from "//canjs.com/demos/api/todo.mjs";
 
 // -------------------------------
@@ -245,6 +245,16 @@ console.log(todo.serialize()); //-> {
 //		owner: { first: "Justin", last: "Meyer" },
 //		tags: ["new"]
 // }
+```
+@codepen
+
+</details>
+
+<details>
+<summary>Observable lists</summary>
+
+```js
+import { ObservableArray, type } from "can";
 
 // -----------------------------------
 // Define an observable TodoList type:
@@ -301,8 +311,7 @@ console.log(areSomeComplete); //-> false
 [can-type] can be used to define typed properties in [ObservableObject] and [StacheElement]
 - Types are strict by default, which means an error will be thrown if a property is set to a value of the wrong type.
 - [can-type/convert] can be used to create a property that will always convert its value to a specific type.
-- [can-type/maybe] can be  used to create a property that can be `null` or `undefined` as well as whatever valid values the type allows
-that has a `person` property with `Person` type:
+- [can-type/maybe] can be  used to create a property that can be `null` or `undefined`.
 
 ```js
 import { ObservableObject, type } from "can";
