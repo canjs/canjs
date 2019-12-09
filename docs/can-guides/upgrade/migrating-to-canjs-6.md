@@ -534,3 +534,17 @@ class MyParent extends StacheElement {
 customElements.define("my-parent", MyParent);
 ```
 @codepen
+
+
+### inserted/removed event
+Starting from CanJS 4, __inserted__ and __removed__ events are no longer exist.
+
+If you still need to listen to those events on an element, you have to write the following:
+
+```js
+import { domEvents, domMutateDomEvents } from "can";
+
+domEvents.addEvent(domMutateDomEvents.inserted);
+domEvents.addEvent(domMutateDomEvents.removed);
+```
+
