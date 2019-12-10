@@ -87,7 +87,7 @@ The `Observation` constructor can be used, similar to a [can-compute] to observe
 a function’s return value by tracking calls to `Observation.add`
 
 ```js
-import { Observation,ObservationRecorder, mapEventBindings } from "can";
+import { Observation, ObservationRecorder, mapEventBindings } from "can";
 
 // Create the Person type
 function Person(){};
@@ -266,7 +266,7 @@ console.log(innerScope.get("../last"));    //-> Abril
 have callbacks called quickly on specific elements within the cloned fragment.
 
 ```js
-import { traget } from "can";
+import { target } from "can";
 
 let aTarget = target([
     {
@@ -297,7 +297,7 @@ console.log(fragment); // -> <h1 class='title'>Hello World</h1>
 [can-cid] is used to get a unique identifier for an object, optionally prefixed by a type name. Once set, the unique identifier does not change, even if the type name changes on subsequent calls.
 
 ```js
-import cid from "can";
+import { cid } from "can";
 const x = {};
 const y = {};
 
