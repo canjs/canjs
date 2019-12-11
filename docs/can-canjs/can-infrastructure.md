@@ -19,23 +19,24 @@ on your objects. The following shows creating a `Person` constructor function
 whose instances can produce events that can be listened to.
 
 ```js
-import mixinMapBindings from 'can-event-queue/map/map';
+import { mapEventBindings } from "can";
 
 // Create the Person type
 function Person(){ /* ... */ };
 Person.prototype.method = function(){ /* ... */ };
 
 // Add event mixin:
-mixinMapBindings(Person.prototype);
+mapEventBindings(Person.prototype);
 
 // Create an instance
 const me = new Person();
 
 // Now listen and dispatch events!
-me.addEventListener("name", function(){ /* ... */ });
+me.addEventListener("name", function(ev,data){ console.log(data) }); // -> {foo: "Bar"}
 
-me.dispatch("name");
+me.dispatch("name", [{foo: "Bar"}]);
 ```
+@codepen
 
 ## can-queues
 
@@ -47,29 +48,29 @@ A light weight queue system for scheduling tasks, it runs tasks in one of the fo
 4. [can-queues.mutateQueue] - Tasks that might cause other mutations that add tasks to one of the previous queues.
 
 ```js
-import queues from "can-queues";
+import { queues } from "can";
 
 queues.batch.start();
 queues.mutateQueue.enqueue( console.log, console, [ "say hi" ] );
 queues.batch.stop();
 ```
+@codepen
 
 ## can-observation
 
 [can-observation] provides a mechanism to notify when an observable has been read and a way to observe those reads called within a given function.  [can-observation] provides the foundation for [can-compute]’s abilities.
 
-Use [can-observation.add Observation.add] to signal when an an observable value has been read.
+Use [can-observation-recorder.add ObservationRecorder.add] to signal when an an observable value has been read.
 The following makes the `Person` type’s `getName()` observable:
 
 ```js
-import Observation from 'can-observation';
-import mixinMapBindings from 'can-event-queue/map/map';
+import { Observation, ObservationRecorder, mapEventBindings } from "can";
 
 // Create the Person type
 function Person(){};
 
 // Add event mixin:
-mixinMapBindings(Person.prototype);
+mapEventBindings(Person.prototype);
 
 Person.prototype.setName = function(newName){
 	let oldName = this.name;
@@ -77,7 +78,7 @@ Person.prototype.setName = function(newName){
 	this.dispatch("name", [newName, oldName]);
 };
 Person.prototype.getName = function(){
-	Observation.add(this, "name");
+	ObservationRecorder.add(this, "name");
 	return this.name;
 };
 ```
@@ -86,21 +87,43 @@ The `Observation` constructor can be used, similar to a [can-compute] to observe
 a function’s return value by tracking calls to `Observation.add`
 
 ```js
+import { Observation, ObservationRecorder, mapEventBindings } from "can";
+
+// Create the Person type
+function Person(){};
+
+// Add event mixin:
+mapEventBindings(Person.prototype);
+
+Person.prototype.setName = function(newName){
+	let oldName = this.name;
+	this.name = newName;
+	this.dispatch("name", [newName, oldName]);
+};
+Person.prototype.getName = function(){
+	ObservationRecorder.add(this, "name");
+	return this.name;
+};
+
 const person = new Person();
 person.setName("Justin");
 
 
 const greetingObservation = new Observation(function(){
 	return person.getName() + " says hi!";
-}, null, function(newValue){
-	console.log(newValue);
 });
-greetingObservation.start();
 
-greetingObservation.value //-> "Justin says hi!"
+ObservationRecorder.start();
+
+greetingObservation.on(function(newValue) {
+  console.log(newValue);
+});
+
+console.log(greetingObservation.value); //-> "Justin says hi!"
 
 person.setName("Matt") //-> console.logs "Matt says hi!";
 ```
+@codepen
 
 ## Utilities
 
@@ -137,21 +160,31 @@ The JS utilities consist of:
 templates.
 
 ```js
-import callbacks from 'can-view-callbacks';
+import { stache, viewCallbacks } from "can";
 
-callbacks.tag("blue-el", function(el){
+viewCallbacks.tag("blue-el", function(el, tagData) {
     el.style.background = "blue";
+    var frag = tagData.subtemplate( {
+        message: "Hello"
+    }, tagData.options );
+  
+   el.appendChild(frag);
 });
+
+var view = stache("<blue-el>{{ message }}</blue-el>");
+
+var frag = view();
+
+document.body.appendChild(frag);
 ```
+@codepen
 
 ## can-view-live
 
 Sets up a live-binding between the DOM and a compute.
 
 ```js
-import live from 'can-view-live';
-import compute from 'can-compute';
-import frag from 'can-frag';
+import { compute, fragment, viewLive } from "can";
 
 let message = compute("World");
 
@@ -163,8 +196,9 @@ document.body.appendChild(content);
 
 message("Earth");
 
-document.body.innerHTML //-> Hello Earth!
+console.log(document.body.innerHTML); //-> Hello Earth
 ```
+@codepen
 
 
 ## can-view-parser
@@ -172,20 +206,26 @@ document.body.innerHTML //-> Hello Earth!
 [can-view-parser] parses HTML and handlebars/mustache tokens.  
 
 ```js
-import parser from 'can-view-parser';
+import { viewParser } from "can";
 
 let html = '<h1><span first="foo"></span><span second="bar"></span></h1>';
 
 let attrs = [];
 
-parser(html, {
+viewParser(html, {
     attrStart: function(attrName){
         attrs.push(attrName)
-    }
+    },
+    attrEnd: function() {},
+    start: function() {},
+    end: function() {},
+    attrValue: function() {},
+    done: function() {}
 });
 
-attrs //-> ["first", "second"]
+console.log(attrs); //-> ["first", "second"]
 ```
+@codepen
 
 ## can-view-scope
 
@@ -209,13 +249,16 @@ outer();
 [can-view-scope] can be used to create a similar lookup path:
 
 ```js
+import { Scope } from "can";
+
 let globalScope = new Scope({message: "Hello"});
 let outerScope = globalScope.add({last: "Abril"});
 let innerScope = outerScope.add({first: "Alexis"});
-innerScope.get("message") //-> Hello
-innerScope.get("first")   //-> Alexis
-innerScope.get("last")    //-> Abril
+console.log(innerScope.get("../../message")); //-> Hello
+console.log(innerScope.get("first"));   //-> Alexis
+console.log(innerScope.get("../last"));    //-> Abril
 ```
+@codepen
 
 ## can-view-target
 
@@ -223,9 +266,9 @@ innerScope.get("last")    //-> Abril
 have callbacks called quickly on specific elements within the cloned fragment.
 
 ```js
-import viewTarget from 'can-view-target';
+import { target } from "can";
 
-let target = viewTarget([
+let aTarget = target([
     {
         tag: "h1",
         callbacks: [function(data){
@@ -233,7 +276,7 @@ let target = viewTarget([
         }],
         children: [
             "Hello ",
-            function(){
+            function(data){
                 this.nodeValue = data.message
             }
         ]
@@ -243,17 +286,18 @@ let target = viewTarget([
 // target.clone -> <h1>|Hello||</h1>
 // target.paths -> path: [0], callbacks: [], children: {paths: [1], callbacks:[function(){}]}
 
-let fragment = target.hydrate({className: "title", message: "World"});
+let fragment = aTarget.hydrate({className: "title", message: "World"});
 
-// fragment -> <h1 class='title'>Hello World</h1>
+console.log(fragment); // -> <h1 class='title'>Hello World</h1>
 ```
+@codepen
 
 ## can-cid
 
 [can-cid] is used to get a unique identifier for an object, optionally prefixed by a type name. Once set, the unique identifier does not change, even if the type name changes on subsequent calls.
 
 ```js
-import cid from 'can-cid';
+import { cid } from "can";
 const x = {};
 const y = {};
 
@@ -261,6 +305,7 @@ console.log(cid(x, "demo")); // -> "demo1"
 console.log(cid(x, "prod")); // -> "demo1"
 console.log(cid(y));         // -> "2"
 ```
+@codepen
 
 ## can-types
 
@@ -294,23 +339,15 @@ export default namespace.unicorn = unicorn;
 
 ```
 
-## can-symbol
-
-[can-symbol] contains Symbols used to detail how CanJS may operate on different objects.
-
-```js
-let MyIDSymbol = CanSymbol("my_ID");
-
-const obj = {};
-obj[MyIDSymbol] = 1;
-```
-
 ## can-reflect
 
 [can-reflect] allows reflection on unknown data types.
 
 ```js
-const foo = new DefineMap({ bar: "baz" });
+import { ObservableObject, Reflect as canReflect } from "can";
 
-canReflect.getKeyValue(foo, "bar"); // -> "baz"
+const foo = new ObservableObject({ bar: "baz" });
+
+console.log(canReflect.getKeyValue(foo, "bar")); // -> "baz"
 ```
+@codepen
