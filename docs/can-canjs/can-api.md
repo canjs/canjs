@@ -78,7 +78,7 @@ class Counter extends StacheElement {
 	}
 }
 
-// The name of the custom element
+// Make <my-counter></my-counter> custom element works in the HTML
 customElements.define("my-counter", Counter);
 </script>
 ```
@@ -88,8 +88,7 @@ customElements.define("my-counter", Counter);
 
 - [can-stache-element/static.props properties] are defined with the [api#Observables Observables] APIs documented below.
 - [can-stache-element/static.view view] is defined with the [api#Views Views] APIs documented below.
-
-Also, the [api#ElementBindings Element Bindings] section shows how to pass data between components.
+- tag name is defined with [customElements.define](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define).
 
 
 ## Observables
@@ -98,11 +97,37 @@ Define custom observable key-value types with [can-observable-object ObservableO
 `ObservableObject` is used to organize the logic of both your [can-stache-element StacheElement] props and your [api#DataModeling Data Models]. The logic
 is expressed as properties and methods.
 
-The following defines a `Todo` type with numerous property behaviors and
-a `toggleComplete` method.
+The following defines a `Todo` type with `toggleComplete` method.
 
 ```js
-import { ObservableObject, ObservableArray, type } from "can";
+import { ObservableObject, type } from "can";
+
+// -------------------------------
+// Define an observable Todo type:
+// -------------------------------
+class Todo extends ObservableObject {
+  static props = {
+    name: string,
+    complete: false
+  };
+
+  // `toggleComplete` is a method
+  toggleComplete() {
+    this.complete = !this.complete;
+  }
+}
+
+// Create a todo instance:
+const todo = new Todo({ name: "Learn Observables" });
+```
+@codepen
+
+<details>
+<summary>Expand to see a larger example with numerous property behaviors:</summary>
+
+```js
+import { ObservableObject, type } from "can";
+import Todo from "//canjs.com/demos/api/todo.mjs";
 
 // -------------------------------
 // Define an observable Owner type:
@@ -223,11 +248,13 @@ console.log(todo.serialize()); //-> {
 ```
 @codepen
 
-Define observable list types with [can-observable-array ObservableArray]:
+</details>
+
+<details>
+<summary>Observable lists</summary>
 
 ```js
 import { ObservableArray, type } from "can";
-import Todo from "//canjs.com/demos/api/todo.mjs";
 
 // -----------------------------------
 // Define an observable TodoList type:
@@ -277,17 +304,38 @@ console.log(areSomeComplete); //-> false
 ```
 @codepen
 
-<details>
-<summary>Infrastructure APIs</summary>
-
-```js
-const fullName = new Observation(() => {
-    return person.first + " " + person.last;
-});
-```
-
 </details>
 
+## Typed properties
+
+[can-type] can be used to define typed properties in [ObservableObject] and [StacheElement]
+- Types are strict by default, which means an error will be thrown if a property is set to a value of the wrong type.
+- [can-type/convert] can be used to create a property that will always convert its value to a specific type.
+- [can-type/maybe] can be  used to create a property that can be `null` or `undefined`.
+
+```js
+import { ObservableObject, type } from "can";
+
+class Person extends ObservableObject {
+  static props = {
+    first: type.check(String),  // type checking is the default behavior
+    last: type.maybe(String),   // maybe null, undefined or string
+    age: Number,                // type checking
+    birthday: type.maybeConvert(Date) // converts the value to date if is defined 
+  };
+};
+
+const farah = new Person({
+  first: 'Farah',
+  last: null,
+  age: '4',
+  birthday: undefined
+});
+
+// Uncaught Error: "4" (string) is not of type Number.
+// Property age is using "type: Number". Use "age: type.convert(Number)"
+// to automatically convert values to Numbers when setting the "age" property.
+```
 
 ## Views
 
