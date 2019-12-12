@@ -537,7 +537,7 @@ customElements.define("my-parent", MyParent);
 
 
 ### inserted/removed event
-Starting from CanJS 4, __inserted__ and __removed__ events are no longer exist.
+Starting with CanJS 4, __inserted__ and __removed__ events are no longer available by default.
 
 If you still need to listen to those events on an element, you have to write the following:
 
