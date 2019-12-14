@@ -70,7 +70,7 @@
     "can-define-backup": "2.1.2",
     "can-define-lazy-value": "1.1.1",
     "can-define-realtime-rest-model": "1.2.0",
-    "can-define-rest-model": "1.2.0",
+    "can-define-rest-model": "2.0.0",
     "can-define-stream": "1.1.1",
     "can-define-stream-kefir": "1.1.1",
     "can-define-validate-validatejs": "1.1.1",
