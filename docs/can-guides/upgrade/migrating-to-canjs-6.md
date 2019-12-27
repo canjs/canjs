@@ -191,6 +191,19 @@ connectTag("todo-model", Todo.connection);
 
 [can-component], [can-define/map/map], and [can-define/list/list] are no longer part of core, but are still available as [can-legacy legacy] packages. This will only affect you if you were using the `core.mjs` or `dist/global/core.js` bundles. Use either `everything.mjs` or `dist/globale/everything.js` instead.
 
+### inserted/removed event
+
+[migrate-4#inserted_removedevent Starting with CanJS 4], the __inserted__ and __removed__ events are no longer available by default.
+
+If you still need to listen to those events on an element, you can write the following:
+
+```js
+import { domEvents, domMutateDomEvents } from "can";
+
+domEvents.addEvent(domMutateDomEvents.inserted);
+domEvents.addEvent(domMutateDomEvents.removed);
+```
+
 ## Recommended Changes
 
 The following are suggested changes to make sure your application is compatible beyond 6.0.
@@ -534,17 +547,3 @@ class MyParent extends StacheElement {
 customElements.define("my-parent", MyParent);
 ```
 @codepen
-
-
-### inserted/removed event
-Starting with CanJS 4, __inserted__ and __removed__ events are no longer available by default.
-
-If you still need to listen to those events on an element, you have to write the following:
-
-```js
-import { domEvents, domMutateDomEvents } from "can";
-
-domEvents.addEvent(domMutateDomEvents.inserted);
-domEvents.addEvent(domMutateDomEvents.removed);
-```
-
