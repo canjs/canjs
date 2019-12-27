@@ -94,7 +94,7 @@
     "can-local-store": "1.0.1",
     "can-log": "1.0.2",
     "can-make-map": "1.2.2",
-    "can-map": "4.3.11",
+    "can-map": "4.3.12",
     "can-map-compat": "1.1.1",
     "can-map-define": "4.4.0",
     "can-memory-store": "1.0.2",
@@ -124,7 +124,7 @@
     "can-simple-dom": "1.7.0",
     "can-simple-map": "4.3.3",
     "can-simple-observable": "2.5.0",
-    "can-stache": "5.0.0",
+    "can-stache": "5.1.1",
     "can-stache-bindings": "5.0.3",
     "can-stache-converters": "5.0.0",
     "can-stache-element": "1.0.3",
@@ -308,15 +308,15 @@
   "bundlesize": [
     {
       "path": "./core.min.mjs",
-      "maxSize": "105.5 kB"
+      "maxSize": "105.6 kB"
     },
     {
       "path": "./core.mjs",
-      "maxSize": "312.5 kB"
+      "maxSize": "313.5 kB"
     },
     {
       "path": "./dist/global/core.js",
-      "maxSize": "196.5 kB"
+      "maxSize": "197 kB"
     }
   ]
 }
