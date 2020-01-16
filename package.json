@@ -121,7 +121,7 @@
     "can-route-mock": "1.0.2",
     "can-route-pushstate": "6.0.0",
     "can-set-legacy": "1.0.1",
-    "can-simple-dom": "1.7.0",
+    "can-simple-dom": "1.7.1",
     "can-simple-map": "4.3.3",
     "can-simple-observable": "2.5.0",
     "can-stache": "5.0.0",
