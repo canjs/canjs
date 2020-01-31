@@ -171,7 +171,7 @@
     "kefir": "^3.8.0",
     "prop-types": "^15.5.10",
     "qunit": "^2.9.2",
-    "semver": "^6.1.1",
+    "semver": "^7.1.2",
     "socket.io-client": "^2.2.0",
     "steal": "^2.2.4",
     "steal-conditional": "^1.1.3",
