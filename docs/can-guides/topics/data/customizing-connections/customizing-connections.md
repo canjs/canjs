@@ -182,7 +182,7 @@ A listing of the behaviors provided by [can-connect] and a short description of 
       <td>
         [can-connect/base/base <code>base</code>]
       </td>
-      <td>Provides option accessor and convience methods required by other behaviors. Included in every connection. Not something that would typically be customized.</td>
+      <td>Provides option accessor and convenience methods required by other behaviors. Included in every connection. Not something that would typically be customized.</td>
     </tr>    
 		<tr>
 			<td>
@@ -300,7 +300,7 @@ The built-in behaviors of `can-connect` have a canonical order to ensure they fu
 				[can-connect/base/base <code>base</code>]
 			</td>
 			<td>
-				Implements option accessor and convience methods. Positioned highest in the prototype chain since this is basic "helper" functionality used to implement other behaviors.
+				Implements option accessor and convenience methods. Positioned highest in the prototype chain since this is basic "helper" functionality used to implement other behaviors.
 			</td>
 		</tr>
 		<tr>
