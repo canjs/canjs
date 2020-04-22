@@ -155,7 +155,7 @@
   "devDependencies": {
     "@feathersjs/feathers": "^3.3.1",
     "@feathersjs/socketio-client": "^1.2.1",
-    "@octokit/rest": "^16.27.3",
+    "@octokit/rest": "^17.5.2",
     "@webcomponents/custom-elements": "^1.2.4",
     "bit-docs": "^0.2.0",
     "bundlesize": "^0.18.0",
