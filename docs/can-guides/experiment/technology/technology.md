@@ -208,8 +208,8 @@ The following widget counts the number of times the <button>+1</button> button i
 In CanJS, widgets are encapsulated with custom elements. Custom elements allow us to put an
 element in our HTML like `<my-counter></my-counter>`, and the widget will spring to life.
 
-The previous demo defines its `view` and `ViewModel` as separate entities. However,
-a Component's [can-component.prototype.ViewModel] and view are typically defined inline as follows:
+The previous demo defines a custom element with a `view` and `Observale Properties` as separate entities. However,
+a Component's [can-stache-element/static.props] and view are typically defined inline as follows:
 
 ```html
 <my-counter></my-counter>
