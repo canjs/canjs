@@ -48,7 +48,7 @@
     "github": "https://github.com/canjs/canjs"
   },
   "dependencies": {
-    "can-ajax": "2.4.5",
+    "can-ajax": "2.4.6",
     "can-assign": "1.3.3",
     "can-attribute-encoder": "1.1.4",
     "can-attribute-observable": "1.2.7",
@@ -91,7 +91,7 @@
     "can-list": "4.2.2",
     "can-local-store": "1.0.1",
     "can-log": "1.0.2",
-    "can-make-map": "1.2.1",
+    "can-make-map": "1.2.2",
     "can-map": "4.3.9",
     "can-map-compat": "1.1.1",
     "can-map-define": "4.4.0",
