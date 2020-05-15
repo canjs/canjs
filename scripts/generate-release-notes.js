@@ -17,7 +17,7 @@ const getReleaseNotes = require('version-and-release');
 const template = require('./release-template');
 
 const options = {
-	token: "9db8f9faffb06a05b75a71b32ac3c8c62f92f096",
+	token: "",
 	owner: "canjs",
 	repo: "canjs",
 	template
