@@ -15,15 +15,23 @@
 
 const getReleaseNotes = require('version-and-release');
 const template = require('./release-template');
+const parseArgs = require('minimist');
+
+const args = parseArgs(process.argv.slice(2), {alias: {token: 'T'}});
+
+const {
+	_: [previousRelease, currentRelease],
+	token
+  } = args;
 
 const options = {
-	token: "",
+	token,
 	owner: "canjs",
 	repo: "canjs",
 	template
-  };
+};
 
-const output = getReleaseNotes('v6.3.0', 'v6.4.0', options);
+const output = getReleaseNotes(previousRelease, currentRelease, options);
 
 output.then(notes => {
 	console.log(notes);
