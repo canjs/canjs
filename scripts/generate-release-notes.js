@@ -6,7 +6,7 @@
  * node generate-release-notes.js <access token> <older version> <newer version>
  * // returns a string in markdown with the aggregated release notes.
  * Example usage with arguments:
- *     node generate-release-notes.js -T s1w5i2f2t v3.8.1 v3.9.0
+ *     node generate-release-notes.js --token s1w5i2f2t v3.8.1 v3.9.0
  *     // returns a string in markdown with the all can-* dependency release notes between CanJS v3.8.1 and CanJS v3.9.0
  */
 
