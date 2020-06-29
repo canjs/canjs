@@ -310,15 +310,15 @@
   "bundlesize": [
     {
       "path": "./core.min.mjs",
-      "maxSize": "105.98 kB"
+      "maxSize": "106 kB"
     },
     {
       "path": "./core.mjs",
-      "maxSize": "313.98 kB"
+      "maxSize": "314 kB"
     },
     {
       "path": "./dist/global/core.js",
-      "maxSize": "199.52 kB"
+      "maxSize": "200 kB"
     }
   ]
 }
