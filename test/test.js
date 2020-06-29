@@ -1,8 +1,8 @@
 // Core tests
-require("can-stache-element/test/test");
-require("can-observable-array/can-observable-array-test");
+require("can-stache-element/test/test-no-class-fields");
+require("can-observable-array/test/test-no-class-fields");
 require("can-observable-bindings/test");
-require("can-observable-object/test/test");
+require("can-observable-object/test/test-no-class-fields");
 require("can-observable-mixin/test/test");
 require("can-type/can-type-test");
 // require('can-route/test/test'); in dev-only
