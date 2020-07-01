@@ -10,8 +10,8 @@ var idleTimeout = 1000; // seconds, default 90, max 1000
 // https://github.com/SeleniumHQ/selenium/wiki/DesiredCapabilities
 var platforms = [{
 	browserName: 'safari',
-	platform: 'OS X 10.13',
-	version: '11',
+	platform: 'OS X 10.15',
+	version: '13',
 	maxDuration: maxDuration,
 	commandTimeout: commandTimeout,
 	idleTimeout: idleTimeout
