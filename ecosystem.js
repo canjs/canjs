@@ -16,7 +16,6 @@ export { default as viewAutorender } from "./es/can-view-autorender";
 
 // Data Modeling
 export { default as superModel } from "./es/can-super-model";
-export { default as connectFeathers } from "./es/can-connect-feathers";
 export { default as connectTag } from "./es/can-connect-tag";
 export { default as fixtureSocket } from "./es/can-fixture-socket";
 export { default as ndjsonStream } from "./es/can-ndjson-stream";
@@ -31,7 +30,6 @@ export { default as RouteMock } from "./es/can-route-mock";
 
 
 // Data Validation
-export { default as defineValidateValidatejs } from "./es/can-define-validate-validatejs";
 export { default as validate } from "./es/can-validate";
 export { default as validateValidatejs } from "./es/can-validate-validatejs";
 export { default as DeepObservable } from "./es/can-deep-observable";
