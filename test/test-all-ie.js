@@ -67,7 +67,6 @@ require('can-fixture/test/fixture_test');
 // require('can-fixture-socket/test/test'); // depends on feathers-hooks which does not support IE11
 //require('can-connect-signalr/test');
 //require('can-connect-cloneable/test/test');
-//require('can-connect-feathers/test/test'); depends on babel-polyfill
 require('can-kefir/can-kefir-test');
 require('can-stream/can-stream_test');
 require('can-stream-kefir/can-stream-kefir_test');
@@ -82,7 +81,6 @@ require('can-define-stream/can-define-stream_test');
 require('can-define-stream-kefir/can-define-stream-kefir_test');
 require('can-validate/test');
 require('can-validate-validatejs/test');
-require('can-define-validate-validatejs/test');
 // require('can-jquery/test/test');
 // require('can-vdom/test/test');
 require('can-view-autorender/test/test');
