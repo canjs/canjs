@@ -6,6 +6,9 @@ makes authenticated requests with OAuth2. It uses [jQuery++](https://jquerypp.co
 drag/drop events. It shows using custom attributes and custom events.  This guide takes
 an hour to complete.
 
+> This recipe uses YouTube API Services and follows [YouTube Terms of Service](https://www.youtube.com/t/terms) 
+> and [Google Privacy Policy](https://policies.google.com/privacy)
+
 @body
 
 The final widget looks like:
