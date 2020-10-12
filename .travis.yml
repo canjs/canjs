@@ -1,10 +1,10 @@
 sudo: false
 language: node_js
 node_js: "6"
+services:
+  - xvfb
 before_install:
 - ./firefox-allow-popups.sh
-- "export DISPLAY=:99.0"
-- "sh -e /etc/init.d/xvfb start"
 - if [ "$TRAVIS_BRANCH" != "master" ] || [ "$TRAVIS_PULL_REQUEST" != false ]; then SAUCE_ACCESS_KEY=$SAUCE_ACCESS_KEY_NOT_MASTER SAUCE_USERNAME=$SAUCE_USERNAME_NOT_MASTER; fi
 - echo "Sauce Labs username is $SAUCE_USERNAME"
 - |
