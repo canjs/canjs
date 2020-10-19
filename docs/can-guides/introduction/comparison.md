@@ -621,4 +621,4 @@ There’s no advantage to choosing a framework with a large community, since com
 
 There’s no advantage to choosing a framework based on ability to hire devs that list X on their resume, since any competent JavaScript developer can be equally effective in any modern framework with a couple days of learning.
 
-This is why CanJS has a stellar reputation with [enterprise companies](who-uses.html). Stability and longevity are critical factors to your application’s success.
+This is why CanJS has a stellar reputation with enterprise companies. Stability and longevity are critical factors to your application’s success.
