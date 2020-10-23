@@ -29,7 +29,6 @@ require('can-simple-observable/can-simple-observable-test');
 require('can-symbol/can-symbol-test');
 require('can-reflect/can-reflect-test');
 require('can-reflect-promise/test/can-reflect-promise_test');
-require('can-ajax/can-ajax-test');
 require('can-globals/can-globals-test');
 require('can-define-lazy-value/define-lazy-value-test');
 require('can-assign/can-assign-test');
