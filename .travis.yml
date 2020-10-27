@@ -1,5 +1,6 @@
 sudo: false
 language: node_js
+node_js: "12"
 services:
   - xvfb
 before_install:
