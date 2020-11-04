@@ -58,9 +58,9 @@ var platforms = [{
 	idleTimeout: idleTimeout
 }, {
 	browserName: 'Safari',
-	'appium-version': '1.15.1',
+	'appium-version': '1.15.0',
 	platformName: 'iOS',
-	platformVersion: '13.0',
+	platformVersion: '11.0',
 	deviceName: 'iPhone 8 Simulator',
 	maxDuration: maxDuration,
 	commandTimeout: commandTimeout,
