@@ -13,3 +13,4 @@ require('can-view-callbacks/test/callbacks-test');
 require('can-simple-map/can-simple-map_test');
 require('can-cid/tests');
 require('can-types/test/test');
+require('can-ajax/can-ajax-test');

@@ -38,7 +38,7 @@
     "github": "https://github.com/canjs/canjs"
   },
   "dependencies": {
-    "can-ajax": "1.4.0",
+    "can-ajax": "1.4.1",
     "can-assign": "1.3.1",
     "can-attribute-encoder": "0.3.4",
     "can-cid": "1.3.0",
@@ -145,7 +145,7 @@
     "steal-stache": "^3.1.0",
     "steal-tools": "^1.3.6",
     "test-saucelabs": "0.0.2",
-    "testee": "^0.7.0"
+    "testee": "^0.9.0"
   },
   "demos": [
     "http://canjs.us/#examples",
