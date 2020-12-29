@@ -1,0 +1,260 @@
+/**
+* @stylesheet code.less Code Rendering
+* @parent Styles.baseline-elements
+*
+* @description
+* Enables both the layout of code wells, and also the syntax highlighting of the specific code language. Syntax coloring provided by prettify.js with the <a href="https://github.com/chriskempson/tomorrow-theme">Tomorrow Theme</a>.
+* 
+* Code "wells" are styled based on the use of the `<pre>` and `<code>` tags around your desired code example.
+*
+* Below are a few examples in various languages. This is not an exhaustive list of supported languages. 
+*
+* ### HTML 
+* ```
+* <pre>
+    <code>
+      <div class="example"><!--with a comment -->
+        <h1>Example</h1>
+        <p>This is some example code that is being styled.</p>
+      </div>
+    </code>
+  </pre>
+*
+* ```
+* ### JavaScript
+*```
+var foo = require('f'),
+    bar = require('br'),
+    writeFile = f.denodify(br.writeFile),
+    path = require('path');
+    
+module.exports = function(littlePromise, options){
+   return littlePromise.then(function(little){
+     return writeFile(
+         path.join(options.dest,'little.json'), 
+         JSON.stringify(little) );
+   });
+};
+* ```
+* ### JSON
+*```
+{
+  "sites": {
+    "docs": {
+      "key" : "value"
+    }
+  }
+}
+* ```
+*
+**/
+code {
+	background-color: @colorCode;
+  border-radius: 5px;
+  padding: 0 5px;
+}
+pre, code, pre *, code * {
+	font-family: "Courier New", Courier, mono;
+  font-style: normal;
+  font-weight: 300; 
+}
+pre {
+  background-color: @clear;
+  border: 1px solid @haze;
+  border-radius: 5px;
+  margin: 0;
+  margin-bottom: 20px;
+  vertical-align: top;
+  overflow:auto;
+  padding: 10px 20px;
+  
+  code{
+  	font-size: 14px;
+  	line-height: 16px;
+  	letter-spacing: 0px;
+  	background-color: transparent;
+  }
+  
+  ol {
+  	margin: 0 0 0 40px;
+  	padding: 0;
+  	
+  	li {
+  		text-indent: 0;
+  		color: @darkSkies;
+  		background-color: @clear;
+  		margin: 0;
+  		list-style: decimal;
+  	}
+  }
+}
+
+  /* Tomorrow Theme */
+  /* Original theme - https://github.com/chriskempson/tomorrow-theme */
+  /* Pretty printing styles. Used with prettify.js. */
+  /* SPAN elements with the classes below are added by prettyprint. */
+  /* plain text */
+
+code.prettyprint {
+    padding:0 !Important;
+}
+
+.pln {
+  color: @darkSkies;
+}
+
+@media screen {
+  /* string content */
+  .str {
+    color:@str-color;
+  }
+
+  /* a keyword */
+  .kwd {
+    color:@kwd-color;
+  }
+
+  /* a comment */
+  .com {
+    color: @com-color;
+  }
+
+  /* a type name */
+  .typ {
+    color: @type-color;
+  }
+
+  /* a literal value */
+  .lit {
+    color: @lit-color;
+  }
+
+  /* punctuation */
+  .pun {
+    color: @pun-color;
+  }
+
+  /* lisp open bracket */
+  .opn {
+    color: @opn-color;
+  }
+
+  /* lisp close bracket */
+  .clo {
+    color: @clo-color;
+  }
+
+  /* a markup tag name */
+  .tag {
+    color: @tag-color;
+  }
+
+  /* a markup attribute name */
+  .atn {
+    color: @atn-color;
+  }
+
+  /* a markup attribute value */
+  .atv {
+    color: @atv-color;
+  }
+
+  /* a declaration */
+  .dec {
+    color: @dec-color;
+  }
+
+  /* a variable name */
+  .var {
+    color: @var-color;
+  }
+
+  /* a function name */
+  .fun {
+    color: @var-color;
+  }
+}
+  /* Use higher contrast and text-weight for printable form. */
+@media print, projection {
+  .str {
+    color: @str-color-pp;
+  }
+
+  .kwd {
+    color: @kwd-color-pp;
+    font-weight: bold;
+  }
+
+  .com {
+    color: @com-color-pp;
+    font-style: italic;
+  }
+
+  .typ {
+    color: @typ-color-pp;
+    font-weight: bold;
+  }
+
+  .lit {
+    color:@lit-color-pp;
+  }
+
+  .pun, .opn, .clo {
+    color: @pun-color-pp;
+  }
+
+  .tag {
+    color: @tag-color-pp;
+    font-weight: bold;
+  }
+
+  .atn {
+    color: @atn-color-pp;
+  }
+
+  .atv {
+    color: @atv-color-pp;
+  }
+}
+  /* Style */
+pre.prettyprint {
+  //background: @pp-bg;
+  font-family: Menlo, "Bitstream Vera Sans Mono", "DejaVu Sans Mono", Monaco, Consolas, monospace;
+  font-size: 14px;
+  border: 1px solid @haze;
+  padding: 10px;
+}
+
+pre.prettyprint ol {
+  font-size: 14px;
+  margin-bottom: 0px;
+}
+
+  /* Specify class=linenums on a pre to get line numbering */
+ol.linenums {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+  /* IE indents via margin-left */
+li.L0,
+li.L1,
+li.L2,
+li.L3,
+li.L4,
+li.L5,
+li.L6,
+li.L7,
+li.L8,
+li.L9 {
+  /* */
+}
+
+  /* Alternate shading for lines */
+li.L1,
+li.L3,
+li.L5,
+li.L7,
+li.L9 {
+  /* */
+}

@@ -1,0 +1,37 @@
+/**
+* @stylesheet helper.less Helpers
+* @parent Styles.baseline-elements 2
+*
+* @description
+* Helper classes are layout-based classes that can be added to elements. Helper classes included here are `clear`, `center`, `pull-right`, and `pull-left`.
+*
+* @demo demos/helpers.html
+**/
+.clear {
+	clear: both;
+}
+.center {
+	margin-right: auto;
+	margin-left: auto;
+	text-align: center;
+}
+.pull-right, .pullright, .float-right, .floatright {
+	float: right;
+}
+.pull-left, .pullleft, .float-left, .float-right {
+	float: left;
+}
+
+.border-box{
+	.box-sizing;
+}
+
+// Toggle font smoothing mode in Webkit & FF
+.text-smoothing() {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.text-smoothing(reset) {
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: auto;
+}

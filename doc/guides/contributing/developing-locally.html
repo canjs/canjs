@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/contribute/developing-locally.md
+	@page guides/contributing/developing-locally
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Developing Locally | Contributing | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="Learn how to set up your development environment, get the code, and verify that it’s working.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Learn how to set up your development environment, get the code, and verify that it’s working.">
+	<meta property="og:title" content="Developing Locally | Contributing | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "Learn how to set up your development environment, get the code, and verify that it’s working.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Developing Locally | Contributing | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/contributing/developing-locally" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="project-organization.html"
+							title="Learn about how CanJS is organized.">
+							Project Organization
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="bug-report.html"
+							title="Learn how to submit a bug report.">
+							Reporting Bugs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="feature-suggestion.html"
+							title="Learn how to suggest a feature.">
+							Suggesting Features
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="finding-ways-to-contribute.html"
+							title="There are many ways to contribute to CanJS, whether you’re a developer who wants to code, a designer who can help improve the design and usability of our projects, or someone who’s interested in helping other members of the community.">
+							Finding Ways to Contribute
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="developing-locally.html"
+							title="Learn how to set up your development environment, get the code, and verify that it’s working.">
+							Developing Locally
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="code.html"
+							title="Learn how to contribute a code change to CanJS. Read the adding-ecosystem-modules guide on how to make a plugin to CanJS.">
+							Changing the Code
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="documentation.html"
+							title="Learn how to improve CanJS’s site and documentation.">
+							Improving the Docs &amp; Site
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="site-style-guide.html"
+							title="Learn about the website’s design and styles.">
+							Site Style Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="adding-ecosystem-modules.html"
+							title="Learn how to add a new package to the CanJS toolkit.">
+							Making a New Package
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="api-design-guidelines.html"
+							title="Learn how to design APIs which are consistent with CanJS.">
+							API Design Guidelines
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="releases.html"
+							title="Release and hosting information for CanJS maintainers.">
+							Releasing CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="updating-the-site.html"
+							title="How to update the CanJS website.">
+							Updating the Site
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="evangelism.html"
+							title="Learn about resources that can help you spread the word about CanJS.">
+							Evangelism
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Developing Locally</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/contribute/developing-locally.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Learn how to set up your development environment, get the code, and verify that it’s working.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <p>This page will walk you through setting up the <a href="https://github.com/canjs/canjs">main CanJS repository</a> on your computer. Remember that CanJS is <a href="project-organization.html" title="Learn about how CanJS is organized.">split into multiple repositories</a>, but you can apply the same general steps to set up any of the other repos.</p>
+<p>We’ll cover the following details in this guide:</p>
+<ul>
+<li>Setting up your development environment.</li>
+<li>Getting the repository’s code and verify it’s working.</li>
+</ul>
+<p>The following video walks through most of the following steps:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/PRuueWqnpIw" frameborder="0" allowfullscreen></iframe>
+<h2>Setting up your development environment</h2>
+<p>Developing CanJS requires:</p>
+<ul>
+<li>A <a href="https://github.com/">GitHub</a> account and git client.</li>
+<li>Node.js version 5 or later.</li>
+<li>Firefox for running automated tests.</li>
+</ul>
+<h3>Sign up for GitHub and set up Git</h3>
+<p>If you don’t already have a GitHub account, you’ll need to <a href="https://help.github.com/articles/signing-up-for-a-new-github-account/">create a new one</a>.</p>
+<p>There are a variety of ways to get a git command line client
+connected to your GitHub account. GitHub has
+great documentation on how to <a href="https://help.github.com/articles/set-up-git/">set up Git</a>.</p>
+<p>If you already have <code>git</code> installed, make sure you’ve
+<a href="https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/">set up your ssh keys</a>.</p>
+<h3>Install Node.js</h3>
+<p>Download Node.js version 5 or later at <a href="https://nodejs.org">NodeJS.org</a>.  You can
+verify Node’s version with:</p>
+<pre><code>node -v
+</code></pre>
+<h3>Install Firefox</h3>
+<p>Firefox is used to run the repository’s tests.</p>
+<p>If you don’t already have it, <a href="https://www.mozilla.org/en-US/firefox/new/">download Firefox</a>.
+Mozilla has guides for installing it on <a href="https://support.mozilla.org/en-US/kb/install-firefox-linux">Linux</a>,
+<a href="https://support.mozilla.org/en-US/kb/how-download-and-install-firefox-mac">Mac</a>,
+and <a href="https://support.mozilla.org/en-US/kb/how-download-and-install-firefox-windows">Windows</a>.
+Make sure it gets installed into the default location for your operating system.</p>
+<h2>Getting the code and verifying that it’s working</h2>
+<p>Once your environment is set up, you should be able to clone the repository you
+want to change, install its dependencies, and verify you’ve set up your
+development environment correctly.</p>
+<h3>Forking and cloning the repository</h3>
+<p>A “fork” is a copy of a repository in your personal GitHub account. “Cloning” is the process of getting the repository’s source code on your computer.</p>
+<p>GitHub has a <a href="https://help.github.com/articles/fork-a-repo/">forking guide</a> and a <a href="https://help.github.com/articles/cloning-a-repository/">cloning guide</a> that explains how to clone a repo on Linux, Mac, or Windows.</p>
+<p>To start, click the <strong>Fork</strong> button to fork the repository from which you will be working.
+For example, you can fork <a href="https://github.com/canjs/can-compute">can-compute</a> by pressing its <strong>Fork</strong> button on GitHub:</p>
+<p><img src="../../../docs/can-guides/contribute/fork.png" width="600px"/></p>
+<p>Next, you’ll want to clone your forked version of the repository. GitHub’s guide will <a href="https://help.github.com/articles/fork-a-repo/#step-2-create-a-local-clone-of-your-fork">instruct you</a> to clone it with a command like:</p>
+<pre><code class="language-shell">git clone git@github.com:&lt;your username&gt;/&lt;repository-name&gt;.git
+</code></pre>
+<p>For example, if your username is <code>justinbmeyer</code> and you forked <code>can-compute</code>:</p>
+<pre><code class="language-shell">git clone git@github.com:justinbmeyer/can-compute.git
+</code></pre>
+<p>Before continuing, move into your project’s directory. For example:</p>
+<pre><code class="language-shell">cd can-compute
+</code></pre>
+<h3>Installing the dependencies</h3>
+<p>Now install the project’s dependencies with npm:</p>
+<pre><code class="language-shell">npm install
+</code></pre>
+<h3>Running the tests</h3>
+<p>Make sure Firefox is closed and run the test suite with:</p>
+<pre><code class="language-shell">npm test
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> When adding tests, make sure you check out <a href="https://github.com/canjs/can-test-helpers">can-test-helpers</a> as it provides some useful helpers for some tests.</p>
+</blockquote>
+<p>If every test passed, <strong>congrats</strong>! You have everything you need to
+change code and have the core team review it.</p>
+<h3>Building the documentation</h3>
+<p>The <a href="https://github.com/canjs/canjs">main CanJS repo</a> contains <a href="https://canjs.com/">CanJS.com</a>.</p>
+<p>To build the site, run:</p>
+<pre><code class="language-shell">npm run document
+</code></pre>
+<p>This should produce a static site in your <code>canjs</code> folder.
+<a href="https://docs.npmjs.com/cli/run-script"><code>npm run</code></a> will look for the <code>document</code>
+script in the repository’s <a href="https://github.com/canjs/canjs/blob/master/package.json"><code>package.json</code></a>
+and run it.</p>
+<h3>Viewing the site</h3>
+<p>After you build the site, your <code>canjs</code> repository will now also contain the website.</p>
+<p>To view the site, we recommend you install <a href="https://www.npmjs.com/package/http-server">http-server</a>.</p>
+<pre><code class="language-shell">npm install http-server -g
+</code></pre>
+<p>After it’s installed, you can start a server in the current directory:</p>
+<pre><code class="language-shell">http-server
+</code></pre>
+<p><code>http-server</code> will tell you where you can go in your browser to see the site. It will be something like <a href="http://127.0.0.1:8080" title="http://127.0.0.1:8080">http://127.0.0.1:8080</a>.</p>
+<h2>Making your changes</h2>
+<p>Next, learn about <a href="code.html" title="Learn how to contribute a code change to CanJS. Read the adding-ecosystem-modules guide on how to make a plugin to CanJS.">making changes and submitting a pull request</a>.</p>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/contribute/developing-locally.md"},"description":"Learn how to set up your development environment, get the code, and verify that it’s working. \n","name":"guides/contributing/developing-locally","title":"Developing Locally","type":"page","parent":"guides/contribute","order":4,"outline":{"depth":2},"comment":" ","pathToRoot":"../../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix="../.."></div>
+
+	</body>
+</html>

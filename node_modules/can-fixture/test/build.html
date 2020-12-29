@@ -1,0 +1,12 @@
+<p>This page simply checks the basics of the build work. To verify
+open the command line tools.</p>
+<script src='../dist/global/can-fixture.js'></script>
+<script>
+	fixture("GET /things", function(){ return {name: "yes"} })
+	var oReq = new XMLHttpRequest();
+	oReq.addEventListener("load", function(){
+		console.log("should say yes",this.responseText);
+	});
+	oReq.open("GET", "/things");
+	oReq.send();
+</script>

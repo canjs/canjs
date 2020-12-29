@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<title>Memory tests</title>
+<style>
+	body {
+		font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	}
+
+	button {
+		font-size: 200%;
+		background: salmon;
+		border: 2px solid black;
+		color: black;
+		padding: .5em 1em;
+		cursor: pointer;
+	}
+
+	#runner {
+		text-align: center;
+	}
+</style>
+<h1>onNodeDisconnected memory leak</h1>
+<p>This tests a leak in using domMutate#onNodeDisconnected when the element is never inserted into the page. Use the devtools memory tool and click <strong>run me</strong>. Every time you click run a new element is created. Hopefully there are no leaks.</p>
+<div id="runner">
+	<button type="button">Run me</button>
+</div>
+<div id="root"></div>
+<script src="../node_modules/steal/steal.js"></script>
+<script type="steal-module">
+	var domMutate = require("can-dom-mutate");
+	var DOCUMENT = require("can-globals/document/");
+	// var nodeLists = require("can-view-nodelist");
+
+	function run() {
+		var doc = document.implementation.createHTMLDocument();
+		var div = doc.createElement("div");
+		DOCUMENT(doc);
+		domMutate.onNodeDisconnected(div, function() {});
+		//domMutate.onNodeAttributeChange(div, function() {});
+		DOCUMENT(document);
+	}
+
+	document.querySelector('button').addEventListener('click', run);
+</script>

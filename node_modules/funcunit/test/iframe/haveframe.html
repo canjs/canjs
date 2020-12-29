@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+	<body>
+		<a href="#" id="open">Click to open</a>
+
+		<script src="../../node_modules/steal/steal.js">
+        var $ = require("funcunit/browser/jquery");
+
+				$(document).ready(function() {
+					$('#open').click(function(ev) {
+						$('<iframe src="iframe.html" name="my frame"></iframe>').appendTo(document.body);
+					});
+				});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "system-parse-amd",
+  "version": "0.0.0",
+  "authors": [
+    "Bitovi"
+  ],
+  "description": "Bower plugin for SystemJS and StealJS",
+  "main": "bower.js",
+  "keywords": [
+    "systemjs",
+    "stealjs",
+    "es6",
+    "bower"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "qunit": "~1.15.0",
+    "system.js": "~0.10.1"
+  }
+}

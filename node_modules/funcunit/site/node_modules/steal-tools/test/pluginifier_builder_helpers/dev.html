@@ -1,0 +1,19 @@
+<html>
+	
+	<body>
+		<div id='tabs'></div>
+		<script src='../../node_modules/steal/steal.js' 
+				config='package.json!npm'
+				main='@empty'></script>
+		<script>
+			System.import(System.configMain).then(function(){
+				Promise.all([
+					System.import("jquery"),
+					System.import("tabs")]).then(function(mods){
+						var $ = mods[0];
+						$("#tabs").tabs();
+					});
+			});
+		</script>
+	</body>
+</html>

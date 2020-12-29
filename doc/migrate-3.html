@@ -1,0 +1,1645 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/upgrade/migrating-to-canjs-3.md
+	@page migrate-3
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Migrating to CanJS 3 | upgrade | Guides | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+	<meta property="og:title" content="Migrating to CanJS 3 | upgrade | Guides | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Migrating to CanJS 3 | upgrade | Guides | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="./static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="migrate-3" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="guides/contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>getting started</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/crud-beginner.html"
+							title="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+							CRUD Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/setup.html"
+							title="Learn how to install CanJS in your environment.">
+							Setting Up CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/technology-overview.html"
+							title="Learn the basics of CanJS’s technology.">
+							Technology Overview
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>topics</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/html.html"
+							title="Learn how to update HTML and listen to user interactions.">
+							HTML
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/routing.html"
+							title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+							Routing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/data.html"
+							title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">
+							Service Layer
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/debugging.html"
+							title="Learn how to debug CanJS applications.">
+							Debugging
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/forms.html"
+							title="Learn how to create amazing &lt;form&gt;s with CanJS.">
+							Forms
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/testing.html"
+							title="Learn how to test CanJS applications.">
+							Testing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/logic.html"
+							title="Learn how to write observables in an organized, maintainable, and testable way.">
+							Logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/server-side-rendering.html"
+							title="Learn how to set up SSR for CanJS.">
+							Server-Side Rendering
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>app guides</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/chat.html"
+							title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+							Chat Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/todomvc.html"
+							title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+							TodoMVC Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/recipes/todomvc-with-steal.html"
+							title="This tutorial walks through building TodoMVC with StealJS. It includes KeyNote presentations covering CanJS core libraries.">
+							TodoMVC with StealJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>beginner recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/recipes/canvas-clock.html"
+							title="This beginner guide walks you through building a clock with the Canvas API.">
+							Canvas Clock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/recipes/credit-card-simple.html"
+							title="This beginner guide walks through building a very simple credit card payment form.  It uses Stripe.js v2 API to create a token which can be used to create a charge.  It also performs simple validation on the payment form values.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/recipes/file-navigator-simple.html"
+							title="This beginner guide walks you through building a simple file navigation widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.0.0. Check out the file-navigator-advanced for an example that makes AJAX requests for its data and uses can-stache-element.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/recipes/signup-simple.html"
+							title="This beginner guide walks through building simple signup, login forms and a logout button.">
+							Signup and Login
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/recipes/video-player.html"
+							title="This beginner guide walks you through building custom video controls around a video element.">
+							Video Player
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/recipes/weather-report-simple.html"
+							title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.2.">
+							Weather Report
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>intermediate recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/recipes/cta-bus-map.html"
+							title="This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map. You&#x27;ll learn how to create a StacheElement that integrates with 3rd party widgets.">
+							CTA Bus Map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/recipes/modals.html"
+							title="This intermediate guide shows how to create a multiple modal form.">
+							Multiple Modals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/recipes/text-editor.html"
+							title="This intermediate guide walks you through building a basic rich text editor.">
+							Text Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/recipes/tinder-carousel.html"
+							title="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+							Tinder Carousel
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>advanced recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/recipes/credit-card-advanced.html"
+							title="This advanced guide walks through building a simple credit card payment form with validations. It doesn’t use can-define. Instead it uses Kefir.js streams to make a ViewModel. can-kefir is used to make the Kefir streams observable to can-stache.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/recipes/file-navigator-advanced.html"
+							title="This advanced guide walks you through building a file navigation widget that requests data with fetch. It takes about 45 minutes to complete.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/recipes/playlist-editor.html"
+							title="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+							Playlist Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/recipes/search-list-details.html"
+							title="This advanced guide walks through building a Search, List, Details flow with lazy-loaded routes.">
+							Search, List, Details
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>upgrade</span>
+						
+	<ul>
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="migrate-3.html"
+							title="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+							Migrating to CanJS 3
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="migrate-4.html"
+							title="This guide walks you through the step-by-step process to upgrade a 3.x app to CanJS 4.">
+							Migrating to CanJS 4
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="migrate-5.html"
+							title="This guide walks you through the process to upgrade a 4.x app to CanJS 5.x.">
+							Migrating to CanJS 5
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="migrate-6.html"
+							title="This guide walks you through the process to upgrade a 5.x app to CanJS 6.x.">
+							Migrating to CanJS 6
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/upgrade/using-codemods.html"
+							title="Learn how to migrate your app to CanJS 6 using can-migrate.">
+							Using Codemods
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>other</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/api.html"
+							title="This page walks through how to use and understand CanJS’s API documentation.">
+							Reading the API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Migrating to CanJS 3</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/upgrade/migrating-to-canjs-3.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <p>CanJS 3 introduces an even more modular project structure and several new features, while having a minimal number of deprecations and removals from the <a href="//v2.canjs.com/docs/">2.3 API</a>.</p>
+<p>Use this guide alone or with the <a href="guides/upgrade/using-codemods.html" title="Learn how to migrate your app to CanJS 6 using can-migrate.">Using Codemods</a> guide, which shows you how to use the <a href="https://github.com/canjs/can-migrate">can-migrate</a> CLI code refactoring tool to automate parts of the migration process.</p>
+<p>This guide goes over:</p>
+<ul>
+<li><a href="#WhyUpgrade">Why you should upgrade</a></li>
+<li><a href="#Pre_migrationpreparation"><em>Pre-migration preparation</em></a> you can do in your current 2.x project to more easily move to 3.x in the future.</li>
+<li><a href="#Minimalmigrationpath">The <em>minimal migration path</em></a>, which includes the fewest changes required to upgrade from 2.x to 3.x.</li>
+<li><a href="#Modernizedmigrationpath">The <em>modernized migration path</em></a>, which includes upgrading your code to match more modern conventions (such as using the new npm packages).</li>
+<li><a href="#Latest_greatestmigrationpath">The <em>latest &amp; greatest migration path</em></a>, which uses all of the modern libraries we are most excited about (such as <a href="can-define.html" title="Defines observable properties and their behavior on a prototype object. This function is not commonly used directly. map
+and list are more commonly used. Types and
+behaviors shared by both map
+and list are documented here.">can-define</a>).</li>
+<li><a href="#Avoidfuturedeprecations_removals">How to <em>avoid future deprecations &amp; removals</em></a> in releases after 3.x</li>
+</ul>
+<h2>Why Upgrade</h2>
+<ul>
+<li>Security: XSS vulnerability fixes in <a href="https://github.com/canjs/canjs/releases/tag/v3.3.1">v3.3.1</a> and <a href="https://github.com/canjs/canjs/releases/tag/v3.14.0">v3.14.0</a>.</li>
+<li><a href="https://canjs.com/doc/can-stache-bindings.html">can-stache-bindings</a> has new intuitive syntaxes for event, one-way bindings, and two-way bindings:
+<ul>
+<li><code>on:event=&quot;key()&quot;</code> for event binding.</li>
+<li><code>prop:from=&quot;key&quot;</code> for one-way parent-to-child binding.</li>
+<li><code>prop:to=&quot;key&quot;</code> for one-way child-to-parent binding.</li>
+<li><code>prop:bind=&quot;key&quot;</code> for two-way binding.</li>
+</ul></li>
+<li><a href="can-define/map/map.html" title="Create observable objects.">can-define/map/map</a> is faster, removes the need for writing <code>.attr()</code>, and allows nice syntax conventions like getters and will give warnings when setting properties that aren't defined.</li>
+<li>Support for real-time with <a href="can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a>’s <a href="can-connect/real-time/real-time.html" title="Update lists to include or exclude instances based
+on set logic.">real-time</a> module.</li>
+<li><a href="https://v3.canjs.com/doc/api.html">Much improved API docs.</a></li>
+<li><a href="https://v3.canjs.com/doc/guides/recipes.html">More guides/recipes.</a></li>
+<li><a href="https://canjs.com/doc/can-stache.helpers.debugger.html">{{debugger}} stache helper will break at the given point in the template so you can inspect the current scope in the browser’s console.</a></li>
+<li><a href="https://canjs.com/doc/can-stache.tags.named-partial.html">Named inline partials (define reusable partials inside your templates).</a></li>
+<li>Support for slots &amp; templates via <a href="can-component/can-slot.html" title="Position the content of &lt;can-template&gt; elements."><code>&lt;can-slot&gt;</code></a> and <a href="can-component/can-template.html" title="Pass templates declaratively to components."><code>&lt;can-template&gt;</code></a>.</li>
+<li><a href="can-stache-converters.html" title="Provides a set of converters useful for two-way binding with form elements such as &lt;input&gt; and &lt;select&gt;.">can-stache-converters</a> for two-way binding with form elements.</li>
+<li><a href="https://v3.canjs.com/doc/can-stache.Whitespace.html">Control whitespace in stache templates.</a></li>
+<li>New validation packages: <a href="can-validate.html" title="Shared utilities and type definitions to process validation errors.">can-validate</a> and <a href="can-validate-validatejs.html" title="Create can-validate.validator functions using validate.js.">can-validate-validatejs</a>.</li>
+<li>Support for FeathersJS with [can-connect-feathers].</li>
+<li>NDJSON support: <a href="can-connect-ndjson.html" title="Get a list of data from an NDJSON service endpoint.">can-connect-ndjson</a> and <a href="can-ndjson-stream.html" title="Parses an NDJSON stream into a stream of JavaScript objects.">can-ndjson-stream</a>.</li>
+<li>No dependency on jQuery/Mootools/Dojo/etc. <a href="http://v3.canjs.com/doc/can-jquery.html">Integration with jQuery is still as easy as ever.</a></li>
+<li>Hundreds of other bug fixes and new features.</li>
+</ul>
+<h2>Pre-migration preparation</h2>
+<p>Before upgrading your project from 2.x to 3.x, make sure your project builds successfully and all the tests pass.</p>
+<p>Additionally, you can take the following steps in your CanJS 2.x app to prepare it for migrating to CanJS 3.</p>
+<h3>Use the module folders</h3>
+<p>You can start importing CanJS code in a modular way before moving to CanJS 3.</p>
+<p>For example, you might be using <a href="can-component.html" title="Create a custom element that can be used to manage widgets or application logic.">can-component</a> like this:</p>
+<pre><code class="language-js">import can from 'can';
+
+can.Component.extend({ /* ... */ });
+</code></pre>
+<p>Update your code to instead look like this:</p>
+<pre><code class="language-js">import Component from 'can/component/component';
+
+Component.extend({ /* ... */ });
+</code></pre>
+<p>Use the same pattern for the other modules you are using. Be careful when declaring names for imported modules that share a similar name to native objects like Map.</p>
+<p>Instead of:</p>
+<pre><code class="language-js">import Map from 'can/map/map'; // this local declaration of Map will collide with ECMAScript2015 [Map](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Map)
+</code></pre>
+<p>Write:</p>
+<pre><code class="language-js">import CanMap from 'can/map/map';
+</code></pre>
+<p>Here’s a list of all the <code>can.</code> properties in CanJS 2.3 that can be replaced with modular paths:</p>
+<ul>
+<li><code>can.autorender</code> — <code>can/view/autorender/autorender</code></li>
+<li><code>can.batch</code> — <code>can/event/batch/batch</code></li>
+<li><code>can.bindings</code> — <code>can/view/bindings/bindings</code></li>
+<li><code>can.Component</code> — <code>can/component/component</code></li>
+<li><code>can.compute</code> — <code>can/compute/compute</code></li>
+<li><code>can.Construct</code> — <code>can/construct/construct</code></li>
+<li><code>can.Control</code> — <code>can/control/control</code></li>
+<li><code>can.Deferred</code> — <code>can/util/deferred</code></li>
+<li><code>can.define</code> — <code>can/map/define</code></li>
+<li><code>can.deparam</code> — <code>can/util/string/deparam/deparam</code></li>
+<li><code>can.ejs</code> — <code>can/view/ejs/ejs</code></li>
+<li><code>can.event</code> — <code>can/event/event</code></li>
+<li><code>can.fixture</code> — <code>can/util/fixture</code></li>
+<li><code>can.isFunction</code> — <code>can/util/js/is-function/is-function</code></li>
+<li><code>can.LazyMap</code> — <code>can/map/lazy/lazy</code></li>
+<li><code>can.List</code> — <code>can/list/list</code></li>
+<li><code>can.Map</code> — <code>can/map/map</code></li>
+<li><code>can.Model</code> — <code>can/model/model</code></li>
+<li><code>can.Model.Cached</code> — <code>can/model/cached/cached</code></li>
+<li><code>can.mustache</code> — <code>can/view/mustache/mustache</code></li>
+<li><code>can.Object</code> — <code>can/util/object/object</code></li>
+<li><code>can.route</code> — <code>can/route/route</code></li>
+<li><code>can.stache</code> — <code>can/view/stache/stache</code></li>
+<li><code>can.util</code> — <code>can/util/util</code></li>
+<li><code>can.view.callbacks</code> — <code>can/view/callbacks/callbacks</code></li>
+</ul>
+<h3>Replace uses of <code>can.$</code></h3>
+<p><a href="//v2.canjs.com/docs/can.$.html"><code>can.$</code></a> allows you to access the underlying DOM library bundled with CanJS; for example, jQuery in <code>can.jquery.js</code>.</p>
+<p>You might be using it in your code to easily reference the library:</p>
+<pre><code class="language-js">import can from 'can';
+const body = can.$('body');
+</code></pre>
+<p>Update your code to explicitly require the library on which you depend. For example:</p>
+<pre><code class="language-js">import $ from 'jquery';
+const body = $('body');
+</code></pre>
+<h3>Set <code>leakScope</code> in components</h3>
+<p>CanJS 2.2 introduced <a href="can-component.prototype.leakScope.html" title="Allow reading the outer scope values from a component’s view and a component’s viewModel values in the user content.">leakScope: false</a> as a property on a <a href="can-component.html" title="Create a custom element that can be used to manage widgets or application logic.">can-component</a>. This prevents values in parent templates from leaking into your component’s template. In CanJS 3, <strong>leakScope</strong> is now <code>false</code> by default.</p>
+<p>If you have a template like:</p>
+<pre><code class="language-html">&lt;some-component&gt;&lt;/some-component&gt;
+</code></pre>
+<p>That you render with a <a href="can-map.html" title="Create observable objects.">map</a> containing a <code>page</code> property like so:</p>
+<pre><code class="language-js">render(new Map({
+    page: &quot;home&quot;
+}));
+</code></pre>
+<p>This <code>page</code> property is not available within <code>some-component</code>’s own template.</p>
+<p>If the component’s template looks like:</p>
+<pre><code class="language-html">&lt;h1&gt;Hello {{page}}&lt;/h1&gt;
+</code></pre>
+<p>It can only lookup the <code>page</code> property on <code>some-component</code>’s own <a href="can-component.prototype.ViewModel.html" title="Defines a class used to provide values and methods to the component’s view. The class is initialized with values specified by the component element’s data bindings.">ViewModel</a>. To restore the behavior in 2.x, simply set <a href="can-component.prototype.leakScope.html" title="Allow reading the outer scope values from a component’s view and a component’s viewModel values in the user content.">leakScope</a> to be <code>true</code> on the component:</p>
+<pre><code class="language-js">Component.extend({
+    tag: &quot;some-component&quot;,
+    ViewModel: { /* ... */ },
+    leakScope: true
+});
+</code></pre>
+<div line-highlight='4'></div>
+<h2>Minimal migration path</h2>
+<p>If you are already using <code>can</code> through npm, simply run the following command to install the latest version:</p>
+<pre><code>npm install can@3 --save
+</code></pre>
+<p>This will update your <code>package.json</code> to look something like this:</p>
+<pre><code class="language-js">{
+  // ...
+  &quot;dependencies&quot;: {
+    &quot;can&quot;: &quot;^6.6.1&quot;
+  }
+}
+</code></pre>
+<p>The <code>^</code> ensures you get minor and patch releases as those are released.</p>
+<p>At a minimum, to upgrade your code for CanJS 3, you must make all of the following changes to your code:</p>
+<h3>Use <code>can/legacy</code></h3>
+<p>In your code where you normally would import <code>can</code>, instead import <code>can/legacy</code>:</p>
+<pre><code class="language-js">import can from 'can/legacy';
+</code></pre>
+<p>This will give you a <code>can</code> object with <em>most</em> of the same APIs as in 2.3, with a few exceptions:</p>
+<ul>
+<li><a href="v2.canjs.com/docs/can.mustache.html">can.mustache</a> is not included with <code>can/legacy</code>, but it can still be installed as a <a href="https://www.npmjs.com/package/can-mustache">separate package</a>.</li>
+<li>The former <code>can.view</code> functionality no longer exists; see below for more details.</li>
+</ul>
+<h3>Asynchronous <code>inserted</code> &amp; <code>removed</code> events</h3>
+<p>In your <a href="can-component.html" title="Create a custom element that can be used to manage widgets or application logic.">can-component</a>s, the [can-util/dom/events/inserted/inserted inserted] and [can-util/dom/events/removed/removed] events were previously fired synchronously as the element was inserted or removed from the DOM. To improve performance, these events are now fired asynchronously.</p>
+<p>There is now a <a href="can-component/beforeremove.html" title="An event called only on component’s elements before they are removed from the document if live binding is performing the removal. It can be listened to
+within a component’s can-component.prototype.events object or on a component
+element with can-stache-bindings.event bindings.  This is an additional
+special event only on component elements. Check out events
+for other mutation events.">beforeremove</a> event that fires synchronously in case you need to perform memory cleanup. For example, you might need to access the parent’s viewModel:</p>
+<pre><code class="language-js">Component.extend({
+    tag: &quot;my-panel&quot;,
+
+    events: {
+        &quot;{element} beforeremove&quot;: function(){
+            canViewModel(this.element.parentNode).removePanel(this.viewModel);
+        }
+    }
+}
+</code></pre>
+<h3>Replace uses of <code>can.view</code></h3>
+<p>The <code>can.view</code> methods have been removed in CanJS 3. The most common use was to create a template renderer from a script element within the page.</p>
+<p>Instead of:</p>
+<pre><code class="language-js">let render = can.view('some-id');
+</code></pre>
+<p>Just use the DOM APIs and pass the string directly into <a href="can-stache.html" title="Live binding templates.">can-stache</a>:</p>
+<pre><code class="language-js">let templateString = document.getElementById('some-id').innerHTML;
+let render = stache(templateString);
+</code></pre>
+<p>If you were using <code>can.view</code> to load a template from a URL like so:</p>
+<pre><code class="language-js">let render = can.view('./template.stache');
+</code></pre>
+<p>We encourage you to use <a href="https://stealjs.com/">StealJS</a> with <a href="#Usingsteal_stachefortemplates">steal-stache</a>:</p>
+<pre><code class="language-js">import render from &quot;./template.stache&quot;;
+</code></pre>
+<p>Alternatively, use the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>:</p>
+<pre><code class="language-js">fetch(&quot;./todos.stache&quot;)
+    .then((resp) =&gt; stache(resp.text()))
+    .then((render) =&gt; /* use render */);
+</code></pre>
+<p>If you’re using another module loader (such as Browserify or webpack), check out <a href="guides/setup.html" title="Learn how to install CanJS in your environment.">Setting Up CanJS</a> for instructions on how to load templates.</p>
+<h4><code>can.view.preload</code></h4>
+<p>If you were using <code>can.view.preload</code> then use <a href="can-stache.registerPartial.html" title="Register a partial template that can be rendered with can-stache.tags.partial.">registerPartial</a> instead.</p>
+<pre><code class="language-js">stache.registerPartial(&quot;some-id&quot;, renderer);
+</code></pre>
+<h3>Replace uses of <code>can.Construct.proxy</code></h3>
+<p>The <code>can.Construct.proxy</code> method has been removed in favor of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind">Function.prototype.bind</a>.</p>
+<p>Instead of:</p>
+<pre><code class="language-js">this.proxy(randFunc)
+</code></pre>
+<p>You should now do this:</p>
+<pre><code class="language-js">randFunc.bind(this)
+</code></pre>
+<h3>Replace uses of <code>can.batch</code></h3>
+<p><code>can.batch</code> has been moved to the <code>can-event</code> module.</p>
+<p>Instead of:</p>
+<pre><code class="language-js">can.batch.method();
+</code></pre>
+<p>You should now do this:</p>
+<pre><code class="language-js">import canBatch from 'can-event/batch/batch';
+canBatch.method();
+</code></pre>
+<p>The <code>trigger</code> method has also been renamed to <code>dispatch</code>.</p>
+<pre><code class="language-js">can.batch.trigger(myObj, 'myEvent');
+</code></pre>
+<p>Becomes:</p>
+<pre><code class="language-js">canBatch.dispatch(myObj, 'myEvent');
+</code></pre>
+<h3>Replace uses of <code>can.isFunction</code></h3>
+<p><code>can.isFunction</code> has been moved to the <code>can-util</code> module.</p>
+<p>Instead of:</p>
+<pre><code class="language-js">can.isFunction(func);
+</code></pre>
+<p>You should now do this:</p>
+<pre><code class="language-js">import isFunction from 'can/util/js/is-function/is-function';
+isFunction(func);
+</code></pre>
+<h3><code>can.event</code></h3>
+<p>Some methods have been renamed in <code>can.event</code>.</p>
+<pre><code class="language-js">can.event.addEvent.call(el, 'click', function() {});
+can.event.removeEvent.call(el, 'click', function() {});
+</code></pre>
+<p>Becomes:</p>
+<pre><code class="language-js">can.event.addEventListener.call(el, 'click', function() {});
+can.event.removeEventListener.call(el, 'click', function() {});
+</code></pre>
+<h3><code>can.extend</code></h3>
+<p>This method has been split into two: a shallow and deep merge. Previously, passing <code>true</code> as the first parameter would do a deep merge. Now, you explicitly invoke the deep merge or shallow merge function.</p>
+<pre><code class="language-js">can.extend({}, { answer: 42 }); // shallow
+can.extend(true, {}, { answer: 42 }); // deep
+</code></pre>
+<p>Becomes:</p>
+<pre><code class="language-js">import assign from 'can-util/js/assign/assign';
+import deepAssign from 'can-util/js/deepAssign/deepAssign';
+assign({}, { answer: 42 }); // shallow
+deepAssign({}, { answer: 42 }); // deep
+</code></pre>
+<h3><code>can.addClass</code></h3>
+<p>This method now requires the DOM element to be the context of function.</p>
+<p>Replace this:</p>
+<pre><code class="language-js">can.addClass(el, 'myClass');
+</code></pre>
+<p>With this:</p>
+<pre><code class="language-js">import className from 'can-util/dom/class-name/class-name';
+className.add.call(el, 'myClass');
+</code></pre>
+<h3><code>can.append</code></h3>
+<p>This method now require the DOM element to be the context of function.</p>
+<p>Replace this:</p>
+<pre><code class="language-js">can.append(el, '&lt;p&gt;&lt;/p&gt;');
+</code></pre>
+<p>With this:</p>
+<pre><code class="language-js">import mutate from 'can-util/dom/mutate/mutate';
+mutate.append.call(el, '&lt;p&gt;&lt;/p&gt;');
+</code></pre>
+<h3><code>can.data</code></h3>
+<p>This method now requires the DOM element to be the context of function. It also has a separate method for getting and setting data.</p>
+<p>Replace this:</p>
+<pre><code class="language-js">can.data(el, 'something', 'secret'); // set
+can.data(el, 'something'); // get
+</code></pre>
+<p>With this:</p>
+<pre><code class="language-js">import domData from 'can-util/dom/data/data';
+domData.set.call(el, 'something', 'secret');
+domData.get.call(el, 'something');
+</code></pre>
+<h3>String methods</h3>
+<p>All string methods are grouped together now, so you only have to import the string utilities once.</p>
+<pre><code class="language-js">can.camelize('first-name');
+can.hyphenate('firstName');
+</code></pre>
+<p>Becomes:</p>
+<pre><code class="language-js">import string from 'can-util/js/string/string';
+
+string.camelize('first-name');
+string.hyphenate('firstName');
+</code></pre>
+<h3>Use native Promises</h3>
+<p>Native <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promises</a> are used instead of jQuery promises which means you need to:</p>
+<ul>
+<li>Include a Promise polyfill if targeting browsers that do not have native support. <a href="https://stealjs.com/">Steal</a> includes a polyfill for you.</li>
+<li>Use <code>.catch()</code> instead of <code>.fail()</code>.</li>
+<li>Use <code>.then()</code> instead of <code>.done()</code>.</li>
+</ul>
+<p>Note that only a single value is returned from a native Promise.</p>
+<h3>Passing the <code>this</code> value to a helper</h3>
+<p><a href="can-stache.html" title="Live binding templates.">can-stache</a> now passes a <a href="can-compute.html" title="Create an observable value.">can-compute</a> to <a href="can-stache.Helpers.html" title="Helpers are functions that can be registered and called from within templates.  These functions
+are typically used to provide functionality that is more appropriate for
+the view than the viewModel.">helpers</a>.</p>
+<p>If you were passing the <code>this</code> value to a helper like so:</p>
+<pre><code class="language-html">{{helper .}}
+</code></pre>
+<p>You can fix this either by having your helpers handle computes, or by using <a href="can-stache/expressions/call.html" title="">call expressions</a> instead:</p>
+<pre><code class="language-html">{{helper(.)}}
+</code></pre>
+<h3>No more global scope names</h3>
+<p>Most recently-built applications do not depend on adding to the global namespace, but in case you have code that does:</p>
+<pre><code class="language-js">Construct.extend(&quot;foo.bar&quot;, /* ... */)
+</code></pre>
+<p>Which sets <code>window.foo.bar</code>, this argument is no longer accepted by <a href="can-construct.html" title="Provides a way to easily use the power of prototypal inheritance
+without worrying about hooking up all the particulars yourself. Use
+can-construct.extend to create an inheritable
+constructor function of your own.">can-construct</a>. If you <em>really</em> need to set a global, you can do so yourself using the return value of <a href="can-construct.extend.html" title="">extend</a>.</p>
+<p>Instead, the first argument to <a href="can-construct.extend.html" title="">extend</a> is the name of the constructor function. This is nice for development as you’ll get named objects in your dev tools.</p>
+<p><a id="Usingsteal_stachefortemplates"></a></p>
+<h3>Using <code>steal-stache</code> for templates</h3>
+<p>If you use StealJS, you’ll need to install <a href="steal-stache.html" title="A StealJS extension that allows stache templates as dependencies.">steal-stache</a> to load your templates:</p>
+<pre><code>npm install steal-stache@3 --save
+</code></pre>
+<p>If you’re using StealJS 0.16, you don’t need to do anything else to make your templates load correctly.</p>
+<p>If you’re using StealJS 1, you also need to add <code>steal-stache</code> to the <code>plugins</code> configuration in your <code>package.json</code>:</p>
+<pre><code class="language-js">{
+  // ...
+  &quot;steal&quot;: {
+    // ...
+    &quot;plugins&quot;: [&quot;steal-stache&quot;]
+  }
+}
+</code></pre>
+<h3>Replace <code>template</code> with <code>view</code> in components</h3>
+<p>The <code>template</code> property name has been deprecated in favor of <code>view</code>.</p>
+<p>Instead of:</p>
+<pre><code class="language-js">import template from &quot;./todo.stache&quot;;
+Component.extend({
+    tag: &quot;some-component&quot;,
+    template: template
+});
+</code></pre>
+<div line-highlight='4'></div>
+<p>You should write:</p>
+<pre><code class="language-js">import view from &quot;./todo.stache&quot;;
+Component.extend({
+    tag: &quot;some-component&quot;,
+    view: view
+});
+</code></pre>
+<div line-highlight='4'></div>
+<h2>Modernized migration path</h2>
+<p>CanJS 3 is divided into separate npm packages. This allows us to more quickly update parts of CanJS without affecting other functionality.</p>
+<p>In addition to the above, take advantage of the individual packages by installing and using them directly to set your project up for easier upgrades in the future.</p>
+<p>For example, you might be using <a href="can-component.html" title="Create a custom element that can be used to manage widgets or application logic.">can-component</a> like either:</p>
+<pre><code class="language-js">import can from 'can';
+
+can.Component.extend({ /* ... */ });
+</code></pre>
+<p>or</p>
+<pre><code class="language-js">import Component from 'can/component/component';
+
+Component.extend({ /* ... */ });
+</code></pre>
+<p>Regardless of which you are using, update your code to instead look like:</p>
+<pre><code class="language-js">import Component from 'can-component';
+
+Component.extend({ /* ... */ });
+</code></pre>
+<p>Use the same pattern for the other <code>can</code> modules you are using. In general, you should not be using the <code>can.</code> properties any more, but rather importing (through your module loader / bundler) only the packages and modules that you are using.</p>
+<p>Here’s a list of all the paths in CanJS 2.3 that now have separate modules in CanJS 3:</p>
+<ul>
+<li><code>can/component/component</code> — <a href="can-component.html" title="Create a custom element that can be used to manage widgets or application logic.">can-component</a></li>
+<li><code>can/compute/compute</code> — <a href="can-compute.html" title="Create an observable value.">can-compute</a></li>
+<li><code>can/construct/construct</code> — <a href="can-construct.html" title="Provides a way to easily use the power of prototypal inheritance
+without worrying about hooking up all the particulars yourself. Use
+can-construct.extend to create an inheritable
+constructor function of your own.">can-construct</a></li>
+<li><code>can/construct/super</code> — <a href="can-construct-super.html" title="can.Construct.super is a plugin that makes it easier to call base
+functions from inside inheriting functions.">can-construct-super</a></li>
+<li><code>can/control/control</code> — <a href="can-control.html" title="Create organized, memory-leak free, rapidly performing, stateful controls with declarative event binding. Use Control to create UI
+controls like tabs, grids, and context menus,
+and organize them into higher-order business rules with
+can.route. It can serve as both a traditional view and a traditional controller.">can-control</a></li>
+<li><code>can/event/event</code> — [can-event]</li>
+<li><code>can/list/list</code> — <a href="can-list.html" title="">can-list</a></li>
+<li><code>can/map/backup</code> — [can-map-backup]</li>
+<li><code>can/map/define</code> — <a href="can-map-define.html" title="Defines the
+type, initial value, get, set, remove, and serialize behavior for attributes
+of a Map.">can-map-define</a></li>
+<li><code>can/map/map</code> — <a href="can-map.html" title="Create observable objects.">can-map</a></li>
+<li><code>can/model/model</code> — <a href="https://github.com/canjs/can-model">can-model</a></li>
+<li><code>can/route/pushstate/pushstate</code> — <a href="can-route-pushstate.html" title="An observable that can be used as can-route's can-route.urlData.">can-route-pushstate</a></li>
+<li><code>can/route/route</code> — <a href="can-route.html" title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">can-route</a></li>
+<li><code>can/util/fixture</code> — <a href="can-fixture.html" title="Intercept AJAX requests and simulate the response.">can-fixture</a></li>
+<li><code>can/util/string/deparam/deparam</code> — <a href="can-deparam.html" title="Deserialize a query string into an array or object.">can-deparam</a></li>
+<li><code>can/util/util</code> — [can-util]</li>
+<li><code>can/view/autorender/autorender</code> — <a href="can-view-autorender.html" title="A module that automatically renders script and other elements with
+the can-autorender attribute. This function is useful to know when the templates have finished rendering.">can-view-autorender</a></li>
+<li><code>can/view/callbacks/callbacks</code> — <a href="can-view-callbacks.html" title="Registered callbacks for behaviors">can-view-callbacks</a></li>
+<li><code>can/view/ejs/ejs</code> — [can-ejs]</li>
+<li><code>can/view/href/href</code> — [can-view-href]</li>
+<li><code>can/view/import/import</code> — <a href="can-view-import.html" title="">can-view-import</a></li>
+<li><code>can/view/live/live</code> — <a href="can-view-live.html" title="Setup live-binding between the DOM and a compute manually.">can-view-live	</a></li>
+<li><code>can/view/mustache/mustache</code> — <a href="https://github.com/canjs/can-mustache">can-mustache</a></li>
+<li><code>can/view/node_lists/node_lists</code> — <a href="https://github.com/canjs/can-view-nodelist">can-view-nodelist</a></li>
+<li><code>can/view/parser/parser</code> — <a href="can-view-parser.html" title="Parse HTML and mustache tokens.">can-view-parser</a></li>
+<li><code>can/view/scope/scope</code> — <a href="can-view-scope.html" title="Create a lookup node for keys.">can-view-scope</a></li>
+<li><code>can/view/stache/stache</code> — <a href="can-stache.html" title="Live binding templates.">can-stache</a></li>
+<li><code>can/view/target/target</code> — <a href="can-view-target.html" title="">can-view-target</a></li>
+</ul>
+<p><a id="Future_proofmigrationpath"></a></p>
+<h2>Latest &amp; greatest migration path</h2>
+<p>In addition to the steps taken in the two sections above, make the following changes to your application if you <em>really</em> want to stay ahead of the curve.</p>
+<h3>Move from <code>can-map</code> to <code>can-define</code></h3>
+<p>If you’ve used <a href="can-map-define.html" title="Defines the
+type, initial value, get, set, remove, and serialize behavior for attributes
+of a Map.">can-map-define</a> in the past, then using <a href="can-define.html" title="Defines observable properties and their behavior on a prototype object. This function is not commonly used directly. map
+and list are more commonly used. Types and
+behaviors shared by both map
+and list are documented here.">can-define</a> should be familiar to you. Using <a href="can-define/map/map.html" title="Create observable objects.">can-define/map/map</a> is the easiest migration path and is what we show in all of the examples in CanJS 3’s docs.</p>
+<p>A typical map looks like:</p>
+<pre><code class="language-js">import Map from 'can-map';
+import 'can-map-define';
+
+const CarOwner = Map.extend({
+    define: {
+        cars: {
+            Type: Car.List
+        },
+        favorite: {
+            Type: Car
+        },
+        color: {
+            type: &quot;string&quot;
+        },
+        age: {
+            value: 18
+        }
+    }
+});
+</code></pre>
+<p>Which can be replaced by flattening it into a <a href="can-define/map/map.html" title="Create observable objects.">can-define/map/map</a> like so:</p>
+<pre><code class="language-js">import DefineMap from 'can-define/map/map';
+
+const CarOwner = DefineMap.extend({
+    cars: Car.List,
+    favorite: Car,
+    color: &quot;string&quot;,
+    age: {
+        type: &quot;number&quot;,
+        value: 18
+    }
+});
+</code></pre>
+<p>Using <a href="can-define.html" title="Defines observable properties and their behavior on a prototype object. This function is not commonly used directly. map
+and list are more commonly used. Types and
+behaviors shared by both map
+and list are documented here.">can-define</a> allows you to use maps without the <a href="can-map.prototype.attr.html" title="Get or set properties on a Map.">.attr()</a> method that’s needed in <a href="can-map.html" title="Create observable objects.">can-map</a> and <a href="can-list.html" title="">can-list</a>. To use this with <a href="can-define/map/map.html" title="Create observable objects.">DefineMap</a>, just use the <code>.</code> (dot) operator instead:</p>
+<pre><code class="language-js">const carOwner = new CarOwner();
+
+// This is observable!
+carOwner.favorite = new Car({ make: &quot;Toyota&quot; });
+</code></pre>
+<p><strong>Note:</strong> With <code>can-map</code> you are able to assign initial values to a property while defining a <code>Map</code> like so:</p>
+<pre><code class="language-js">import CanMap from 'can-map';
+
+const Person = CanMap.extend({
+  name: &quot;Justin&quot;
+});
+</code></pre>
+<p>This shorthand in <code>can-define/map/map</code> defines the <a href="can-define.types.html" title="Specify a type to convert values to. Type coercion only applies when setting a property.
+All types leave null and undefined as is except for
+the &quot;htmlbool&quot; type converter.">type</a>, not the initial value.</p>
+<p>Here’s the example above updated for <code>can-define/map/map</code>:</p>
+<pre><code class="language-js">import DefineMap from 'can-define/map/map';
+
+const Person = DefineMap.extend({
+  name: {value: &quot;Justin&quot;}
+});
+</code></pre>
+<h4>Remove use of <code>change</code> events</h4>
+<p>When you upgrade to use <a href="can-define.html" title="Defines observable properties and their behavior on a prototype object. This function is not commonly used directly. map
+and list are more commonly used. Types and
+behaviors shared by both map
+and list are documented here.">can-define</a>, you’ll no longer receive <code>change</code> events on maps. If you had any code that binded to a map’s <code>change</code> event, you’ll want to instead bind to the properties that you are interested in.</p>
+<p>For example:</p>
+<pre><code class="language-js">route.bind(&quot;change&quot;, function(){
+    // The route changed
+});
+</code></pre>
+<p>Can be modified to instead use a compute that calls <code>serialize</code> on the route’s map:</p>
+<pre><code class="language-js">let routeMap = compute(function(){
+    return route.map.serialize();
+});
+
+routeMap.bind(&quot;change&quot;, function(){
+    // A property on the route’s map changed.
+});
+</code></pre>
+<p>As you might notice, [can-event.on on()] is preferable to <code>bind()</code>, although <code>bind()</code> still works the same.</p>
+<h3>Use <code>can-connect</code> directly</h3>
+<p>When using the easy migration path, you were secretly using [can-connect/can/model/model], a constructor that is mostly backwards-compatible with <a href="//v2.canjs.com/docs/can.Model.html">can-model</a>.</p>
+<p>Most new projects should use <a href="can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a> directly. <a href="can-connect/can/super-map/super-map.html" title="Create connection with many of the best behaviors in can-connect and hook it up to
+a map.">can-connect/can/super-map/super-map</a> is the easiest way to create models with <code>can-connect</code>’s features. Using <code>can-connect</code> directly allows you to use <a href="can-define/map/map.html" title="Create observable objects.">can-define/map/map</a>s as your models like so:</p>
+<pre><code class="language-js">import DefineMap from 'can-define/map/map';
+import DefineList from 'can-define/list/list';
+import superMap from 'can-connect/can/super-map/super-map';
+
+const Message = DefineMap.extend({
+    id: &quot;*&quot;
+});
+
+Message.List = DefineList.extend({
+    &quot;#&quot;: Message
+});
+
+const messageConnection = superMap({
+    url: 'https://chat.donejs.com/api/messages',
+    idProp: 'id',
+    Map: Message,
+    List: Message.List,
+    name: 'message'
+});
+</code></pre>
+<h2>Avoid future deprecations &amp; removals</h2>
+<h3>Wrap elements in jQuery objects</h3>
+<p>If you are using [can-jquery/legacy] to automatically get jQuery-wrapped elements in <a href="can-control.html" title="Create organized, memory-leak free, rapidly performing, stateful controls with declarative event binding. Use Control to create UI
+controls like tabs, grids, and context menus,
+and organize them into higher-order business rules with
+can.route. It can serve as both a traditional view and a traditional controller.">can-control</a> event handlers, you’ll want to remove the usage of [can-jquery/legacy] as it doesn’t play well with <a href="can-component.html" title="Create a custom element that can be used to manage widgets or application logic.">can-component</a>s that do not expect elements to be jQuery-wrapped.</p>
+<p>Instead, use [can-jquery] directly and handle the wrapping yourself. For example:</p>
+<pre><code class="language-js">import Component from 'can-component';
+import $ from 'can-jquery';
+
+Component.extend({
+    tag: &quot;some-component&quot;,
+
+    events: {
+        inserted: function(){
+            this.element = $(this.element);
+        },
+        &quot;li click&quot;: function(li){
+            let $li = $(li);
+        }
+    }
+});
+</code></pre>
+<p>[can-jquery] will continue to be supported indefinitely but [can-jquery/legacy] will be dropped in a future major version.</p>
+<h3>Use the new binding syntax</h3>
+<p>CanJS 2.3 introduced new binding syntaxes. They’re available in CanJS 3 with <a href="can-stache-bindings.html" title="Listen to events and create one-way and two-way bindings.">can-stache-bindings</a>. Although the old binding syntaxes still work, they will likely be dropped in 4.0. View <a href="can-stache-bindings.html" title="Listen to events and create one-way and two-way bindings.">can-stache-bindings</a>’s documentation to learn how to use the new binding syntax.</p>
+<p>An example is changing a <code>can-value</code> binding from:</p>
+<pre><code class="language-html">&lt;input type=&quot;text&quot; can-value=&quot;{someProp}&quot; /&gt;
+</code></pre>
+<p>To:</p>
+<pre><code class="language-html">&lt;input type=&quot;text&quot; value:bind=&quot;someProp&quot; /&gt;
+</code></pre>
+<p>CanJS 3 also introduces new <a href="can-stache.registerConverter.html" title="Register a helper for bidirectional value conversion.">stache converters</a>, which are special two-way <a href="can-stache.Helpers.html" title="Helpers are functions that can be registered and called from within templates.  These functions
+are typically used to provide functionality that is more appropriate for
+the view than the viewModel.">helpers</a> that update an element when an observable value changes and update the observable value when the form element’s value changes (from user input).</p>
+<p>An example is the <a href="can-stache-converters.string-to-any.html" title="A converter that binds a value to a primitive value, two-way converted back to that primitive value when the attribute changes.">string-to-any</a> converter, which converts a primitive value to a string to set a <code>&lt;select&gt;</code>’s value, and then converts the <code>&lt;select&gt;</code> value when a user selects an <code>&lt;option&gt;</code> back to the primitive value to update the scope value:</p>
+<pre><code class="language-html">&lt;select value:bind=&quot;string-to-any(~favePlayer)&quot;&gt;
+    &lt;option value=&quot;23&quot;&gt;Michael Jordan&lt;/option&gt;
+    &lt;option value=&quot;32&quot;&gt;Magic Johnson&lt;/option&gt;
+&lt;/select&gt;
+</code></pre>
+<h3>Use bracket syntax in route definitions.</h3>
+<p>CanJS 3 routes use the <code>{part}</code> syntax instead of <code>:part</code>. Replace the use of the colon syntax which is deprecated and will be removed in a future release.</p>
+<p>Replace:</p>
+<pre><code class="language-js">import route from &quot;can-route&quot;;
+
+route(&quot;:page&quot;, { page: &quot;home&quot; });
+</code></pre>
+<p>with:</p>
+<pre><code class="language-js">import route from &quot;can-route&quot;;
+
+route(&quot;{page}&quot;, { page: &quot;home&quot; });
+</code></pre>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/upgrade/migrating-to-canjs-3.md"},"description":"This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3. \n","name":"migrate-3","title":"Migrating to CanJS 3","type":"page","parent":"guides/upgrade","order":0,"templateRender":["<%","%>"],"outline":{"depth":0},"comment":" ","pathToRoot":".."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="./static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix="."></div>
+
+	</body>
+</html>

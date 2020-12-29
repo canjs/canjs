@@ -1,0 +1,22 @@
+<div class="tab-description plugins">
+	<div class="pull-right categories">
+		<a href="http://bithub.com/app/" class="button">+ Add your App</a>
+		<ul>
+			<li><a href="http://bithub.com/article/">Articles</a></li>
+			<li><a href="http://bithub.com/app/">Apps</a></li>
+			<li><a href="http://bithub.com/plugin/">Plugins</a></li>
+		</ul>
+	</div>
+	<div class="posts">
+		<h1>Top Articles, Apps, &amp; Plugins</h1>
+		<div class="bithub-content">
+		{{#plugins}}
+		{{>docs/static/templates/plugin.mustache}}
+		{{/plugins}}
+		{{^plugins}}
+		<div class="loading"/>
+		{{/plugins}}
+		</div>
+	</div>
+	<br class="clear" />
+</div><!-- .tab-description -->

@@ -1,0 +1,32 @@
+/**
+* @stylesheet ie.less IE Corrections
+* @parent Styles.other
+*
+* @description
+* These styles are to correct the display differences specific to Internet Explorer.
+**/
+
+.ie {
+	.search:before {
+	  font-family: Bitstrap;
+	  content: "\e012";
+	  display: block;
+	  position: absolute;
+	  left: 17px;
+	  color: @haze;
+	} 
+	.sidebar .api li li.active > a, 
+	.sidebar .api li li.active > a:hover,
+	.sidebar .api li li.active > a:before,
+	.sidebar .api li li.active > a:before {
+		background-image: none;
+		background-color: @clear;
+		background: @clear;
+	}
+	.sidebar .api li li.active > a:before,
+	.sidebar .api li li.active > a:before {
+		display: none;
+	}
+	
+}
+

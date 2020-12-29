@@ -1,0 +1,1 @@
+steal('nocallback/other.js');

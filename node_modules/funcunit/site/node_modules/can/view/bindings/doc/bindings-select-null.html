@@ -1,0 +1,46 @@
+<div id="demo">
+<div id='out'></div>
+<script type='text/stache' id="attending-template">
+<p>Attending? 
+  <select {($value)}='attending'>
+	  <option value='yes'>Yes</option>
+	  <option value='no'>No</option>
+	  <option value='maybe'>Maybe</option>
+  </select>
+</p>
+<p>{{attending}}.</p>
+</script>
+</div>
+<script>
+	DEMO_HTML = document.getElementById("demo").innerHTML;
+</script>
+<script src="../../../node_modules/steal/steal.js" main="@empty"></script>
+<script>
+steal("can/view/bindings", "can/view/stache", "can/map/define",function(){
+	
+Person = can.Map.extend({
+	define: {
+		attending: {
+			set: function(newVal){
+				if(newVal === "") {
+					this.removeAttr("attending");
+					return undefined;
+				} else {
+					return newVal;
+				}
+			}
+		}
+	}
+});
+	
+person = new Person({
+	attending: null
+});
+
+var frag = can.view( "attending-template", person);
+
+$("#out").html( frag );
+
+});
+</script>
+

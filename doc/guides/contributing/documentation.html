@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/contribute/improving-the-docs-and-site.md
+	@page guides/contributing/documentation
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Improving the Docs &amp; Site | Contributing | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="Learn how to improve CanJS’s site and documentation.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Learn how to improve CanJS’s site and documentation.">
+	<meta property="og:title" content="Improving the Docs &amp; Site | Contributing | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "Learn how to improve CanJS’s site and documentation.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Improving the Docs &amp; Site | Contributing | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/contributing/documentation" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="project-organization.html"
+							title="Learn about how CanJS is organized.">
+							Project Organization
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="bug-report.html"
+							title="Learn how to submit a bug report.">
+							Reporting Bugs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="feature-suggestion.html"
+							title="Learn how to suggest a feature.">
+							Suggesting Features
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="finding-ways-to-contribute.html"
+							title="There are many ways to contribute to CanJS, whether you’re a developer who wants to code, a designer who can help improve the design and usability of our projects, or someone who’s interested in helping other members of the community.">
+							Finding Ways to Contribute
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="developing-locally.html"
+							title="Learn how to set up your development environment, get the code, and verify that it’s working.">
+							Developing Locally
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="code.html"
+							title="Learn how to contribute a code change to CanJS. Read the adding-ecosystem-modules guide on how to make a plugin to CanJS.">
+							Changing the Code
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="documentation.html"
+							title="Learn how to improve CanJS’s site and documentation.">
+							Improving the Docs &amp; Site
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="site-style-guide.html"
+							title="Learn about the website’s design and styles.">
+							Site Style Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="adding-ecosystem-modules.html"
+							title="Learn how to add a new package to the CanJS toolkit.">
+							Making a New Package
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="api-design-guidelines.html"
+							title="Learn how to design APIs which are consistent with CanJS.">
+							API Design Guidelines
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="releases.html"
+							title="Release and hosting information for CanJS maintainers.">
+							Releasing CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="updating-the-site.html"
+							title="How to update the CanJS website.">
+							Updating the Site
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="evangelism.html"
+							title="Learn about resources that can help you spread the word about CanJS.">
+							Evangelism
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Improving the Docs &amp; Site</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/contribute/improving-the-docs-and-site.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Learn how to improve CanJS’s site and documentation.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <h2>Overview</h2>
+<p>The CanJS site is generated with <a href="https://github.com/bit-docs/bit-docs">bit-docs</a>,
+a modified version of <a href="https://documentjs.com">DocumentJS</a>.  Its
+content is hosted using GitHub pages publishing the <a href="https://github.com/canjs/canjs/tree/gh-pages">canjs/canjs#gh-pages</a> repo.</p>
+<p><code>bit-docs</code> reads JavaScript comments and markdown files within the <code>canjs</code> repo as well as
+the individual repositories within <code>node_modules</code> to produce a static site.</p>
+<p>The high level content (Ex: homepage) and the guides content for the site is within the
+<code>canjs/docs</code> folder.  Individual repositories contain their own markdown and commented
+JavaScript files used to produce their API pages.</p>
+<h2>Generate the documentation locally</h2>
+<p>First, follow the steps listed under <a href="developing-locally.html" title="Learn how to set up your development environment, get the code, and verify that it’s working.">Developing Locally</a> to
+fork &amp; clone the repository, install the dependencies, build the documentation,
+and view the site locally.</p>
+<h2>Improve the theme’s design and styles</h2>
+<p>The CanJS theme is in
+<a href="https://github.com/canjs/bit-docs-html-canjs">bit-docs-html-canjs</a>. Its
+<a href="https://github.com/canjs/bit-docs-html-canjs/blob/master/readme.md">README</a>
+has instructions on how to test out the theme.  Once the theme is updated and published,</p>
+<ol>
+<li>Open <code>canjs/package.json</code>. Update <code>bit-docs-html-canjs</code>’s version to the new theme version.</li>
+<li>Run <code>npm run document</code> to make sure the theme is correctly applied.</li>
+</ol>
+<p>The <a href="https://drive.google.com/open?id=0B9uYesPecByGZGkzc2YxRHA4ZEE">CanJS design folder</a>
+has logos, stickers, and other design resources.</p>
+<h2>Test out content from other repos</h2>
+<p>As noted above, the API docs from each package come from that package.  So if you’re
+improving the docs for say <code>can-compute</code>, you want to see what <code>can-compute</code>’s docs look like,
+install your local <code>can-compute</code> and re-run bit-docs like:</p>
+<pre><code class="language-shell">npm install ../can-compute &amp;&amp; npm run document
+</code></pre>
+<h2>Publish the documentation</h2>
+<p>Once the docs look right locally, commit your changes, then run:</p>
+<pre><code class="language-shell">make
+</code></pre>
+<p>The make script will generate the documentation again and push out the <code>gh-pages</code> branch.</p>
+<h2>Writing API documentation</h2>
+<p>Our documentation is modeled off of jQuery’s.  Please read
+their <a href="https://github.com/jquery/api.jquery.com/blob/master/README.md">guidelines</a>. Also read our
+<a href="../api.html" title="This page walks through how to use and understand CanJS’s API documentation.">Reading the API Docs</a>.</p>
+<p>Generally speaking there are three parts to every documentation page:</p>
+<ul>
+<li>Its description</li>
+<li>Its signatures</li>
+<li>The body (typically &quot;Use&quot; section)</li>
+</ul>
+<h3>Description</h3>
+<p>The description section should be a one or two sentence explanation of what this
+piece of documentation does from a <em>user</em>-centric view.  Descriptions are a quick summary
+of the <strong>why</strong> and the <strong>what</strong>. It should take on an
+active voice.  For example, <a href="../../can-component.html" title="Create a custom element that can be used to manage widgets or application logic.">can-component</a>’s description:</p>
+<blockquote>
+<p>Create a custom element that can be used to manage widgets or application logic.</p>
+</blockquote>
+<p>Notice that it uses &quot;Create&quot; not &quot;Creates&quot;.</p>
+<h3>Signatures</h3>
+<p>Signatures are the <strong>what</strong> and the <strong>how</strong>.  They should include all or most of the following:</p>
+<ul>
+<li><strong>What the signature does</strong>, if different from the description, especially if there are
+multiple signatures.</li>
+<li>High level details on <strong>how the code works</strong>.</li>
+<li>A simple example showing <strong>how to use the code</strong>.</li>
+</ul>
+<p><a href="../../can-compute.html" title="Create an observable value.">can-compute</a>’s first signature is a good example of this. First, it explains
+<strong>what that signature does</strong>:</p>
+<blockquote>
+<p>Create a compute that derives its value from other observables.</p>
+</blockquote>
+<p>Then it briefly explains <strong>how the code works</strong>:</p>
+<blockquote>
+<p>Uses can-observation to call the getterSetter and track observables.</p>
+</blockquote>
+<p>Finally, it provides minimal sample code:</p>
+<pre><code class="language-js">let age = compute(32);
+
+let nameAndAge = compute(function(){
+    return &quot;Matthew - &quot; + age();
+});
+
+nameAndAge() // -&gt; &quot;Matthew - 32&quot;
+
+age(33);
+
+nameAndAge() // -&gt; &quot;Matthew - 33&quot;
+</code></pre>
+<p>Not all signatures need to hit all three points.  For example [can-event/batch/batch]’s
+signature simply adds a bit more depth to the purpose of [can-event/batch/batch]
+and then details <strong>how the code works</strong>.  <strong>How to use the code</strong> is
+left for the <code>body</code> section as importing the module is not necessary to show.</p>
+<p>Signature titles should follow jQuery’s conventions:</p>
+<ul>
+<li>Static methods like: <code>TypeAlias.method()</code></li>
+<li>Prototype methods like: <code>typeAlias.method()</code></li>
+<li>Spaces in between arguments: <code>typeAlias.method( arg1, arg2 )</code></li>
+<li>Brackets around optional args: <code>typeAlias.method( arg1 [, arg2 ], arg3 )</code> or
+<code>typeAlias.method( arg1 [, arg2 ][, arg3 ] )</code></li>
+</ul>
+<p>Make sure to fully document the a signature’s parameters and return
+value.  There’s a lot of flexibility in documenting the <a href="https://documentjs.com/docs/documentjs.typeExpression.html">type expression</a> of
+a return value or parameters and the <a href="https://documentjs.com/docs/documentjs.nameExpression.html">name expression</a> of
+parameters.</p>
+<ul>
+<li>Parameter and descriptions should start with a <code>Capital</code> and end with a period like:
+<code>@param {Type} name Indicates that something should happen.</code></li>
+</ul>
+<h3>Body</h3>
+<p>Most body sections start with a <code>## Use</code> subsection.  This is a mini guide on
+how to use that piece of code.  Modules should have long bodies that span
+multiple topics.  For example <a href="../../can-component.html" title="Create a custom element that can be used to manage widgets or application logic.">can-component</a>’s body has examples and
+information about nearly all of its sub-functions.  However
+<a href="../../can-component.prototype.tag.html" title="Specifies the HTML tag (or node-name) the can-component will be created on.">can-component.prototype.tag</a> doesn’t have a
+use section because it’s covered in <a href="../../can-component.html" title="Create a custom element that can be used to manage widgets or application logic.">can-component</a>.</p>
+<h3>Structuring documentation</h3>
+<ul>
+<li>Group names (like <code>prototype</code>) should be lower case.</li>
+<li>Types should be capitalized <code>{String}</code> except when they are describing a function <a href="../../can-fixture.requestHandler.html" title="Defines the XHR response for a given trapped request.">requestHandler</a>.</li>
+</ul>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/contribute/improving-the-docs-and-site.md"},"description":"Learn how to improve CanJS’s site and documentation. \n","name":"guides/contributing/documentation","title":"Improving the Docs & Site","type":"page","parent":"guides/contribute","order":6,"comment":" ","pathToRoot":"../../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix="../.."></div>
+
+	</body>
+</html>

@@ -1,0 +1,4097 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: node_modules/can-query-logic/doc/can-query-logic.md
+	@module can-query-logic
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>can-query-logic | Data Modeling | API Docs | CanJS</title>
+	<meta name="description" content="Perform data queries and compare queries against each other. Provides logic useful for data caching and real-time behavior.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Perform data queries and compare queries against each other. Provides logic useful for data caching and real-time behavior.">
+	<meta property="og:title" content="can-query-logic | Data Modeling | API Docs | CanJS">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "git://github.com/canjs/can-query-logic.git",
+			"description": "Perform data queries and compare queries against each other. Provides logic useful for data caching and real-time behavior.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "can-query-logic | Data Modeling | API Docs | CanJS",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "1.2.2"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="./static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="can-query-logic" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="guides/contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>Observables</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-bind.html"
+							title="Updates one observable value with the value of another observable.">
+							can-bind
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-compute.html"
+							title="Create an observable value.">
+							can-compute
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-debug.html"
+							title="Useful debugging utilities.">
+							can-debug
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-deep-observable.html"
+							title="Create observable objects where nested objects and arrays are also observable.">
+							can-deep-observable
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define.html"
+							title="Defines observable properties and their behavior on a prototype object. This function is not commonly used directly. map and list are more commonly used. Types and behaviors shared by both map and list are documented here.">
+							can-define
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define/list/list.html"
+							title="Create observable lists.">
+							can-define/list/list
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define/map/map.html"
+							title="Create observable objects.">
+							can-define/map/map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-backup.html"
+							title="">
+							can-define-backup
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-stream.html"
+							title="Add useful stream conversion methods to a supplied map or list constructor using a stream interface such as can-stream-kefir.">
+							can-define-stream
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-stream-kefir.html"
+							title="Export a function that takes a map or list constructor and uses can-stream-kefir to create streamable properties.">
+							can-define-stream-kefir
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-event-queue.html"
+							title="Mixin observable behavior to your types.">
+							can-event-queue
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-kefir.html"
+							title="Integrate KefirJS streams directly within can-stache and other parts of CanJS.">
+							can-kefir
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-list.html"
+							title="">
+							can-list
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-map.html"
+							title="Create observable objects.">
+							can-map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-map-compat.html"
+							title="can-map-compat">
+							can-map-compat
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-map-define.html"
+							title="Defines the type, initial value, get, set, remove, and serialize behavior for attributes of a Map.">
+							can-map-define
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observable-array.html"
+							title="Create observable arrays with defined properties.">
+							can-observable-array
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observable-object.html"
+							title="Create observable objects used to manage state in explicitly defined ways.">
+							can-observable-object
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observation.html"
+							title="Create observable values that derive their value from other observable values.">
+							can-observation
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observation-recorder.html"
+							title="Specify how to listen to changes in a value being read and record those specifications between two points in time. Record observables being read and indicate how to listen to changes in a value being read.">
+							can-observation-recorder
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observe.html"
+							title="Create observable objects, arrays, and functions that work like plain JavaScript objects, arrays, and functions.">
+							can-observe
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-simple-map.html"
+							title="A performant live-bound map.">
+							can-simple-map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-simple-observable.html"
+							title="Create an observable value.">
+							can-simple-observable
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stream.html"
+							title="Create useful stream methods from a minimal stream wrapper implementation.">
+							can-stream
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stream-kefir.html"
+							title="Convert observable values into streams. Kefir is used to provide the stream functionality.">
+							can-stream-kefir
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-value.html"
+							title="Get an observable that’s bound to a specific property on another object.">
+							can-value
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Views</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-attribute-observable.html"
+							title="Create an observable value from an element&#x27;s property or attribute.">
+							can-attribute-observable
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-component.html"
+							title="Create a custom element that can be used to manage widgets or application logic.">
+							can-component
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observable-bindings.html"
+							title="">
+							can-observable-bindings
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache.html"
+							title="Live binding templates.">
+							can-stache
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-bindings.html"
+							title="Listen to events and create one-way and two-way bindings.">
+							can-stache-bindings
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-converters.html"
+							title="Provides a set of converters useful for two-way binding with form elements such as &lt;input&gt; and &lt;select&gt;.">
+							can-stache-converters
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-element.html"
+							title="Create a custom element with ObservableObject-like properties and stache views.">
+							can-stache-element
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-route-helpers.html"
+							title="Adds routeUrl and routeCurrent helpers to stache.">
+							can-stache-route-helpers
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-autorender.html"
+							title="A module that automatically renders script and other elements with the can-autorender attribute. This function is useful to know when the templates have finished rendering.">
+							can-view-autorender
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-callbacks.html"
+							title="Registered callbacks for behaviors">
+							can-view-callbacks
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-import.html"
+							title="">
+							can-view-import
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-live.html"
+							title="Setup live-binding between the DOM and a compute manually.">
+							can-view-live
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-model.html"
+							title="Gets the ViewModel of an element.">
+							can-view-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-parser.html"
+							title="Parse HTML and mustache tokens.">
+							can-view-parser
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-scope.html"
+							title="Create a lookup node for keys.">
+							can-view-scope
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-target.html"
+							title="">
+							can-view-target
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="steal-stache.html"
+							title="A StealJS extension that allows stache templates as dependencies.">
+							steal-stache
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Data Modeling</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-connect.html"
+							title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">
+							can-connect
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-connect-ndjson.html"
+							title="Get a list of data from an NDJSON service endpoint.">
+							can-connect-ndjson
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-connect-tag.html"
+							title="Create custom elements that can be used to retrieve model instances.">
+							can-connect-tag
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-realtime-rest-model.html"
+							title="Connect a type to a restful data source and automatically manage lists.">
+							can-define-realtime-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-rest-model.html"
+							title="Connect a type to a restful service layer.">
+							can-define-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-fixture.html"
+							title="Intercept AJAX requests and simulate the response.">
+							can-fixture
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-fixture-socket.html"
+							title="Simulate socket.io services.">
+							can-fixture-socket
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-local-store.html"
+							title="Create, update, delete and query data saved in localStorage.">
+							can-local-store
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-memory-store.html"
+							title="Create, update, delete and query data saved in memory.">
+							can-memory-store
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-ndjson-stream.html"
+							title="Parses an NDJSON stream into a stream of JavaScript objects.">
+							can-ndjson-stream
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						parent
+           						expanded">
+						<a class="module"
+							href="can-query-logic.html"
+							title="Perform data queries and compare queries against each other. Provides logic useful for data caching and real-time behavior.">
+							can-query-logic
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>prototype</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.prototype.count.html"
+							title="Return the number of records in a query.">
+							count
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.prototype.difference.html"
+							title="Return a query representing the values that are in one set that are not in the another set.">
+							difference
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.prototype.filterMembers.html"
+							title="Filter data using a query.">
+							filterMembers
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.prototype.filterMembersAndGetCount.html"
+							title="Filter data using a query and get the number of records that would be returned without pagination.">
+							filterMembersAndGetCount
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.prototype.identityKeys.html"
+							title="Return the identity keys.">
+							identityKeys
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.prototype.index.html"
+							title="returns the index where the record will be input.">
+							index
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.prototype.intersection.html"
+							title="Return a query that represents the intersection of two queries.">
+							intersection
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.prototype.isDefinedAndHasMembers.html"
+							title="Return if a query can have records.">
+							isDefinedAndHasMembers
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.prototype.isEqual.html"
+							title="Return if two queries represent the same data.">
+							isEqual
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.prototype.isMember.html"
+							title="Return if a record belongs to a query.">
+							isMember
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.prototype.isProperSubset.html"
+							title="Return if a query is a strict subset of another set.">
+							isProperSubset
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.prototype.isSpecial.html"
+							title="Return if a query is a special query.">
+							isSpecial
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.prototype.isSubset.html"
+							title="Return if a query is a subset of another set.">
+							isSubset
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.prototype.union.html"
+							title="Perform a union of two queries.">
+							union
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.prototype.unionMembers.html"
+							title="Unifies records from two queries.">
+							unionMembers
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>query format</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-query-logic/query.html"
+							title="The default structure of objects used to represent queries.">
+							Query
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-query-logic/comparison-operators.html"
+							title="The comparison operators available to the default query.">
+							Comparison Operators
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>static methods</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.defineComparison.html"
+							title="">
+							defineComparison
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.set.difference.html"
+							title="Perform a difference of set types.">
+							set.difference
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.set.intersection.html"
+							title="Perform an intersection of set types.">
+							set.intersection
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.set.union.html"
+							title="Perform a union of set types.">
+							set.union
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>static types</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-query-logic.EMPTY.html"
+							title="Represents the empty set.">
+							EMPTY
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.KeysAnd.html"
+							title="Create a logical AND of keys and their values.">
+							KeysAnd
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-query-logic.UNDEFINABLE.html"
+							title="Represents a set that contains values, but can not be defined and is not the can-query-logic.UNIVERSAL set.">
+							UNDEFINABLE
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-query-logic.UNIVERSAL.html"
+							title="Represents the universal set.">
+							UNIVERSAL
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-query-logic.UNKNOWABLE.html"
+							title="Represents a non-answer.">
+							UNKNOWABLE
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-query-logic.makeEnum.html"
+							title="Create a schema type that represents a finite set of values.">
+							makeEnum
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-realtime-rest-model.html"
+							title="Connect a type to a restful data source and automatically manage lists.">
+							can-realtime-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-rest-model.html"
+							title="Connect a type to a restful service layer.">
+							can-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-set-legacy.html"
+							title="can-set-legacy supports a legacy can-set API that creates a can-query-logic instance.">
+							can-set-legacy
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-super-model.html"
+							title="Connect a type to a restful data source, automatically manage lists, combine requests, and use a fall-through localstorage cache.">
+							can-super-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Routing</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-deparam.html"
+							title="Deserialize a query string into an array or object.">
+							can-deparam
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-param.html"
+							title="Serialize an object or array into a query string.">
+							can-param
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route.html"
+							title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">
+							can-route
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route-hash.html"
+							title="An observable that is cross bound to the window.location.hash.">
+							can-route-hash
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route-mock.html"
+							title="Simulate routing without having to change the URL.">
+							can-route-mock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route-pushstate.html"
+							title="An observable that can be used as can-route&#x27;s can-route.urlData.">
+							can-route-pushstate
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>JS Utilities</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-assign.html"
+							title="A simplified version of Object.assign, which only accepts a single source argument.">
+							can-assign
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-lazy-value.html"
+							title="can-define-lazy-value">
+							can-define-lazy-value
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-diff.html"
+							title="Utilities for comparing and applying differences between data structures.">
+							can-diff
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-globals.html"
+							title="An environment agnostic container for global variables. Useful for testing and server-side rendering (SSR), typically used internally by CanJS.">
+							can-globals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-join-uris.html"
+							title="Join together a URI path to a base.">
+							can-join-uris
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-key.html"
+							title="Utilities that read and write nested properties on objects and arrays.">
+							can-key
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-key-tree.html"
+							title="Store values in a tree structure.">
+							can-key-tree
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-make-map.html"
+							title="Convert a comma-separated string into a plain JavaScript object.">
+							can-make-map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-parse-uri.html"
+							title="can-parse-uri">
+							can-parse-uri
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-queues.html"
+							title="A light weight queue system for scheduling tasks.">
+							can-queues
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-string.html"
+							title="String utilities.">
+							can-string
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-string-to-any.html"
+							title="Turns a string representation of a primitive type back into the associated primitive.">
+							can-string-to-any
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>DOM Utilities</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-ajax.html"
+							title="Make an asynchronous HTTP (AJAX) request.">
+							can-ajax
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-attribute-encoder.html"
+							title="Encode and decode attribute names.">
+							can-attribute-encoder
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-child-nodes.html"
+							title="">
+							can-child-nodes
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-control.html"
+							title="Create organized, memory-leak free, rapidly performing, stateful controls with declarative event binding. Use Control to create UI controls like tabs, grids, and context menus, and organize them into higher-order business rules with can.route. It can serve as both a traditional view and a traditional controller.">
+							can-control
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-dom-data.html"
+							title="Associate key/value pair data with a DOM node in a memory-safe way.">
+							can-dom-data
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-dom-events.html"
+							title="Listen to DOM events and special events, and register special events.">
+							can-dom-events
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-dom-mutate.html"
+							title="Dispatch and listen for DOM mutations.">
+							can-dom-mutate
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-event-dom-enter.html"
+							title="Watch for when enter keys are pressed on a DomEventTarget.">
+							can-event-dom-enter
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-event-dom-radiochange.html"
+							title="A custom event for listening to changes of inputs with type &quot;radio&quot;, which fires when a conflicting radio input changes. A &quot;conflicting&quot; radio button has the same &quot;name&quot; attribute and exists within in the same form, or lack thereof. This event coordinates state bound to whether a radio is checked. The &quot;change&quot; event does not fire for deselected radios. By using this event instead, deselected radios receive notification.">
+							can-event-dom-radiochange
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-fragment.html"
+							title="Convert a String, HTMLElement, documentFragment, contentArray, or object with a can.toDOM symbol into a documentFragment.">
+							can-fragment
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Data Validation</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-type.html"
+							title="Define types that can verify values are of the correct type, or convert values to the correct type.">
+							can-type
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate.html"
+							title="Shared utilities and type definitions to process validation errors.">
+							can-validate
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate-interface.html"
+							title="can-validate-interface provides simple property existence validation. Use to prevent errors resulting from missing properties on input objects.">
+							can-validate-interface
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate-legacy.html"
+							title="A plugin for CanJS that wraps any validation library to can.validate. Can-Validate doesn&#x27;t do any validation of its own but instead provides some abstraction to your library of choice. The chosen library is registered with can-validate using a shim.">
+							can-validate-legacy
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate-validatejs.html"
+							title="Create can-validate.validator functions using validate.js.">
+							can-validate-validatejs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Typed Data</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-cid.html"
+							title="Utility for getting a unique identifier for an object.">
+							can-cid
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-construct.html"
+							title="Provides a way to easily use the power of prototypal inheritance without worrying about hooking up all the particulars yourself. Use can-construct.extend to create an inheritable constructor function of your own.">
+							can-construct
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-construct-super.html"
+							title="can.Construct.super is a plugin that makes it easier to call base functions from inside inheriting functions.">
+							can-construct-super
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-data-types.html"
+							title="A package of type objects that are used to test if a value is a member of the type and convert values to the type.">
+							can-data-types
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-namespace.html"
+							title="Namespace where can-* packages are registered.">
+							can-namespace
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-reflect.html"
+							title="Perform operations and read information on unknown data types.">
+							can-reflect
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-reflect-dependencies.html"
+							title="Functions to keep track of observable dependencies.">
+							can-reflect-dependencies
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-reflect-promise.html"
+							title="Expose an observable, Map-like API on Promise types.">
+							can-reflect-promise
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-types.html"
+							title="A stateful container for CanJS type information.">
+							can-types
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Polyfills</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-symbol.html"
+							title="Symbols used to detail how CanJS may operate on different objects CanJS has a consistent internal interface for objects to interact with each other, and this is also important for interop with external libraries.  CanJS uses symbols to identify object types, property access methods, and for event handling. can-symbol also has a polyfill function that will fake symbols on unsupported platforms.">
+							can-symbol
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-vdom.html"
+							title="A browser-lite environment for Node.js or a worker thread.">
+							can-vdom
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-core.html"
+							title="The best, most hardened and generally useful libraries in CanJS.">
+							Core
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						">
+						<a class="page"
+							href="can-infrastructure.html"
+							title="Utility libraries that power the core and ecosystem collection.">
+							Infrastructure
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-global.html"
+							title="can-global">
+							can-global
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-test-helpers.html"
+							title="Common utilities for effectively testing the features of CanJS.">
+							can-test-helpers
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-ecosystem.html"
+							title="Useful libraries that extend or add important features to the core collection.">
+							Ecosystem
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-legacy.html"
+							title="Former libraries that we still accept patches for, but are not under active development.">
+							Legacy
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>can-query-logic</h1>
+			<ul class="title-social">
+				
+				<li>
+					<a class="npm-button" href="https://www.npmjs.com/package/can-query-logic">
+						<img src="https://img.shields.io/badge/npm%20package-1.2.2-brightgreen.svg" alt="npm package badge" />
+					</a>
+				</li>
+				<li>
+					<a class="github-button nav-social" href="https://github.com/canjs/can-query-logic" data-show-count="true">Star</a>
+				</li>
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/can-query-logic/edit/master/doc/can-query-logic.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Perform data queries and compare queries against each other. Provides logic useful for
+data caching and real-time behavior.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+<div class="signature">
+  <h2 class="signature-title">
+    <code>new QueryLogic( [schemaOrType] [,options] )</code>
+  </h2>
+  <p>The <code>can-query-logic</code> package exports a constructor function that builds <em>query logic</em>
+from:</p>
+<ul>
+<li>an optional schema or type argument, and</li>
+<li>an optional <code>options</code> argument used to convert alternate parameters to
+the expected <a href="can-query-logic/query.html" title="The default structure of objects used to represent queries.">Query</a> format.</li>
+</ul>
+<p>For example, the following builds <em>query logic</em> from a <a href="can-define/map/map.html" title="Create observable objects.">can-define/map/map</a>:</p>
+<pre><code class="language-js">import {DefineMap, QueryLogic} from &quot;can&quot;;
+
+const Todo = DefineMap.extend({
+    id: {
+        identity: true,
+        type: &quot;number&quot;
+    },
+    name: &quot;string&quot;,
+    complete: &quot;boolean&quot;
+});
+
+const todoQueryLogic = new QueryLogic(Todo);
+
+const filter = todoQueryLogic.filterMembers({
+    filter: {
+        complete: false
+    },
+    sort: &quot;-name&quot;,
+    page: {start: 0, end: 19}
+},[
+    {id: 1, name: &quot;do dishes&quot;, complete: false},
+    {id: 2, name: &quot;mow lawn&quot;, complete: true},
+    // ...
+]);
+console.log( filter ); //-&gt; [{id: 1, name: &quot;do dishes&quot;, complete: false}]
+
+</code></pre>
+<div class='codepen' data-codepen=''></div>
+  <div line-highlight='3-10,12,only'></div>
+<p>Once a <em>query logic</em> instance is created, it can be used to
+perform actions using <a href="can-query-logic/query.html" title="The default structure of objects used to represent queries.">queries</a>.  For example,
+the following might select 20 incomplete todos from a list of todos:</p>
+<pre><code class="language-js">import {DefineMap, QueryLogic} from &quot;can&quot;;
+
+const Todo = DefineMap.extend({
+    id: {
+        identity: true,
+        type: &quot;number&quot;
+    },
+    name: &quot;string&quot;,
+    complete: &quot;boolean&quot;
+});
+
+const todoQueryLogic = new QueryLogic(Todo);
+
+const filter = todoQueryLogic.filterMembers({
+    filter: {
+        complete: false
+    },
+    sort: &quot;-name&quot;,
+    page: {start: 0, end: 19}
+},[
+    {id: 1, name: &quot;do dishes&quot;, complete: false},
+    {id: 2, name: &quot;mow lawn&quot;, complete: true},
+    // ...
+]);
+console.log( filter ); //-&gt; [{id: 1, name: &quot;do dishes&quot;, complete: false}]
+
+</code></pre>
+<div class='codepen' data-codepen=''></div>
+  <div line-highlight='14-24,only'></div>
+<p>By default <code>can-query-logic</code> supports queries represented by the <a href="can-query-logic/query.html" title="The default structure of objects used to represent queries.">Query</a>
+format.  It supports a variety of operators and options.  It looks like:</p>
+<pre><code class="language-js">import {QueryLogic} from &quot;can&quot;;
+import {Todo} from &quot;//unpkg.com/can-demo-models@5&quot;;
+
+const todoQueryLogic = new QueryLogic(Todo);
+// Perform query logic:
+const filter = todoQueryLogic.filterMembers({
+  // Selects only the todos that match.
+  filter: {
+    complete: false
+  },
+  // Sort the results of the selection
+  sort: &quot;-name&quot;,
+  // Selects a range of the sorted result
+  page: {start: 0, end: 19}
+},[
+  {id: 1, name: &quot;do dishes&quot;, complete: false},
+  {id: 2, name: &quot;mow lawn&quot;, complete: true},
+  // ...
+]);
+console.log( filter ); //-&gt; [{id: 1, name: &quot;do dishes&quot;, complete: false}]
+
+</code></pre>
+<div class='codepen' data-codepen=''></div>
+  <div line-highlight='6-15,only'></div>
+
+  
+  <div class="parameters">
+    <h3 class="parameters-title" data-skip>Parameters</h3>
+      <ol>
+        
+          <li><b>schemaOrType</b> <code>{function(options)|can-reflect/schema}</code>: <p>Defines the behavior of keys on a <a href="can-query-logic/query.html" title="The default structure of objects used to represent queries.">Query</a>. This is done with either:</p>
+<ul>
+<li>A constructor function that supports <a href="can-reflect.getSchema.html" title="Returns the schema for a type or value.">can-reflect.getSchema</a>. Currently, <a href="can-define/map/map.html" title="Create observable objects.">can-define/map/map</a> supports the <code>can.getSchema</code> symbol:</li>
+</ul>
+<pre><code class="language-js">import {DefineMap, QueryLogic} from &quot;can&quot;;
+
+const Todo = DefineMap.extend({
+    id: {
+        identity: true,
+        type: &quot;number&quot;
+    },
+    name: &quot;string&quot;,
+    complete: &quot;boolean&quot;
+});
+
+const todoQueryLogic = new QueryLogic(Todo);
+
+const filter = todoQueryLogic.filterMembers({
+    filter: {
+        complete: false
+    },
+    sort: &quot;-name&quot;,
+    page: {start: 0, end: 19}
+},[
+    {id: 1, name: &quot;do dishes&quot;, complete: false},
+    {id: 2, name: &quot;mow lawn&quot;, complete: true},
+    // ...
+]);
+console.log( filter ); //-&gt; [{id: 1, name: &quot;do dishes&quot;, complete: false}]
+
+</code></pre>
+<div class='codepen' data-codepen=''></div>
+  <div line-highlight='3,10,only'></div>
+<ul>
+<li><p>A <a href="can-reflect.getSchema.html" title="Returns the schema for a type or value.">schema object</a> that looks like the following:</p>
+<pre><code class="language-js">import {QueryLogic, MaybeNumber, MaybeString, MaybeBoolean} from &quot;can&quot;;
+
+const queryLogic = new QueryLogic({
+  // keys that uniquely represent this type
+  identity: [&quot;id&quot;],
+  keys: {
+    id: MaybeNumber,
+    name: MaybeString,
+    complete: MaybeBoolean
+  }
+});
+
+const result = queryLogic.filterMembers({ filter: {complete: false}}, [
+  {id: &quot;1&quot;, name: &quot;Justin&quot;, complete: &quot;truthy&quot;},
+  {id: &quot;2&quot;, name: &quot;Paula&quot;, complete: &quot;&quot;},
+  {id: &quot;3&quot;, name: &quot;Kevin&quot;, complete: true}
+]);
+
+console.log( result );
+</code></pre>
+<!-- Example doesn't work. Issue open: https://github.com/canjs/can-data-types/issues/7 -->
+<!-- @codepen -->
+<p>Note that if a key type (ex: <code>name: MaybeString</code>) is <strong>not</strong> provided, filtering by that
+key will still work, but there won't be any type coercion. For example, the following
+might not produce the desired results:</p>
+<pre><code class="language-js">import {QueryLogic} from &quot;can&quot;;
+
+const queryLogic = new QueryLogic();
+const unionized = queryLogic.union(
+  {filter: {age: 7}},
+  {filter: {age: &quot;07&quot;}}
+);
+console.log( JSON.stringify( unionized ) ); //-&gt; &quot;{'filter':{'age':{'$in':[7,'07']}}}&quot;
+</code></pre></li>
+</ul>
+<div class='codepen' data-codepen=''></div>
+<p>Use types like <a href="can-data-types/maybe-number/maybe-number.html" title="A type that can be a Number, null, or undefined.">can-data-types/maybe-number/maybe-number</a> if you want to add basic
+type coercion:</p>
+<pre><code class="language-js">import {QueryLogic, MaybeNumber} from &quot;can&quot;;
+
+const queryLogic = new QueryLogic({
+  identity: [&quot;id&quot;],
+  keys: {age: MaybeNumber}
+});
+const unionized = queryLogic.union(
+  {filter: {age: 7}},
+  {filter: {age: &quot;07&quot;}}
+);
+console.log( JSON.stringify( unionized ) ); //-&gt; {filter: {age: 7}}
+</code></pre>
+<div class='codepen' data-codepen=''></div>
+<p>If you need even more special key behavior, read <a href="#Definingfilterpropertieswithspeciallogic">defining properties with special logic</a>.</p>
+<p>By default, filter properties like <code>status</code> in <code>{filter: {status: &quot;complete&quot;}}</code>
+are used to create to one of the <a href="can-query-logic/comparison-operators.html" title="The comparison operators available to the default query.">Comparison Operators</a> like
+<code>GreaterThan</code>. A matching schema key will overwrite this behavior. How this
+works is explained in the <a href="#Definingfilterpropertieswithspeciallogic">Defining filter properties with special logic</a> section below.</p>
+</li>
+        
+      </ol>
+  </div>
+  
+  
+  
+</div>
+
+
+
+
+
+  
+    <section class="body">
+    <h2>Purpose</h2>
+<p><code>can-query-logic</code> is used to give CanJS an <em>understanding</em> of what <strong>the parameters used to
+retrieve a list of data</strong> represent.  This awareness helps other libraries like
+<a href="can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a> and <a href="can-fixture.html" title="Intercept AJAX requests and simulate the response.">can-fixture</a> provide real-time, caching and other behaviors.</p>
+<p><strong>The parameters used to retrieve a list of data?</strong></p>
+<p>In many applications, you request a list of data by making a <code>fetch</code> or <code>XMLHTTPRequest</code>
+to a url like:</p>
+<pre><code>/api/todos?filter[complete]=true&amp;sort=name
+</code></pre>
+<p>The values after the <code>?</code> are used to control the data that comes back. Those values are
+<a href="can-deparam.html" title="Deserialize a query string into an array or object.">deserialized</a> into
+a query object look like this:</p>
+<pre><code class="language-js">{
+  filter: {complete: true},
+  sort: &quot;name&quot;
+}
+</code></pre>
+<p>This object represents a <a href="can-query-logic/query.html" title="The default structure of objects used to represent queries.">Query</a>. This specific query is for requesting completed todos and have the todos sorted by their <em>name</em>.</p>
+<p>A <code>QueryLogic</code> instance <em>understands</em> what a <code>Query</code> represents. For example, it can filter records
+that match a particular query:</p>
+<pre><code class="language-js">import {QueryLogic} from &quot;can&quot;;
+
+const todos = [
+  { id: 1, name: &quot;learn CanJS&quot;,   complete: true  },
+  { id: 2, name: &quot;wash the car&quot;,  complete: false },
+  { id: 3, name: &quot;do the dishes&quot;, complete: true  }
+];
+
+const queryLogic = new QueryLogic();
+
+const result = queryLogic.filterMembers({
+  filter: {complete: true},
+  sort: &quot;name&quot;,
+}, todos);
+
+console.log( result ); //-&gt; [
+//  { id: 3, name: &quot;do the dishes&quot;, complete: true  },
+//  { id: 1, name: &quot;learn CanJS&quot;,   complete: true  }
+//]
+</code></pre>
+<div class='codepen'></div>
+<p>The <a href="can-query-logic.prototype.filterMembers.html" title="Filter data using a query.">filterMembers</a> method allows <code>QueryLogic</code> to be used similar to a database. <code>QueryLogic</code> instances methods help solve other problems too:</p>
+<ul>
+<li><strong>real-time</strong> - <a href="can-query-logic.prototype.isMember.html" title="Return if a record belongs to a query.">isMember</a> returns if a particular item
+belongs to a query and <a href="can-query-logic.prototype.index.html" title="returns the index where the record will be input.">index</a> returns the location where that item belongs.</li>
+<li><strong>caching</strong> - <a href="can-query-logic.prototype.isSubset.html" title="Return if a query is a subset of another set.">isSubset</a> can tell you if you've already loaded
+data you are looking for.  <a href="can-query-logic.prototype.difference.html" title="Return a query representing the values that are in one set that are not in the another set.">difference</a> can tell you what data
+you need to load that already isn't in your cache.</li>
+</ul>
+<p>In fact, <code>can-query-logic</code>'s most unique ability is to be able to directly compare
+queries that represent sets of data instead of having to compare
+the data itself. For example, if you already loaded all completed todos,
+<code>can-query-logic</code> can tell you how to get all remaining todos:</p>
+<pre><code class="language-js">import {QueryLogic} from &quot;can&quot;;
+
+const completedTodosQuery = {filter: {complete: false}};
+const allTodosQuery = {};
+
+const queryLogic = new QueryLogic();
+const remainingTodosQuery = queryLogic.difference(allTodosQuery, completedTodosQuery);
+
+console.log( JSON.stringify( remainingTodosQuery ) ); //-&gt; &quot;{'filter':{'complete':{'$ne':false}}}&quot;
+</code></pre>
+<div class='codepen'></div>
+<h2>Use</h2>
+<p>There are two main uses of <code>can-query-logic</code>:</p>
+<ul>
+<li>Configuring a <code>QueryLogic</code> instance to match your service behavior.</li>
+<li>Using a <code>QueryLogic</code> instance to create a new <a href="can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a> behavior.</li>
+</ul>
+<h2>Configuration</h2>
+<p>Most people will only ever need to configure a
+<code>QueryLogic</code> logic instance.  Once properly configured, all <a href="can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a> behaviors will
+work correctly.  If your service parameters match the <a href="can-query-logic/query.html" title="The default structure of objects used to represent queries.">default query structure</a>,
+you likely don't need to use <code>can-query-logic</code> directly at all.  However, if your service parameters differ from
+the <a href="can-query-logic/query.html" title="The default structure of objects used to represent queries.">default query structure</a> or they need additional logic, some configuration will be necessary.</p>
+<h3>Matching the default query structure</h3>
+<p>By default, <code>can-query-logic</code> assumes your service layer will match a <a href="can-query-logic/query.html" title="The default structure of objects used to represent queries.">default query structure</a>
+that looks like:</p>
+<pre><code class="language-js">import {QueryLogic} from &quot;can&quot;;
+
+const queryLogic = new QueryLogic()
+
+const filter = queryLogic.filterMembers({
+  // Selects only the todos that match.
+  filter: {
+    complete: {$in: [false, null]}
+  },
+  // Sort the results of the selection
+  sort: &quot;-name&quot;,
+  // Selects a range of the sorted result
+  page: {start: 0, end: 19}
+},
+[
+  {id: 1, name: &quot;do dishes&quot;, complete: false},
+  {id: 2, name: &quot;mow lawn&quot;, complete: true},
+  // ...
+]);
+
+console.log( filter ); //-&gt; [{id: 1, name: &quot;do dishes&quot;, complete: false}]
+</code></pre>
+<div class='codepen'></div>
+<div line-highlight='6-13'></div>
+<p>This structures follows the <a href="http://jsonapi.org/format/#fetching">Fetching Data JSONAPI specification</a>.</p>
+<p>There's:</p>
+<ul>
+<li>a <a href="http://jsonapi.org/format/#fetching-filtering">filter</a> property for filtering records,</li>
+<li>a <a href="http://jsonapi.org/format/#fetching-sorting">sort</a> property for specifying the order to sort records, and</li>
+<li>a <a href="http://jsonapi.org/format/#fetching-pagination">page</a> property that selects a range of the sorted result. <em>The range indexes are inclusive</em>.</li>
+</ul>
+<blockquote>
+<p><strong>NOTE</strong>: <a href="can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a> does not follow the rest of the JSONAPI specification. Specifically
+<a href="can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a> expects your server to send back JSON data in a different format.</p>
+</blockquote>
+<p>If you control the service layer, we <strong>encourage</strong> you to make it match the default
+<a href="can-query-logic/query.html" title="The default structure of objects used to represent queries.">Query</a>.  The default query structure also supports the following <a href="can-query-logic/comparison-operators.html" title="The comparison operators available to the default query.">Comparison Operators</a>: <code>$eq</code>, <code>$gt</code>, <code>$gte</code>, <code>$in</code>, <code>$lt</code>, <code>$lte</code>, <code>$ne</code>, <code>$nin</code>.</p>
+<p>If you support the default structure, it's very likely the entire configuration you need to perform will
+happen on the data type you pass to your <a href="can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect connection</a>. For example,
+you might create a <code>Todo</code> data type and pass it to a connection like this:</p>
+<pre><code class="language-js">import {DefineMap, DefineList, realtimeRestModel} from &quot;can&quot;;
+import {Todo, todoFixture} from &quot;//unpkg.com/can-demo-models@5&quot;;
+
+// creates a mock todo api
+todoFixture(1);
+
+Todo.List = DefineList.extend(&quot;TodoList&quot;, {
+  &quot;#&quot;: {Type: Todo}
+});
+
+Todo.connection = realtimeRestModel({
+  url: &quot;/api/todos/{id}&quot;,
+  Map: Todo
+});
+
+Todo.getList().then(todos =&gt; {
+  todos.forEach(todo =&gt; {
+    console.log(todo.name); // logs todos
+  });
+});
+
+</code></pre>
+<div class='codepen'></div>
+<div line-highlight='11-14,only'></div>
+<p>Internally, <code>realTimeRest</code> is using <code>Todo</code> to create and configure a <code>QueryLogic</code>
+instance for you.  The previous example is equivalent to:</p>
+<pre><code class="language-js">import {DefineMap, DefineList, realtimeRestModel, QueryLogic} from &quot;can&quot;;
+import {Todo, todoFixture} from &quot;//unpkg.com/can-demo-models@5&quot;;
+
+// creates a mock todo api
+todoFixture(1);
+
+Todo.List = DefineList.extend(&quot;TodoList&quot;, {
+  &quot;#&quot;: {Type: Todo}
+});
+
+const todoQueryLogic = new QueryLogic(Todo);
+
+Todo.connection = realtimeRestModel({
+  url: &quot;/api/todos/{id}&quot;,
+  Map: Todo,
+  queryLogic: todoQueryLogic
+});
+
+Todo.getList().then(todos =&gt; {
+  todos.forEach(todo =&gt; {
+    console.log(todo.name); // logs todos
+  });
+});
+
+</code></pre>
+<div class='codepen'></div>
+<div line-highlight='11,16,only'></div>
+<p>If your services don't match the default query structure or logic, read on to
+see how to configure your query to match your service layer.</p>
+<h3>Changing the query structure</h3>
+<p>If the logic of your service layer matches the logic of the <a href="can-query-logic/query.html" title="The default structure of objects used to represent queries.">default query</a>, but the form
+of the query parameters is different, the easiest way to configure the <code>QueryLogic</code> is to
+translate your parameter structure to the <a href="can-query-logic/query.html" title="The default structure of objects used to represent queries.">default query structure</a>.</p>
+<p>For example, to change queries to use <code>where</code> instead of <code>filter</code> so that queries can be
+made like:</p>
+<pre><code class="language-js">import {DefineMap, DefineList, realtimeRestModel, QueryLogic} from &quot;can&quot;;
+import {Todo, todoFixture} from &quot;//unpkg.com/can-demo-models@5&quot;;
+
+// creates a mock todo api
+todoFixture(5);
+
+Todo.List = DefineList.extend(&quot;TodoList&quot;, {
+  &quot;#&quot;: {Type: Todo}
+});
+
+const todoQueryLogic = new QueryLogic(Todo);
+
+Todo.connection = realtimeRestModel({
+  url: &quot;/api/todos/{id}&quot;,
+  Map: Todo,
+});
+
+Todo.getList({filter: {complete: true}}).then(todos =&gt; {
+  todos.forEach(todo =&gt; {
+    console.log(todo.name); // logs completed todos
+  });
+});
+
+</code></pre>
+<div class='codepen'></div>
+<div line-highlight='18,22,only'></div>
+<p>You can use the <code>options</code>' <code>toQuery</code> and <code>toParams</code> functions
+to set the <code>filter</code> property value to the passed in <code>where</code> property value.</p>
+<pre><code class="language-js">import {DefineMap, QueryLogic, realtimeRestModel} from &quot;can&quot;;
+import {Todo, todoFixture} from &quot;//unpkg.com/can-demo-models@5&quot;;
+
+todoFixture(5);
+
+// CREATE YOUR QUERY LOGIC
+const todoQueryLogic = new QueryLogic(Todo, {
+  // Takes what your service expects: {where: {...}}
+  // Returns what QueryLogic expects: {filter: {...}}
+  toQuery(params){
+    const where = params.where;
+    delete params.where;
+    params.filter = where;
+    return params;
+  },
+  // Takes what QueryLogic expects: {filter: {...}}
+  // Returns what your service expects: {where: {...}}
+  toParams(query){
+    const where = query.filter;
+    delete query.filter;
+    query.where = where;
+    return query;
+  }
+});
+
+Todo.List = DefineList.extend(&quot;TodoList&quot;, {
+  &quot;#&quot;: {Type: Todo}
+});
+
+// PASS YOUR QueryLogic TO YOUR CONNECTION
+Todo.connection = realtimeRestModel({
+  url: &quot;/api/todos/{id}&quot;,
+  Map: Todo,
+  queryLogic: todoQueryLogic
+});
+
+Todo.getList({filter: {complete:true}}).then(todos =&gt; {
+  todos.forEach(todo =&gt; {
+    console.log(todo.name); // shows FILTERED todos
+  });
+});
+
+</code></pre>
+<div class='codepen'></div>
+<h3>Defining filter properties with special logic</h3>
+<p>If the logic of the <a href="can-query-logic/query.html" title="The default structure of objects used to represent queries.">default query</a> is not adequate to represent
+the behavior of your service layer queries, you can define special classes called <code>SetType</code>s to
+provide the additional logic.</p>
+<p>Depending on your needs, this can be quite complex or rather simple. The following sections
+provide configuration examples in increasing complexity.</p>
+<p>Before reading the following sections, it's useful to have some background information on
+how <code>can-query-logic</code> works.  We suggest reading the <a href="#Howitworks">How it works</a> section.</p>
+<h4>Built-in special types</h4>
+<p><code>can-query-logic</code> comes with functionality that can be used to create special logic. For example,
+the <a href="can-query-logic.makeEnum.html" title="Create a schema type that represents a finite set of values.">makeEnum</a> method can be used to build a <code>Status</code> type that contains ONLY the
+enumerated values:</p>
+<pre><code class="language-js">import {QueryLogic, DefineMap} from &quot;can&quot;;
+
+const Status = QueryLogic.makeEnum([&quot;new&quot;,&quot;assigned&quot;,&quot;complete&quot;]);
+
+const Todo = DefineMap.extend({
+  id: &quot;number&quot;,
+  status: Status,
+  complete: &quot;boolean&quot;,
+  name: &quot;string&quot;
+});
+
+const todoLogic = new QueryLogic(Todo);
+const unionQuery = todoLogic.union(
+  {filter: {status: [&quot;new&quot;,&quot;assigned&quot;] }},
+  {filter: {status: &quot;complete&quot; }}
+)
+
+console.log( unionQuery ); //-&gt; {}
+</code></pre>
+<div class='codepen'></div>
+<blockquote>
+<p>NOTE: <code>unionQuery</code> is empty because if we loaded all todos that
+are new, assigned, and complete, we've loaded every todo.<br />
+The <code>{}</code> query would load every todo.</p>
+</blockquote>
+<h4>Custom types that work with the comparison operators</h4>
+<p>If a number or string can represent your type, then you can create a <code>SetType</code> class
+that can be used with the comparison operators.</p>
+<p>The <code>SetType</code> needs to be able to translate back and forth from
+the values in the query to a number or string.</p>
+<p>For example, you might want to represent a date with a string like:</p>
+<pre><code class="language-js">{
+    filter: {date: {$gt: &quot;Wed Apr 04 2018 10:00:00 GMT-0500 (CDT)&quot;}}
+}
+</code></pre>
+<p>The following creates a <code>DateStringSet</code> that translates a date string to a number:</p>
+<pre><code class="language-js">import {DefineMap, QueryLogic} from &quot;can&quot;;
+
+class DateStringSet {
+    constructor(value){
+        this.value = value;
+    }
+    // used to convert to a number
+    valueOf(){
+        return new Date(this.value).getTime();
+    }
+    [Symbol.for(&quot;can.serialize&quot;)](){
+        return this.value;
+    }
+}
+
+const DateString = {
+    [Symbol.for(&quot;can.new&quot;)]: function(v){ return v; },
+    [Symbol.for(&quot;can.SetType&quot;)]: DateStringSet
+};
+
+const Todo = DefineMap.extend({
+    id: {type: &quot;number&quot;, identity: true},
+    name: &quot;string&quot;,
+    date: DateString
+});
+
+const queryLogic = new QueryLogic(Todo);
+
+const filter = queryLogic.filterMembers(
+    {filter: {date: {$gt: &quot;Wed Apr 04 2018 10:00:00 GMT-0500 (CDT)&quot;}}},
+    [{id: 1, name: &quot;Learn CanJS&quot;, date: &quot;Thurs Apr 05 2017 10:00:00 GMT-0500 (CDT)&quot;},
+    {id: 2, name: &quot;grab coffee&quot;, date: &quot;Wed Apr 03 2018 10:00:00 GMT-0500 (CDT)&quot;},
+    {id: 3, name: &quot;finish these docs&quot;, date: &quot;Thurs Apr 05 2018 10:00:00 GMT-0500 (CDT)&quot;}]
+);
+
+console.log(filter); //-&gt; [{
+//  id: 2,
+//  name: &quot;finish these docs&quot;,
+//  date: &quot;Wed Apr 05 2018 10:00:00 GMT-0500 (CDT)&quot;
+// }]
+
+</code></pre>
+<div class='codepen'></div>
+<p>These classes must provide:</p>
+<ul>
+<li><code>constructor</code> - initialized with the the value passed to a comparator (ex: <code>&quot;Wed Apr 04 2018 10:00:00 GMT-0500 (CDT)&quot;</code>).</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf" title="valueOf">valueOf</a> - return a string or number used to compare (ex: <code>1522854000000</code>).</li>
+<li><code>Symbol.for(&quot;can.serialize&quot;)</code> - returns a string or number to compare against <a href="can-data-types.html" title="A package of type objects that are used to test if a value is a member of the type and convert values to the type.">can-data-types</a> for the query.</li>
+</ul>
+<p>To configure a <code>QueryLogic</code> to use a <code>SetType</code>, it must be the <code>can.SetType</code> property on a
+schema's <code>keys</code> object.  This can be done directly like:</p>
+<pre><code class="language-js">new QueryLogic({
+  keys: {
+    date: {[Symbol.for(&quot;can.SetType&quot;)]: DateStringSet}
+  }
+});
+</code></pre>
+<p>More commonly, <code>DateStringSet</code> is the <code>can.SetType</code> symbol of a type like:</p>
+<pre><code class="language-js">import {DefineMap, QueryLogic} from &quot;can&quot;;
+
+class DateStringSet {
+    constructor(value){
+        this.value = value;
+    }
+    // used to convert to a number
+    valueOf(){
+        return new Date(this.value).getTime();
+    }
+    [Symbol.for(&quot;can.serialize&quot;)](){
+        return this.value;
+    }
+}
+
+const DateString = {
+    [Symbol.for(&quot;can.new&quot;)]: function(v){ return v; },
+    [Symbol.for(&quot;can.SetType&quot;)]: DateStringSet
+};
+
+const Todo = DefineMap.extend({
+    id: {type: &quot;number&quot;, identity: true},
+    name: &quot;string&quot;,
+    date: DateString
+});
+
+const queryLogic = new QueryLogic(Todo);
+
+const filter = queryLogic.filterMembers(
+    {filter: {date: {$gt: &quot;Wed Apr 04 2018 10:00:00 GMT-0500 (CDT)&quot;}}},
+    [{id: 1, name: &quot;Learn CanJS&quot;, date: &quot;Thurs Apr 05 2017 10:00:00 GMT-0500 (CDT)&quot;},
+    {id: 2, name: &quot;grab coffee&quot;, date: &quot;Wed Apr 03 2018 10:00:00 GMT-0500 (CDT)&quot;},
+    {id: 3, name: &quot;finish these docs&quot;, date: &quot;Thurs Apr 05 2018 10:00:00 GMT-0500 (CDT)&quot;}]
+);
+
+console.log(filter); //-&gt; [{
+//  id: 2,
+//  name: &quot;finish these docs&quot;,
+//  date: &quot;Wed Apr 05 2018 10:00:00 GMT-0500 (CDT)&quot;
+// }]
+
+</code></pre>
+<div class='codepen'></div>
+<div line-highlight='19-21,only'></div>
+<p>Then this <code>DateString</code> is used to configure your data type like:</p>
+<pre><code class="language-js">import {DefineMap, QueryLogic} from &quot;can&quot;;
+
+class DateStringSet {
+    constructor(value){
+        this.value = value;
+    }
+    // used to convert to a number
+    valueOf(){
+        return new Date(this.value).getTime();
+    }
+    [Symbol.for(&quot;can.serialize&quot;)](){
+        return this.value;
+    }
+}
+
+const DateString = {
+    [Symbol.for(&quot;can.new&quot;)]: function(v){ return v; },
+    [Symbol.for(&quot;can.SetType&quot;)]: DateStringSet
+};
+
+const Todo = DefineMap.extend({
+    id: {type: &quot;number&quot;, identity: true},
+    name: &quot;string&quot;,
+    date: DateString
+});
+
+const queryLogic = new QueryLogic(Todo);
+
+const filter = queryLogic.filterMembers(
+    {filter: {date: {$gt: &quot;Wed Apr 04 2018 10:00:00 GMT-0500 (CDT)&quot;}}},
+    [{id: 1, name: &quot;Learn CanJS&quot;, date: &quot;Thurs Apr 05 2017 10:00:00 GMT-0500 (CDT)&quot;},
+    {id: 2, name: &quot;grab coffee&quot;, date: &quot;Wed Apr 03 2018 10:00:00 GMT-0500 (CDT)&quot;},
+    {id: 3, name: &quot;finish these docs&quot;, date: &quot;Thurs Apr 05 2018 10:00:00 GMT-0500 (CDT)&quot;}]
+);
+
+console.log(filter); //-&gt; [{
+//  id: 2,
+//  name: &quot;finish these docs&quot;,
+//  date: &quot;Wed Apr 05 2018 10:00:00 GMT-0500 (CDT)&quot;
+// }]
+
+</code></pre>
+<div class='codepen'></div>
+<div line-highlight='23-27,only'></div>
+<blockquote>
+<p>NOTE: Types like <code>DateString</code> need to be distinguished from <code>SetType</code>s like
+<code>DateStringSet</code> because types like <code>DateString</code> have different values. For example,
+a <code>DateStringSet</code> might have a value like &quot;yesterday&quot;, but this would not be a valid
+<code>DateString</code>.</p>
+</blockquote>
+<h4>Completely custom types</h4>
+<p>If you want total control over filtering logic, you can create a <code>SetType</code> that
+provides the following:</p>
+<ul>
+<li>methods:
+<ul>
+<li><code>can.isMember</code> - A function that returns if an object belongs to the query.</li>
+<li><code>can.serialize</code> - A function that returns the serialized form of the type for the query.</li>
+</ul></li>
+<li>comparisons:
+<ul>
+<li><code>union</code> - The result of taking a union of two <code>SetType</code>s.</li>
+<li><code>intersection</code> - The result of taking an intersection of two <code>SetType</code>s.</li>
+<li><code>difference</code> - The result of taking a difference of two <code>SetType</code>s.</li>
+</ul></li>
+</ul>
+<p>The following creates a <code>SearchableStringSet</code> that is able to perform searches that match
+the provided text like:</p>
+<pre><code class="language-js">import {QueryLogic} from &quot;can&quot;;
+
+const recipes = [
+  {id: 1, name: &quot;garlic chicken&quot;},
+  {id: 2, name: &quot;ice cream&quot;},
+  {id: 3, name: &quot;chicken kiev&quot;}
+];
+
+const queryLogic = new QueryLogic();
+const result = queryLogic.filterMembers({
+  filter: {name: &quot;chicken&quot;}
+}, recipes);
+
+console.log( result ); //-&gt; []
+</code></pre>
+<div class='codepen'></div>
+<p>Notice how all values that match <code>chicken</code> are returned.</p>
+<pre><code class="language-js">import {canReflect, QueryLogic} from &quot;can&quot;;
+
+// Takes the value of `name` (ex: `&quot;chicken&quot;`)
+function SearchableStringSet(value) {
+  this.value = value;
+}
+
+canReflect.assignSymbols(SearchableStringSet.prototype,{
+  // Returns if the name on a todo is actually a member of the set.
+  &quot;can.isMember&quot;: function(value){
+    return value.includes(this.value);
+  },
+  // Converts back to a value that can be in a query.
+  &quot;can.serialize&quot;: function(){
+    return this.value;
+  }
+});
+
+// Specify how to do the fundamental set comparisons.
+QueryLogic.defineComparison(SearchableStringSet,SearchableStringSet,{
+  // Return a set that would load all records in searchA and searchB.
+  union(searchA, searchB){
+    // If searchA's text contains searchB's text, then
+    // searchB will include searchA's results.
+    if(searchA.value.includes(searchB.value)) {
+      // A:`food` ∪ B:`foo` =&gt; `foo`
+      return searchB;
+    }
+    if(searchB.value.includes(searchA.value)) {
+      // A:`foo` ∪ B:`food` =&gt; `foo`
+      return searchA;
+    }
+    // A:`ice` ∪ B:`cream` =&gt; `ice` || `cream`
+    return new QueryLogic.ValueOr([searchA, searchB]);
+  },
+  // Return a set that would load records shared by searchA and searchB.
+  intersection(searchA, searchB){
+    // If searchA's text contains searchB's text, then
+    // searchA is the shared search results.
+    if(searchA.value.includes(searchB.value)) {
+        // A:`food` ∩ B:`foo` =&gt; `food`
+        return searchA;
+    }
+    if(searchB.value.includes(searchA.value)) {
+        // A:`foo` ∩ B:`food` =&gt; `food`
+      return searchB;
+    }
+    // A:`ice` ∩ B:`cream` =&gt; `ice` &amp;&amp; `cream`
+    // But suppose AND isn't supported,
+    // So we return `UNDEFINABLE`.
+    return QueryLogic.UNDEFINABLE;
+  },
+  // Return a set that would load records in searchA that are not in
+  // searchB.
+  difference(searchA, searchB){
+    // if searchA's text contains searchB's text, then
+    // searchA has nothing outside what searchB would return.
+    if(searchA.value.includes(searchB.value)) {
+      // A:`food` \ B:`foo` =&gt; ∅
+      return QueryLogic.EMPTY;
+    }
+    // If searchA has results outside searchB's results
+    // then there are records, but we aren't able to
+    // create a string that represents this.
+    if(searchB.value.includes(searchA.value)) {
+      // A:`foo` \ B:`food` =&gt; UNDEFINABLE
+      return QueryLogic.UNDEFINABLE;
+    }
+
+    // A:`ice` \ B:`cream` =&gt; `ice` &amp;&amp; !`cream`
+    // If there's another situation, we
+    // aren't able to express the difference
+    // so we return UNDEFINABLE.
+    return QueryLogic.UNDEFINABLE;
+  }
+});
+
+const recipes = [
+  {id: 1, name: &quot;garlic chicken&quot;},
+  {id: 2, name: &quot;ice cream&quot;},
+  {id: 3, name: &quot;chicken kiev&quot;}
+];
+
+const queryLogic = new QueryLogic({ keys: {
+  name : {[Symbol.for(&quot;can.SetType&quot;)]: SearchableStringSet}
+}});
+
+const result = queryLogic.filterMembers({
+  filter: {name: &quot;chicken&quot;}
+}, recipes);
+
+console.log( result ); //-&gt; [
+  // {id: 1, name: &quot;garlic chicken&quot;},
+  // {id: 3, name: &quot;chicken kiev&quot;}
+  // ]
+
+</code></pre>
+<div class='codepen'></div>
+<div line-highlight='3-75,only'></div>
+<p>To configure a <code>QueryLogic</code> to use a <code>SetType</code>, it must be the <code>can.SetType</code> property on a
+schema's <code>keys</code> object.  This can be done directly like:</p>
+<pre><code class="language-js">import {canReflect, QueryLogic} from &quot;can&quot;;
+
+// Takes the value of `name` (ex: `&quot;chicken&quot;`)
+function SearchableStringSet(value) {
+  this.value = value;
+}
+
+canReflect.assignSymbols(SearchableStringSet.prototype,{
+  // Returns if the name on a todo is actually a member of the set.
+  &quot;can.isMember&quot;: function(value){
+    return value.includes(this.value);
+  },
+  // Converts back to a value that can be in a query.
+  &quot;can.serialize&quot;: function(){
+    return this.value;
+  }
+});
+
+// Specify how to do the fundamental set comparisons.
+QueryLogic.defineComparison(SearchableStringSet,SearchableStringSet,{
+  // Return a set that would load all records in searchA and searchB.
+  union(searchA, searchB){
+    // If searchA's text contains searchB's text, then
+    // searchB will include searchA's results.
+    if(searchA.value.includes(searchB.value)) {
+      // A:`food` ∪ B:`foo` =&gt; `foo`
+      return searchB;
+    }
+    if(searchB.value.includes(searchA.value)) {
+      // A:`foo` ∪ B:`food` =&gt; `foo`
+      return searchA;
+    }
+    // A:`ice` ∪ B:`cream` =&gt; `ice` || `cream`
+    return new QueryLogic.ValueOr([searchA, searchB]);
+  },
+  // Return a set that would load records shared by searchA and searchB.
+  intersection(searchA, searchB){
+    // If searchA's text contains searchB's text, then
+    // searchA is the shared search results.
+    if(searchA.value.includes(searchB.value)) {
+        // A:`food` ∩ B:`foo` =&gt; `food`
+        return searchA;
+    }
+    if(searchB.value.includes(searchA.value)) {
+        // A:`foo` ∩ B:`food` =&gt; `food`
+      return searchB;
+    }
+    // A:`ice` ∩ B:`cream` =&gt; `ice` &amp;&amp; `cream`
+    // But suppose AND isn't supported,
+    // So we return `UNDEFINABLE`.
+    return QueryLogic.UNDEFINABLE;
+  },
+  // Return a set that would load records in searchA that are not in
+  // searchB.
+  difference(searchA, searchB){
+    // if searchA's text contains searchB's text, then
+    // searchA has nothing outside what searchB would return.
+    if(searchA.value.includes(searchB.value)) {
+      // A:`food` \ B:`foo` =&gt; ∅
+      return QueryLogic.EMPTY;
+    }
+    // If searchA has results outside searchB's results
+    // then there are records, but we aren't able to
+    // create a string that represents this.
+    if(searchB.value.includes(searchA.value)) {
+      // A:`foo` \ B:`food` =&gt; UNDEFINABLE
+      return QueryLogic.UNDEFINABLE;
+    }
+
+    // A:`ice` \ B:`cream` =&gt; `ice` &amp;&amp; !`cream`
+    // If there's another situation, we
+    // aren't able to express the difference
+    // so we return UNDEFINABLE.
+    return QueryLogic.UNDEFINABLE;
+  }
+});
+
+const recipes = [
+  {id: 1, name: &quot;garlic chicken&quot;},
+  {id: 2, name: &quot;ice cream&quot;},
+  {id: 3, name: &quot;chicken kiev&quot;}
+];
+
+const queryLogic = new QueryLogic({ keys: {
+  name : {[Symbol.for(&quot;can.SetType&quot;)]: SearchableStringSet}
+}});
+
+const result = queryLogic.filterMembers({
+  filter: {name: &quot;chicken&quot;}
+}, recipes);
+
+console.log( result ); //-&gt; [
+  // {id: 1, name: &quot;garlic chicken&quot;},
+  // {id: 3, name: &quot;chicken kiev&quot;}
+  // ]
+
+</code></pre>
+<div class='codepen'></div>
+<div line-highlight='84-86,only'></div>
+<p>More commonly, <code>SearchableStringSet</code> is the <code>can.SetType</code> symbol of a type like:</p>
+<pre><code class="language-js">import {canReflect, DefineMap, QueryLogic} from &quot;can&quot;;
+
+// Takes the value of `name` (ex: `&quot;chicken&quot;`)
+function SearchableStringSet(value) {
+  this.value = value;
+}
+
+canReflect.assignSymbols(SearchableStringSet.prototype,{
+  // Returns if the name on a todo is actually a member of the set.
+  &quot;can.isMember&quot;: function(value){
+    return value.includes(this.value);
+  },
+  // Converts back to a value that can be in a query.
+  &quot;can.serialize&quot;: function(){
+    return this.value;
+  }
+});
+
+// Specify how to do the fundamental set comparisons.
+QueryLogic.defineComparison(SearchableStringSet,SearchableStringSet,{
+  // Return a set that would load all records in searchA and searchB.
+  union(searchA, searchB){
+    // If searchA's text contains searchB's text, then
+    // searchB will include searchA's results.
+    if(searchA.value.includes(searchB.value)) {
+      // A:`food` ∪ B:`foo` =&gt; `foo`
+      return searchB;
+    }
+    if(searchB.value.includes(searchA.value)) {
+      // A:`foo` ∪ B:`food` =&gt; `foo`
+      return searchA;
+    }
+    // A:`ice` ∪ B:`cream` =&gt; `ice` || `cream`
+    return new QueryLogic.ValueOr([searchA, searchB]);
+  },
+  // Return a set that would load records shared by searchA and searchB.
+  intersection(searchA, searchB){
+    // If searchA's text contains searchB's text, then
+    // searchA is the shared search results.
+    if(searchA.value.includes(searchB.value)) {
+        // A:`food` ∩ B:`foo` =&gt; `food`
+        return searchA;
+    }
+    if(searchB.value.includes(searchA.value)) {
+        // A:`foo` ∩ B:`food` =&gt; `food`
+      return searchB;
+    }
+    // A:`ice` ∩ B:`cream` =&gt; `ice` &amp;&amp; `cream`
+    // But suppose AND isn't supported,
+    // So we return `UNDEFINABLE`.
+    return QueryLogic.UNDEFINABLE;
+  },
+  // Return a set that would load records in searchA that are not in
+  // searchB.
+  difference(searchA, searchB){
+    // if searchA's text contains searchB's text, then
+    // searchA has nothing outside what searchB would return.
+    if(searchA.value.includes(searchB.value)) {
+      // A:`food` \ B:`foo` =&gt; ∅
+      return QueryLogic.EMPTY;
+    }
+    // If searchA has results outside searchB's results
+    // then there are records, but we aren't able to
+    // create a string that represents this.
+    if(searchB.value.includes(searchA.value)) {
+      // A:`foo` \ B:`food` =&gt; UNDEFINABLE
+      return QueryLogic.UNDEFINABLE;
+    }
+
+    // A:`ice` \ B:`cream` =&gt; `ice` &amp;&amp; !`cream`
+    // If there's another situation, we
+    // aren't able to express the difference
+    // so we return UNDEFINABLE.
+    return QueryLogic.UNDEFINABLE;
+  }
+});
+
+const SearchableString = {
+  [Symbol.for(&quot;can.SetType&quot;)]: SearchableStringSet
+};
+
+const Todo = DefineMap.extend({
+  id: {type: &quot;number&quot;, identity: true},
+  name: SearchableString,
+});
+
+const todos = [
+  {id: 1, name: &quot;important meeting&quot;},
+  {id: 2, name: &quot;fall asleep during meeting&quot;},
+  {id: 3, name: &quot;find out what important means&quot;}
+];
+
+const queryLogic = new QueryLogic(Todo);
+
+const result = queryLogic.filterMembers({
+  filter: {name: &quot;important&quot;}
+}, todos);
+
+console.log( result ); //-&gt;[{id: 1, name: &quot;important meeting&quot;},{id: 3, name: &quot;find out what important means&quot;}]
+
+</code></pre>
+<div class='codepen'></div>
+<div line-highlight='78-80,only'></div>
+<p>Then this <code>SearchableString</code> is used to configure your data type like:</p>
+<pre><code class="language-js">import {canReflect, DefineMap, QueryLogic} from &quot;can&quot;;
+
+// Takes the value of `name` (ex: `&quot;chicken&quot;`)
+function SearchableStringSet(value) {
+  this.value = value;
+}
+
+canReflect.assignSymbols(SearchableStringSet.prototype,{
+  // Returns if the name on a todo is actually a member of the set.
+  &quot;can.isMember&quot;: function(value){
+    return value.includes(this.value);
+  },
+  // Converts back to a value that can be in a query.
+  &quot;can.serialize&quot;: function(){
+    return this.value;
+  }
+});
+
+// Specify how to do the fundamental set comparisons.
+QueryLogic.defineComparison(SearchableStringSet,SearchableStringSet,{
+  // Return a set that would load all records in searchA and searchB.
+  union(searchA, searchB){
+    // If searchA's text contains searchB's text, then
+    // searchB will include searchA's results.
+    if(searchA.value.includes(searchB.value)) {
+      // A:`food` ∪ B:`foo` =&gt; `foo`
+      return searchB;
+    }
+    if(searchB.value.includes(searchA.value)) {
+      // A:`foo` ∪ B:`food` =&gt; `foo`
+      return searchA;
+    }
+    // A:`ice` ∪ B:`cream` =&gt; `ice` || `cream`
+    return new QueryLogic.ValueOr([searchA, searchB]);
+  },
+  // Return a set that would load records shared by searchA and searchB.
+  intersection(searchA, searchB){
+    // If searchA's text contains searchB's text, then
+    // searchA is the shared search results.
+    if(searchA.value.includes(searchB.value)) {
+        // A:`food` ∩ B:`foo` =&gt; `food`
+        return searchA;
+    }
+    if(searchB.value.includes(searchA.value)) {
+        // A:`foo` ∩ B:`food` =&gt; `food`
+      return searchB;
+    }
+    // A:`ice` ∩ B:`cream` =&gt; `ice` &amp;&amp; `cream`
+    // But suppose AND isn't supported,
+    // So we return `UNDEFINABLE`.
+    return QueryLogic.UNDEFINABLE;
+  },
+  // Return a set that would load records in searchA that are not in
+  // searchB.
+  difference(searchA, searchB){
+    // if searchA's text contains searchB's text, then
+    // searchA has nothing outside what searchB would return.
+    if(searchA.value.includes(searchB.value)) {
+      // A:`food` \ B:`foo` =&gt; ∅
+      return QueryLogic.EMPTY;
+    }
+    // If searchA has results outside searchB's results
+    // then there are records, but we aren't able to
+    // create a string that represents this.
+    if(searchB.value.includes(searchA.value)) {
+      // A:`foo` \ B:`food` =&gt; UNDEFINABLE
+      return QueryLogic.UNDEFINABLE;
+    }
+
+    // A:`ice` \ B:`cream` =&gt; `ice` &amp;&amp; !`cream`
+    // If there's another situation, we
+    // aren't able to express the difference
+    // so we return UNDEFINABLE.
+    return QueryLogic.UNDEFINABLE;
+  }
+});
+
+const SearchableString = {
+  [Symbol.for(&quot;can.SetType&quot;)]: SearchableStringSet
+};
+
+const Todo = DefineMap.extend({
+  id: {type: &quot;number&quot;, identity: true},
+  name: SearchableString,
+});
+
+const todos = [
+  {id: 1, name: &quot;important meeting&quot;},
+  {id: 2, name: &quot;fall asleep during meeting&quot;},
+  {id: 3, name: &quot;find out what important means&quot;}
+];
+
+const queryLogic = new QueryLogic(Todo);
+
+const result = queryLogic.filterMembers({
+  filter: {name: &quot;important&quot;}
+}, todos);
+
+console.log( result ); //-&gt;[{id: 1, name: &quot;important meeting&quot;},{id: 3, name: &quot;find out what important means&quot;}]
+
+</code></pre>
+<div class='codepen'></div>
+<div line-highlight='82-85,only'></div>
+<blockquote>
+<p>NOTE: Types like <code>SearchableString</code> need to be distinguished from <code>SetType</code>s like
+<code>SearchableStringSet</code> because types like <code>SearchableString</code> have different values. For example,
+a <code>SearchableStringSet</code> might have a value like &quot;yesterday&quot;, but this would not be a valid
+<code>SearchableString</code>.</p>
+</blockquote>
+<h3>Testing your QueryLogic</h3>
+<p>It can be very useful to test your <code>QueryLogic</code> before using it with <a href="can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a>.</p>
+<pre><code class="language-js">import {DefineMap, QueryLogic} from &quot;can&quot;;
+
+const Todo = DefineMap.extend({ ... });
+
+const queryLogic = new QueryLogic(Todo, {
+  toQuery(params){ ... },
+  toParams(query){ ... }
+});
+
+unit.test(&quot;isMember&quot;, function(){
+  const result = queryLogic.isMember({
+    filter: {special: &quot;SOMETHING SPECIAL&quot;}
+  },{
+    id: 0,
+    name: &quot;I'm very special&quot;
+  });
+  assert.ok(result, &quot;is member&quot;);
+});
+
+</code></pre>
+<h2>How it works</h2>
+<p>The following gives a rough overview of how <code>can-query-logic</code> works:</p>
+<p><strong>1. Types are defined:</strong></p>
+<p>A user defines the type of data that will be loaded from the server:</p>
+<pre><code class="language-js">import {DefineMap, QueryLogic} from &quot;can&quot;;
+
+const Todo = DefineMap.extend({
+    id: {
+        identity: true,
+        type: &quot;number&quot;
+    },
+    name: &quot;string&quot;,
+    complete: &quot;boolean&quot;
+});
+
+const todoQueryLogic = new QueryLogic(Todo);
+
+const unionization = todoQueryLogic.union(
+  { filter: {name: &quot;assigned&quot;} },
+  { filter: {name: &quot;complete&quot;} }
+);
+
+console.log( JSON.stringify(unionization) ); //-&gt; &quot;{'filter':{'name':{'$in':['assigned','complete']}}}&quot;
+
+</code></pre>
+<div class='codepen'></div>
+<div line-highlight='3-10,only'></div>
+<p><strong>2. The defined type exposes a schema:</strong></p>
+<p><a href="can-define/map/map.html" title="Create observable objects.">can-define/map/map</a>s expose this type information as a schema:</p>
+<pre><code class="language-js">import {DefineMap, QueryLogic} from &quot;can&quot;;
+
+const Todo = DefineMap.extend({
+    id: {
+        identity: true,
+        type: &quot;number&quot;
+    },
+    name: &quot;string&quot;,
+    complete: &quot;boolean&quot;
+});
+
+const todoQueryLogic = new QueryLogic(Todo);
+
+const unionization = todoQueryLogic.union(
+  { filter: {name: &quot;assigned&quot;} },
+  { filter: {name: &quot;complete&quot;} }
+);
+
+console.log( JSON.stringify(unionization) ); //-&gt; &quot;{'filter':{'name':{'$in':['assigned','complete']}}}&quot;
+
+</code></pre>
+<div class='codepen'></div>
+<div line-highlight='12,only'></div>
+<p><strong>3. The schema is used by <code>can-query-logic</code> to create set instances:</strong></p>
+<p>When a call to <code>.filter()</code> happens like:</p>
+<pre><code class="language-js">import {DefineMap, QueryLogic} from &quot;can&quot;;
+
+const Todo = DefineMap.extend({
+    id: {
+        identity: true,
+        type: &quot;number&quot;
+    },
+    name: &quot;string&quot;,
+    complete: &quot;boolean&quot;
+});
+
+const todoQueryLogic = new QueryLogic(Todo);
+
+const unionization = todoQueryLogic.union(
+  { filter: {name: &quot;assigned&quot;} },
+  { filter: {name: &quot;complete&quot;} }
+);
+
+console.log( JSON.stringify(unionization) ); //-&gt; &quot;{'filter':{'name':{'$in':['assigned','complete']}}}&quot;
+
+</code></pre>
+<div class='codepen'></div>
+<div line-highlight='14-17,only'></div>
+<p>The queries (ex: <code>{ filter: {name: &quot;assigned&quot;} }</code>) are hydrated to <code>SetType</code>s like:</p>
+<pre><code class="language-js">const assignedSet = new BasicQuery({
+  filter: new And({
+    name: new Status[Symbol.for(&quot;can.SetType&quot;)](&quot;assigned&quot;)
+  })
+});
+</code></pre>
+<blockquote>
+<p>NOTE: <strong>hydrated</strong> is the opposite of serialization. It means we take
+a plain JavaScript object like <code>{ filter: {name: &quot;assigned&quot;} }</code> and
+create instances of types with it.</p>
+</blockquote>
+<p>The following is a more complex query and what it gets hydrated to:</p>
+<pre><code class="language-js">import {canReflect, QueryLogic} from &quot;can&quot;;
+//query
+const queryLogic = new QueryLogic({
+  filter: {
+    age: {$gt: 22}
+  },
+  sort: &quot;-name&quot;,
+  page: {start: 0, end: 9}
+});
+
+console.log( canReflect.getSchema(queryLogic) ); //-&gt; {
+//   filter: {
+//     age: {$gt: 22}
+//   },
+//   sort: &quot;-name&quot;,
+//   page: {start: 0, end: 9}
+// }
+</code></pre>
+<div class='codepen'></div>
+<pre><code class="language-js">// hydrated set types
+new BasicQuery({
+  filter: new And({
+    age: new GreaterThan(22)
+  }),
+  sort: &quot;-name&quot;,
+  page: new RealNumberRangeInclusive(0,9)
+});
+</code></pre>
+<!-- can has no export by the name of BasicQuery -->
+<p>Once queries are hydrated, <code>can-query/src/set</code> is used to perform the union:</p>
+<pre><code class="language-js">set.union(assignedSet, completeSet);
+</code></pre>
+<p><code>set.union</code> looks for comparator functions specified on their constructor's
+<code>can.setComparisons</code> symbol property.  For example, <code>BasicQuery</code> has
+a <code>can.setComparisons</code> property and value like the following:</p>
+<pre><code class="language-js">import {BasicQuery} from &quot;can&quot;;
+
+BasicQuery[Symbol.for(&quot;can.setComparisons&quot;)] = new Map([
+  [BasicQuery]: new Map([
+    [BasicQuery]: {union, difference, intersection}
+    [QueryLogic.UNIVERSAL]: {difference}
+  ])
+]);
+</code></pre>
+<!-- can has no export by the name of BasicQuery -->
+<p>Types like <code>BasicQuery</code> and <code>And</code> are &quot;composer&quot; types.  Their
+<code>union</code>, <code>difference</code> and <code>intersection</code> methods perform
+<code>union</code>, <code>difference</code> and <code>intersection</code> on their children types.</p>
+<p><code>can-query-logic</code>s methods reflect <a href="https://en.wikipedia.org/wiki/Set_theory">set theory</a>
+operations.  That's why most types need a <code>union</code>, <code>intersection</code>, and <code>difference</code>
+method.  With that, other methods like <code>isEqual</code> and <code>isSubset</code> can be derived.</p>
+<p>In this case, <code>set.union</code> will call <code>BasicQuery</code>'s union with
+itself.  This will see that the <code>sort</code> and <code>page</code> results match
+and simply return a new <code>BasicQuery</code> with the union of the filters:</p>
+<pre><code class="language-js">new BasicQuery({
+  filter: set.union( assignedSet.filter, completeSet.filter )
+})
+</code></pre>
+<p>This will eventually result in a query like:</p>
+<pre><code class="language-js">new BasicQuery({
+  filter: new And({
+    name: new Status[Symbol.for(&quot;can.SetType&quot;)](&quot;assigned&quot;, &quot;complete&quot;)
+  })
+})
+</code></pre>
+<p><strong>4. The resulting query is serialized:</strong></p>
+<p>Finally, this set will be serialized to:</p>
+<pre><code class="language-js">{
+  filter: {
+    name: [&quot;assigned&quot;, &quot;complete&quot;]
+  }
+}
+</code></pre>
+<p>The serialized output above is what is returned as a result of the union.</p>
+<h3>Code Organization</h3>
+<p>On a high level, <code>can-query-logic</code> is organized in four places:</p>
+<ul>
+<li><code>src/set.js</code> - The core &quot;set logic&quot; functionality. For example <code>set.isEqual</code>
+is built to derive from using underlying <code>difference</code> and <code>intersection</code> operators.</li>
+<li><code>src/types/*</code> - These are the <code>SetType</code> constructors used to make comparisons between
+different sets or properties.</li>
+<li><code>src/serializers/*</code> - These provide hydration and serialization methods used to
+change the plain JavaScript query objects to <code>SetType</code>s and back to plain JavaScript
+query objects.</li>
+<li><code>can-query-logic.js</code> - Assembles all the different types and serializers to
+hydrate  a query object to a SetType instance, then uses <code>set.js</code>'s logic to
+perform the set logic and serialize the result.</li>
+</ul>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"node_modules/can-query-logic/doc/can-query-logic.md"},"description":"Perform data queries and compare queries against each other. Provides logic useful for\ndata caching and real-time behavior.\n\n","type":"module","title":"","types":[{"type":"function","returns":{"types":[{"type":"undefined"}]},"params":[]}],"name":"can-query-logic","parent":"can-data-modeling","collection":"can-core","package":{"author":{"name":"Bitovi","email":"core@donejs.com","url":"donejs.com"},"bugs":{"url":"https://github.com/canjs/can-query-logic/issues"},"bundleDependencies":false,"dependencies":{"can-assign":"^1.1.1","can-define-lazy-value":"^1.0.2","can-key":"<2.0.0","can-log":"^1.0.0","can-reflect":"^1.14.1","can-symbol":"^1.6.1"},"deprecated":false,"description":"query data","devDependencies":{"can-define":"^2.0.3","can-test-helpers":"^1.1.2","http-server":"^0.11.0","jshint":"^2.9.1","steal":"^2.2.1","steal-qunit":"^2.0.0","steal-tools":"^2.2.1","test-saucelabs":"^0.0.6","testee":"^0.9.0"},"homepage":"https://github.com/canjs/can-query-logic#readme","keywords":["donejs-plugin"],"license":"MIT","main":"can-query-logic","name":"can-query-logic","repository":{"type":"git","url":"git://github.com/canjs/can-query-logic.git"},"scripts":{"ci":"npm run test && node test-saucelabs.js","develop":"done-serve --static --develop --port 8080","http-server":"http-server -p 3000 --silent","jshint":"jshint --config .jshintrc --exclude ./node_modules,./dist .","postpublish":"git push --tags && git push","preversion":"npm test","release:major":"npm version major && npm publish","release:minor":"npm version minor && npm publish","release:patch":"npm version patch && npm publish","test":"npm run jshint && npm run testee","testee":"testee test.html --browsers firefox"},"steal":{"npmIgnore":["testee","generator-donejs","donejs-cli","steal-tools"],"plugins":["steal-less","steal-stache"]},"version":"1.2.2"},"outline":{"depth":3},"signatures":[{"code":"new QueryLogic( [schemaOrType] [,options] )","description":"\n\n  The `can-query-logic` package exports a constructor function that builds _query logic_\n  from:\n\n  - an optional schema or type argument, and\n  - an optional `options` argument used to convert alternate parameters to\n  the expected [can-query-logic/query] format.\n\n\n  For example, the following builds _query logic_ from a [can-define/map/map]:\n\n```js\nimport {DefineMap, QueryLogic} from \"can\";\n\nconst Todo = DefineMap.extend({\n\tid: {\n\t\tidentity: true,\n\t\ttype: \"number\"\n\t},\n\tname: \"string\",\n\tcomplete: \"boolean\"\n});\n\nconst todoQueryLogic = new QueryLogic(Todo);\n\nconst filter = todoQueryLogic.filterMembers({\n\tfilter: {\n\t\tcomplete: false\n\t},\n\tsort: \"-name\",\n\tpage: {start: 0, end: 19}\n},[\n\t{id: 1, name: \"do dishes\", complete: false},\n\t{id: 2, name: \"mow lawn\", complete: true},\n\t// ...\n]);\nconsole.log( filter ); //-> [{id: 1, name: \"do dishes\", complete: false}]\n\n```\n\n<div class='codepen' data-codepen=''></div>\n\n  <div line-highlight='3-10,12,only'></div>\n\n\n  Once a _query logic_ instance is created, it can be used to\n  perform actions using [can-query-logic/query queries].  For example,\n  the following might select 20 incomplete todos from a list of todos:\n\n```js\nimport {DefineMap, QueryLogic} from \"can\";\n\nconst Todo = DefineMap.extend({\n\tid: {\n\t\tidentity: true,\n\t\ttype: \"number\"\n\t},\n\tname: \"string\",\n\tcomplete: \"boolean\"\n});\n\nconst todoQueryLogic = new QueryLogic(Todo);\n\nconst filter = todoQueryLogic.filterMembers({\n\tfilter: {\n\t\tcomplete: false\n\t},\n\tsort: \"-name\",\n\tpage: {start: 0, end: 19}\n},[\n\t{id: 1, name: \"do dishes\", complete: false},\n\t{id: 2, name: \"mow lawn\", complete: true},\n\t// ...\n]);\nconsole.log( filter ); //-> [{id: 1, name: \"do dishes\", complete: false}]\n\n```\n\n<div class='codepen' data-codepen=''></div>\n\n  <div line-highlight='14-24,only'></div>\n\n\n  By default `can-query-logic` supports queries represented by the [can-query-logic/query]\n  format.  It supports a variety of operators and options.  It looks like:\n\n  ```js\n  import {QueryLogic} from \"can\";\n  import {Todo} from \"//unpkg.com/can-demo-models@5\";\n\n  const todoQueryLogic = new QueryLogic(Todo);\n  // Perform query logic:\n  const filter = todoQueryLogic.filterMembers({\n    // Selects only the todos that match.\n    filter: {\n      complete: false\n    },\n    // Sort the results of the selection\n    sort: \"-name\",\n    // Selects a range of the sorted result\n    page: {start: 0, end: 19}\n  },[\n    {id: 1, name: \"do dishes\", complete: false},\n    {id: 2, name: \"mow lawn\", complete: true},\n    // ...\n  ]);\n  console.log( filter ); //-> [{id: 1, name: \"do dishes\", complete: false}]\n\n  ```\n<div class='codepen' data-codepen=''></div>\n\n  <div line-highlight='6-15,only'></div>\n\n","params":[{"types":[{"type":"function","returns":{"types":[{"type":"undefined"}]},"params":[{"types":[{"type":"Object","options":[]}],"optional":true,"name":"options","description":"The following _optional_ options are used to translate between the standard [can-query-logic/query] and the parameters the server expects:\n\n- `toQuery(params)` - Converts from the parameters used by the server to the standard [can-query-logic/query].\n- `toParams(query)` - Converts from the standard [can-query-logic/query] to the parameters used by the server.\n\nThe [Changing the query structure](#Changingthequerystructure) section below describes how to use these options to match your query's logic to your servers.\n"}]},{"type":"can-reflect/schema"}],"name":"schemaOrType","description":"Defines the behavior of keys on a [can-query-logic/query]. This is done with either:\n\n- A constructor function that supports [can-reflect.getSchema can-reflect.getSchema]. Currently, [can-define/map/map] supports the `can.getSchema` symbol:\n```js\nimport {DefineMap, QueryLogic} from \"can\";\n\nconst Todo = DefineMap.extend({\n\tid: {\n\t\tidentity: true,\n\t\ttype: \"number\"\n\t},\n\tname: \"string\",\n\tcomplete: \"boolean\"\n});\n\nconst todoQueryLogic = new QueryLogic(Todo);\n\nconst filter = todoQueryLogic.filterMembers({\n\tfilter: {\n\t\tcomplete: false\n\t},\n\tsort: \"-name\",\n\tpage: {start: 0, end: 19}\n},[\n\t{id: 1, name: \"do dishes\", complete: false},\n\t{id: 2, name: \"mow lawn\", complete: true},\n\t// ...\n]);\nconsole.log( filter ); //-> [{id: 1, name: \"do dishes\", complete: false}]\n\n```\n\n<div class='codepen' data-codepen=''></div>\n\n  <div line-highlight='3,10,only'></div>\n\n\n- A [can-reflect.getSchema schema object] that looks like the following:\n\n  ```js\n  import {QueryLogic, MaybeNumber, MaybeString, MaybeBoolean} from \"can\";\n\n  const queryLogic = new QueryLogic({\n    // keys that uniquely represent this type\n    identity: [\"id\"],\n    keys: {\n      id: MaybeNumber,\n      name: MaybeString,\n      complete: MaybeBoolean\n    }\n  });\n\n  const result = queryLogic.filterMembers({ filter: {complete: false}}, [\n    {id: \"1\", name: \"Justin\", complete: \"truthy\"},\n    {id: \"2\", name: \"Paula\", complete: \"\"},\n    {id: \"3\", name: \"Kevin\", complete: true}\n  ]);\n\n  console.log( result );\n  ```\n  <!-- Example doesn't work. Issue open: https://github.com/canjs/can-data-types/issues/7 -->\n  <!-- @codepen -->\n\n  Note that if a key type (ex: `name: MaybeString`) is __not__ provided, filtering by that\n  key will still work, but there won't be any type coercion. For example, the following\n  might not produce the desired results:\n\n  ```js\n  import {QueryLogic} from \"can\";\n\n  const queryLogic = new QueryLogic();\n  const unionized = queryLogic.union(\n    {filter: {age: 7}},\n    {filter: {age: \"07\"}}\n  );\n  console.log( JSON.stringify( unionized ) ); //-> \"{'filter':{'age':{'$in':[7,'07']}}}\"\n  ```\n<div class='codepen' data-codepen=''></div>\n\n\n  Use types like [can-data-types/maybe-number/maybe-number] if you want to add basic\n  type coercion:\n\n  ```js\n  import {QueryLogic, MaybeNumber} from \"can\";\n\n  const queryLogic = new QueryLogic({\n    identity: [\"id\"],\n    keys: {age: MaybeNumber}\n  });\n  const unionized = queryLogic.union(\n    {filter: {age: 7}},\n    {filter: {age: \"07\"}}\n  );\n  console.log( JSON.stringify( unionized ) ); //-> {filter: {age: 7}}\n  ```\n<div class='codepen' data-codepen=''></div>\n\n\n\n  If you need even more special key behavior, read [defining properties with special logic](#Definingfilterpropertieswithspeciallogic).\n\n  By default, filter properties like `status` in `{filter: {status: \"complete\"}}`\n  are used to create to one of the [can-query-logic/comparison-operators] like\n  `GreaterThan`. A matching schema key will overwrite this behavior. How this\n  works is explained in the [Defining filter properties with special logic](#Definingfilterpropertieswithspeciallogic) section below.\n"}]}],"codepen":[["\"can\"","\"//unpkg.com/can@6/core.mjs\""],["\"can/ecosystem\"","\"//unpkg.com/can@6/ecosystem.mjs\""],["\"can/everything\"","\"//unpkg.com/can@6/everything.mjs\""],["\"can/demos/technology-overview/mock-url\"","\"//unpkg.com/mock-url@^6.0.0/mock-url.mjs\""],["\"can/demos/technology-overview/route-mini-app-components\"","\"//unpkg.com/route-mini-app@^5.0.0/components.mjs\""],["return steal.import(","return import("],["\"can/demos/technology-overview/page-login\"","\"//unpkg.com/route-mini-app@^5.0.0/page-login.mjs\""],["`can/demos/technology-overview/page-${this.page}`","`//unpkg.com/route-mini-app@^5.0.0/page-${this.page}.mjs`"]],"_curParam":{"types":[{"type":"function","returns":{"types":[{"type":"undefined"}]},"params":[{"types":[{"type":"Object","options":[]}],"optional":true,"name":"options","description":"The following _optional_ options are used to translate between the standard [can-query-logic/query] and the parameters the server expects:\n\n- `toQuery(params)` - Converts from the parameters used by the server to the standard [can-query-logic/query].\n- `toParams(query)` - Converts from the standard [can-query-logic/query] to the parameters used by the server.\n\nThe [Changing the query structure](#Changingthequerystructure) section below describes how to use these options to match your query's logic to your servers.\n"}]},{"type":"can-reflect/schema"}],"name":"schemaOrType","description":"Defines the behavior of keys on a [can-query-logic/query]. This is done with either:\n\n- A constructor function that supports [can-reflect.getSchema can-reflect.getSchema]. Currently, [can-define/map/map] supports the `can.getSchema` symbol:\n```js\nimport {DefineMap, QueryLogic} from \"can\";\n\nconst Todo = DefineMap.extend({\n\tid: {\n\t\tidentity: true,\n\t\ttype: \"number\"\n\t},\n\tname: \"string\",\n\tcomplete: \"boolean\"\n});\n\nconst todoQueryLogic = new QueryLogic(Todo);\n\nconst filter = todoQueryLogic.filterMembers({\n\tfilter: {\n\t\tcomplete: false\n\t},\n\tsort: \"-name\",\n\tpage: {start: 0, end: 19}\n},[\n\t{id: 1, name: \"do dishes\", complete: false},\n\t{id: 2, name: \"mow lawn\", complete: true},\n\t// ...\n]);\nconsole.log( filter ); //-> [{id: 1, name: \"do dishes\", complete: false}]\n\n```\n\n<div class='codepen' data-codepen=''></div>\n\n  <div line-highlight='3,10,only'></div>\n\n\n- A [can-reflect.getSchema schema object] that looks like the following:\n\n  ```js\n  import {QueryLogic, MaybeNumber, MaybeString, MaybeBoolean} from \"can\";\n\n  const queryLogic = new QueryLogic({\n    // keys that uniquely represent this type\n    identity: [\"id\"],\n    keys: {\n      id: MaybeNumber,\n      name: MaybeString,\n      complete: MaybeBoolean\n    }\n  });\n\n  const result = queryLogic.filterMembers({ filter: {complete: false}}, [\n    {id: \"1\", name: \"Justin\", complete: \"truthy\"},\n    {id: \"2\", name: \"Paula\", complete: \"\"},\n    {id: \"3\", name: \"Kevin\", complete: true}\n  ]);\n\n  console.log( result );\n  ```\n  <!-- Example doesn't work. Issue open: https://github.com/canjs/can-data-types/issues/7 -->\n  <!-- @codepen -->\n\n  Note that if a key type (ex: `name: MaybeString`) is __not__ provided, filtering by that\n  key will still work, but there won't be any type coercion. For example, the following\n  might not produce the desired results:\n\n  ```js\n  import {QueryLogic} from \"can\";\n\n  const queryLogic = new QueryLogic();\n  const unionized = queryLogic.union(\n    {filter: {age: 7}},\n    {filter: {age: \"07\"}}\n  );\n  console.log( JSON.stringify( unionized ) ); //-> \"{'filter':{'age':{'$in':[7,'07']}}}\"\n  ```\n<div class='codepen' data-codepen=''></div>\n\n\n  Use types like [can-data-types/maybe-number/maybe-number] if you want to add basic\n  type coercion:\n\n  ```js\n  import {QueryLogic, MaybeNumber} from \"can\";\n\n  const queryLogic = new QueryLogic({\n    identity: [\"id\"],\n    keys: {age: MaybeNumber}\n  });\n  const unionized = queryLogic.union(\n    {filter: {age: 7}},\n    {filter: {age: \"07\"}}\n  );\n  console.log( JSON.stringify( unionized ) ); //-> {filter: {age: 7}}\n  ```\n<div class='codepen' data-codepen=''></div>\n\n\n\n  If you need even more special key behavior, read [defining properties with special logic](#Definingfilterpropertieswithspeciallogic).\n\n  By default, filter properties like `status` in `{filter: {status: \"complete\"}}`\n  are used to create to one of the [can-query-logic/comparison-operators] like\n  `GreaterThan`. A matching schema key will overwrite this behavior. How this\n  works is explained in the [Defining filter properties with special logic](#Definingfilterpropertieswithspeciallogic) section below.\n"},"comment":" ","pathToRoot":".."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="./static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix="."></div>
+
+	</body>
+</html>

@@ -1,0 +1,43 @@
+#!/usr/bin/env node
+
+var yargs = require("yargs");
+
+var configured = require("../lib/configured/configured");
+var only = require("../lib/cmd/only");
+var _ = require("lodash");
+
+
+var argv = yargs
+	.usage("Usage: documentjs [site|version][@source]")
+	.example("documentjs","Generate every site and version in documentjs.json.")
+	.example("documentjs api","Generate only the api site.")
+	.example("documentjs api 2.0.0","Generate the api site and the 2.0.0 version.")
+	.example("documentjs 2.0.0@../dir","Only the 2.0.0 version but loaded from ../dir.")
+	
+	.string("_")
+	
+	.alias("w","watch")
+	.describe("w","Watch files and regenerate on changes")
+	.boolean("w")
+	
+	.alias("f","forceBuild")
+	.describe("f","Force rebuilding the templates, js, and css.")
+	.boolean("f")
+	
+	.alias("d","debug")
+	.describe("d","Turn on debugging output.")
+	.boolean("d")
+	
+	.alias("h","help")
+	.help("h")
+	.argv;
+
+var options = _.extend({}, argv);
+if(options._.length){
+	options.only = only(options._.map(function(value){
+		return ""+value;
+	}));
+}
+delete options._;
+
+configured.generateProject({path: process.cwd()}, undefined, options).done();

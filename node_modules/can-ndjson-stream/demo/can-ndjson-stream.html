@@ -1,0 +1,38 @@
+<script src="../node_modules/steal/steal.js" main="@empty">
+var ndjsonStream = require("can-ndjson-stream");
+
+function streamerr(e) {
+  console.warn("Stream error");
+  console.warn(e);
+}
+
+fetch("/api").then( function(response) { 
+  return ndjsonStream(response.body);
+ }).then(function(todosStream) { 
+  var reader = todosStream.getReader();
+
+  reader.read().then(function read(result) {
+    if (result.value.user === '17437675') {
+      reader.cancel('Matched userId');
+      return;
+    }
+
+    if (result.done) {
+      render("Done.");
+      return;
+    }
+
+    render(result.value);   
+    reader.read().then(read, streamerr);
+
+  }, streamerr);
+ });
+
+var counter = 0;
+
+render = val => {
+  var div = document.createElement('div');
+  div.append('Fetched ndjson row ', ++counter, ' : ', JSON.stringify(val));
+  document.getElementsByTagName('body')[0].append(div);
+}
+</script>

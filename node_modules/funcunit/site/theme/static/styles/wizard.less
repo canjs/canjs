@@ -1,0 +1,81 @@
+.wizard {
+	list-style-type: none;
+	text-align: center;
+	padding: 0;
+	margin: 10px auto;
+	background: url(../img/wizard-bkg.svg) no-repeat center center;
+	margin-top: 30px;
+	
+	li {
+		display: inline-block;
+		position: relative;
+		width: 270px;
+		height: 82px;
+		line-height: 82px;
+		padding: 0;
+		margin: 0 45px 0 0;
+		overflow: visible;
+		
+		&:last-child {
+			margin-right: 0;
+		}
+		
+		a {
+			text-decoration: none;
+			text-shadow: 0 1px 0 rgba(0, 0, 0, 1);
+			color: rgba(255, 255, 255, 0.9);
+			font-size: 18px;
+			font-weight: normal;
+			font-style: normal;
+			.text-smoothing;
+			position: relative;
+			z-index: 1;
+			padding: 30px 50px;
+			
+			&:hover {
+				text-shadow: 0 1px 8px rgba(0, 0, 0, 1);
+				color: rgba(255, 255, 255, 0.9);
+			}
+		}
+	}
+	
+	 .download a,
+	 .guide a,
+	 .video a {
+		padding-left: 80px;
+		position: relative;
+		overflow: visible;
+	}
+	 .guide a {
+		left:  15px;
+	}
+	 .download a:before,
+	 .guide a:before,
+	 .video a:before {
+		text-decoration: inherit;
+		display: inline;
+		width: auto;
+		height: auto;
+		vertical-align: baseline;
+		text-decoration: inherit;
+		display: inline-block;
+		speak: none;
+		content: "\e044";
+		font: normal normal 70px Bitstrap;
+		position: absolute;
+		left: 30px;
+		top: -10px;
+	}
+	 .guide a:before {
+		content: "\e045";
+	}
+	 .video a:before {
+		content: "\e046";
+	}
+	
+	
+}
+
+
+
+

@@ -1,0 +1,8 @@
+{
+	"sites": {
+		"api": {
+			"parent": "mylib"
+		}
+	}
+	
+}

@@ -1,0 +1,15 @@
+{
+	"node": false,
+	"strict": "global",
+	"globals": {
+		"window": false,
+		"document": false,
+		"require": false,
+		"module": false,
+		"CustomEvent": true,
+		"test": false,
+		"ok": false,
+		"equal": false,
+		"deepEqual": false
+	}
+}

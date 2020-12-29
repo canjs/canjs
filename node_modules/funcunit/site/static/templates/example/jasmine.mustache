@@ -1,0 +1,64 @@
+<pre class="code prettyprint lang-js" style="overflow: auto;">
+//slowing funcunit down for dramatic effect
+F.speed = 100;
+ 
+describe('TodoMVC', function(){
+  it('should create and complete todos', function() {
+    var newTodo = F('#new-todo');
+    newTodo.type('FuncUnit [enter]');
+    newTodo.type('is [enter]');
+    newTodo.type('awesome! [enter]');
+ 
+    F('.todo label:contains("FuncUnit")').visible();
+    F('.todo label:contains("is")').visible();
+    F('.todo label:contains("awesome")').visible();
+ 
+    F('.toggle:not(:checked)').click();
+    F('.toggle:not(:checked)').click();
+    F('.toggle:not(:checked)').click();
+ 
+    F('#clear-completed').click();
+    F('.todo.completed').missing();
+  });
+ 
+  it('should filter todos, then complete', function() {
+    var newTodo = F('#new-todo');
+    newTodo.type('Simple [enter]');
+    newTodo.type('Event [enter]');
+    newTodo.type('Simulation [enter]');
+ 
+    F('.toggle:not(:checked)').click();
+    F('.toggle:not(:checked)').click();
+ 
+    F('a:contains("Active")').click();
+    F('.todo label:contains("Simple")').invisible();
+    F('.todo label:contains("Event")').invisible();
+    F('.todo label:contains("Simulation")').visible();
+ 
+    F('a:contains("Completed")').click();
+    F('.todo label:contains("Simple")').visible();
+    F('.todo label:contains("Event")').visible();
+    F('.todo label:contains("Simulation")').invisible();
+ 
+    F('a:contains("All")').click();
+    F('.todo label:contains("Simple")').visible();
+    F('.todo label:contains("Event")').visible();
+    F('.todo label:contains("Simulation")').visible();
+ 
+    F('.toggle:not(:checked)').click();
+    F('#clear-completed').click();
+    F('.todo.completed').missing();
+  });
+ 
+  it('should destroy todos', function() {
+    F('#new-todo').type('Sweet. [enter]');
+ 
+    F('.todo label:contains("Sweet.")').visible();
+    F('.destroy').click();
+ 
+    F('.todo label:contains("Sweet.")').missing();
+  });
+});
+</pre>
+ 
+<iframe class="result" src="site/examples/todo_jasmine.html?init"></iframe>

@@ -1,0 +1,2 @@
+
+define('another-define',thisIsMyVariable);

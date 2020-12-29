@@ -1,0 +1,11 @@
+[
+	{"can-vdom": [
+		{"modules": [
+			"can-vdom/make-window/make-window",
+			"can-vdom/make-document/make-document"
+		]},
+		{"types": [
+			"can-vdom.types.window"
+		]}
+	]}
+]

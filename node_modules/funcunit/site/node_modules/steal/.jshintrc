@@ -1,0 +1,44 @@
+{
+  "globals": {
+    "steal": true,
+    "QUnit": true,
+    "test": true,
+    "asyncTest": true,
+    "expect": true,
+    "module": true,
+    "ok": true,
+    "equal": true,
+    "notEqual": true,
+    "deepEqual": true,
+    "notDeepEqual": true,
+    "strictEqual": true,
+    "notStrictEqual": true,
+    "raises": true,
+    "start": true,
+    "stop": true,
+    "System": true,
+    "Promise": true
+  },
+
+  "curly": true,
+  "eqeqeq": true,
+  "freeze": true,
+  "indent": 2,
+  "latedef": true,
+  "noarg": true,
+  "undef": true,
+  "unused": "vars",
+  "trailing": true,
+  "maxdepth": 4,
+  "boss" : true,
+
+  "esnext": true,
+  "eqnull": true,
+  "evil": true,
+  "loopfunc": true,
+  "smarttabs": true,
+  "maxerr" : 200,
+
+  "browser": true,
+  "phantom": true
+}

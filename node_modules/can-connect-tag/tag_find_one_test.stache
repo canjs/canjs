@@ -1,0 +1,4 @@
+<person-model get='{id=personId}'>
+	{{#if isPending}}<span class='pending' on:inserted="../pending()"></span>{{/if}}
+	{{#if isResolved}}<span class='resolved' on:inserted="../resolved(scope.context, scope.element)" pid="{{value.id}}">{{value.type}}</span>{{/if}}
+</person-model>

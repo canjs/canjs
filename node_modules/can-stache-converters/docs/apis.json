@@ -1,0 +1,9 @@
+[
+	{"can-stache-converters": [
+		"can-stache-converters.boolean-to-inList",
+		"can-stache-converters.string-to-any",
+		"can-stache-converters.not",
+		"can-stache-converters.index-to-selected",
+		"can-stache-converters.either-or"
+	]}
+]

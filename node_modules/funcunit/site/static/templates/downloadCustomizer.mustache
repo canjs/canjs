@@ -1,0 +1,55 @@
+<h1>Customize<span class="pullright">version {{versionNumber configuration.version}}</span></h1>
+<form method="get" action="http://bitbuilder.herokuapp.com/can.custom.js">
+
+  {{^configuration}}
+	<div class="loading"/>
+  {{/configuration}}
+
+  {{#if configuration}}
+  <div class="libraries">Library:
+    {{#configuration.libraries}}
+    <input type="radio" id="{{id}}" name="configuration" value="{{name}}" {{#isDefault}}checked{{/isDefault}}><label for="{{id}}" class="radio"></label>
+    <label for="{{id}}">{{description}}</label>
+    {{/configuration.libraries}}
+
+    <span class="pullright">
+      <input id="minify" type="checkbox" name="minify" value="true" {{#minified}}checked{{/minified}}><label for="minify" class="checkbox"></label><label for="minify">Minified</label>
+    </span>
+  </div>
+
+  <table class="options" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <th width="40" align="center" valign="top"><input type="checkbox" class="all" id="core" data-type="core"/><label for="core" class="checkbox"></label></th>
+      <th colspan="2" align="center" valign="middle"><label for="core">Core</label></th>
+    </tr>
+    {{#configuration.types.core.modules}}
+    <tr>
+      <td width="40" align="center" valign="top"><input type="checkbox" id="{{id}}" class="module" name="plugins" value="{{path}}" {{#isDefault}}checked{{/isDefault}} {{data 'module'}}/><label for="{{id}}" class="checkbox"></label></td>
+      <td width="175" align="left" valign="top"><label for="{{id}}">{{name}}</label></td>
+      <td align="left" valign="top">{{description}}</td>
+    </tr>
+    {{/configuration.types.core.modules}}
+    </tr>
+  </table>
+
+  <table class="options" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <th width="40" align="center" valign="top"><input type="checkbox" class="all checkbox" id="plugin" data-type="plugin"/><label for="plugin" class="checkbox"></label></th>
+      <th colspan="2" align="center" valign="middle"><label for="plugin">Plugins</label></th>
+    </tr>
+    {{#configuration.types.plugin.modules}}
+    <tr>
+      <td width="40" align="center" valign="top"><input type="checkbox" id="{{id}}" class="module" name="plugins" value="{{path}}" {{#isDefault}}checked{{/isDefault}} {{data 'module'}}/><label for="{{id}}" class="checkbox"></label></td>
+      <td width="175" align="left" valign="top"><label for="{{id}}">{{name}}</label></td>
+      <td align="left" valign="top">{{description}}</td>
+    </tr>
+    {{/configuration.types.plugin.modules}}
+    </tr>
+  </table>
+
+  <br />
+  <div class="download-button">
+    <button class="color" type="submit">Customize & Download</button>
+  </div>
+  {{/if}}
+</form>

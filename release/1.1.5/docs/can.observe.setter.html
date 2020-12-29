@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>can.observe.setter.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="can.construct.proxy.html">
+                can.construct.proxy.js
+              </a>
+            
+              
+              <a class="source" href="can.construct.super.html">
+                can.construct.super.js
+              </a>
+            
+              
+              <a class="source" href="can.control.plugin.html">
+                can.control.plugin.js
+              </a>
+            
+              
+              <a class="source" href="can.dojo.html">
+                can.dojo.js
+              </a>
+            
+              
+              <a class="source" href="can.fixture.html">
+                can.fixture.js
+              </a>
+            
+              
+              <a class="source" href="can.jquery-all.html">
+                can.jquery-all.js
+              </a>
+            
+              
+              <a class="source" href="can.jquery.html">
+                can.jquery.js
+              </a>
+            
+              
+              <a class="source" href="can.model.queue.html">
+                can.model.queue.js
+              </a>
+            
+              
+              <a class="source" href="can.mootools.html">
+                can.mootools.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.attributes.html">
+                can.observe.attributes.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.backup.html">
+                can.observe.backup.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.delegate.html">
+                can.observe.delegate.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.setter.html">
+                can.observe.setter.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.validations.html">
+                can.observe.validations.js
+              </a>
+            
+              
+              <a class="source" href="can.view.modifiers.html">
+                can.view.modifiers.js
+              </a>
+            
+              
+              <a class="source" href="can.view.mustache.html">
+                can.view.mustache.js
+              </a>
+            
+              
+              <a class="source" href="can.yui.html">
+                can.yui.js
+              </a>
+            
+              
+              <a class="source" href="can.zepto.html">
+                can.zepto.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>can.observe.setter.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="comment">/*!
+* CanJS - 1.1.5 (2013-03-27)
+* http://canjs.us/
+* Copyright (c) 2013 Bitovi
+* Licensed MIT
+*/</span>
+(<span class="function"><span class="keyword">function</span> <span class="params">(can, window, undefined)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2>can/observe/setter/setter.js</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    can.classize = <span class="function"><span class="keyword">function</span> <span class="params">(s, join)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>this can be moved out ..
+used for getter setter</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> parts = s.split(can.undHash),
+            i = <span class="number">0</span>;
+        <span class="keyword">for</span> (; i &lt; parts.length; i++) {
+            parts[i] = can.capitalize(parts[i]);
+        }
+
+        <span class="keyword">return</span> parts.join(join || <span class="string">''</span>);
+    }
+
+    <span class="keyword">var</span> classize = can.classize,
+        proto = can.Observe.prototype,
+        old = proto.__set;
+
+    proto.__set = <span class="function"><span class="keyword">function</span> <span class="params">(prop, value, current, success, error)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>check if there&#39;s a setter</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> cap = classize(prop),
+            setName = <span class="string">"set"</span> + cap,
+            errorCallback = <span class="function"><span class="keyword">function</span> <span class="params">(errors)</span> {</span>
+                <span class="keyword">var</span> stub = error &amp;&amp; error.call(self, errors);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>if &#39;setter&#39; is on the page it will trigger
+the error itself and we dont want to trigger
+the event twice. :)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (stub !== <span class="literal">false</span>) {
+                    can.trigger(self, <span class="string">"error"</span>, [prop, errors], <span class="literal">true</span>);
+                }
+
+                <span class="keyword">return</span> <span class="literal">false</span>;
+            },
+            self = <span class="keyword">this</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>if we have a setter</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (<span class="keyword">this</span>[setName] &amp;&amp;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>call the setter, if returned value is undefined,
+this means the setter is async so we 
+do not call update property and return right away</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        (value = <span class="keyword">this</span>[setName](value, <span class="function"><span class="keyword">function</span> <span class="params">(value)</span> {</span>
+            old.call(self, prop, value, current, success, errorCallback)
+        }, errorCallback)) === <span class="literal">undefined</span>) {
+            <span class="keyword">return</span>;
+        }
+
+        old.call(self, prop, value, current, success, errorCallback);
+
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    };
+
+})(can, <span class="keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

@@ -1,0 +1,1 @@
+This `app` folder holds the source files for the home page demo.  To build it, run `grunt build` at in the parent folder.  It will output to static/app.

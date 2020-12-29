@@ -1,0 +1,23 @@
+<script>
+	window.QUnit = window.parent.QUnit;
+	window.removeMyself = window.parent.removeMyself;
+</script>
+<script src="../../steal.production.js"
+		data-config="./config.js"
+		data-main="foo"
+		data-env="production"></script>
+<script>
+	var consoleError = console.error;
+	console.error = function(err){
+		if(typeof window !== "undefined" && window.QUnit) {
+			var str = err.toString();
+			QUnit.ok(str, "got got an error");
+
+			QUnit.start();
+			removeMyself();
+			return {};
+		} else {
+			console.log("got an error", err, err.stack);
+		}
+	};
+</script>

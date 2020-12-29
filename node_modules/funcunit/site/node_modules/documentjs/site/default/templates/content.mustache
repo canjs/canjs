@@ -1,0 +1,119 @@
+{{#unless hideContainer}}
+<div class="container api">
+{{/unless}}
+	{{#unless hideSidebar}}
+	<nav class="sidebar">
+		{{#if enableSearch}}
+		<div class="search-wrapper">
+			<div class="search">
+				<input type="text"/>
+			</div>
+		</div>
+		{{/if}}
+		{{> menu.mustache}}
+	</nav>
+	{{/unless}}
+	
+	{{#unless hideArticle}}
+	<article class="content docs">
+	{{/unless}}
+	
+		{{#unless hideTitle}}
+		<section class="title">
+			{{> title.mustache}}
+		</section>
+		{{/unless}}
+		
+		{{#unless hideArticle}}
+		<section class="contents">
+		</section>
+		{{/unless}}
+		
+		{{#if deprecated.length}}
+			<section class='warnings'>
+				{{#deprecated}}
+					<div class='deprecated warning'>
+						<h3>Deprecated {{version}}</h3>
+						<div class='signature-wrapper'>
+							{{{chain "makeHtml" "makeLinks" description}}}
+						</div>
+					</div>
+				{{/deprecated}}
+			</section>
+		{{/if}}
+
+		{{#if description}}
+		<section class="description">
+			{{{chain "makeHtml" "makeLinks" description}}}
+		</section>
+		{{/if}}
+
+		{{#if signatures}}
+			{{#signatures}}
+				<section class="signature">
+					{{> signature.mustache}}
+				</section>
+			{{/signatures}}
+		{{else}}
+			{{#if types}}
+			<section class='primary-options'>
+				{{> types.mustache}}
+			</section>
+			{{/if}}
+		{{/if}}
+		
+		{{#ifAny params returns}}
+			<section class="signature">
+				{{> signature.mustache}}
+			</section>
+		{{/ifAny}}
+		
+
+		{{#if body}}
+		<section class="comment">
+			{{{chain "renderAsTemplate" "makeHtml" "makeLinks" body}}}
+		</section>
+		{{/if}}
+		{{#if htmlBody}}
+			{{{htmlBody}}}
+		{{/if}}
+
+		{{#if showChildrenInPage}}
+			{{#eachOrderedChildren children}}
+				<section class="comment">
+					<h2>{{title}}</h2>
+				</section>
+				
+				{{#if description}}
+				<section class="description">
+					{{{chain "makeHtml" "makeLinks" description}}}
+				</section>
+				{{/if}}
+
+				{{#if body}}
+					<section class="comment">
+						{{{chain "renderAsTemplate" "makeHtml" "makeLinks" body}}}
+					</section>
+					{{#if htmlBody}}
+						{{{htmlBody}}}
+					{{/if}}
+				{{/if}}
+			{{/eachOrderedChildren}}
+		{{/if}}
+
+		{{#if api}}
+		<section class="api">
+			{{{makeApiSection}}}
+		</section>
+		{{/if}}
+	
+	{{#unless hideArticle}}
+	</article>
+	{{/unless}}
+	
+{{#unless hideContainer}}
+</div>
+{{/unless}}
+
+
+

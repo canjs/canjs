@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/topics/logic.md
+	@page guides/logic
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Logic | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="Learn how to write observables in an organized, maintainable, and testable way.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Learn how to write observables in an organized, maintainable, and testable way.">
+	<meta property="og:title" content="Logic | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "Learn how to write observables in an organized, maintainable, and testable way.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Logic | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/logic" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>getting started</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="crud-beginner.html"
+							title="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+							CRUD Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="setup.html"
+							title="Learn how to install CanJS in your environment.">
+							Setting Up CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="technology-overview.html"
+							title="Learn the basics of CanJS’s technology.">
+							Technology Overview
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>topics</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="html.html"
+							title="Learn how to update HTML and listen to user interactions.">
+							HTML
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="routing.html"
+							title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+							Routing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="data.html"
+							title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">
+							Service Layer
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="debugging.html"
+							title="Learn how to debug CanJS applications.">
+							Debugging
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="forms.html"
+							title="Learn how to create amazing &lt;form&gt;s with CanJS.">
+							Forms
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="testing.html"
+							title="Learn how to test CanJS applications.">
+							Testing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="logic.html"
+							title="Learn how to write observables in an organized, maintainable, and testable way.">
+							Logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="server-side-rendering.html"
+							title="Learn how to set up SSR for CanJS.">
+							Server-Side Rendering
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>app guides</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="chat.html"
+							title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+							Chat Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="todomvc.html"
+							title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+							TodoMVC Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/todomvc-with-steal.html"
+							title="This tutorial walks through building TodoMVC with StealJS. It includes KeyNote presentations covering CanJS core libraries.">
+							TodoMVC with StealJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>beginner recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/canvas-clock.html"
+							title="This beginner guide walks you through building a clock with the Canvas API.">
+							Canvas Clock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-simple.html"
+							title="This beginner guide walks through building a very simple credit card payment form.  It uses Stripe.js v2 API to create a token which can be used to create a charge.  It also performs simple validation on the payment form values.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-simple.html"
+							title="This beginner guide walks you through building a simple file navigation widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.0.0. Check out the file-navigator-advanced for an example that makes AJAX requests for its data and uses can-stache-element.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/signup-simple.html"
+							title="This beginner guide walks through building simple signup, login forms and a logout button.">
+							Signup and Login
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/video-player.html"
+							title="This beginner guide walks you through building custom video controls around a video element.">
+							Video Player
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/weather-report-simple.html"
+							title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.2.">
+							Weather Report
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>intermediate recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/cta-bus-map.html"
+							title="This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map. You&#x27;ll learn how to create a StacheElement that integrates with 3rd party widgets.">
+							CTA Bus Map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/modals.html"
+							title="This intermediate guide shows how to create a multiple modal form.">
+							Multiple Modals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/text-editor.html"
+							title="This intermediate guide walks you through building a basic rich text editor.">
+							Text Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/tinder-carousel.html"
+							title="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+							Tinder Carousel
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>advanced recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-advanced.html"
+							title="This advanced guide walks through building a simple credit card payment form with validations. It doesn’t use can-define. Instead it uses Kefir.js streams to make a ViewModel. can-kefir is used to make the Kefir streams observable to can-stache.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-advanced.html"
+							title="This advanced guide walks you through building a file navigation widget that requests data with fetch. It takes about 45 minutes to complete.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/playlist-editor.html"
+							title="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+							Playlist Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/search-list-details.html"
+							title="This advanced guide walks through building a Search, List, Details flow with lazy-loaded routes.">
+							Search, List, Details
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>upgrade</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-3.html"
+							title="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+							Migrating to CanJS 3
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-4.html"
+							title="This guide walks you through the step-by-step process to upgrade a 3.x app to CanJS 4.">
+							Migrating to CanJS 4
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-5.html"
+							title="This guide walks you through the process to upgrade a 4.x app to CanJS 5.x.">
+							Migrating to CanJS 5
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-6.html"
+							title="This guide walks you through the process to upgrade a 5.x app to CanJS 6.x.">
+							Migrating to CanJS 6
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="upgrade/using-codemods.html"
+							title="Learn how to migrate your app to CanJS 6 using can-migrate.">
+							Using Codemods
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>other</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="api.html"
+							title="This page walks through how to use and understand CanJS’s API documentation.">
+							Reading the API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Logic</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/topics/logic.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Learn how to write observables in an organized, maintainable, and testable way.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <p>This guide will show you many techniques for writing the logic of an element props so that it is easy to test and easy to maintain. It will show how to organize props so that there is a clear purpose for each property and method, how to use derived properties to handle complex logic, how to write methods that are focused on doing a single thing, how to isolate side effects so they do not affect other logic and unit tests, and how to clean up event listeners to prevent memory leaks.</p>
+<h2>Organize element props</h2>
+<p>The organization of an element props should convey which properties should change and where those changes should happen. We suggest organizing props using the following sections:</p>
+<ul>
+<li>External stateful properties - Properties passed in to the component through <a href="../can-stache-bindings.html" title="Listen to events and create one-way and two-way bindings.">bindings</a>.</li>
+<li>Internal stateful properties - Stateful properties &quot;owned&quot; by this component.</li>
+<li>Derived properties - Properties derived from stateful properties.</li>
+<li>Methods - Methods that change stateful properties and dispatch events that can be used in derived properties and side effects.</li>
+<li>Side effects - Side effects that depend on the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction#What_is_the_DOM">DOM</a> should be done in the <a href="../can-stache-element/lifecycle-hooks.connected.html" title="A lifecycle hook called after the element is inserted into the document.">connected lifecycle hook</a>.</li>
+</ul>
+<p>Here is an example (click the &quot;Run in your browser&quot; button to see them in action):</p>
+<pre><code class="language-html">&lt;props-organization heading:raw=&quot;Props Organization Example&quot;&gt;&lt;/props-organization&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css&quot;&gt;
+&lt;script src=&quot;https://code.jquery.com/jquery-3.2.1.slim.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { StacheElement, type } from &quot;can&quot;;
+
+class PropsOrganization extends StacheElement {
+  static view = `
+    {{# if(this.heading) }}
+      &lt;h2&gt;{{ this.heading }}&lt;/h2&gt;
+    {{/ if }}
+
+    &lt;p&gt;
+      {{# if(this.showExternalStatefulProperties) }}
+        &lt;span on:click=&quot;this.showExternalStatefulProperties = false&quot;&gt;-&lt;/span&gt;
+      {{ else }}
+        &lt;span on:click=&quot;this.showExternalStatefulProperties = true&quot;&gt;+&lt;/span&gt;
+      {{/ if }}
+      External stateful properties
+    &lt;/p&gt;
+    &lt;p {{# unless(this.showExternalStatefulProperties) }}class=&quot;hidden&quot;{{/ unless }}&gt;
+      Properties passed in to the component through &lt;a href=&quot;//canjs.com/doc/can-stache-bindings.html&quot;&gt;bindings&lt;/a&gt;.
+    &lt;/p&gt;
+
+    &lt;p&gt;
+      {{# if(this.showInternalStatefulProperties) }}
+        &lt;span on:click=&quot;this.showInternalStatefulProperties = false&quot;&gt;-&lt;/span&gt;
+      {{ else }}
+        &lt;span on:click=&quot;this.showInternalStatefulProperties = true&quot;&gt;+&lt;/span&gt;
+      {{/ if }}
+      Internal stateful properties
+    &lt;/p&gt;
+    &lt;p {{# unless(this.showInternalStatefulProperties) }}class=&quot;hidden&quot;{{/ unless }}&gt;
+      Stateful properties &quot;owned&quot; by this component.
+    &lt;/p&gt;
+
+    &lt;p&gt;
+      {{# if(this.showDerivedProperties) }}
+        &lt;span on:click=&quot;this.hideDerivedProperties = true&quot;&gt;-&lt;/span&gt;
+      {{ else }}
+        &lt;span on:click=&quot;this.hideDerivedProperties = false&quot;&gt;+&lt;/span&gt;
+      {{/ if }}
+      Derived properties
+    &lt;/p&gt;
+    &lt;p {{# unless(this.showDerivedProperties) }}class=&quot;hidden&quot;{{/ unless }}&gt;
+      Properties derived from stateful properties. This is where most of the logic of props should happen.
+    &lt;/p&gt;
+
+    &lt;p&gt;
+      &lt;button on:click=&quot;this.toggleShowMethods()&quot;&gt;
+        {{# if(this.showMethods) }}Hide {{/ if }} Methods
+      &lt;/button&gt;
+    &lt;/p&gt;
+    &lt;p {{# unless(this.showMethods) }}class=&quot;hidden&quot;{{/ unless }}&gt;
+      Methods can change stateful properties and dispatch events that can be used in derived properties and side effects.
+    &lt;/p&gt;
+
+    &lt;p&gt;&lt;button on:click=&quot;this.showSideEffects()&quot;&gt;Side Effects&lt;/button&gt;&lt;/p&gt;
+    &lt;div class=&quot;modal&quot; tabindex=&quot;-1&quot; role=&quot;dialog&quot;&gt;
+      &lt;div class=&quot;modal-dialog modal-dialog-centered&quot; role=&quot;document&quot;&gt;
+        &lt;div class=&quot;modal-content&quot;&gt;
+          &lt;div class=&quot;modal-body&quot;&gt;
+            &lt;p&gt;The connected lifecycle hook is where side effects should be handled. This will prevent them from happening during unit tests of the props.&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  `;
+
+  static props = {
+    // EXTERNAL STATEFUL PROPERTIES
+    heading: type.maybeConvert(String),
+
+    // INTERNAL STATEFUL PROPERTIES
+    showExternalStatefulProperties: false,
+
+    showInternalStatefulProperties: false,
+    hideDerivedProperties: true,
+    showMethods: false,
+
+    // DERIVED PROPERTIES
+    get showDerivedProperties () {
+      return !this.hideDerivedProperties;
+    }
+  };
+
+  toggleShowMethods() {
+    this.showMethods = !this.showMethods;
+  }
+
+  showSideEffects() {
+    this.dispatch(&quot;show-side-effects&quot;);
+  }
+
+  connected() {
+    const $modal = $(this).find(&quot;.modal&quot;);
+
+    this.listenTo(&quot;show-side-effects&quot;, () =&gt; {
+      $modal.show();
+    });
+
+    this.listenTo(window, &quot;click&quot;, () =&gt; {
+      $modal.hide();
+    });
+  }
+};
+customElements.define(&quot;props-organization&quot;, PropsOrganization);
+&lt;/script&gt;
+&lt;style&gt;
+props-organization {
+  display: block;
+}
+
+span {
+  cursor: pointer;
+  font-weight: 700;
+  padding: 4px;
+}
+
+span.right-arrow:after {
+ content: &quot;►&quot;;
+}
+
+span.down-arrow:after {
+  content: &quot;▼&quot;;
+}
+
+p.hidden {
+  display: none;
+}
+&lt;/style&gt;
+</code></pre>
+<div line-highlight='72-106,only'></div>
+<div class='codepen'></div>
+<h2>Derived properties</h2>
+<p>A derived property is a property whose value is not set by any other function; derived properties calculate their own value based on the values of other properties, changes to other properties, and other events.</p>
+<p>Since the logic of a derived property is isolated to that property’s definition, it is much easier to understand and debug than a property that can be changed directly by other functions. Beacuse of this, <strong>most of the logic of an elements props should be handled by derived properties</strong>.</p>
+<p>CanJS has two ways to create derived properties:</p>
+<ul>
+<li><a href="logic.html#Derivepropertiesfromotherproperties" title="Learn how to write observables in an organized, maintainable, and testable way.">get property behaviors</a> can derive their value from the value of other properties and the value they were last set to.</li>
+<li><a href="logic.html#Derivepropertiesfromchangestoanotherproperty" title="Learn how to write observables in an organized, maintainable, and testable way.">value property behaviors</a> can derive their value from more complex logic such as changes to other properties, dispatched events, and their own previously derived values.</li>
+</ul>
+<p>The sections below show how to use these property behaviors to build maintainable, testable props.</p>
+<h3>Derive properties from other properties</h3>
+<p>Getters in CanJS can be used to derive a value based on the <em>current</em> value of the properties read by the getter, each time the getter runs.</p>
+<blockquote>
+<p>Getters will run when the property is read, and automatically re-run whenever one of the properties read by the getter changes (if the property defined by the getter is bound).</p>
+</blockquote>
+<p>Getters can be used to replace imperative logic like this:</p>
+<pre><code class="language-html">&lt;a-pp&gt;&lt;/a-pp&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { StacheElement } from &quot;can&quot;;
+
+class App extends StacheElement {
+  static view = `
+    &lt;p&gt;First: &lt;input value:from=&quot;this.first&quot; on:change=&quot;setFirst(scope.element.value)&quot;&gt;&lt;/p&gt;
+    &lt;p&gt;Last: &lt;input value:from=&quot;this.last&quot; on:change=&quot;setLast(scope.element.value)&quot;&gt;&lt;/p&gt;
+    &lt;p&gt;{{ this.name }}&lt;/p&gt;
+  `;
+
+  static props = {
+    // INTERNAL STATEFUL PROPERTIES
+    first: &quot;Kevin&quot;,
+
+    last: &quot;McCallister&quot;,
+    name: &quot;Kevin McCallister&quot;
+  };
+
+  setFirst(first) {
+      this.first = first;
+      this.name = `${first} ${this.last}`;
+  }
+
+  setLast(last) {
+      this.last = last;
+      this.name = `${this.first} ${last}`;
+  }
+};
+customElements.define(&quot;a-pp&quot;, App);
+&lt;/script&gt;
+</code></pre>
+<div line-highlight='20-28,only'></div>
+<div class='codepen'></div>
+<p>Using a derived property removes a lot of this boilerplate, and more importantly, isolates the logic for <code>name</code> to <code>name</code>’s property definiton.</p>
+<pre><code class="language-html">&lt;a-pp&gt;&lt;/a-pp&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { StacheElement } from &quot;can&quot;;
+
+class App extends StacheElement {
+  static view = `
+    &lt;p&gt;First: &lt;input value:bind=&quot;this.first&quot;&gt;&lt;/p&gt;
+    &lt;p&gt;Last: &lt;input value:bind=&quot;this.last&quot;&gt;&lt;/p&gt;
+    &lt;p&gt;{{ this.name }}&lt;/p&gt;
+  `;
+
+  static props = {
+    // INTERNAL STATEFUL PROPERTIES
+    first: &quot;Kevin&quot;,
+    last: &quot;McCallister&quot;,
+
+    // DERIVED PROPERTIES
+    get name() {
+      return `${this.first} ${this.last}`;
+    }
+  };
+};
+customElements.define(&quot;a-pp&quot;, App);
+&lt;/script&gt;
+</code></pre>
+<div line-highlight='17-20,only'></div>
+<div class='codepen'></div>
+<h3>Side effects when derived properties change</h3>
+<p>When using derived properties like this, it can be tempting to add side effects inside of the getter. For example, if you wanted to keep a list of all of the values of <code>name</code> over time, you might try to do something like this:</p>
+<pre><code class="language-js">static props = {
+  // INTERNAL STATEFUL PROPERTIES
+  first: &quot;Kevin&quot;,
+  last: &quot;McCallister&quot;,
+  names: {
+    get default() {
+      return new DefineList();
+    }
+  },
+
+  // DERIVED PROPERTIES
+  get name() {
+    const name = `${this.first} ${this.last}`;
+    this.names.push( name );
+    return name;
+  }
+}
+</code></pre>
+<div line-highlight='12-16'></div>
+<p>Doing mutations like this can cause lots of problems, including inifinite loops and stack overflows.</p>
+<div class="deprecated warning">
+Mutations should not be done in a getter.
+</div>
+<p>Here is an example demonstrating the issues that can be caused by doing mutations in a getter:</p>
+<pre><code class="language-html">&lt;a-pp&gt;&lt;/a-pp&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { ajax, fixture, StacheElement } from &quot;can&quot;;
+
+fixture.delay = 500;
+
+fixture({ url: &quot;/api/{id}&quot; }, (req, resp) =&gt; {
+  const id = req.data.id;
+
+  if (id &lt; 50) {
+    resp({ data: { id: id } });
+  } else {
+    resp(404, { message: &quot;Not Found&quot; });
+  }
+});
+
+class App extends StacheElement {
+  static view = `
+    {{# if(this.data.error) }}
+      &lt;p class=&quot;error&quot;&gt;Error: {{ this.data.error }}&lt;/p&gt;
+    {{ else }}
+      &lt;p&gt;{{ this.data.id }}&lt;/p&gt;
+    {{/ if }}
+  `;
+
+  static props = {
+    // INTERNAL STATEFUL PROPERTIES
+    id: 0,
+
+    // DERIVED PROPERTIES
+    data: {
+      async(resolve, lastSet) {
+        ajax({
+          url: `/api/${this.id}`
+        })
+        .then(resp =&gt; {
+          resolve(resp.data);
+          this.id++;
+        })
+        .catch(err =&gt; {
+          resolve({
+            error: err.message
+          })
+        });
+      }
+    }
+  };
+};
+customElements.define(&quot;a-pp&quot;, App);
+&lt;/script&gt;
+</code></pre>
+<div line-highlight='33-39,only'></div>
+<div class='codepen'></div>
+<p>This example uses an async getter to make an <a href="../can-ajax.html" title="Make an asynchronous HTTP (AJAX) request.">ajax</a> call to retrieve data for the current <code>id</code>. Once the response is received, the getter uses <code>resolve</code> to set the value of the property then increments <code>id</code>. Since this getter also reads <code>id</code> to create the URL for the ajax request, the getter immediately re-runs when <code>id</code> changes. This means that the getter will continue making ajax requests in an infinite loop.</p>
+<p>In real-world applications, where a getter may depend on other derived values and have many dependencies, it can be much less obvious that this type of circular dependency exists. This is why <strong>mutations should not be done in a getter.</strong></p>
+<p>The next section will show how to handle situations like this where you need to update a derived value every time another property changes.</p>
+<h3>Derive properties from <em>changes</em> to another property</h3>
+<p>The <a href="../can-define.types.value.html" title="Specify the behavior of a property by listening to changes in other properties.">value property behavior</a> is available for defining complex derived values that cannot be created using getters.</p>
+<p>The <code>value</code> property behavior defines a property by <strong>listening to</strong> changes in other properties (and its own <strong>last set</strong> value) and calling <strong>resolve</strong> with new values.</p>
+<p>Here is an example of using <code>value</code> to keep a list of all of the values of a derived <code>name</code> property over time:</p>
+<pre><code class="language-html">&lt;a-pp&gt;&lt;/a-pp&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { ObservableArray, StacheElement } from &quot;can&quot;;
+
+class App extends StacheElement {
+  static view = `
+    &lt;p&gt;{{ this.name }}&lt;/p&gt;
+
+    &lt;h2&gt;Names:&lt;/h2&gt;
+    {{# for(name of this.names) }}
+      &lt;p&gt;{{ name }}&lt;/p&gt;
+    {{/ for }}
+  `;
+
+  static props = {
+    // INTERNAL STATEFUL PROPERTIES
+    first: &quot;Kevin&quot;,
+    last: &quot;McCallister&quot;,
+
+    // DERIVED PROPERTIES
+    get name() {
+      return `${this.first} ${this.last}`;
+    },
+    names: {
+      value({ listenTo, resolve }) {
+        let names = resolve( new ObservableArray([ this.name ]) );
+
+        listenTo(&quot;name&quot;, (ev, name) =&gt; {
+          names.push(name);
+        });
+      }
+    }
+  };
+};
+customElements.define(&quot;a-pp&quot;, App);
+&lt;/script&gt;
+</code></pre>
+<div line-highlight='21-32,only'></div>
+<div class='codepen'></div>
+<p>Using a <code>value</code> defition, allows <code>names</code> to update when <code>name</code> <em>changes</em> and eliminates having the need for the side effect in the <code>name</code> getter. This makes it much easier to debug the <code>names</code> property and makes this code much easier to maintain.</p>
+<h3>Derive properties from <em>changes</em> to multiple other properties</h3>
+<p>The <code>value</code> property behavior can also be quite useful when a property needs to derive its value from changes to <em>multiple</em> other properties. The <code>value</code> function can listen to changes in all of the necessary properties and resolve with the new value accordingly.</p>
+<p>The following example has a slider for selecting a value within a range. The value should be updated:</p>
+<ul>
+<li>when the user selects a new value using the slider, set the <code>selectedValue</code> property to the new value or to the <code>minimum</code> or <code>maximum</code> if the new <code>selectedValue</code> is outside the range</li>
+<li>if the <code>minimum</code> changes, set the <code>selectedValue</code> property to the new <code>minimum</code> if it is currently lower</li>
+<li>if the <code>maximum</code> changes, set the <code>selectedValue</code> property to the new <code>maximum</code> if it is currently higher</li>
+</ul>
+<p>This could be accomplished using a series of setters like in the code below. However, this scatters the mutations for <code>selectedValue</code> throughout the props:</p>
+<pre><code class="language-js">  // INTERNAL STATEFUL PROPERTIES
+  selectedValue: {
+    default: 100,
+    set(val) {
+      return val &gt; this.maximum ? this.maximum :
+              val &lt; this.minimum ? this.minimum : val;
+    }
+  },
+  minimum: {
+    default: 50,
+    set(min) {
+      if (this.selectedValue &lt; min) {
+        this.selectedValue = min;
+      }
+      return min;
+    }
+  },
+  maximum: {
+    default: 150,
+    set(max) {
+      if (this.selectedValue &gt; max) {
+        this.selectedValue = max;
+      }
+      return max;
+    }
+  }
+</code></pre>
+<div line-highlight='5-6,13,22'></div>
+<p>Code like this becomes very hard to maintain as you cannot look at a the <a href="../can-define.types.propDefinition.html" title="Defines the type, initial value, and get, set, and serialize behavior for an
+observable property.  These behaviors can be specified with as an Object, String,
+Constructor function, Array, a getter expression, or setter expression.">property definition</a> for <code>selectedValue</code> to understand how it works.</p>
+<p><strong>Keeping all of the logic for a property within its property definition makes code much easier to maintain.</strong></p>
+<p>This same functionality can be accomplished using a <code>value</code> definition:</p>
+<pre><code class="language-html">&lt;range-slider&gt;&lt;/range-slider&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { StacheElement } from &quot;can&quot;;
+
+class RangeSlider extends StacheElement {
+  static view = `
+    &lt;p&gt;
+      Min: &lt;input type=&quot;range&quot; min=&quot;0&quot; max=&quot;200&quot; valueAsNumber:bind=&quot;this.minimum&quot;&gt; {{ this.minimum }}
+    &lt;/p&gt;
+
+    &lt;p&gt;
+    Value: &lt;input type=&quot;range&quot; min=&quot;0&quot; max=&quot;200&quot; valueAsNumber:bind=&quot;this.selectedValue&quot;&gt; {{ this.selectedValue }}
+    &lt;/p&gt;
+
+    &lt;p&gt;
+      Max: &lt;input type=&quot;range&quot; min=&quot;0&quot; max=&quot;200&quot; valueAsNumber:bind=&quot;this.maximum&quot;&gt; {{ this.maximum }}
+    &lt;/p&gt;
+  `;
+
+  static props = {
+    // INTERNAL STATEFUL PROPERTIES
+    minimum: 50,
+    maximum: 150,
+
+    // DERIVED PROPERTIES
+    selectedValue: {
+      value({ listenTo, lastSet, resolve }) {
+        let latest = resolve(100);
+
+        listenTo(lastSet, (val) =&gt; {
+          latest = val;
+
+          if (latest &gt; this.maximum) {
+            latest = this.maximum;
+          }
+
+          if (latest &lt; this.minimum) {
+            latest = this.minimum;
+          }
+
+          resolve(latest);
+        });
+
+        listenTo(&quot;minimum&quot;, (ev, min) =&gt; {
+          if(latest &lt; min) {
+            resolve(min);
+          }
+        });
+
+        listenTo(&quot;maximum&quot;, (ev, max) =&gt; {
+          if(latest &gt; max) {
+            resolve(max);
+          }
+        });
+      }
+    }
+  };
+};
+customElements.define(&quot;range-slider&quot;, RangeSlider);
+&lt;/script&gt;
+</code></pre>
+<div line-highlight='26-57,only'></div>
+<div class='codepen'></div>
+<h2>Methods</h2>
+<p>Methods are a staple of <a href="https://en.wikipedia.org/wiki/Object-oriented_programming">Object Oriented Programming</a>. In CanJS applications, methods can be used to update props state when an event occurs.</p>
+<h3>Use a method to set a property</h3>
+<p>Methods can be used to update stateful properties when an event occurs:</p>
+<pre><code class="language-html">&lt;a-pp&gt;&lt;/a-pp&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { StacheElement } from &quot;can&quot;;
+
+class App extends StacheElement {
+  static view = `
+    &lt;p&gt;{{ this.day }}&lt;/p&gt;
+
+    &lt;button on:click=&quot;this.resetDay()&quot;&gt;Reset Day&lt;/button&gt;
+  `;
+
+  static props = {
+    // INTERNAL STATEFUL PROPERTIES
+    day: &quot;Sun&quot;
+  };
+
+  resetDay() {
+    this.day = &quot;Sun&quot;;
+  }
+};
+customElements.define(&quot;a-pp&quot;, App);
+&lt;/script&gt;
+</code></pre>
+<div line-highlight='9,17-19,only'></div>
+<div class='codepen'></div>
+<p>You can also do this using a &quot;simple setter&quot; directly in the view:</p>
+<pre><code class="language-js">  static view = `
+    &lt;p&gt;{{ this.day }}&lt;/p&gt;
+
+    &lt;button on:click=&quot;this.day = 'Sun'&quot;&gt;Reset Day&lt;/button&gt;
+  `
+</code></pre>
+<div line-highlight='4'></div>
+<p>To simplify debugging and make documentation easier, using methods may still be useful for your application.</p>
+<h3>Use a method to set multiple properties</h3>
+<p>If you need to do update more than one stateful property when an event occurs, it can be tempting to generalize the event handler to do everything:</p>
+<pre><code class="language-js">  static view = `
+    {{# if(this.editing) }}
+      &lt;input value:bind=&quot;this.day&quot;&gt;
+    {{ else }}
+      &lt;p&gt;{{ this.day }}&lt;/p&gt;
+    {{/ if }}
+
+    &lt;button on:click=&quot;this.resetDay()&quot;&gt;Reset Day&lt;/button&gt;
+  `,
+
+  static props = {
+    // INTERNAL STATEFUL PROPERTIES
+    day: &quot;Sun&quot;,
+    editing: true,
+
+    // METHODS
+    resetDay() {
+      this.day = &quot;Sun&quot;;
+      this.editing = false;
+    }
+  }
+</code></pre>
+<div line-highlight='2-6,17-20'></div>
+<p>Functions like this become very hard to maintain as an application continues to grow because it is difficult to understand everything that will happen when the function is called.</p>
+<p>Instead of using a single function to update multiple properties, <a href="../can-event-queue/map/map.dispatch.html" title="Dispatch event and key binding handlers.">dispatch</a> can be used to dispatch an event that other properties can then derive their values from:</p>
+<pre><code class="language-html">&lt;a-pp day:raw=&quot;Wed&quot; editing:raw=&quot;true&quot;&gt;&lt;/a-pp&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { StacheElement } from &quot;can&quot;;
+
+class App extends StacheElement {
+  static view = `
+    {{# if(this.editing) }}
+      &lt;input value:bind=&quot;this.day&quot;&gt;
+    {{ else }}
+      &lt;p&gt;{{ this.day }}&lt;/p&gt;
+    {{/ if }}
+
+    &lt;button on:click=&quot;this.resetDay()&quot;&gt;Reset Day&lt;/button&gt;
+  `;
+
+  static props = {
+    // DERIVED PROPERTIES
+    day: {
+      default: &quot;Sun&quot;,
+      value({ lastSet, listenTo, resolve }) {
+        resolve( lastSet.value );
+
+        listenTo(&quot;reset-day&quot;, () =&gt; {
+          resolve(&quot;Sun&quot;);
+        });
+      }
+    },
+
+    editing: {
+      default: false,
+      value({ lastSet, listenTo, resolve }) {
+        resolve( lastSet.value );
+
+        listenTo(&quot;reset-day&quot;, () =&gt; {
+          resolve(false);
+        });
+      }
+    }
+  };
+
+  resetDay() {
+    this.dispatch(&quot;reset-day&quot;);
+  }
+};
+customElements.define(&quot;a-pp&quot;, App);
+&lt;/script&gt;
+&lt;style&gt;
+input {
+  width: 100px;
+}
+
+p {
+  width: 100px;
+  margin: 0;
+  display: inline-block;
+}
+&lt;/style&gt;
+</code></pre>
+<div line-highlight='23-25,34-36,41-43,only'></div>
+<div class='codepen'></div>
+<p>Using this technique, it is possible to read each property definition and know exactly how it will behave when this event occurs.</p>
+<h2>DOM side effects</h2>
+<p>Side effects of properties changing that depend on the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction#What_is_the_DOM">DOM</a> being available should be handled in the <a href="../can-stache-element/lifecycle-methods.connect.html" title="Connect a StacheElement instance to the DOM.">connect</a>. This will ensure that the props can be tested without the DOM.</p>
+<p>The <a href="../can-stache-element/lifecycle-hooks.connected.html" title="A lifecycle hook called after the element is inserted into the document.">connected lifecycle hook</a> can use <a href="../can-event-queue/map/map.listenTo.html" title="Listen to an event and register the binding for simplified unbinding.">listenTo</a> to listen to dispatched events or property changes and perform necessary side effects. This example shows how to <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play">play</a> an <code>&lt;audio&gt;</code> element each time a button is pressed:</p>
+<pre><code class="language-html">&lt;memory-game&gt;&lt;/memory-game&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { ObservableArray, StacheElement, type } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class ColorPicker extends StacheElement {
+  static view = `
+    &lt;button
+      on:click=&quot;this.selectColor( this.color )&quot;
+      style=&quot;background-color: {{ this.color }}&quot;
+    &gt;&lt;/button&gt;
+  `;
+
+  static props = {
+      // EXTERNAL STATEFUL PROPERTIES
+      color: type.maybeConvert(String)
+    };
+  }
+};
+customElements.define(&quot;color-picker&quot;, ColorPicker);
+
+class Simon extends StacheElement {
+  static view = `
+    &lt;audio
+      class=&quot;green&quot;
+      src=&quot;https://s3.amazonaws.com/freecodecamp/simonSound1.mp3&quot;
+    &gt;&lt;/audio&gt;
+    &lt;audio
+      class=&quot;red&quot;
+      src=&quot;https://s3.amazonaws.com/freecodecamp/simonSound2.mp3&quot;
+    &gt;&lt;/audio&gt;
+    &lt;audio
+      class=&quot;yellow&quot;
+      src=&quot;https://s3.amazonaws.com/freecodecamp/simonSound3.mp3&quot;
+    &gt;&lt;/audio&gt;
+    &lt;audio
+      class=&quot;blue&quot;
+      src=&quot;https://s3.amazonaws.com/freecodecamp/simonSound4.mp3&quot;
+    &gt;&lt;/audio&gt;
+
+    &lt;div&gt;
+      &lt;color-picker
+        selectColor:from=&quot;this.selectColor&quot;
+        color:raw=&quot;green&quot;
+      &gt;&lt;/color-picker&gt;
+
+      &lt;color-picker
+        selectColor:from=&quot;this.selectColor&quot;
+        color:raw=&quot;red&quot;
+      &gt;&lt;/color-picker&gt;
+    &lt;/div&gt;
+
+    &lt;div&gt;
+      &lt;color-picker
+        selectColor:from=&quot;this.selectColor&quot;
+        color:raw=&quot;yellow&quot;
+      &gt;&lt;/color-picker&gt;
+
+      &lt;color-picker
+        selectColor:from=&quot;this.selectColor&quot;
+        color:raw=&quot;blue&quot;
+      &gt;&lt;/color-picker&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;pattern&quot;&gt;
+      {{# for(color of this.pattern) }}
+        &lt;span style=&quot;background-color: {{ color }}&quot;&gt;&lt;/span&gt;
+      {{/ for }}
+    &lt;/div&gt;
+  `;
+
+  static props = {
+    // DERIVED PROPERTIES
+    pattern: {
+      value({ listenTo, resolve }) {
+        const list = new ObservableArray();
+
+        listenTo(&quot;color-change&quot;, (ev, color) =&gt; {
+          list.push(color);
+        });
+
+        resolve(list);
+      }
+    }
+  };
+
+  selectColor(color) {
+    this.dispatch(&quot;color-change&quot;, [ color ]);
+  }
+
+  connected() {
+    let playingSound = Promise.resolve(true);
+
+    const play = (audioElement) =&gt; {
+      playingSound = playingSound.then(() =&gt; {
+        return new Promise(resolve =&gt; {
+          audioElement.play().then(() =&gt; {
+            audioElement.addEventListener(&quot;ended&quot;, () =&gt; {
+              resolve(true);
+            });
+          });
+        });
+      });
+    };
+
+    const audioElements = {
+      green: this.querySelector(&quot;audio.green&quot;),
+      red: this.querySelector(&quot;audio.red&quot;),
+      yellow: this.querySelector(&quot;audio.yellow&quot;),
+      blue: this.querySelector(&quot;audio.blue&quot;)
+    };
+
+    this.listenTo(&quot;color-change&quot;, (ev, color) =&gt; {
+      play( audioElements[color] );
+    });
+  }
+};
+customElements.define(&quot;memory-game&quot;, Simon);
+&lt;/script&gt;
+&lt;style&gt;
+color-picker button {
+  width: 50px;
+  height: 50px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.pattern span {
+  display: inline-block;
+  width: 23px;
+  height: 23px;
+}
+&lt;/style&gt;
+</code></pre>
+<div line-highlight='86-88,105-114,only'></div>
+<div class='codepen'></div>
+<h2>Clean up event listeners</h2>
+<p>In most cases, CanJS will automatically clean up event listeners, but there are a few situations where event listeners will need to be cleaned up manually. These are discussed in the following sections.</p>
+<h3>Clean up listeners set up in the connected lifecycle hook</h3>
+<p>Any listeners set up using <a href="../can-event-queue/map/map.listenTo.html" title="Listen to an event and register the binding for simplified unbinding.">listenTo</a> in the <a href="../can-stache-element/lifecycle-hooks.connected.html" title="A lifecycle hook called after the element is inserted into the document.">connected lifecycle hook</a> will be cleaned up automatically when the component is torn down:</p>
+<pre><code class="language-js">static props = {
+  // SIDE EFFECTS
+  connected() {
+    // this will be cleaned up automatically
+    listenTo(&quot;name&quot;, () =&gt; {
+      // ...
+    });
+  }
+}
+</code></pre>
+<p>This clean up is done by <a href="../can-event-queue/map/map.stopListening.html" title="Stops listening for registered event handlers.">stopListening</a>, which is the default teardown function. A function can be returned from the <a href="../can-stache-element/lifecycle-methods.connect.html" title="Connect a StacheElement instance to the DOM.">connect</a> to provide a custom teardown function. When doing this, it is necessary to call <a href="../can-event-queue/map/map.stopListening.html" title="Stops listening for registered event handlers.">stopListening</a> manually to clean up event listeners:</p>
+<pre><code class="language-js">static props = {
+  // SIDE EFFECTS
+  connected() {
+    listenTo(&quot;aProperty&quot;, () =&gt; {
+      // ...
+    });
+
+    // custom teardown function
+    return () =&gt; {
+      // calling `stopListening` manually to clean up
+      // event listeners set up with `listenTo`
+      this.stopListening();
+    };
+  }
+}
+</code></pre>
+<p>Event listeners set up with anything other than <code>listenTo</code>, as well as timers and anything else that needs to be cleaned up, can also be cleaned up in this teardown function:</p>
+<pre><code class="language-js">static props = {
+  // SIDE EFFECTS
+  connected(el) {
+    listenTo(&quot;aProperty&quot;, () =&gt; {
+      // ...
+    });
+
+    const timeoutId = setInterval(() =&gt; {
+      // ...
+    });
+
+    const jqueryEventHandler = () =&gt; {
+      // ...
+    };
+
+    $(el).on(&quot;some-jquery-event&quot;, jqueryEventHandler);
+
+    const vanillaEventHandler = () =&gt; {
+      // ...
+    };
+
+    el.addEventListener(&quot;some-vanilla-event&quot;, vanillaEventHandler);
+
+    return () =&gt; {
+      // clean up `listenTo` event listeners
+      this.stopListening();
+
+      // clean up other event listeners
+      $(el).off(&quot;some-jquery-event&quot;, jqueryEventHandler);
+      el.removeEventListener(&quot;some-vanilla-event&quot;, vanillaEventHandler);
+
+      // clean up timers
+      clearTimeout( timeoutId );
+    };
+  }
+}
+</code></pre>
+<h3>Clean up listeners in a <code>value</code> definition</h3>
+<p>The same technique can be used to clean up listeners set up in a <a href="../can-define.types.value.html" title="Specify the behavior of a property by listening to changes in other properties.">value</a> definition. A function returned from the <code>value</code> function will be called when that property is no longer bound.</p>
+<p><strong>Event listeners set up using <code>listenTo</code> in a <code>value</code> definition will be cleaned up automatically. Other listeners should be cleaned up manually.</strong></p>
+<p>Here is an example:</p>
+<pre><code class="language-js">  // DERIVED PROPERTIES
+  namedCounter: {
+    value({ listenTo, resolve }) {
+      let count = 0;
+      let name = this.name;
+
+      resolve(`${name}: ${count}`);
+
+      let timeoutId = setInterval(() =&gt; {
+        count++;
+        resolve(`${name}: ${count}`);
+      }, 1000);
+
+      listenTo(&quot;name&quot;, (ev, n) =&gt; {
+        name = n;
+        resolve(`${name}: ${count}`);
+      });
+
+      return () =&gt; {
+        clearTimeout(timeoutId);
+      };
+    }
+  }
+</code></pre>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/topics/logic.md"},"description":"Learn how to write observables in an organized, maintainable, and testable way. \n","name":"guides/logic","title":"Logic","type":"page","parent":"guides/topics","order":9,"outline":{"depth":2},"comment":" ","codepen":[["\"can\"","\"//unpkg.com/can@6/core.mjs\""],["\"can/ecosystem\"","\"//unpkg.com/can@6/ecosystem.mjs\""],["\"can/everything\"","\"//unpkg.com/can@6/everything.mjs\""],["\"can/demos/technology-overview/mock-url\"","\"//unpkg.com/mock-url@^6.0.0/mock-url.mjs\""],["\"can/demos/technology-overview/route-mini-app-components\"","\"//unpkg.com/route-mini-app@^5.0.0/components.mjs\""],["return steal.import(","return import("],["\"can/demos/technology-overview/page-login\"","\"//unpkg.com/route-mini-app@^5.0.0/page-login.mjs\""],["`can/demos/technology-overview/page-${this.page}`","`//unpkg.com/route-mini-app@^5.0.0/page-${this.page}.mjs`"]],"pathToRoot":"../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix=".."></div>
+
+	</body>
+</html>

@@ -1,0 +1,17 @@
+{
+	"versions": {
+		"1.0.0" : {
+			"source" : "./project",
+			"sites": {
+				"api": {
+					"parent": "MultiVersion",
+					"minifyBuild": false,
+					"forceBuild": true
+				}
+			}
+		}
+	},
+	"defaultVersion": "1.0.0",
+	"defaultDest": "../tmp/project_sites/project",
+	"versionDest": "../tmp/project_sites/<%= version %>/project"
+}

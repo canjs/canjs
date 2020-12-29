@@ -1,0 +1,1 @@
+{"version":3,"sources":["steal.js"],"names":["foo","bar"],"mappings":";;iBAEQ;AAAA,IACNA,GAAA,EAAKA,GADC;AAAA,IAENC,GAAA,EAAKA,GAFC;AAAA,C","sourceRoot":"../","sourcesContent":["steal(\"foo\", \"bar\", function(foo, bar){\n\t\n\treturn {\n\t\tfoo: foo,\n\t\tbar: bar\n\t};\n\t\n});\n"]}

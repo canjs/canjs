@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="../resources/jasmine.css">
+		<title>Jasmine w/ FuncUnit Test</title>
+	</head>
+	<body>
+		<h1>Hello World!</h1>
+
+		<script src="../resources/jquery.js"></script>
+		<script src="../resources/jasmine.js"></script>
+		<script src="../resources/jasmine-html.js"></script>
+
+		<script src="../resources/funcunit.js"></script>
+
+		<script src="jasmine_test.js"></script>
+
+		<script type="text/javascript">
+			var jasmineEnv = jasmine.getEnv();
+
+			var htmlReporter = new jasmine.HtmlReporter();
+			jasmineEnv.addReporter(htmlReporter);
+
+			jasmineEnv.specFilter = function(spec) {
+				return htmlReporter.specFilter(spec);
+			};
+
+			jasmineEnv.execute();
+		</script>
+	</body>
+</html>

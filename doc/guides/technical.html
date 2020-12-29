@@ -1,0 +1,1902 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/introduction/technical.md
+	@page guides/technical
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Technical Highlights | About | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="Learn about CanJS’s technical accomplishments.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Learn about CanJS’s technical accomplishments.">
+	<meta property="og:title" content="Technical Highlights | About | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "",
+			"description": "Learn about CanJS’s technical accomplishments.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Technical Highlights | About | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : ""
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/technical" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="mission.html"
+							title="Learn about CanJS’s mission, why it matters, and how we’ve worked (and will keep working) to accomplish it.">
+							Mission
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="technical.html"
+							title="Learn about CanJS’s technical accomplishments.">
+							Technical Highlights
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="who-uses-canjs.html"
+							title="">
+							Who Uses CanJS?
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../roadmap.html"
+							title="Learn about CanJS’s future plans, how we make them, and how you can influence them.">
+							Roadmap
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Technical Highlights</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/introduction/technical.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Learn about CanJS’s technical accomplishments.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <h2>Browser and Environment Support</h2>
+<p>CanJS supports:</p>
+<ul>
+<li>Latest Chrome, Firefox, Edge, Safari</li>
+<li>iOS Safari 11+</li>
+<li>NodeJS 6+ with <a href="../can-vdom.html" title="A browser-lite environment for Node.js or a worker thread.">can-vdom</a> as a document.</li>
+</ul>
+<p><a href="https://saucelabs.com/u/canjs-not-master"><img src="https://saucelabs.com/browser-matrix/canjs-not-master.svg" alt="Sauce Test Status" /></a></p>
+<h2>Phenomenal Features, Small Size</h2>
+<p>The <a href="../can-core.html" title="The best, most hardened and generally useful libraries in CanJS.">core</a> of CanJS is under 50KB (gzipped). While there may be smaller architectural libraries, there are not other frameworks that provide comparable functionality. For custom elements, observables, live binding, routing, a model layer with intelligent caching and real-time support, 50KB is very small.</p>
+<p>jQuery 3.1 is 30KB minified and gzipped, and that is only providing DOM utilities. CanJS implements its own DOM utilities, in addition to much more.</p>
+<p>Ember 2.9 is 108KB minified and gzipped, providing a comparable feature set.</p>
+<p>React 15.3 is 44KB minified and gzipped, yet React is, on its own, simply a View layer.</p>
+<p>The Angular 2’s Hello World app, provided by the angular-cli, is ~100KB minified and gzipped.</p>
+<h2>Independent Repositories and Packages</h2>
+<p>CanJS is maintained in independent repositories,
+each with its own npm package and <a href="http://semver.org/">semantic version</a> number.
+Organizing CanJS into individual repositories and packages has many benefits.</p>
+<p>The obvious advantage is that pieces can be used without the whole. You can choose to use CanJS’s observables or <a href="../can-fixture.html" title="Intercept AJAX requests and simulate the response.">can-fixture</a> without the rest of the framework. You could even mix and match CanJS libraries with other libraries like React quite easily.</p>
+<p>However, the main benefit is that independent repositories
+improve CanJS’s stability — one half of CanJS’s <a href="mission.html" title="Learn about CanJS’s mission, why it matters, and how we’ve worked (and will keep working) to accomplish it.">mission</a>. This is
+because independent repositories make it easier to upgrade more frequently. For example,
+compare:</p>
+<ul>
+<li>Upgrading a 2.3 app, which was not organized in individual repositories, to</li>
+<li>Upgrading a 3.0 app.</li>
+</ul>
+<p>Despite making relatively few breaking changes, and
+providing a <a href="../migrate-3.html" title="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">migration guide</a>, upgrading from CanJS 2.3 to 3.0 looks like
+a big step:</p>
+<p><img src="../../docs/can-guides/images/introduction/mission-stability-3-upgrade.png" style="width:100%;max-width:450px"/></p>
+<p>But if you break that step down, CanJS 2.3 is mostly CanJS 3.0 with a bunch of bug
+fixes, a heap of new features, and a few breaking changes.  Most of the difficulties
+upgrading are the breaking changes, which account for the majority of the upgrade step size:</p>
+<p><img src="../../docs/can-guides/images/introduction/mission-stability-upgrade-breakdown.png" style="width:100%;max-width:450px"/></p>
+<p>To get all of those bug fixes and new features in 3.0, you have to
+take on those breaking changes from 2.3 all at once.  Depending on your company culture,
+and scale of your application, this might not be easy.</p>
+<p>Going forward from CanJS 3.0, packages are released independently of
+each other.  You can upgrade to bug fixes and new features
+immediately and delay breaking changes (example: <code>can-route 4.0.0</code>) until later. You can upgrade breaking changes in steps too.  For example,
+you might upgrade to <code>can-route 4.0.0</code> one month and <code>can-component 4.0.0</code>
+the following month.  CanJS 3.0’s upgrade path might look like:</p>
+<p><img src="../../docs/can-guides/images/introduction/mission-stability-upgrade-new.png" style="width:100%;max-width:450px"/></p>
+<p>Independent repositories also mean that <a href="../can-legacy.html" title="Former libraries that we still accept patches for, but are not under active development.">legacy</a> libraries, like [can-ejs] can continue
+living through community-driven fixes and releases.  They don’t die simply because
+they are no longer included in the core CanJS build.</p>
+<h2>Flexible Features</h2>
+<p>No framework can perfectly satisfy every application
+requirement.  Often, a framework can’t even satisfy all the requirements
+for a single application. When this happens, it’s nice to have a framework that can
+flexibly adapt to the challenge.  The sections below have
+many examples of this flexibility:</p>
+<ul>
+<li>CanJS can be both <a href="#Objectorientedandfunctional">object-oriented and functional</a>,
+imperative and declarative.</li>
+<li>CanJS’s MVVM <a href="#Flexible">observables are useful outside the framework</a>.</li>
+<li>CanJS <a href="#jQueryintegration">integrates with jQuery</a>, making DOM-centric development easier.</li>
+</ul>
+<p>There are a bunch of other ways that CanJS makes it easy to develop outside the box:</p>
+<ul>
+<li><a href="../can-control.html" title="Create organized, memory-leak free, rapidly performing, stateful controls with declarative event binding. Use Control to create UI
+controls like tabs, grids, and context menus,
+and organize them into higher-order business rules with
+can.route. It can serve as both a traditional view and a traditional controller.">can-control</a> can handle when DOM-centric programming is necessary.</li>
+<li><a href="../can-compute.html" title="Create an observable value.">can-compute</a> can be wired up to anything.</li>
+<li>The <a href="../can-infrastructure.html" title="Utility libraries that power the core and ecosystem collection.">Infrastructure</a> collection has a number of utility libraries that
+can help jump-start development.</li>
+</ul>
+<h2>Cool Computed Values</h2>
+<p>CanJS has two powerful observable systems that are the foundation for many of the other
+core libraries:</p>
+<ul>
+<li><a href="../can-value.html" title="Get an observable that’s bound to a specific property on another object.">can-value</a> - Observable values and derived observable values.</li>
+<li><a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a> - Observable objects.</li>
+</ul>
+<p>This section shows examples using <a href="../can-value.returnedBy.html" title="Creates an observable that derives its value from other observable values.">value.returnedBy()</a>.  However,
+as [can-obserable-object] and <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">can-observable-array</a> use <code>returnedBy()</code> internally for <a href="#Computedgetterproperties">computed getter properties</a>
+and <a href="##Asynccomputedgetterproperties">asynchronous computed getter properties</a>, the benefits
+of computes extend to <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a> and <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">can-observable-array</a>. In a few examples cases, we’ll use <a href="#Computedgetterproperties">computed getter properties</a> to
+show the advantages of computes.</p>
+<p><a href="../can-value.returnedBy.html" title="Creates an observable that derives its value from other observable values.">value.returnedBy()</a> is used in similar situations as event streams libraries like RXJS and Bacon.js. It is
+used to transform a set of observable values into another observable value.  While event stream libraries are able to set up more complex transformations, <a href="../can-value.returnedBy.html" title="Creates an observable that derives its value from other observable values.">value.returnedBy()</a> can set up simple but common transformations more easily.</p>
+<p>For example, the following compute keeps the completed count of todos in a list:</p>
+<pre><code class="language-js">import { ObservableArray, value } from &quot;can&quot;;
+
+let todoList = new ObservableArray([
+    { name: &quot;dishes&quot;,  complete: true },
+    { name: &quot;laundry&quot;, complete: false }
+]);
+
+let completedCount = value.returnedBy(() =&gt; {
+    return todoList.filter((todo) =&gt; {
+        return todo.complete;
+    });
+})
+</code></pre>
+<p><code>completedCount</code> is updated when any todo’s <code>complete</code> property changes like:</p>
+<pre><code class="language-js">todoList[0].complete = false;
+</code></pre>
+<p>Or a todo is added to or removed from the list like:</p>
+<pre><code class="language-js">todoList.push({ name: &quot;learn about computes&quot;, complete: true });
+</code></pre>
+<p><code>completedCount</code> automatically listens to all of these changes because
+it infers dependencies. These observables also:</p>
+<ul>
+<li><a href="#Cachedvalues">Cache their value</a> for faster reads.</li>
+<li><a href="#Synchronous">Dispatch events synchronously</a> for easier testing and debugging.</li>
+<li><a href="#Batchedevents">Update only once for batched changes</a> for faster updates.</li>
+</ul>
+<h3>Inferred dependencies</h3>
+<p>In event stream libraries or other computed libraries, you must declare your
+dependencies like:</p>
+<pre><code class="language-js">let fullNameStream = Kefir.combine(firstNameStream, lastNameStream, (firstName, lastName) =&gt; {
+    return firstName + &quot; &quot; + lastName;
+});
+</code></pre>
+<p>or like:</p>
+<pre><code class="language-js">fullName: Ember.computed(&quot;firstName&quot;, &quot;lastName&quot;, function() {
+    return this.get(&quot;firstName&quot;) + &quot; &quot; + this.get(&quot;lastName&quot;);
+});
+</code></pre>
+<p><a href="../can-value.returnedBy.html" title="Creates an observable that derives its value from other observable values.">value.returnedBy()</a> infers its own dependencies without needing to explicitly declare them, therefore requiring less boilerplate code. This means you can write <code>fullName</code> like:</p>
+<pre><code class="language-js">import { value } from &quot;can&quot;;
+
+let firstName = value.with(&quot;Payal&quot;);
+let lastName = value.with(&quot;Meyer&quot;);
+
+let fullName = value.returnedBy(() =&gt; {
+    return firstName.value + &quot; &quot; + lastName.value;
+});
+</code></pre>
+<p>or like:</p>
+<pre><code class="language-js">class Person extends ObservableObject {
+    static props = {
+        firstName: String,
+        lastName: String,
+        get fullName() {
+            return this.firstName + &quot; &quot; +this.lastName;
+        }
+    };
+}
+</code></pre>
+<p>This ability is especially useful when the dependencies are dynamic as in the
+following <code>completedCount</code> example:</p>
+<pre><code class="language-js">let todoList = new ObservableArray([
+    { name: &quot;dishes&quot;,  complete: true },
+    { name: &quot;laundry&quot;, complete: false }
+]);
+
+let completedCount = value.returnedBy(() =&gt; {
+    return todoList.filter((todo) =&gt; {
+        return todo.complete;
+    });
+})
+</code></pre>
+<p>When todos are added to and removed from <code>todoList</code>, <code>completedCount</code>
+will update its bindings automatically.</p>
+<h3>Cached values</h3>
+<p>Once a compute is bound (using <a href="../can-compute.computed.on.html" title="Listen to when a compute changes value.">on</a> or <a href="../can-compute.computed.addEventListener.html" title="Listen to when a compute changes value.">addEventListener</a>), it immediately calculates its
+value and caches it so any future reads will use the cached value.</p>
+<p>In the following example, before <code>fullName</code> is bound,
+<code>fullName</code>’s value is recalculated every time it is read.  After <code>fullName</code> is bound,
+its value is recalculated only when a dependent value changes.</p>
+<pre><code class="language-js">import { value } from &quot;can&quot;;
+
+let firstName = value.with(&quot;Payal&quot;);
+let lastName = value.with(&quot;Meyer&quot;);
+
+let fullName = value.returnedBy(() =&gt; {
+    console.log(&quot;Calculating fullName.&quot;);
+    return firstName.value + &quot; &quot; + lastName.value;
+});
+
+fullName.value // console.logs &quot;Calculating fullName.&quot;
+               //-&gt; &quot;Payal Meyer&quot;
+
+fullName.value // console.logs &quot;Calculating fullName.&quot;
+               //-&gt; &quot;Payal Meyer&quot;
+
+fullName.on(() =&gt; {}) // console.logs &quot;Calculating fullName.&quot;
+
+fullName.value //-&gt; &quot;Payal Meyer&quot;
+fullName.value //-&gt; &quot;Payal Meyer&quot;
+
+firstName.value = &quot;Ramiya&quot; // console.logs &quot;Calculating fullName.&quot;
+
+fullName.value //-&gt; &quot;Ramiya Meyer&quot;
+</code></pre>
+<div class='codepen'></div>
+<p>Using cached values improves performance in situations where a computed value is frequently read by multiple parts of the application.</p>
+<h3>Synchronous</h3>
+<p>CanJS observables synchronously notify any event listeners. This makes testing
+and debugging easier.</p>
+<p>The following example shows how you can
+change the <code>firstName</code> value and immediately check the consequences of that change:</p>
+<pre><code class="language-js">import { stache, value } from &quot;can&quot;;
+
+let template = stache(&quot;&lt;h1&gt;Welcome {{ fullName }}&lt;/h1&gt;&quot;);
+
+let firstName = value.with(&quot;Justin&quot;);
+let lastName = value.with(&quot;Meyer&quot;);
+
+let fullName = value.returnedBy(() =&gt; {
+    return firstName.value + &quot; &quot; + lastName.value;
+});
+
+let fragment = template({ fullName: fullName });
+
+assert.equal(fragment.firstChild.innerHTML, &quot;Welcome Payal Meyer&quot;);
+
+firstName.value = &quot;Ramiya&quot;;
+
+assert.equal(fragment.firstChild.innerHTML, &quot;Welcome Ramiya Meyer&quot;);
+</code></pre>
+<h3>Batched events</h3>
+<p>The previous section highlighted that synchronous event
+[can-event/batch/batch.dispatch dispatching] and DOM updates are ideal for many scenarios. But, there are times where this can cause performance problems. To prevent unnecessary updates, events can be batched using [can-event/batch/batch.start batch.start] and [can-event/batch/batch.stop batch.stop]. Computes and the DOM will only be updated once for all changes within the batch.</p>
+<p>In the previous example, <code>{{ fullName }}</code> would be updated twice
+if <code>firstName</code> and <code>lastName</code> are changed:</p>
+<pre><code class="language-js">firstName.value = &quot;Payal&quot;;
+lastName.value = &quot;Shah&quot;;
+</code></pre>
+<p>Wrapping this in a batch makes <code>{{ fullName }}</code> update only once:</p>
+<pre><code class="language-js">import { queues } from &quot;can&quot;;
+
+queue.batch.start();
+firstName.value = &quot;Payal&quot;;
+lastName.value = &quot;Shah&quot;;
+queue.batch.stop();
+</code></pre>
+<p>Using <a href="../can-queues.batch.start.html" title="Begin collecting tasks before executing them.">batch.start</a> and <a href="../can-queues.batch.stop.html" title="Stop collecting tasks and flush the queues.">batch.stop</a>
+can even make quadratic updates (<code>O(n^2)</code>) become linear (<code>O(n)</code>).</p>
+<p>Consider the performance of a <code>completeAll</code> method that completes every todo in a list
+and a <code>completeCount</code> compute that calculates the number of complete todos:</p>
+<pre><code class="language-js">let todoList = new ObservableArray([
+    { name: &quot;dishes&quot;,  complete: false },
+    { name: &quot;laundry&quot;, complete: false }
+]);
+
+let completeAll = () =&gt; {
+    todoList.forEach((todo) =&gt; {
+        console.log(&quot;completing&quot;, todo.name)
+        todo.complete = true;
+    });
+};
+
+let completedCount = compute(() =&gt; {
+    return todoList.filter((todo) =&gt; {
+        console.log(&quot;  checking&quot;, todo.name);
+        return todo.complete;
+    });
+});
+
+completedCount.on(&quot;change&quot;, (ev, newVal) =&gt; {
+    console.log(&quot;completedCount is&quot;, newVal);
+});
+</code></pre>
+<p>If <code>completeAll</code> is called, the following will be logged:</p>
+<pre><code class="language-js">completeAll();
+// console.logs &quot;completing dishes&quot;
+// console.logs &quot;  checking dishes&quot;
+// console.logs &quot;  checking laundry&quot;
+// console.logs &quot;completedCount is 1&quot;
+// console.logs &quot;completing laundry&quot;
+// console.logs &quot;  checking dishes&quot;
+// console.logs &quot;  checking laundry&quot;
+// console.logs &quot;completedCount is 2&quot;
+</code></pre>
+<p>This means that every time a todo is marked as complete, <code>completedCount</code> loops
+through every todo.</p>
+<p>However, changing <code>completeAll</code> to use <code>batch.start</code> and <code>batch.stop</code> like:</p>
+<pre><code class="language-js">let completeAll = function() {
+    batch.start();
+    todoList.forEach((todo) =&gt; {
+        console.log(&quot;completing&quot;, todo.name)
+        todo.complete = true;
+    });
+    batch.stop()
+};
+</code></pre>
+<p>means <code>completeAll</code> will log the following:</p>
+<pre><code class="language-js">completeAll();
+// console.logs &quot;completing dishes&quot;
+// console.logs &quot;completing laundry&quot;
+// console.logs &quot;  checking dishes&quot;
+// console.logs &quot;  checking laundry&quot;
+// console.logs &quot;completedCount is 2&quot;
+</code></pre>
+<p>[can-event/batch/batch.start batch.start] and [can-event/batch/batch.stop batch.stop]
+can improve performance by preventing compute recalculations.</p>
+<h2>Outstanding Observable Objects</h2>
+<p><a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a> and <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">can-observable-array</a> is used to create observable <a href="#MalleableModels">Models</a> and <a href="#VeraciousViewModels">ViewModels</a> like:</p>
+<pre><code class="language-js">import { ObservableObject } from &quot;can&quot;;
+
+class Person extends ObservableObject {
+    static props = {
+        first: String,
+        last: String,
+        get fullName() {
+            return this.first + &quot; &quot; + this.last;
+        }
+    };
+}
+</code></pre>
+<p><a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a> and <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">can-observable-array</a> uses <a href="../can-value.html" title="Get an observable that’s bound to a specific property on another object.">can-value</a> internally to support <a href="##Computedgetterproperties">computed getter properties</a> like the previous example’s <code>fullName</code>, so make sure to read about the benefits of <a href="#CoolComputedValues">cool computes</a>.</p>
+<p>As <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a> and <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">can-observable-array</a> powers almost everything in a CanJS application, it has grown to be
+quite powerful, performant and flexible.  Read on to explore some of its best characteristics.</p>
+<h3>Expressive property definition syntax</h3>
+<p><a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a> and <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">can-observable-array</a> supports an expressive, powerful syntax for defining properties on observable objects and lists. It supports <a href="../can-observable-object/define/get.html" title="Specify what happens when a certain property is read on an object. get functions
+are computed and automatically update themselves when a dependent
+observable value is changed.">getter</a>, <a href="../can-observable-object/define/set.html" title="Specify what happens when a property value is set.">setter</a>,
+initial <a href="../can-observable-object/define/default.html" title="Specifies the default value for instances of the defined type.">default</a>, and <a href="../can-observable-object/define/type.html" title="Specify a type for the property.">type</a> conversion, and <a href="../can-observable-object/define/serialize.html" title="serialize
+Defines custom serialization behavior for a property.">serialize</a> behaviors.</p>
+<p>The following illustrates the signatures of these behaviors:</p>
+<pre><code class="language-js">class Obj extends ObservableObject {
+    static props = {
+        propertyName: {
+                    type:
+                                TypeObject |
+                                PrimitiveFunction |
+                                ConstructorFunction |
+                                FunctionFunction
+
+                    default:
+                                Primitive |
+                                Function |
+                                Object
+
+                    get default() { /* ... */ }
+
+                    get() {}
+                    set(newVal,lastSet) { /* ... */ }
+                    async(resolve) { /* ... */ }
+                    value({resolve, listenTo, stopListening, lastSet}) { /* ... */ },
+
+                    required: Boolean=false,
+                    enumerable: Boolean,
+                    serialize(value):{ /* ... */ }
+        }
+    };
+}
+</code></pre>
+<p><a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a> and <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">can-observable-array</a> also supports a wide variety of short hands for setting up these
+behaviors. The following illustrates some of these behaviors:</p>
+<pre><code class="language-js">class Obj extends ObservableObject {
+        static props = {
+                static props = {
+                propertyA: Object      -&gt; PropertyDefinition
+                propertyB: Primitive   -&gt; { default: Primitive }
+                propertyC: String      -&gt; { type: String }
+                propertyD: Constructor -&gt; { type: Constructor }
+                get propertyE() { /* ... */ }   -&gt; { get: propertyE() { /* ... */  } }
+                set propertyF() { /* ... */ }   -&gt; { get: propertyF() { /* ... */  } }
+                method: Function
+        };
+}
+</code></pre>
+<p>Putting it together, the following defines an <code>Address</code> and <code>Person</code> type with some nifty features:</p>
+<pre><code class="language-js">// Address has a street, city, and state property
+class Address extends ObservableObject {
+    static get props() {
+        return {
+            street: String,
+            city: String,
+            state: String
+        };
+    }
+}
+
+class Person extends ObservableObject {
+    static get props() {
+        return {
+            // first is a string
+            first: { type: String },
+            // last is a string
+            last: String,
+            // fullName is the combination of first and last
+            get fullName() {
+                return this.first + &quot; &quot; + this.last;
+            },
+            // age is a number that defaults to `0`
+            age: { default: 0, type: Number },
+            // addresses is a DefineList of Address types
+            addresses: [Address]
+        };
+    }
+}
+</code></pre>
+<h3>Object-oriented and functional</h3>
+<p>CanJS’s observables produce data types that are easy for others to consume,
+but can be implemented with the rigor of declarative programming.  This is
+accomplished by combining the benefits of object-oriented programming,
+functional programming, and functional reactive programming.</p>
+<p><a href="https://en.wikipedia.org/wiki/Functional_programming">Functional programming</a>, which is a
+form of <a href="https://en.wikipedia.org/wiki/Declarative_programming">declarative programming</a>, avoids
+changing state and mutable data.  It treats programming as math.  This eliminates side effects,
+making it easier to predict the behavior of an application.</p>
+<blockquote>
+<p>Programming is, at its best, a branch of formal mathematics and applied logic.
+<strong>Edsger Dijkstra</strong> - <em>1 March 1999 at the ACM Symposium on Applied Computing at San Antonio, TX</em></p>
+</blockquote>
+<p>However, <a href="https://en.wikipedia.org/wiki/Object-oriented_programming">object-oriented</a> APIs often feel more natural.</p>
+<blockquote>
+<p>Object-oriented programming leverages the fact that humans have millions of years of evolution invested in conceiving of the world in terms of things, which have properties, and associated methods of doing things with them. A salt shaker has a property of the amount of salt in it, and can be shaken.
+<a href="https://www.quora.com/Why-did-Dijkstra-say-that-%E2%80%9CObject-oriented-programming-is-an-exceptionally-bad-idea-which-could-only-have-originated-in-California-%E2%80%9D">Tim Boudreau, Oracle Labs</a></p>
+</blockquote>
+<p>We agree with both of these ideas! The following object-oriented <code>SaltShaker</code> API feels intuitive - any
+developer can immediately understand it.</p>
+<pre><code class="language-js">const saltShaker = new SaltShaker();
+
+saltShaker.fill();
+
+saltShaker.shake() //-&gt; &quot;salt&quot;
+saltShaker.shake() //-&gt; &quot;salt&quot;
+saltShaker.shake() //-&gt; null
+
+saltShaker.empty   //-&gt; true
+</code></pre>
+<p>To satisfy this API, <code>SaltShaker</code> could be implemented as follows:</p>
+<pre><code class="language-js">import { ObservableObject } from &quot;can&quot;;
+
+class SaltShaker extends ObservableObject {
+    static get props() {
+        return {
+            saltCount: { type: Number, default: 0 },
+
+            get empty() {
+                return ! this.saltCount;
+            }
+        };
+    }
+
+    fill() {
+        this.saltCount = 2;
+    }
+
+    shake() {
+        let hasSalt = this.saltCount;
+        this.saltCount = hasSalt ? this.saltCount - 1 : 0;
+        return hasSalt ? &quot;salt&quot; : null;
+    }
+}
+
+const saltShaker = new SaltShaker();
+
+saltShaker.fill();
+
+console.log( saltShaker.shake() ) //-&gt; &quot;salt&quot;
+console.log( saltShaker.shake() ) //-&gt; &quot;salt&quot;
+console.log( saltShaker.shake() ) //-&gt; null
+
+console.log( saltShaker.empty )   //-&gt; true
+</code></pre>
+<div class='codepen'></div>
+<p>While <code>empty</code> is implemented <a href="https://en.wikipedia.org/wiki/Declarative_programming">declaratively</a>,
+notice how both <code>fill</code> and <code>shake</code> mutate the state of <code>saltCount</code>.  In a more complex type,
+this can easily lead to bugs. Instead, the <a href="../can-observable-object/define/value.html" title="Specify the behavior of a property by listening to changes in other properties.">value</a> property behavior can
+derive property values from changes in other property values.  For example, the following
+uses <a href="../can-observable-object/define/value.html" title="Specify the behavior of a property by listening to changes in other properties.">value</a> to make <code>saltCount</code> a function of the calls to <code>fill</code> and <code>shake</code>.</p>
+<pre><code class="language-js">import { ObservableObject } from &quot;can&quot;;
+
+class SaltShaker extends ObservableObject {
+    static get props() {
+        return {
+            saltCount: {
+                value({ listenTo, resolve }) {
+                    var saltCount = resolve(0);
+                    listenTo(&quot;fill&quot;, ()=&gt;{
+                        resolve(saltCount = 2);
+                    });
+                    listenTo(&quot;shake&quot;, ()=&gt;{
+                        resolve(--saltCount);
+                    });
+                }
+            },
+
+            get empty() {
+                return ! this.saltCount;
+            }
+        };
+    }
+
+    fill() {
+        this.dispatch(&quot;fill&quot;);
+    }
+
+    shake() {
+        let hadSalt = this.saltCount;
+        this.dispatch(&quot;shake&quot;);
+        return hadSalt ? &quot;salt&quot; : null;
+    }
+}
+
+const saltShaker = new SaltShaker();
+
+// Bind on saltCount or any property that reads saltCount
+saltShaker.on(&quot;saltCount&quot;, () =&gt; {});
+
+saltShaker.fill();
+
+console.log( saltShaker.shake() ) //-&gt; &quot;salt&quot;
+console.log( saltShaker.shake() ) //-&gt; &quot;salt&quot;
+console.log( saltShaker.shake() ) //-&gt; null
+
+console.log( saltShaker.empty )   //-&gt; true
+</code></pre>
+<div class='codepen'></div>
+<p>CanJS provides three powerful functional helpers on <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a> and <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">can-observable-array</a> that will explore in the following sections:</p>
+<ul>
+<li><a href="../can-observable-object/define/get.html" title="Specify what happens when a certain property is read on an object. get functions
+are computed and automatically update themselves when a dependent
+observable value is changed.">computed getter properties</a></li>
+<li><a href="../can-observable-object/define/async.html" title="async
+Specify an asynchronous property whose value will be resolved later. async
+properties are computed and automatically update themselves when a dependent
+observable value is changed.">async computed getter properties</a></li>
+</ul>
+<h3>Computed getter properties</h3>
+<p><a href="../can-observable-object/define/get.html" title="Specify what happens when a certain property is read on an object. get functions
+are computed and automatically update themselves when a dependent
+observable value is changed.">Computed getters</a> are the easiest way to declaratively transform
+stateful values into derived values.  For example, the following defines a <code>completedCount</code>
+property on instances of the <code>TodoList</code> type:</p>
+<pre><code class="language-js">class TodoList extends ObservableArray {
+    static get props() {
+        return {
+            get completedCount() {
+                return this.filter({ complete: true }).length;
+            }
+        };
+    }
+
+    static get items() {
+        return Todo;
+    }
+}
+
+let todos = new TodoList([{ complete: true }, { complete:false }]);
+todos.completedCount //-&gt; 1
+</code></pre>
+<p>These <a href="../can-observable-object/define/get.html" title="Specify what happens when a certain property is read on an object. get functions
+are computed and automatically update themselves when a dependent
+observable value is changed.">getters</a> are made with <a href="../can-compute.html" title="Create an observable value.">can-compute</a>, so they
+<a href="#Inferreddependencies">infer dependencies</a>, <a href="#Cachedvalues">cache their values</a>, and are <a href="#Synchronous">synchronous</a>.</p>
+<h3>Async computed getter properties</h3>
+<p>It’s common to load data asynchronously given some state. For example, given
+a <code>todoId</code>, you might need to load a <code>todo</code> from the server.  This <code>todo</code> property
+can be described using <a href="../can-observable-object/define/async.html" title="async
+Specify an asynchronous property whose value will be resolved later. async
+properties are computed and automatically update themselves when a dependent
+observable value is changed.">asynchronous computed getters</a> as follows:</p>
+<pre><code class="language-js">class EditTodoVM extends ObservableObject {
+    static get props() {
+        return {
+            todoId: Number,
+            todo: {
+                async(resolve) {
+                    Todo.get(this.todoId).then(resolve);
+                }
+            }
+        };
+    }
+}
+</code></pre>
+<h2>Maintainable MVVM</h2>
+<p>CanJS applications are Model-View-ViewModel (MVVM) architecture with
+custom elements providing orchestration.</p>
+<p><img src="../../docs/can-guides/images/introduction/mvvm.png" style="width:100%;max-width:750px" alt="Model-View-ViewModel Diagram"/></p>
+<p>It’s a <a href="#Straightforward">straightforward</a>, but <a href="#Flexible">flexible</a> architecture that
+produces <a href="#Easily_testable">easily testable</a>, <a href="#Compose_able">compose-able</a> modules and components.</p>
+<h3>Straightforward</h3>
+<p>On the highest level, CanJS applications are broken down into 2 parts:</p>
+<ul>
+<li><strong>Custom Elements</strong> that manage a particular part of the application.</li>
+<li><a href="#MalleableModels">Models</a> that handle data requests to and from the server.</li>
+</ul>
+<p>For example, consider the following order page from <a href="http://place-my-order.com">place-my-order</a>:</p>
+<p><img src="../../docs/can-guides/images/introduction/tech-component-map.png" style="width:100%;max-width:750px" /></p>
+<p>This page might be broken down into the following
+custom elements:</p>
+<ul>
+<li><code>&lt;pmo-nav&gt;</code></li>
+<li><code>&lt;pmo-order-new&gt;</code> which is further broken down into:
+<ul>
+<li><code>&lt;bit-tabs&gt;</code></li>
+<li><code>&lt;pmo-order-menu&gt;</code></li>
+</ul></li>
+</ul>
+<p>These <em>Custom Elements</em> use the <code>Restaurant</code> model
+to get a restaurant’s menu by making a <code>GET</code> request to <code>/api/restaurants</code>;
+and they use the <code>Order</code> model to create an order by making a <code>POST</code> request to
+<code>POST /api/orders</code>.</p>
+<p><em>Custom Elements</em> are broken down themselves into two layers:</p>
+<ul>
+<li><a href="#VeraciousViewModels">ViewModels</a> that manage the logic of a custom element.</li>
+<li><a href="#VivaciousViews">Views</a> that convert the data and values of the
+<em>ViewModel</em> into HTML elements. Views update their HTML
+ elements when the <em>ViewModel</em> changes and are able to
+ call methods on the <em>ViewModel</em> when a user interacts
+ with their HTML.</li>
+</ul>
+<p>All of these parts, <em>Custom Elements</em>, <em>Models</em>,
+<em>View Models</em>, and <em>Views</em>, are <strong>mostly</strong> written using just
+a couple APIs:</p>
+<ul>
+<li><a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a> and <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">can-observable-array</a> observables for <em>ViewModels</em> and <em>Models</em>.</li>
+<li><a href="../can-stache.html" title="Live binding templates.">can-stache</a> templates with <a href="../can-stache-bindings.html" title="Listen to events and create one-way and two-way bindings.">can-stache-bindings</a> for <em>Views</em>.</li>
+</ul>
+<p>The rest of the core APIs are just decorators, used
+to turn <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a> and <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">can-observable-array</a> observables and <a href="../can-stache.html" title="Live binding templates.">can-stache</a> templates
+into something more:</p>
+<ul>
+<li><a href="../can-component.html" title="Create a custom element that can be used to manage widgets or application logic.">can-component</a> combines a <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a> and <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">can-observable-array</a> observable
+and <a href="../can-stache.html" title="Live binding templates.">can-stache</a> template into a <em>Custom Element</em>.</li>
+<li><a href="../can-route.html" title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">can-route</a> two-way binds a <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a> and <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">can-observable-array</a> observable
+with the browser’s URL.</li>
+<li><a href="../can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a> adds methods to a <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a> and <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">can-observable-array</a> observable,
+enabling it to create, read, update, and delete data on
+a RESTful URL.</li>
+</ul>
+<p>CanJS is straightforward because it’s just about building
+custom elements and models with just a small set of tools -  <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a> and <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">can-observable-array</a>
+and <a href="../can-stache.html" title="Live binding templates.">can-stache</a>.</p>
+<h3>Independent</h3>
+<p>CanJS’s Models, Views, and ViewModels are all independent, individually
+useful layers.  This independence is the source for the benefits of
+MVVM architecture discussed in the following sections:</p>
+<ul>
+<li><a href="#Flexible">Flexible</a> - change tools and patterns when the need arises.</li>
+<li><a href="#Testable">Testable</a> - easily unit test parts of the application.</li>
+<li><a href="#Compose_able">Compose-able</a> - combine smaller units of functionality into a large whole.</li>
+</ul>
+<p>For now, we’ll just demonstrate that these things actually are independent using
+code in the <a href="todomvc.html" title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">TodoMVC Guide</a>.  We’ll organize code related to the <code>&lt;todo-list&gt;</code> component
+into individual and independent modules and files that look like:</p>
+<pre><code>├── models/
+|   ├── todo.js
+├── components/
+|   ├── todo-list/
+|   |   ├── view-model.js
+|   |   ├── view.stache
+|   |   ├── todo-list.js
+</code></pre>
+<p>The <strong>Model</strong>, in <em>models/todo.js</em>, looks like:</p>
+<pre><code class="language-js">import { ObservableArray, ObservableObject, realtimeRestModel } from &quot;can&quot;;
+
+// Defines the type of data we get back from the server.
+class Todo extends ObservableObject {
+  static get props() {
+    return {
+      id: { type: Number, identity: true },
+      name: String,
+      complete: { type: Boolean, default: false }
+    };
+  }
+}
+
+// Defines methods or properties on lists
+// we get back from the server.
+class TodoList extends ObservableArray {
+  static get props() {
+    return {
+      get active() {
+        return this.filter({ complete: false });
+      },
+
+      get complete() {
+        return this.filter({ complete: true });
+      }
+    };
+  }
+
+  static get items() {
+    return Todo;
+  }
+}
+
+// Connects the types above to a RESTful url.
+Todo.connection = realtimeRestModel({
+  url: &quot;/api/todos&quot;,
+  ObjectType: Todo,
+  ArrayType: TodoList
+});
+
+export default Todo;
+</code></pre>
+<p>This model can independently make requests to a RESTful service layer.</p>
+<ul>
+<li><a href="../can-connect/can/map/map.getList.html" title="Retrieve a list of instance.">Get a list</a> of Todos
+<pre><code class="language-js">Todo.getList({ filter: { complete: true } }).then((todos) =&gt; {})
+</code></pre></li>
+<li><a href="../can-connect/can/map/map.get.html" title="Use it to get a single instance by id.">Get</a> a single Todo
+<pre><code class="language-js">Todo.get({ _id: 6 }).then((todo) =&gt; {})
+</code></pre></li>
+<li><a href="../can-connect/can/map/map.prototype.save.html" title="Save or update client data to the persisted data source.">Create</a> a Todo
+<pre><code class="language-js">const todo = new Todo({ name: &quot;do dishes&quot;, complete: false })
+todo.save().then((todo) =&gt; {})
+</code></pre></li>
+<li><a href="../can-connect/can/map/map.prototype.save.html" title="Save or update client data to the persisted data source.">Update</a> an <a href="../can-connect/can/map/map.prototype.isNew.html" title="If the data is not in the dat">already created</a> Todo
+<pre><code class="language-js">todo.complete = true;
+todo.save().then((todo) =&gt; {})
+</code></pre></li>
+<li><a href="../can-connect/can/map/map.prototype.destroy.html" title="Delete an instance from the service via the connection.">Delete</a> a Todo
+<pre><code class="language-js">todo.destroy().then((todo) =&gt; {})
+</code></pre></li>
+</ul>
+<p>The <strong>ViewModel</strong>, in <em>components/todo-list/view-model.js</em>, looks like:</p>
+<pre><code class="language-js">import { ObservableObject } from &quot;can&quot;;
+import Todo from &quot;../models/todo&quot;;
+
+export default class Model extends ObservableObject {
+  static props = {
+    todos: Todo.List,
+    editing: Todo,
+    backupName: String
+  };
+
+  // Returns true if the current todo is being edited.
+  isEditing(todo) {
+    return todo === this.editing;
+  }
+
+  // Marks a todo as being edited.
+  edit(todo) {
+    this.backupName = todo.name;
+    this.editing = todo;
+  }
+
+  // Cancels that todo as being edited.
+  cancelEdit() {
+    if(this.editing) {
+      this.editing.name = this.backupName;
+    }
+    this.editing = null;
+  }
+
+  // Updates the todo being edited on
+  // the server.
+  updateName() {
+    this.editing.save();
+    this.editing = null;
+  }
+}
+</code></pre>
+<p>This <em>ViewModel</em> will be tested independent of the view in the
+<a href="#Testable">testable</a> section.</p>
+<p>The <strong>View</strong>, in <em>components/todo-list/view.stache</em>, looks like:</p>
+<pre><code class="language-html">&lt;ul id=&quot;todo-list&quot;&gt;
+  &lt;!-- Loop through every todo --&gt;
+  {{# for(todo of this.todos) }}
+
+    &lt;!-- Create an li with the right class names --&gt;
+    &lt;li class=&quot;todo {{# if(todo.complete) }}completed{{/ if }}
+      {{# if( todo.isDestroying() ) }}destroying{{/ if }}
+      {{# if( this.isEditing(this) ) }}editing{{/ if }}&quot;&gt;
+
+      &lt;div class=&quot;view&quot;&gt;
+        &lt;!-- Connect this checkbox to the `complete` property
+             of the current todo --&gt;
+        &lt;input class=&quot;toggle&quot; type=&quot;checkbox&quot;
+               checked:bind=&quot;todo.complete&quot;
+               on:change=&quot;todo.save()&quot;&gt;
+
+        &lt;!-- Edit this todo on double click --&gt;
+        &lt;label on:dblclick=&quot;this.edit(todo)&quot;&gt;{{ todo.name }}&lt;/label&gt;
+
+        &lt;!-- Delete this todo on the server when clicked --&gt;
+        &lt;button class=&quot;destroy&quot; on:click=&quot;todo.destroy()&quot;&gt;&lt;/button&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Handle editing this todo with this input element --&gt;
+      &lt;input class=&quot;edit&quot; type=&quot;text&quot;
+        value:bind=&quot;todo.name&quot;
+        on:enter=&quot;this.updateName()&quot;
+        focused:from=&quot;this.isEditing(todo)&quot;
+        on:blur=&quot;this.cancelEdit()&quot;/&gt;
+    &lt;/li&gt;
+  {{/ for }}
+&lt;/ul&gt;
+</code></pre>
+<p>This <em>View</em> lives in its own file, so a designer can modify it
+without touching any JavaScript directly.</p>
+<p>Finally, the component file in <em>components/todo-list/todo-list.js</em> puts
+everything together:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;can&quot;;
+import ViewModel from &quot;./view-model&quot;;
+import view from &quot;./view.stache!&quot;;
+
+class TodoList extends StacheElement {
+  static get view() {
+    return view;
+  }
+
+  static get props() {
+    return ViewModel;
+  }
+}
+customElements.define(&quot;todo-list&quot;, TodoList);
+</code></pre>
+<p>Read on to see how CanJS’s independence results in easily testable, flexible,
+and compose-able code.</p>
+<h3>Testable</h3>
+<p>CanJS’s MVVM architecture results in testable code. In the previous
+section, we created the <a href="todomvc.html" title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">TodoMVC Guide</a>’s <code>&lt;todo-list&gt;</code>’s Model, ViewModel, and View code.
+The following shows examples of testing each part.</p>
+<p>Testing the <strong>Model</strong>’s <code>active</code> and <code>complete</code> properties:</p>
+<pre><code class="language-js">test(&quot;Todo active and complete&quot;, () =&gt; {
+    let list = new Todo.List([
+        { name: &quot;dishes&quot;, complete: false },
+        { name: &quot;lawn&quot;, complete: true }
+    ]);
+    assert.deepEqual(list.active.get(), [{ name: &quot;dishes&quot;, complete: false }], &quot;one active&quot;);
+    assert.deepEqual(list.complete.get(), [{ name: &quot;lawn&quot;, complete: true }], &quot;one complete&quot;)
+});
+</code></pre>
+<p>Testing the <strong>ViewModel</strong>’s <code>edit</code> and <code>cancelEdit</code> methods:</p>
+<pre><code class="language-js">test(&quot;TodoListVM cancelEdit&quot;, () =&gt; {
+    let todos = new Todo.List([
+        { name: &quot;mow lawn&quot;, complete: false },
+        { name: &quot;dishes&quot;, complete: true },
+    ]);
+
+    let todoListVM = new TodoListVM({
+        todos: todos
+    });
+
+    todoListVM.edit(todos[0]);
+    todos[0].name = &quot;mow yard&quot;;
+
+    todoListVM.cancelEdit();
+
+    assert.equal(todos[0].name, &quot;mow lawn&quot;);
+});
+</code></pre>
+<p>To test the <strong>View</strong>, we typically recommend testing the component. The
+following, using <a href="../can-fixture.html" title="Intercept AJAX requests and simulate the response.">can-fixture</a>, tests that the component can edit a
+todo’s name.</p>
+<pre><code class="language-js">test(&quot;&lt;todo-list&gt; can update todo name&quot;, (done) =&gt; {
+
+    fixture(&quot;PUT /api/todos/{id}&quot;, (request) =&gt; {
+        assert.equal(request.data.name, &quot;MOW YARD&quot;, &quot;update&quot;);
+        done();
+    });
+
+    let todos = new Todo.List([
+        { name: &quot;mow lawn&quot;, complete: false, id: 22 },
+        { name: &quot;dishes&quot;, complete: true, id: 23 },
+    ]);
+
+    let template = stache(&quot;&lt;todo-list todos:from='todos' /&gt;&quot;);
+    let todoListElement = template({ todos: todos }).firstChild;
+
+    // double click todo
+    todosListElement.querySelector(&quot;.todo label&quot;).dispatch( new MouseEvent(&quot;dblclick&quot;) );
+
+    // change its value to MOW YARD by hitting enter (which causes a change first)
+    let input = todoListElement.querySelector(&quot;.todo input.edit&quot;);
+    input.value = &quot;MOW YARD&quot;;
+
+    input.dispatchEvent( new Event(&quot;change&quot;) );
+
+    input.dispatchEvent( new KeyboardEvent(&quot;keyup&quot;,{ code: &quot;Enter&quot;, keyCode: 13 }) );
+});
+</code></pre>
+<h3>Flexible</h3>
+<p>CanJS’s architecture produces observables that stand on their
+own, useful outside of the framework.  CanJS’s observables aren’t dependent on a diffing engine to identify changes.  Instead, any other tool or library can be an observer or call methods
+on the observable.</p>
+<p><a href="https://jsbin.com/vivowu/7/edit?html,js,output">This JS Bin</a> shows an analog clock that uses the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API">Canvas API</a>. The <code>Analog</code>
+clock listens to a <code>timer</code> observable and updates the position of the second, hour, and minute
+hands when the time changes.</p>
+<pre><code class="language-js">Analog = function(element, timer) {
+    // ...
+    timer.on(&quot;time&quot;, this.drawClock.bind(this) );
+};
+
+let timer = new Timer();
+new Analog(document.getElementById(&quot;analog&quot;), timer);
+</code></pre>
+<p>Also, with the ideas discussed in <a href="#Objectorientedandfunctional">Object-oriented and functional</a>,
+CanJS applications can closely approximate a stateless, redux-like,
+architecture.  While we think this architecture creates more work than necessary for
+developers, it’s possible by:</p>
+<ul>
+<li>Having a single, ApplicationViewModel that contains all state, derived using
+<a href="../can-observable-object/define/value.html" title="Specify the behavior of a property by listening to changes in other properties.">value</a> from events dispatched on the ApplicationViewModel.</li>
+<li>Enforcing that parent-to-child communication only uses one-way
+<a href="../can-stache-bindings.toChild.html" title="One-way bind a value in the parent scope to the StacheElement, can-component ViewModel, or element.">key:from</a> bindings like:
+<pre><code class="language-html">&lt;child-component prop:from=&quot;parentValue&quot;/&gt;
+</code></pre></li>
+<li>Enforcing that child-to-parent communication is <a href="../can-stache-bindings.event.html" title="Respond to events on elements or component ViewModels.">on:event</a> based:
+<pre><code class="language-html">&lt;child-component on:event=&quot;parentMethod()&quot;/&gt;
+</code></pre></li>
+</ul>
+<h3>Compose-able</h3>
+<p>We believe that application state should be federated:</p>
+<blockquote>
+<p><a href="https://en.oxforddictionaries.com/definition/federate">Federated</a> - form or be formed into a single centralized unit, within which each state or organization keeps some internal autonomy.</p>
+</blockquote>
+<p>CanJS applications are composed from hierarchical <a href="../can-component.html" title="Create a custom element that can be used to manage widgets or application logic.">can-component</a>s, each containing their own independent state (their own ViewModel). This architecture is at the core of CanJS’s approach to building large applications.</p>
+<blockquote>
+<p>The secret to building large apps is never build large apps. Break your applications into small pieces. Then, assemble those testable, bite-sized pieces into your big application.</p>
+</blockquote>
+<p>CanJS applications can be represented by <a href="https://en.wikipedia.org/wiki/UML_state_machine#Hierarchically_nested_states">Hierarchical State Machines</a>. The <a href="atm.html" title="This guide will walk you through building and testing an Automated Teller Machine (ATM) application with CanJS’s
+Core libraries.  You’ll learn how to do test driven development (TDD)
+and manage complex state.  It takes about 2 hours to complete.">ATM Guide</a>
+walks through an example of this concept where a <code>Card</code>, <code>Deposit</code>, and <code>Withdrawal</code>’s states
+are composed into the <code>ATM</code>’s state.</p>
+<p><img height="693" src="../../docs/can-guides/experiment/atm/1-pages-template/state-diagram.png" width="808"></p>
+<p>This dispersed (federated) state means that a <code>Card</code> is still useful without the
+<code>ATM</code>.  A <code>Card</code> can make AJAX requests and maintains its state of being
+<code>verified</code> or <code>unverified</code>.</p>
+<p>Federated state stands in contrast to architectures that have a
+<em>one-way</em> data flow. Architectures with a <em>one-way</em> data flow usually flow to
+a central and global <em>state mechanism</em>. That <em>state mechanism</em>
+becomes an implicit dependency of every component in the application. This creates additional downstream problems:</p>
+<ul>
+<li><p>It becomes harder to work independently and verify the behavior of component of the project. Thus, scaling the team and parallelizing the effort becomes trickier, as several developers might have to touch the same central state mechanism.</p></li>
+<li><p>Individual components become less reusable in other contexts because of their dependency on this external state layer.</p></li>
+<li><p>Individual components become harder to test in isolation, since testing them requires importing or mocking large external dependencies.</p></li>
+</ul>
+<h2>Veracious ViewModels</h2>
+<p>CanJS’s ViewModels are <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a> and <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">can-observable-array</a> observables that manage the state of a <a href="../can-component.html" title="Create a custom element that can be used to manage widgets or application logic.">can-component</a>.
+As ViewModels are observables, CanJS’s ViewModels have all the benefits of
+CanJS’s outstanding observable objects, namely:</p>
+<ul>
+<li><a href="#Expressivepropertydefinitionsyntax">Expressive property definition syntax</a></li>
+<li><a href="#Objectorientedandfunctional">Object-oriented and functional</a></li>
+<li><a href="#Computedgetterproperties">Computed getter properties</a></li>
+<li><a href="#Asynccomputedgetterproperties">Async computed getter properties</a></li>
+</ul>
+<p>In CanJS, the ViewModel is its own layer, completely independent from the
+template and the component. This is why ViewModels are largely responsible for
+many of the benefits of CanJS’s maintainable MVVM architecture:</p>
+<ul>
+<li><a href="#Independent">Independence</a></li>
+<li><a href="#Independent">Flexible</a></li>
+<li><a href="#Testable">Testable</a></li>
+<li><a href="#Compose_able">Compose-able</a></li>
+</ul>
+<p>The introduction of a strong ViewModel provides key advantages for maintaining large applications:</p>
+<ul>
+<li><p>Decouples the presentation from its business logic - A ViewModel is essentially an object and methods representing the state of a View. This separation of concerns enables simple, HTML-based Views containing minimal logic, while the ViewModel manages the complexities of application logic.</p></li>
+<li><p>Enables designer/developer cooperation - Because the view is stripped of code and application logic, designers can safely and comfortably change the View without fear of breaking things.</p></li>
+<li><p>Enables easier testing - ViewModels can be unit tested easily. Because they represent the view’s state without any knowledge of the DOM, they provide a simple interface for testing.</p></li>
+</ul>
+<h2>Vivacious Views</h2>
+<p>CanJS views are <a href="../can-stache.html" title="Live binding templates.">can-stache</a> templates, that implement a syntax similar to
+<a href="https://mustache.github.io/mustache.5.html">Mustache</a> and <a href="http://handlebarsjs.com/">Handlebars</a>,
+and include special features like event bindings, custom elements, and performance optimizations.</p>
+<p><a href="../can-stache.html" title="Live binding templates.">can-stache</a> templates look like HTML, but with <em>magic</em> tags like <a href="../can-stache.tags.escaped.html" title="Insert the value of the expression into the output of the template.">{{expression}}</a>
+and view bindings like <a href="../can-stache-bindings.twoWay.html" title="Two-way bind a value in the StacheElement, can-component ViewModel, or element to the parent scope.">key:bind</a> in the template. For example, the following is the application template in the <a href="todomvc.html" title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">TodoMVC Guide</a>:</p>
+<pre><code class="language-html">&lt;header id=&quot;header&quot;&gt;
+    &lt;h1&gt;todos&lt;/h1&gt;
+    &lt;todo-create/&gt;
+&lt;/header&gt;
+
+&lt;ul id=&quot;todo-list&quot;&gt;
+    {{# for(todo of this.todos) }}
+        &lt;li class=&quot;todo {{# if(todo.complete) }}completed{{/ if }}&quot;&gt;
+                &lt;div class=&quot;view&quot;&gt;
+                        &lt;input class=&quot;toggle&quot; type=&quot;checkbox&quot;
+                            checked:bind=&quot;todo.complete&quot;&gt;
+                        &lt;label&gt;{{ todo.name }}&lt;/label&gt;
+                        &lt;button class=&quot;destroy&quot;
+                            on:click=&quot;todo.destroy()&quot;&gt;&lt;/button&gt;
+                &lt;/div&gt;
+
+                &lt;input class=&quot;edit&quot; type=&quot;text&quot; value=&quot;{{ todo.name }}&quot;/&gt;
+        &lt;/li&gt;
+    {{/ for }}
+&lt;/ul&gt;
+</code></pre>
+<p>The following sections cover:</p>
+<ul>
+<li><a href="#MustacheandHandlebarsextendedsyntax">The powerful syntaxes</a> that support the transformation of any ViewModel into HTML.</li>
+<li>How <a href="#Customelementsandattributes">custom elements and attributes</a> make
+applications easer to assemble and debug.</li>
+<li>The <a href="#DataandEventBindings">binding syntaxes</a> that allow HTML to
+call methods back on the ViewModel.</li>
+<li>The strategies used to keep <a href="#MinimalDOMupdates">DOM updates to a minimum</a>.</li>
+<li>How Views can fit in your larger ecosystem with <a href="#Templateminification">template minification</a>,
+<a href="#In_templatedependencydeclarations">dependency declarations</a>, and <a href="#ProgressiveLoading">progressive loading</a>.</li>
+</ul>
+<h3>Mustache and Handlebars extended syntax</h3>
+<p><a href="../can-stache.html" title="Live binding templates.">can-stache</a> templates implement the mustache syntax
+<a href="https://mustache.github.io/mustache.5.html">Mustache</a>, adopt many of
+the <a href="http://handlebarsjs.com/">Handlebars</a> extensions, and provide a few extensions of
+their own.  The result is a simple syntax that covers the most common things needed in a template,
+but is capable of translating any ViewModel into HTML.</p>
+<p><a href="../can-stache.html" title="Live binding templates.">can-stache</a> is built on the Mustache spec because Mustache simplifies the most common needs of templates into
+a very limited subset of syntax.  Most of Mustache is just:</p>
+<ul>
+<li><a href="../can-stache.tags.escaped.html" title="Insert the value of the expression into the output of the template.">{{expression}}</a> - to insert content into the page.</li>
+<li><a href="../can-stache.tags.section.html" title="Renders a subsection one or more times depending on the type of expression
+or the expression’s return value.">{{#expression}}</a>...<a href="../can-stache.tags.close.html" title="">{{/expression}}</a> - to do conditionals, looping, or change context.</li>
+</ul>
+<p>A simple template might look like:</p>
+<pre><code class="language-html">&lt;p&gt;Hello {{ this.name }}&lt;/p&gt;
+&lt;p&gt;You have just won {{ this.value }} dollars!&lt;/p&gt;
+{{# this.in_ca }}
+&lt;p&gt;Well, {{ this.taxed.ca.value }} dollars, after taxes.&lt;/p&gt;
+{{/}}
+</code></pre>
+<p>This is not enough to translate every ViewModel into HTML, so <a href="../can-stache.html" title="Live binding templates.">can-stache</a> supports
+additional JavaScript-like syntaxes such as the
+ability to <a href="../can-stache/expressions/call.html" title="">call methods</a> and use <a href="../can-stache.helpers.for-of.html" title="Loop through a list of values, keys in an object, or integers.">for(of)</a>
+loops.</p>
+<p>A template that uses those features looks like:</p>
+<pre><code class="language-html">{{# for(player of players) }}
+    &lt;h2&gt;{{ player.name }}&lt;/h2&gt;
+    {{# for( stat of this.stats.forPlayerId(player.id) ) }}
+        &lt;span&gt;
+            {{ stat.type }}
+        &lt;/span&gt;
+    {{/ for }}
+{{/ for }}
+</code></pre>
+<h3>Custom elements and attributes</h3>
+<p>CanJS supports defining custom elements and
+attributes.  You can make it so adding a <code>&lt;ui-datepicker&gt;</code>
+element to the page creates a date picker widget; or, you can make it so
+a <code>my-tooltip=&quot;your message&quot;</code> attribute adds a tooltip.</p>
+<p>Custom elements are created for widgets like <code>&lt;ui-datepicker&gt;</code> and for
+higher-order components like <code>&lt;acme-message-editor&gt;</code>.  Higher-order components
+often assemble the behavior of multiple widget components.  Custom elements are created with <a href="../can-view-callbacks.tag.html" title="">tag</a> or <a href="../can-component.html" title="Create a custom element that can be used to manage widgets or application logic.">can-component</a>.</p>
+<p>Custom attributes are typically used for mixins that can be
+added to any element. Custom attributes are created with <a href="../can-view-callbacks.attr.html" title="Register custom behavior for an attribute.">attr</a>.</p>
+<p>The main advantages of building applications based on custom HTML elements and attributes are:</p>
+<ol>
+<li>Ease of use - Designers can do it! Non-developers can express complex behavior with little to no JavaScript required. All you need to build a new page or feature is HTML.</li>
+<li>Application assembly clarity - Applications assembled with custom elements are easier to debug and
+and understand the relationship between the user interface and the code powering it.</li>
+</ol>
+<p>Let’s explore these benefits more in the following sections:</p>
+<p><strong>Ease of use</strong></p>
+<p>Before custom HTML elements existed, to add a date picker to your page, you would:</p>
+<ol>
+<li><p>Add a placeholder HTML element</p>
+<pre><code class="language-html">&lt;div class=&quot;datepicker&quot; /&gt;
+</code></pre></li>
+<li><p>Add JavaScript code to instantiate your datepicker:</p>
+<pre><code class="language-js">$(&quot;.datepicker&quot;).datepicker(task.dueDate)
+</code></pre></li>
+<li><p>Wire up the datepicker to update the rest of your application and vice-versa:</p>
+<pre><code class="language-js">task.on(&quot;dueDate&quot;, (ev, dueDate) =&gt; {
+    $(&quot;.datepicker&quot;).datepicker(dueDate)
+})
+
+$(&quot;.datepicker&quot;).on(&quot;datechange&quot;, (ev, dueDate) =&gt; {
+    task.dueDate = dueDate;
+});
+</code></pre></li>
+</ol>
+<p>With custom HTML elements, to add the same datepicker, you would
+simply add the datepicker to your HTML or template:</p>
+<pre><code class="language-html">&lt;ui-datepicker value:bind=&quot;task.dueDate&quot;/&gt;
+</code></pre>
+<p>That might seem like a subtle difference, but it is actually a major step forward. The custom HTML element syntax allows for instantiation, configuration, and location, all happening at the same time.</p>
+<p>Custom HTML elements are one aspect of <a href="https://www.webcomponents.org/">Web Components</a>, a collection of browser specs that have <a href="https://caniuse.com/#search=components">yet to be implemented</a> across browsers.</p>
+<p><strong>Application assembly clarity</strong></p>
+<p>Custom elements make it easier to tell how an application was assembled. This is because you
+can inspect the DOM and see the custom elements and their bindings.</p>
+<p>The
+following shows inspecting the <a href="todomvc.html" title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">TodoMVC Guide</a>’s <em>“What needs to be done?”</em> input element.  Notice how it’s easy to tell that its behavior is provided by the
+<code>&lt;todo-create&gt;</code> element.</p>
+<p><img src="../../docs/can-guides/images/introduction/inspect.png" style="width:100%;max-width:750px" /></p>
+<h3>Data and Event Bindings</h3>
+<p><a href="../can-stache.html" title="Live binding templates.">can-stache</a> includes Mustache data bindings that update the DOM when data changes.  For example,
+if the data passed to the following template changes, the DOM is automatically updated.</p>
+<pre><code class="language-html">&lt;h1 class=&quot;{{# if(user.admin) }}admin{{/ if }}&quot;&gt;Hello {{ user.name }}&lt;/h1&gt;
+</code></pre>
+<p>In addition to the default Mustache data bindings, the <a href="../can-stache-bindings.html" title="Listen to events and create one-way and two-way bindings.">can-stache-bindings</a> module
+adds more powerful data and event bindings. These event bindings provide full control over how
+data and control flows between the DOM, ViewModels, and the <a href="../can-view-scope.html" title="Create a lookup node for keys.">can-view-scope</a>. Bindings look like:</p>
+<ul>
+<li><code>on:event=&quot;key()&quot;</code> for <a href="../can-stache-bindings.event.html" title="Respond to events on elements or component ViewModels.">event binding</a>.</li>
+<li><code>prop:from=&quot;key&quot;</code> for <a href="../can-stache-bindings.toChild.html" title="One-way bind a value in the parent scope to the StacheElement, can-component ViewModel, or element.">one-way binding to a child</a>.</li>
+<li><code>prop:to=&quot;key&quot;</code> for <a href="../can-stache-bindings.toParent.html" title="One-way bind a value from the StacheElement, can-component ViewModel, or element to the parent scope.">one-way binding to a parent</a>.</li>
+<li><code>prop:bind=&quot;key&quot;</code> for <a href="../can-stache-bindings.twoWay.html" title="Two-way bind a value in the StacheElement, can-component ViewModel, or element to the parent scope.">two-way binding</a>.</li>
+</ul>
+<p>To two-way bind an <code>&lt;input&gt;</code> element’s <code>value</code> to a <code>todo.name</code> looks like:</p>
+<pre><code class="language-html">&lt;input value:bind=&quot;todo.name&quot;/&gt;
+</code></pre>
+<p>To two-way bind a custom <code>&lt;ui-datepicker&gt;</code>’s <code>date</code> to a <code>todo.dueDate</code> looks like:</p>
+<pre><code class="language-html">&lt;ui-datepicker date:bind=&quot;todo.dueDate&quot;/&gt;
+</code></pre>
+<p>By mixing and matching <code>$</code> and the different syntaxes, you have complete control over how
+data flows.</p>
+<h3>Minimal DOM updates</h3>
+<p>Everyone knows that updating the DOM is traditionally the slowest part of JavaScript
+applications.  CanJS uses two strategies for keeping DOM updates to a minimum:
+observation and data diffing.</p>
+<p>To understand how these strategies are used, consider a template like:</p>
+<pre><code class="language-html">&lt;ul&gt;
+{{# for( todo of completeTodos() ) }}
+    &lt;div&gt;{{ todo.name }}&lt;/div&gt;
+{{/ for }}
+&lt;/ul&gt;
+</code></pre>
+<p>And rendered with <code>viewModel</code> like:</p>
+<pre><code class="language-js">class ViewModel extends ObservableObject {
+    static props = {
+        tasks: Todo.List
+    };
+
+    completeTodos() {
+        return this.tasks.filter({ complete: false });
+    }
+}
+
+const viewModel = new ViewModel({
+    tasks: new Todo.List([
+        { name: &quot;dishes&quot;, complete: true },
+        { name: &quot;lawn&quot;, complete: false }
+    ])
+})
+</code></pre>
+<p><strong>Observation</strong></p>
+<p>CanJS directly observes what’s happening in each magic tag
+like <code>{{ name }}</code> so it can localize changes as much as possible. This means
+that when the first todo’s name is changed like:</p>
+<pre><code class="language-js">viewModel.tasks[0].name = &quot;Do the dishes&quot;
+</code></pre>
+<p>This change will be observed, and a textNode in the div will simply
+be updated with the new <code>name</code>.  There’s no diffing on the whole template.  A
+change happens and we know directly what is impacted.</p>
+<p><strong>Data diffing</strong></p>
+<p>The <a href="../can-stache.helpers.for-of.html" title="Loop through a list of values, keys in an object, or integers.">{{# for(of) }} helper</a> provides data diffing.  It is able
+to do a difference between two arrays and calculate a minimal set of mutations to
+make one array match another.  This means that if a new task is added to the
+list of <code>tasks</code> like:</p>
+<pre><code class="language-js">viewModel.tasks.push({ name: &quot;Understand diffing&quot;, complete: true });
+</code></pre>
+<p>This change will be observed, and a new array will be returned from
+<code>completeTodos()</code>.  The <code>#for</code> helper will <a href="../can-diff/list/list.html" title="Return a difference of two lists.">diff</a> this new array to the
+original array, and only create a single new <code>&lt;div&gt;</code> for the new todo.</p>
+<h3>Template minification</h3>
+<p>While templates provide obvious benefits to application maintainability, they can be a
+chore to correctly integrate into the build tool chain. The <a href="../steal-stache.html" title="A StealJS extension that allows stache templates as dependencies.">steal-stache</a> library provides an easy hook to load <a href="../can-stache.html" title="Live binding templates.">can-stache</a> templates using <a href="https://stealjs.com">StealJS</a> and include the compiled templates into the minified result of the build.</p>
+<p><a href="../steal-stache.html" title="A StealJS extension that allows stache templates as dependencies.">steal-stache</a> returns a renderer function that will render the template into a document fragment.</p>
+<pre><code class="language-js">import todosStache from &quot;todos.stache&quot;
+todosStache([{ name: &quot;dishes&quot; }]); //-&gt; &lt;documentFragment&gt;
+</code></pre>
+<p>When the build is run, this import statement will tell StealJS that &quot;todos.stache&quot; is a dependency, and will include an already parsed representation in the build result.</p>
+<h3>In-template dependency declarations</h3>
+<p><a href="../can-view-import.html" title="">can-view-import</a> allows templates to import their dependencies like
+other modules. You can import custom elements, helpers, and other modules straight from a template module like:</p>
+<pre><code class="language-html">&lt;can-import from=&quot;components/my_tabs&quot;/&gt;
+&lt;can-import from=&quot;helpers/prettyDate&quot;/&gt;
+&lt;my-tabs&gt;
+  &lt;my-panel title=&quot;{{ prettyDate start }}&quot;&gt;...&lt;/my-panel&gt;
+  &lt;my-panel title=&quot;{{ prettyDate end }}&quot;&gt;...&lt;/my-panel&gt;
+&lt;/my-tabs&gt;
+</code></pre>
+<h3>Progressive Loading</h3>
+<p>A template may load or conditionally load a module after the initial page load. <code>&lt;can-import&gt;</code> allows progressive loading by using an end tag.</p>
+<p>This feature, when used with <a href="../../steal-stache.html">steal-stache</a>, signals to the build that the enclosed section’s dependencies should be dynamically loaded at runtime.</p>
+<pre><code class="language-html">{{# eq(location, &quot;home&quot;) }}
+&lt;can-import from=&quot;components/home&quot;&gt;
+  &lt;my-home/&gt;
+&lt;/can-import&gt;
+{{/ eq }}
+{{# eq(location, &quot;away&quot;) }}
+&lt;can-import from=&quot;components/chat&quot;&gt;
+  &lt;my-chat/&gt;
+&lt;/can-import&gt;
+{{/ eq }}
+</code></pre>
+<h2>Malleable Models</h2>
+<p>CanJS’s models are primarily responsible for defining your data’s schema and communicating with a server to read and write data.</p>
+<p>In addition to CRUD and real-time capabilities, [can-set] and <a href="../can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a> provide lots of great features out-of-the-box:</p>
+<ul>
+<li><a href="#Memory_safeinstancestore">Memory-safe instance store</a></li>
+<li><a href="#Real_timelistupdates">Real-time list updates</a></li>
+<li><a href="#Parameterawareness">Parameter awareness</a></li>
+<li><a href="#Cachingandminimaldatarequests">Caching and minimal data requests</a></li>
+<li><a href="#Related_datafeatures">Related-data features</a></li>
+</ul>
+<p>We’ll cover each of these in the sections below.</p>
+<h3>Separation of concerns</h3>
+<p>CanJS separates your model layer into two parts:</p>
+<ol>
+<li>Communicating with a server.</li>
+<li>Managing your data’s schema.</li>
+</ol>
+<p>Separating these two concerns means your model data isn’t tied to how you communicate with your API. Your project may start with a RESTful API for CRUD operations but end up with a real-time WebSocket API, and with CanJS, that change doesn’t affect how your data is modeled.</p>
+<p>Additionally, with our mixin-based approach, you can easily add behaviors to both parts separately. Want to add <a href="../can-connect/data/localstorage-cache/localstorage-cache.html" title="Saves raw data in localStorage.">Local Storage</a> caching? It’s a one-line add-on. How about a behavior to <a href="../can-connect/data/combine-requests/combine-requests.html" title="Combines multiple incoming lists requests into a single list request when possible.">efficiently combine network requests</a>? One line too! Need something not provided by <a href="../can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a>? Write and mix in your own custom behaviors.</p>
+<p>This separation of concerns and powerful mixin behavior is accomplished by encapsulating the code required to connect to a service and encouraging typed definitions of your model data. For every “type” of data object in your project, you can create a model to represent the properties and methods attached to it. With this model in hand, you can structure how you communicate with your server. Different API calls can return the same type of data and have those represented as the same model objects.</p>
+<p>Let’s look at an example of how we would define a <code>Todo</code> type and a list of todos:</p>
+<pre><code class="language-js">import { ObservableArray, ObservableObject } from &quot;can&quot;;
+
+class Todo extends ObservableObject {
+    static props = {
+        id: { identity: true, type: Number },
+        complete: Boolean,
+        name: String
+    };
+}
+
+class TodoList extends ObservableArray {
+    static props = {};
+
+    completeCount() {
+        return this.filter({ complete: true }).length;
+    }
+
+    static items = Todo;
+}
+</code></pre>
+<p>This example uses <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a> to create a type definition for a <code>Todo</code>; each instance of <code>Todo</code> has a boolean <code>complete</code> property and a string <code>name</code> property.</p>
+<p>This example also uses <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">can-observable-array</a> to define a type for an array of <code>Todo</code> instances; the list has a <code>completeCount</code> method for easily determining how many todos in the list have been completed.</p>
+<p>Using <a href="../can-rest-model.html" title="Connect a type to a restful service layer.">can-rest-model</a>, we’ll create a connection between a RESTful <code>/api/todos</code> service and our <code>Todo</code> instances and <code>TodoList</code> lists:</p>
+<pre><code class="language-js">import { restModel } from &quot;can&quot;;
+
+Todo.connection = restModel({
+    url: &quot;/api/todos&quot;,
+    ObjectType: Todo,
+    ArrayType: TodoList
+});
+</code></pre>
+<p>That connection can be used to get a <code>Todo.List</code> of <code>Todo</code>s:</p>
+<pre><code class="language-js">Todo.getList({}).then((todos) =&gt;  {
+    // Do what you’d like with the `todos`
+});
+</code></pre>
+<h3>Memory-safe instance store</h3>
+<p>Let’s continue with our todo app example and imagine that we want to show two lists on a page: incomplete and urgent todos.</p>
+<p>First, let’s fetch the incomplete todos:</p>
+<pre><code class="language-js">Todo.getList({ filter: { completed: false } }).then((incompleteTodos) =&gt;  {});
+</code></pre>
+<p><code>incompleteTodos</code> might look like this:</p>
+<pre><code>[
+  { id: 2, completed: false, name: &quot;Finish docs&quot;, priority: &quot;high&quot; },
+  { id: 3, completed: false, name: &quot;Publish release&quot;, priority: &quot;medium&quot; }
+]
+</code></pre>
+<p>Next, let’s fetch a list of high-priority todos:</p>
+<pre><code class="language-js">Todo.getList({ filter: { priority: &quot;high&quot; } }).then((urgentTodos) =&gt;  {});
+</code></pre>
+<p><code>urgentTodos</code> might look like this:</p>
+<pre><code>[
+  { id: 1, completed: true, name: &quot;Finish code&quot;, priority: &quot;high&quot; },
+  { id: 2, completed: false, name: &quot;Finish docs&quot;, priority: &quot;high&quot; }
+]
+</code></pre>
+<p>Note that the “Finish docs” todo appears in both lists. If we make a change to the todo (e.g. changing its name), we want that change to appear in both lists.</p>
+<p><a href="../can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">can-realtime-rest-model</a>’s <a href="../can-connect/constructor/store/store.instanceStore.html" title="A mapping of instances keyed by their base.id.">instance store</a> keeps a reference to every model object by <code>id</code> (but you can [can-set.props.id change] which property is used). It does two things:</p>
+<ol>
+<li>Prevents duplicate instances of a model object from being created.</li>
+<li>Cleans up unused instances to release memory when they’re no longer referenced.</li>
+</ol>
+<p>Let’s look at both of these points in more detail.</p>
+<h4>Duplicate instances</h4>
+<p>The instance store prevents duplicate instances from being created by storing each model object by its <a href="../can-observable-object/define/identity.html" title="Specifies that the property uniquely identifies instances of the type.">identity</a>. When a model object is fetched from the server, CanJS checks its <code>identity</code> to see if it’s already in the instance store; if it is, then CanJS will reuse the same object.</p>
+<p>In our example, CanJS puts the “Finish docs” todo in the instance store when <code>incompleteTodos</code> is fetched. When <code>urgentTodos</code> is retrieved, CanJS sees the “Finish docs” todo with the same <code>id</code>, so it reuses the instance of “Finish docs” that is already in the instance store.</p>
+<p>If these todos are displayed in separate lists on the page, and a user marks “Finish docs” as completed in one of the lists (causing the <code>completed</code> property to be set to <code>true</code>), then the other list will reflect this change.</p>
+<h4>Prevent memory leaks</h4>
+<p>A global instance store <em>sounds</em> great until you consider the memory implications: if every model object instance is tracked, then won’t the application’s memory usage only grow over time?</p>
+<p>CanJS solves this potential problem by keeping track of which objects are observing changes to your model object instances.</p>
+<p>The reference count for each object increases in two ways:</p>
+<ul>
+<li><p><strong>Explicitly:</strong> if you use <a href="../can-connect/constructor/store/store.addInstanceReference.html" title="Add a reference to the store.instanceStore so an instance can be easily looked up.">addInstanceReference</a> or call <code>.on()</code> on an instance (e.g. <code>todo.on(&quot;name&quot;, () =&gt; {})</code>)</p></li>
+<li><p><strong>Implicitly:</strong> if properties of the instance are bound to via live-binding in a view, e.g. <code>Name: {{ name }}</code> in a <a href="../can-stache.html" title="Live binding templates.">can-stache</a> template</p></li>
+</ul>
+<p>Similarly, the reference count is decreased in two ways:</p>
+<ul>
+<li><p><strong>Explicitly:</strong> if you use <a href="../can-connect/constructor/store/store.deleteInstanceReference.html" title="Remove a reference from the store.instanceStore so an instance can be garbage
+collected.">deleteInstanceReference</a> or call <code>.off()</code> on an instance</p></li>
+<li><p><strong>Implicitly:</strong> if part of the DOM connected to a live-binding gets removed</p></li>
+</ul>
+<p>When the reference count for a model object instance gets back down to 0 (no more references), the instance is removed from the store so its memory can be garbage collected.</p>
+<p>The result is that in long-running applications that stream large amounts of data, this store will not cause memory to increase unnecessarily over time.</p>
+<p>You can read more about the benefits of the instance store in our <a href="https://www.bitovi.com/blog/avoid-the-zombie-apocalypse">“Avoid the Zombie Apocalypse” blog post</a>.</p>
+<h3>Real-time list updates</h3>
+<p>CanJS also automatically inserts, removes, and replaces objects within lists.</p>
+<p>Let’s continue with our incomplete and urgent todo example from the previous section.</p>
+<p><code>incompleteTodos</code> looks like this:</p>
+<pre><code>[
+  { id: 2, completed: false, name: &quot;Finish docs&quot;, priority: &quot;high&quot; },
+  { id: 3, completed: false, name: &quot;Publish release&quot;, priority: &quot;medium&quot; }
+]
+</code></pre>
+<p><code>urgentTodos</code> looks like this:</p>
+<pre><code>[
+  { id: 1, completed: true, name: &quot;Finish code&quot;, priority: &quot;high&quot; },
+  { id: 2, completed: false, name: &quot;Finish docs&quot;, priority: &quot;high&quot; }
+]
+</code></pre>
+<p>In the UI, there’s a checkbox next to each urgent todo that toggles the <code>completed</code> property:</p>
+<pre><code class="language-js">todo.completed = !todo.completed;
+todo.save();
+</code></pre>
+<p>When the user clicks the checkbox for the “Finish docs” todo, its <code>completed</code> property is set to <code>true</code> and it disappears from the <code>incompleteTodos</code> list when <a href="../can-connect/can/map/map.prototype.save.html" title="Save or update client data to the persisted data source.">.save()</a> is called.</p>
+<p>This is made possible by two things:</p>
+<ul>
+<li><p>The <a href="../can-connect/constructor/store/store.listStore.html" title="A mapping of lists keyed by their base.listQuery.">list store</a> contains all of the lists loaded from the server. It’s memory safe so it won’t leak.</p></li>
+<li><p><a href="../can-query-logic.html" title="Perform data queries and compare queries against each other. Provides logic useful for
+data caching and real-time behavior.">can-query-logic</a> understands what your parameters mean so it can insert, remove, and replace objects within your lists. This is discussed in the following <em>&quot;Parameter awareness&quot;</em> section.</p></li>
+</ul>
+<p>CanJS’s real-time list updates work great with &quot;push notification&quot; systems like <a href="https://socket.io/">socket.io</a> and SignalR.  To add realtime behavior to a CanJS app, you
+just have to call the <a href="../can-connect/real-time/real-time.createInstance.html" title="Programatically indicate a new instance has been created.">createInstance</a>,
+<a href="../can-connect/real-time/real-time.updateInstance.html" title="Programatically indicate a new instance has been updated.">updateInstance</a> and <a href="../can-connect/real-time/real-time.destroyInstance.html" title="Programatically indicate a new instance has been destroyed.">destroyInstance</a>
+when updates happen similar to the following:</p>
+<pre><code class="language-js">let socket = io(&quot;https://example.com&quot;);
+
+socket.on(&quot;todo created&quot;, (todo) =&gt; {
+    Todo.connection.createInstance(todo)
+});
+socket.on(&quot;todo updated&quot;, (todo) =&gt; {
+    Todo.connection.updateInstance(todo)
+});
+socket.on(&quot;todo removed&quot;, (todo) =&gt; {
+    Todo.connection.destroyInstance(todo)
+});
+</code></pre>
+<h3>Parameter awareness</h3>
+<p>When you make a request for <code>incompleteTodos</code> like the one below:</p>
+<pre><code class="language-js">Todo.getList({ filter: { completed: false } }).then((incompleteTodos) =&gt;  {});
+</code></pre>
+<p>The <code>{ filter: { completed: false } }</code> object is passed to the server as parameters and represents all incomplete todos.
+If your server expects a different format, it can be configured with <a href="../can-query-logic.html" title="Perform data queries and compare queries against each other. Provides logic useful for
+data caching and real-time behavior.">can-query-logic</a>.</p>
+<p>The <code>{ filter: {completed: false } }</code> parameters are associated with <code>incompleteTodos</code> so <code>can-connect</code> knows that <code>incompleteTodos</code> should contain <em>any</em> todo with a <code>false</code> <code>completed</code> property. By understanding what
+the parameters used to request data mean, all sorts of interesting behaviors and performance optimizations
+can happen, including:</p>
+<ul>
+<li>Real-time updates as described in the previous section.</li>
+<li>Fall-through caching, request caching, and combining requests behaviors as described in the
+following sections.</li>
+</ul>
+<p>Parameter awareness is provided by <a href="../can-query-logic.html" title="Perform data queries and compare queries against each other. Provides logic useful for
+data caching and real-time behavior.">can-query-logic</a>.  Read more about the magic of <code>can-query-logic</code> in its <a href="../can-query-logic.html" title="Perform data queries and compare queries against each other. Provides logic useful for
+data caching and real-time behavior.">API docs</a>.</p>
+<h3>Caching and minimal data requests</h3>
+<p>Undoubtedly, the slowest part of any web application is communicating with the server. CanJS uses the following strategies to improve performance:</p>
+<ul>
+<li><a href="../can-connect/fall-through-cache/fall-through-cache.html" title="Add fall-through caching with the cacheConnection.">Fall-through caching</a>: improve perceived performance by showing cached data first (while still fetching the latest data)</li>
+<li><a href="../can-connect/cache-requests/cache-requests.html" title="Cache response data and use it to prevent unnecessary future requests or make future requests smaller.">Request caching</a>: reduce the number and size of server requests by intelligently using cached datasets</li>
+<li><a href="../can-connect/data/combine-requests/combine-requests.html" title="Combines multiple incoming lists requests into a single list request when possible.">Combining requests</a>: combine multiple requests to the same API into one request</li>
+</ul>
+<h4>Fall-through caching</h4>
+<p>To increase perceived performance, <code>can-connect</code> includes a <a href="../can-connect/fall-through-cache/fall-through-cache.html" title="Add fall-through caching with the cacheConnection.">fall-through cache</a> that first serves cached data from <code>localStorage</code> while simultaneously making the API request to get the latest data.</p>
+<p>The major benefit of this technique is improved perceived performance: users will see content faster because it’s returned immediately from the cache. When the data hasn’t changed, the user doesn’t notice anything, but when it has, the magic of live-bindings automatically updates the data as soon as the API request finishes.</p>
+<h4>Request caching</h4>
+<p>In some scenarios, an even more aggressive caching strategy is favorable. One example is fetching data that doesn’t change very often, or cached data that you can invalidate yourself. The <a href="../can-connect/cache-requests/cache-requests.html" title="Cache response data and use it to prevent unnecessary future requests or make future requests smaller.">cache-requests</a> behavior can reduce both the number of requests that are made and the size of those requests in these cases.</p>
+<p>In the first scenario, where the data doesn’t change very often (and thus shouldn’t be fetched again during the lifetime of the application), no more requests to the API will be made for that same set of data. In the second scenario, you can choose to invalidate the cache yourself, so after the first API request the data is always cached until you clear it manually.</p>
+<p>Additionally, the request logic is more aggressive in its attempts to find subsets of the data within the cache and to only make an API request for the subset NOT found in the cache. In other words, partial cache hits are supported.</p>
+<h4>Combining requests</h4>
+<p>CanJS collects requests that are made within <a href="../can-connect/data/combine-requests.time.html" title="Specifies the amount of time to wait to combine requests.">a millisecond</a> of each other and tries to combine them into a single request if they are for the same API.</p>
+<p>For example, let’s say we’re loading a page that has two parts: a section with incomplete todos and a section that’s an archive of completed todos. The incomplete section is just a list of todos, while the archive section is broken up by month, so you want to split these sections into two different components.</p>
+<p>In most other frameworks, you would probably decide to have some parent component fetch the list of all todos so you could pass different subsets to each component. This decreases the reusability and maintainability of the components, but it would result in just one network request instead of two.</p>
+<p>With CanJS, you don’t have to choose between maintainability and performance. You can decide to have each component fetch its data independently and <a href="../can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a> will intelligently combine the two requests into one.</p>
+<p>This is made possible by the [can-set] algebra we discussed earlier. <a href="../can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a> sees the outgoing requests, can determine that requests for <code>Todo.getList({ filter: { completed: true }, sort: &quot;completedDate&quot; })</code> and <code>Todo.getList({ filter: { completed: false }, sort: &quot;priority&quot; })</code> are equivalent to just one <code>Todo.getList({})</code> request, then make that single request and return the correct sorted data to each call.</p>
+<p>This <a href="../can-connect/data/combine-requests/combine-requests.html" title="Combines multiple incoming lists requests into a single list request when possible.">configurable behavior</a> is extremely powerful because it abstracts network request complexity away from how you create and compose your application.</p>
+<h3>Related-data features</h3>
+<p>CanJS makes dealing with document-based APIs easier by handling situations where the server might return either a reference to a value or the value itself.</p>
+<p>For example, in a MongoDB setup, a request like <code>GET /api/todos/2</code> might return:</p>
+<pre><code>{
+  id: 2,
+  name: &quot;Finish docs&quot;,
+  projectRef: 1
+}
+</code></pre>
+<p>But a request like <code>GET /api/todos/2?$populate=projectRef</code> might return:</p>
+<pre><code>{
+  id: 2,
+  name: &quot;Finish docs&quot;,
+  projectRef: {
+    id: 1,
+    name: &quot;Release&quot;
+  }
+}
+</code></pre>
+<p><a href="../can-connect/can/ref/ref.html" title="Handle references to instances in the data returned by the server. Allows several means of loading referenced instances, determined on-the-fly.">can/ref</a> handles this ambiguity by creating a <a href="../can-connect/can/ref/ref.Map.Ref.html" title="A reference type with instanceRef.value primed to return an existing instance of the
+map._Map type, if available, or lazy load an instance upon accessing instanceRef.value.">Ref type</a> that is always populated by the <code>id</code> and can contain the full value if it’s been fetched.</p>
+<p>For example, without populating the project data:</p>
+<pre><code class="language-js">Todo.get({ id: 2 }).then((todo) =&gt; {
+  todo.projectRef.id //-&gt; 2
+});
+</code></pre>
+<p>With populating the project data:</p>
+<pre><code class="language-js">Todo.get({ id: 2, populate: &quot;projectRef&quot; }).then((todo) =&gt; {
+  todo.projectRef.id //-&gt; 2
+});
+</code></pre>
+<p>The values of other properties and methods on the <a href="../can-connect/can/ref/ref.Map.Ref.html" title="A reference type with instanceRef.value primed to return an existing instance of the
+map._Map type, if available, or lazy load an instance upon accessing instanceRef.value.">Ref type</a> are determined by whether the reference was populated or the referenced item already exists in the <a href="../can-connect/constructor/store/store.instanceStore.html" title="A mapping of instances keyed by their base.id.">instanceStore</a>.</p>
+<p>For example, <code>value</code>, which points to the referenced instance, will be populated if the reference was populated:</p>
+<pre><code class="language-js">Todo.get({ id: 2, populate: &quot;projectRef&quot; }).then((todo) =&gt; {
+  todo.projectRef.value.name //-&gt; “Release”
+});
+</code></pre>
+<p>Or, it can be lazy loaded if it’s used in a template. For example, with this template:</p>
+<pre><code class="language-html">{{# for(todo of this.todos) }}
+  Name: {{ todo.name }}
+  Project: {{ todo.projectRef.value.name }}
+{{/ for }}
+</code></pre>
+<p>If <code>todo.projectRef.value</code> hasn’t been loaded by some other means, CanJS will fetch it from the server so it can be displayed in the template. This is handled automatically without you having to write any additional code to fetch the project data.</p>
+<p>Additionally, if multiple todos have the same project, only one request will be made to the server (if the data isn’t already cached), thanks to the <a href="../can-connect/data/combine-requests/combine-requests.html" title="Combines multiple incoming lists requests into a single list request when possible.">combine-requests</a> behavior.</p>
+<h2>jQuery integration</h2>
+<p>By default, CanJS’s <a href="../can-core.html" title="The best, most hardened and generally useful libraries in CanJS.">Core</a> works without jQuery.  However, the <a href="../can-dom-events/helpers/add-jquery-events.html" title="Add jQuery’s special events to the global registry.">./helpers/add-jquery-events</a>
+module integrates jQuery’s events into CanJS’s events.  This allows you to listen to
+jQuery custom events like <code>draginit</code> directly in <a href="../can-stache.html" title="Live binding templates.">can-stache</a> like:</p>
+<pre><code class="language-html">&lt;li on:draginit=&quot;doSomething()&quot;&gt;...&lt;/li&gt;
+</code></pre>
+<p>The <a href="recipes/playlist-editor.html" title="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for
+drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes
+an hour to complete.
+
+This recipe uses YouTube API Services and follows YouTube Terms of Service
+and Google Privacy Policy">Playlist Editor</a> recipe shows using this feature to implement a drag-drop playlist.</p>
+<h2>Server Side Rendering</h2>
+<p>CanJS applications can be rendered on the server by running the same code. This is known as <a href="https://en.wikipedia.org/wiki/Isomorphic_JavaScript">Isomorphic JavaScript</a> or <a href="https://medium.com/@mjackson/universal-javascript-4761051b7ae9">Universal JavaScript</a>.</p>
+<p>Server-side rendering (SSR) provides two main benefits over traditional single page apps: better page load performance and SEO support.</p>
+<p>CanJS makes it possible to load your application on the server. This is because CanJS works in a NodeJS context, on top of a virtual DOM.</p>
+<p>See the <a href="server-side-rendering.html" title="Learn how to set up SSR for CanJS.">SSR guide</a> for more information on setting up server-side rendering.</p>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/introduction/technical.md"},"description":"Learn about CanJS’s technical accomplishments. \n","name":"guides/technical","title":"Technical Highlights","type":"page","parent":"about","order":1,"outline":{"depth":2},"comment":" ","codepen":[["\"can\"","\"//unpkg.com/can@6/core.mjs\""],["\"can/ecosystem\"","\"//unpkg.com/can@6/ecosystem.mjs\""],["\"can/everything\"","\"//unpkg.com/can@6/everything.mjs\""],["\"can/demos/technology-overview/mock-url\"","\"//unpkg.com/mock-url@^6.0.0/mock-url.mjs\""],["\"can/demos/technology-overview/route-mini-app-components\"","\"//unpkg.com/route-mini-app@^5.0.0/components.mjs\""],["return steal.import(","return import("],["\"can/demos/technology-overview/page-login\"","\"//unpkg.com/route-mini-app@^5.0.0/page-login.mjs\""],["`can/demos/technology-overview/page-${this.page}`","`//unpkg.com/route-mini-app@^5.0.0/page-${this.page}.mjs`"]],"pathToRoot":"../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix=".."></div>
+
+	</body>
+</html>

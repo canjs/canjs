@@ -1,0 +1,48 @@
+<script type='text/stache' id='demo-html'>
+<drivers-list {^selected}="*editing">
+	<ul>
+		{{#each drivers}}
+			<li ($click)="select(.)">
+				{{title}} {{first}} {{last}} - {{licensePlate}}
+			</li>
+		{{/each}}
+	</ul>
+</drivers-list>
+<edit-plate {(plate-name)}="*editing.licensePlate"/>
+</script>
+
+<script src="../../../node_modules/steal/steal.js" main="@empty" id='demo-source'>
+import can from "can";
+import "can/view/autorender/autorender";
+import "can/view/bindings/bindings";
+import "can/view/stache/stache";
+import "can/map/define/";
+
+can.Component.extend({
+	tag: "drivers-list",
+	viewModel: {
+		drivers: [
+			{ title: "Dr.", first: "Cosmo", last: "Kramer", licensePlate: "ASSMAN" },
+			{ title: "Ms.", first: "Elaine", last: "Benes", licensePlate: "621433" }
+		],
+		select: function(driver){
+			this.attr("selected", driver);
+		}
+	}
+});
+
+
+can.Component.extend({
+	tag: "edit-plate",
+	template: can.stache("<input value='{{plateName}}' ($input)='update($element.val)'/>"),
+	viewModel: {
+		update: function(value){
+			this.attr("plateName", value);
+		}
+	}
+});
+
+$("body").append( can.view('demo-html')({}) );
+</script>
+
+

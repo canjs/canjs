@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Synthetic Typing Test</title>
+		<style>
+			#key th:nth-child(even) {background: #CCf}
+			#who th:nth-child(even) {background: #fCb}
+			.hover {background-color: blue}
+			#drag, #drop {
+				width: 20px;
+				height: 20px;
+				border:1px solid black;
+			}
+			#drag {
+				top: 0px;
+				background-color: green;
+			}
+			#drop {
+				margin-top:10px;
+				background-color: blue;
+			}
+			.clicked {
+				border:1px solid red;
+			}
+		</style>
+	</head>
+	<body>
+		<p id="start">start</p>
+		<div class="over">Move over me</div>
+		<p id="end">end</p>
+		<div>
+			<div id="drag"></div>
+			<div id="drop"></div>
+		</div>
+		<div class="status"></div>
+		<script>
+			steal = {
+				map: {
+					"jquery/dist/jquery": "funcunit/browser/jquery"
+				}
+			};
+		</script>
+		<script src="../../node_modules/steal/steal.js" main="funcunit/test/drag/drag"></script>
+	</body>
+</html>

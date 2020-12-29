@@ -1,0 +1,1 @@
+{"version":3,"sources":["amd.js"],"names":["name","es6module","es6"],"mappings":";iBACQ;AAAA,IACNA,IAAA,EAAM,QADA;AAAA,IAENC,SAAA,EAAWC,GAFL;AAAA,C","sourceRoot":"../","sourcesContent":["define([\"basics/es6module\"],function(es6){\n\treturn {\n\t\tname: \"module\",\n\t\tes6module: es6\n\t};\n});\n"]}

@@ -1,0 +1,13 @@
+{
+	"name": "app",
+	"version": "1.0.0",
+	"main": "main.js",
+	"dependencies": {
+		"other": "1.0.0"
+	},
+	"system": {
+		"directories": {
+			"lib": "src"
+		}
+	}
+}

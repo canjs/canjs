@@ -1,0 +1,16 @@
+{
+	"name": "meta-deep",
+	"main": "main.js",
+	"version": "1.0.0",
+	"system": {
+		"meta": {
+			"foo": {
+				"format": "global",
+				"deps": ["bar"]
+			}
+		},
+		"configDependencies": [
+			"meta-config"
+		]
+	}
+}

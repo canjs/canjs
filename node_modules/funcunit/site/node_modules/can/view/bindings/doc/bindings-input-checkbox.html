@@ -1,0 +1,32 @@
+<script type='text/stache' id='demo-html'>
+<p><input type='checkbox' {($checked)}='owns.car'/> Car</p>
+<p><input type='checkbox' {($checked)}='owns.bike'/> Bike</p>
+<p><input type='checkbox' {($checked)}='owns.sled'/> Dog Sled</p>
+<p>You own: {{ownership}}</p>
+</script>
+<script src="../../../node_modules/steal/steal.js" main="@empty">
+import can from "can";
+import "can/view/autorender/";
+import "can/view/stache/";
+
+		
+var person = new can.Map({
+  owns: {
+    bike: true
+  }
+});
+
+$("body").append(can.view('demo-html',person,{
+  ownership: function(){
+    var list = [],
+    	owns = person.attr('owns');
+    can.each(can.Map.keys(owns), function(prop){
+    	if(owns.attr(prop) ) {
+          list.push(prop)
+        }
+    });
+    return list.length ? list.join(" and ") : "nothing";
+  }
+}));
+
+</script>

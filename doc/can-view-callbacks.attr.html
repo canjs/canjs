@@ -1,0 +1,2575 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: node_modules/can-view-callbacks/docs/attr.md
+	@function can-view-callbacks.attr
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>attr | can-view-callbacks | Views | API Docs | CanJS</title>
+	<meta name="description" content="Register custom behavior for an attribute.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Register custom behavior for an attribute.">
+	<meta property="og:title" content="attr | can-view-callbacks | Views | API Docs | CanJS">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "git://github.com/canjs/can-view-callbacks.git",
+			"description": "Register custom behavior for an attribute.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "attr | can-view-callbacks | Views | API Docs | CanJS",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "5.0.0"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="./static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="can-view-callbacks.attr" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="guides/contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>Observables</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-bind.html"
+							title="Updates one observable value with the value of another observable.">
+							can-bind
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-compute.html"
+							title="Create an observable value.">
+							can-compute
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-debug.html"
+							title="Useful debugging utilities.">
+							can-debug
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-deep-observable.html"
+							title="Create observable objects where nested objects and arrays are also observable.">
+							can-deep-observable
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define.html"
+							title="Defines observable properties and their behavior on a prototype object. This function is not commonly used directly. map and list are more commonly used. Types and behaviors shared by both map and list are documented here.">
+							can-define
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define/list/list.html"
+							title="Create observable lists.">
+							can-define/list/list
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define/map/map.html"
+							title="Create observable objects.">
+							can-define/map/map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-backup.html"
+							title="">
+							can-define-backup
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-stream.html"
+							title="Add useful stream conversion methods to a supplied map or list constructor using a stream interface such as can-stream-kefir.">
+							can-define-stream
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-stream-kefir.html"
+							title="Export a function that takes a map or list constructor and uses can-stream-kefir to create streamable properties.">
+							can-define-stream-kefir
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-event-queue.html"
+							title="Mixin observable behavior to your types.">
+							can-event-queue
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-kefir.html"
+							title="Integrate KefirJS streams directly within can-stache and other parts of CanJS.">
+							can-kefir
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-list.html"
+							title="">
+							can-list
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-map.html"
+							title="Create observable objects.">
+							can-map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-map-compat.html"
+							title="can-map-compat">
+							can-map-compat
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-map-define.html"
+							title="Defines the type, initial value, get, set, remove, and serialize behavior for attributes of a Map.">
+							can-map-define
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observable-array.html"
+							title="Create observable arrays with defined properties.">
+							can-observable-array
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observable-object.html"
+							title="Create observable objects used to manage state in explicitly defined ways.">
+							can-observable-object
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observation.html"
+							title="Create observable values that derive their value from other observable values.">
+							can-observation
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observation-recorder.html"
+							title="Specify how to listen to changes in a value being read and record those specifications between two points in time. Record observables being read and indicate how to listen to changes in a value being read.">
+							can-observation-recorder
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observe.html"
+							title="Create observable objects, arrays, and functions that work like plain JavaScript objects, arrays, and functions.">
+							can-observe
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-simple-map.html"
+							title="A performant live-bound map.">
+							can-simple-map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-simple-observable.html"
+							title="Create an observable value.">
+							can-simple-observable
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stream.html"
+							title="Create useful stream methods from a minimal stream wrapper implementation.">
+							can-stream
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stream-kefir.html"
+							title="Convert observable values into streams. Kefir is used to provide the stream functionality.">
+							can-stream-kefir
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-value.html"
+							title="Get an observable that’s bound to a specific property on another object.">
+							can-value
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Views</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-attribute-observable.html"
+							title="Create an observable value from an element&#x27;s property or attribute.">
+							can-attribute-observable
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-component.html"
+							title="Create a custom element that can be used to manage widgets or application logic.">
+							can-component
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observable-bindings.html"
+							title="">
+							can-observable-bindings
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache.html"
+							title="Live binding templates.">
+							can-stache
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-bindings.html"
+							title="Listen to events and create one-way and two-way bindings.">
+							can-stache-bindings
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-converters.html"
+							title="Provides a set of converters useful for two-way binding with form elements such as &lt;input&gt; and &lt;select&gt;.">
+							can-stache-converters
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-element.html"
+							title="Create a custom element with ObservableObject-like properties and stache views.">
+							can-stache-element
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-route-helpers.html"
+							title="Adds routeUrl and routeCurrent helpers to stache.">
+							can-stache-route-helpers
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-autorender.html"
+							title="A module that automatically renders script and other elements with the can-autorender attribute. This function is useful to know when the templates have finished rendering.">
+							can-view-autorender
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="module"
+							href="can-view-callbacks.html"
+							title="Registered callbacks for behaviors">
+							can-view-callbacks
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>types</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-view-callbacks.attrData.html"
+							title="The data provided to can-view-callbacks.attr.">
+							attrData
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-view-callbacks.tagData.html"
+							title="The data passed to can-view-callbacks.tag.">
+							tagData
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>methods</span>
+						
+	<ul>
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="function"
+							href="can-view-callbacks.attr.html"
+							title="Register custom behavior for an attribute.">
+							attr
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-view-callbacks.attrs.html"
+							title="Add a Map of attr callbacks">
+							attrs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-view-callbacks.tag.html"
+							title="">
+							tag
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-import.html"
+							title="">
+							can-view-import
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-live.html"
+							title="Setup live-binding between the DOM and a compute manually.">
+							can-view-live
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-model.html"
+							title="Gets the ViewModel of an element.">
+							can-view-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-parser.html"
+							title="Parse HTML and mustache tokens.">
+							can-view-parser
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-scope.html"
+							title="Create a lookup node for keys.">
+							can-view-scope
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-target.html"
+							title="">
+							can-view-target
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="steal-stache.html"
+							title="A StealJS extension that allows stache templates as dependencies.">
+							steal-stache
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Data Modeling</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-connect.html"
+							title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">
+							can-connect
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-connect-ndjson.html"
+							title="Get a list of data from an NDJSON service endpoint.">
+							can-connect-ndjson
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-connect-tag.html"
+							title="Create custom elements that can be used to retrieve model instances.">
+							can-connect-tag
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-realtime-rest-model.html"
+							title="Connect a type to a restful data source and automatically manage lists.">
+							can-define-realtime-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-rest-model.html"
+							title="Connect a type to a restful service layer.">
+							can-define-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-fixture.html"
+							title="Intercept AJAX requests and simulate the response.">
+							can-fixture
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-fixture-socket.html"
+							title="Simulate socket.io services.">
+							can-fixture-socket
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-local-store.html"
+							title="Create, update, delete and query data saved in localStorage.">
+							can-local-store
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-memory-store.html"
+							title="Create, update, delete and query data saved in memory.">
+							can-memory-store
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-ndjson-stream.html"
+							title="Parses an NDJSON stream into a stream of JavaScript objects.">
+							can-ndjson-stream
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-query-logic.html"
+							title="Perform data queries and compare queries against each other. Provides logic useful for data caching and real-time behavior.">
+							can-query-logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-realtime-rest-model.html"
+							title="Connect a type to a restful data source and automatically manage lists.">
+							can-realtime-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-rest-model.html"
+							title="Connect a type to a restful service layer.">
+							can-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-set-legacy.html"
+							title="can-set-legacy supports a legacy can-set API that creates a can-query-logic instance.">
+							can-set-legacy
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-super-model.html"
+							title="Connect a type to a restful data source, automatically manage lists, combine requests, and use a fall-through localstorage cache.">
+							can-super-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Routing</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-deparam.html"
+							title="Deserialize a query string into an array or object.">
+							can-deparam
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-param.html"
+							title="Serialize an object or array into a query string.">
+							can-param
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route.html"
+							title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">
+							can-route
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route-hash.html"
+							title="An observable that is cross bound to the window.location.hash.">
+							can-route-hash
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route-mock.html"
+							title="Simulate routing without having to change the URL.">
+							can-route-mock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route-pushstate.html"
+							title="An observable that can be used as can-route&#x27;s can-route.urlData.">
+							can-route-pushstate
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>JS Utilities</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-assign.html"
+							title="A simplified version of Object.assign, which only accepts a single source argument.">
+							can-assign
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-lazy-value.html"
+							title="can-define-lazy-value">
+							can-define-lazy-value
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-diff.html"
+							title="Utilities for comparing and applying differences between data structures.">
+							can-diff
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-globals.html"
+							title="An environment agnostic container for global variables. Useful for testing and server-side rendering (SSR), typically used internally by CanJS.">
+							can-globals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-join-uris.html"
+							title="Join together a URI path to a base.">
+							can-join-uris
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-key.html"
+							title="Utilities that read and write nested properties on objects and arrays.">
+							can-key
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-key-tree.html"
+							title="Store values in a tree structure.">
+							can-key-tree
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-make-map.html"
+							title="Convert a comma-separated string into a plain JavaScript object.">
+							can-make-map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-parse-uri.html"
+							title="can-parse-uri">
+							can-parse-uri
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-queues.html"
+							title="A light weight queue system for scheduling tasks.">
+							can-queues
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-string.html"
+							title="String utilities.">
+							can-string
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-string-to-any.html"
+							title="Turns a string representation of a primitive type back into the associated primitive.">
+							can-string-to-any
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>DOM Utilities</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-ajax.html"
+							title="Make an asynchronous HTTP (AJAX) request.">
+							can-ajax
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-attribute-encoder.html"
+							title="Encode and decode attribute names.">
+							can-attribute-encoder
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-child-nodes.html"
+							title="">
+							can-child-nodes
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-control.html"
+							title="Create organized, memory-leak free, rapidly performing, stateful controls with declarative event binding. Use Control to create UI controls like tabs, grids, and context menus, and organize them into higher-order business rules with can.route. It can serve as both a traditional view and a traditional controller.">
+							can-control
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-dom-data.html"
+							title="Associate key/value pair data with a DOM node in a memory-safe way.">
+							can-dom-data
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-dom-events.html"
+							title="Listen to DOM events and special events, and register special events.">
+							can-dom-events
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-dom-mutate.html"
+							title="Dispatch and listen for DOM mutations.">
+							can-dom-mutate
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-event-dom-enter.html"
+							title="Watch for when enter keys are pressed on a DomEventTarget.">
+							can-event-dom-enter
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-event-dom-radiochange.html"
+							title="A custom event for listening to changes of inputs with type &quot;radio&quot;, which fires when a conflicting radio input changes. A &quot;conflicting&quot; radio button has the same &quot;name&quot; attribute and exists within in the same form, or lack thereof. This event coordinates state bound to whether a radio is checked. The &quot;change&quot; event does not fire for deselected radios. By using this event instead, deselected radios receive notification.">
+							can-event-dom-radiochange
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-fragment.html"
+							title="Convert a String, HTMLElement, documentFragment, contentArray, or object with a can.toDOM symbol into a documentFragment.">
+							can-fragment
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Data Validation</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-type.html"
+							title="Define types that can verify values are of the correct type, or convert values to the correct type.">
+							can-type
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate.html"
+							title="Shared utilities and type definitions to process validation errors.">
+							can-validate
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate-interface.html"
+							title="can-validate-interface provides simple property existence validation. Use to prevent errors resulting from missing properties on input objects.">
+							can-validate-interface
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate-legacy.html"
+							title="A plugin for CanJS that wraps any validation library to can.validate. Can-Validate doesn&#x27;t do any validation of its own but instead provides some abstraction to your library of choice. The chosen library is registered with can-validate using a shim.">
+							can-validate-legacy
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate-validatejs.html"
+							title="Create can-validate.validator functions using validate.js.">
+							can-validate-validatejs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Typed Data</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-cid.html"
+							title="Utility for getting a unique identifier for an object.">
+							can-cid
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-construct.html"
+							title="Provides a way to easily use the power of prototypal inheritance without worrying about hooking up all the particulars yourself. Use can-construct.extend to create an inheritable constructor function of your own.">
+							can-construct
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-construct-super.html"
+							title="can.Construct.super is a plugin that makes it easier to call base functions from inside inheriting functions.">
+							can-construct-super
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-data-types.html"
+							title="A package of type objects that are used to test if a value is a member of the type and convert values to the type.">
+							can-data-types
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-namespace.html"
+							title="Namespace where can-* packages are registered.">
+							can-namespace
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-reflect.html"
+							title="Perform operations and read information on unknown data types.">
+							can-reflect
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-reflect-dependencies.html"
+							title="Functions to keep track of observable dependencies.">
+							can-reflect-dependencies
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-reflect-promise.html"
+							title="Expose an observable, Map-like API on Promise types.">
+							can-reflect-promise
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-types.html"
+							title="A stateful container for CanJS type information.">
+							can-types
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Polyfills</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-symbol.html"
+							title="Symbols used to detail how CanJS may operate on different objects CanJS has a consistent internal interface for objects to interact with each other, and this is also important for interop with external libraries.  CanJS uses symbols to identify object types, property access methods, and for event handling. can-symbol also has a polyfill function that will fake symbols on unsupported platforms.">
+							can-symbol
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-vdom.html"
+							title="A browser-lite environment for Node.js or a worker thread.">
+							can-vdom
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-core.html"
+							title="The best, most hardened and generally useful libraries in CanJS.">
+							Core
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						">
+						<a class="page"
+							href="can-infrastructure.html"
+							title="Utility libraries that power the core and ecosystem collection.">
+							Infrastructure
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-global.html"
+							title="can-global">
+							can-global
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-test-helpers.html"
+							title="Common utilities for effectively testing the features of CanJS.">
+							can-test-helpers
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-ecosystem.html"
+							title="Useful libraries that extend or add important features to the core collection.">
+							Ecosystem
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-legacy.html"
+							title="Former libraries that we still accept patches for, but are not under active development.">
+							Legacy
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>attr</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/can-view-callbacks/edit/master/docs/attr.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Register custom behavior for an attribute.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+<div class="signature">
+  <h2 class="signature-title">
+    <code>callbacks.attr(attributeName, attrHandler(el, attrData))</code>
+  </h2>
+  <p>Registers the <code>attrHandler</code> callback when <code>attributeName</code> is found
+in a template.</p>
+<p>Handlers must be registered before templates using them are parsed.</p>
+<pre><code class="language-js">import canViewCallbacks from &quot;can-view-callbacks&quot;;
+import domEvents from &quot;can-dom-events&quot;;
+
+canViewCallbacks.attr( &quot;show-when&quot;, function( el, attrData ) {
+    const prop = el.getAttribute( &quot;show-when&quot; );
+    const compute = attrData.compute( prop );
+
+    const showOrHide = function() {
+        const val = compute();
+        if ( val ) {
+            el.style.display = &quot;block&quot;;
+        } else {
+            el.style.display = &quot;hidden&quot;;
+        }
+    };
+
+    compute.on( &quot;change&quot;, showOrHide );
+    showOrHide();
+
+    domEvents.addEventListener.call( el, &quot;removed&quot;, function onremove() {
+        compute.off( &quot;change&quot;, showOrHide );
+        domEvents.removeEventListener.call( &quot;removed&quot;, onremove );
+    } );
+} );
+</code></pre>
+
+  
+  <div class="parameters">
+    <h3 class="parameters-title" data-skip>Parameters</h3>
+      <ol>
+        
+          <li><b>attributeName</b> <code>{String|RegExp}</code>: <p>A lower-case attribute name or regular expression
+that matches attribute names. Examples: <code>&quot;my-fill&quot;</code> or <code>/my-\w/</code>.</p>
+</li>
+        
+          <li><b>attrHandler</b> <code>{function(el, <a href="can-view-callbacks.attrData.html" title="The data provided to can-view-callbacks.attr.">attrData</a>)}</code>: <p>A function that adds custom behavior to <code>el</code>. Note that <code>el</code> might not be in the DOM
+when the callback is called.</p>
+</li>
+        
+      </ol>
+  </div>
+  
+  
+  
+</div>
+
+
+
+
+
+  
+    <section class="body">
+    <h2>Use</h2>
+<p><code>canViewCallbacks.attr</code> is used to add custom behavior to elements that contain a
+specified html attribute. Typically it is used to mixin behavior (whereas
+<a href="can-view-callbacks.tag.html" title="">tag</a> is used to define behavior).</p>
+<p>The following example adds a jQueryUI tooltip to any element that has
+a <code>tooltip</code> attribute like <code>&lt;div tooltip=&quot;Click to edit&quot;&gt;Name&lt;/div&gt;</code>.</p>
+<div class='demo_wrapper' data-demo-src='demos/can-view-callbacks/tooltip.html'></div>
+<h2>Listening to attribute changes</h2>
+<p>In the previous example, the content of the tooltip was static. However,
+it’s likely that the tooltip’s value might change. For instance, the template
+might want to dynamically update the tooltip like:</p>
+<pre><code class="language-html">&lt;button tooltip=&quot;{{deleteTooltip()}}&quot;&gt;
+  Delete
+&lt;/button&gt;
+</code></pre>
+<p>Where <code>deleteTooltip()</code> changes depending on how many users are selected:</p>
+<pre><code class="language-js">{
+    deleteTooltip: function() {
+        const selectedCount = selected.length;
+        if ( selectedCount ) {
+            return &quot;Delete &quot; + selectedCount + &quot; users&quot;;
+        } else {
+            return &quot;Select users to delete them.&quot;;
+        }
+    }
+}
+</code></pre>
+<p>The <a href="can-dom-mutate/events/events.html" title="This adds attributes, inserted and removed attributes to the DOM.">attributes</a> event can be used to listen to when
+the tooltip attribute changes its value like:</p>
+<pre><code class="language-js">var domMutateEvents = require(&quot;can-dom-mutate/events/events&quot;);
+domEvents.addEvent(domMutateEvents.attributes);
+
+
+canViewCallbacks.attr( &quot;tooltip&quot;, function( el, attrData ) {
+
+    // A helper that updates or sets up the tooltip
+    const updateTooltip = function() {
+        $( el ).tooltip( {
+            content: el.getAttribute( &quot;tooltip&quot; ),
+            items: &quot;[tooltip]&quot;
+        } );
+    };
+
+    // When the tooltip attribute changes, update the tooltip
+    domEvents.addEventListener( el, &quot;attributes&quot;, function( ev ) {
+        if ( ev.attributeName === &quot;tooltip&quot; ) {
+            updateTooltip();
+        }
+    } );
+
+    // Setup the tooltip
+    updateTooltip();
+
+} );
+</code></pre>
+<p>To see this behavior in the following demo, hover the mouse over the “Delete”
+button. Then select some users and hover over the “Delete” button again:</p>
+<div class='demo_wrapper' data-demo-src='demos/can-view-callbacks/dynamic_tooltip.html'></div>
+<h2>Reading values from the scope.</h2>
+<p>It’s common that attribute mixins need complex, observable data to
+perform rich behavior. The attribute mixin is able to read
+data from the element’s <a href="can-view-scope.html" title="Create a lookup node for keys.">scope</a>. For example,
+<strong>toggle</strong> and <strong>fade-in-when</strong> will need the value of <code>showing</code> in:</p>
+<pre><code class="language-html">&lt;button toggle=&quot;showing&quot;&gt;
+    {{#if(showing)}}Hide{{else}}Show{{/if}} more info
+&lt;/button&gt;
+&lt;div fade-in-when=&quot;showing&quot;&gt;
+    Here is more info!
+&lt;/div&gt;
+</code></pre>
+<p>These values can be read from <a href="can-view-callbacks.attrData.html" title="The data provided to can-view-callbacks.attr.">attrData</a>’s scope like:</p>
+<pre><code class="language-js">attrData.scope.attr( &quot;showing&quot; );
+</code></pre>
+<p>But often, you want to update scope value or listen when the scope value
+changes. For example, the <strong>toggle</strong> mixin might want to update <code>showing</code>
+and the <strong>fade-in-when</strong> mixin needs to know when
+the <code>showing</code> changes.  Both of these can be achieved by
+using <a href="can-view-scope.prototype.compute.html" title="">compute</a> to get a get/set compute that is
+tied to the value in the scope:</p>
+<pre><code class="language-js">const showing = attrData.scope.compute( &quot;showing&quot; );
+</code></pre>
+<p>This value can be written to by <code>toggle</code>:</p>
+<pre><code class="language-js">canViewCallbacks.attr( &quot;toggle&quot;, function( el, attrData ) {
+    const attrValue = el.getAttribute( &quot;toggle&quot; );
+    const toggleCompute = attrData.scope.compute( attrValue );
+
+    $( el ).click( function() {
+        toggleCompute( !toggleCompute() );
+    } );
+} );
+</code></pre>
+<p>Or listened to by <code>fade-in-when</code>:</p>
+<pre><code class="language-js">canViewCallbacks.attr( &quot;fade-in-when&quot;, function( el, attrData ) {
+    const attrValue = el.getAttribute( &quot;fade-in-when&quot; );
+    const fadeInCompute = attrData.scope.compute( attrValue );
+
+    // handler for when the observable changes
+    const handler = function( event, newVal, oldVal ) {
+        if ( newVal &amp;&amp; !oldVal ) {
+            $( el ).fadeIn( &quot;slow&quot; );
+        } else if ( !newVal ) {
+            $( el ).hide();
+        }
+    };
+
+    fadeInCompute.on( &quot;change&quot;, handler );
+
+    // ...
+
+} );
+</code></pre>
+<p>When you listen to something other than the attribute’s element, remember to
+unbind the event handler when the element is <a href="can-dom-mutate/events/events.html" title="This adds attributes, inserted and removed attributes to the DOM.">removed</a> from the page:</p>
+<pre><code class="language-js">domEvents.addEventListener.call( el, &quot;removed&quot;, function() {
+    fadeInCompute.off( &quot;change&quot;, handler );
+} );
+</code></pre>
+<div class='demo_wrapper' data-demo-src='demos/can-view-callbacks/fade_in_when.html'></div>
+<h2>When to call</h2>
+<p><code>canViewCallbacks.attr</code> must be called before a template is processed. When
+using <a href="can-stache.html" title="Live binding templates.">can-stache</a> to create a renderer function, <code>canViewCallbacks.attr</code> must
+be called before the template is loaded, not simply before it is rendered.</p>
+<pre><code class="language-js">//Call canViewCallbacks.attr first
+canViewCallbacks.attr( &quot;tooltip&quot;, tooltipFunction );
+
+//Preload a template for rendering
+const renderer = stache( &quot;&lt;div tooltip='Hi There'&gt;...&lt;/div&gt;&quot; );
+
+//No calls to canViewCallbacks.attr after this will be used by `renderer`
+</code></pre>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"node_modules/can-view-callbacks/docs/attr.md"},"description":"\nRegister custom behavior for an attribute.\n","title":"attr","name":"can-view-callbacks.attr","type":"function","parent":"can-view-callbacks/methods","signatures":[{"code":"callbacks.attr(attributeName, attrHandler(el, attrData))","description":"\n\nRegisters the `attrHandler` callback when `attributeName` is found\nin a template.\n\nHandlers must be registered before templates using them are parsed.\n\n```js\nimport canViewCallbacks from \"can-view-callbacks\";\nimport domEvents from \"can-dom-events\";\n\ncanViewCallbacks.attr( \"show-when\", function( el, attrData ) {\n\tconst prop = el.getAttribute( \"show-when\" );\n\tconst compute = attrData.compute( prop );\n\n\tconst showOrHide = function() {\n\t\tconst val = compute();\n\t\tif ( val ) {\n\t\t\tel.style.display = \"block\";\n\t\t} else {\n\t\t\tel.style.display = \"hidden\";\n\t\t}\n\t};\n\n\tcompute.on( \"change\", showOrHide );\n\tshowOrHide();\n\n\tdomEvents.addEventListener.call( el, \"removed\", function onremove() {\n\t\tcompute.off( \"change\", showOrHide );\n\t\tdomEvents.removeEventListener.call( \"removed\", onremove );\n\t} );\n} );\n```\n\n\n","params":[{"types":[{"type":"String"},{"type":"RegExp"}],"name":"attributeName","description":"A lower-case attribute name or regular expression\nthat matches attribute names. Examples: `\"my-fill\"` or `/my-\\w/`.\n"},{"types":[{"type":"function","returns":{"types":[{"type":"undefined"}]},"params":[{"types":[{"type":"HTMLElement"}],"name":"el"},{"types":[{"type":"can-view-callbacks.attrData"}],"name":"attrData"}]}],"name":"attrHandler","description":"\nA function that adds custom behavior to `el`. Note that `el` might not be in the DOM\nwhen the callback is called.\n"}]}],"_curParam":{"types":[{"type":"function","returns":{"types":[{"type":"undefined"}]},"params":[{"types":[{"type":"HTMLElement"}],"name":"el"},{"types":[{"type":"can-view-callbacks.attrData"}],"name":"attrData"}]}],"name":"attrHandler","description":"\nA function that adds custom behavior to `el`. Note that `el` might not be in the DOM\nwhen the callback is called.\n"},"comment":" ","pathToRoot":".."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="./static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix="."></div>
+
+	</body>
+</html>

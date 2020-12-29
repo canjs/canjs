@@ -1,0 +1,58 @@
+<script type='text/stache' can-autorender id='demo-html'>
+<p>Alison: <player-scores {scores}="game.scoresForPlayer('Alison')"/></p>
+<p>Jeff: <player-scores {scores}="game.scoresForPlayer('Jeff')"/></p>
+</script>
+
+<script src="../../../node_modules/steal/steal.js" main="@empty" id='demo-source'>
+import can from "can";
+import "can/view/autorender/autorender";
+import "can/view/bindings/bindings";
+import "can/view/stache/stache";
+import "can/map/define/";
+
+can.Component.extend({
+	tag: "player-scores",
+	template: can.stache('{{#each scores}} {{points}} {{/each}} = {{scores.sum}}')
+});
+
+var ScoreList = can.List.extend({
+	sum: function(){
+		var sum = 0;
+		this.each(function(score){
+			sum += score.attr("points");
+		});
+		return sum;
+	}
+});
+
+var Game = can.Map.extend({
+	define: {
+		scores: {
+			Type: ScoreList
+		}
+	},
+	scoresForPlayer: function(name){
+		return this.attr("scores").filter(function(score){
+			return score.attr("player") === name;
+		});
+	}
+});
+
+var game = new Game({
+	scores: [
+		{player: "Alison", points: 2},
+		{player: "Alison", points: 3},
+		{player: "Jeff", points: 5},
+		{player: "Jeff", points: 1},
+		{player: "Alison", points: 6},
+		{player: "Jeff", points: 1},
+	]
+});
+
+$("#demo-html").viewModel({
+	game: game
+});
+
+</script>
+
+

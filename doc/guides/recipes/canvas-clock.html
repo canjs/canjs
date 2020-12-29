@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/commitment/recipes/canvas-clock/canvas-clock.md
+	@page guides/recipes/canvas-clock
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Canvas Clock | beginner recipes | Guides | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="This beginner guide walks you through building a clock with the Canvas API.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="This beginner guide walks you through building a clock with the Canvas API.">
+	<meta property="og:title" content="Canvas Clock | beginner recipes | Guides | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "This beginner guide walks you through building a clock with the Canvas API.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Canvas Clock | beginner recipes | Guides | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/recipes/canvas-clock" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>getting started</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../crud-beginner.html"
+							title="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+							CRUD Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../setup.html"
+							title="Learn how to install CanJS in your environment.">
+							Setting Up CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../technology-overview.html"
+							title="Learn the basics of CanJS’s technology.">
+							Technology Overview
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>topics</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../html.html"
+							title="Learn how to update HTML and listen to user interactions.">
+							HTML
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../routing.html"
+							title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+							Routing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../data.html"
+							title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">
+							Service Layer
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../debugging.html"
+							title="Learn how to debug CanJS applications.">
+							Debugging
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../forms.html"
+							title="Learn how to create amazing &lt;form&gt;s with CanJS.">
+							Forms
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../testing.html"
+							title="Learn how to test CanJS applications.">
+							Testing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../logic.html"
+							title="Learn how to write observables in an organized, maintainable, and testable way.">
+							Logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../server-side-rendering.html"
+							title="Learn how to set up SSR for CanJS.">
+							Server-Side Rendering
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>app guides</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../chat.html"
+							title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+							Chat Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../todomvc.html"
+							title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+							TodoMVC Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="todomvc-with-steal.html"
+							title="This tutorial walks through building TodoMVC with StealJS. It includes KeyNote presentations covering CanJS core libraries.">
+							TodoMVC with StealJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>beginner recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="canvas-clock.html"
+							title="This beginner guide walks you through building a clock with the Canvas API.">
+							Canvas Clock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="credit-card-simple.html"
+							title="This beginner guide walks through building a very simple credit card payment form.  It uses Stripe.js v2 API to create a token which can be used to create a charge.  It also performs simple validation on the payment form values.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="file-navigator-simple.html"
+							title="This beginner guide walks you through building a simple file navigation widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.0.0. Check out the file-navigator-advanced for an example that makes AJAX requests for its data and uses can-stache-element.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="signup-simple.html"
+							title="This beginner guide walks through building simple signup, login forms and a logout button.">
+							Signup and Login
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="video-player.html"
+							title="This beginner guide walks you through building custom video controls around a video element.">
+							Video Player
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="weather-report-simple.html"
+							title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.2.">
+							Weather Report
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>intermediate recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="cta-bus-map.html"
+							title="This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map. You&#x27;ll learn how to create a StacheElement that integrates with 3rd party widgets.">
+							CTA Bus Map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="modals.html"
+							title="This intermediate guide shows how to create a multiple modal form.">
+							Multiple Modals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="text-editor.html"
+							title="This intermediate guide walks you through building a basic rich text editor.">
+							Text Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="tinder-carousel.html"
+							title="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+							Tinder Carousel
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>advanced recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="credit-card-advanced.html"
+							title="This advanced guide walks through building a simple credit card payment form with validations. It doesn’t use can-define. Instead it uses Kefir.js streams to make a ViewModel. can-kefir is used to make the Kefir streams observable to can-stache.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="file-navigator-advanced.html"
+							title="This advanced guide walks you through building a file navigation widget that requests data with fetch. It takes about 45 minutes to complete.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="playlist-editor.html"
+							title="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+							Playlist Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="search-list-details.html"
+							title="This advanced guide walks through building a Search, List, Details flow with lazy-loaded routes.">
+							Search, List, Details
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>upgrade</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../migrate-3.html"
+							title="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+							Migrating to CanJS 3
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../migrate-4.html"
+							title="This guide walks you through the step-by-step process to upgrade a 3.x app to CanJS 4.">
+							Migrating to CanJS 4
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../migrate-5.html"
+							title="This guide walks you through the process to upgrade a 4.x app to CanJS 5.x.">
+							Migrating to CanJS 5
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../migrate-6.html"
+							title="This guide walks you through the process to upgrade a 5.x app to CanJS 6.x.">
+							Migrating to CanJS 6
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../upgrade/using-codemods.html"
+							title="Learn how to migrate your app to CanJS 6 using can-migrate.">
+							Using Codemods
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>other</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../api.html"
+							title="This page walks through how to use and understand CanJS’s API documentation.">
+							Reading the API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Canvas Clock</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/commitment/recipes/canvas-clock/canvas-clock.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>This beginner guide walks you through building a clock with the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API" title="Canvas API">Canvas API</a>.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <p>In this guide you will learn how to:</p>
+<ul>
+<li>Create custom elements for digital and analog clocks</li>
+<li>Use the <code>canvas</code> API to draw the hands of the analog clock</li>
+</ul>
+<p>The final widget looks like:</p>
+<p class="codepen" data-height="495" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="LYPZjbO" style="height: 495px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Canvas Clock (Simple) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/LYPZjbO/">
+  Canvas Clock (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<p>The following sections are broken down into the following parts:</p>
+<ul>
+<li><strong>The problem</strong> — A description of what the section is trying to accomplish.</li>
+<li><strong>What you need to know</strong> — Information about CanJS that is useful for solving the problem.</li>
+<li><strong>How to verify it works</strong> - How to make sure the solution works (if it’s not obvious).</li>
+<li><strong>The solution</strong> — The solution to the problem.</li>
+</ul>
+<h2>Setup</h2>
+<p><strong>START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED</strong>:</p>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="oNvpXpV" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Canvas Clock (Simple) [Starter]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/oNvpXpV/">
+  Canvas Clock (Simple) [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<p>This CodePen has initial prototype HTML, CSS, and JS to bootstrap a basic CanJS application.</p>
+<h3>What you need to know</h3>
+<p>There’s nothing to do in this step. The CodePen is already setup with:</p>
+<ul>
+<li>A <em>basic</em> CanJS setup.</li>
+<li>A <code>&lt;clock-controls&gt;</code> custom element that:
+<ul>
+<li>updates a <code>time</code> property every second</li>
+<li>passes the <code>time</code> value to <code>&lt;digital-clock&gt;</code> and
+<code>&lt;analog-clock&gt;</code> components that will be defined in future sections.</li>
+</ul></li>
+</ul>
+<p>Please read on to understand the setup.</p>
+<h4>A Basic CanJS Setup</h4>
+<p>A basic CanJS setup is usually a custom element.  In the <code>HTML</code>
+tab, you’ll find a <code>&lt;clock-controls&gt;</code> element.  The following code in the <code>JS</code> tab
+defines the behavior of the <code>&lt;clock-controls&gt;</code> element:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class ClockControls extends StacheElement {
+  static view = `
+    &lt;p&gt;{{ this.time }}&lt;/p&gt;
+    &lt;digital-clock time:from=&quot;this.time&quot;/&gt;
+    &lt;analog-clock time:from=&quot;this.time&quot;/&gt;
+  `;
+
+  static props = {
+    time: {
+      get default() {
+        return new Date();
+      }
+    }
+  };
+
+  connected() {
+    setInterval(() =&gt; {
+      this.time = new Date();
+    }, 1000);
+  }
+}
+
+customElements.define(&quot;clock-controls&quot;, ClockControls);
+
+</code></pre>
+<p><a href="../../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a> is used to define the behavior of the  <code>&lt;clock-controls&gt;</code>
+element. Elements are configured with two main properties that define their
+behavior:</p>
+<ul>
+<li><a href="../../can-stache-element/static.view.html" title="Provides a way to render the element's innerHTML using a can-stache template.">view</a> is used as the HTML content within the custom
+element; by default, it is a <a href="../../can-stache.html" title="Live binding templates.">can-stache</a> template.</li>
+<li><a href="../../can-stache-element/static.props.html" title="A static property used to create ObservableObject-like properties on each StacheElement instance.">props</a> provides values to the <code>view</code>.</li>
+</ul>
+<p>Here, a <code>time</code> property is defined using the <a href="../../can-observable-object/define/value.html" title="Specify the behavior of a property by listening to changes in other properties.">value behavior</a>.
+This uses <code>resolve</code> to set the value of <code>time</code> to be an instance of a
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date">Date</a>
+and then update the value every second to be a new <code>Date</code>.</p>
+<p>Finally, the name of the custom element (e.g. <code>clock-controls</code>) is added to the
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define">custom element registry</a> so the browser can render the <code>&lt;clock-controls&gt;</code> element properly.</p>
+<h2>Create a digital clock component</h2>
+<h3>The problem</h3>
+<p>In this section, we will:</p>
+<ul>
+<li>Create a <code>&lt;digital-clock&gt;</code> custom element.</li>
+<li>Pass the <code>time</code> from the <code>&lt;clock-controls&gt;</code> element to the <code>&lt;digital-clock&gt;</code> element.</li>
+<li>Write out the time in the format: <code>hh:mm:ss</code>.</li>
+</ul>
+<h3>What you need to know</h3>
+<ul>
+<li>Use <a href="../../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a> to create a custom element.
+<ul>
+<li><a href="../../can-stache-element/static.view.html" title="Provides a way to render the element's innerHTML using a can-stache template.">view</a> is used as the HTML content within the custom
+element; by default, it is a <a href="../../can-stache.html" title="Live binding templates.">can-stache</a> template (hint: <code>&quot;Your {{content}}&quot;</code>).</li>
+<li><a href="../../can-stache-element/static.props.html" title="A static property used to create ObservableObject-like properties on each StacheElement instance.">props</a> provides values to the <code>view</code> like:
+<pre><code class="language-js">class MyElement extends StacheElemet {
+  static view = `...`;
+  static props = {
+    property: Type, // hint -&gt; time: Date
+  };
+  method() {
+    return // ...
+  }
+}
+</code></pre></li>
+</ul></li>
+<li><a href="../../can-stache.html" title="Live binding templates.">can-stache</a> can insert the return value from function calls into the page like:
+<pre><code>{{method()}}
+</code></pre>
+These methods are often functions on the element.</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date">Date</a>
+has methods that give you details about that date and time:
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getSeconds">date.getSeconds()</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getMinutes">date.getMinutes()</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getHours">date.getHours()</a></li>
+</ul></li>
+<li>Use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart">padStart</a>
+to convert a string like <code>&quot;1&quot;</code> into <code>&quot;01&quot;</code> like <code>.padStart(2, &quot;00&quot;)</code>.</li>
+<li>Use <a href="https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define" title="customElements.define">customElements.define</a> to
+specify the name of the custom element (hint: <code>&quot;digital-clock&quot;</code>).</li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class DigitalClock extends StacheElement {
+  static view = `{{ hh() }}:{{ mm() }}:{{ ss() }}`;
+
+  static props = {
+    time: Date
+  };
+
+  hh() {
+    const hr = this.time.getHours() % 12;
+    return hr === 0 ? 12 : hr;
+  }
+
+  mm() {
+    return this.time.getMinutes().toString().padStart(2, &quot;00&quot;);
+  }
+
+  ss() {
+    return this.time.getSeconds().toString().padStart(2, &quot;00&quot;);
+  }
+}
+
+customElements.define(&quot;digital-clock&quot;, DigitalClock);
+
+class ClockControls extends StacheElement {
+  static view = `
+    &lt;p&gt;{{ this.time }}&lt;/p&gt;
+    &lt;digital-clock time:from=&quot;this.time&quot;/&gt;
+    &lt;analog-clock time:from=&quot;this.time&quot;/&gt;
+  `;
+
+  static props = {
+    time: {
+      value({ resolve }) {
+        const intervalID = setInterval(() =&gt; {
+          resolve(new Date());
+        }, 1000);
+
+        resolve(new Date());
+
+        return () =&gt; clearInterval(intervalID);
+      }
+    }
+  };
+}
+
+customElements.define(&quot;clock-controls&quot;, ClockControls);
+
+</code></pre>
+<div line-highlight='3-24,only'></div>
+<h2>Draw a circle in the analog clock component</h2>
+<h3>The problem</h3>
+<p>In this section, we will:</p>
+<ul>
+<li>Create a <code>&lt;analog-clock&gt;</code> custom element.</li>
+<li>Draw a circle inside the <code>&lt;canvas/&gt;</code> element within the <code>&lt;analog-clock&gt;</code>.</li>
+</ul>
+<h3>What you need to know</h3>
+<ul>
+<li>Use another <a href="../../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">custom element</a> to define a <code>&lt;analog-clock&gt;</code> component.</li>
+<li>Define the component’s <a href="../../can-stache-element/static.view.html" title="Provides a way to render the element's innerHTML using a can-stache template.">view</a> to write out a <code>&lt;canvas&gt;</code>
+element (hint: <code>&lt;canvas id=&quot;analog&quot; width=&quot;255&quot; height=&quot;255&quot;&gt;&lt;/canvas&gt;</code>).</li>
+<li>An element <a href="../../can-stache-element/lifecycle-hooks.connected.html" title="A lifecycle hook called after the element is inserted into the document.">connected hook</a> will be called when the component is inserted into the page.</li>
+<li><a href="https://canjs.com/doc/can-stache-bindings.html#Passanelementtothescope">Pass an element reference to the scope</a>, like the following:</li>
+</ul>
+<pre><code class="language-html">&lt;div this:to=&quot;key&quot;&gt;...&lt;/div&gt;
+</code></pre>
+<ul>
+<li>To get the <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">canvas rendering context</a>
+from a <code>&lt;canvas&gt;</code> element, use <code>canvas = canvasElement.getContext(&quot;2d&quot;)</code>.</li>
+<li>To draw a line (or curve), you generally set different style properties of the rendering context like:
+<pre><code class="language-js">this.canvas.lineWidth = 4.0
+this.canvas.strokeStyle = &quot;#567&quot;
+</code></pre>
+Then you start path with:
+<pre><code class="language-js">this.canvas.beginPath()
+</code></pre>
+Then make <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D">arcs</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineTo">lines</a>
+for your path like:
+<pre><code class="language-js">this.canvas.arc(125, 125, 125, 0, Math.PI * 2, true)
+</code></pre>
+Then close the path like:
+<pre><code class="language-js">this.canvas.closePath()
+</code></pre>
+Finally, use <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/stroke">stroke</a>
+to actually draw the line:
+<pre><code class="language-js">this.canvas.stroke();
+</code></pre></li>
+<li>The following variables will be useful for coordinates:
+<pre><code class="language-js">this.diameter = 255;
+this.radius = this.diameter/2 - 5;
+this.center = this.diameter/2;
+</code></pre></li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class AnalogClock extends StacheElement {
+  static view = `
+    &lt;canvas this:to=&quot;canvasElement&quot; id=&quot;analog&quot; width=&quot;255&quot; height=&quot;255&quot;&gt;&lt;/canvas&gt;
+  `;
+
+  static props = {
+    // the canvas element
+    canvasElement: HTMLCanvasElement,
+
+    // the canvas 2d context
+    get canvas() {
+      return this.canvasElement.getContext(&quot;2d&quot;);
+    }
+  };
+
+  connected() {
+    const diameter = 255;
+    const radius = diameter / 2 - 5;
+    const center = diameter / 2;
+    // draw circle
+    this.canvas.lineWidth = 4.0;
+    this.canvas.strokeStyle = &quot;#567&quot;;
+    this.canvas.beginPath();
+    this.canvas.arc(center, center, radius, 0, Math.PI * 2, true);
+    this.canvas.closePath();
+    this.canvas.stroke();
+  }
+}
+
+customElements.define(&quot;analog-clock&quot;, AnalogClock);
+
+class DigitalClock extends StacheElement {
+  static view = &quot;{{ hh() }}:{{ mm() }}:{{ ss() }}&quot;;
+
+  static props = {
+    time: Date
+  };
+
+  hh() {
+    const hr = this.time.getHours() % 12;
+    return hr === 0 ? 12 : hr;
+  }
+
+  mm() {
+    return this.time.getMinutes().toString().padStart(2, &quot;00&quot;);
+  }
+
+  ss() {
+    return this.time.getSeconds().toString().padStart(2, &quot;00&quot;);
+  }
+}
+
+customElements.define(&quot;digital-clock&quot;, DigitalClock);
+
+class ClockControls extends StacheElement {
+  static view = `
+    &lt;p&gt;{{ time }}&lt;/p&gt;
+    &lt;digital-clock time:from=&quot;time&quot;/&gt;
+    &lt;analog-clock time:from=&quot;time&quot;/&gt;
+  `;
+
+  static props = {
+    time: {
+      value({ resolve }) {
+        const intervalID = setInterval(() =&gt; {
+          resolve(new Date());
+        }, 1000);
+
+        resolve(new Date());
+
+        return () =&gt; clearInterval(intervalID);
+      }
+    }
+  };
+}
+
+customElements.define(&quot;clock-controls&quot;, ClockControls);
+
+</code></pre>
+<div line-highlight='3-32,only'></div>
+<h2>Draw the second hand</h2>
+<h3>The problem</h3>
+<p>In this section, we will:</p>
+<ul>
+<li>Draw the second hand needle when the <code>time</code> value changes
+on the element.</li>
+<li>The needle should be <code>2</code> pixels wide, red (<code>#FF0000</code>), and 85% of the
+clock’s radius.</li>
+</ul>
+<h3>What you need to know</h3>
+<ul>
+<li><p><a href="../../can-event-queue/map/map.listenTo.html" title="Listen to an event and register the binding for simplified unbinding.">this.listenTo</a> can be used in a component’s
+<a href="../../can-stache-element/lifecycle-hooks.connected.html" title="A lifecycle hook called after the element is inserted into the document.">connected hook</a> to listen to changes in the element <code>props</code> like:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class AnalogClock extends StacheElement {
+  static props = {
+    time: Date
+  },
+  connected() {
+    this.listenTo(&quot;time&quot;, (event, time) =&gt; {
+      // ...
+    });
+  }
+}
+</code></pre></li>
+<li><p>Use <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext/moveTo">canvas.moveTo(x1,y1)</a>
+and <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/lineTo">canvas.lineTo(x2,y2)</a>
+to draw a line from one position to another.</p></li>
+<li><p>To get the needle point to move around a “unit” circle, you’d want to make the
+following calls given the number of seconds:</p>
+<pre><code>0s  -&gt; .lineTo(.5,0)
+15s -&gt; .lineTo(1,.5)
+30s -&gt; .lineTo(.5,1)
+45s -&gt; .lineTo(0,.5)
+</code></pre></li>
+<li><p>Our friends <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/sin">Math.sin</a>
+and <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/cos">Math.cos</a>
+can help here… but they take radians.</p>
+<p><img src="https://www.mathsisfun.com/algebra/images/sine-cosine-graph.gif" alt="Sine and Cosine Graph" /></p>
+<p>Use the following <code>base60ToRadians</code> method to convert a number from 0–60 to one between 0 and 2π:</p>
+<pre><code class="language-js">// 60 = 2π
+const base60ToRadians = (base60Number) =&gt;
+  2 * Math.PI * base60Number / 60;
+</code></pre></li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+// 60 = 2π
+const base60ToRadians = base60Number =&gt; 2 * Math.PI * base60Number / 60;
+
+class AnalogClock extends StacheElement {
+  static view = `
+    &lt;canvas this:to=&quot;canvasElement&quot; id=&quot;analog&quot; width=&quot;255&quot; height=&quot;255&quot;&gt;&lt;/canvas&gt;
+  `;
+
+  static props = {
+    // the canvas element
+    canvasElement: HTMLCanvasElement,
+
+    // the canvas 2d context
+    get canvas() {
+      return this.canvasElement.getContext(&quot;2d&quot;);
+    }
+  };
+
+  connected() {
+    const diameter = 255;
+    const radius = diameter / 2 - 5;
+    const center = diameter / 2;
+
+    // draw circle
+    this.canvas.lineWidth = 4.0;
+    this.canvas.strokeStyle = &quot;#567&quot;;
+    this.canvas.beginPath();
+    this.canvas.arc(center, center, radius, 0, Math.PI * 2, true);
+    this.canvas.closePath();
+    this.canvas.stroke();
+
+    this.listenTo(&quot;time&quot;, (ev, time) =&gt; {
+      this.canvas.clearRect(0, 0, diameter, diameter);
+
+      // draw circle
+      this.canvas.lineWidth = 4.0;
+      this.canvas.strokeStyle = &quot;#567&quot;;
+      this.canvas.beginPath();
+      this.canvas.arc(center, center, radius, 0, Math.PI * 2, true);
+      this.canvas.closePath();
+      this.canvas.stroke();
+
+      Object.assign(this.canvas, {
+        lineWidth: 2.0,
+        strokeStyle: &quot;#FF0000&quot;,
+        lineCap: &quot;round&quot;
+      });
+
+      // draw second hand
+      const seconds = time.getSeconds() + this.time.getMilliseconds() / 1000;
+      const size = radius * 0.85;
+      const x = center + size * Math.sin(base60ToRadians(seconds));
+      const y = center + size * -1 * Math.cos(base60ToRadians(seconds));
+      this.canvas.beginPath();
+      this.canvas.moveTo(center, center);
+      this.canvas.lineTo(x, y);
+      this.canvas.closePath();
+      this.canvas.stroke();
+    });
+  }
+}
+
+customElements.define(&quot;analog-clock&quot;, AnalogClock);
+
+class DigitalClock extends StacheElement {
+  static view = &quot;{{ hh() }}:{{ mm() }}:{{ ss() }}&quot;;
+
+  static props = {
+    time: Date
+  };
+
+  hh() {
+    const hr = this.time.getHours() % 12;
+    return hr === 0 ? 12 : hr;
+  }
+
+  mm() {
+    return this.time.getMinutes().toString().padStart(2, &quot;00&quot;);
+  }
+
+  ss() {
+    return this.time.getSeconds().toString().padStart(2, &quot;00&quot;);
+  }
+}
+
+customElements.define(&quot;digital-clock&quot;, DigitalClock);
+
+class ClockControls extends StacheElement {
+  static view = `
+    &lt;p&gt;{{ time }}&lt;/p&gt;
+    &lt;digital-clock time:from=&quot;time&quot;/&gt;
+    &lt;analog-clock time:from=&quot;time&quot;/&gt;
+  `;
+
+  static props = {
+    time: {
+      value({ resolve }) {
+        const intervalID = setInterval(() =&gt; {
+          resolve(new Date());
+        }, 1000);
+
+        resolve(new Date());
+
+        return () =&gt; clearInterval(intervalID);
+      }
+    }
+  };
+}
+
+customElements.define(&quot;clock-controls&quot;, ClockControls);
+
+</code></pre>
+<div line-highlight='3-4,34-61,only'></div>
+<h2>Clear the canvas and create a <code>drawNeedle</code> method</h2>
+<h3>The problem</h3>
+<p>In this section, we will:</p>
+<ul>
+<li>Clear the canvas before drawing the circle and needle.</li>
+<li>Refactor the needle drawing code into a <code>drawNeedle(length, base60Distance, styles)</code> method where:
+<ul>
+<li><code>length</code> is the length in pixels of the needle.</li>
+<li><code>base60Distance</code> is a number between 0–60 representing how far around the clock the
+needle should be drawn.</li>
+<li><code>styles</code> is an object of canvas context style properties and values like:
+<pre><code class="language-js">{
+  lineWidth: 2.0,
+  strokeStyle: &quot;#FF0000&quot;,
+  lineCap: &quot;round&quot;
+}
+</code></pre></li>
+</ul></li>
+</ul>
+<h3>What you need to know</h3>
+<ul>
+<li>Move the <strong>draw circle</strong> into the <code>this.listenTo(&quot;time&quot;, /* ... */)</code> event handler so it is redrawn
+when the time changes.</li>
+<li>Use <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/clearRect">clearRect(x, y, width, height)</a> to clear
+the canvas.</li>
+<li>Add a function inside the [can-stache-element/lifecycle-methods.connected connected hook] that will have access to all the variables created above it like:
+<pre><code class="language-js">class AnalogClock extends StacheElement {
+  static view = &quot;...&quot;;
+  static props = {};
+  drawNeedle(length, base60Distance, styles, center) {
+    // ...
+  }
+}
+</code></pre></li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+// 60 = 2π
+const base60ToRadians = base60Number =&gt; 2 * Math.PI * base60Number / 60;
+
+class AnalogClock extends StacheElement {
+  static view = `
+    &lt;canvas this:to=&quot;canvasElement&quot; id=&quot;analog&quot; width=&quot;255&quot; height=&quot;255&quot;&gt;&lt;/canvas&gt;
+  `;
+
+  static props = {
+    // the canvas element
+    canvasElement: HTMLCanvasElement,
+
+    // the canvas 2d context
+    get canvas() {
+      return this.canvasElement.getContext(&quot;2d&quot;);
+    }
+  };
+
+  drawNeedle(length, base60Distance, styles, center) {
+    Object.assign(this.canvas, styles);
+    const x = center + length * Math.sin(base60ToRadians(base60Distance));
+    const y = center + length * -1 * Math.cos(base60ToRadians(base60Distance));
+    this.canvas.beginPath();
+    this.canvas.moveTo(center, center);
+    this.canvas.lineTo(x, y);
+    this.canvas.closePath();
+    this.canvas.stroke();
+  }
+
+  connected() {
+    const diameter = 255;
+    const radius = diameter / 2 - 5;
+    const center = diameter / 2;
+
+    this.listenTo(&quot;time&quot;, (ev, time) =&gt; {
+      this.canvas.clearRect(0, 0, diameter, diameter);
+
+      // draw circle
+      this.canvas.lineWidth = 4.0;
+      this.canvas.strokeStyle = &quot;#567&quot;;
+      this.canvas.beginPath();
+      this.canvas.arc(center, center, radius, 0, Math.PI * 2, true);
+      this.canvas.closePath();
+      this.canvas.stroke();
+
+      // draw second hand
+      const seconds = time.getSeconds() + this.time.getMilliseconds() / 1000;
+      this.drawNeedle(
+        radius * 0.85,
+        seconds,
+        {
+          lineWidth: 2.0,
+          strokeStyle: &quot;#FF0000&quot;,
+          lineCap: &quot;round&quot;
+        },
+        center
+      );
+    });
+  }
+}
+
+customElements.define(&quot;analog-clock&quot;, AnalogClock);
+
+class DigitalClock extends StacheElement {
+  static view = &quot;{{ hh() }}:{{ mm() }}:{{ ss() }}&quot;;
+
+  static props = {
+    time: Date
+  };
+
+  hh() {
+    const hr = this.time.getHours() % 12;
+    return hr === 0 ? 12 : hr;
+  }
+
+  mm() {
+    return this.time.getMinutes().toString().padStart(2, &quot;00&quot;);
+  }
+
+  ss() {
+    return this.time.getSeconds().toString().padStart(2, &quot;00&quot;);
+  }
+}
+
+customElements.define(&quot;digital-clock&quot;, DigitalClock);
+
+class ClockControls extends StacheElement {
+  static view = `
+    &lt;p&gt;{{ time }}&lt;/p&gt;
+    &lt;digital-clock time:from=&quot;time&quot;/&gt;
+    &lt;analog-clock time:from=&quot;time&quot;/&gt;
+  `;
+
+  static props = {
+    time: {
+      value({ resolve }) {
+        const intervalID = setInterval(() =&gt; {
+          resolve(new Date());
+        }, 1000);
+
+        resolve(new Date());
+
+        return () =&gt; clearInterval(intervalID);
+      }
+    }
+  };
+}
+
+customElements.define(&quot;clock-controls&quot;, ClockControls);
+
+</code></pre>
+<div line-highlight='21-30,50-59,only'></div>
+<h2>Draw the minute and hour hand</h2>
+<h3>The problem</h3>
+<p>In this section, we will:</p>
+<ul>
+<li>Draw the minute hand <code>3</code> pixels wide, dark gray (<code>#423</code>), and 65% of the
+clock’s radius.</li>
+<li>Draw the minute hand <code>4</code> pixels wide, dark blue (<code>#42F</code>), and 45% of the
+clock’s radius.</li>
+</ul>
+<h3>What you need to know</h3>
+<p>You know everything at this point.  You got this!</p>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+// 60 = 2π
+const base60ToRadians = base60Number =&gt; 2 * Math.PI * base60Number / 60;
+
+class AnalogClock extends StacheElement {
+  static view = `
+    &lt;canvas this:to=&quot;this.canvasElement&quot; id=&quot;analog&quot; width=&quot;255&quot; height=&quot;255&quot;&gt;&lt;/canvas&gt;
+  `;
+
+  static props = {
+    // the canvas element
+    canvasElement: HTMLCanvasElement,
+
+    // the canvas 2d context
+    get canvas() {
+      return this.canvasElement.getContext(&quot;2d&quot;);
+    }
+  };
+
+  drawNeedle(length, base60Distance, styles, center) {
+    Object.assign(this.canvas, styles);
+    const x = center + length * Math.sin(base60ToRadians(base60Distance));
+    const y = center + length * -1 * Math.cos(base60ToRadians(base60Distance));
+    this.canvas.beginPath();
+    this.canvas.moveTo(center, center);
+    this.canvas.lineTo(x, y);
+    this.canvas.closePath();
+    this.canvas.stroke();
+  }
+
+  connected() {
+    const diameter = 255;
+    const radius = diameter / 2 - 5;
+    const center = diameter / 2;
+
+    this.listenTo(&quot;time&quot;, (ev, time) =&gt; {
+      this.canvas.clearRect(0, 0, diameter, diameter);
+
+      // draw circle
+      this.canvas.lineWidth = 4.0;
+      this.canvas.strokeStyle = &quot;#567&quot;;
+      this.canvas.beginPath();
+      this.canvas.arc(center, center, radius, 0, Math.PI * 2, true);
+      this.canvas.closePath();
+      this.canvas.stroke();
+
+      // draw second hand
+      const seconds = time.getSeconds() + this.time.getMilliseconds() / 1000;
+      this.drawNeedle(
+        radius * 0.85,
+        seconds,
+        {
+          lineWidth: 2.0,
+          strokeStyle: &quot;#FF0000&quot;,
+          lineCap: &quot;round&quot;
+        },
+        center
+      );
+
+      // draw minute hand
+      const minutes = time.getMinutes() + seconds / 60;
+      this.drawNeedle(
+        radius * 0.65,
+        minutes,
+        {
+          lineWidth: 3.0,
+          strokeStyle: &quot;#423&quot;,
+          lineCap: &quot;round&quot;
+        },
+        center
+      );
+      // draw hour hand
+      const hoursInBase60 = time.getHours() * 60 / 12 + minutes / 60;
+      this.drawNeedle(
+        radius * 0.45,
+        hoursInBase60,
+        {
+          lineWidth: 4.0,
+          strokeStyle: &quot;#42F&quot;,
+          lineCap: &quot;round&quot;
+        },
+        center
+      );
+    });
+  }
+}
+
+customElements.define(&quot;analog-clock&quot;, AnalogClock);
+
+class DigitalClock extends StacheElement {
+  static view = &quot;{{ this.hh() }}:{{ this.mm() }}:{{ this.ss() }}&quot;;
+
+  static props = {
+    time: Date
+  };
+
+  hh() {
+    const hr = this.time.getHours() % 12;
+    return hr === 0 ? 12 : hr;
+  }
+
+  mm() {
+    return this.time.getMinutes().toString().padStart(2, &quot;00&quot;);
+  }
+
+  ss() {
+    return this.time.getSeconds().toString().padStart(2, &quot;00&quot;);
+  }
+}
+
+customElements.define(&quot;digital-clock&quot;, DigitalClock);
+
+class ClockControls extends StacheElement {
+  static view = `
+    &lt;p&gt;{{ this.time }}&lt;/p&gt;
+    &lt;digital-clock time:from=&quot;this.time&quot;/&gt;
+    &lt;analog-clock time:from=&quot;this.time&quot;/&gt;
+  `;
+
+  static props = {
+    time: {
+      value({ resolve }) {
+        const intervalID = setInterval(() =&gt; {
+          resolve(new Date());
+        }, 1000);
+
+        resolve(new Date());
+
+        return () =&gt; clearInterval(intervalID);
+      }
+    }
+  };
+}
+
+customElements.define(&quot;clock-controls&quot;, ClockControls);
+
+</code></pre>
+<div line-highlight='61-84,only'></div>
+<h2>Result</h2>
+<p>When finished, you should see something like the following CodePen:</p>
+<p class="codepen" data-height="495" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="LYPZjbO" style="height: 495px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Canvas Clock (Simple) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/LYPZjbO/">
+  Canvas Clock (Simple) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/commitment/recipes/canvas-clock/canvas-clock.md"},"description":"This beginner guide walks you through building a clock with the [https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API Canvas API].\n\n\n","name":"guides/recipes/canvas-clock","title":"Canvas Clock","type":"page","parent":"guides/recipes/beginner","comment":" ","pathToRoot":"../../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix="../.."></div>
+
+	</body>
+</html>

@@ -1,0 +1,5 @@
+<can-import from="./file-missing" />
+
+<section class="app">
+	<div>...</div>
+</section>

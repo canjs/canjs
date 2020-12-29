@@ -1,0 +1,15 @@
+{{#eachCategory}}
+	<div>
+		<h2><code>“{{name}}” Methods</code></h2>
+		{{#eachDocObject name}}
+			<h3>
+				<a id="{{name}}"> </a>
+				<code class="prettyprint">{{{makeSignature code}}}</code>
+			</h3>
+			{{{makeLinks description}}}
+			{{> signature.mustache}}
+			<h4>Example</h4>
+			{{{makeLinks body}}}
+		{{/eachDocObject}} 
+	</div>
+{{/eachCategory}}

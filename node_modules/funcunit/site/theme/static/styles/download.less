@@ -1,0 +1,207 @@
+.customize.container {
+	background-color: #fff;
+	border: solid 1px #ccc;
+	margin-bottom: 20px;
+	margin-top: -80px;
+	padding: 20px;
+	color: #222121;
+	.border-box;
+	.text-smoothing;
+
+	h1 {
+		color: #fff;
+		background-color: @dark;
+		font-size: 17px;
+		text-transform: uppercase;
+		padding: 10px;
+		.text-smoothing;
+		.text-shadow;
+		margin: -21px;
+		margin-bottom: 21px;
+	}
+
+	h1 .pullright {
+		font-size: 11px;
+		padding-top: 3px;
+		text-align: right;
+		min-width: 200px;
+	}
+	td {
+		padding: 15px 0 0;
+
+		label.checkbox {
+			top: 2px;
+		}
+	}
+
+
+}
+
+.customize {
+	center button {
+		text-transform: uppercase;
+		font-size: 17px;
+		padding: 10px 70px;
+	}
+	form {
+		font-size: 14px;
+		line-height: 16px;
+	}
+	.options {
+		width: 49%;
+		float: left;
+		margin-top: 10px;
+		margin-right: 2%;
+		border: none;
+		&:last-of-type {
+			margin-right: 0%;
+		}
+		th {
+			text-transform: uppercase;
+			color: #222121;
+		}
+	}
+
+}
+
+.customize .options, .customize .options th, .customize .options td {
+	border: none;
+}
+
+.download {
+	footer {
+		margin-top: 60px;
+	}
+	.hero .pull-right {
+		margin-top: 70px;
+	}
+	.download-link {
+		display: block;
+		height: 54px;
+	}
+	button.color, button.download {
+		padding-left: 80px;
+		padding-right: 80px;
+		margin: 0 auto;
+	}
+	button.color {
+		margin: 10px auto;
+		font-size: 17px;
+		text-transform: uppercase;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		text-align: center;
+		display: block;
+	}
+	.download-button {
+		width: 384px;
+		margin: 0 auto;
+	}
+	.button-desc a {
+		color: #fff;
+		text-transform: none;
+	}
+	.hero {
+		height: 270px;
+		border-bottom: none;
+	}
+	@cdn-height: 40px;
+	.cdn {
+		width: 550px;
+		float: left;
+		position: relative;
+		top: 77px;
+		font-size: 15px;
+
+		h4 {
+			display: inline-block;
+			color: #fff;
+			.text-shadow;
+			line-height: @cdn-height;
+			position: relative;
+			top: 0;
+		}
+		.input {
+			display: inline-block;
+			height: @cdn-height;
+			width: 470px;
+			-moz-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+			-webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+			box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+		}
+		span {
+			line-height: @cdn-height;
+			color: #717171;
+			font-family: LatoLight;
+			display: inline-block;
+			position: relative;
+		}
+		select, .dropdown, .dropdown:before, .dropdown:after {
+			height: @cdn-height;
+		}
+		.dropdown {
+			width: 100px;
+			border: none;
+			background: none;
+			background-color: none;
+			display: inline-block;
+			margin-right: 5px;
+			border: 0px solid #ccc;
+			border-right: 1px solid #ccc;
+			.border-radius (0px);
+			position: relative;
+			top: -1px;
+			// height: (@cdn-height -2px);
+
+			&:before {
+				top: 18px;
+			}
+			select {
+				font-size: 15px;
+				color: #717171;
+				font-family: LatoLight;
+				// line-height: (@cdn-height - 1px);
+				display: inline-block;
+				position: relative;
+			}
+		}
+
+	}
+
+	.input {
+		background: #fff;
+		.border-radius;
+		color: #999;
+		border: 1px solid #4d4d4d;
+	}
+
+	.libraries {
+		margin-bottom: 12px;
+		line-height: 50px;
+
+		label.radio, label.checkbox {
+			margin-left: 20px;
+			margin-right: 5px;
+		}
+
+	}
+
+	.options {
+		float: left;
+		width: 439px;
+		margin-right: 40px;
+
+		.inactive {
+			color: #d4d4d4;
+			.checkbox {
+				background-color: #ebebeb;
+				border-color: #dcdcdc;
+			}
+		}
+	}
+
+	.options + .options {
+		margin-right: 0px;
+	}
+
+}

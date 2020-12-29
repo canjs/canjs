@@ -1,0 +1,11 @@
+@font-face {
+	font-family: foo;
+	src: url('fonts/foo.eot');
+	src: url('fonts/foo.woff') format('woof2'),
+		url('fonts/foo.eot?#iefix') format('embedded-opentype'),
+		url('fonts/foo.svg#glyphicons_half') format('svg');
+}
+
+body.home {
+	background: url("images/logo.png");
+}

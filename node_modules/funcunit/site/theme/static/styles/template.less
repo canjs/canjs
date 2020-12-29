@@ -1,0 +1,177 @@
+@footerHeight: 80px;
+@headerHeight: 54px;
+
+
+
+
+header {
+	display: block;
+	background-color: @colorHeader;
+	color: #fff;
+	position: relative;
+	z-index: 2;
+	
+	.container {
+		position: relative;
+		height: @headerHeight;
+		text-align: left;
+	}
+	.nav {
+		list-style-type: none;
+		padding: 0;
+		margin: 0 0 0 15px;
+		display: inline-block;
+		position: relative;
+		top: -2px;
+	}
+	.nav li {
+		display: inline-block;
+		line-height: @headerHeight;
+		
+		a {
+			text-transform: uppercase;
+			text-decoration: none;
+			font-weight: bold;
+			font-size: 12px;
+			color: #ffffff;
+			.text-shadow;
+			padding: 5px 10px;
+			border: 1px solid rgba(255, 255, 255, 0);
+		}
+	}
+	
+	.nav li a:hover, .nav li.active a {
+		background-color: rgba(0, 0, 0, 0.37);
+		border: 1px solid rgba(0, 0, 0, 0.62);
+		.border-radius(2px);
+	}
+	.bitovi.icon-bits {
+		color: #ffffff;
+		text-shadow: 0 -1px 0 rgba(0, 4, 159, 0.49);
+		display: block;
+		opacity: .2;
+		font-size: 26px;
+		line-height: @headerHeight;
+		text-align: center;
+		width: 50px;
+		height: 54px;
+		
+		&:before {
+			/*
+			right: 4px;
+			position: relative;
+			*/
+			position: absolute;
+			left: 13px;
+		}
+	}
+	.bitovi-menu:hover .bitovi.icon-bits {
+		background-color: #fff;
+		border-left: 1px solid #d5d5d5;
+		border-right: 1px solid #d5d5d5;
+		color: @colorHeader;
+		text-shadow: none;
+		opacity: 1;
+	}
+	.logo-menu {
+		position: relative;
+		display: inline-block;
+	}
+	.dropdown-menu {
+		display: none;
+		visibility: collapse;
+		position: absolute;
+		left: 0;
+		background-color: #fff;
+		border: 1px solid #d5d5d5;
+		border-top: none;
+		z-index: 5;
+		margin: 0;
+		padding: 0;
+		list-style-type: none;
+		top: @headerHeight;
+		width: 240px;
+	}
+	.dropdown-menu li a {
+		display: block;
+		text-decoration: none;
+		border-bottom: 1px solid #f5f5f5;
+		color: #676767;
+		font-size: 14px;
+		line-height: 32px;
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+	.dropdown-menu li a:hover, .dropdown-menu li.active a {
+		background-color: #f5f5f5;
+		color: #000;
+	}
+	.dropdown-menu li a:hover:after {
+		content: "\e000";
+		color: #dcdada;
+		font: 20px/27px Bitstrap;
+		position: absolute;
+		right: 10px;
+	}
+	.bitovi-menu:hover .dropdown-menu, .logo-menu:hover .dropdown-menu {
+		display: block;
+		visibility: visible;
+	}
+	.bitovi-menu:hover .dropdown-menu {
+		right: 0;
+		left: auto;
+	}
+	.pull-right {
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+	.bitovi-menu {
+		display: inline-block;
+	}
+}
+/* end */
+
+footer {
+	background-color: #e7e7e7;
+	border-top: 1px solid #fff;
+	color: #bababa;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	position: relative;
+	text-align: right;
+	height:  @footerHeight;
+	
+	.container {
+		text-align: right;
+		position: relative;
+		height:  @footerHeight;
+		overflow: hidden;
+	}
+	
+	li a {
+		font-size: 12px;
+		font-weight: bold;
+		text-transform: uppercase;
+		text-decoration: none;
+		.text-shadow-light;
+		color: @colorHeader;
+		padding: 5px 10px;
+		height:  @footerHeight;
+		line-height: @footerHeight;
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+	ul {
+		list-style-type: none;
+		list-style: none;
+		margin: 0;
+		position: absolute;
+		right: 0;
+		top: 0px;
+	}
+	li {
+		display: inline-block;
+	}
+}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+    </head>
+    <body>
+    	<div id='tabs'></div>
+        <script src="require.js"></script>
+        <script>
+        	require.config({
+			    paths: {
+			        "jquery": "node_modules/jquery/dist/jquery"
+			    },
+			    packages: [{
+				    	name: 'tabs',
+				    	location: 'dist/amd',
+				    	main: 'tabs'
+			    }]
+			});
+			require(["jquery","tabs"], function($){
+				
+				$("#tabs").tabs();
+				window.WIDTH = $("#tabs").width();
+			});
+        </script>
+    </body>
+</html>

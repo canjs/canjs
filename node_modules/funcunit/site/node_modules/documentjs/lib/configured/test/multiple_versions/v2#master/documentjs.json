@@ -1,0 +1,10 @@
+{
+	"sites": {
+		"api": {
+			"parent": "MultiVersion",
+			"minifyBuild": false,
+			"forceBuild": true
+		}
+	}
+	
+}

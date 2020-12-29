@@ -1,0 +1,16 @@
+{
+  "name": "app",
+  "main": "main.js",
+  "version": "1.0.0",
+  "dependencies": {
+    "dep1": "1.0.0",
+	"dep2": "1.0.0",
+	"dep4": "1.0.0"
+  },
+  "system": {
+    "bundle": ["bundleA", "bundleB"],
+	"configDependencies": [
+      "config_dep"
+	]
+  }
+}

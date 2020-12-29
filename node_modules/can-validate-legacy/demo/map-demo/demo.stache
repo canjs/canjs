@@ -1,0 +1,38 @@
+<p>Current value of <code>myVal</code>: <code>[{{myMap.myVal}}]</code><br>
+Current value of <code>myNum</code>: <code>[{{myMap.myNum}}]</code></p>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">Validation Test</h3>
+	</div>
+	<div class="panel-body">
+		<p>Validation happens when a property&rsquo;s setter is called.
+		In the following examples, this happens when the field&rsquo;s value changes.</p>
+		<div class="form-group">
+			<label for="test1">MyVal required?</label>
+			<input class="form-control" id="test" type="checkbox" can-value="myMap.isRequired">
+		</div>
+		<div class="form-group">
+			<label for="test1">MyVal</label>
+			<input class="form-control" id="test1" type="text" can-value="myMap.myVal">
+		</div>
+		<div class="form-group">
+			<label for="test2">MyNum</label>
+			<input class="form-control" id="test2" type="text" can-value="myMap.myNum">
+		</div>
+		<div class="input-group">
+			<p>You can also validate all properties at once</p>
+			<button type="button" class="btn btn-primary" can-click="doValidate">Validate All</button>
+		</div>
+	</div>
+	<ul class="list-group">
+		{{#myMap.errors}}
+			{{#myVal}}
+				<li class="list-group-item list-group-item-danger">{{.}}</li>
+			{{/myVal}}
+			{{#myNum}}
+				<li class="list-group-item list-group-item-danger">{{.}}</li>
+			{{/myNum}}
+		{{/myMap.errors}}
+	</ul>
+</div>

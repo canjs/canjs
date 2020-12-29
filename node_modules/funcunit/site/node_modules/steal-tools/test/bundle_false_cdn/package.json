@@ -1,0 +1,19 @@
+{
+  "name": "bundle-false-cdn",
+  "main": "main",
+  "dependencies": {
+    "jqueryt": "2.2.0"
+  },
+  "system": {
+    "directories": {
+      "lib": "src"
+    },
+    "envs": {
+      "window-production": {
+        "paths": {
+          "jqueryt": "//code.jquery.com/jquery-2.2.0.js"
+        }
+      }
+    }
+  }
+}

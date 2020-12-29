@@ -1,0 +1,4048 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/topics/testing/testing.md
+	@page guides/testing
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Testing | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="Learn how to test CanJS applications.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Learn how to test CanJS applications.">
+	<meta property="og:title" content="Testing | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "Learn how to test CanJS applications.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Testing | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/testing" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>getting started</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="crud-beginner.html"
+							title="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+							CRUD Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="setup.html"
+							title="Learn how to install CanJS in your environment.">
+							Setting Up CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="technology-overview.html"
+							title="Learn the basics of CanJS’s technology.">
+							Technology Overview
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>topics</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="html.html"
+							title="Learn how to update HTML and listen to user interactions.">
+							HTML
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="routing.html"
+							title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+							Routing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="data.html"
+							title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">
+							Service Layer
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="debugging.html"
+							title="Learn how to debug CanJS applications.">
+							Debugging
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="forms.html"
+							title="Learn how to create amazing &lt;form&gt;s with CanJS.">
+							Forms
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="testing.html"
+							title="Learn how to test CanJS applications.">
+							Testing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="logic.html"
+							title="Learn how to write observables in an organized, maintainable, and testable way.">
+							Logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="server-side-rendering.html"
+							title="Learn how to set up SSR for CanJS.">
+							Server-Side Rendering
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>app guides</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="chat.html"
+							title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+							Chat Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="todomvc.html"
+							title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+							TodoMVC Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/todomvc-with-steal.html"
+							title="This tutorial walks through building TodoMVC with StealJS. It includes KeyNote presentations covering CanJS core libraries.">
+							TodoMVC with StealJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>beginner recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/canvas-clock.html"
+							title="This beginner guide walks you through building a clock with the Canvas API.">
+							Canvas Clock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-simple.html"
+							title="This beginner guide walks through building a very simple credit card payment form.  It uses Stripe.js v2 API to create a token which can be used to create a charge.  It also performs simple validation on the payment form values.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-simple.html"
+							title="This beginner guide walks you through building a simple file navigation widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.0.0. Check out the file-navigator-advanced for an example that makes AJAX requests for its data and uses can-stache-element.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/signup-simple.html"
+							title="This beginner guide walks through building simple signup, login forms and a logout button.">
+							Signup and Login
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/video-player.html"
+							title="This beginner guide walks you through building custom video controls around a video element.">
+							Video Player
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/weather-report-simple.html"
+							title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.2.">
+							Weather Report
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>intermediate recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/cta-bus-map.html"
+							title="This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map. You&#x27;ll learn how to create a StacheElement that integrates with 3rd party widgets.">
+							CTA Bus Map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/modals.html"
+							title="This intermediate guide shows how to create a multiple modal form.">
+							Multiple Modals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/text-editor.html"
+							title="This intermediate guide walks you through building a basic rich text editor.">
+							Text Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/tinder-carousel.html"
+							title="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+							Tinder Carousel
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>advanced recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-advanced.html"
+							title="This advanced guide walks through building a simple credit card payment form with validations. It doesn’t use can-define. Instead it uses Kefir.js streams to make a ViewModel. can-kefir is used to make the Kefir streams observable to can-stache.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-advanced.html"
+							title="This advanced guide walks you through building a file navigation widget that requests data with fetch. It takes about 45 minutes to complete.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/playlist-editor.html"
+							title="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+							Playlist Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/search-list-details.html"
+							title="This advanced guide walks through building a Search, List, Details flow with lazy-loaded routes.">
+							Search, List, Details
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>upgrade</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-3.html"
+							title="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+							Migrating to CanJS 3
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-4.html"
+							title="This guide walks you through the step-by-step process to upgrade a 3.x app to CanJS 4.">
+							Migrating to CanJS 4
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-5.html"
+							title="This guide walks you through the process to upgrade a 4.x app to CanJS 5.x.">
+							Migrating to CanJS 5
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-6.html"
+							title="This guide walks you through the process to upgrade a 5.x app to CanJS 6.x.">
+							Migrating to CanJS 6
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="upgrade/using-codemods.html"
+							title="Learn how to migrate your app to CanJS 6 using can-migrate.">
+							Using Codemods
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>other</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="api.html"
+							title="This page walks through how to use and understand CanJS’s API documentation.">
+							Reading the API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Testing</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/topics/testing/testing.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Learn how to test CanJS applications.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <p>This guide will show you how to set up and write tests for different pieces of CanJS applications. It will also show techniques that can be used to test things that would otherwise be difficult to test. Not all of these techniques will be needed for every application.</p>
+<p>This guide does not focus on how to write applications in a maintainable, testable way. That is covered in the <a href="logic.html" title="Learn how to write observables in an organized, maintainable, and testable way.">Logic Guide</a>.</p>
+<blockquote>
+<p><strong>Note:</strong> All of the examples in this guide use the <a href="https://mochajs.org/">Mocha</a> test framework and <a href="http://www.chaijs.com/">Chai</a> assertion library, but none of the examples are specific to Mocha/Chai and should work with any setup.</p>
+</blockquote>
+<h2>Observables</h2>
+<p>Observables contain a majority of the logic in CanJS applications, so it is very important that they are well-tested. Since CanJS observables act mostly like normal JavaScript objects, testing them usually works just like working with normal objects—set a property (or call a function) then check the value of other properties. This setup is shown below, followed by a few techniques for making it easier to test more complex observables.</p>
+<blockquote>
+<p>Note: The examples below show how to test an <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">ObservableObject</a>, but the same techniques also work with an <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">ObservableArray</a>.</p>
+</blockquote>
+<h3>Basic setup</h3>
+<p>The basic setup for testing an observable is:</p>
+<ol>
+<li>Create an instance of the observable</li>
+<li>Test default values of the observable’s properties</li>
+<li>Set properties (or call functions) on the observable</li>
+<li>Test values of the observable’s properties</li>
+<li>Repeat 3 &amp; 4</li>
+</ol>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { ObservableObject } from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class Person extends ObservableObject {
+    static props = {
+        first: String,
+        last: String,
+
+        get name() {
+            return `${this.first || &quot;&quot;} ${this.last || &quot;&quot;}`.trim();
+        }
+    };
+
+    setName(val) {
+        const parts = val.split(&quot; &quot;);
+        this.first = parts[0];
+        this.last = parts[1];
+    }
+}
+
+describe(&quot;Person&quot;, () =&gt; {
+    it(&quot;name&quot;, () =&gt; {
+        // 1. Create an instance of the ObservableObject
+        const vm = new Person({});
+
+        // 2. Test values of the ObservableObject’s default values
+        assert.equal(vm.name, &quot;&quot;, &quot;default `name` is correct&quot;);
+
+        // 3. Set ObservableObject properties (or call ObservableObject functions)
+        vm.first = &quot;Kevin&quot;;
+        // 4. Test values of the ObservableObject’s properties
+        assert.equal(
+            vm.name,
+            &quot;Kevin&quot;,
+            &quot;setting `first` updates `name` correctly&quot;
+        );
+
+        // 3. Set ObservableObject properties (or call ObservableObject functions)
+        vm.last = &quot;McCallister&quot;;
+        // 4. Test values of the ObservableObject’s properties
+        assert.equal(
+            vm.name,
+            &quot;Kevin McCallister&quot;,
+            &quot;setting `last` updates `name` correctly&quot;
+        );
+
+        // 3. Set ObservableObject properties (or call ObservableObject functions)
+        vm.setName(&quot;Marv Merchants&quot;);
+        // 4. Test values of the ObservableObject’s properties
+        assert.equal(vm.first, &quot;Marv&quot;, &quot;`setName` updates `first` correctly&quot;);
+        assert.equal(vm.last, &quot;Merchants&quot;, &quot;`setName` updates `last` correctly&quot;);
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='31-59,only'></div>
+<div class='codepen'></div>
+<h3>Asynchronous behavior</h3>
+<p>Asynchronous behavior is one of the toughest things to test in JavaScript. There are a few techniques that can be used to make it a little easier in CanJS applications.</p>
+<p>The following example uses <code>listenTo</code> to capture the value whenever you type into the <code>&lt;input&gt;</code> element, but it only updates the value of the <code>text</code> property when nothing has been typed for 500ms:</p>
+<div class='demo_wrapper' data-demo-src='demos/testing/throttled-input.html'></div>
+<div class='codepen'></div>
+<p>The difficulty in testing this observable is knowing when to run assertions. One approach to testing this code is:</p>
+<ul>
+<li>Set the <code>text</code> property</li>
+<li>Wait 500ms</li>
+<li>Test that the value of the <code>text</code> property is correct</li>
+</ul>
+<p>This might work initially, but different browsers will not handle this 500ms delay in exactly the same way. Tests using <code>setTimeout</code> like this become very brittle and prone to break as browsers and test environments change. It is very frustrating to write a test and have it start failing six months down the road even though nothing in the code has changed.</p>
+<p>This brittleness can be avoided by using an <a href="../can-event-queue/map/map.listenTo.html" title="Listen to an event and register the binding for simplified unbinding.">event listener</a> instead of <code>setTimeout</code>. Using this technique, the test approach is:</p>
+<ul>
+<li>Set the <code>text</code> property</li>
+<li>Wait for the <code>text</code> property to change</li>
+<li>Test that the value of the <code>text</code> property is correct</li>
+</ul>
+<p>Since the event listener needs to be set up before the property is changed, in practice this approach becomes:</p>
+<ul>
+<li>Create an event listener for when the <code>text</code> property changes</li>
+<li>Set the <code>text</code> property</li>
+<li>When the event listener is triggered, test that the value of the <code>text</code> property is correct</li>
+</ul>
+<p>Here is how this is done for this example:</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { ObservableObject } from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class ThrottledText extends ObservableObject {
+    static props = {
+        text: {
+            value({ lastSet, listenTo, resolve }) {
+                let latest = &quot;&quot;;
+                let timeoutId = null;
+
+                listenTo(lastSet, val =&gt; {
+                    latest = val;
+                    timeoutId = clearTimeout(timeoutId);
+
+                    timeoutId = setTimeout(() =&gt; {
+                        resolve(latest);
+                    }, 500);
+                });
+            }
+        }
+    };
+}
+
+describe(&quot;ThrottledText&quot;, () =&gt; {
+    it(&quot;text&quot;, done =&gt; {
+        const throttled = new ThrottledText({});
+
+        throttled.listenTo(&quot;text&quot;, () =&gt; {
+            assert.equal(throttled.text, &quot;Hi there!&quot;, &quot;text updated correctly&quot;);
+            done();
+        });
+
+        throttled.text = &quot;Hi there!&quot;;
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='34-41,only'></div>
+<div class='codepen'></div>
+<blockquote>
+<p><strong>Note:</strong> When using Mocha, <a href="https://mochajs.org/#asynchronous-code">testing asynchronous code</a> is accomplished by calling the <code>done</code> callback to indicate the test is complete. Different testing frameworks might have slightly different solutions.</p>
+</blockquote>
+<h3>Properties derived from asynchronous behavior</h3>
+<p>It is often useful to use an <a href="../can-observable-object/define/async.html" title="async
+Specify an asynchronous property whose value will be resolved later. async
+properties are computed and automatically update themselves when a dependent
+observable value is changed.">asynchronous property</a> to load data from a model or service layer. It can be difficult to test this without also testing the model. The async property might look something like this:</p>
+<pre><code class="language-js">class Todos extends ObservableObject {
+    static props = {
+        todoCount: {
+            async(resolve) {
+                todoConnection.getList({}).then(response =&gt; {
+                    resolve(response.metadata.count);
+                });
+            }
+        }
+    };
+}
+</code></pre>
+<p>The primary logic in this code is responsible for reading the <code>metadata.count</code> property from the service layer response and setting it as the <code>todoCount</code> property on the observable. The way this code is written makes it very difficult to test this logic.</p>
+<p>In order to make it easier, first <strong>split</strong> this property into two properties:</p>
+<ul>
+<li>the count property itself</li>
+<li>the promise returned by the Model</li>
+</ul>
+<pre><code class="language-js">class Todos extends ObservableObject {
+    static props = {
+        todoCount: {
+            async(resolve) {
+                this.todoCountPromise.then(response =&gt; {
+                    resolve(response.metadata.count);
+                });
+            }
+        },
+
+        todoCountPromise: {
+            get(lastSet) {
+                return todoConnection.getList({});
+            }
+        }
+    };
+}
+</code></pre>
+<p>Next, make it possible to override the <code>todoCountPromise</code> property by utilizing <a href="../can-observable-object/define/get.html#Propertiesvaluesthatchangewiththeirinternalsetvalue" title="Specify what happens when a certain property is read on an object. get functions
+are computed and automatically update themselves when a dependent
+observable value is changed.">lastSet</a>:</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { ObservableObject } from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class Todos extends ObservableObject {
+    static props = {
+        todoCount: {
+            async(resolve, lastSet) {
+                this.todoCountPromise.then(response =&gt; {
+                    resolve(response.metadata.count);
+                });
+            }
+        },
+
+        todoCountPromise: {
+            get(lastSet) {
+                if (lastSet) {
+                    return lastSet;
+                }
+
+                return todoConnection.getList({});
+            }
+        }
+    };
+}
+
+describe(&quot;Todos&quot;, () =&gt; {
+    it(&quot;todoCount&quot;, done =&gt; {
+        const todoResponse = {
+            metadata: { count: 150 },
+            data: []
+        };
+
+        const todos = new Todos({
+            todoCountPromise: Promise.resolve(todoResponse)
+        });
+
+        todos.listenTo(&quot;todoCount&quot;, () =&gt; {
+            assert.equal(todos.todoCount, 150, &quot;`todoCount` === 150&quot;);
+            done();
+        });
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div class='codepen'></div>
+<div line-highlight='24-26,only'></div>
+<p>Now this can be tested by setting the default value of <code>todoCountPromise</code> to a promise that <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve">resolves</a> with test data:</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { ObservableObject } from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class Todos extends ObservableObject {
+    static props = {
+        todoCount: {
+            async(resolve, lastSet) {
+                this.todoCountPromise.then(response =&gt; {
+                    resolve(response.metadata.count);
+                });
+            }
+        },
+
+        todoCountPromise: {
+            get(lastSet) {
+                if (lastSet) {
+                    return lastSet;
+                }
+
+                return todoConnection.getList({});
+            }
+        }
+    };
+}
+
+describe(&quot;Todos&quot;, () =&gt; {
+    it(&quot;todoCount&quot;, done =&gt; {
+        const todoResponse = {
+            metadata: { count: 150 },
+            data: []
+        };
+
+        const todos = new Todos({
+            todoCountPromise: Promise.resolve(todoResponse)
+        });
+
+        todos.listenTo(&quot;todoCount&quot;, () =&gt; {
+            assert.equal(todos.todoCount, 150, &quot;`todoCount` === 150&quot;);
+            done();
+        });
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div class='codepen'></div>
+<div line-highlight='41-43,only'></div>
+<p>Since this is a default value, the actual model’s <code>getList</code> method will never be called. The <code>todoCount</code> property can then be tested like any other <a href="testing.html#Testingasynchronousbehavior" title="Learn how to test CanJS applications.">asynchronous behavior</a>.</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { ObservableObject } from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class Todos extends ObservableObject {
+    static props = {
+        todoCount: {
+            async(resolve, lastSet) {
+                this.todoCountPromise.then(response =&gt; {
+                    resolve(response.metadata.count);
+                });
+            }
+        },
+
+        todoCountPromise: {
+            get(lastSet) {
+                if (lastSet) {
+                    return lastSet;
+                }
+
+                return todoConnection.getList({});
+            }
+        }
+    };
+}
+
+describe(&quot;Todos&quot;, () =&gt; {
+    it(&quot;todoCount&quot;, done =&gt; {
+        const todoResponse = {
+            metadata: { count: 150 },
+            data: []
+        };
+
+        const todos = new Todos({
+            todoCountPromise: Promise.resolve(todoResponse)
+        });
+
+        todos.listenTo(&quot;todoCount&quot;, () =&gt; {
+            assert.equal(todos.todoCount, 150, &quot;`todoCount` === 150&quot;);
+            done();
+        });
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div class='codepen'></div>
+<div line-highlight='36-48,only'></div>
+<p>It is also possible to test this synchronously by setting <code>todoCountPromise</code> to a normal object that <a href="https://en.wikipedia.org/wiki/Duck_typing">has the same methods</a> as a Promise, but “resolves” synchronously. This might look like:</p>
+<pre><code class="language-js">const testTodoCountPromise = {
+    then(resolve) {
+        resolve(todoResponse);
+    }
+};
+
+const todos = new Todos({
+    todoCountPromise: testTodoCountPromise
+});
+</code></pre>
+<p>With this approach, the assertions can be made outside of the <code>listenTo</code> callback and there is no need to call <code>done()</code> since this test is now synchronous.</p>
+<blockquote>
+<p><strong>Note:</strong> Even with this approach, <code>listenTo</code> still needs to be called; without this, CanJS will not provide the <code>resolve</code> function to the asynchronous getter. This is done to prevent memory leaks.</p>
+</blockquote>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { ObservableObject } from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class Todos extends ObservableObject {
+    static props = {
+        todoCount: {
+            async(resolve, lastSet) {
+                this.todoCountPromise.then(response =&gt; {
+                    resolve(response.metadata.count);
+                });
+            }
+        },
+
+        todoCountPromise: {
+            get(lastSet) {
+                if (lastSet) {
+                    return lastSet;
+                }
+
+                return todoConnection.getList({});
+            }
+        }
+    };
+}
+
+describe(&quot;Todos&quot;, () =&gt; {
+    it(&quot;todoCount&quot;, () =&gt; {
+        const todoResponse = {
+            metadata: { count: 150 },
+            data: []
+        };
+
+        const testTodoCountPromise = {
+            then(resolve) {
+                resolve(todoResponse);
+            }
+        };
+
+        const todos = new Todos({
+            todoCountPromise: testTodoCountPromise
+        });
+
+        todos.listenTo(&quot;todoCount&quot;, () =&gt; {});
+
+        assert.equal(todos.todoCount, 150, &quot;`todoCount` === 150&quot;);
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div class='codepen'></div>
+<div line-highlight='41-53,only'></div>
+<h3>Properties derived from models (or any imported module)</h3>
+<p>The <a href="testing.html#Propertiesderivedfromasynchronousbehavior" title="Learn how to test CanJS applications.">previous example</a> shows how to test logic that is dependent on a promise returned by a <a href="data-introduction.html#Retrievingalistofrecords" title="Learn how to get, create, update, and delete backend service layer data.">getList</a> call. That example did not show how to test that the Model is used correctly.</p>
+<p>Specifically, we did not test:</p>
+<ul>
+<li><code>todoCountPromise</code> calls <code>todoConnection.getList</code></li>
+<li><code>todoCountPromise</code> is the return value of <code>todoConnection.getList</code></li>
+</ul>
+<pre><code class="language-js">import todoConnection from &quot;models/todo&quot;;
+
+class Todos extends ObservableObject {
+    static props = {
+        todoCountPromise: {
+            get(lastSet) {
+                return todoConnection.getList({});
+            }
+        }
+    };
+}
+</code></pre>
+<div line-highlight='6-8,only'></div>
+<p>This could be tested using <a href="../can-fixture.html" title="Intercept AJAX requests and simulate the response.">can-fixture</a>, but doing this would also test any logic in the <code>todoConnection</code> itself. A unit test of the observable should just test the code in the observable; testing the model should be handled by tests specifically created to test the model and/or in integration tests. Both of these will be discussed later in this guide.</p>
+<p>To test the <code>todoCountPromise</code>, you can store the <code>todoConnection</code> as a property on the observable and then use <code>this.todoConnection</code> instead of the <code>todoConnection</code> that was imported:</p>
+<pre><code class="language-js">import todoConnection from &quot;models/todo&quot;;
+
+class Todos extends ObservableObject {
+    static props = {
+        todoConnection: {
+            get default() {
+                return todoConnection;
+            }
+        },
+        todoCountPromise: {
+            get(lastSet) {
+                return this.todoConnection.getList({});
+            }
+        }
+    };
+}
+</code></pre>
+<div line-highlight='5-9,12,only'></div>
+<p>Using this technique allows you to set a new value of <code>todoConnection</code> by passing it as a default value to the <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">ObservableObject</a> constructor. You can then test that the <code>getList</code> function was called (as well as test the arguments passed to it) and also test that the getter returned the correct value.</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { ObservableObject } from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class Todos extends ObservableObject {
+    static props = {
+        completeFilter: Boolean,
+        todoConnection: {
+            get default() {
+                return todoConnection;
+            }
+        },
+        todoCountPromise: {
+            get() {
+                const complete = this.completeFilter;
+                const req = {};
+
+                if (complete != null) {
+                    req.complete = complete;
+                }
+
+                return this.todoConnection.getList(req);
+            }
+        }
+    };
+}
+
+describe(&quot;Todos&quot;, () =&gt; {
+    it(&quot;todoCountPromise&quot;, () =&gt; {
+        let getListOptions = null;
+        const testPromise = new Promise((res, rej) =&gt; {});
+
+        const testTodoConnection = {
+            getList(options) {
+                getListOptions = options;
+                return testPromise;
+            }
+        };
+
+        const todos = new Todos({
+            todoConnection: testTodoConnection
+        });
+
+        todos.listenTo(&quot;todoCountPromise&quot;, () =&gt; {});
+
+        assert.equal(
+            todos.todoCountPromise,
+            testPromise,
+            &quot;todoCountPromise is the promise returned by getList&quot;
+        );
+
+        todos.completeFilter = true;
+        assert.equal(
+            getListOptions.complete,
+            true,
+            &quot;completeFilter: true is passed to getList&quot;
+        );
+
+        todos.completeFilter = false;
+        assert.equal(
+            getListOptions.complete,
+            false,
+            &quot;completeFilter: false is passed to getList&quot;
+        );
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div class='codepen'></div>
+<div line-highlight='15-19,29,40-45,48,53-71,only'></div>
+<p>This technique is useful for testing code using models, but it can be used to test any code that uses a function or property <em>exported directly</em> from another module.</p>
+<h2>Components</h2>
+<p>Components are the glue that holds CanJS applications together—connecting observables to the DOM, handling events triggered by user interaction, interfacing with third-party libraries, and many other things.</p>
+<p>There are different challenges to testing each of these responsibilities. These are discussed in the sections below.</p>
+<h3>Properties</h3>
+<p>All of the techniques described in <a href="testing.html#Observables" title="Learn how to test CanJS applications.">Testing Observables</a> can be used for testing a component’s properties by creating an instance of the component:</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { StacheElement } from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class NameForm extends StacheElement {
+    static view = `
+        &lt;div&gt;
+            &lt;label&gt;
+                First: &lt;input value:bind=&quot;this.first&quot;&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+                Last: &lt;input value:bind=&quot;this.last&quot;&gt;
+            &lt;/label&gt;
+
+            &lt;p&gt;
+                &lt;button on:click=&quot;this.setName('Kevin McCallister')&quot;&gt;Pick Random Name&lt;/button&gt;
+            &lt;/p&gt;
+
+            &lt;p&gt;Name: {{ this.name }}&lt;/p&gt;
+        &lt;/div&gt;
+    `;
+
+    static props = {
+        first: String,
+        last: String,
+
+        get name() {
+            return `${this.first || &quot;&quot;} ${this.last || &quot;&quot;}`.trim();
+        }
+    };
+
+    setName(val) {
+        const parts = val.split(&quot; &quot;);
+        this.first = parts[0];
+        this.last = parts[1];
+    }
+}
+
+customElements.define(&quot;name-form&quot;, NameForm);
+
+describe(&quot;NameForm component&quot;, () =&gt; {
+    it(&quot;name&quot;, () =&gt; {
+        // 1. Create an instance of the component
+        const nameForm = new NameForm();
+
+        // 2. Test the component’s default values
+        assert.equal(nameForm.name, &quot;&quot;, &quot;default `name` is correct&quot;);
+
+        // 3. Set properties (or call functions) on the component
+        nameForm.first = &quot;Kevin&quot;;
+        // 4. Test the component’s property values
+        assert.equal(
+            nameForm.name,
+            &quot;Kevin&quot;,
+            &quot;setting `first` updates `name` correctly&quot;
+        );
+
+        // 3. Set properties (or call functions) on the component
+        nameForm.last = &quot;McCallister&quot;;
+        // 4. Test the component’s property values
+        assert.equal(
+            nameForm.name,
+            &quot;Kevin McCallister&quot;,
+            &quot;setting `first` updates `name` correctly&quot;
+        );
+
+        // 3. Set component properties (or call component functions)
+        nameForm.setName(&quot;Marv Merchants&quot;);
+        // 4. Test values of the component’s properties
+        assert.equal(
+            nameForm.first,
+            &quot;Marv&quot;,
+            &quot;`setName` updates `first` correctly&quot;
+        );
+        assert.equal(
+            nameForm.last,
+            &quot;Merchants&quot;,
+            &quot;`setName` updates `last` correctly&quot;
+        );
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='12,30-43,51,only'></div>
+<div class='codepen'></div>
+<h3>DOM Events</h3>
+<p>DOM events handled through <a href="../can-stache-bindings.html" title="Listen to events and create one-way and two-way bindings.">can-stache-bindings</a>, like <code>value:bind=&quot;first&quot;</code>, can be tested through the component directly as shown in <a href="testing.html#Basicsetup" title="Learn how to test CanJS applications.">Testing Observables</a>. However, they can also be tested by:</p>
+<ol>
+<li>Creating an instance of the component</li>
+<li>Calling <a href="../can-stache-element/lifecycle-methods.render.html" title="Render a StacheElement instance.">render</a> on the instance to render the component’s view into its <code>innerHTML</code></li>
+<li>Finding the event target through the component</li>
+<li>Using <a href="../can-dom-events.dispatch.html" title="Create and dispatch a configured event on the target.">domEvents.dispatch</a> to dispatch the event</li>
+</ol>
+<blockquote>
+<p><strong>Note:</strong> Tests like this will work even if the component is not in the document.</p>
+</blockquote>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { domEvents, StacheElement } from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class NameForm extends StacheElement {
+    static view = `
+        &lt;div&gt;
+            &lt;label&gt;
+                First: &lt;input class=&quot;first&quot; value:bind=&quot;this.first&quot;&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+                Last: &lt;input class=&quot;last&quot; value:bind=&quot;this.last&quot;&gt;
+            &lt;/label&gt;
+
+            &lt;p&gt;
+                &lt;button on:click=&quot;this.setName('Kevin McCallister')&quot;&gt;Pick Random Name&lt;/button&gt;
+            &lt;/p&gt;
+
+            &lt;p&gt;Name: {{ this.name }}&lt;/p&gt;
+        &lt;/div&gt;
+    `;
+
+    static props = {
+        first: String,
+        last: String,
+
+        get name() {
+            return `${this.first || &quot;&quot;} ${this.last || &quot;&quot;}`.trim();
+        }
+    };
+
+    setName(val) {
+        const parts = val.split(&quot; &quot;);
+        this.first = parts[0];
+        this.last = parts[1];
+    }
+}
+
+customElements.define(&quot;name-form&quot;, NameForm);
+
+describe(&quot;NameForm component DOM events&quot;, () =&gt; {
+    it(&quot;first name updated when user types in &lt;input&gt;&quot;, () =&gt; {
+        // 1. Creating an instance of the Component
+        const nameForm = new NameForm();
+
+        // 2. Calling render() on the instance
+        nameForm.render();
+
+        // 3. Finding the event target through the component
+        const input = nameForm.querySelector(&quot;input.first&quot;);
+
+        // 4. Using domEvents.dispatch to dispatch the event
+        input.value = &quot;Marv&quot;;
+        domEvents.dispatch(input, &quot;change&quot;); // bindings are updated on &quot;change&quot; by default
+
+        assert.equal(nameForm.first, &quot;Marv&quot;, &quot;first set correctly&quot;);
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='49-64,only'></div>
+<div class='codepen'></div>
+<p>This strategy can also be used to test events using <code>listenTo</code> in a <a href="../can-observable-object/define/value.html" title="Specify the behavior of a property by listening to changes in other properties.">value</a> behavior (or a Map’s <a href="../can-event-queue/map/map.listenTo.html" title="Listen to an event and register the binding for simplified unbinding.">listenTo</a> method):</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { domEvents, StacheElement } from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class Modal extends StacheElement {
+    static view = `
+        {{# if(this.showing) }}
+            &lt;div class=&quot;modal&quot;&gt;
+                This is the modal
+            &lt;/div&gt;
+        {{/ if }}
+    `;
+
+    static props = {
+        showing: {
+            value({ lastSet, listenTo, resolve }) {
+                listenTo(lastSet, resolve);
+
+                listenTo(window, &quot;click&quot;, () =&gt; {
+                    resolve(false);
+                });
+            }
+        }
+    };
+}
+
+customElements.define(&quot;my-modal&quot;, Modal);
+
+describe(&quot;MyModal Component Events&quot;, () =&gt; {
+    it(&quot;clicking on the window should close the modal&quot;, () =&gt; {
+        const modal = new Modal().render();
+
+        modal.showing = true;
+
+        domEvents.dispatch(window, &quot;click&quot;);
+
+        assert.equal(
+            modal.showing,
+            false,
+            &quot;modal hidden when user clicks on the window&quot;
+        );
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='26-28,37-49,only'></div>
+<div class='codepen'></div>
+<p>Another place you might use <code>listenTo</code> is in <a href="../can-stache-element/lifecycle-methods.connect.html" title="Connect a StacheElement instance to the DOM.">connect</a>. The same testing procedure can be used in this scenario, but you need to make sure <code>connect</code> is called, which is discussed in the next section.</p>
+<h3>connected</h3>
+<p>The <a href="../can-stache-element/lifecycle-hooks.connected.html" title="A lifecycle hook called after the element is inserted into the document.">connected hook</a> is a good place to put code that is expected to run once a component is in the document. To test this code, the <a href="../can-stache-element/lifecycle-methods.connect.html" title="Connect a StacheElement instance to the DOM.">connect method</a> needs to be called. One way to do this is to call it manually:</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { StacheElement } from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+function DatePicker(el) {
+    this.el = el;
+    el.classList.add(&quot;date-picker&quot;);
+}
+
+DatePicker.prototype.teardown = function() {
+    this.el.classList.remove(&quot;date-picker&quot;);
+};
+
+class DateRange extends StacheElement {
+    static view = `&lt;p class=&quot;start-date&quot;&gt;This is the Date Picker&lt;/p&gt;`;
+
+    connected() {
+        const startDate = new DatePicker(this.querySelector(&quot;.start-date&quot;));
+
+        return () =&gt; {
+            startDate.teardown();
+        };
+    }
+}
+
+customElements.define(&quot;date-range&quot;, DateRange);
+
+describe(&quot;DateRange component connected hook&quot;, () =&gt; {
+    it(&quot;should set up DatePicker&quot;, () =&gt; {
+        const dateRange = new DateRange();
+
+        dateRange.connect();
+
+        const startDate = dateRange.querySelector(&quot;.start-date&quot;);
+
+        assert.ok(
+            startDate.classList.contains(&quot;date-picker&quot;),
+            &quot;start date DatePicker set up&quot;
+        );
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='39,only'></div>
+<div class='codepen'></div>
+<p>If the code relies on the element actually being in the document, you can add the element to the page using <a href="https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild">appendChild</a>:</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { StacheElement } from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+function DatePicker(el) {
+    this.el = el;
+    el.classList.add(&quot;date-picker&quot;);
+}
+
+DatePicker.prototype.teardown = function() {
+    this.el.classList.remove(&quot;date-picker&quot;);
+};
+
+class DateRange extends StacheElement {
+    static view = `&lt;p class=&quot;start-date&quot;&gt;This is the Date Picker&lt;/p&gt;`;
+
+    connected() {
+        const startDate = new DatePicker(this.querySelector(&quot;.start-date&quot;));
+
+        return () =&gt; {
+            startDate.teardown();
+        };
+    }
+}
+
+customElements.define(&quot;date-range&quot;, DateRange);
+
+describe(&quot;DateRange Component connectedCallback&quot;, () =&gt; {
+    it(&quot;should set up DatePicker&quot;, () =&gt; {
+        const dateRange = new DateRange();
+
+        document.body.appendChild(dateRange);
+
+        const startDate = dateRange.querySelector(&quot;.start-date&quot;);
+
+        assert.ok(
+            startDate.classList.contains(&quot;date-picker&quot;),
+            &quot;start date DatePicker set up&quot;
+        );
+
+        // clean up element
+        document.body.removeChild(document.querySelector(&quot;date-range&quot;));
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='39,only'></div>
+<div class='codepen'></div>
+<blockquote>
+<p><strong>Note:</strong> Some test frameworks like <a href="https://qunitjs.com/cookbook/#keeping-tests-atomic">QUnit</a> have special test areas that you insert elements into for your tests.
+These are automatically cleaned up after each test, so you do not have to worry about a test causing problems for other tests.
+If the framework you’re using doesn’t have this, make sure to clean up after the test yourself.</p>
+</blockquote>
+<h2>Routing</h2>
+<p>Routing in CanJS applications has three primary responsibilities:</p>
+<ol>
+<li>Connecting a component to <a href="../can-route.html" title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">can-route</a></li>
+<li>Displaying the corrent component based on the route</li>
+<li>Passing data to the displayed component</li>
+</ol>
+<p>Separating these into three separate properties on the component means that they can each be tested independently. This will be shown in the following sections.</p>
+<h3>Route data</h3>
+<p>CanJS’s router uses the observable key-value object <a href="../can-route.data.html" title="An observable key-value object used to cross bind to the url observable can-route.urlData. Set it to cross-bind a top level state object (Application ViewModel) to can-route.">can-route.data</a> to bind the URL to a StacheElement. To make this observable available to the StacheElement, you can make a property that returns <code>route.data</code> its <a href="../can-observable-object/define/get-default.html" title="Returns the default value for instances of the defined type.  The default value is defined on demand, when the property is read for the first time.">default value</a>:</p>
+<pre><code class="language-js">class Application extends StacheElement {
+    static props = {
+        routeData: {
+            get default() {
+                return route.data;
+            }
+        }
+    };
+}
+</code></pre>
+<div line-highlight='3-7'></div>
+<p>Most applications also set up <a href="routing.html#Registerroutes" title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">“pretty” routes</a> by calling <a href="../can-route.register.html" title="Create a route matching rule.">route.register</a>. This can also be done in the default value definition before calling <a href="../can-route.start.html" title="Initializes the two way relationship between the url and route.data.">start</a>:</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { route, RouteMock, StacheElement } from &quot;can/ecosystem&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class Application extends StacheElement {
+    static view = `{{ this.elementToShow }}`;
+
+    static props = {
+        routeData: {
+            get default() {
+                route.register(&quot;{page}&quot;, { page: &quot;home&quot; });
+                route.register(&quot;list/{id}&quot;, { page: &quot;list&quot; });
+                route.start();
+                return route.data;
+            }
+        }
+    };
+}
+
+customElements.define(&quot;app-component&quot;, Application);
+
+describe(&quot;Application&quot;, () =&gt; {
+    it(&quot;routeData updates when URL changes&quot;, () =&gt; {
+        const routeMock = new RouteMock();
+        route.urlData = routeMock;
+
+        const vm = new Application();
+
+        assert.equal(vm.routeData.page, &quot;home&quot;, &quot;`page` defaults to 'home'&quot;);
+
+        routeMock.value = &quot;#!list/5&quot;;
+
+        assert.equal(vm.routeData.page, &quot;list&quot;, &quot;#!list/5 sets `page` to 'list'&quot;);
+        assert.equal(vm.routeData.id, 5, &quot;#!list/5 sets `id` to 5&quot;);
+    });
+
+    it(&quot;URL updates when routeData changes&quot;, done =&gt; {
+        const routeMock = new RouteMock();
+        route.urlData = routeMock;
+
+        const vm = new Application();
+
+        assert.equal(routeMock.value, &quot;&quot;);
+
+        routeMock.on(() =&gt; {
+            assert.equal(routeMock.value, &quot;list/10&quot;);
+            done();
+        });
+
+        vm.routeData.update({
+            page: &quot;list&quot;,
+            id: 10
+        });
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='18-20,only'></div>
+<div class='codepen'></div>
+<p>Testing this can be difficult because changes to <code>routeData</code> will also cause changes to the URL. This can cause big problems: if the URL suddenly changes to <code>/list/5</code> in the middle of running the tests, the test page is no longer going to be functional.</p>
+<p>To avoid this, CanJS provides <a href="../can-route-mock.html" title="Simulate routing without having to change the URL.">RouteMock</a> so that you can interact with <code>route.data</code> without actually changing the URL.</p>
+<p>After setting <a href="../can-route.urlData.html" title="Specifies an observable value that represents the URL. Useful for changing
+what URL route is cross-bound to.">urlData</a> to an instance of <code>RouteMock</code>, you can make changes to the <code>value</code> of the <code>RouteMock</code> instance to simulate changes to the URL and then verify that the StacheElement’s <code>routeData</code> property updates correctly:</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { route, RouteMock, StacheElement } from &quot;can/ecosystem&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class Application extends StacheElement {
+    static view = `{{ this.elementToShow }}`;
+
+    static props = {
+        routeData: {
+            get default() {
+                route.register(&quot;{page}&quot;, { page: &quot;home&quot; });
+                route.register(&quot;list/{id}&quot;, { page: &quot;list&quot; });
+                route.start();
+                return route.data;
+            }
+        }
+    };
+}
+
+customElements.define(&quot;app-component&quot;, Application);
+
+describe(&quot;Application&quot;, () =&gt; {
+    it(&quot;routeData updates when URL changes&quot;, () =&gt; {
+        const routeMock = new RouteMock();
+        route.urlData = routeMock;
+
+        const vm = new Application();
+
+        assert.equal(vm.routeData.page, &quot;home&quot;, &quot;`page` defaults to 'home'&quot;);
+
+        routeMock.value = &quot;#!list/5&quot;;
+
+        assert.equal(vm.routeData.page, &quot;list&quot;, &quot;#!list/5 sets `page` to 'list'&quot;);
+        assert.equal(vm.routeData.id, 5, &quot;#!list/5 sets `id` to 5&quot;);
+    });
+
+    it(&quot;URL updates when routeData changes&quot;, done =&gt; {
+        const routeMock = new RouteMock();
+        route.urlData = routeMock;
+
+        const vm = new Application();
+
+        assert.equal(routeMock.value, &quot;&quot;);
+
+        routeMock.on(() =&gt; {
+            assert.equal(routeMock.value, &quot;list/10&quot;);
+            done();
+        });
+
+        vm.routeData.update({
+            page: &quot;list&quot;,
+            id: 10
+        });
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='30-42,only'></div>
+<div class='codepen'></div>
+<p>You can also make changes to the <code>routeData</code> and check that the URL is updated correctly by verifying the <code>value</code> of the <code>RouteMock</code> instance. In CanJS, the URL is changed asynchronously, so you will need to use an asynchronous test that uses <code>routeMock.on</code> to determine when to run assertions:</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { route, RouteMock, StacheElement } from &quot;can/ecosystem&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class Application extends StacheElement {
+    static view = `{{ this.elementToShow }}`;
+
+    static props = {
+        routeData: {
+            get default() {
+                route.register(&quot;{page}&quot;, { page: &quot;home&quot; });
+                route.register(&quot;list/{id}&quot;, { page: &quot;list&quot; });
+                route.start();
+                return route.data;
+            }
+        }
+    };
+}
+
+customElements.define(&quot;app-component&quot;, Application);
+
+describe(&quot;Application&quot;, () =&gt; {
+    it(&quot;routeData updates when URL changes&quot;, () =&gt; {
+        const routeMock = new RouteMock();
+        route.urlData = routeMock;
+
+        const vm = new Application();
+
+        assert.equal(vm.routeData.page, &quot;home&quot;, &quot;`page` defaults to 'home'&quot;);
+
+        routeMock.value = &quot;#!list/5&quot;;
+
+        assert.equal(vm.routeData.page, &quot;list&quot;, &quot;#!list/5 sets `page` to 'list'&quot;);
+        assert.equal(vm.routeData.id, 5, &quot;#!list/5 sets `id` to 5&quot;);
+    });
+
+    it(&quot;URL updates when routeData changes&quot;, done =&gt; {
+        const routeMock = new RouteMock();
+        route.urlData = routeMock;
+
+        const vm = new Application();
+
+        assert.equal(routeMock.value, &quot;&quot;);
+
+        routeMock.on(() =&gt; {
+            assert.equal(routeMock.value, &quot;list/10&quot;);
+            done();
+        });
+
+        vm.routeData.update({
+            page: &quot;list&quot;,
+            id: 10
+        });
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='44-61,only'></div>
+<div class='codepen'></div>
+<h3>Displaying the correct component</h3>
+<p>Testing that the correct component is displayed based on the <code>routeData</code> can be done completely independently from <code>can-route</code> when <code>routeData</code> is defined as a <a href="../can-observable-object/define/get-default.html" title="Returns the default value for instances of the defined type.  The default value is defined on demand, when the property is read for the first time.">default value</a> as shown above.</p>
+<p>The component can be defined using a <a href="../can-observable-object/getter.html" title="Specify a property's get behavior with the get syntax.
+import { ObservableObject } from &quot;can/everything&quot;;
+
+class Example extends ObservableObject {
+  get propertyName() {
+    return true;
+  }
+}
+
+const e = new Example();
+console.log( e.propertyName ); //-&gt; true
+
+
+For example:
+import { ObservableObject } from &quot;can/everything&quot;;
+
+class Person extends ObservableObject {
+  static props = {
+    first: String,
+    last: String
+  };
+
+  get fullName() {
+    return this.first + &quot; &quot; + this.last;
+  }
+}
+
+const person = new Person( {first: &quot;Justin&quot;, last: &quot;Meyer&quot;} );
+console.log( person.fullName ); //-&gt; &quot;Justin Meyer&quot;
+
+
+This is a shorthand for providing an object with a get property like:
+import { ObservableObject } from &quot;can/everything&quot;;
+
+class Person extends ObservableObject {
+  static props = {
+    first: String,
+    last: String,
+    fullName: {
+      get() {
+        return this.first + &quot; &quot; + this.last;
+      }
+    }
+  }
+}
+
+const person = new Person( {first: &quot;Justin&quot;, last: &quot;Meyer&quot;} );
+console.log( person.fullName ); //-&gt; &quot;Justin Meyer&quot;
+
+
+You must use an object with a get property if you want your get to take the lastSetValue or resolve arguments.">getter</a> that reads <code>routeData</code> and creates an instance of the correct type of component:</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { ObservableObject, route, StacheElement } from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class HomePage extends StacheElement {
+    static view = `&lt;h2&gt;Home Page&lt;/h2&gt;`;
+}
+
+customElements.define(&quot;home-page&quot;, HomePage);
+
+class ListPage extends StacheElement {
+    static view = `&lt;h2&gt;List Page&lt;/h2&gt;`;
+}
+
+customElements.define(&quot;list-page&quot;, ListPage);
+
+class Application extends StacheElement {
+    static view = `{{ this.elementToShow }}`;
+
+    static props = {
+        get elementToShow() {
+            if (this.routeData.page === &quot;home&quot;) {
+                return new HomePage();
+            } else if (this.routeData.page === &quot;list&quot;) {
+                return new ListPage();
+            }
+        },
+
+        routeData: {
+            get default() {
+                route.register(&quot;{page}&quot;, { page: &quot;home&quot; });
+                route.register(&quot;list/{id}&quot;, { page: &quot;list&quot; });
+                route.start();
+                return route.data;
+            }
+        }
+    };
+}
+
+customElements.define(&quot;app-component&quot;, Application);
+
+describe(&quot;Application&quot;, () =&gt; {
+    it(&quot;elementToShow&quot;, () =&gt; {
+        const routeData = new ObservableObject({
+            id: null,
+            page: &quot;home&quot;
+        });
+
+        const app = new Application().initialize({
+            routeData: routeData
+        });
+
+        assert.ok(
+            app.elementToShow instanceof HomePage,
+            &quot;ListPage shown when routeData.page === 'home'&quot;
+        );
+
+        routeData.page = &quot;list&quot;;
+
+        assert.ok(
+            app.elementToShow instanceof ListPage,
+            &quot;ListPage shown when routeData.page === 'list'&quot;
+        );
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='28-34,only'></div>
+<div class='codepen'></div>
+<p>In order to test this, create an observable and pass it to the ObservableObject constructor as the <code>routeData</code> property:</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { ObservableObject, route, StacheElement } from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class HomePage extends StacheElement {
+    static view = `&lt;h2&gt;Home Page&lt;/h2&gt;`;
+}
+
+customElements.define(&quot;home-page&quot;, HomePage);
+
+class ListPage extends StacheElement {
+    static view = `&lt;h2&gt;List Page&lt;/h2&gt;`;
+}
+
+customElements.define(&quot;list-page&quot;, ListPage);
+
+class Application extends StacheElement {
+    static view = `{{ this.elementToShow }}`;
+
+    static props = {
+        get elementToShow() {
+            if (this.routeData.page === &quot;home&quot;) {
+                return new HomePage();
+            } else if (this.routeData.page === &quot;list&quot;) {
+                return new ListPage();
+            }
+        },
+
+        routeData: {
+            get default() {
+                route.register(&quot;{page}&quot;, { page: &quot;home&quot; });
+                route.register(&quot;list/{id}&quot;, { page: &quot;list&quot; });
+                route.start();
+                return route.data;
+            }
+        }
+    };
+}
+
+customElements.define(&quot;app-component&quot;, Application);
+
+describe(&quot;Application&quot;, () =&gt; {
+    it(&quot;elementToShow&quot;, () =&gt; {
+        const routeData = new ObservableObject({
+            id: null,
+            page: &quot;home&quot;
+        });
+
+        const app = new Application().initialize({
+            routeData: routeData
+        });
+
+        assert.ok(
+            app.elementToShow instanceof HomePage,
+            &quot;ListPage shown when routeData.page === 'home'&quot;
+        );
+
+        routeData.page = &quot;list&quot;;
+
+        assert.ok(
+            app.elementToShow instanceof ListPage,
+            &quot;ListPage shown when routeData.page === 'list'&quot;
+        );
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='51-58,only'></div>
+<div class='codepen'></div>
+<p>This will override what is set up in the <code>default() {}</code> and allow you to make changes to the <code>routeData</code> object and verify that the correct component is created:</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { ObservableObject, route, StacheElement } from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class HomePage extends StacheElement {
+    static view = `&lt;h2&gt;Home Page&lt;/h2&gt;`;
+}
+
+customElements.define(&quot;home-page&quot;, HomePage);
+
+class ListPage extends StacheElement {
+    static view = `&lt;h2&gt;List Page&lt;/h2&gt;`;
+}
+
+customElements.define(&quot;list-page&quot;, ListPage);
+
+class Application extends StacheElement {
+    static view = `{{ this.elementToShow }}`;
+
+    static props = {
+        get elementToShow() {
+            if (this.routeData.page === &quot;home&quot;) {
+                return new HomePage();
+            } else if (this.routeData.page === &quot;list&quot;) {
+                return new ListPage();
+            }
+        },
+
+        routeData: {
+            get default() {
+                route.register(&quot;{page}&quot;, { page: &quot;home&quot; });
+                route.register(&quot;list/{id}&quot;, { page: &quot;list&quot; });
+                route.start();
+                return route.data;
+            }
+        }
+    };
+}
+
+customElements.define(&quot;app-component&quot;, Application);
+
+describe(&quot;Application&quot;, () =&gt; {
+    it(&quot;elementToShow&quot;, () =&gt; {
+        const routeData = new ObservableObject({
+            id: null,
+            page: &quot;home&quot;
+        });
+
+        const app = new Application().initialize({
+            routeData: routeData
+        });
+
+        assert.ok(
+            app.elementToShow instanceof HomePage,
+            &quot;ListPage shown when routeData.page === 'home'&quot;
+        );
+
+        routeData.page = &quot;list&quot;;
+
+        assert.ok(
+            app.elementToShow instanceof ListPage,
+            &quot;ListPage shown when routeData.page === 'list'&quot;
+        );
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='60-71,only'></div>
+<div class='codepen'></div>
+<h3>Passing data to the component</h3>
+<p>Data that needs to be passed to the component being displayed can also be tested independently if it is created as a separate property on the ObservableObject that is derived from the <code>routeData</code> property:</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { ObservableObject, route, StacheElement, type, value } from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class HomePage extends StacheElement {
+    static view = `&lt;h2&gt;Home Page&lt;/h2&gt;`;
+}
+
+customElements.define(&quot;home-page&quot;, HomePage);
+
+class ListPage extends StacheElement {
+    static view = `
+        &lt;h2&gt;List Page&lt;/h2&gt;
+        &lt;p&gt;{{ this.id }}&lt;/p&gt;
+    `;
+
+    static props = {
+        id: Number
+    };
+}
+
+customElements.define(&quot;list-page&quot;, ListPage);
+
+class Application extends StacheElement {
+    static view = `{{ this.elementToShow }}`;
+
+    static props = {
+        get elementToShow() {
+            if (this.routeData.page === &quot;home&quot;) {
+                return new HomePage();
+            } else if (this.routeData.page === &quot;list&quot;) {
+                return new ListPage().bindings(this.elementToShowBindings);
+            }
+        },
+
+        get elementToShowBindings() {
+            const appData = {};
+
+            if (this.routeData.page === &quot;list&quot;) {
+                appData.id = value.bind(this.routeData, &quot;id&quot;);
+            }
+
+            return appData;
+        },
+
+        routeData: {
+            get default() {
+                route.register(&quot;{page}&quot;, { page: &quot;home&quot; });
+                route.register(&quot;list/{id}&quot;, { page: &quot;list&quot; });
+                route.start();
+                return route.data;
+            }
+        }
+    };
+}
+
+customElements.define(&quot;app-component&quot;, Application);
+
+describe(&quot;Application&quot;, () =&gt; {
+    it(&quot;elementToShow component&quot;, () =&gt; {
+        const routeData = new ObservableObject({
+            id: null,
+            page: &quot;home&quot;
+        });
+
+        const app = new Application().initialize({
+            routeData: routeData
+        });
+
+        assert.deepEqual(
+            app.elementToShowBindings,
+            {},
+            &quot;elementToShowBindings defaults to empty object&quot;
+        );
+
+        routeData.update({
+            id: 10,
+            page: &quot;list&quot;
+        });
+
+        const idBinding = app.elementToShowBindings.id;
+        assert.equal(
+            idBinding.value,
+            10,
+            &quot;routeData.id is passed to elementToShow component&quot;
+        );
+
+        routeData.id = 20;
+        assert.equal(
+            idBinding.value,
+            20,
+            &quot;setting routeData.id updates the elementToShowBindings.id&quot;
+        );
+
+        idBinding.value = 30;
+        assert.equal(
+            routeData.id,
+            30,
+            &quot;setting elementToShowBindings.id updates routeData.id&quot;
+        );
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='6,43-51,only'></div>
+<div class='codepen'></div>
+<p>With the component data set up like this, you can make changes to <code>routeData</code> and confirm that the child component will get the correct values by verifying the <code>value</code> of the observable passed through the <code>elementToShowBindings</code>:</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { ObservableObject, route, StacheElement, type, value } from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class HomePage extends StacheElement {
+    static view = `&lt;h2&gt;Home Page&lt;/h2&gt;`;
+}
+
+customElements.define(&quot;home-page&quot;, HomePage);
+
+class ListPage extends StacheElement {
+    static view = `
+        &lt;h2&gt;List Page&lt;/h2&gt;
+        &lt;p&gt;{{ this.id }}&lt;/p&gt;
+    `;
+
+    static props = {
+        id: Number
+    };
+}
+
+customElements.define(&quot;list-page&quot;, ListPage);
+
+class Application extends StacheElement {
+    static view = `{{ this.elementToShow }}`;
+
+    static props = {
+        get elementToShow() {
+            if (this.routeData.page === &quot;home&quot;) {
+                return new HomePage();
+            } else if (this.routeData.page === &quot;list&quot;) {
+                return new ListPage().bindings(this.elementToShowBindings);
+            }
+        },
+
+        get elementToShowBindings() {
+            const appData = {};
+
+            if (this.routeData.page === &quot;list&quot;) {
+                appData.id = value.bind(this.routeData, &quot;id&quot;);
+            }
+
+            return appData;
+        },
+
+        routeData: {
+            get default() {
+                route.register(&quot;{page}&quot;, { page: &quot;home&quot; });
+                route.register(&quot;list/{id}&quot;, { page: &quot;list&quot; });
+                route.start();
+                return route.data;
+            }
+        }
+    };
+}
+
+customElements.define(&quot;app-component&quot;, Application);
+
+describe(&quot;Application&quot;, () =&gt; {
+    it(&quot;elementToShow component&quot;, () =&gt; {
+        const routeData = new ObservableObject({
+            id: null,
+            page: &quot;home&quot;
+        });
+
+        const app = new Application().initialize({
+            routeData: routeData
+        });
+
+        assert.deepEqual(
+            app.elementToShowBindings,
+            {},
+            &quot;elementToShowBindings defaults to empty object&quot;
+        );
+
+        routeData.update({
+            id: 10,
+            page: &quot;list&quot;
+        });
+
+        const idBinding = app.elementToShowBindings.id;
+        assert.equal(
+            idBinding.value,
+            10,
+            &quot;routeData.id is passed to elementToShow component&quot;
+        );
+
+        routeData.id = 20;
+        assert.equal(
+            idBinding.value,
+            20,
+            &quot;setting routeData.id updates the elementToShowBindings.id&quot;
+        );
+
+        idBinding.value = 30;
+        assert.equal(
+            routeData.id,
+            30,
+            &quot;setting elementToShowBindings.id updates routeData.id&quot;
+        );
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='83-93,only'></div>
+<div class='codepen'></div>
+<p>You can also set the <code>value</code> of the properties of <code>elementToShowBindings</code> and verify that the <code>routeData</code> is updated correctly:</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { ObservableObject, route, StacheElement, type, value } from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class HomePage extends StacheElement {
+    static view = `&lt;h2&gt;Home Page&lt;/h2&gt;`;
+}
+
+customElements.define(&quot;home-page&quot;, HomePage);
+
+class ListPage extends StacheElement {
+    static view = `
+        &lt;h2&gt;List Page&lt;/h2&gt;
+        &lt;p&gt;{{ this.id }}&lt;/p&gt;
+    `;
+
+    static props = {
+        id: Number
+    };
+}
+
+customElements.define(&quot;list-page&quot;, ListPage);
+
+class Application extends StacheElement {
+    static view = `{{ this.elementToShow }}`;
+
+    static props = {
+        get elementToShow() {
+            if (this.routeData.page === &quot;home&quot;) {
+                return new HomePage();
+            } else if (this.routeData.page === &quot;list&quot;) {
+                return new ListPage().bindings(this.elementToShowBindings);
+            }
+        },
+
+        get elementToShowBindings() {
+            const appData = {};
+
+            if (this.routeData.page === &quot;list&quot;) {
+                appData.id = value.bind(this.routeData, &quot;id&quot;);
+            }
+
+            return appData;
+        },
+
+        routeData: {
+            get default() {
+                route.register(&quot;{page}&quot;, { page: &quot;home&quot; });
+                route.register(&quot;list/{id}&quot;, { page: &quot;list&quot; });
+                route.start();
+                return route.data;
+            }
+        }
+    };
+}
+
+customElements.define(&quot;app-component&quot;, Application);
+
+describe(&quot;Application&quot;, () =&gt; {
+    it(&quot;elementToShow component&quot;, () =&gt; {
+        const routeData = new ObservableObject({
+            id: null,
+            page: &quot;home&quot;
+        });
+
+        const app = new Application().initialize({
+            routeData: routeData
+        });
+
+        assert.deepEqual(
+            app.elementToShowBindings,
+            {},
+            &quot;elementToShowBindings defaults to empty object&quot;
+        );
+
+        routeData.update({
+            id: 10,
+            page: &quot;list&quot;
+        });
+
+        const idBinding = app.elementToShowBindings.id;
+        assert.equal(
+            idBinding.value,
+            10,
+            &quot;routeData.id is passed to elementToShow component&quot;
+        );
+
+        routeData.id = 20;
+        assert.equal(
+            idBinding.value,
+            20,
+            &quot;setting routeData.id updates the elementToShowBindings.id&quot;
+        );
+
+        idBinding.value = 30;
+        assert.equal(
+            routeData.id,
+            30,
+            &quot;setting elementToShowBindings.id updates routeData.id&quot;
+        );
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='95-107,only'></div>
+<div class='codepen'></div>
+<h2>Models</h2>
+<p>CanJS models like <a href="../can-rest-model.html" title="Connect a type to a restful service layer.">can-rest-model</a> and <a href="../can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">can-realtime-rest-model</a> allow you to connect an observable to a service layer. They also provide caching and real-time behavior using <a href="../can-query-logic.html" title="Perform data queries and compare queries against each other. Provides logic useful for
+data caching and real-time behavior.">can-query-logic</a>. The following sections will show how to test that these models are set up correctly to work with the application’s service layer.</p>
+<h3>Connections</h3>
+<p>CanJS models work as mixins to add methods like <a href="../can-connect/can/map/map.get.html" title="Use it to get a single instance by id.">get</a> and <a href="../can-connect/can/map/map.getList.html" title="Retrieve a list of instance.">getList</a> to CanJS observables. You can use <a href="../can-fixture.html" title="Intercept AJAX requests and simulate the response.">can-fixture</a> to test these methods without making real requests to your service layer; <code>can-fixture</code> will intercept the <a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest">request</a> made by the connection and simulate a response using the data given by the fixture.</p>
+<p>A basic test setup using this approach looks like:</p>
+<ol>
+<li>Create sample data</li>
+<li>Create a fixture to return sample data for a specific URL</li>
+<li>Call model function to request data from that URL</li>
+<li>Verify the model returned the sample data</li>
+</ol>
+<p>Here is an example:</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {
+    fixture,
+    ObservableArray,
+    ObservableObject,
+    restModel,
+    type
+} from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class Todo extends ObservableObject {
+    static props = {
+        id: Number,
+        complete: Boolean,
+        name: String
+    };
+}
+
+class TodoList extends ObservableArray {
+    static items = type.convert(Todo);
+}
+
+Todo.connection = restModel({
+    ArrayType: TodoList,
+    ObjectType: Todo,
+    url: &quot;/api/todos/{id}&quot;
+});
+
+describe(&quot;TodoModel&quot;, () =&gt; {
+    it(&quot;getList&quot;, done =&gt; {
+        // 1. Create sample data
+        const todos = [{ id: 1, complete: false, name: &quot;do dishes&quot; }];
+
+        // 2. Create a fixture to return sample data for a specific URL
+        fixture({ url: &quot;/api/todos&quot; }, todos);
+
+        // 3. Call model function to request data from that URL
+        Todo.getList().then(todosList =&gt; {
+            // 4. Verify the model returned the sample data
+            assert.deepEqual(todosList.serialize(), todos);
+            done();
+        });
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='38-49,only'></div>
+<div class='codepen'></div>
+<h3>QueryLogic</h3>
+<p>CanJS model mixins internally use <a href="../can-query-logic.html" title="Perform data queries and compare queries against each other. Provides logic useful for
+data caching and real-time behavior.">can-query-logic</a> to perform queries of your service layer data and compare different queries against each other. It uses the logic of these queries to understand how to cache data and provide real-time behavior.</p>
+<p>It can be useful to test this logic to ensure that it will work correctly when used for these other behaviors. It is also very useful to add tests like this when you run into an issue with your model not working as expected.</p>
+<p>One useful way to do this is to use <a href="../can-query-logic.prototype.filterMembers.html" title="Filter data using a query.">filterMembers</a> to verify that a specific query will correctly filter an array of data:</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {
+    ObservableArray,
+    ObservableObject,
+    QueryLogic,
+    restModel,
+    type
+} from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class Todo extends ObservableObject {
+    static props = {
+        id: Number,
+        complete: Boolean,
+        name: String
+    };
+}
+
+class TodoList extends ObservableArray {
+    static items = type.convert(Todo);
+}
+
+Todo.connection = restModel({
+    ArrayType: TodoList,
+    ObjectType: Todo,
+    url: &quot;/api/todos/{id}&quot;
+});
+
+describe(&quot;TodoModel query logic&quot;, () =&gt; {
+    it(&quot;filterMembers&quot;, () =&gt; {
+        const todoQueryLogic = new QueryLogic(Todo);
+
+        const completeTodos = [{ id: 2, name: &quot;mow lawn&quot;, complete: true }];
+
+        const incompleteTodos = [{ id: 1, name: &quot;do dishes&quot;, complete: false }];
+
+        const allTodos = [...completeTodos, ...incompleteTodos];
+
+        const completeTodosFilter = { filter: { complete: false } };
+
+        const queryLogicIncompleteTodos = todoQueryLogic.filterMembers(
+            completeTodosFilter,
+            allTodos
+        );
+
+        assert.deepEqual(queryLogicIncompleteTodos, incompleteTodos);
+    });
+
+    it(&quot;isMember&quot;, () =&gt; {
+        const todoQueryLogic = new QueryLogic(Todo);
+
+        const completeTodosFilter = { filter: { complete: false } };
+
+        const becomingAnAstronautIsIncomplete = todoQueryLogic.isMember(
+            completeTodosFilter,
+            { id: 5, name: &quot;become an astronaut&quot;, complete: false }
+        );
+
+        assert.ok(becomingAnAstronautIsIncomplete);
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='37-54,only'></div>
+<div class='codepen'></div>
+<p>It can also be useful to use <a href="../can-query-logic.prototype.isMember.html" title="Return if a record belongs to a query.">isMember</a> to verify that a specific record is contained within the results of a query:</p>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {
+    ObservableArray,
+    ObservableObject,
+    QueryLogic,
+    restModel,
+    type
+} from &quot;can&quot;;
+
+// Mocha / Chai Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+class Todo extends ObservableObject {
+    static props = {
+        id: Number,
+        complete: Boolean,
+        name: String
+    };
+}
+
+class TodoList extends ObservableArray {
+    static items = type.convert(Todo);
+}
+
+Todo.connection = restModel({
+    ArrayType: TodoList,
+    ObjectType: Todo,
+    url: &quot;/api/todos/{id}&quot;
+});
+
+describe(&quot;TodoModel query logic&quot;, () =&gt; {
+    it(&quot;filterMembers&quot;, () =&gt; {
+        const todoQueryLogic = new QueryLogic(Todo);
+
+        const completeTodos = [{ id: 2, name: &quot;mow lawn&quot;, complete: true }];
+
+        const incompleteTodos = [{ id: 1, name: &quot;do dishes&quot;, complete: false }];
+
+        const allTodos = [...completeTodos, ...incompleteTodos];
+
+        const completeTodosFilter = { filter: { complete: false } };
+
+        const queryLogicIncompleteTodos = todoQueryLogic.filterMembers(
+            completeTodosFilter,
+            allTodos
+        );
+
+        assert.deepEqual(queryLogicIncompleteTodos, incompleteTodos);
+    });
+
+    it(&quot;isMember&quot;, () =&gt; {
+        const todoQueryLogic = new QueryLogic(Todo);
+
+        const completeTodosFilter = { filter: { complete: false } };
+
+        const becomingAnAstronautIsIncomplete = todoQueryLogic.isMember(
+            completeTodosFilter,
+            { id: 5, name: &quot;become an astronaut&quot;, complete: false }
+        );
+
+        assert.ok(becomingAnAstronautIsIncomplete);
+    });
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='56-67,only'></div>
+<div class='codepen'></div>
+<h2>Integration Testing</h2>
+<p>Integration testing is designed to test multiple units of an application to make sure they work together.</p>
+<p>There are a few things that make writing and maintaining integration tests more costly than unit tests:</p>
+<ul>
+<li>Functional tests usually take longer to write because they require an understanding of a larger portion of the application</li>
+<li>Functional tests take longer to <em>run</em> because of the time it takes to render and interact with the DOM</li>
+<li>Functional tests often need to be updated when the structure of an application’s HTML and CSS changes</li>
+</ul>
+<p>For these reasons, you may not want to write integration tests for every feature of an application. That being said, integration tests of an application’s <strong>most important functionality</strong> are very valuable. Also, for applications with no tests at all, adding integration tests <strong>before making big changes</strong> (like large upgrades, etc) can make it much easier to verify that the app is still functioning after the changes are in place.</p>
+<p>No matter the purpose of the integration test, they generally follow the same pattern:</p>
+<ol>
+<li>Render an application</li>
+<li>Verify that the application rendered correctly</li>
+<li>Simulate user interaction</li>
+<li>Verify that the application responds correctly</li>
+<li>Clean up</li>
+</ol>
+<blockquote>
+<p><strong>Note:</strong> The test below is written using <a href="https://funcunit.com/">FuncUnit</a> but it would also work with <a href="https://www.cypress.io/">cypress.io</a>, <a href="https://www.npmjs.com/package/dom-testing-library">dom-testing-library</a>, or whatever integration testing setup you prefer.</p>
+</blockquote>
+<pre><code class="language-html">&lt;div id=&quot;mocha&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;//unpkg.com/mocha@6/mocha.css&quot; /&gt;
+&lt;script src=&quot;//unpkg.com/mocha@6/mocha.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/chai@4/chai.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/jquery@3/dist/jquery.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/funcunit@3/dist/funcunit.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {
+    domEvents,
+    enterEvent,
+    fixture,
+    ObservableArray,
+    ObservableObject,
+    realtimeRestModel,
+    route,
+    StacheElement,
+    type
+} from &quot;can/ecosystem&quot;;
+
+// Mocha / Chai / Funcunit Setup
+mocha.setup(&quot;bdd&quot;);
+const assert = chai.assert;
+
+domEvents.addEvent(enterEvent);
+
+class Todo extends ObservableObject {
+    static props = {
+        id: { type: Number, identity: true },
+        name: String,
+        complete: { type: Boolean, default: false }
+    };
+}
+
+const todoStore = fixture.store(
+    [
+        { name: &quot;Learn CanJS&quot;, complete: true, id: 7 },
+        { name: &quot;Write tests&quot;, complete: false, id: 8 }
+    ],
+    Todo
+);
+
+fixture(&quot;/api/todos&quot;, todoStore);
+fixture.delay = 500;
+
+class TodoListModel extends ObservableArray {
+    static items = type.convert(Todo);
+
+    static props = {
+        get active() {
+            return this.filter({ complete: false });
+        },
+
+        get allComplete() {
+            return this.length === this.complete.length;
+        },
+
+        get complete() {
+            return this.filter({ complete: true });
+        },
+
+        get saving() {
+            return this.filter(todo =&gt; {
+                return todo.isSaving();
+            });
+        }
+    };
+
+    destroyComplete() {
+        this.complete.forEach(todo =&gt; {
+            todo.destroy();
+        });
+    }
+
+    updateCompleteTo(value) {
+        this.forEach(todo =&gt; {
+            todo.complete = value;
+            todo.save();
+        });
+    }
+}
+
+Todo.connection = realtimeRestModel({
+    ArrayType: TodoListModel,
+    ObjectType: Todo,
+    url: &quot;/api/todos&quot;
+});
+
+class TodoCreate extends StacheElement {
+    static view = `
+        &lt;input id=&quot;new-todo&quot;
+                placeholder=&quot;What needs to be done?&quot;
+                value:bind=&quot;this.todo.name&quot;
+                on:enter=&quot;this.createTodo()&quot; /&gt;
+    `;
+
+    static props = {
+        todo: {
+            get default() {
+                return new Todo();
+            }
+        }
+    };
+
+    createTodo() {
+        this.todo.save().then(() =&gt; {
+            this.todo = new Todo();
+        });
+    }
+}
+
+customElements.define(&quot;todo-create&quot;, TodoCreate);
+
+class TodoList extends StacheElement {
+    static view = `
+        &lt;ul id=&quot;todo-list&quot;&gt;
+            {{# for(todo of this.todos) }}
+                &lt;li class=&quot;todo {{# if(todo.complete) }}completed{{/ if }}
+                    {{# if( todo.isDestroying() )}}destroying{{/ if }}
+                    {{# if( this.isEditing(todo) ) }}editing{{/ if }}&quot;&gt;
+                    &lt;div class=&quot;view&quot;&gt;
+                        &lt;input class=&quot;toggle&quot; type=&quot;checkbox&quot; checked:bind=&quot;todo.complete&quot;&gt;
+                        &lt;label on:dblclick=&quot;this.edit(todo)&quot;&gt;{{ todo.name }}&lt;/label&gt;
+                        &lt;button class=&quot;destroy&quot; on:click=&quot;todo.destroy()&quot;&gt;&lt;/button&gt;
+                    &lt;/div&gt;
+                    &lt;input class=&quot;edit&quot; type=&quot;text&quot;
+                        default:bind=&quot;todo.name&quot;
+                        on:enter=&quot;this.updateName()&quot;
+                        focused:from=&quot;this.isEditing(todo)&quot;
+                        on:blur=&quot;this.cancelEdit()&quot; /&gt;
+                &lt;/li&gt;
+            {{/ for }}
+        &lt;/ul&gt;
+    `;
+
+    static props = {
+        backupName: String,
+        editing: Todo,
+        todos: TodoListModel
+    };
+
+    cancelEdit() {
+        if (this.editing) {
+            this.editing.name = this.backupName;
+        }
+        this.editing = null;
+    }
+
+    edit(todo) {
+        this.backupName = todo.name;
+        this.editing = todo;
+    }
+
+    isEditing(todo) {
+        return todo === this.editing;
+    }
+
+    updateName() {
+        this.editing.save();
+        this.editing = null;
+    }
+}
+
+customElements.define(&quot;todo-list&quot;, TodoList);
+
+class TodoMvc extends StacheElement {
+    static view = `
+        &lt;section id=&quot;todoapp&quot;&gt;
+            &lt;header id=&quot;header&quot;&gt;
+                &lt;h1&gt;todos&lt;/h1&gt;
+                &lt;todo-create /&gt;
+            &lt;/header&gt;
+            &lt;section id=&quot;main&quot;&gt;
+                &lt;input id=&quot;toggle-all&quot; type=&quot;checkbox&quot;
+                            checked:bind=&quot;this.allChecked&quot;
+                            disabled:from=&quot;this.todosList.saving.length&quot; /&gt;
+                &lt;label for=&quot;toggle-all&quot;&gt;Mark all as complete&lt;/label&gt;
+                {{# if(this.todosPromise.isResolved) }}
+                    &lt;todo-list todos:from=&quot;todosPromise.value&quot; /&gt;
+                {{/ if }}
+            &lt;/section&gt;
+            {{# if(this.todosPromise.isResolved) }}
+                    &lt;footer id=&quot;footer&quot;&gt;
+                        &lt;span id=&quot;todo-count&quot;&gt;
+                            &lt;strong&gt;{{ this.todosPromise.value.active.length }}&lt;/strong&gt; items left
+                        &lt;/span&gt;
+                        &lt;ul id=&quot;filters&quot;&gt;
+                            &lt;li&gt;
+                                &lt;a href=&quot;{{ routeUrl(filter=undefined) }}&quot;
+                                    {{# routeCurrent(filter=undefined) }}class='selected'{{/ routeCurrent }}&gt;All&lt;/a&gt;
+                            &lt;/li&gt;
+                            &lt;li&gt;
+                                &lt;a href=&quot;{{ routeUrl(filter='active') }}&quot;
+                                    {{# routeCurrent(filter='active') }}class='selected'{{/ routeCurrent }}&gt;Active&lt;/a&gt;
+                            &lt;/li&gt;
+                            &lt;li&gt;
+                                &lt;a href=&quot;{{ routeUrl(filter='complete') }}&quot;
+                                    {{# routeCurrent(filter='complete') }}class='selected'{{/ routeCurrent }}&gt;Completed&lt;/a&gt;
+                            &lt;/li&gt;
+                        &lt;/ul&gt;
+                        &lt;button id=&quot;clear-completed&quot;
+                                        on:click=&quot;this.todosList.destroyComplete()&quot;&gt;
+                            Clear completed ({{ this.todosPromise.value.complete.length }})
+                        &lt;/button&gt;
+                    &lt;/footer&gt;
+                {{/if}}
+        &lt;/section&gt;
+    `;
+
+    static props = {
+        get allChecked() {
+            return this.todosList &amp;&amp; this.todosList.allComplete;
+        },
+        set allChecked(newVal) {
+            this.todosList &amp;&amp; this.todosList.updateCompleteTo(newVal);
+        },
+        routeData: {
+            get default() {
+                route.register(&quot;{filter}&quot;);
+                route.start();
+                return route.data;
+            }
+        },
+        todosArrayType: {
+            async: function(resolve, lastSetValue) {
+                this.todosPromise.then(resolve);
+            }
+        },
+        get todosPromise() {
+            if (!this.routeData.filter) {
+                return Todo.getList({});
+            } else {
+                return Todo.getList({
+                    filter: { complete: this.routeData.filter === &quot;complete&quot; }
+                });
+            }
+        }
+    };
+}
+
+customElements.define(&quot;todo-mvc&quot;, TodoMvc);
+
+describe(&quot;Application Integration Tests&quot;, () =&gt; {
+    let app = null;
+
+    beforeEach(() =&gt; {
+        // 1. Render an application
+        app = document.createElement(&quot;todo-mvc&quot;);
+        document.body.appendChild(app);
+    });
+
+    afterEach(() =&gt; {
+        // 5. Clean up
+        document.body.removeChild(app);
+        localStorage.clear();
+    });
+
+    it(&quot;Todo list&quot;, done =&gt; {
+        // 2. Verify that the application rendered correctly
+        F(&quot;todo-mvc li.todo&quot;).size(2, &quot;one todo loaded from server&quot;);
+
+        // 3. Simulate user interaction(s)
+        F(&quot;todo-mvc #new-todo&quot;).type(&quot;Profit\r&quot;);
+
+        // 4. Verify that the application responds correctly
+        F(&quot;todo-mvc li.todo&quot;).size(3, &quot;new todo added&quot;);
+
+        // 3. Simulate user interaction(s)
+        F(&quot;todo-mvc #clear-completed&quot;).click();
+
+        // 4. Verify that the application responds correctly
+        F(&quot;todo-mvc #todo-count strong&quot;)
+            .text(2, &quot;completed todos cleared&quot;)
+            .then(() =&gt; done());
+    }).timeout(10000);
+});
+
+// start Mocha
+mocha.run();
+&lt;/script&gt;
+
+&lt;style&gt;
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+button {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 100%;
+    vertical-align: baseline;
+    font-family: inherit;
+    color: inherit;
+    -webkit-appearance: none;
+    /*-moz-appearance: none;*/
+    -ms-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+}
+
+todo-mvc {
+    font: 14px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;
+    line-height: 1.4em;
+    background: #eaeaea url(&quot;../../experiment/todomvc/bg.png&quot;);
+    color: #4d4d4d;
+    width: 550px;
+    margin: 0 auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased;
+    -ms-font-smoothing: antialiased;
+    -o-font-smoothing: antialiased;
+    font-smoothing: antialiased;
+}
+
+#todoapp {
+    background: #fff;
+    background: rgba(255, 255, 255, 0.9);
+    margin: 130px 0 40px 0;
+    border: 1px solid #ccc;
+    position: relative;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2),
+        0 25px 50px 0 rgba(0, 0, 0, 0.15);
+}
+
+#todoapp:before {
+    content: &quot;&quot;;
+    border-left: 1px solid #f5d6d6;
+    border-right: 1px solid #f5d6d6;
+    width: 2px;
+    position: absolute;
+    top: 0;
+    left: 40px;
+    height: 100%;
+}
+
+#todoapp input::-webkit-input-placeholder {
+    font-style: italic;
+}
+
+#todoapp input::-moz-placeholder {
+    font-style: italic;
+    color: #a9a9a9;
+}
+
+#todoapp h1 {
+    position: absolute;
+    top: -120px;
+    width: 100%;
+    font-size: 70px;
+    font-weight: bold;
+    text-align: center;
+    color: #b3b3b3;
+    color: rgba(255, 255, 255, 0.3);
+    text-shadow: -1px -1px rgba(0, 0, 0, 0.2);
+    -webkit-text-rendering: optimizeLegibility;
+    -moz-text-rendering: optimizeLegibility;
+    -ms-text-rendering: optimizeLegibility;
+    -o-text-rendering: optimizeLegibility;
+    text-rendering: optimizeLegibility;
+}
+
+#header {
+    padding-top: 15px;
+    border-radius: inherit;
+}
+
+#header:before {
+    content: &quot;&quot;;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 15px;
+    z-index: 2;
+    border-bottom: 1px solid #6c615c;
+    background: #8d7d77;
+    background: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        from(rgba(132, 110, 100, 0.8)),
+        to(rgba(101, 84, 76, 0.8))
+    );
+    background: -webkit-linear-gradient(
+        top,
+        rgba(132, 110, 100, 0.8),
+        rgba(101, 84, 76, 0.8)
+    );
+    background: -moz-linear-gradient(
+        top,
+        rgba(132, 110, 100, 0.8),
+        rgba(101, 84, 76, 0.8)
+    );
+    background: -o-linear-gradient(
+        top,
+        rgba(132, 110, 100, 0.8),
+        rgba(101, 84, 76, 0.8)
+    );
+    background: -ms-linear-gradient(
+        top,
+        rgba(132, 110, 100, 0.8),
+        rgba(101, 84, 76, 0.8)
+    );
+    background: linear-gradient(
+        top,
+        rgba(132, 110, 100, 0.8),
+        rgba(101, 84, 76, 0.8)
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#9d8b83', EndColorStr='#847670');
+    border-top-left-radius: 1px;
+    border-top-right-radius: 1px;
+}
+
+#new-todo,
+.edit {
+    position: relative;
+    margin: 0;
+    width: 100%;
+    font-size: 24px;
+    font-family: inherit;
+    line-height: 1.4em;
+    border: 0;
+    outline: none;
+    color: inherit;
+    padding: 6px;
+    border: 1px solid #999;
+    box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased;
+    -ms-font-smoothing: antialiased;
+    -o-font-smoothing: antialiased;
+    font-smoothing: antialiased;
+}
+
+#new-todo {
+    padding: 16px 16px 16px 60px;
+    border: none;
+    background: rgba(0, 0, 0, 0.02);
+    z-index: 2;
+    box-shadow: none;
+}
+
+#main {
+    position: relative;
+    z-index: 2;
+    border-top: 1px dotted #adadad;
+}
+
+label[for=&quot;toggle-all&quot;] {
+    display: none;
+}
+
+#toggle-all {
+    position: absolute;
+    top: -42px;
+    left: -4px;
+    width: 40px;
+    text-align: center;
+    border: none; /* Mobile Safari */
+}
+
+#toggle-all:before {
+    content: &quot;&gt;&quot;;
+    font-size: 28px;
+    color: #d9d9d9;
+    padding: 0 25px 7px;
+}
+
+#toggle-all:checked:before {
+    color: #737373;
+}
+
+#todo-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#todo-list li {
+    position: relative;
+    font-size: 24px;
+    border-bottom: 1px dotted #ccc;
+}
+
+#todo-list li:last-child {
+    border-bottom: none;
+}
+
+#todo-list li.saving {
+    font-style: italic;
+}
+#todoapp #todo-list li.destroying label {
+    font-style: italic;
+    color: #a88a8a;
+}
+
+#todo-list li.editing {
+    border-bottom: none;
+    padding: 0;
+}
+
+#todo-list li.editing .edit {
+    display: block;
+    width: 506px;
+    padding: 13px 17px 12px 17px;
+    margin: 0 0 0 43px;
+}
+
+#todo-list li.editing .view {
+    display: none;
+}
+
+#todo-list li .toggle {
+    text-align: center;
+    width: 40px;
+    /* auto, since non-WebKit browsers doesn’t support input styling */
+    height: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto 0;
+    border: none; /* Mobile Safari */
+    -webkit-appearance: none;
+    /*-moz-appearance: none;*/
+    -ms-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+}
+
+#todo-list li .toggle:after {
+    content: &quot;\2713&quot;;
+    line-height: 43px; /* 40 + a couple of pixels visual adjustment */
+    font-size: 20px;
+    color: #d9d9d9;
+    text-shadow: 0 -1px 0 #bfbfbf;
+}
+
+#todo-list li .toggle:checked:after {
+    color: #85ada7;
+    text-shadow: 0 1px 0 #669991;
+    bottom: 1px;
+    position: relative;
+}
+
+#todo-list li label {
+    word-break: break-word;
+    padding: 15px;
+    margin-left: 45px;
+    display: block;
+    line-height: 1.2;
+    -webkit-transition: color 0.4s;
+    -moz-transition: color 0.4s;
+    -ms-transition: color 0.4s;
+    -o-transition: color 0.4s;
+    transition: color 0.4s;
+}
+
+#todo-list li.completed label {
+    color: #a9a9a9;
+    text-decoration: line-through;
+}
+
+#todo-list li .destroy {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    bottom: 0;
+    width: 40px;
+    height: 40px;
+    margin: auto 0;
+    font-size: 22px;
+    color: #a88a8a;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -ms-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
+}
+
+#todo-list li .destroy:hover {
+    text-shadow: 0 0 1px #000, 0 0 10px rgba(199, 107, 107, 0.8);
+    -webkit-transform: scale(1.3);
+    -moz-transform: scale(1.3);
+    -ms-transform: scale(1.3);
+    -o-transform: scale(1.3);
+    transform: scale(1.3);
+}
+
+#todo-list li .destroy:after {
+    content: &quot;x&quot;;
+}
+
+#todo-list li:hover .destroy {
+    display: block;
+}
+
+#todo-list li .edit {
+    display: none;
+}
+
+#todo-list li.editing:last-child {
+    margin-bottom: -1px;
+}
+
+#footer {
+    color: #777;
+    padding: 0 15px;
+    position: absolute;
+    right: 0;
+    bottom: -31px;
+    left: 0;
+    height: 20px;
+    z-index: 1;
+    text-align: center;
+}
+
+#footer:before {
+    content: &quot;&quot;;
+    position: absolute;
+    right: 0;
+    bottom: 31px;
+    left: 0;
+    height: 50px;
+    z-index: -1;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3),
+        0 6px 0 -3px rgba(255, 255, 255, 0.8), 0 7px 1px -3px rgba(0, 0, 0, 0.3),
+        0 43px 0 -6px rgba(255, 255, 255, 0.8), 0 44px 2px -6px rgba(0, 0, 0, 0.2);
+}
+
+#todo-count {
+    float: left;
+    text-align: left;
+}
+
+#filters {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: absolute;
+    right: 0;
+    left: 0;
+}
+
+#filters li {
+    display: inline;
+}
+
+#filters li a {
+    color: #83756f;
+    margin: 2px;
+    text-decoration: none;
+}
+
+#filters li a.selected {
+    font-weight: bold;
+}
+
+#clear-completed {
+    float: right;
+    position: relative;
+    line-height: 20px;
+    text-decoration: none;
+    background: rgba(0, 0, 0, 0.1);
+    font-size: 11px;
+    padding: 0 10px;
+    border-radius: 3px;
+    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.2);
+}
+
+#clear-completed:hover {
+    background: rgba(0, 0, 0, 0.15);
+    box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.3);
+}
+
+#info {
+    margin: 65px auto 0;
+    color: #a6a6a6;
+    font-size: 12px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+    text-align: center;
+}
+
+#info a {
+    color: inherit;
+}
+
+/*
+Hack to remove background from Mobile Safari.
+Can’t use it globally since it destroys checkboxes in Firefox and Opera
+*/
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    #toggle-all,
+    #todo-list li .toggle {
+        background: none;
+    }
+
+    #todo-list li .toggle {
+        height: 40px;
+    }
+
+    #toggle-all {
+        top: -56px;
+        left: -15px;
+        width: 65px;
+        height: 41px;
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
+        -webkit-appearance: none;
+        appearance: none;
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+hr {
+    margin: 20px 0;
+    border: 0;
+    border-top: 1px dashed #c5c5c5;
+    border-bottom: 1px dashed #f7f7f7;
+}
+
+.learn a {
+    font-weight: normal;
+    text-decoration: none;
+    color: #b83f45;
+}
+
+.learn a:hover {
+    text-decoration: underline;
+    color: #787e7e;
+}
+
+.learn h3,
+.learn h4,
+.learn h5 {
+    margin: 10px 0;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #000;
+}
+
+.learn h3 {
+    font-size: 24px;
+}
+
+.learn h4 {
+    font-size: 18px;
+}
+
+.learn h5 {
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
+.learn ul {
+    padding: 0;
+    margin: 0 0 30px 25px;
+}
+
+.learn li {
+    line-height: 20px;
+}
+
+.learn p {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.3;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.quote {
+    border: none;
+    margin: 20px 0 60px 0;
+}
+
+.quote p {
+    font-style: italic;
+}
+
+.quote p:before {
+    content: &quot;“&quot;;
+    font-size: 50px;
+    opacity: 0.15;
+    position: absolute;
+    top: -20px;
+    left: 3px;
+}
+
+.quote p:after {
+    content: &quot;”&quot;;
+    font-size: 50px;
+    opacity: 0.15;
+    position: absolute;
+    bottom: -42px;
+    right: 3px;
+}
+
+.quote footer {
+    position: absolute;
+    bottom: -40px;
+    right: 0;
+}
+
+.quote footer img {
+    border-radius: 3px;
+}
+
+.quote footer a {
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+.speech-bubble {
+    position: relative;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 5px;
+}
+
+.speech-bubble:after {
+    content: &quot;&quot;;
+    position: absolute;
+    top: 100%;
+    right: 30px;
+    border: 13px solid transparent;
+    border-top-color: rgba(0, 0, 0, 0.04);
+}
+
+/**body*/
+.learn-bar &gt; .learn {
+    position: absolute;
+    width: 272px;
+    top: 8px;
+    left: -300px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.6);
+    transition-property: left;
+    transition-duration: 500ms;
+}
+
+@media (min-width: 899px) {
+    /**body*/
+    .learn-bar {
+        width: auto;
+        margin: 0 0 0 300px;
+    }
+    /**body*/
+    .learn-bar &gt; .learn {
+        left: 8px;
+    }
+    /**body*/
+    .learn-bar #todoapp {
+        width: 550px;
+        margin: 130px auto 40px auto;
+    }
+}
+&lt;/style&gt;
+
+</code></pre>
+<div line-highlight='242-275,only'></div>
+<div class='codepen'></div>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/topics/testing/testing.md"},"description":"Learn how to test CanJS applications. \n","name":"guides/testing","title":"Testing","type":"page","parent":"guides/topics","order":8,"outline":{"depth":2},"comment":" ","codepen":[["\"can\"","\"//unpkg.com/can@6/core.mjs\""],["\"can/ecosystem\"","\"//unpkg.com/can@6/ecosystem.mjs\""],["\"can/everything\"","\"//unpkg.com/can@6/everything.mjs\""],["\"can/demos/technology-overview/mock-url\"","\"//unpkg.com/mock-url@^6.0.0/mock-url.mjs\""],["\"can/demos/technology-overview/route-mini-app-components\"","\"//unpkg.com/route-mini-app@^5.0.0/components.mjs\""],["return steal.import(","return import("],["\"can/demos/technology-overview/page-login\"","\"//unpkg.com/route-mini-app@^5.0.0/page-login.mjs\""],["`can/demos/technology-overview/page-${this.page}`","`//unpkg.com/route-mini-app@^5.0.0/page-${this.page}.mjs`"]],"pathToRoot":"../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix=".."></div>
+
+	</body>
+</html>

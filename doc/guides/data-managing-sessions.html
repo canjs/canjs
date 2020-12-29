@@ -1,0 +1,4127 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/topics/data/managing-sessions/managing-sessions.md
+	@page guides/data-managing-sessions
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Managing Sessions | Service Layer | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="Learn how to use can/session to manage user session state in CanJS apps.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Learn how to use can/session to manage user session state in CanJS apps.">
+	<meta property="og:title" content="Managing Sessions | Service Layer | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "Learn how to use can/session to manage user session state in CanJS apps.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Managing Sessions | Service Layer | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/data-managing-sessions" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>getting started</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="crud-beginner.html"
+							title="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+							CRUD Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="setup.html"
+							title="Learn how to install CanJS in your environment.">
+							Setting Up CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="technology-overview.html"
+							title="Learn the basics of CanJS’s technology.">
+							Technology Overview
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>topics</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="html.html"
+							title="Learn how to update HTML and listen to user interactions.">
+							HTML
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="routing.html"
+							title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+							Routing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="data.html"
+							title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">
+							Service Layer
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="data-introduction.html"
+							title="Learn how to get, create, update, and delete backend service layer data.">
+							Introduction
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="data-configuring-requests.html"
+							title="URL, query, and response formats for making requests.">
+							Configuring Requests
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="data-managing-sessions.html"
+							title="Learn how to use can/session to manage user session state in CanJS apps.">
+							Managing Sessions
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="data-customizing-connections.html"
+							title="Learn the layers that make up can-connect and how to implement custom connection functionality.">
+							Customizing Connections
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="debugging.html"
+							title="Learn how to debug CanJS applications.">
+							Debugging
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="forms.html"
+							title="Learn how to create amazing &lt;form&gt;s with CanJS.">
+							Forms
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="testing.html"
+							title="Learn how to test CanJS applications.">
+							Testing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="logic.html"
+							title="Learn how to write observables in an organized, maintainable, and testable way.">
+							Logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="server-side-rendering.html"
+							title="Learn how to set up SSR for CanJS.">
+							Server-Side Rendering
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>app guides</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="chat.html"
+							title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+							Chat Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="todomvc.html"
+							title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+							TodoMVC Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/todomvc-with-steal.html"
+							title="This tutorial walks through building TodoMVC with StealJS. It includes KeyNote presentations covering CanJS core libraries.">
+							TodoMVC with StealJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>beginner recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/canvas-clock.html"
+							title="This beginner guide walks you through building a clock with the Canvas API.">
+							Canvas Clock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-simple.html"
+							title="This beginner guide walks through building a very simple credit card payment form.  It uses Stripe.js v2 API to create a token which can be used to create a charge.  It also performs simple validation on the payment form values.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-simple.html"
+							title="This beginner guide walks you through building a simple file navigation widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.0.0. Check out the file-navigator-advanced for an example that makes AJAX requests for its data and uses can-stache-element.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/signup-simple.html"
+							title="This beginner guide walks through building simple signup, login forms and a logout button.">
+							Signup and Login
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/video-player.html"
+							title="This beginner guide walks you through building custom video controls around a video element.">
+							Video Player
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/weather-report-simple.html"
+							title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.2.">
+							Weather Report
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>intermediate recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/cta-bus-map.html"
+							title="This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map. You&#x27;ll learn how to create a StacheElement that integrates with 3rd party widgets.">
+							CTA Bus Map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/modals.html"
+							title="This intermediate guide shows how to create a multiple modal form.">
+							Multiple Modals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/text-editor.html"
+							title="This intermediate guide walks you through building a basic rich text editor.">
+							Text Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/tinder-carousel.html"
+							title="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+							Tinder Carousel
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>advanced recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-advanced.html"
+							title="This advanced guide walks through building a simple credit card payment form with validations. It doesn’t use can-define. Instead it uses Kefir.js streams to make a ViewModel. can-kefir is used to make the Kefir streams observable to can-stache.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-advanced.html"
+							title="This advanced guide walks you through building a file navigation widget that requests data with fetch. It takes about 45 minutes to complete.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/playlist-editor.html"
+							title="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+							Playlist Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/search-list-details.html"
+							title="This advanced guide walks through building a Search, List, Details flow with lazy-loaded routes.">
+							Search, List, Details
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>upgrade</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-3.html"
+							title="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+							Migrating to CanJS 3
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-4.html"
+							title="This guide walks you through the step-by-step process to upgrade a 3.x app to CanJS 4.">
+							Migrating to CanJS 4
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-5.html"
+							title="This guide walks you through the process to upgrade a 4.x app to CanJS 5.x.">
+							Migrating to CanJS 5
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-6.html"
+							title="This guide walks you through the process to upgrade a 5.x app to CanJS 6.x.">
+							Migrating to CanJS 6
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="upgrade/using-codemods.html"
+							title="Learn how to migrate your app to CanJS 6 using can-migrate.">
+							Using Codemods
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>other</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="api.html"
+							title="This page walks through how to use and understand CanJS’s API documentation.">
+							Reading the API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Managing Sessions</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/topics/data/managing-sessions/managing-sessions.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Learn how to use <a href="../can-connect/can/session/session.html" title="Adds properties to the Map constructor to assist in managing a singleton user session model.">can/session</a> to manage user session state in CanJS apps.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <h2>Introduction</h2>
+<p>A &quot;session&quot; refers to the period of time when a user has logged into an application. To begin sessions users submit login requests to access restricted data or features. The response from a login request contains a piece of information that is passed in future requests to identify them as being from a particular user. This piece of information is called a session token and is typically a string, either held directly by the application or in a cookie held by the browser. The <a href="../can-connect/can/session/session.html" title="Adds properties to the Map constructor to assist in managing a singleton user session model.">can/session</a> behavior assists in managing the lifecycle of user sessions and accessing any session-related data.</p>
+<p>This guide will explain how:</p>
+<ul>
+<li>the <a href="../can-connect/can/session/session.html" title="Adds properties to the Map constructor to assist in managing a singleton user session model.">can/session</a> behavior makes session management easier</li>
+<li><a href="../can-connect/can/session/session.html" title="Adds properties to the Map constructor to assist in managing a singleton user session model.">can/session</a> expects your backend to work by default</li>
+<li>to use <a href="../can-connect/can/session/session.html" title="Adds properties to the Map constructor to assist in managing a singleton user session model.">can/session</a> with cookies</li>
+<li>to use <a href="../can-connect/can/session/session.html" title="Adds properties to the Map constructor to assist in managing a singleton user session model.">can/session</a> with application held tokens</li>
+<li>to initialize <a href="../can-connect/can/session/session.html" title="Adds properties to the Map constructor to assist in managing a singleton user session model.">can/session</a> manually if you know you have an active session</li>
+</ul>
+<p>If you prefer a video introduction to this material, the basics of this guide are also covered in a presentation from our monthly online meetup:</p>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/sIh0_hCx6WM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<h2>Benefits Of The can/session Behavior</h2>
+<p><a href="../can-connect/can/session/session.html" title="Adds properties to the Map constructor to assist in managing a singleton user session model.">can/session</a> makes it easy to access and load the current session. It adds the following properties to the connection model constructor to allow developers to access the current session and any pending request for the current session:</p>
+<pre><code class="language-js">// a reference to the current session or undefined if no session is available
+// yet
+Session.current;
+
+// a Promise representing the request for the current session. resolves when a  
+// session is available or rejects if there is no ongoing session.  
+Session.currentPromise;
+</code></pre>
+<p>The <em>first time</em> either <code>current</code> or <code>currentPromise</code> is accessed in the application, a request is made to verify if there is an ongoing session. If there is no ongoing session <code>current</code> will remain undefined and <code>currentPromise</code> will reject. The user will need to log in to start a session.</p>
+<p><a href="../can-connect/can/session/session.html" title="Adds properties to the Map constructor to assist in managing a singleton user session model.">can/session</a> adds methods to the connection model to make starting sessions &amp; ending sessions easy:</p>
+<pre><code class="language-js">// logging in to start a session
+Session.save({ username: 'nils', password: 'foobar' });
+
+// logging out to end a session
+Session.current.destroy();
+</code></pre>
+<p>The following sections demonstrate how to configure the behavior and apply these benefits to your application.</p>
+<h2>Expected Backend Structure</h2>
+<p>The <a href="../can-connect/can/session/session.html" title="Adds properties to the Map constructor to assist in managing a singleton user session model.">can/session</a> behavior expects that your backend will have a &quot;session&quot; endpoint (e.g <code>/api/session</code>) that responds to three different HTTP request types:</p>
+<ul>
+<li>A <code>GET</code> request is made to the session endpoint to see if the user still has an active session. This is done when first loading the application. The server should validate any session token provided, which may be a cookie or an HTTP header. If the session is still valid, the server should respond with a 200 response and any session metadata as the response body. If the session is not valid, or no token is provided, the server should respond with a 401 response, indicating to the UI that the user must login &amp; start a new session.</li>
+</ul>
+<ul>
+<li>A <code>POST</code> request is made to the session endpoint when a user logs in and begins a new session. This request will include whatever login info a user has provided, typically a username &amp; password. The backend should validate that login info, and if successful, respond with a 200 response that includes a new session token (either as a cookie or a property in the response body), along with any session metadata in the response body. If the login information is invalid, the server should respond with a 401 response, indicating to the UI that the login information is not valid and the user should try again.</li>
+</ul>
+<ul>
+<li>A <code>DELETE</code> request is made to the session endpoint when a user logs out and ends their session. This request will include a session token, which should be invalidated by the backend to end the session. How this is done will vary between the sort of tokens implemented by your backend architecture. If the logout is successful, the server should respond with a 200 response that removes the session cookie (if cookies are being used). If the logout is unsuccessful the server should respond with a 4xx response, indicating to the UI that something has gone wrong during the logout and the user's session is still active.</li>
+</ul>
+<p>If your backend uses multiple endpoints or different HTTP request types to implement these three scenarios, you can configure the behavior to accommodate that. This is explained in the following section.</p>
+<h2>Configuring The Behavior</h2>
+<p>The connection that includes the <a href="../can-connect/can/session/session.html" title="Adds properties to the Map constructor to assist in managing a singleton user session model.">can/session</a> behavior should always include the following configuration parameters:</p>
+<ul>
+<li><code>ObjectType</code> configures what <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">ObservableObject</a> will represent the session and will have the <code>current</code> &amp; <code>currentPromise</code> properties added to it.</li>
+</ul>
+<ul>
+<li><code>url</code> configures the path of the session endpoint used during verification (<code>getData</code>), login (<code>createData</code>) and logout (<code>destroyData</code>). Even if you use the same endpoint for those three cases you will need to explicitly set the path for <code>destroyData</code> and <code>getData</code>. Unless these are set, the <a href="../can-connect/data/url/url.html" title="">data/url</a> behavior tries to include an id as part of the url. Since sessions, unlike other models, don't typically have an id this will cause an error.</li>
+</ul>
+<p>A typical example of configuration:</p>
+<pre><code class="language-html">&lt;todo-login&gt;&lt;/todo-login&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+  import {
+    connect,
+    connectCanSession,
+    fixture,
+    type,
+    ObservableObject,
+    StacheElement,
+  } from &quot;//unpkg.com/can@6/ecosystem.mjs&quot;;
+
+  setupFixtures();
+
+    class Session extends ObservableObject {}
+  Session.connection = [
+    connect.base,
+    connect.dataUrl,
+    connect.constructor,
+    connect.canMap,
+    connectCanSession
+  ].reduce((conn, behavior) =&gt; behavior(conn), {
+    ObjectType: Session,
+    url: {
+      resource: '/api/session', // endpoint
+      getData: '/api/session', // endpoint when validating
+      destroyData: '/api/session', // endpoint when logging out
+    }
+  });
+  Session.connection.init();
+
+  class TodoLogin extends StacheElement {
+    static view =`
+      {{# if (this.Session.currentPromise.isResolved) }}
+        &lt;p class=&quot;welcome-message&quot;&gt;
+           Welcome {{ Session.current.email }}.
+           &lt;a href=&quot;javascript://&quot; on:click=&quot;this.logOut()&quot;&gt;Log out&lt;/a&gt;
+        &lt;/p&gt;
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isPending) }}
+        Loading User...
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isRejected) }}
+        &lt;form on:submit=&quot;this.logIn(scope.event)&quot;&gt;
+          &lt;h2&gt;Log In&lt;/h2&gt;
+
+          &lt;input placeholder=&quot;email&quot; value:to=&quot;this.email&quot; /&gt;
+
+          &lt;input type=&quot;password&quot; placeholder=&quot;password&quot;
+                 value:to=&quot;this.password&quot; /&gt;
+
+          &lt;button&gt;Log In&lt;/button&gt;
+
+          {{# if (this.logInError) }}
+            &lt;div class=&quot;error&quot;&gt;{{ this.logInError.message }}&lt;/div&gt;
+          {{/ if }}
+
+          &lt;aside&gt;
+             Login with the following account details:&lt;br/&gt;
+             Email: nils@bitovi.com&lt;br/&gt;
+             Password: abc123&lt;br/&gt;
+          &lt;/aside&gt;
+        &lt;/form&gt;
+      {{/ if }}
+    `;
+
+    static props = {
+      email: String,
+      password: String,
+      logInError: type.Any,
+    };
+
+    get Session() {
+      return Session;
+    }
+
+    logOut() {
+      Session.current.destroy();
+    }
+
+    logIn(event) {
+      event.preventDefault();
+      this.logInError = null;
+
+      const session = new Session({
+        email: this.email,
+        password: this.password
+      });
+
+      session.save().catch((error) =&gt; {
+        this.logInError = error;
+      });
+    }
+  }
+  customElements.define(&quot;todo-login&quot;, TodoLogin);
+
+  function setupFixtures() {
+    fixture(&quot;GET /api/session&quot;, function (request, response) {
+      const session = getSession();
+
+      if (session) {
+        response(session);
+      } else {
+        response(404, {message: &quot;No session&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;POST /api/session&quot;, function (request, response) {
+      const email = request.data.email;
+      const password = request.data.password;
+
+      if (
+        email === 'nils@bitovi.com' &amp;&amp;
+        password === 'abc123'
+      ) {
+        document.cookie = `SESSION-TOKEN=${btoa(JSON.stringify({email, password}))}`;
+        return request.data;
+      } else {
+        response(401, {message: &quot;Unauthorized&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;DELETE /api/session&quot;, function () {
+      document.cookie = 'SESSION-TOKEN=';
+      return {};
+    });
+  }
+
+  // get browser cookies as a map from key to value
+  function getCookieMap() {
+    return document.cookie.split(';').map(cookie =&gt; cookie.split('=')).reduce((map, [key, value]) =&gt; {
+      map[key] = value;
+      return map;
+    }, {});
+  }
+
+  // get the decoded session cookie
+  function getSession() {
+    try {
+      const token = getCookieMap()['SESSION-TOKEN'];
+      // a real backend would verify the token by checking a database or by decrypting the token
+      return JSON.parse(atob(token));
+    } catch (e) {
+      return null;
+    }
+  }
+&lt;/script&gt;
+&lt;style type=&quot;text/less&quot;&gt;
+  @font-family: 'Raleway', &quot;Helvetica Neue&quot;, Arial, sans-serif;
+  @font-size: 1em;
+  @color-dark: #54599c;
+  @color-light: #fff;
+  @color-light-gray: #d3d3d3;
+  @color-light-blue: #e2f5ff;
+  @color-error: #ff000e;
+  @color-error-light: #fde5ec;
+  @link-color: #2196F3;
+
+  body,
+  input,
+  button {
+    font-family: @font-family;
+    font-size: @font-size;
+  }
+
+  body {
+    background-color: @color-dark;
+    padding: 5%;
+  }
+
+  form {
+    background-color: @color-light;
+    padding: 30px 40px 0 40px;
+    border-radius: 6px;
+
+  }
+
+  input {
+    border: 1px solid @color-light-gray;
+    border-radius: 4px;
+    width: 93%;
+    padding: 3%;
+    margin-bottom: 20px;
+
+    &amp;:focus {
+      background-color: @color-light-blue;
+      outline: 0;
+      border-color: #a1c7e8;
+    }
+  }
+
+  button {
+    background-color: #3ec967;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 20px;
+    border: 0;
+    color: White;
+    padding: 10px;
+    width: 100%;
+  }
+
+  a {
+    color: @link-color;
+  }
+
+  h2 {
+    color: #b027a1;
+    text-align: center;
+    font-size: 2em;
+  }
+
+  aside {
+    background-color: #f1f0ff;
+    margin: 40px -40px;
+    padding: 15px;
+    border-radius: 0px 0px 6px 6px;
+    text-align: center;
+    color: @color-dark;
+  }
+
+  .welcome-message {
+    color: white;
+    text-align: center;
+  }
+
+  .error {
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+    color: @color-error;
+    background-color: @color-error-light;
+  }
+&lt;/style&gt;
+
+</code></pre>
+<div line-highlight='23-28,only'></div>
+<div class='codepen'></div>
+<p>An example of a configuration that uses multiple session endpoints:</p>
+<pre><code class="language-html">&lt;todo-login&gt;&lt;/todo-login&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+  import {
+    connect,
+    connectCanSession,
+    fixture,
+    type,
+    ObservableObject,
+    StacheElement,
+  } from &quot;//unpkg.com/can@6/ecosystem.mjs&quot;;
+
+  setupFixtures();
+
+    class Session extends ObservableObject {}
+  Session.connection = [
+    connect.base,
+    connect.dataUrl,
+    connect.constructor,
+    connect.canMap,
+    connectCanSession
+  ].reduce((conn, behavior) =&gt; behavior(conn), {
+    ObjectType: Session,
+    url: {
+      getData: 'GET /api/validate_session',
+      createData: 'POST /api/login',
+      destroyData: 'POST /api/logout',
+    }
+  });
+  Session.connection.init();
+
+  class TodoLogin extends StacheElement {
+    static view = `
+      {{# if (this.Session.currentPromise.isResolved) }}
+        &lt;p class=&quot;welcome-message&quot;&gt;
+           Welcome {{ Session.current.email }}.
+           &lt;a href=&quot;javascript://&quot; on:click=&quot;this.logOut()&quot;&gt;Log out&lt;/a&gt;
+        &lt;/p&gt;
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isPending) }}
+        Loading User...
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isRejected) }}
+        &lt;form on:submit=&quot;this.logIn(scope.event)&quot;&gt;
+          &lt;h2&gt;Log In&lt;/h2&gt;
+
+          &lt;input placeholder=&quot;email&quot; value:to=&quot;this.email&quot; /&gt;
+
+          &lt;input type=&quot;password&quot; placeholder=&quot;password&quot;
+                 value:to=&quot;this.password&quot; /&gt;
+
+          &lt;button&gt;Log In&lt;/button&gt;
+
+          {{# if (this.logInError) }}
+            &lt;div class=&quot;error&quot;&gt;{{ this.logInError.message }}&lt;/div&gt;
+          {{/ if }}
+
+          &lt;aside&gt;
+             Login with the following account details:&lt;br/&gt;
+             Email: nils@bitovi.com&lt;br/&gt;
+             Password: abc123&lt;br/&gt;
+          &lt;/aside&gt;
+        &lt;/form&gt;
+      {{/ if }}
+    `;
+
+    static props = {
+      email: String,
+      password: String,
+      logInError: type.Any,
+    };
+
+    get Session() {
+      return Session;
+    }
+
+    logOut() {
+      Session.current.destroy();
+    }
+
+    logIn(event) {
+      event.preventDefault();
+      this.logInError = null;
+
+      const session = new Session({
+        email: this.email,
+        password: this.password
+      });
+
+      session.save().catch((error) =&gt; {
+        this.logInError = error;
+      });
+    }
+  }
+  customElements.define(&quot;todo-login&quot;, TodoLogin);
+
+  function setupFixtures() {
+    fixture(&quot;GET /api/validate_session&quot;, function (request, response) {
+      const session = getSession();
+
+      if (session) {
+        response(session);
+      } else {
+        response(404, {message: &quot;No session&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;POST /api/login&quot;, function (request, response) {
+      const email = request.data.email;
+      const password = request.data.password;
+
+      if (
+        email === 'nils@bitovi.com' &amp;&amp;
+        password === 'abc123'
+      ) {
+        document.cookie = `SESSION-TOKEN=${btoa(JSON.stringify({email, password}))}`;
+        return request.data;
+      } else {
+        response(401, {message: &quot;Unauthorized&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;POST /api/logout&quot;, function () {
+      document.cookie = 'SESSION-TOKEN=';
+      return {};
+    });
+  }
+
+  // get browser cookies as a map from key to value
+  function getCookieMap() {
+    return document.cookie.split(';').map(cookie =&gt; cookie.split('=')).reduce((map, [key, value]) =&gt; {
+      map[key] = value;
+      return map;
+    }, {});
+  }
+
+  // get the decoded session cookie
+  function getSession() {
+    try {
+      const token = getCookieMap()['SESSION-TOKEN'];
+      // a real backend would verify the token by checking a database or by decrypting the token
+      return JSON.parse(atob(token));
+    } catch (e) {
+      return null;
+    }
+  }
+&lt;/script&gt;
+&lt;style type=&quot;text/less&quot;&gt;
+  @font-family: 'Raleway', &quot;Helvetica Neue&quot;, Arial, sans-serif;
+  @font-size: 1em;
+  @color-dark: #54599c;
+  @color-light: #fff;
+  @color-light-gray: #d3d3d3;
+  @color-light-blue: #e2f5ff;
+  @color-error: #ff000e;
+  @color-error-light: #fde5ec;
+  @link-color: #2196F3;
+
+  body,
+  input,
+  button {
+    font-family: @font-family;
+    font-size: @font-size;
+  }
+
+  body {
+    background-color: @color-dark;
+    padding: 5%;
+  }
+
+  form {
+    background-color: @color-light;
+    padding: 30px 40px 0 40px;
+    border-radius: 6px;
+
+  }
+
+  input {
+    border: 1px solid @color-light-gray;
+    border-radius: 4px;
+    width: 93%;
+    padding: 3%;
+    margin-bottom: 20px;
+
+    &amp;:focus {
+      background-color: @color-light-blue;
+      outline: 0;
+      border-color: #a1c7e8;
+    }
+  }
+
+  button {
+    background-color: #3ec967;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 20px;
+    border: 0;
+    color: White;
+    padding: 10px;
+    width: 100%;
+  }
+
+  a {
+    color: @link-color;
+  }
+
+  h2 {
+    color: #b027a1;
+    text-align: center;
+    font-size: 2em;
+  }
+
+  aside {
+    background-color: #f1f0ff;
+    margin: 40px -40px;
+    padding: 15px;
+    border-radius: 0px 0px 6px 6px;
+    text-align: center;
+    color: @color-dark;
+  }
+
+  .welcome-message {
+    color: white;
+    text-align: center;
+  }
+
+  .error {
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+    color: @color-error;
+    background-color: @color-error-light;
+  }
+&lt;/style&gt;
+
+</code></pre>
+<div line-highlight='23-28,only'></div>
+<div class='codepen'></div>
+<h2>Sessions Via Cookies</h2>
+<p>Cookies are an excellent way to store session tokens since when properly configured, they're very secure and require little application-level code to utilize. Storing tokens as cookies is generally regarded as a best practice.</p>
+<h3>Initializing The App &amp; Depending On An Active Session</h3>
+<p>Usually, when storing tokens in cookies, they're stored as an &quot;httponly&quot; cookie, which prevents JavaScript from accessing it. This is a useful security feature in preventing XSS (Cross Site Scripting) and similar attacks. Due to this, when your application initially loads it won't immediately know if there is an ongoing user session since your app JS can't tell if the browser currently has a session token or not. The page will need to make a request to see if a session is active or not.</p>
+<p>Thus to verify if there's an ongoing user session, the app should access <code>Session.currentPromise</code>, and see if it resolves successfully. There are several places in your application you might need an active session and choose to do this:</p>
+<ol>
+<li>in your <strong>view</strong> before rendering components that make requests to restricted services or uses the session metadata</li>
+<li>in the <strong>component state</strong> of a component that makes requests to restricted services or uses the session metadata</li>
+<li>in the <code>beforeSend</code> callback of a <strong>connection</strong> to restricted services</li>
+</ol>
+<p>Here, we'll show examples of all three dependencies. The third one is of particular importance to the <a href="#appHeldTokens">application held tokens</a> section since it's necessary for that case.</p>
+<h4>Depending On Session In A View</h4>
+<p>In a component's view you could depend on <code>Session.currentPromise</code> directly like this:</p>
+<pre><code class="language-html">&lt;todo-login&gt;&lt;/todo-login&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+  import {
+    connect,
+    connectCanSession,
+    fixture,
+    type,
+    ObservableObject,
+    StacheElement,
+  } from &quot;//unpkg.com/can@6/ecosystem.mjs&quot;;
+
+  setupFixtures();
+
+    class Session extends ObservableObject {}
+  Session.connection = [
+    connect.base,
+    connect.dataUrl,
+    connect.constructor,
+    connect.canMap,
+    connectCanSession
+  ].reduce((conn, behavior) =&gt; behavior(conn), {
+    ObjectType: Session,
+    url: {
+      resource: '/api/session', // endpoint
+      getData: '/api/session', // endpoint when validating
+      destroyData: '/api/session', // endpoint when logging out
+    }
+  });
+  Session.connection.init();
+
+  class TodoLogin extends StacheElement {
+    static view =`
+      {{# if (this.Session.currentPromise.isResolved) }}
+        &lt;p class=&quot;welcome-message&quot;&gt;
+           Welcome {{ Session.current.email }}.
+           &lt;a href=&quot;javascript://&quot; on:click=&quot;this.logOut()&quot;&gt;Log out&lt;/a&gt;
+        &lt;/p&gt;
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isPending) }}
+        Loading User...
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isRejected) }}
+        &lt;form on:submit=&quot;this.logIn(scope.event)&quot;&gt;
+          &lt;h2&gt;Log In&lt;/h2&gt;
+
+          &lt;input placeholder=&quot;email&quot; value:to=&quot;this.email&quot; /&gt;
+
+          &lt;input type=&quot;password&quot; placeholder=&quot;password&quot;
+                 value:to=&quot;this.password&quot; /&gt;
+
+          &lt;button&gt;Log In&lt;/button&gt;
+
+          {{# if (this.logInError) }}
+            &lt;div class=&quot;error&quot;&gt;{{ this.logInError.message }}&lt;/div&gt;
+          {{/ if }}
+
+          &lt;aside&gt;
+             Login with the following account details:&lt;br/&gt;
+             Email: nils@bitovi.com&lt;br/&gt;
+             Password: abc123&lt;br/&gt;
+          &lt;/aside&gt;
+        &lt;/form&gt;
+      {{/ if }}
+    `;
+
+    static props = {
+      email: String,
+      password: String,
+      logInError: type.Any,
+    };
+
+    get Session() {
+      return Session;
+    }
+
+    logOut() {
+      Session.current.destroy();
+    }
+
+    logIn(event) {
+      event.preventDefault();
+      this.logInError = null;
+
+      const session = new Session({
+        email: this.email,
+        password: this.password
+      });
+
+      session.save().catch((error) =&gt; {
+        this.logInError = error;
+      });
+    }
+  }
+  customElements.define(&quot;todo-login&quot;, TodoLogin);
+
+  function setupFixtures() {
+    fixture(&quot;GET /api/session&quot;, function (request, response) {
+      const session = getSession();
+
+      if (session) {
+        response(session);
+      } else {
+        response(404, {message: &quot;No session&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;POST /api/session&quot;, function (request, response) {
+      const email = request.data.email;
+      const password = request.data.password;
+
+      if (
+        email === 'nils@bitovi.com' &amp;&amp;
+        password === 'abc123'
+      ) {
+        document.cookie = `SESSION-TOKEN=${btoa(JSON.stringify({email, password}))}`;
+        return request.data;
+      } else {
+        response(401, {message: &quot;Unauthorized&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;DELETE /api/session&quot;, function () {
+      document.cookie = 'SESSION-TOKEN=';
+      return {};
+    });
+  }
+
+  // get browser cookies as a map from key to value
+  function getCookieMap() {
+    return document.cookie.split(';').map(cookie =&gt; cookie.split('=')).reduce((map, [key, value]) =&gt; {
+      map[key] = value;
+      return map;
+    }, {});
+  }
+
+  // get the decoded session cookie
+  function getSession() {
+    try {
+      const token = getCookieMap()['SESSION-TOKEN'];
+      // a real backend would verify the token by checking a database or by decrypting the token
+      return JSON.parse(atob(token));
+    } catch (e) {
+      return null;
+    }
+  }
+&lt;/script&gt;
+&lt;style type=&quot;text/less&quot;&gt;
+  @font-family: 'Raleway', &quot;Helvetica Neue&quot;, Arial, sans-serif;
+  @font-size: 1em;
+  @color-dark: #54599c;
+  @color-light: #fff;
+  @color-light-gray: #d3d3d3;
+  @color-light-blue: #e2f5ff;
+  @color-error: #ff000e;
+  @color-error-light: #fde5ec;
+  @link-color: #2196F3;
+
+  body,
+  input,
+  button {
+    font-family: @font-family;
+    font-size: @font-size;
+  }
+
+  body {
+    background-color: @color-dark;
+    padding: 5%;
+  }
+
+  form {
+    background-color: @color-light;
+    padding: 30px 40px 0 40px;
+    border-radius: 6px;
+
+  }
+
+  input {
+    border: 1px solid @color-light-gray;
+    border-radius: 4px;
+    width: 93%;
+    padding: 3%;
+    margin-bottom: 20px;
+
+    &amp;:focus {
+      background-color: @color-light-blue;
+      outline: 0;
+      border-color: #a1c7e8;
+    }
+  }
+
+  button {
+    background-color: #3ec967;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 20px;
+    border: 0;
+    color: White;
+    padding: 10px;
+    width: 100%;
+  }
+
+  a {
+    color: @link-color;
+  }
+
+  h2 {
+    color: #b027a1;
+    text-align: center;
+    font-size: 2em;
+  }
+
+  aside {
+    background-color: #f1f0ff;
+    margin: 40px -40px;
+    padding: 15px;
+    border-radius: 0px 0px 6px 6px;
+    text-align: center;
+    color: @color-dark;
+  }
+
+  .welcome-message {
+    color: white;
+    text-align: center;
+  }
+
+  .error {
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+    color: @color-error;
+    background-color: @color-error-light;
+  }
+&lt;/style&gt;
+
+</code></pre>
+<div line-highlight='34,41,45,only'></div>
+<div class='codepen'></div>
+<p>This is a good option when you can make this dependency high in the component hierarchy, toggling several session-dependant components at once. In cases where a rendered component should determine for itself if a session is active, rather than depending on a parent component to check, one of the following two techniques should be used.</p>
+<h4>Depending On Session In A Component State</h4>
+<p>In a component's props, you may use <code>currentPromise</code> in computed properties like this:</p>
+<pre><code class="language-html">&lt;todo-login&gt;&lt;/todo-login&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+  import {
+    connect,
+    connectCanSession,
+    fixture,
+    restModel,
+    type,
+    ObservableObject,
+    StacheElement,
+  } from &quot;//unpkg.com/can@6/ecosystem.mjs&quot;;
+
+  setupFixtures();
+
+  class Session extends ObservableObject {}
+  Session.connection = [
+    connect.base,
+    connect.dataUrl,
+    connect.constructor,
+    connect.canMap,
+    connectCanSession
+  ].reduce((conn, behavior) =&gt; behavior(conn), {
+    ObjectType: Session,
+    url: {
+      resource: '/api/session',
+      getData: '/api/session',
+      destroyData: '/api/session',
+    }
+  });
+  Session.connection.init();
+
+    class Todo extends ObservableObject {
+        static props = {
+            body: String,
+            completed: Boolean
+        };
+    }
+
+  Todo.connection = restModel({
+    ObjectType: Todo,
+    url: '/api/todo'
+  });
+
+  class TodoLogin extends StacheElement {
+    static view = `
+      {{# if (this.Session.currentPromise.isResolved) }}
+        &lt;p class=&quot;welcome-message&quot;&gt;
+           Welcome {{ Session.current.email }}.
+           &lt;a href=&quot;javascript://&quot; on:click=&quot;this.logOut()&quot;&gt;Log out&lt;/a&gt;
+        &lt;/p&gt;
+        &lt;todo-list&gt;&lt;/todo-list&gt;
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isPending) }}
+        Loading User...
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isRejected) }}
+        &lt;form on:submit=&quot;this.logIn(scope.event)&quot;&gt;
+          &lt;h2&gt;Log In&lt;/h2&gt;
+
+          &lt;input placeholder=&quot;email&quot; value:to=&quot;this.email&quot; /&gt;
+
+          &lt;input type=&quot;password&quot; placeholder=&quot;password&quot;
+                 value:to=&quot;this.password&quot; /&gt;
+
+          &lt;button&gt;Log In&lt;/button&gt;
+
+          {{# if (this.logInError) }}
+            &lt;div class=&quot;error&quot;&gt;{{ this.logInError.message }}&lt;/div&gt;
+          {{/ if }}
+
+          &lt;aside&gt;
+             Login with the following account details:&lt;br/&gt;
+             Email: nils@bitovi.com&lt;br/&gt;
+             Password: abc123&lt;br/&gt;
+          &lt;/aside&gt;
+        &lt;/form&gt;
+      {{/ if }}
+    `;
+
+    static props = {
+      email: String,
+      password: String,
+      logInError: type.Any,
+    };
+
+    get Session() {
+      return Session;
+    }
+
+    logOut() {
+      Session.current.destroy();
+    }
+
+    logIn(event) {
+      event.preventDefault();
+      this.logInError = null;
+
+      const session = new Session({
+        email: this.email,
+        password: this.password
+      });
+
+      session.save().catch((error) =&gt; {
+        this.logInError = error;
+      });
+    }
+  }
+  customElements.define(&quot;todo-login&quot;, TodoLogin);
+
+  class TodoList extends StacheElement {
+    static view = `
+      &lt;h3&gt;Todos:&lt;/h3&gt;
+      &lt;ol&gt;
+      {{#each (this.todos)}}
+        &lt;li&gt;
+          &lt;input type=&quot;checkbox&quot; checked:bind=&quot;this.completed&quot; /&gt;
+          {{ this.body }}
+        &lt;/li&gt;
+      {{/each}}
+      &lt;/ol&gt;
+    `;
+
+    static props = {
+      todos: {
+        async(resolve) {
+          Session.currentPromise.then(() =&gt; {
+            Todo.getList({}).then(resolve);
+          });
+          return [];
+        }
+      },
+    };
+  }
+  customElements.define(&quot;todo-list&quot;, TodoList);
+
+  function setupFixtures() {
+    fixture(&quot;GET /api/session&quot;, function (request, response) {
+      const session = getSession();
+
+      if (session) {
+        response(session);
+      } else {
+        response(404, {message: &quot;No session&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;POST /api/session&quot;, function (request, response) {
+      const email = request.data.email;
+      const password = request.data.password;
+
+      if (
+        email === 'nils@bitovi.com' &amp;&amp;
+        password === 'abc123'
+      ) {
+        document.cookie = `SESSION-TOKEN=${btoa(JSON.stringify({email, password}))}`;
+        return request.data;
+      } else {
+        response(401, {message: &quot;Unauthorized&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;DELETE /api/session&quot;, function () {
+      document.cookie = 'SESSION-TOKEN=';
+      return {};
+    });
+
+    fixture(&quot;GET /api/todo&quot;, function () {
+      const session = getSession();
+
+      if (session) {
+        return todos;
+      } else {
+        response(401, {message: &quot;Unauthorized&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+  }
+
+  // get browser cookies as a map from key to value
+  function getCookieMap() {
+    return document.cookie.split(';').map(cookie =&gt; cookie.split('=')).reduce((map, [key, value]) =&gt; {
+      map[key] = value;
+      return map;
+    }, {});
+  }
+
+  // get the decoded session cookie
+  function getSession() {
+    try {
+      const token = getCookieMap()['SESSION-TOKEN'];
+      // a real backend would verify the token by checking a database or by decrypting the token
+      return JSON.parse(atob(token));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  const todos = [
+    {body: 'buy milk', completed: true},
+    {body: 'pick up dry cleaning', completed: false},
+    {body: 'call mom', completed: false},
+    {body: 'clean basement', completed: false},
+  ];
+&lt;/script&gt;
+&lt;style type=&quot;text/less&quot;&gt;
+  @font-family: 'Raleway', &quot;Helvetica Neue&quot;, Arial, sans-serif;
+  @font-size: 1em;
+  @color-dark: #54599c;
+  @color-light: #fff;
+  @color-light-gray: #d3d3d3;
+  @color-light-blue: #e2f5ff;
+  @color-error: #ff000e;
+  @color-error-light: #fde5ec;
+  @link-color: #2196F3;
+
+  body,
+  input,
+  button {
+    font-family: @font-family;
+    font-size: @font-size;
+  }
+
+  body {
+    background-color: @color-dark;
+    padding: 5%;
+  }
+
+  form {
+    background-color: @color-light;
+    padding: 30px 40px 0 40px;
+    border-radius: 6px;
+
+  }
+
+  input {
+    border: 1px solid @color-light-gray;
+    border-radius: 4px;
+    padding: 3%;
+    margin-bottom: 20px;
+
+    &amp;:not([type=checkbox]) {
+      width: 93%;
+    }
+
+    &amp;:focus {
+      background-color: @color-light-blue;
+      outline: 0;
+      border-color: #a1c7e8;
+    }
+  }
+
+  button {
+    background-color: #3ec967;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 20px;
+    border: 0;
+    color: White;
+    padding: 10px;
+    width: 100%;
+  }
+
+  a {
+    color: @link-color;
+  }
+
+  h2 {
+    color: #b027a1;
+    text-align: center;
+    font-size: 2em;
+  }
+
+  aside {
+    background-color: #f1f0ff;
+    margin: 40px -40px;
+    padding: 15px;
+    border-radius: 0px 0px 6px 6px;
+    text-align: center;
+    color: @color-dark;
+  }
+
+  .welcome-message {
+    color: white;
+    text-align: center;
+  }
+
+  .error {
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+    color: @color-error;
+    background-color: @color-error-light;
+  }
+
+  todo-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+&lt;/style&gt;
+
+</code></pre>
+<div line-highlight='127-134,only'></div>
+<div class='codepen'></div>
+<p>This is a good option for making a single request dependant on an active session. However, if you use this model (e.g <code>Todo</code>) in many places, making this dependency in each place is a lot of extra code. Additionally, application held token scenarios need a way to add the token from the session to the request. In those cases, you should depend on the session as part of the connection.</p>
+<p><span id="connectionDependency"></span></p>
+<h4>Depending On Session In A Connection</h4>
+<p>In the <code>beforeSend</code> callback for a restricted resource you may depend on <code>currentPromise</code> like this:</p>
+<pre><code class="language-html">&lt;todo-login&gt;&lt;/todo-login&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+  import {
+    connect,
+    connectCanSession,
+    fixture,
+    restModel,
+    type,
+    ObservableObject,
+    StacheElement,
+  } from &quot;//unpkg.com/can@6/ecosystem.mjs&quot;;
+
+  setupFixtures();
+
+    class Session extends ObservableObject {}
+  Session.connection = [
+    connect.base,
+    connect.dataUrl,
+    connect.constructor,
+    connect.canMap,
+    connectCanSession
+  ].reduce((conn, behavior) =&gt; behavior(conn), {
+    ObjectType: Session,
+    url: {
+      resource: '/api/session',
+      getData: '/api/session',
+      destroyData: '/api/session',
+    }
+  });
+  Session.connection.init();
+
+    class Todo extends ObservableObject {
+        static props = {
+            body: String,
+            completed: Boolean
+        }
+    }
+
+  Todo.connection = restModel({
+    ObjectType: Todo,
+    url: {
+      resource: '/api/todo',
+      beforeSend: () =&gt; {
+        return Session.currentPromise;
+      }
+    }
+  });
+
+  class TodoLogin extends StacheElement {
+    static view = `
+      {{# if (this.Session.currentPromise.isResolved) }}
+        &lt;p class=&quot;welcome-message&quot;&gt;
+           Welcome {{ Session.current.email }}.
+           &lt;a href=&quot;javascript://&quot; on:click=&quot;this.logOut()&quot;&gt;Log out&lt;/a&gt;
+        &lt;/p&gt;
+        &lt;todo-list&gt;&lt;/todo-list&gt;
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isPending) }}
+        Loading User...
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isRejected) }}
+        &lt;form on:submit=&quot;this.logIn(scope.event)&quot;&gt;
+          &lt;h2&gt;Log In&lt;/h2&gt;
+
+          &lt;input placeholder=&quot;email&quot; value:to=&quot;this.email&quot; /&gt;
+
+          &lt;input type=&quot;password&quot; placeholder=&quot;password&quot;
+                 value:to=&quot;this.password&quot; /&gt;
+
+          &lt;button&gt;Log In&lt;/button&gt;
+
+          {{# if (this.logInError) }}
+            &lt;div class=&quot;error&quot;&gt;{{ this.logInError.message }}&lt;/div&gt;
+          {{/ if }}
+
+          &lt;aside&gt;
+             Login with the following account details:&lt;br/&gt;
+             Email: nils@bitovi.com&lt;br/&gt;
+             Password: abc123&lt;br/&gt;
+          &lt;/aside&gt;
+        &lt;/form&gt;
+      {{/ if }}
+    `;
+
+    static props = {
+      email: String,
+      password: String,
+      logInError: type.Any,
+    };
+
+    get Session() {
+      return Session;
+    }
+
+    logOut() {
+      Session.current.destroy();
+    }
+
+    logIn(event) {
+      event.preventDefault();
+      this.logInError = null;
+
+      const session = new Session({
+        email: this.email,
+        password: this.password
+      });
+
+      session.save().catch((error) =&gt; {
+        this.logInError = error;
+      });
+    }
+  }
+  customElements.define(&quot;todo-login&quot;, TodoLogin);
+
+  class TodoList extends StacheElement {
+    static view = `
+      &lt;h3&gt;Todos:&lt;/h3&gt;
+      &lt;ol&gt;
+      {{#each (this.todos)}}
+        &lt;li&gt;
+          &lt;input type=&quot;checkbox&quot; checked:bind=&quot;this.completed&quot; /&gt;
+          {{ this.body }}
+        &lt;/li&gt;
+      {{/each}}
+      &lt;/ol&gt;
+    `;
+
+    static props = {
+      todos: {
+        async(resolve) {
+          Todo.getList({}).then(resolve);
+          return [];
+        }
+      },
+    };
+  }
+  customElements.define(&quot;todo-list&quot;, TodoList);
+
+  function setupFixtures() {
+    fixture(&quot;GET /api/session&quot;, function (request, response) {
+      const session = getSession();
+
+      if (session) {
+        response(session);
+      } else {
+        response(404, {message: &quot;No session&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;POST /api/session&quot;, function (request, response) {
+      const email = request.data.email;
+      const password = request.data.password;
+
+      if (
+        email === 'nils@bitovi.com' &amp;&amp;
+        password === 'abc123'
+      ) {
+        document.cookie = `SESSION-TOKEN=${btoa(JSON.stringify({email, password}))}`;
+        return request.data;
+      } else {
+        response(401, {message: &quot;Unauthorized&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;DELETE /api/session&quot;, function () {
+      document.cookie = 'SESSION-TOKEN=';
+      return {};
+    });
+
+    fixture(&quot;GET /api/todo&quot;, function () {
+      const session = getSession();
+
+      if (session) {
+        return todos;
+      } else {
+        response(401, {message: &quot;Unauthorized&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+  }
+
+  // get browser cookies as a map from key to value
+  function getCookieMap() {
+    return document.cookie.split(';').map(cookie =&gt; cookie.split('=')).reduce((map, [key, value]) =&gt; {
+      map[key] = value;
+      return map;
+    }, {});
+  }
+
+  // get the decoded session cookie
+  function getSession() {
+    try {
+      const token = getCookieMap()['SESSION-TOKEN'];
+      // a real backend would verify the token by checking a database or by decrypting the token
+      return JSON.parse(atob(token));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  const todos = [
+    {body: 'buy milk', completed: true},
+    {body: 'pick up dry cleaning', completed: false},
+    {body: 'call mom', completed: false},
+    {body: 'clean basement', completed: false},
+  ];
+&lt;/script&gt;
+&lt;style type=&quot;text/less&quot;&gt;
+  @font-family: 'Raleway', &quot;Helvetica Neue&quot;, Arial, sans-serif;
+  @font-size: 1em;
+  @color-dark: #54599c;
+  @color-light: #fff;
+  @color-light-gray: #d3d3d3;
+  @color-light-blue: #e2f5ff;
+  @color-error: #ff000e;
+  @color-error-light: #fde5ec;
+  @link-color: #2196F3;
+
+  body,
+  input,
+  button {
+    font-family: @font-family;
+    font-size: @font-size;
+  }
+
+  body {
+    background-color: @color-dark;
+    padding: 5%;
+  }
+
+  form {
+    background-color: @color-light;
+    padding: 30px 40px 0 40px;
+    border-radius: 6px;
+
+  }
+
+  input {
+    border: 1px solid @color-light-gray;
+    border-radius: 4px;
+    padding: 3%;
+    margin-bottom: 20px;
+
+    &amp;:not([type=checkbox]) {
+      width: 93%;
+    }
+
+    &amp;:focus {
+      background-color: @color-light-blue;
+      outline: 0;
+      border-color: #a1c7e8;
+    }
+  }
+
+  button {
+    background-color: #3ec967;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 20px;
+    border: 0;
+    color: White;
+    padding: 10px;
+    width: 100%;
+  }
+
+  a {
+    color: @link-color;
+  }
+
+  h2 {
+    color: #b027a1;
+    text-align: center;
+    font-size: 2em;
+  }
+
+  aside {
+    background-color: #f1f0ff;
+    margin: 40px -40px;
+    padding: 15px;
+    border-radius: 0px 0px 6px 6px;
+    text-align: center;
+    color: @color-dark;
+  }
+
+  .welcome-message {
+    color: white;
+    text-align: center;
+  }
+
+  .error {
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+    color: @color-error;
+    background-color: @color-error-light;
+  }
+
+  todo-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+&lt;/style&gt;
+
+</code></pre>
+<div line-highlight='40-48,132-137,only'></div>
+<div class='codepen'></div>
+<p>One advantage of this option is that it keeps the dependency on the session contained to the definition of the connection. This is cleaner than depending on the session in the component state where the connection is used, or in the view before a component making a request is rendered. In app-held token scenarios, this option must be used since <code>beforeSend</code> is where the token is added to the request headers.</p>
+<blockquote>
+<p><strong>Note:</strong> Since <code>Session.currentPromise</code> only makes a request the first time it's accessed, all the components that make requests for restricted data can use it without worrying about multiple requests happening unintentionally.</p>
+</blockquote>
+<p>In all the above examples, after the <code>currentPromise</code> resolves, properties like <code>isResolved</code> &amp; <code>todos</code> will recalculate (and emit updates), rendering new components or making requests. If <code>currentPromise</code> rejects, the request to verify the active session has failed, typically because there is no active session. At this point, the user should be prompted by the app to log in.</p>
+<h3>Logging In</h3>
+<p>The <code>can/session</code> behavior makes it easy to log in and start a session. All you have to do is save a new instance of the session model when the user has provided their login details:</p>
+<pre><code class="language-html">&lt;todo-login&gt;&lt;/todo-login&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+  import {
+    connect,
+    connectCanSession,
+    fixture,
+    restModel,
+    type,
+    ObservableObject,
+    StacheElement,
+  } from &quot;//unpkg.com/can@6/ecosystem.mjs&quot;;
+
+  setupFixtures();
+
+  class Session extends ObservableObject {}
+  Session.connection = [
+    connect.base,
+    connect.dataUrl,
+    connect.constructor,
+    connect.canMap,
+    connectCanSession
+  ].reduce((conn, behavior) =&gt; behavior(conn), {
+    ObjectType: Session,
+    url: {
+      resource: '/api/session',
+      getData: '/api/session',
+      destroyData: '/api/session',
+    }
+  });
+  Session.connection.init();
+
+    class Todo extends ObservableObject {
+        static props = {
+            body: String,
+            completed: Boolean
+        };
+    }
+
+  Todo.connection = restModel({
+    ObjectType: Todo,
+    url: '/api/todo'
+  });
+
+  class TodoLogin extends StacheElement {
+    static view = `
+      {{# if (this.Session.currentPromise.isResolved) }}
+        &lt;p class=&quot;welcome-message&quot;&gt;
+           Welcome {{ Session.current.email }}.
+           &lt;a href=&quot;javascript://&quot; on:click=&quot;this.logOut()&quot;&gt;Log out&lt;/a&gt;
+        &lt;/p&gt;
+        &lt;todo-list&gt;&lt;/todo-list&gt;
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isPending) }}
+        Loading User...
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isRejected) }}
+        &lt;form on:submit=&quot;this.logIn(scope.event)&quot;&gt;
+          &lt;h2&gt;Log In&lt;/h2&gt;
+
+          &lt;input placeholder=&quot;email&quot; value:to=&quot;this.email&quot; /&gt;
+
+          &lt;input type=&quot;password&quot; placeholder=&quot;password&quot;
+                 value:to=&quot;this.password&quot; /&gt;
+
+          &lt;button&gt;Log In&lt;/button&gt;
+
+          {{# if (this.logInError) }}
+            &lt;div class=&quot;error&quot;&gt;{{ this.logInError.message }}&lt;/div&gt;
+          {{/ if }}
+
+          &lt;aside&gt;
+             Login with the following account details:&lt;br/&gt;
+             Email: nils@bitovi.com&lt;br/&gt;
+             Password: abc123&lt;br/&gt;
+          &lt;/aside&gt;
+        &lt;/form&gt;
+      {{/ if }}
+    `;
+
+    static props = {
+      email: String,
+      password: String,
+      logInError: type.Any,
+    };
+
+    get Session() {
+      return Session;
+    }
+
+    logOut() {
+      Session.current.destroy();
+    }
+
+    logIn(event) {
+      event.preventDefault();
+      this.logInError = null;
+
+      const session = new Session({
+        email: this.email,
+        password: this.password
+      });
+
+      session.save().catch((error) =&gt; {
+        this.logInError = error;
+      });
+    }
+  }
+  customElements.define(&quot;todo-login&quot;, TodoLogin);
+
+  class TodoList extends StacheElement {
+    static view = `
+      &lt;h3&gt;Todos:&lt;/h3&gt;
+      &lt;ol&gt;
+      {{#each (this.todos)}}
+        &lt;li&gt;
+          &lt;input type=&quot;checkbox&quot; checked:bind=&quot;this.completed&quot; /&gt;
+          {{ this.body }}
+        &lt;/li&gt;
+      {{/each}}
+      &lt;/ol&gt;
+    `;
+
+    static props = {
+      todos: {
+        async(resolve) {
+          Session.currentPromise.then(() =&gt; {
+            Todo.getList({}).then(resolve);
+          });
+          return [];
+        }
+      },
+    };
+  }
+  customElements.define(&quot;todo-list&quot;, TodoList);
+
+  function setupFixtures() {
+    fixture(&quot;GET /api/session&quot;, function (request, response) {
+      const session = getSession();
+
+      if (session) {
+        response(session);
+      } else {
+        response(404, {message: &quot;No session&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;POST /api/session&quot;, function (request, response) {
+      const email = request.data.email;
+      const password = request.data.password;
+
+      if (
+        email === 'nils@bitovi.com' &amp;&amp;
+        password === 'abc123'
+      ) {
+        document.cookie = `SESSION-TOKEN=${btoa(JSON.stringify({email, password}))}`;
+        return request.data;
+      } else {
+        response(401, {message: &quot;Unauthorized&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;DELETE /api/session&quot;, function () {
+      document.cookie = 'SESSION-TOKEN=';
+      return {};
+    });
+
+    fixture(&quot;GET /api/todo&quot;, function () {
+      const session = getSession();
+
+      if (session) {
+        return todos;
+      } else {
+        response(401, {message: &quot;Unauthorized&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+  }
+
+  // get browser cookies as a map from key to value
+  function getCookieMap() {
+    return document.cookie.split(';').map(cookie =&gt; cookie.split('=')).reduce((map, [key, value]) =&gt; {
+      map[key] = value;
+      return map;
+    }, {});
+  }
+
+  // get the decoded session cookie
+  function getSession() {
+    try {
+      const token = getCookieMap()['SESSION-TOKEN'];
+      // a real backend would verify the token by checking a database or by decrypting the token
+      return JSON.parse(atob(token));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  const todos = [
+    {body: 'buy milk', completed: true},
+    {body: 'pick up dry cleaning', completed: false},
+    {body: 'call mom', completed: false},
+    {body: 'clean basement', completed: false},
+  ];
+&lt;/script&gt;
+&lt;style type=&quot;text/less&quot;&gt;
+  @font-family: 'Raleway', &quot;Helvetica Neue&quot;, Arial, sans-serif;
+  @font-size: 1em;
+  @color-dark: #54599c;
+  @color-light: #fff;
+  @color-light-gray: #d3d3d3;
+  @color-light-blue: #e2f5ff;
+  @color-error: #ff000e;
+  @color-error-light: #fde5ec;
+  @link-color: #2196F3;
+
+  body,
+  input,
+  button {
+    font-family: @font-family;
+    font-size: @font-size;
+  }
+
+  body {
+    background-color: @color-dark;
+    padding: 5%;
+  }
+
+  form {
+    background-color: @color-light;
+    padding: 30px 40px 0 40px;
+    border-radius: 6px;
+
+  }
+
+  input {
+    border: 1px solid @color-light-gray;
+    border-radius: 4px;
+    padding: 3%;
+    margin-bottom: 20px;
+
+    &amp;:not([type=checkbox]) {
+      width: 93%;
+    }
+
+    &amp;:focus {
+      background-color: @color-light-blue;
+      outline: 0;
+      border-color: #a1c7e8;
+    }
+  }
+
+  button {
+    background-color: #3ec967;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 20px;
+    border: 0;
+    color: White;
+    padding: 10px;
+    width: 100%;
+  }
+
+  a {
+    color: @link-color;
+  }
+
+  h2 {
+    color: #b027a1;
+    text-align: center;
+    font-size: 2em;
+  }
+
+  aside {
+    background-color: #f1f0ff;
+    margin: 40px -40px;
+    padding: 15px;
+    border-radius: 0px 0px 6px 6px;
+    text-align: center;
+    color: @color-dark;
+  }
+
+  .welcome-message {
+    color: white;
+    text-align: center;
+  }
+
+  .error {
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+    color: @color-error;
+    background-color: @color-error-light;
+  }
+
+  todo-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+&lt;/style&gt;
+
+</code></pre>
+<div line-highlight='106-108,only'></div>
+<div class='codepen'></div>
+<p>After the Promise returned by the <code>.save</code> method completes <code>Session.current</code> is set to the new instance <code>session</code> and <code>Session.currentPromise</code> is set to a resolved Promise that returns <code>session</code>. Any components using <code>current</code> or <code>currentPromise</code> will notice this change and update their view  or make requests for restricted services.</p>
+<h3>Making Requests</h3>
+<p>In the cookie scenario making requests on restricted services requires no special effort. The browser is responsible for sending the cookie containing the token as part of appropriate requests, so requests are made as if it were for any other endpoint:</p>
+<pre><code class="language-html">&lt;todo-login&gt;&lt;/todo-login&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+  import {
+    connect,
+    connectCanSession,
+    fixture,
+    restModel,
+    type,
+    ObservableObject,
+    StacheElement,
+  } from &quot;//unpkg.com/can@6/ecosystem.mjs&quot;;
+
+  setupFixtures();
+
+  class Session extends ObservableObject {}
+  Session.connection = [
+    connect.base,
+    connect.dataUrl,
+    connect.constructor,
+    connect.canMap,
+    connectCanSession
+  ].reduce((conn, behavior) =&gt; behavior(conn), {
+    ObjectType: Session,
+    url: {
+      resource: '/api/session',
+      getData: '/api/session',
+      destroyData: '/api/session',
+    }
+  });
+  Session.connection.init();
+
+    class Todo extends ObservableObject {
+        static props = {
+            body: String,
+            completed: Boolean
+        };
+    }
+
+  Todo.connection = restModel({
+    ObjectType: Todo,
+    url: '/api/todo'
+  });
+
+  class TodoLogin extends StacheElement {
+    static view = `
+      {{# if (this.Session.currentPromise.isResolved) }}
+        &lt;p class=&quot;welcome-message&quot;&gt;
+           Welcome {{ Session.current.email }}.
+           &lt;a href=&quot;javascript://&quot; on:click=&quot;this.logOut()&quot;&gt;Log out&lt;/a&gt;
+        &lt;/p&gt;
+        &lt;todo-list&gt;&lt;/todo-list&gt;
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isPending) }}
+        Loading User...
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isRejected) }}
+        &lt;form on:submit=&quot;this.logIn(scope.event)&quot;&gt;
+          &lt;h2&gt;Log In&lt;/h2&gt;
+
+          &lt;input placeholder=&quot;email&quot; value:to=&quot;this.email&quot; /&gt;
+
+          &lt;input type=&quot;password&quot; placeholder=&quot;password&quot;
+                 value:to=&quot;this.password&quot; /&gt;
+
+          &lt;button&gt;Log In&lt;/button&gt;
+
+          {{# if (this.logInError) }}
+            &lt;div class=&quot;error&quot;&gt;{{ this.logInError.message }}&lt;/div&gt;
+          {{/ if }}
+
+          &lt;aside&gt;
+             Login with the following account details:&lt;br/&gt;
+             Email: nils@bitovi.com&lt;br/&gt;
+             Password: abc123&lt;br/&gt;
+          &lt;/aside&gt;
+        &lt;/form&gt;
+      {{/ if }}
+    `;
+
+    static props = {
+      email: String,
+      password: String,
+      logInError: type.Any,
+    };
+
+    get Session() {
+      return Session;
+    }
+
+    logOut() {
+      Session.current.destroy();
+    }
+
+    logIn(event) {
+      event.preventDefault();
+      this.logInError = null;
+
+      const session = new Session({
+        email: this.email,
+        password: this.password
+      });
+
+      session.save().catch((error) =&gt; {
+        this.logInError = error;
+      });
+    }
+  }
+  customElements.define(&quot;todo-login&quot;, TodoLogin);
+
+  class TodoList extends StacheElement {
+    static view = `
+      &lt;h3&gt;Todos:&lt;/h3&gt;
+      &lt;ol&gt;
+      {{#each (this.todos)}}
+        &lt;li&gt;
+          &lt;input type=&quot;checkbox&quot; checked:bind=&quot;this.completed&quot; /&gt;
+          {{ this.body }}
+        &lt;/li&gt;
+      {{/each}}
+      &lt;/ol&gt;
+    `;
+
+    static props = {
+      todos: {
+        async(resolve) {
+          Session.currentPromise.then(() =&gt; {
+            Todo.getList({}).then(resolve);
+          });
+          return [];
+        }
+      },
+    };
+  }
+  customElements.define(&quot;todo-list&quot;, TodoList);
+
+  function setupFixtures() {
+    fixture(&quot;GET /api/session&quot;, function (request, response) {
+      const session = getSession();
+
+      if (session) {
+        response(session);
+      } else {
+        response(404, {message: &quot;No session&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;POST /api/session&quot;, function (request, response) {
+      const email = request.data.email;
+      const password = request.data.password;
+
+      if (
+        email === 'nils@bitovi.com' &amp;&amp;
+        password === 'abc123'
+      ) {
+        document.cookie = `SESSION-TOKEN=${btoa(JSON.stringify({email, password}))}`;
+        return request.data;
+      } else {
+        response(401, {message: &quot;Unauthorized&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;DELETE /api/session&quot;, function () {
+      document.cookie = 'SESSION-TOKEN=';
+      return {};
+    });
+
+    fixture(&quot;GET /api/todo&quot;, function () {
+      const session = getSession();
+
+      if (session) {
+        return todos;
+      } else {
+        response(401, {message: &quot;Unauthorized&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+  }
+
+  // get browser cookies as a map from key to value
+  function getCookieMap() {
+    return document.cookie.split(';').map(cookie =&gt; cookie.split('=')).reduce((map, [key, value]) =&gt; {
+      map[key] = value;
+      return map;
+    }, {});
+  }
+
+  // get the decoded session cookie
+  function getSession() {
+    try {
+      const token = getCookieMap()['SESSION-TOKEN'];
+      // a real backend would verify the token by checking a database or by decrypting the token
+      return JSON.parse(atob(token));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  const todos = [
+    {body: 'buy milk', completed: true},
+    {body: 'pick up dry cleaning', completed: false},
+    {body: 'call mom', completed: false},
+    {body: 'clean basement', completed: false},
+  ];
+&lt;/script&gt;
+&lt;style type=&quot;text/less&quot;&gt;
+  @font-family: 'Raleway', &quot;Helvetica Neue&quot;, Arial, sans-serif;
+  @font-size: 1em;
+  @color-dark: #54599c;
+  @color-light: #fff;
+  @color-light-gray: #d3d3d3;
+  @color-light-blue: #e2f5ff;
+  @color-error: #ff000e;
+  @color-error-light: #fde5ec;
+  @link-color: #2196F3;
+
+  body,
+  input,
+  button {
+    font-family: @font-family;
+    font-size: @font-size;
+  }
+
+  body {
+    background-color: @color-dark;
+    padding: 5%;
+  }
+
+  form {
+    background-color: @color-light;
+    padding: 30px 40px 0 40px;
+    border-radius: 6px;
+
+  }
+
+  input {
+    border: 1px solid @color-light-gray;
+    border-radius: 4px;
+    padding: 3%;
+    margin-bottom: 20px;
+
+    &amp;:not([type=checkbox]) {
+      width: 93%;
+    }
+
+    &amp;:focus {
+      background-color: @color-light-blue;
+      outline: 0;
+      border-color: #a1c7e8;
+    }
+  }
+
+  button {
+    background-color: #3ec967;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 20px;
+    border: 0;
+    color: White;
+    padding: 10px;
+    width: 100%;
+  }
+
+  a {
+    color: @link-color;
+  }
+
+  h2 {
+    color: #b027a1;
+    text-align: center;
+    font-size: 2em;
+  }
+
+  aside {
+    background-color: #f1f0ff;
+    margin: 40px -40px;
+    padding: 15px;
+    border-radius: 0px 0px 6px 6px;
+    text-align: center;
+    color: @color-dark;
+  }
+
+  .welcome-message {
+    color: white;
+    text-align: center;
+  }
+
+  .error {
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+    color: @color-error;
+    background-color: @color-error-light;
+  }
+
+  todo-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+&lt;/style&gt;
+
+</code></pre>
+<div line-highlight='130,only'></div>
+<div class='codepen'></div>
+<h3>Logging Out</h3>
+<p>Eventually, a user will want to stop making requests and end their session, this is quite easy as well. When a user initiates the logout code like the following must be run:</p>
+<pre><code class="language-html">&lt;todo-login&gt;&lt;/todo-login&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+  import {
+    connect,
+    connectCanSession,
+    fixture,
+    restModel,
+    type,
+    ObservableObject,
+    StacheElement,
+  } from &quot;//unpkg.com/can@6/ecosystem.mjs&quot;;
+
+  setupFixtures();
+
+  class Session extends ObservableObject {}
+  Session.connection = [
+    connect.base,
+    connect.dataUrl,
+    connect.constructor,
+    connect.canMap,
+    connectCanSession
+  ].reduce((conn, behavior) =&gt; behavior(conn), {
+    ObjectType: Session,
+    url: {
+      resource: '/api/session',
+      getData: '/api/session',
+      destroyData: '/api/session',
+    }
+  });
+  Session.connection.init();
+
+    class Todo extends ObservableObject {
+        static props = {
+            body: String,
+            completed: Boolean
+        };
+    }
+
+  Todo.connection = restModel({
+    ObjectType: Todo,
+    url: '/api/todo'
+  });
+
+  class TodoLogin extends StacheElement {
+    static view = `
+      {{# if (this.Session.currentPromise.isResolved) }}
+        &lt;p class=&quot;welcome-message&quot;&gt;
+           Welcome {{ Session.current.email }}.
+           &lt;a href=&quot;javascript://&quot; on:click=&quot;this.logOut()&quot;&gt;Log out&lt;/a&gt;
+        &lt;/p&gt;
+        &lt;todo-list&gt;&lt;/todo-list&gt;
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isPending) }}
+        Loading User...
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isRejected) }}
+        &lt;form on:submit=&quot;this.logIn(scope.event)&quot;&gt;
+          &lt;h2&gt;Log In&lt;/h2&gt;
+
+          &lt;input placeholder=&quot;email&quot; value:to=&quot;this.email&quot; /&gt;
+
+          &lt;input type=&quot;password&quot; placeholder=&quot;password&quot;
+                 value:to=&quot;this.password&quot; /&gt;
+
+          &lt;button&gt;Log In&lt;/button&gt;
+
+          {{# if (this.logInError) }}
+            &lt;div class=&quot;error&quot;&gt;{{ this.logInError.message }}&lt;/div&gt;
+          {{/ if }}
+
+          &lt;aside&gt;
+             Login with the following account details:&lt;br/&gt;
+             Email: nils@bitovi.com&lt;br/&gt;
+             Password: abc123&lt;br/&gt;
+          &lt;/aside&gt;
+        &lt;/form&gt;
+      {{/ if }}
+    `;
+
+    static props = {
+      email: String,
+      password: String,
+      logInError: type.Any,
+    };
+
+    get Session() {
+      return Session;
+    }
+
+    logOut() {
+      Session.current.destroy();
+    }
+
+    logIn(event) {
+      event.preventDefault();
+      this.logInError = null;
+
+      const session = new Session({
+        email: this.email,
+        password: this.password
+      });
+
+      session.save().catch((error) =&gt; {
+        this.logInError = error;
+      });
+    }
+  }
+  customElements.define(&quot;todo-login&quot;, TodoLogin);
+
+  class TodoList extends StacheElement {
+    static view = `
+      &lt;h3&gt;Todos:&lt;/h3&gt;
+      &lt;ol&gt;
+      {{#each (this.todos)}}
+        &lt;li&gt;
+          &lt;input type=&quot;checkbox&quot; checked:bind=&quot;this.completed&quot; /&gt;
+          {{ this.body }}
+        &lt;/li&gt;
+      {{/each}}
+      &lt;/ol&gt;
+    `;
+
+    static props = {
+      todos: {
+        async(resolve) {
+          Session.currentPromise.then(() =&gt; {
+            Todo.getList({}).then(resolve);
+          });
+          return [];
+        }
+      },
+    };
+  }
+  customElements.define(&quot;todo-list&quot;, TodoList);
+
+  function setupFixtures() {
+    fixture(&quot;GET /api/session&quot;, function (request, response) {
+      const session = getSession();
+
+      if (session) {
+        response(session);
+      } else {
+        response(404, {message: &quot;No session&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;POST /api/session&quot;, function (request, response) {
+      const email = request.data.email;
+      const password = request.data.password;
+
+      if (
+        email === 'nils@bitovi.com' &amp;&amp;
+        password === 'abc123'
+      ) {
+        document.cookie = `SESSION-TOKEN=${btoa(JSON.stringify({email, password}))}`;
+        return request.data;
+      } else {
+        response(401, {message: &quot;Unauthorized&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;DELETE /api/session&quot;, function () {
+      document.cookie = 'SESSION-TOKEN=';
+      return {};
+    });
+
+    fixture(&quot;GET /api/todo&quot;, function () {
+      const session = getSession();
+
+      if (session) {
+        return todos;
+      } else {
+        response(401, {message: &quot;Unauthorized&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+  }
+
+  // get browser cookies as a map from key to value
+  function getCookieMap() {
+    return document.cookie.split(';').map(cookie =&gt; cookie.split('=')).reduce((map, [key, value]) =&gt; {
+      map[key] = value;
+      return map;
+    }, {});
+  }
+
+  // get the decoded session cookie
+  function getSession() {
+    try {
+      const token = getCookieMap()['SESSION-TOKEN'];
+      // a real backend would verify the token by checking a database or by decrypting the token
+      return JSON.parse(atob(token));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  const todos = [
+    {body: 'buy milk', completed: true},
+    {body: 'pick up dry cleaning', completed: false},
+    {body: 'call mom', completed: false},
+    {body: 'clean basement', completed: false},
+  ];
+&lt;/script&gt;
+&lt;style type=&quot;text/less&quot;&gt;
+  @font-family: 'Raleway', &quot;Helvetica Neue&quot;, Arial, sans-serif;
+  @font-size: 1em;
+  @color-dark: #54599c;
+  @color-light: #fff;
+  @color-light-gray: #d3d3d3;
+  @color-light-blue: #e2f5ff;
+  @color-error: #ff000e;
+  @color-error-light: #fde5ec;
+  @link-color: #2196F3;
+
+  body,
+  input,
+  button {
+    font-family: @font-family;
+    font-size: @font-size;
+  }
+
+  body {
+    background-color: @color-dark;
+    padding: 5%;
+  }
+
+  form {
+    background-color: @color-light;
+    padding: 30px 40px 0 40px;
+    border-radius: 6px;
+
+  }
+
+  input {
+    border: 1px solid @color-light-gray;
+    border-radius: 4px;
+    padding: 3%;
+    margin-bottom: 20px;
+
+    &amp;:not([type=checkbox]) {
+      width: 93%;
+    }
+
+    &amp;:focus {
+      background-color: @color-light-blue;
+      outline: 0;
+      border-color: #a1c7e8;
+    }
+  }
+
+  button {
+    background-color: #3ec967;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 20px;
+    border: 0;
+    color: White;
+    padding: 10px;
+    width: 100%;
+  }
+
+  a {
+    color: @link-color;
+  }
+
+  h2 {
+    color: #b027a1;
+    text-align: center;
+    font-size: 2em;
+  }
+
+  aside {
+    background-color: #f1f0ff;
+    margin: 40px -40px;
+    padding: 15px;
+    border-radius: 0px 0px 6px 6px;
+    text-align: center;
+    color: @color-dark;
+  }
+
+  .welcome-message {
+    color: white;
+    text-align: center;
+  }
+
+  .error {
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+    color: @color-error;
+    background-color: @color-error-light;
+  }
+
+  todo-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+&lt;/style&gt;
+
+</code></pre>
+<div line-highlight='94,only'></div>
+<div class='codepen'></div>
+<p>After the logout completes <code>Session.current</code> will be set to undefined and <code>Session.currentPromise</code> will be set to a rejected promise. Due to this change, properties dependent on the session will recalculate and return to a logged out state. A user must then login anew to update <code>current</code> &amp; <code>currentPromise</code> and resume using the application.</p>
+<h3>Example</h3>
+<p>The following is the full example of using cookie-based sessions:</p>
+<pre><code class="language-html">&lt;todo-login&gt;&lt;/todo-login&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+  import {
+    connect,
+    connectCanSession,
+    fixture,
+    restModel,
+    type,
+    ObservableObject,
+    StacheElement,
+  } from &quot;//unpkg.com/can@6/ecosystem.mjs&quot;;
+
+  setupFixtures();
+
+  class Session extends ObservableObject {}
+  Session.connection = [
+    connect.base,
+    connect.dataUrl,
+    connect.constructor,
+    connect.canMap,
+    connectCanSession
+  ].reduce((conn, behavior) =&gt; behavior(conn), {
+    ObjectType: Session,
+    url: {
+      resource: '/api/session',
+      getData: '/api/session',
+      destroyData: '/api/session',
+    }
+  });
+  Session.connection.init();
+
+    class Todo extends ObservableObject {
+        static props = {
+            body: String,
+            completed: Boolean
+        };
+    }
+
+  Todo.connection = restModel({
+    ObjectType: Todo,
+    url: '/api/todo'
+  });
+
+  class TodoLogin extends StacheElement {
+    static view = `
+      {{# if (this.Session.currentPromise.isResolved) }}
+        &lt;p class=&quot;welcome-message&quot;&gt;
+           Welcome {{ Session.current.email }}.
+           &lt;a href=&quot;javascript://&quot; on:click=&quot;this.logOut()&quot;&gt;Log out&lt;/a&gt;
+        &lt;/p&gt;
+        &lt;todo-list&gt;&lt;/todo-list&gt;
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isPending) }}
+        Loading User...
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isRejected) }}
+        &lt;form on:submit=&quot;this.logIn(scope.event)&quot;&gt;
+          &lt;h2&gt;Log In&lt;/h2&gt;
+
+          &lt;input placeholder=&quot;email&quot; value:to=&quot;this.email&quot; /&gt;
+
+          &lt;input type=&quot;password&quot; placeholder=&quot;password&quot;
+                 value:to=&quot;this.password&quot; /&gt;
+
+          &lt;button&gt;Log In&lt;/button&gt;
+
+          {{# if (this.logInError) }}
+            &lt;div class=&quot;error&quot;&gt;{{ this.logInError.message }}&lt;/div&gt;
+          {{/ if }}
+
+          &lt;aside&gt;
+             Login with the following account details:&lt;br/&gt;
+             Email: nils@bitovi.com&lt;br/&gt;
+             Password: abc123&lt;br/&gt;
+          &lt;/aside&gt;
+        &lt;/form&gt;
+      {{/ if }}
+    `;
+
+    static props = {
+      email: String,
+      password: String,
+      logInError: type.Any,
+    };
+
+    get Session() {
+      return Session;
+    }
+
+    logOut() {
+      Session.current.destroy();
+    }
+
+    logIn(event) {
+      event.preventDefault();
+      this.logInError = null;
+
+      const session = new Session({
+        email: this.email,
+        password: this.password
+      });
+
+      session.save().catch((error) =&gt; {
+        this.logInError = error;
+      });
+    }
+  }
+  customElements.define(&quot;todo-login&quot;, TodoLogin);
+
+  class TodoList extends StacheElement {
+    static view = `
+      &lt;h3&gt;Todos:&lt;/h3&gt;
+      &lt;ol&gt;
+      {{#each (this.todos)}}
+        &lt;li&gt;
+          &lt;input type=&quot;checkbox&quot; checked:bind=&quot;this.completed&quot; /&gt;
+          {{ this.body }}
+        &lt;/li&gt;
+      {{/each}}
+      &lt;/ol&gt;
+    `;
+
+    static props = {
+      todos: {
+        async(resolve) {
+          Session.currentPromise.then(() =&gt; {
+            Todo.getList({}).then(resolve);
+          });
+          return [];
+        }
+      },
+    };
+  }
+  customElements.define(&quot;todo-list&quot;, TodoList);
+
+  function setupFixtures() {
+    fixture(&quot;GET /api/session&quot;, function (request, response) {
+      const session = getSession();
+
+      if (session) {
+        response(session);
+      } else {
+        response(404, {message: &quot;No session&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;POST /api/session&quot;, function (request, response) {
+      const email = request.data.email;
+      const password = request.data.password;
+
+      if (
+        email === 'nils@bitovi.com' &amp;&amp;
+        password === 'abc123'
+      ) {
+        document.cookie = `SESSION-TOKEN=${btoa(JSON.stringify({email, password}))}`;
+        return request.data;
+      } else {
+        response(401, {message: &quot;Unauthorized&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;DELETE /api/session&quot;, function () {
+      document.cookie = 'SESSION-TOKEN=';
+      return {};
+    });
+
+    fixture(&quot;GET /api/todo&quot;, function () {
+      const session = getSession();
+
+      if (session) {
+        return todos;
+      } else {
+        response(401, {message: &quot;Unauthorized&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+  }
+
+  // get browser cookies as a map from key to value
+  function getCookieMap() {
+    return document.cookie.split(';').map(cookie =&gt; cookie.split('=')).reduce((map, [key, value]) =&gt; {
+      map[key] = value;
+      return map;
+    }, {});
+  }
+
+  // get the decoded session cookie
+  function getSession() {
+    try {
+      const token = getCookieMap()['SESSION-TOKEN'];
+      // a real backend would verify the token by checking a database or by decrypting the token
+      return JSON.parse(atob(token));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  const todos = [
+    {body: 'buy milk', completed: true},
+    {body: 'pick up dry cleaning', completed: false},
+    {body: 'call mom', completed: false},
+    {body: 'clean basement', completed: false},
+  ];
+&lt;/script&gt;
+&lt;style type=&quot;text/less&quot;&gt;
+  @font-family: 'Raleway', &quot;Helvetica Neue&quot;, Arial, sans-serif;
+  @font-size: 1em;
+  @color-dark: #54599c;
+  @color-light: #fff;
+  @color-light-gray: #d3d3d3;
+  @color-light-blue: #e2f5ff;
+  @color-error: #ff000e;
+  @color-error-light: #fde5ec;
+  @link-color: #2196F3;
+
+  body,
+  input,
+  button {
+    font-family: @font-family;
+    font-size: @font-size;
+  }
+
+  body {
+    background-color: @color-dark;
+    padding: 5%;
+  }
+
+  form {
+    background-color: @color-light;
+    padding: 30px 40px 0 40px;
+    border-radius: 6px;
+
+  }
+
+  input {
+    border: 1px solid @color-light-gray;
+    border-radius: 4px;
+    padding: 3%;
+    margin-bottom: 20px;
+
+    &amp;:not([type=checkbox]) {
+      width: 93%;
+    }
+
+    &amp;:focus {
+      background-color: @color-light-blue;
+      outline: 0;
+      border-color: #a1c7e8;
+    }
+  }
+
+  button {
+    background-color: #3ec967;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 20px;
+    border: 0;
+    color: White;
+    padding: 10px;
+    width: 100%;
+  }
+
+  a {
+    color: @link-color;
+  }
+
+  h2 {
+    color: #b027a1;
+    text-align: center;
+    font-size: 2em;
+  }
+
+  aside {
+    background-color: #f1f0ff;
+    margin: 40px -40px;
+    padding: 15px;
+    border-radius: 0px 0px 6px 6px;
+    text-align: center;
+    color: @color-dark;
+  }
+
+  .welcome-message {
+    color: white;
+    text-align: center;
+  }
+
+  .error {
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+    color: @color-error;
+    background-color: @color-error-light;
+  }
+
+  todo-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+&lt;/style&gt;
+
+</code></pre>
+<div line-highlight='16-31, 47, 55, 59, 94, 101-104, 106-108, 127-134, only'></div>
+<div class='codepen'></div>
+<p style="text-align: center">
+<img src="../../docs/can-guides/images/managing-sessions/example.gif" class="bit-docs-screenshot"/>
+</p>
+<p><span id="appHeldTokens"></span></p>
+<h2>Sessions Via Application Held Tokens</h2>
+<p>Sessions are easiest to implement with cookies since the browser takes care of securely storing the session token and sending the token with requests. However you may be working with an API that requires the session token to be sent as an <code>Authorization</code> header in which case your application needs to hold the session token and add it to requests.</p>
+<h3>The Dangers Of Application Held Tokens</h3>
+<p>The use of application held tokens, in general, is considered a hazardous practice since your token is accessible by any script on the page. A malicious script may steal the token and impersonate the user. If you must use application held tokens, avoid the temptation to persist the token by storing it in browser LocalStorage (or SessionStorage) for reuse during the next visit to the application by a user. Storing tokens in a widely used location like this may increase the likelihood that they're stolen by a malicious script.</p>
+<h3>Difference From Cookie Held Tokens</h3>
+<p>From a code perspective, the difference from a cookie-based scenario is the requirement to add the token to requests manually, rather than letting the browser do it for you. When initializing an app using app-held tokens you'll typically use the third scenario <a href="#connectionDependency">described above</a>. You'll access <code>Session.currentPromise</code> in the <code>beforeSend</code> handler of requests for restricted data, which looks something like this:</p>
+<pre><code class="language-html">&lt;todo-login&gt;&lt;/todo-login&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+  import {
+    connect,
+    connectCanSession,
+    fixture,
+    restModel,
+    type,
+    ObservableObject,
+    StacheElement,
+  } from &quot;//unpkg.com/can@6/ecosystem.mjs&quot;;
+
+  setupFixtures();
+
+    class Session extends ObservableObject {}
+  Session.connection = [
+    connect.base,
+    connect.dataUrl,
+    connect.constructor,
+    connect.canMap,
+    connectCanSession
+  ].reduce((conn, behavior) =&gt; behavior(conn), {
+    ObjectType: Session,
+    url: {
+      resource: '/api/session',
+      getData: '/api/session',
+      destroyData: '/api/session',
+    }
+  });
+  Session.connection.init();
+
+    class Todo extends ObservableObject {
+        static props = {
+            body: String,
+            completed: Boolean
+        };
+    }
+
+  Todo.connection = restModel({
+    ObjectType: Todo,
+    url: {
+      resource: '/api/todo',
+      beforeSend: (xhr) =&gt; {
+        return Session.currentPromise.then(() =&gt; {
+          xhr.setRequestHeader('Authorization', `Bearer ${Session.current.token}`);
+        });
+      }
+    }
+  });
+
+  class TodoLogin extends StacheElement {
+    static view = `
+      {{# if (this.Session.currentPromise.isResolved) }}
+        &lt;p class=&quot;welcome-message&quot;&gt;
+           Welcome {{ Session.current.email }}.
+           &lt;a href=&quot;javascript://&quot; on:click=&quot;this.logOut()&quot;&gt;Log out&lt;/a&gt;
+        &lt;/p&gt;
+        &lt;todo-list&gt;&lt;/todo-list&gt;
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isPending) }}
+        Loading User...
+      {{/ if }}
+
+      {{# if (this.Session.currentPromise.isRejected) }}
+        &lt;form on:submit=&quot;this.logIn(scope.event)&quot;&gt;
+          &lt;h2&gt;Log In&lt;/h2&gt;
+
+          &lt;input placeholder=&quot;email&quot; value:to=&quot;this.email&quot; /&gt;
+
+          &lt;input type=&quot;password&quot; placeholder=&quot;password&quot;
+                 value:to=&quot;this.password&quot; /&gt;
+
+          &lt;button&gt;Log In&lt;/button&gt;
+
+          {{# if (this.logInError) }}
+            &lt;div class=&quot;error&quot;&gt;{{ this.logInError.message }}&lt;/div&gt;
+          {{/ if }}
+
+          &lt;aside&gt;
+             Login with the following account details:&lt;br/&gt;
+             Email: nils@bitovi.com&lt;br/&gt;
+             Password: abc123&lt;br/&gt;
+          &lt;/aside&gt;
+        &lt;/form&gt;
+      {{/ if }}
+      `;
+
+    static props = {
+      email: String,
+      password: String,
+      logInError: type.Any,
+    };
+
+    get Session() {
+      return Session;
+    }
+
+    logOut() {
+      Session.current.destroy();
+    }
+
+    logIn(event) {
+      event.preventDefault();
+      this.logInError = null;
+
+      const session = new Session({
+        email: this.email,
+        password: this.password
+      });
+
+      session.save().catch((error) =&gt; {
+        this.logInError = error;
+      });
+    }
+  }
+  customElements.define(&quot;todo-login&quot;, TodoLogin);
+
+  class TodoList extends StacheElement {
+    static view = `
+      &lt;h3&gt;Todos:&lt;/h3&gt;
+      &lt;ol&gt;
+      {{#each (this.todos)}}
+        &lt;li&gt;
+          &lt;input type=&quot;checkbox&quot; checked:bind=&quot;this.completed&quot; /&gt;
+          {{ this.body }}
+        &lt;/li&gt;
+      {{/each}}
+      &lt;/ol&gt;
+    `;
+
+    static props = {
+      todos: {
+        async(resolve) {
+          Todo.getList({}).then(resolve);
+          return [];
+        }
+      },
+    };
+  }
+  customElements.define(&quot;todo-list&quot;, TodoList);
+
+  function setupFixtures() {
+    fixture(&quot;GET /api/session&quot;, function (request, response, headers) {
+      const session = getSession(headers);
+
+      if (session) {
+        response(session);
+      } else {
+        response(404, {message: &quot;No session&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;POST /api/session&quot;, function (request, response) {
+      const email = request.data.email;
+      const password = request.data.password;
+
+      if (
+        email === 'nils@bitovi.com' &amp;&amp;
+        password === 'abc123'
+      ) {
+        request.data.token = btoa(JSON.stringify({email, password}));
+        return request.data;
+      } else {
+        response(401, {message: &quot;Unauthorized&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+
+    fixture(&quot;DELETE /api/session&quot;, function () {
+      document.cookie = 'SESSION-TOKEN=';
+      return {};
+    });
+
+    fixture(&quot;GET /api/todo&quot;, function (request, response, headers) {
+      const session = getSession(headers);
+
+      if (session) {
+        return todos;
+      } else {
+        response(401, {message: &quot;Unauthorized&quot;}, {}, &quot;unauthorized&quot;);
+      }
+    });
+  }
+
+  // get the decoded session header
+  function getSession(headers) {
+    try {
+      const token = headers['Authorization'].replace('Bearer ', '');
+      // a real backend would verify the token by checking a database or by decrypting the token
+      return JSON.parse(atob(token));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  const todos = [
+    {body: 'buy milk', completed: true},
+    {body: 'pick up dry cleaning', completed: false},
+    {body: 'call mom', completed: false},
+    {body: 'clean basement', completed: false},
+  ];
+&lt;/script&gt;
+&lt;style type=&quot;text/less&quot;&gt;
+  @font-family: 'Raleway', &quot;Helvetica Neue&quot;, Arial, sans-serif;
+  @font-size: 1em;
+  @color-dark: #54599c;
+  @color-light: #fff;
+  @color-light-gray: #d3d3d3;
+  @color-light-blue: #e2f5ff;
+  @color-error: #ff000e;
+  @color-error-light: #fde5ec;
+  @link-color: #2196F3;
+
+  body,
+  input,
+  button {
+    font-family: @font-family;
+    font-size: @font-size;
+  }
+
+  body {
+    background-color: @color-dark;
+    padding: 5%;
+  }
+
+  form {
+    background-color: @color-light;
+    padding: 30px 40px 0 40px;
+    border-radius: 6px;
+
+  }
+
+  input {
+    border: 1px solid @color-light-gray;
+    border-radius: 4px;
+    padding: 3%;
+    margin-bottom: 20px;
+
+    &amp;:not([type=checkbox]) {
+      width: 93%;
+    }
+
+    &amp;:focus {
+      background-color: @color-light-blue;
+      outline: 0;
+      border-color: #a1c7e8;
+    }
+  }
+
+  button {
+    background-color: #3ec967;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-radius: 20px;
+    border: 0;
+    color: White;
+    padding: 10px;
+    width: 100%;
+  }
+
+  a {
+    color: @link-color;
+  }
+
+  h2 {
+    color: #b027a1;
+    text-align: center;
+    font-size: 2em;
+  }
+
+  aside {
+    background-color: #f1f0ff;
+    margin: 40px -40px;
+    padding: 15px;
+    border-radius: 0px 0px 6px 6px;
+    text-align: center;
+    color: @color-dark;
+  }
+
+  .welcome-message {
+    color: white;
+    text-align: center;
+  }
+
+  .error {
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+    color: @color-error;
+    background-color: @color-error-light;
+  }
+
+  todo-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+&lt;/style&gt;
+
+</code></pre>
+<div line-highlight='46,only'></div>
+<div class='codepen'></div>
+<p>With the above configuration every request made via <code>Todo.connection</code> (e.g <code>Todo.getList()</code>, <code>newTodo.save()</code>, etc.) will wait for a session to be available before attempting the request. Once the session is available it will use the token held by the application (as part of the Session instance) and add it via an HTTP header to the outgoing request.</p>
+<h2>Initializing The Session Manually</h2>
+<p>As we've described above, in most apps a request must be made upon loading to tell if there's an active session. However, an app using cookie tokens could be written so that the server indicates to the app JS that there's already an active session, preventing the need for an initialization request. This is done by including session metadata as part of the initial page load.</p>
+<p>For example, when the browser requests the page at <code>www.myapp.com/store</code>, the browser includes any cookies for that domain. If I have a session cookie for <code>www.myapp.com</code>, the server can detect this and add a script tag including session metadata to the HTML in the response:</p>
+<pre><code class="language-html">&lt;script&gt;
+  window.sessionMetadata = {
+    sessionTimeout: 1763078400,
+  }
+&lt;/script&gt;
+</code></pre>
+<p>Then when my application JS initializes, it can check <code>window.sessionMetadata</code> to see if the server has indicated that there's already an active session. If there is, it can manually set <code>Session.current</code>:</p>
+<pre><code class="language-js">// upon starting the application js, check for session data included with page
+if (window.sessionMetadata) {
+  const session = new Session(window.sessionMetadata);
+  Session.current = session;
+  // after setting Session.current, Session.currentPromise is also automatically set:
+  // Session.currentPromise === Promise.resolve(session);
+}
+</code></pre>
+<p>Any requests that use <code>Session.current</code> or <code>Session.currentPromise</code> can now be made immediately, without the need for a request to see if there's an active session.</p>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/topics/data/managing-sessions/managing-sessions.md"},"description":"Learn how to use [can-connect/can/session/session can/session] to manage user session state in CanJS apps. \n","name":"guides/data-managing-sessions","title":"Managing Sessions","type":"page","parent":"guides/data","order":3,"outline":{"depth":4},"comment":" ","codepen":[["\"can\"","\"//unpkg.com/can@6/core.mjs\""],["\"can/ecosystem\"","\"//unpkg.com/can@6/ecosystem.mjs\""],["\"can/everything\"","\"//unpkg.com/can@6/everything.mjs\""],["\"can/demos/technology-overview/mock-url\"","\"//unpkg.com/mock-url@^6.0.0/mock-url.mjs\""],["\"can/demos/technology-overview/route-mini-app-components\"","\"//unpkg.com/route-mini-app@^5.0.0/components.mjs\""],["return steal.import(","return import("],["\"can/demos/technology-overview/page-login\"","\"//unpkg.com/route-mini-app@^5.0.0/page-login.mjs\""],["`can/demos/technology-overview/page-${this.page}`","`//unpkg.com/route-mini-app@^5.0.0/page-${this.page}.mjs`"]],"pathToRoot":"../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix=".."></div>
+
+	</body>
+</html>

@@ -1,0 +1,1894 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/topics/data/introduction.md
+	@page guides/data-introduction
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Introduction | Service Layer | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="Learn how to get, create, update, and delete backend service layer data.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Learn how to get, create, update, and delete backend service layer data.">
+	<meta property="og:title" content="Introduction | Service Layer | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "Learn how to get, create, update, and delete backend service layer data.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Introduction | Service Layer | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/data-introduction" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>getting started</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="crud-beginner.html"
+							title="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+							CRUD Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="setup.html"
+							title="Learn how to install CanJS in your environment.">
+							Setting Up CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="technology-overview.html"
+							title="Learn the basics of CanJS’s technology.">
+							Technology Overview
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>topics</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="html.html"
+							title="Learn how to update HTML and listen to user interactions.">
+							HTML
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="routing.html"
+							title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+							Routing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="data.html"
+							title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">
+							Service Layer
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="data-introduction.html"
+							title="Learn how to get, create, update, and delete backend service layer data.">
+							Introduction
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="data-configuring-requests.html"
+							title="URL, query, and response formats for making requests.">
+							Configuring Requests
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="data-managing-sessions.html"
+							title="Learn how to use can/session to manage user session state in CanJS apps.">
+							Managing Sessions
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="data-customizing-connections.html"
+							title="Learn the layers that make up can-connect and how to implement custom connection functionality.">
+							Customizing Connections
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="debugging.html"
+							title="Learn how to debug CanJS applications.">
+							Debugging
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="forms.html"
+							title="Learn how to create amazing &lt;form&gt;s with CanJS.">
+							Forms
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="testing.html"
+							title="Learn how to test CanJS applications.">
+							Testing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="logic.html"
+							title="Learn how to write observables in an organized, maintainable, and testable way.">
+							Logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="server-side-rendering.html"
+							title="Learn how to set up SSR for CanJS.">
+							Server-Side Rendering
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>app guides</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="chat.html"
+							title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+							Chat Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="todomvc.html"
+							title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+							TodoMVC Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/todomvc-with-steal.html"
+							title="This tutorial walks through building TodoMVC with StealJS. It includes KeyNote presentations covering CanJS core libraries.">
+							TodoMVC with StealJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>beginner recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/canvas-clock.html"
+							title="This beginner guide walks you through building a clock with the Canvas API.">
+							Canvas Clock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-simple.html"
+							title="This beginner guide walks through building a very simple credit card payment form.  It uses Stripe.js v2 API to create a token which can be used to create a charge.  It also performs simple validation on the payment form values.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-simple.html"
+							title="This beginner guide walks you through building a simple file navigation widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.0.0. Check out the file-navigator-advanced for an example that makes AJAX requests for its data and uses can-stache-element.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/signup-simple.html"
+							title="This beginner guide walks through building simple signup, login forms and a logout button.">
+							Signup and Login
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/video-player.html"
+							title="This beginner guide walks you through building custom video controls around a video element.">
+							Video Player
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/weather-report-simple.html"
+							title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.2.">
+							Weather Report
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>intermediate recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/cta-bus-map.html"
+							title="This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map. You&#x27;ll learn how to create a StacheElement that integrates with 3rd party widgets.">
+							CTA Bus Map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/modals.html"
+							title="This intermediate guide shows how to create a multiple modal form.">
+							Multiple Modals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/text-editor.html"
+							title="This intermediate guide walks you through building a basic rich text editor.">
+							Text Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/tinder-carousel.html"
+							title="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+							Tinder Carousel
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>advanced recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-advanced.html"
+							title="This advanced guide walks through building a simple credit card payment form with validations. It doesn’t use can-define. Instead it uses Kefir.js streams to make a ViewModel. can-kefir is used to make the Kefir streams observable to can-stache.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-advanced.html"
+							title="This advanced guide walks you through building a file navigation widget that requests data with fetch. It takes about 45 minutes to complete.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/playlist-editor.html"
+							title="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+							Playlist Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/search-list-details.html"
+							title="This advanced guide walks through building a Search, List, Details flow with lazy-loaded routes.">
+							Search, List, Details
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>upgrade</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-3.html"
+							title="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+							Migrating to CanJS 3
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-4.html"
+							title="This guide walks you through the step-by-step process to upgrade a 3.x app to CanJS 4.">
+							Migrating to CanJS 4
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-5.html"
+							title="This guide walks you through the process to upgrade a 4.x app to CanJS 5.x.">
+							Migrating to CanJS 5
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-6.html"
+							title="This guide walks you through the process to upgrade a 5.x app to CanJS 6.x.">
+							Migrating to CanJS 6
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="upgrade/using-codemods.html"
+							title="Learn how to migrate your app to CanJS 6 using can-migrate.">
+							Using Codemods
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>other</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="api.html"
+							title="This page walks through how to use and understand CanJS’s API documentation.">
+							Reading the API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Introduction</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/topics/data/introduction.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Learn how to get, create, update, and delete backend service layer data.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <style>
+table.panels .background td {
+    background: #f4f4f4;
+    padding: 5px 5px 5px 5px;
+    border: solid 1px white;
+    margin: 1px;
+    vertical-align: top;
+}
+table.panels pre {
+    margin-top: 0px;
+}
+</style>
+<h2>Overview</h2>
+<p>Most applications need to request data from a server.  For example, you might have used
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest">XMLHttpRequest</a> to
+make an <strong>AJAX</strong> request, used the new <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">fetch API</a>
+to get JSON data, or used <a href="http://api.jquery.com/jquery.ajax/">jQuery.ajax</a> to post form data.</p>
+<p>While these techniques are <em>fine</em> in a CanJS application, using CanJS’s service-layer modeling tools can solve some difficult problems with little configuration:</p>
+<ul>
+<li>Provide a standard interface for retrieving, creating, updating, and deleting data.</li>
+<li>Convert raw data from the server to typed data, with methods and special property behaviors.</li>
+<li>Caching</li>
+<li>Real time updates of instances and lists</li>
+<li>Prevent multiple instances of a given id or multiple lists of a given set from being created.</li>
+<li>Handle relationships between data.</li>
+</ul>
+<p>This guide walks you through the basics of CanJS’s service layer modeling.</p>
+<h2>Creating a model</h2>
+<p>CanJS’s pattern is such that you define application logic in one or more observables, then connect the observables to various browser APIs. CanJS’s model layer
+libraries connect observables to backend services. CanJS’s model-layer will make
+AJAX requests to get, create, update, and delete data.</p>
+<p>For example, you
+can connect a <code>Todo</code> and <code>TodoList</code> observable to a restful service layer at
+<code>/api/todos</code> with <a href="../can-rest-model.html" title="Connect a type to a restful service layer.">can-rest-model</a>:</p>
+<pre><code class="language-js">import { ObservableArray, ObservableObject, restModel, type } from &quot;can&quot;;
+
+class Todo extends ObservableObject {
+    static props = {
+        // `id` uniquely identifies instances of this type.
+        id: { type: type.maybe(Number), identity: true },
+
+        // properties on models can be given types as well as default values
+        complete: { type: Boolean, default: false },
+        dueDate: type.maybeConvert(Date),
+        name: type.maybe(String)
+    };
+
+    toggleComplete() {
+        this.complete = !this.complete;
+    }
+}
+
+class TodoList extends ObservableArray {
+    static items = Todo;  
+
+    completeAll() {
+        return this.forEach((todo) =&gt; { todo.complete = true; });
+    }
+}
+
+const todoConnection = restModel({
+    ObjectType: Todo,
+    ArrayType: TodoList,
+    url: &quot;/api/todos/{id}&quot;
+});
+</code></pre>
+<div line-highlight='27-31'></div>
+<div class='codepen'></div>
+<p>This allows you to get, create, update and destroy data
+programmatically through the <code>Todo</code> observable. <a href="../can-rest-model.html" title="Connect a type to a restful service layer.">can-rest-model</a> mixes in the
+following methods:</p>
+<ul>
+<li><code>Todo.getList({filter: {complete: true}})</code> - <em>GET</em> a list of todos from <code>/api/todos?filter[complete]=true</code>.</li>
+<li><code>Todo.get({id: 5})</code> - <em>GET</em> a single todo from <code>/api/todos/5</code>.</li>
+<li><code>new Todo({name: &quot;Learn CanJS&quot;}).save()</code> - Create a todo by <em>POSTing</em> it to <code>/api/todos</code>.</li>
+<li><code>todo.save()</code> - Update a todo's data by <em>PUTing</em> it to <code>/api/todos/5</code>.</li>
+<li><code>todo.destroy()</code> - Delete a todo by <em>DELETE-ing</em> it from <code>/api/todos/5</code>.</li>
+</ul>
+<p>The following sections show examples of how to use these methods.</p>
+<h2>Retrieving a list of records</h2>
+<p>Use <a href="../can-connect/can/map/map.getList.html" title="Retrieve a list of instance.">getList</a> to retrieve records.</p>
+<table class="panels">
+<tr>
+    <th>JavaScript API</th>
+    <th>Request</th>
+    <th>Response</th>
+</tr>
+<tr class='background'>
+<td>
+<p>Call <code>.getList</code> with <em>parameters</em> used to filter, sort,
+and paginate your list.</p>
+</td>
+<td>
+<p>The <em>parameters</em> are serialized
+with <a href="../can-param.html" title="Serialize an object or array into a query string.">can-param</a> and added to the restful url.</p>
+</td>
+<td>
+<p>Server responds with <code>data</code> property containing the
+records. Configure for other formats with
+<a href="../can-connect/data/parse/parse.parseListProp.html" title="The property to find the array-like data that represents each instance item.">parseListProp</a> or <a href="../can-connect/data/parse/parse.parseListData.html" title="Given a response from connection.getListData returns its data in the proper can-connect.listData format.">parseListData</a>.</p>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-js">Todo.getList({
+  filter: {
+    complete: false
+  }
+}) //-&gt; Promise&lt;TodoList[]&gt;
+
+
+
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code>GET /api/todos?
+  filter[complete]=false
+
+
+
+
+
+
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">{
+  &quot;data&quot;: [
+    {
+      &quot;id&quot;: 20,
+      &quot;name&quot;: &quot;mow lawn&quot;,
+      &quot;complete&quot;: false
+    },
+    ...
+  ]
+}
+</code></pre>
+</td>
+</tr>
+</table>
+<p><code>.getList(params)</code> returns a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>
+that will eventually resolve to a <code>TodoList</code> of <code>Todo</code> instances.  This means that
+properties and methods defined on <code>TodoList</code> and <code>Todo</code> will be available:</p>
+<pre><code class="language-js">let todosPromise = Todo.getList({});
+
+todosPromise.then(function(todos){
+    todos    //-&gt; Todos.List[Todo..]
+    todos[0] //-&gt; Todo{id: 1, name: &quot;Learn CanJS&quot;, complete: false, ...}
+
+    todos.completeAll();
+    todos[0] //-&gt; Todo{id: 1, name: &quot;Learn CanJS&quot;, complete: true, ...}
+
+    todos[0].toggleComplete();
+    todos[0] //-&gt; Todo{id: 1, name: &quot;Learn CanJS&quot;, complete: false, ...}
+})
+</code></pre>
+<p>The following creates a component that uses <code>Todo.getList</code> to load and list data:</p>
+<pre><code class="language-js">class TodoList extends StacheElement {
+    static view = `
+        &lt;ul&gt;
+            {{# if(this.todosPromise.isResolved) }}
+                {{# for(todo of this.todosPromise.value) }}
+                    &lt;li&gt;
+                        &lt;input type='checkbox' checked:bind='todo.complete' disabled/&gt;
+                        &lt;label&gt;{{ todo.name }}&lt;/label&gt;
+                        &lt;input type='date' valueAsDate:bind='todo.dueDate' disabled/&gt;
+                    &lt;/li&gt;
+                {{/ for }}
+            {{/ if }}
+            {{# if(this.todosPromise.isPending) }}
+                &lt;li&gt;Loading&lt;/li&gt;
+            {{/ if }}
+        &lt;/ul&gt;
+    `;
+
+    static props = {
+        todosPromise: {
+            get default() {
+                return Todo.getList({});
+            }
+        }
+    };
+};
+customElements.define(&quot;todo-list&quot;, TodoList);
+</code></pre>
+<div line-highlight='4-5,22,only'></div>
+<blockquote>
+<p><strong>Note:</strong> A promise's values and state can be read in <a href="../can-stache.html" title="Live binding templates.">can-stache</a> directly via:
+<code>promise.value</code>, <code>promise.reason</code>, <code>promise.isResolved</code>, <code>promise.isPending</code>, and <code>promise.isRejected</code>.</p>
+</blockquote>
+<p>See the component in action here:</p>
+<div class='demo_wrapper' data-demo-src='demos/can-rest-model/can-rest-model-0.html'></div>
+<div class='codepen'></div>
+<p>The object passed to <code>.getList</code> can be used to filter, sort, and paginate
+the items retrieved. The following adds inputs to control the filtering,
+sorting, and pagination of the component:</p>
+<pre><code class="language-js">class TodoList extends StacheElement {
+    static view = `
+        Sort By: &lt;select value:bind=&quot;sort&quot;&gt;
+            &lt;option value=&quot;&quot;&gt;none&lt;/option&gt;
+            &lt;option value=&quot;name&quot;&gt;name&lt;/option&gt;
+            &lt;option value=&quot;dueDate&quot;&gt;dueDate&lt;/option&gt;
+        &lt;/select&gt;
+
+        Show: &lt;select value:bind=&quot;completeFilter&quot;&gt;
+            &lt;option value=&quot;&quot;&gt;All&lt;/option&gt;
+            &lt;option value=&quot;complete&quot;&gt;Complete&lt;/option&gt;
+            &lt;option value=&quot;incomplete&quot;&gt;Incomplete&lt;/option&gt;
+        &lt;/select&gt;
+
+        Due: &lt;select value:bind=&quot;dueFilter&quot;&gt;
+            &lt;option value=&quot;&quot;&gt;Anytime&lt;/option&gt;
+            &lt;option value=&quot;today&quot;&gt;Today&lt;/option&gt;
+            &lt;option value=&quot;week&quot;&gt;This Week&lt;/option&gt;
+        &lt;/select&gt;
+
+        Results &lt;select value:bind=&quot;count&quot;&gt;
+            &lt;option value=&quot;&quot;&gt;All&lt;/option&gt;
+            &lt;option value=&quot;10&quot;&gt;10&lt;/option&gt;
+            &lt;option value=&quot;20&quot;&gt;20&lt;/option&gt;
+        &lt;/select&gt;
+
+        &lt;ul&gt;
+            {{# if(this.todosPromise.isResolved) }}
+                {{# for(todo of this.todosPromise.value) }}
+                    &lt;li&gt;
+                        &lt;input type='checkbox' checked:bind='todo.complete' disabled/&gt;
+                        &lt;label&gt;{{ todo.name }}&lt;/label&gt;
+                        &lt;input type='date' valueAsDate:bind='todo.dueDate' disabled/&gt;
+                    &lt;/li&gt;
+                {{/ for }}
+            {{/ if }}
+            {{# if(this.todosPromise.isPending) }}
+                &lt;li&gt;Loading&lt;/li&gt;
+            {{/ if }}
+        &lt;/ul&gt;
+    `;
+
+    static props = {
+        sort: type.maybe(String),
+        completeFilter: type.maybe(String),
+        dueFilter: type.maybe(String),
+        count: {type: String, default: &quot;10&quot;},
+        get todosPromise(){
+            let query = {filter: {}};
+            if(this.sort) {
+                query.sort =  this.sort;
+            }
+            if(this.completeFilter) {
+                query.filter.complete = this.completeFilter === &quot;complete&quot;;
+            }
+            if(this.dueFilter) {
+                let day = 24*60*60*1000;
+                let now = new Date();
+                let today = new Date(now.getFullYear(), now.getMonth(), now.getDate() );
+                if(this.dueFilter === &quot;today&quot;) {
+
+                    query.filter.dueDate = {
+                        $gte: now.toString(),
+                        $lt: new Date(now.getTime() + day).toString()
+                    }
+                }
+                if(this.dueFilter === &quot;week&quot;) {
+                    let start = today.getTime() - (today.getDay() * day);
+                    query.filter.dueDate = {
+                        $gte: new Date(start).toString(),
+                        $lt: new Date(start + 7*day).toString()
+                    };
+                }
+            }
+            if(this.count) {
+                query.page = {
+                    start: 0,
+                    end: (+this.count)-1
+                };
+            }
+            return Todo.getList(query);
+        }
+    };
+};
+customElements.define(&quot;todo-list&quot;, TodoList);
+</code></pre>
+<div line-highlight='3-25,44-82,only'></div>
+<p>See it in action here:</p>
+<div class='demo_wrapper' data-demo-src='demos/can-rest-model/can-rest-model-1.html'></div>
+<div class='codepen'></div>
+<h2>Creating records</h2>
+<p>Use <a href="../can-connect/can/map/map.prototype.save.html" title="Save or update client data to the persisted data source.">save</a> to create records.</p>
+<table class="panels">
+<tr>
+    <th>JavaScript API</th>
+    <th>Request</th>
+    <th>Response</th>
+</tr>
+<tr class='background'>
+<td>
+<p>Create an instance and then call <code>.save()</code> to
+create a record.</p>
+</td>
+<td>
+<p>The instance is <a href="../can-define/map/map.prototype.serialize.html" title="Get a serialized representation of the map instance and its children.">serialized</a>
+and POSTed to the server.</p>
+</td>
+<td>
+<p>Server responds with the <a href="../can-define.types.identity.html" title="Specifies that the property uniquely identifies instances of the type.">identity</a> value and
+all other values on the record. Use
+<a href="../can-connect/can/map/map.updateInstanceWithAssignDeep.html" title="Use the response from save() and destroy() to assign properties, never delete them.">updateInstanceWithAssignDeep</a> to
+not require every record value.</p>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-js">const todo = new Todo({
+  name: &quot;make a model&quot;
+})
+todo.save()  //-&gt; Promise&lt;Todo&gt;
+
+
+</code></pre>
+</td>
+<td>
+<pre><code>POST /api/todos
+    {
+      &quot;name&quot;: &quot;make a model&quot;,
+      &quot;complete&quot;: false
+    }
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">{
+  &quot;id&quot;: 22,
+  &quot;name&quot;: &quot;make a model&quot;,
+  &quot;complete&quot;: false
+}
+</code></pre>
+</td>
+</tr>
+</table>
+<p><code>.save()</code> returns a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a> that eventually resolves to the same instance that <code>.save()</code> was called
+on.  While the record is being saved, <a href="../can-connect/can/map/map.prototype.isSaving.html" title="Returns if the instance is currently being saved.">isSaving</a>
+will return <code>true</code>:</p>
+<pre><code class="language-js">const todo = new Todo({
+  name: &quot;make a model&quot;
+});
+
+todo.isSaving() //-&gt; false
+
+todoPromise = todo.save();
+
+todo.isSaving() //-&gt; true
+
+todoPromise.then(function(){
+    todo.isSaving() //-&gt; false
+});
+</code></pre>
+<p>The following creates a component that uses <code>Todo.prototype.save</code> to create data:</p>
+<pre><code class="language-js">class TodoCreate extends StacheElement {
+    static view = `
+        &lt;form on:submit=&quot;createTodo(scope.event)&quot;&gt;
+            &lt;p&gt;
+                &lt;label&gt;Name&lt;/label&gt;
+                &lt;input on:input:value:bind='todo.name'/&gt;
+            &lt;/p&gt;
+            &lt;p&gt;
+                &lt;label&gt;Complete&lt;/label&gt;
+                &lt;input type='checkbox' checked:bind='todo.complete'/&gt;
+            &lt;/p&gt;
+            &lt;p&gt;
+                &lt;label&gt;Date&lt;/label&gt;
+                &lt;input type='date' valueAsDate:bind='todo.dueDate'/&gt;
+            &lt;/p&gt;
+            &lt;button disabled:from=&quot;todo.preventSave()&quot;&gt;Create Todo&lt;/button&gt;
+            {{# if(todo.isSaving()) }}Creating…{{/ if }}
+        &lt;/form&gt;
+    `;
+
+    static props = {
+        todo: {
+            get default() {
+                return new Todo();
+            }
+        }
+    };
+
+    createTodo(event) {
+        event.preventDefault();
+        this.todo.save().then((createdTodo) =&gt; {
+            // Create a new todo instance to receive from data
+            this.todo = new Todo();
+        })
+    }
+};
+customElements.define(&quot;todo-create&quot;, TodoCreate);
+</code></pre>
+<div line-highlight='3,31'></div>
+<p>See this component in action here:</p>
+<div class='demo_wrapper' data-demo-src='demos/can-rest-model/can-rest-model-create.html'></div>
+<div class='codepen'></div>
+<p>Note that this demo lists newly created todos by listening to <code>Todo</code>’s created event as follows:</p>
+<pre><code class="language-js">class CreatedTodos extends StacheElement {
+    static view = `
+        &lt;h3&gt;Created Todos&lt;/h3&gt;
+        &lt;table&gt;
+            &lt;tr&gt;
+                &lt;th&gt;id&lt;/th&gt;&lt;th&gt;complete&lt;/th&gt;
+                &lt;th&gt;name&lt;/th&gt;&lt;th&gt;due date&lt;/th&gt;
+            &lt;/tr&gt;
+            {{# for(todo of this.todos) }}
+                &lt;tr&gt;
+                    &lt;td&gt;{{todo.id}}&lt;/td&gt;
+                    &lt;td&gt;&lt;input type='checkbox' checked:bind='todo.complete' disabled/&gt;&lt;/td&gt;
+                    &lt;td&gt;{{todo.name}}&lt;/td&gt;
+                    &lt;td&gt;&lt;input type='date' valueAsDate:bind='todo.dueDate' disabled/&gt;&lt;/td&gt;
+                &lt;/tr&gt;
+            {{ else }}
+                &lt;tr&gt;&lt;td colspan='4'&gt;&lt;i&gt;The todos you create will be listed here&lt;/i&gt;&lt;/td&gt;&lt;/tr&gt;
+            {{/ for }}
+        &lt;/table&gt;
+    `;  
+
+    static props = {
+        todos: {Default: TodoList}
+    };    
+
+    connected() {
+        this.listenTo(Todo,&quot;created&quot;, (event, created) =&gt; {
+            this.todos.unshift(created);
+        })
+    }
+};
+customElements.define(&quot;created-todos&quot;, CreatedTodos);
+</code></pre>
+<div line-highlight='27,only'></div>
+<p>When any todo is <code>created</code>, <code>updated</code>, or <code>destroyed</code>, an event is dispatched on the <code>Todo</code> type.</p>
+<h2>Updating records</h2>
+<p>Also use <a href="../can-connect/can/map/map.prototype.save.html" title="Save or update client data to the persisted data source.">save</a> to update records.</p>
+<table class="panels">
+<tr>
+    <th>JavaScript API</th>
+    <th>Request</th>
+    <th>Response</th>
+</tr>
+<tr class='background'>
+<td>
+<p>On an instance that has already been created, change its data and call <code>.save()</code> to update the record.</p>
+</td>
+<td>
+<p>The instance is <a href="../can-define/map/map.prototype.serialize.html" title="Get a serialized representation of the map instance and its children.">serialized</a> and PUT to the server.</p>
+</td>
+<td>
+<p>Server responds with all values on the record. Use <a href="../can-connect/can/map/map.updateInstanceWithAssignDeep.html" title="Use the response from save() and destroy() to assign properties, never delete them.">updateInstanceWithAssignDeep</a> to not require every record value.</p>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-js">todo.complete = true;
+todo.save()  //-&gt; Promise&lt;Todo&gt;
+
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code>PUT /api/todos/22
+    {
+      &quot;name&quot;: &quot;make a model&quot;,
+      &quot;complete&quot;: true
+    }
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">{
+  &quot;id&quot;: 22,
+  &quot;name&quot;: &quot;make a model&quot;,
+  &quot;complete&quot;: true
+}
+</code></pre>
+</td>
+</tr>
+</table>
+<p>For example, the
+following creates a component that uses <code>Todo.prototype.save</code> to update data:</p>
+<pre><code class="language-js">class TodoUpdate extends StacheElement {
+    static view = `
+        {{# if(todo) }}
+            &lt;h3&gt;Update Todo&lt;/h3&gt;
+            &lt;form on:submit=&quot;updateTodo(scope.element, scope.event)&quot;&gt;
+                &lt;p&gt;
+                    &lt;label&gt;Name&lt;/label&gt;
+                    &lt;input name=&quot;name&quot; value:from='todo.name' /&gt;
+                &lt;/p&gt;
+                &lt;p&gt;
+                    &lt;label&gt;Complete&lt;/label&gt;
+                    &lt;input type='checkbox' name='complete'
+                        checked:from='todo.complete'/&gt;
+                &lt;/p&gt;
+                &lt;p&gt;
+                    &lt;label&gt;Date&lt;/label&gt;
+                    &lt;input type='date'
+                        name='dueDate' valueAsDate:from='todo.dueDate'/&gt;
+                &lt;/p&gt;
+                &lt;button disabled:from=&quot;todo.preventSave()&quot;&gt;
+                    {{# if(todo.isSaving()) }}Updating{{else}}Update{{/ if }}Todo
+                &lt;/button&gt;
+                &lt;button disabled:from=&quot;todo.preventSave()&quot;
+                    on:click=&quot;cancelEdit()&quot;&gt;Cancel&lt;/button&gt;
+
+            &lt;/form&gt;
+        {{ else }}
+            &lt;i&gt;Click a todo above to edit it here.&lt;/i&gt;
+        {{/ if }}
+    `;
+
+    static props = {
+        todo: type.maybeConvert(Todo)
+    };
+
+    updateTodo(form, event) {
+        event.preventDefault();
+        this.todo.assign({
+            name: form.name.value,
+            complete: form.complete.checked,
+            dueDate: form.dueDate.valueAsDate
+        }).save().then(this.cancelEdit.bind(this))
+    }
+
+    cancelEdit() {
+        this.todo = null;
+    }
+}
+customElements.define(&quot;todo-update&quot;, TodoUpdate);
+</code></pre>
+<div line-highlight='5,36-43'></div>
+<p>See this in action here:</p>
+<div class='demo_wrapper' data-demo-src='demos/can-rest-model/can-rest-model-update.html'></div>
+<div class='codepen'></div>
+<h2>Destroying records</h2>
+<p>Use <a href="../can-connect/can/map/map.prototype.destroy.html" title="Delete an instance from the service via the connection.">destroy</a> to delete records.</p>
+<table class="panels">
+<tr>
+    <th>JavaScript API</th>
+    <th>Request</th>
+    <th>Response</th>
+</tr>
+<tr class='background'>
+<td>
+<p>On an instance that has already been created, call <code>.destroy()</code> to delete the record.</p>
+</td>
+<td>
+<p>A DELETE request is sent with the instance's <a href="../can-define.types.identity.html" title="Specifies that the property uniquely identifies instances of the type.">identity</a>.</p>
+</td>
+<td>
+<p>No response data is necessary. Just a successful status code.</p>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-js">todo.destroy()  //-&gt; Promise&lt;Todo&gt;
+</code></pre>
+</td>
+<td>
+<pre><code>DELETE /api/todos/22
+</code></pre>
+</td>
+<td>
+<pre><code>200 Status code.
+</code></pre>
+</td>
+</tr>
+</table>
+<p>The following creates a component that uses <code>Todo.prototype.destroy</code> to delete data:</p>
+<pre><code class="language-js">class TodoList extends StacheElement {
+    static view = `
+        &lt;ul&gt;
+            {{# if(this.todosPromise.isResolved) }}
+                {{# for(todo of this.todosPromise.value) }}
+                    &lt;li&gt;
+                        &lt;input type='checkbox' checked:bind='todo.complete' disabled/&gt;
+                        &lt;label&gt;{{ todo.name }}&lt;/label&gt;
+                        &lt;input type='date' valueAsDate:bind='todo.dueDate' disabled/&gt;
+                        &lt;button on:click=&quot;todo.destroy()&quot;&gt;delete&lt;/button&gt;
+                    &lt;/li&gt;
+                {{/ for }}
+            {{/ if }}
+            {{# if(this.todosPromise.isPending) }}
+                &lt;li&gt;Loading&lt;/li&gt;
+            {{/ if }}
+        &lt;/ul&gt;
+    `;
+
+    static props = {
+        todosPromise: {
+            get default() {
+                return Todo.getList({});
+            }
+        }
+    };
+
+    connected() {
+        this.todosPromise.then((todos)=&gt;{
+            this.listenTo(Todo, &quot;destroyed&quot;, function(ev, destroyed){
+                let index = todos.indexOf(destroyed);
+                todos.splice(index, 1);
+            });
+        });
+    }
+};
+customElements.define(&quot;todo-list&quot;, TodoList);
+</code></pre>
+<div line-highlight='5,10,only'></div>
+<p>The following example shows this in action. Click the <button>delete</button> button to delete todos and have the todo removed from the list.</p>
+<div class='demo_wrapper' data-demo-src='demos/can-rest-model/can-rest-model-destroy.html'></div>
+<div class='codepen'></div>
+<p>This demo works by calling <a href="../can-connect/can/map/map.prototype.destroy.html" title="Delete an instance from the service via the connection.">destroy</a> when the  <button>delete</button> button is clicked.</p>
+<pre><code class="language-html">&lt;button on:click=&quot;destroy()&quot;&gt;delete&lt;/button&gt;
+</code></pre>
+<p>To keep the list of todos up to date, the above demo works by listening
+when any todo is destroyed and removing it from the list:</p>
+<pre><code class="language-js">connected(){
+    this.todosPromise.then((todos)=&gt;{
+        this.listenTo(Todo, &quot;destroyed&quot;, function(ev, destroyed){
+            let index = todos.indexOf(destroyed);
+            todos.splice(index, 1);
+        });
+    });
+}
+</code></pre>
+<h2>Update lists when records are mutated</h2>
+<p>The previous <em>Creating Records</em>, <em>Updating Records</em> and <em>Destroying Records</em>
+examples showed how to listen to when records are mutated:</p>
+<pre><code class="language-js">this.listenTo(Todo,&quot;created&quot;,   (event, createdTodo)   =&gt; { /* ... */ })
+this.listenTo(Todo,&quot;updated&quot;,   (event, updatedTodo)   =&gt; { /* ... */ })
+this.listenTo(Todo,&quot;destroyed&quot;, (event, destroyedTodo) =&gt; { /* ... */ })
+</code></pre>
+<p>These listeners can be used to update lists similar to how the <em>Destroying Records</em>
+example removed lists:</p>
+<pre><code class="language-js">connected(){
+    this.todosPromise.then( (todos)=&gt;{
+        this.listenTo(Todo, &quot;created&quot;, function(ev, created){
+            // ADD created to `todos`
+        })
+        this.listenTo(Todo, &quot;destroyed&quot;, function(ev, destroyed){
+            // REMOVE destroyed from `todos`
+        });
+        this.listenTo(Todo, &quot;updated&quot;, function(ev, updated){
+            // ADD, REMOVE, or UPDATE the position of updated
+            // within `todos`
+        });
+    });
+}
+</code></pre>
+<p>But this is cumbersome, especially when lists contain sorted and filtered results. For example, if you are displaying only completed todos, you might not want to add newly created incomplete todos. The following only pushes complete todos onto <code>todos</code>:</p>
+<pre><code class="language-js">static props = {
+    todosPromise: {
+        default(){
+            return Todo.getList({filter: {complete: true}});
+        }
+    },
+}
+connected(){
+    this.todosPromise.then((todos) =&gt; {
+        this.listenTo(Todo, &quot;created&quot;, (ev, createdTodo) =&gt; {
+            // make sure the todo is complete:
+            if(createdTodo.complete) {
+                todos.push(complete);
+            }
+        });
+    });
+}
+</code></pre>
+<div line-highlight='12-14'></div>
+<p>Fortunately, <a href="../can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">can-realtime-rest-model</a> using <a href="../can-query-logic.html" title="Perform data queries and compare queries against each other. Provides logic useful for
+data caching and real-time behavior.">can-query-logic</a> can automatically update lists for you! If your service layer matches what <a href="../can-query-logic.html" title="Perform data queries and compare queries against each other. Provides logic useful for
+data caching and real-time behavior.">can-query-logic</a> expects, you can just replace <a href="../can-rest-model.html" title="Connect a type to a restful service layer.">can-rest-model</a> with <a href="../can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">can-realtime-rest-model</a> as follows:</p>
+<pre><code class="language-js">import { ObservableArray, ObservableObject, realtimeRestModel, type } from &quot;can&quot;;
+
+class Todo extends ObservableObject {
+    static props = {
+        id: { type: type.maybe(Number), identity: true },
+        complete: { type: Boolean, default: false },
+        dueDate: type.maybeConvert(Date),
+        name: type.maybe(String)
+    };
+}
+
+class TodoList extends ObservableArray {
+    static items = Todo;
+}
+
+const todoConnection = realtimeRestModel({
+    ObjectType: Todo,
+    ArrayType: TodoList,
+    url: &quot;/api/todos/{id}&quot;
+});
+</code></pre>
+<div line-highlight='1,16'></div>
+<blockquote>
+<p><strong>Note:</strong> You can configure <a href="../can-query-logic.html" title="Perform data queries and compare queries against each other. Provides logic useful for
+data caching and real-time behavior.">can-query-logic</a> to match your service layer. Learn
+more in the <a href="../can-query-logic.html#Configuration">configuration section of can-query-logic</a>.</p>
+</blockquote>
+<p>The following uses <a href="../can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">can-realtime-rest-model</a> to create a <em>filterable</em> and <em>sortable</em> grid that automatically updates itself when todos are created, updated or destroyed.</p>
+<p>Try out the following use cases that <a href="../can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">can-realtime-rest-model</a> provides automatically:</p>
+<ul>
+<li>Delete a todo and the todo will be removed from the list.</li>
+<li>Sort by date, then create a todo and the todo will be inserted into the right place in the list.</li>
+<li>Sort by date, then edit a todo's <code>dueDate</code> and the todo will be moved to the right place in the list.</li>
+<li>Show only <code>Complete</code> todos, then toggle the todo's complete status and the todo will be removed
+from the view.</li>
+</ul>
+<div class='demo_wrapper' data-demo-src='demos/can-realtime-rest-model/can-realtime-rest-model.html'></div>
+<div class='codepen'></div>
+<p>By default, <a href="../can-query-logic.html" title="Perform data queries and compare queries against each other. Provides logic useful for
+data caching and real-time behavior.">can-query-logic</a> assumes your service layer will match a <a href="../can-query-logic/query.html" title="The default structure of objects used to represent queries.">default query structure</a> that looks like:</p>
+<pre><code class="language-js">Todo.getList({
+    // Selects only the todos that match.
+    filter: {
+        complete: {$in: [false, null]}
+    },
+    // Sort the results of the selection
+    sort: &quot;-name&quot;,
+    // Selects a range of the sorted result
+    page: {start: 0, end: 19}
+})
+</code></pre>
+<p>This structures follows the <a href="http://jsonapi.org/format/#fetching">Fetching Data JSONAPI specification</a>.</p>
+<p>There's a:</p>
+<ul>
+<li><a href="http://jsonapi.org/format/#fetching-filtering">filter</a> property for filtering records,</li>
+<li><a href="http://jsonapi.org/format/#fetching-sorting">sort</a> property for specifying the order to sort records, and</li>
+<li><a href="http://jsonapi.org/format/#fetching-pagination">page</a> property that selects a range of the sorted result. <em>The range indexes are inclusive</em>.</li>
+</ul>
+<blockquote>
+<p><strong>NOTE</strong>: <a href="../can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">can-realtime-rest-model</a> does not follow the rest of the JSONAPI specification. Specifically
+<a href="../can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">can-realtime-rest-model</a> expects your server to send back JSON data in a different format.</p>
+</blockquote>
+<p>If you control the service layer, we <strong>encourage</strong> you to make it match the default <a href="../can-query-logic/query.html" title="The default structure of objects used to represent queries.">query structure</a> to avoid configuration.  The default query structure also supports the following <a href="../can-query-logic/comparison-operators.html" title="The comparison operators available to the default query.">Comparison Operators</a>: <code>$eq</code>, <code>$gt</code>, <code>$gte</code>, <code>$in</code>,
+<code>$lt</code>, <code>$lte</code>, <code>$ne</code>, <code>$nin</code>.</p>
+<p>If you are unable to match the default query structure, or need special behavior, read the
+<a href="../can-query-logic.html#Configuration">configuration section of can-query-logic</a> to learn how to configure a custom query logic.</p>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/topics/data/introduction.md"},"description":"Learn how to get, create, update, and delete backend service layer data. \n","name":"guides/data-introduction","title":"Introduction","type":"page","parent":"guides/data","order":1,"outline":{"depth":2},"comment":" ","codepen":[["\"can\"","\"//unpkg.com/can@6/core.mjs\""],["\"can/ecosystem\"","\"//unpkg.com/can@6/ecosystem.mjs\""],["\"can/everything\"","\"//unpkg.com/can@6/everything.mjs\""],["\"can/demos/technology-overview/mock-url\"","\"//unpkg.com/mock-url@^6.0.0/mock-url.mjs\""],["\"can/demos/technology-overview/route-mini-app-components\"","\"//unpkg.com/route-mini-app@^5.0.0/components.mjs\""],["return steal.import(","return import("],["\"can/demos/technology-overview/page-login\"","\"//unpkg.com/route-mini-app@^5.0.0/page-login.mjs\""],["`can/demos/technology-overview/page-${this.page}`","`//unpkg.com/route-mini-app@^5.0.0/page-${this.page}.mjs`"]],"pathToRoot":"../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix=".."></div>
+
+	</body>
+</html>

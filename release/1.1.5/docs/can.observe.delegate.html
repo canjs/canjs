@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>can.observe.delegate.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="can.construct.proxy.html">
+                can.construct.proxy.js
+              </a>
+            
+              
+              <a class="source" href="can.construct.super.html">
+                can.construct.super.js
+              </a>
+            
+              
+              <a class="source" href="can.control.plugin.html">
+                can.control.plugin.js
+              </a>
+            
+              
+              <a class="source" href="can.dojo.html">
+                can.dojo.js
+              </a>
+            
+              
+              <a class="source" href="can.fixture.html">
+                can.fixture.js
+              </a>
+            
+              
+              <a class="source" href="can.jquery-all.html">
+                can.jquery-all.js
+              </a>
+            
+              
+              <a class="source" href="can.jquery.html">
+                can.jquery.js
+              </a>
+            
+              
+              <a class="source" href="can.model.queue.html">
+                can.model.queue.js
+              </a>
+            
+              
+              <a class="source" href="can.mootools.html">
+                can.mootools.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.attributes.html">
+                can.observe.attributes.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.backup.html">
+                can.observe.backup.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.delegate.html">
+                can.observe.delegate.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.setter.html">
+                can.observe.setter.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.validations.html">
+                can.observe.validations.js
+              </a>
+            
+              
+              <a class="source" href="can.view.modifiers.html">
+                can.view.modifiers.js
+              </a>
+            
+              
+              <a class="source" href="can.view.mustache.html">
+                can.view.mustache.js
+              </a>
+            
+              
+              <a class="source" href="can.yui.html">
+                can.yui.js
+              </a>
+            
+              
+              <a class="source" href="can.zepto.html">
+                can.zepto.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>can.observe.delegate.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="comment">/*!
+* CanJS - 1.1.5 (2013-03-27)
+* http://canjs.us/
+* Copyright (c) 2013 Bitovi
+* Licensed MIT
+*/</span>
+(<span class="function"><span class="keyword">function</span> <span class="params">(can, window, undefined)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2>can/observe/delegate/delegate.js</h2>
+<p><em>* - &#39;this&#39; will be the deepest item changed
+</em> - &#39;this&#39; will be any changes within <em>, but </em> will be the 
+    this returned
+tells if the parts part of a delegate matches the broken up props of the event
+gives the prop to use as &#39;this&#39;
+- parts - the attribute name of the delegate split in parts [&#39;foo&#39;,&#39;*&#39;]
+- props - the split props of the event that happened [&#39;foo&#39;,&#39;bar&#39;,&#39;0&#39;]
+- returns - the attribute to delegate too (&#39;foo.bar&#39;), or null if not a match </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> delegateMatches = <span class="function"><span class="keyword">function</span> <span class="params">(parts, props)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>check props parts are the same or </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> len = parts.length,
+            i = <span class="number">0</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>keeps the matched props we will use</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            matchedProps = [],
+            prop;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>if the event matches</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">for</span> (i; i &lt; len; i++) {
+            prop = props[i]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>if no more props (but we should be matching them)
+return null</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (<span class="keyword">typeof</span> prop !== <span class="string">'string'</span>) {
+                <span class="keyword">return</span> <span class="literal">null</span>;
+            } <span class="keyword">else</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>if we have a &quot;**&quot;, match everything</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (parts[i] == <span class="string">"**"</span>) {
+                <span class="keyword">return</span> props.join(<span class="string">"."</span>);
+            } <span class="keyword">else</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>a match, but we want to delegate to &quot;*&quot;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (parts[i] == <span class="string">"*"</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>only do this if there is nothing after ...</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                matchedProps.push(prop);
+            }
+            <span class="keyword">else</span> <span class="keyword">if</span> (prop === parts[i]) {
+                matchedProps.push(prop);
+            } <span class="keyword">else</span> {
+                <span class="keyword">return</span> <span class="literal">null</span>;
+            }
+        }
+        <span class="keyword">return</span> matchedProps.join(<span class="string">"."</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>gets a change event and tries to figure out which
+delegates to call</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        delegateHandler = <span class="function"><span class="keyword">function</span> <span class="params">(event, prop, how, newVal, oldVal)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>pre-split properties to save some regexp time</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">var</span> props = prop.split(<span class="string">"."</span>),
+                delegates = (<span class="keyword">this</span>._observe_delegates || []).slice(<span class="number">0</span>),
+                delegate, attr, matchedAttr, hasMatch, valuesEqual;
+            event.attr = prop;
+            event.lastAttr = props[props.length - <span class="number">1</span>];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>for each delegate</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; delegate = delegates[i++];) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>if there is a batchNum, this means that this
+event is part of a series of events caused by a single 
+attrs call.  We don&#39;t want to issue the same event
+multiple times
+setting the batchNum happens later</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> ((event.batchNum &amp;&amp; delegate.batchNum === event.batchNum) || delegate.undelegated) {
+                    <span class="keyword">continue</span>;
+                }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>reset match and values tests</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                hasMatch = <span class="literal">undefined</span>;
+                valuesEqual = <span class="literal">true</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>yeah, all this under here has to be redone v
+for each attr in a delegate</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">for</span> (<span class="keyword">var</span> a = <span class="number">0</span>; a &lt; delegate.attrs.length; a++) {
+
+                    attr = delegate.attrs[a];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>check if it is a match</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    <span class="keyword">if</span> (matchedAttr = delegateMatches(attr.parts, props)) {
+                        hasMatch = matchedAttr;
+                    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>if it has a value, make sure it&#39;s the right value
+if it&#39;s set, we should probably check that it has a 
+value no matter what</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    <span class="keyword">if</span> (attr.value &amp;&amp; valuesEqual) {
+                        valuesEqual = attr.value === <span class="string">""</span> + <span class="keyword">this</span>.attr(attr.attr)
+                    } <span class="keyword">else</span> <span class="keyword">if</span> (valuesEqual &amp;&amp; delegate.attrs.length &gt; <span class="number">1</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>if there are multiple attributes, each has to at
+least have some value</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        valuesEqual = <span class="keyword">this</span>.attr(attr.attr) !== <span class="literal">undefined</span>
+                    }
+                }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>if there is a match and valuesEqual ... call back</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (hasMatch &amp;&amp; valuesEqual) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>how to get to the changed property from the delegate</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    <span class="keyword">var</span> from = prop.replace(hasMatch + <span class="string">"."</span>, <span class="string">""</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>if this event is part of a batch, set it on the delegate
+to only send one event</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    <span class="keyword">if</span> (event.batchNum) {
+                        delegate.batchNum = event.batchNum
+                    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>if we listen to change, fire those with the same attrs
+TODO: the attrs should probably be using from</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    <span class="keyword">if</span> (delegate.event === <span class="string">'change'</span>) {
+                        arguments[<span class="number">1</span>] = from;
+                        event.curAttr = hasMatch;
+                        delegate.callback.apply(<span class="keyword">this</span>.attr(hasMatch), can.makeArray(arguments));
+                    } <span class="keyword">else</span> <span class="keyword">if</span> (delegate.event === how) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>if it&#39;s a match, callback with the location of the match</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        delegate.callback.apply(<span class="keyword">this</span>.attr(hasMatch), [event, newVal, oldVal, from]);
+                    } <span class="keyword">else</span> <span class="keyword">if</span> (delegate.event === <span class="string">'set'</span> &amp;&amp; how == <span class="string">'add'</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>if we are listening to set, we should also listen to add</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        delegate.callback.apply(<span class="keyword">this</span>.attr(hasMatch), [event, newVal, oldVal, from]);
+                    }
+                }
+
+            }
+        };
+
+    can.extend(can.Observe.prototype, {
+
+        delegate: <span class="function"><span class="keyword">function</span> <span class="params">(selector, event, handler)</span> {</span>
+            selector = can.trim(selector);
+            <span class="keyword">var</span> delegates = <span class="keyword">this</span>._observe_delegates || (<span class="keyword">this</span>._observe_delegates = []),
+                attrs = [],
+                selectorRegex = <span class="regexp">/([^\s=,]+)(?:=("[^",]*"|'[^',]*'|[^\s"',]*))?(,?)\s*/g</span>,
+                matches;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>parse each property in the selector</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">while</span> (matches = selectorRegex.exec(selector)) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>we need to do a little doctoring to make up for the quotes.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (matches[<span class="number">2</span>] &amp;&amp; $.inArray(matches[<span class="number">2</span>].substr(<span class="number">0</span>, <span class="number">1</span>), [<span class="string">'"'</span>, <span class="string">"'"</span>]) &gt;= <span class="number">0</span>) {
+                    matches[<span class="number">2</span>] = matches[<span class="number">2</span>].substr(<span class="number">1</span>, -<span class="number">1</span>);
+                }
+
+                attrs.push({</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>the attribute name</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    attr: matches[<span class="number">1</span>],</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>the attribute name, pre-split for speed</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    parts: matches[<span class="number">1</span>].split(<span class="string">'.'</span>),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>the value associated with this property (if there was one given)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    value: matches[<span class="number">2</span>],</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>whether this selector combines with the one after it with AND or OR</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    or: matches[<span class="number">3</span>] === <span class="string">','</span>
+                });
+            }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>delegates has pre-processed info about the event</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            delegates.push({</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>the attrs name for unbinding</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                selector: selector,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>an object of attribute names and values {type: &#39;recipe&#39;,id: undefined}
+undefined means a value was not defined</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                attrs: attrs,
+                callback: handler,
+                event: event
+            });
+            <span class="keyword">if</span> (delegates.length === <span class="number">1</span>) {
+                <span class="keyword">this</span>.bind(<span class="string">"change"</span>, delegateHandler)
+            }
+            <span class="keyword">return</span> <span class="keyword">this</span>;
+        },
+
+        undelegate: <span class="function"><span class="keyword">function</span> <span class="params">(selector, event, handler)</span> {</span>
+            selector = can.trim(selector);
+
+            <span class="keyword">var</span> i = <span class="number">0</span>,
+                delegates = <span class="keyword">this</span>._observe_delegates || [],
+                delegateOb;
+            <span class="keyword">if</span> (selector) {
+                <span class="keyword">while</span> (i &lt; delegates.length) {
+                    delegateOb = delegates[i];
+                    <span class="keyword">if</span> (delegateOb.callback === handler || (!handler &amp;&amp; delegateOb.selector === selector)) {
+                        delegateOb.undelegated = <span class="literal">true</span>;
+                        delegates.splice(i, <span class="number">1</span>)
+                    } <span class="keyword">else</span> {
+                        i++;
+                    }
+                }
+            } <span class="keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>remove all delegates</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                delegates = [];
+            }
+            <span class="keyword">if</span> (!delegates.length) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>can.removeData(this, &quot;_observe_delegates&quot;);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">this</span>.unbind(<span class="string">"change"</span>, delegateHandler)
+            }
+            <span class="keyword">return</span> <span class="keyword">this</span>;
+        }
+    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>add helpers for testing .. </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    can.Observe.prototype.delegate.matches = delegateMatches;
+
+})(can, <span class="keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

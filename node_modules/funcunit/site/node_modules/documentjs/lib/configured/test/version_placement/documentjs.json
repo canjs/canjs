@@ -1,0 +1,12 @@
+{
+	"versions": {
+		"1.0.0" : "./v1"
+	},
+	"defaultVersion": "2.0.0",
+	"defaultDest": "../tmp/version_placement/project",
+	"versionDest": "../tmp/version_placement/<%= version %>/project",
+	"siteDefaults": {
+		"templates": "./templates",
+		"versionsSelectText" : "Project <%= version %>"
+	}
+}

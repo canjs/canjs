@@ -1,0 +1,11 @@
+{
+  "name": "main",
+  "dependencies": {
+    "foo": "~1.0.0"
+  },
+  "system": {
+    "configDependencies": [
+      "package.json!npm"
+    ]
+  }
+}

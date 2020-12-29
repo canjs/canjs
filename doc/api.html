@@ -1,0 +1,3844 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-canjs/can-api.md
+	@page api
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>API Docs | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+	<meta property="og:title" content="API Docs | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "API Docs | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="./static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="api" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="guides/contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						parent
+           						expanded">
+						<a class="page"
+							href="api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>Observables</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-bind.html"
+							title="Updates one observable value with the value of another observable.">
+							can-bind
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-compute.html"
+							title="Create an observable value.">
+							can-compute
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-debug.html"
+							title="Useful debugging utilities.">
+							can-debug
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-deep-observable.html"
+							title="Create observable objects where nested objects and arrays are also observable.">
+							can-deep-observable
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define.html"
+							title="Defines observable properties and their behavior on a prototype object. This function is not commonly used directly. map and list are more commonly used. Types and behaviors shared by both map and list are documented here.">
+							can-define
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define/list/list.html"
+							title="Create observable lists.">
+							can-define/list/list
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define/map/map.html"
+							title="Create observable objects.">
+							can-define/map/map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-backup.html"
+							title="">
+							can-define-backup
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-stream.html"
+							title="Add useful stream conversion methods to a supplied map or list constructor using a stream interface such as can-stream-kefir.">
+							can-define-stream
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-stream-kefir.html"
+							title="Export a function that takes a map or list constructor and uses can-stream-kefir to create streamable properties.">
+							can-define-stream-kefir
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-event-queue.html"
+							title="Mixin observable behavior to your types.">
+							can-event-queue
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-kefir.html"
+							title="Integrate KefirJS streams directly within can-stache and other parts of CanJS.">
+							can-kefir
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-list.html"
+							title="">
+							can-list
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-map.html"
+							title="Create observable objects.">
+							can-map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-map-compat.html"
+							title="can-map-compat">
+							can-map-compat
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-map-define.html"
+							title="Defines the type, initial value, get, set, remove, and serialize behavior for attributes of a Map.">
+							can-map-define
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observable-array.html"
+							title="Create observable arrays with defined properties.">
+							can-observable-array
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observable-object.html"
+							title="Create observable objects used to manage state in explicitly defined ways.">
+							can-observable-object
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observation.html"
+							title="Create observable values that derive their value from other observable values.">
+							can-observation
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observation-recorder.html"
+							title="Specify how to listen to changes in a value being read and record those specifications between two points in time. Record observables being read and indicate how to listen to changes in a value being read.">
+							can-observation-recorder
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observe.html"
+							title="Create observable objects, arrays, and functions that work like plain JavaScript objects, arrays, and functions.">
+							can-observe
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-simple-map.html"
+							title="A performant live-bound map.">
+							can-simple-map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-simple-observable.html"
+							title="Create an observable value.">
+							can-simple-observable
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stream.html"
+							title="Create useful stream methods from a minimal stream wrapper implementation.">
+							can-stream
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stream-kefir.html"
+							title="Convert observable values into streams. Kefir is used to provide the stream functionality.">
+							can-stream-kefir
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-value.html"
+							title="Get an observable that’s bound to a specific property on another object.">
+							can-value
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Views</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-attribute-observable.html"
+							title="Create an observable value from an element&#x27;s property or attribute.">
+							can-attribute-observable
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-component.html"
+							title="Create a custom element that can be used to manage widgets or application logic.">
+							can-component
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observable-bindings.html"
+							title="">
+							can-observable-bindings
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache.html"
+							title="Live binding templates.">
+							can-stache
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-bindings.html"
+							title="Listen to events and create one-way and two-way bindings.">
+							can-stache-bindings
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-converters.html"
+							title="Provides a set of converters useful for two-way binding with form elements such as &lt;input&gt; and &lt;select&gt;.">
+							can-stache-converters
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-element.html"
+							title="Create a custom element with ObservableObject-like properties and stache views.">
+							can-stache-element
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-route-helpers.html"
+							title="Adds routeUrl and routeCurrent helpers to stache.">
+							can-stache-route-helpers
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-autorender.html"
+							title="A module that automatically renders script and other elements with the can-autorender attribute. This function is useful to know when the templates have finished rendering.">
+							can-view-autorender
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-callbacks.html"
+							title="Registered callbacks for behaviors">
+							can-view-callbacks
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-import.html"
+							title="">
+							can-view-import
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-live.html"
+							title="Setup live-binding between the DOM and a compute manually.">
+							can-view-live
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-model.html"
+							title="Gets the ViewModel of an element.">
+							can-view-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-parser.html"
+							title="Parse HTML and mustache tokens.">
+							can-view-parser
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-scope.html"
+							title="Create a lookup node for keys.">
+							can-view-scope
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-target.html"
+							title="">
+							can-view-target
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="steal-stache.html"
+							title="A StealJS extension that allows stache templates as dependencies.">
+							steal-stache
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Data Modeling</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-connect.html"
+							title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">
+							can-connect
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-connect-ndjson.html"
+							title="Get a list of data from an NDJSON service endpoint.">
+							can-connect-ndjson
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-connect-tag.html"
+							title="Create custom elements that can be used to retrieve model instances.">
+							can-connect-tag
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-realtime-rest-model.html"
+							title="Connect a type to a restful data source and automatically manage lists.">
+							can-define-realtime-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-rest-model.html"
+							title="Connect a type to a restful service layer.">
+							can-define-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-fixture.html"
+							title="Intercept AJAX requests and simulate the response.">
+							can-fixture
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-fixture-socket.html"
+							title="Simulate socket.io services.">
+							can-fixture-socket
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-local-store.html"
+							title="Create, update, delete and query data saved in localStorage.">
+							can-local-store
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-memory-store.html"
+							title="Create, update, delete and query data saved in memory.">
+							can-memory-store
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-ndjson-stream.html"
+							title="Parses an NDJSON stream into a stream of JavaScript objects.">
+							can-ndjson-stream
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-query-logic.html"
+							title="Perform data queries and compare queries against each other. Provides logic useful for data caching and real-time behavior.">
+							can-query-logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-realtime-rest-model.html"
+							title="Connect a type to a restful data source and automatically manage lists.">
+							can-realtime-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-rest-model.html"
+							title="Connect a type to a restful service layer.">
+							can-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-set-legacy.html"
+							title="can-set-legacy supports a legacy can-set API that creates a can-query-logic instance.">
+							can-set-legacy
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-super-model.html"
+							title="Connect a type to a restful data source, automatically manage lists, combine requests, and use a fall-through localstorage cache.">
+							can-super-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Routing</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-deparam.html"
+							title="Deserialize a query string into an array or object.">
+							can-deparam
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-param.html"
+							title="Serialize an object or array into a query string.">
+							can-param
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route.html"
+							title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">
+							can-route
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route-hash.html"
+							title="An observable that is cross bound to the window.location.hash.">
+							can-route-hash
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route-mock.html"
+							title="Simulate routing without having to change the URL.">
+							can-route-mock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route-pushstate.html"
+							title="An observable that can be used as can-route&#x27;s can-route.urlData.">
+							can-route-pushstate
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>JS Utilities</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-assign.html"
+							title="A simplified version of Object.assign, which only accepts a single source argument.">
+							can-assign
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-lazy-value.html"
+							title="can-define-lazy-value">
+							can-define-lazy-value
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-diff.html"
+							title="Utilities for comparing and applying differences between data structures.">
+							can-diff
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-globals.html"
+							title="An environment agnostic container for global variables. Useful for testing and server-side rendering (SSR), typically used internally by CanJS.">
+							can-globals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-join-uris.html"
+							title="Join together a URI path to a base.">
+							can-join-uris
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-key.html"
+							title="Utilities that read and write nested properties on objects and arrays.">
+							can-key
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-key-tree.html"
+							title="Store values in a tree structure.">
+							can-key-tree
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-make-map.html"
+							title="Convert a comma-separated string into a plain JavaScript object.">
+							can-make-map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-parse-uri.html"
+							title="can-parse-uri">
+							can-parse-uri
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-queues.html"
+							title="A light weight queue system for scheduling tasks.">
+							can-queues
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-string.html"
+							title="String utilities.">
+							can-string
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-string-to-any.html"
+							title="Turns a string representation of a primitive type back into the associated primitive.">
+							can-string-to-any
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>DOM Utilities</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-ajax.html"
+							title="Make an asynchronous HTTP (AJAX) request.">
+							can-ajax
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-attribute-encoder.html"
+							title="Encode and decode attribute names.">
+							can-attribute-encoder
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-child-nodes.html"
+							title="">
+							can-child-nodes
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-control.html"
+							title="Create organized, memory-leak free, rapidly performing, stateful controls with declarative event binding. Use Control to create UI controls like tabs, grids, and context menus, and organize them into higher-order business rules with can.route. It can serve as both a traditional view and a traditional controller.">
+							can-control
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-dom-data.html"
+							title="Associate key/value pair data with a DOM node in a memory-safe way.">
+							can-dom-data
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-dom-events.html"
+							title="Listen to DOM events and special events, and register special events.">
+							can-dom-events
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-dom-mutate.html"
+							title="Dispatch and listen for DOM mutations.">
+							can-dom-mutate
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-event-dom-enter.html"
+							title="Watch for when enter keys are pressed on a DomEventTarget.">
+							can-event-dom-enter
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-event-dom-radiochange.html"
+							title="A custom event for listening to changes of inputs with type &quot;radio&quot;, which fires when a conflicting radio input changes. A &quot;conflicting&quot; radio button has the same &quot;name&quot; attribute and exists within in the same form, or lack thereof. This event coordinates state bound to whether a radio is checked. The &quot;change&quot; event does not fire for deselected radios. By using this event instead, deselected radios receive notification.">
+							can-event-dom-radiochange
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-fragment.html"
+							title="Convert a String, HTMLElement, documentFragment, contentArray, or object with a can.toDOM symbol into a documentFragment.">
+							can-fragment
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Data Validation</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-type.html"
+							title="Define types that can verify values are of the correct type, or convert values to the correct type.">
+							can-type
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate.html"
+							title="Shared utilities and type definitions to process validation errors.">
+							can-validate
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate-interface.html"
+							title="can-validate-interface provides simple property existence validation. Use to prevent errors resulting from missing properties on input objects.">
+							can-validate-interface
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate-legacy.html"
+							title="A plugin for CanJS that wraps any validation library to can.validate. Can-Validate doesn&#x27;t do any validation of its own but instead provides some abstraction to your library of choice. The chosen library is registered with can-validate using a shim.">
+							can-validate-legacy
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate-validatejs.html"
+							title="Create can-validate.validator functions using validate.js.">
+							can-validate-validatejs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Typed Data</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-cid.html"
+							title="Utility for getting a unique identifier for an object.">
+							can-cid
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-construct.html"
+							title="Provides a way to easily use the power of prototypal inheritance without worrying about hooking up all the particulars yourself. Use can-construct.extend to create an inheritable constructor function of your own.">
+							can-construct
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-construct-super.html"
+							title="can.Construct.super is a plugin that makes it easier to call base functions from inside inheriting functions.">
+							can-construct-super
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-data-types.html"
+							title="A package of type objects that are used to test if a value is a member of the type and convert values to the type.">
+							can-data-types
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-namespace.html"
+							title="Namespace where can-* packages are registered.">
+							can-namespace
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-reflect.html"
+							title="Perform operations and read information on unknown data types.">
+							can-reflect
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-reflect-dependencies.html"
+							title="Functions to keep track of observable dependencies.">
+							can-reflect-dependencies
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-reflect-promise.html"
+							title="Expose an observable, Map-like API on Promise types.">
+							can-reflect-promise
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-types.html"
+							title="A stateful container for CanJS type information.">
+							can-types
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Polyfills</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-symbol.html"
+							title="Symbols used to detail how CanJS may operate on different objects CanJS has a consistent internal interface for objects to interact with each other, and this is also important for interop with external libraries.  CanJS uses symbols to identify object types, property access methods, and for event handling. can-symbol also has a polyfill function that will fake symbols on unsupported platforms.">
+							can-symbol
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-vdom.html"
+							title="A browser-lite environment for Node.js or a worker thread.">
+							can-vdom
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-core.html"
+							title="The best, most hardened and generally useful libraries in CanJS.">
+							Core
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						">
+						<a class="page"
+							href="can-infrastructure.html"
+							title="Utility libraries that power the core and ecosystem collection.">
+							Infrastructure
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-global.html"
+							title="can-global">
+							can-global
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-test-helpers.html"
+							title="Common utilities for effectively testing the features of CanJS.">
+							can-test-helpers
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-ecosystem.html"
+							title="Useful libraries that extend or add important features to the core collection.">
+							Ecosystem
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-legacy.html"
+							title="Former libraries that we still accept patches for, but are not under active development.">
+							Legacy
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>API Docs</h1>
+			<ul class="title-social">
+				
+				<li>
+					<a class="npm-button" href="https://www.npmjs.com/package/can">
+						<img src="https://img.shields.io/badge/npm%20package-6.6.1-brightgreen.svg" alt="npm package badge" />
+					</a>
+				</li>
+				<li>
+					<a class="github-button nav-social" href="https://github.com/canjs/canjs" data-show-count="true">Star</a>
+				</li>
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-canjs/can-api.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the
+<a href="guides/technology-overview.html" title="Learn the basics of CanJS’s technology.">Technology Overview</a> page for background on the following APIs.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <style>
+.hidden-codepen {
+    display: none;
+}
+.hidden-codepen + .codepen {
+    border: none;
+    position: relative;
+    text-align: left;
+    background: none;
+    color: #3e7abe;
+    padding: 0px;
+    cursor: pointer;
+    margin-bottom: 15px;
+    top: 0px;
+    text-decoration: underline;
+}
+.hidden-codepen + .codepen:hover {
+    color: #4078c0;
+    background-color: unset;
+}
+.hidden-codepen + .codepen:before {
+    content: "See the previous examples in your browser!";
+}
+</style>
+<h2>Custom Element Basics</h2>
+<p>Custom elements are defined with <a href="can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">StacheElement</a>.
+The following defines a <code>&lt;my-counter&gt;</code> widget and includes it in the page:</p>
+<pre><code class="language-html">&lt;!-- Adds the custom element to the page --&gt;
+&lt;my-counter&gt;&lt;/my-counter&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+import { StacheElement } from &quot;can&quot;;
+
+// Extend StacheElement to define a custom element
+class Counter extends StacheElement {
+    // The HTML content within the custom element.
+    //  - {{ this.count }} is a `stache` magic tag.
+    //  - `on:click` is a `stache` event binding.
+    // Read the VIEWS section below for more details. 👀
+    static view = `
+        Count: &lt;span&gt;{{ this.count }}&lt;/span&gt;
+        &lt;button on:click=&quot;this.increment()&quot;&gt;+1&lt;/button&gt;
+    `;
+
+    // Defines the properties used in the view of this custom element.
+    // Read the OBSERVABLES section below for more details. 👀
+    static props = {
+        count: 0
+    };
+
+    increment() {
+        this.count++;
+    }
+}
+
+// Make &lt;my-counter&gt;&lt;/my-counter&gt; custom element works in the HTML
+customElements.define(&quot;my-counter&quot;, Counter);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<p>An element's:</p>
+<ul>
+<li><a href="can-stache-element/static.props.html" title="A static property used to create ObservableObject-like properties on each StacheElement instance.">properties</a> are defined with the <a href="api.html#Observables" title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the
+technology-overview page for background on the following APIs.">Observables</a> APIs documented below.</li>
+<li><a href="can-stache-element/static.view.html" title="Provides a way to render the element's innerHTML using a can-stache template.">view</a> is defined with the <a href="api.html#Views" title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the
+technology-overview page for background on the following APIs.">Views</a> APIs documented below.</li>
+<li>tag name is defined with <a href="https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define">customElements.define</a>.</li>
+</ul>
+<h2>Observables</h2>
+<p>Define custom observable key-value types with <a href="can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">ObservableObject</a>.
+<code>ObservableObject</code> is used to organize the logic of both your <a href="can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">StacheElement</a> props and your <a href="api.html#DataModeling" title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the
+technology-overview page for background on the following APIs.">Data Models</a>. The logic
+is expressed as properties and methods.</p>
+<p>The following defines a <code>Todo</code> type with <code>toggleComplete</code> method.</p>
+<pre><code class="language-js">import { ObservableObject, type } from &quot;can&quot;;
+
+// -------------------------------
+// Define an observable Todo type:
+// -------------------------------
+class Todo extends ObservableObject {
+  static props = {
+    name: string,
+    complete: false
+  };
+
+  // `toggleComplete` is a method
+  toggleComplete() {
+    this.complete = !this.complete;
+  }
+}
+
+// Create a todo instance:
+const todo = new Todo({ name: &quot;Learn Observables&quot; });
+</code></pre>
+<div class='codepen'></div>
+<p><details>
+<summary>Expand to see a larger example with numerous property behaviors:</summary></p>
+<pre><code class="language-js">import { ObservableObject, type } from &quot;can&quot;;
+import Todo from &quot;//canjs.com/demos/api/todo.mjs&quot;;
+
+// -------------------------------
+// Define an observable Owner type:
+// -------------------------------
+class Owner extends ObservableObject {
+  static props = {
+    first: String,
+    last: String
+  };
+}
+
+// -------------------------------
+// Define an observable Todo type:
+// -------------------------------
+class Todo extends ObservableObject {
+    static props = {
+        // `id` is a Number
+        // and uniquely identifies instances of this type.
+        id: { type: Number, identity: true },
+
+        // `complete` is a Boolean and defaults to `false`.
+        complete: {
+            type: Boolean,
+            default: false
+        },
+
+        // `dueDate` is a Date
+        dueDate: Date,
+
+        // `isDueWithin24Hours` property returns if the `.dueDate`
+        // is in the next 24 hrs. This is a computed property.
+        get isDueWithin24Hours() {
+            let msLeft = this.dueDate - new Date();
+            return msLeft &gt;= 0 &amp;&amp; msLeft &lt;= 24 * 60 * 60 * 1000;
+        },
+
+        // `name` is a String.
+        name: String,
+
+        // `nameChangeCount` increments when `name` changes.
+        nameChangeCount: {
+            value({ listenTo, resolve }) {
+                let count = resolve(0);
+                listenTo(&quot;name&quot;, () =&gt; {
+                    resolve(++count);
+                });
+            }
+        },
+
+        // Owner is a custom ObservableObject with a first and
+        // last property. Whenever `owner` is set, the value
+        // will be converted to the Owner type.
+        owner: type.convert(Owner),
+
+        // `tags` is an observable array of items that
+        // defaults to including &quot;new&quot;
+        tags: {
+            get default() {
+                return new ObservableArray([&quot;new&quot;]);
+            }
+        },
+    };
+
+    // `toggleComplete` is a method
+    toggleComplete() {
+        this.complete = !this.complete;
+    }
+}
+
+// -----------------------------------------------------------
+// Create and use instances of the observable key-value type:
+// -----------------------------------------------------------
+
+// Create a todo instance:
+const todo = new Todo({ name: &quot;Learn Observables&quot; });
+
+// Change a property:
+todo.dueDate = new Date(new Date().getTime() + 1000 * 60 * 60);
+
+// Listen to changes
+todo.listenTo(&quot;nameChangeCount&quot;, ({ value }) =&gt; {
+    console.log(value); //-&gt; 1
+});
+
+let handler = ({ value }) =&gt; {
+    console.log(value); //-&gt; &quot;Learn observables&quot;
+};
+todo.listenTo(&quot;name&quot;, handler);
+
+todo.name = &quot;Learn observables&quot;;
+
+// Stop listening to changes
+todo.stopListening(&quot;name&quot;, handler);
+
+// Stop listening to all registered handlers
+todo.stopListening();
+
+// Call a method
+todo.toggleComplete();
+console.log(todo.complete); //-&gt; true
+
+// Assign properties
+todo.assign({
+    owner: {
+        first: &quot;Justin&quot;,
+        last: &quot;Meyer&quot;
+    }
+});
+
+// Serialize to a plain JavaScript object
+console.log(todo.serialize()); //-&gt; {
+//      complete: true,
+//      dueDate: Date,
+//      name: &quot;Learn observables&quot;,
+//      owner: { first: &quot;Justin&quot;, last: &quot;Meyer&quot; },
+//      tags: [&quot;new&quot;]
+// }
+</code></pre>
+<div class='codepen'></div>
+<p></details></p>
+<p><details>
+<summary>Observable lists</summary></p>
+<pre><code class="language-js">import { ObservableArray, type } from &quot;can&quot;;
+
+// -----------------------------------
+// Define an observable TodoList type:
+// -----------------------------------
+class TodoList extends ObservableArray {
+    // Specify the behavior of items in the TodoList
+    static items = type.convert(Todo);
+
+    // Create a computed `complete` property
+    get complete() {
+        // Filter all complete todos
+        return this.filter({ complete: true });
+    }
+}
+
+// -----------------------------------
+// Create and use instances of observable list types:
+// -----------------------------------
+
+/// Create a todo list
+const todos = new TodoList([
+    { id: 1, name: &quot;learn observable lists&quot; },
+    new Todo({ id: 2, name: &quot;mow lawn&quot;, complete: true })
+]);
+
+// Read the length and access items
+console.log(todos.length); //-&gt; 2
+console.log(todos[0]); //-&gt; Todo { id: 1, name: &quot;learn observable lists&quot; }
+
+// Read properties
+console.log(todos.complete); //-&gt; TodoList[Todo{ id: 2, name: &quot;mow lawn&quot;, complete: true }]
+
+// Listen for changes:
+// TODO
+todos.listenTo(&quot;length&quot;, ({ value }) =&gt; {
+    console.log(value); //-&gt; 1
+});
+
+// Make changes:
+todos.pop();
+
+// Call non-mutating methods
+const areSomeComplete = todos.some((todo) =&gt; {
+    return todo.complete === true;
+});
+console.log(areSomeComplete); //-&gt; false
+</code></pre>
+<div class='codepen'></div>
+<p></details></p>
+<h2>Typed properties</h2>
+<p><a href="can-type.html" title="Define types that can verify values are of the correct type, or convert values to the correct type.">can-type</a> can be used to define typed properties in [ObservableObject] and [StacheElement]</p>
+<ul>
+<li>Types are strict by default, which means an error will be thrown if a property is set to a value of the wrong type.</li>
+<li><a href="can-type/convert.html" title="Create a can-type.typeobject that converts values to the given type.">convert</a> can be used to create a property that will always convert its value to a specific type.</li>
+<li><a href="can-type/maybe.html" title="Create a strictly typed TypeObject that also accepts null and undefined values.">maybe</a> can be  used to create a property that can be <code>null</code> or <code>undefined</code>.</li>
+</ul>
+<pre><code class="language-js">import { ObservableObject, type } from &quot;can&quot;;
+
+class Person extends ObservableObject {
+  static props = {
+    first: type.check(String),  // type checking is the default behavior
+    last: type.maybe(String),   // maybe null, undefined or string
+    age: Number,                // type checking
+    birthday: type.maybeConvert(Date) // converts the value to date if is defined 
+  };
+};
+
+const farah = new Person({
+  first: 'Farah',
+  last: null,
+  age: '4',
+  birthday: undefined
+});
+
+// Uncaught Error: &quot;4&quot; (string) is not of type Number.
+// Property age is using &quot;type: Number&quot;. Use &quot;age: type.convert(Number)&quot;
+// to automatically convert values to Numbers when setting the &quot;age&quot; property.
+</code></pre>
+<h2>Views</h2>
+<p>Render a template that updates the page when any data changes using <a href="can-stache.html" title="Live binding templates.">can-stache</a>:</p>
+<pre><code class="language-js">import { stache } from &quot;can&quot;;
+import Todo from &quot;//canjs.com/demos/api/todo.mjs&quot;;
+
+// Create a template / view
+let view = stache(`&lt;p&gt;I need to {{ this.name }}&lt;/p&gt;`);
+
+const todo = new Todo({ name: &quot;learn views&quot; });
+
+// Render the template into document fragment
+let fragment = view(todo);
+
+// Insert fragment in the page
+document.body.appendChild(fragment);
+</code></pre>
+<div class='codepen'></div>
+<p>Common <a href="can-stache.html" title="Live binding templates.">can-stache</a> tags and built in helpers:</p>
+<table>
+<tr>
+    <th>View</th>
+    <th>Data</th>
+    <th>Result</th>
+</tr>
+<tr>
+<td>
+<pre><code class="language-html">&lt;p&gt;{{ this.value }}&lt;/p&gt;
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">{ value: &quot;&lt;b&gt;esc&lt;/b&gt;&quot; }
+</code></pre>
+</td>
+<td>
+<pre><code class="language-html">&lt;p&gt;&amp;gt;b&amp;lt;esc&amp;gt;/b&amp;lt;&lt;/p&gt;
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<div class="code-toolbar"><pre class=" line-numbers language-html"><code class=" language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>&#123;{{ this.value }}}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><div class="toolbar"><div class="toolbar-item"><a>Copy</a></div></div></div>
+</td>
+<td>
+<pre><code class="language-js">{ value: &quot;&lt;b&gt;unescape&lt;/b&gt;&quot; }
+</code></pre>
+</td>
+<td>
+<pre><code class="language-html">&lt;p&gt;&lt;b&gt;unescape&lt;/b&gt;&lt;/p&gt;
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-html">&lt;p&gt;
+  {{# if(this.value) }}
+    Hi
+  {{ else }}
+    Bye
+  {{/ if }}
+&lt;/p&gt;
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">{ value: true }
+
+
+
+
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code class="language-html">&lt;p&gt;
+
+     Hi  
+
+&lt;/p&gt;
+
+
+
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-html">&lt;p&gt;
+  {{# if(this.promise.isPending) }}
+    Pending
+  {{/ if }}
+  {{# if(this.promise.isRejected) }}
+    Rejected {{ promise.reason }}
+  {{/ if }}
+  {{# if(this.promise.isResolved) }}
+    Resolved {{ promise.value }}
+  {{/ if }}
+&lt;/p&gt;
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">{
+  promise:
+    Promise.resolve(&quot;Yo&quot;)
+}
+
+
+
+
+
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code class="language-html">&lt;p&gt;
+
+     Resolved Yo
+
+&lt;/p&gt;
+
+
+
+
+
+
+
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-html">&lt;ul&gt;
+  {{# for(todo of this.todos) }}
+    &lt;li&gt;
+      {{ todo.name }}-{{ this.owner }}
+    &lt;/li&gt;
+  {{/ for }}
+&lt;/ul&gt;
+
+
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">{
+  todos: [
+    { name: &quot;lawn&quot; },
+    { name: &quot;dishes&quot; }
+  ],
+  owner: &quot;Justin&quot;
+}
+
+
+</code></pre>
+</td>
+<td>
+<pre><code class="language-html">&lt;ul&gt;
+  &lt;li&gt;
+    lawn-Justin  
+  &lt;li&gt;
+  &lt;li&gt;
+    dishes-Justin  
+  &lt;li&gt;
+&lt;/ul&gt;
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-html">&lt;ul&gt;
+  {{# for(todo of todos) }}
+    &lt;li&gt; ... &lt;/li&gt;
+  {{ else }}
+    &lt;li&gt;No todos&lt;/li&gt;
+  {{/ for }}
+&lt;/ul&gt;
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">{
+  todos: [],
+  owner: &quot;Justin&quot;
+}
+
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code class="language-html">&lt;ul&gt;
+
+  &lt;li&gt;No todos&lt;/li&gt;
+
+&lt;/ul&gt;
+
+
+
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-html">&lt;p&gt;
+  {{# eq(this.value, 22) }}
+    YES
+  {{ else }}
+    NO
+  {{/ eq }}
+&lt;/p&gt;
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">{
+  value: 22
+}
+
+
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code class="language-html">&lt;p&gt;
+
+     YES  
+
+&lt;/p&gt;
+
+
+
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-html">&lt;p&gt;
+  {{ let first = this.value.first }}
+  {{ first }} {{ this.value.last }}
+&lt;/p&gt;
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">{
+  value: {
+    first: &quot;Bohdi&quot;,
+    last: &quot;Meyer&quot;
+  }
+}
+
+</code></pre>
+</td>
+<td>
+<pre><code class="language-html">&lt;p&gt;
+
+     Bohdi Meyer  
+
+&lt;/p&gt;
+
+
+</code></pre>
+</td>
+</tr>
+</table>
+<div class='hidden-codepen'>
+<pre><code class="language-html">&lt;stache-examples&gt;&lt;/stache-examples&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+    import { StacheElement } from &quot;can&quot;;
+
+    // Extend StacheElement to define a custom element
+    class StacheExamples extends StacheElement {
+        static view = `
+            &lt;p&gt;{{ this.escapeValue }}&lt;/p&gt;
+            &lt;p&gt;\{{{ this.unescapeValue }}}&lt;/p&gt;
+            &lt;p&gt;
+                {{# if(this.truthyValue) }}
+                    Hi
+                {{ else }}
+                    Bye
+                {{/ if }}
+            &lt;/p&gt;
+            &lt;p&gt;
+                {{# if(this.promise.isPending) }}
+                    Pending
+                {{/ if }}
+                {{# if(this.promise.isRejected) }}
+                    Rejected {{ this.promise.reason }}
+                {{/ if }}
+                {{# if(this.promise.isResolved) }}
+                    Resolved {{ this.promise.value }}
+                {{/ if }}
+            &lt;/p&gt;
+            &lt;ul&gt;
+                {{# for(todo of this.todos) }}
+                    &lt;li&gt;
+                        {{ todo.name }}-{{ this.owner.first }}
+                    &lt;/li&gt;
+                {{/ for }}
+            &lt;/ul&gt;
+            &lt;p&gt;
+                {{# eq(this.eqValue, 22) }}
+                    YES
+                {{ else }}
+                    NO
+                {{/ eq }}
+            &lt;/p&gt;
+            &lt;p&gt;
+                {{ let first = this.owner.first }}
+                {{ first }} {{ this.owner.last }}
+            &lt;/p&gt;
+        `;
+        static props = {
+            escapeValue: &quot;&lt;b&gt;esc&lt;/b&gt;&quot;,
+            unescapeValue: &quot;&lt;b&gt;unescape&lt;/b&gt;&quot;,
+            truthyValue: true,
+            promise: {
+                get default() {
+                    return Promise.resolve(&quot;Yo&quot;);
+                }
+            },
+            todos: {
+                get default() {
+                    return [{ name: &quot;lawn&quot; }, { name: &quot;dishes&quot; }];
+                }
+            },
+            owner: {
+                get default() {
+                    return {
+                        first: &quot;Bohdi&quot;,
+                        last: &quot;Meyer&quot;
+                    };
+                }
+            },
+            eqValue: 22
+        };
+    }
+
+    customElements.define(&quot;stache-examples&quot;, StacheExamples);
+&lt;/script&gt;
+</code></pre>
+</div>
+<div class='codepen'></div>
+<p>Common <a href="can-stache.html" title="Live binding templates.">can-stache</a> expressions:</p>
+<table>
+<tr>
+    <th>View</th>
+    <th>Data</th>
+    <th>Result</th>
+</tr>
+<tr>
+<td>
+<pre><code class="language-html">&lt;p&gt;{{ [key] }}&lt;/p&gt;
+
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">{
+  key: &quot;age&quot;,
+  age: 3
+}
+</code></pre>
+</td>
+<td>
+<pre><code class="language-html">&lt;p&gt;3&lt;/p&gt;
+
+
+
+
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-html">&lt;p&gt;{{ add(age, 2) }}&lt;/p&gt;
+
+
+
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">{
+  add(v1, v2){
+    return v1+v2;
+  },
+  age: 3
+}
+</code></pre>
+</td>
+<td>
+<pre><code class="language-html">&lt;p&gt;5&lt;/p&gt;
+
+
+
+
+
+
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-html">&lt;p&gt;{{ add(v1=age v2=2) }}&lt;/p&gt;
+
+
+
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">{
+  add(vals){
+    return vals.v1+vals.v2;
+  },
+  age: 3
+}
+</code></pre>
+</td>
+<td>
+<pre><code class="language-html">&lt;p&gt;5&lt;/p&gt;
+
+
+
+
+
+
+</code></pre>
+</td>
+</tr>
+</table>
+<div class='hidden-codepen'>
+<pre><code class="language-html">&lt;stache-examples&gt;&lt;/stache-examples&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+import { StacheElement } from &quot;can&quot;;
+
+// Extend StacheElement to define a custom element
+class StacheExamples extends StacheElement {
+    static view = `
+        &lt;p&gt;{{ [key] }}&lt;/p&gt;
+        &lt;p&gt;{{ addArgs(age, 2) }}&lt;/p&gt;
+        &lt;p&gt;{{ addProps(v1=age v2=2) }}&lt;/p&gt;
+    `;
+    static props = {
+        age: 3,
+        key: &quot;age&quot;,
+        addArgs(v1, v2) {
+            return v1 + v2;
+        },
+        addProps(vals) {
+            return vals.v1 + vals.v2;
+        }
+    };
+}
+
+customElements.define(&quot;stache-examples&quot;, StacheExamples);
+&lt;/script&gt;
+</code></pre>
+</div>
+<div class='codepen'></div>
+<h2>Element Bindings</h2>
+<p>Listen to events on elements, read data, write data, or cross-bind data on elements with <a href="can-stache-bindings.html" title="Listen to events and create one-way and two-way bindings.">can-stache-bindings</a>:</p>
+<table>
+<tr>
+    <th>View</th>
+    <th>Roughly Equivalent Code</th>
+</tr>
+<tr>
+<td>
+<pre><code class="language-js">&lt;input value:from='todo.name'/&gt;
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">todo.on(&quot;name&quot;, () =&gt; {
+  input.value = todo.name;
+});
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-js">&lt;input value:to='todo.name'/&gt;
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">input.addEventListener(&quot;change&quot;, () =&gt; {
+  todo.name = input.value;
+});
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-js">&lt;input on:input:value:to='todo.name'/&gt;
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">input.addEventListener(&quot;input&quot;, () =&gt; {
+  todo.name = input.value;
+});
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-js">&lt;input value:bind='name'/&gt;
+
+
+
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">todo.on(&quot;name&quot;, () =&gt; {
+  input.value = todo.name;
+});
+input.addEventListener(&quot;change&quot;, () =&gt; {
+  todo.name = input.value;
+});
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-js">&lt;input on:change='todo.method()'/&gt;
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">input.onchange = todo.method;
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-js">&lt;button on:click='todo.priority = 1'&gt;
+  Critical
+&lt;/button&gt;
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">button.addEventListener(&quot;click&quot;, () =&gt; {
+  todo.priority = 1;
+});
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-js">&lt;div on:name:by:todo='this.shake(scope.element)'/&gt;
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">todo.on(&quot;name&quot;, () =&gt; {
+    this.shake(div);
+});
+</code></pre>
+</td>
+</tr>
+</table>
+<div class='hidden-codepen'>
+<pre><code class="language-html">&lt;stache-examples&gt;&lt;/stache-examples&gt;
+&lt;style&gt;
+.shake {
+    /* Start the shake animation and make the animation last for 0.5 seconds */
+    animation: shake 0.5s;
+}
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+&lt;/style&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { StacheElement, ObservableObject } from &quot;can&quot;;
+
+// Extend StacheElement to define a custom element
+class StacheExamples extends StacheElement {
+    static view = `
+        &lt;p&gt;Updates when the todo's name changes:
+            &lt;input value:from='this.todo.name'/&gt;
+        &lt;/p&gt;
+        &lt;p&gt;Updates the todo's name when the input's &lt;code&gt;change&lt;/code&gt; event fires:
+            &lt;input value:to='this.todo.name'/&gt;
+        &lt;/p&gt;
+        &lt;p&gt;Updates the todo's name when the input's &lt;code&gt;input&lt;/code&gt; event fires:
+            &lt;input on:input:value:to='this.todo.name'/&gt;
+        &lt;/p&gt;
+        &lt;p&gt;Updates when the todo's name changes and update the
+            todo's name when the input's &lt;code&gt;change&lt;/code&gt; event fires:
+            &lt;input value:bind='this.todo.name'/&gt;
+        &lt;/p&gt;
+        &lt;p&gt;Calls the todo's &lt;code&gt;sayHi&lt;/code&gt; method when the button
+           is clicked:
+            &lt;button on:click=&quot;this.todo.sayHi()&quot;&gt;Say Hi&lt;/button&gt;
+        &lt;/p&gt;
+        &lt;p&gt;Animate the div when the todo's &lt;code&gt;name&lt;/code&gt; event fires:
+            &lt;div on:name:by:todo='this.shake(scope.element)'
+                on:animationend='this.removeShake(scope.element)'&gt;
+                {{ this.todo.name }}
+            &lt;/div&gt;
+        &lt;/p&gt;
+    `;
+
+    static props = {
+        sayHi() {
+            console.log(&quot;the element says hi&quot;);
+        },
+        shake(element) {
+            element.classList.add(&quot;shake&quot;);
+        },
+        removeShake(element) {
+            element.classList.remove(&quot;shake&quot;);
+        },
+        todo: {
+            get default() {
+                return new ObservableObject({
+                    name: &quot;&quot;,
+                    sayHi() {
+                        console.log(&quot;the todo says hi&quot;);
+                    }
+                });
+            }
+        }
+    };
+}
+
+customElements.define(&quot;stache-examples&quot;, StacheExamples);
+&lt;/script&gt;
+</code></pre>
+</div>
+<div class='codepen'></div>
+<h2>Custom Element Bindings</h2>
+<p>Similar to the bindings on normal elements in the previous section &mdash; you can
+listen to events on custom elements, read, write or cross-bind an element’s properties with <a href="can-stache-bindings.html" title="Listen to events and create one-way and two-way bindings.">can-stache-bindings</a>.</p>
+<p>The following shows examples of passing data to and from
+the <code>&lt;my-counter&gt;</code> element in the <a href="api.html#CustomElementBasics" title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the
+technology-overview page for background on the following APIs.">Custom Elements Basics</a>
+section:</p>
+<pre><code class="language-html">&lt;!-- Listens to when count changes and passes the value to doSomething --&gt;
+&lt;my-counter on:count=&quot;this.doSomething(scope.element.count)&quot;&gt;&lt;/my-counter&gt;
+
+&lt;!-- Starts counting at 3 --&gt;
+&lt;my-counter count:from=&quot;3&quot;&gt;&lt;/my-counter&gt;
+
+&lt;!-- Starts counting at startCount --&gt;
+&lt;my-counter count:from=&quot;this.startCount&quot;&gt;&lt;/my-counter&gt;
+
+&lt;!-- Update parentCount with the value of count --&gt;
+&lt;my-counter count:to=&quot;this.parentCount&quot;&gt;&lt;/my-counter&gt;
+
+&lt;!-- Cross bind parentCount with count --&gt;
+&lt;my-counter count:bind=&quot;this.parentCount&quot;&gt;&lt;/my-counter&gt;
+</code></pre>
+<div class='hidden-codepen'>
+<pre><code class="language-html">&lt;!-- Adds the custom element to the page --&gt;
+&lt;my-app&gt;&lt;/my-app&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+import { StacheElement } from &quot;can&quot;;
+
+class MyCounter extends StacheElement {
+    static view = `
+        Count: &lt;span&gt;{{ this.count }}&lt;/span&gt;
+        &lt;button on:click='this.increment()'&gt;+1&lt;/button&gt;
+    `;
+    static props = {
+        count: { default: 0 },
+        increment() {
+            this.count++;
+        }
+    };
+}
+customElements.define(&quot;my-counter&quot;, MyCounter);
+
+class MyApp extends StacheElement {
+    static view = `
+        &lt;p&gt;Calls &lt;code&gt;sayHi&lt;/code&gt; when &lt;code&gt;count&lt;/code&gt; changes.
+            &lt;my-counter on:count=&quot;this.sayHi(scope.element.count)&quot;&gt;&lt;/my-counter&gt;
+        &lt;/p&gt;
+        &lt;p&gt;Start counting at 3.
+            &lt;my-counter count:from=&quot;3&quot;&gt;&lt;/my-counter&gt;
+        &lt;/p&gt;
+        &lt;p&gt;Start counting at &lt;code&gt;startCount&lt;/code&gt; ({{ this.startCount }}).
+            &lt;my-counter count:from=&quot;this.startCount&quot;&gt;&lt;/my-counter&gt;
+        &lt;/p&gt;
+        &lt;p&gt;Update &lt;code&gt;parentCount&lt;/code&gt; ({{ this.parentCount }}) with the value of count.
+            &lt;my-counter count:to=&quot;this.parentCount&quot;&gt;&lt;/my-counter&gt;
+        &lt;/p&gt;
+        &lt;p&gt;Update &lt;code&gt;bindCount&lt;/code&gt; ({{this.bindCount}}) with the value of count.
+            &lt;my-counter count:bind=&quot;this.bindCount&quot;&gt;&lt;/my-counter&gt;
+        &lt;/p&gt;
+    `;
+
+    static props = {
+        sayHi(count) {
+            console.log(&quot;MyApp says hi with&quot;, count);
+        },
+        startCount: { default: 4 },
+        parentCount: {},
+        bindCount: { default: 10 }
+    };
+}
+customElements.define(&quot;my-app&quot;, MyApp);
+
+&lt;/script&gt;
+</code></pre>
+</div>
+<div class='codepen'></div>
+<p>You can also pass data to custom elements directly in html using <a href="can-observable-bindings/fromAttribute.html" title="Create a property and attribute binding on a StacheElement.">fromAttribute</a>:</p>
+<pre><code class="language-html">&lt;!-- pass count directly to the &lt;my-counter&gt; element --&gt;
+&lt;my-counter count=&quot;5&quot;&gt;&lt;/my-counter&gt;
+</code></pre>
+<div class='hidden-codepen'>
+<pre><code class="language-html">&lt;!-- pass count directly to the &lt;my-counter&gt; element --&gt;
+&lt;my-counter count=&quot;5&quot;&gt;&lt;/my-counter&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+import { StacheElement, type, fromAttribute } from &quot;can&quot;;
+
+class MyCounter extends StacheElement {
+    static view = `
+        Count: &lt;span&gt;{{ this.count }}&lt;/span&gt;
+        &lt;button on:click='this.increment()'&gt;+1&lt;/button&gt;
+    `;
+    static props = {
+        count: { type: type.convert(String), default: 0, bind: fromAttribute },
+        increment() {
+            this.count++;
+        }
+    };
+}
+customElements.define(&quot;my-counter&quot;, MyCounter);
+
+&lt;/script&gt;
+</code></pre>
+</div>
+<div class='codepen'></div>
+<p>Pass <a href="can-stache.tags.named-partial.html" title="Create an inline named partial within the current template.">can-stache renderers</a> to custom elements to customize layout:</p>
+<pre><code class="language-js">{{&lt; incrementButton }}
+    &lt;button on:click=&quot;this.add(5)&quot;&gt;ADD 5!&lt;/button&gt;
+{{/ incrementButton }}
+
+{{&lt; countDisplay }}
+    You have counted to {{ this.count }}!
+{{/ countDisplay }}
+
+&lt;my-counter count:from=&quot;5&quot; incrementButton:from=&quot;incrementButton&quot; countDisplay:from=&quot;countDisplay&quot;&gt;&lt;/my-counter&gt;
+</code></pre>
+<p>Use <a href="can-stache/expressions/call.html" title="">call expressions</a> to call the passed renderer or the
+<a href="can-observable-object/define/default.html" title="Specifies the default value for instances of the defined type.">default renderers</a> if one was not provided.</p>
+<pre><code class="language-js">import { StacheElement } from &quot;can&quot;;
+
+class MyCounter extends StacheElement {
+    static view = `
+        {{ incrementButton(this) }}
+        {{ countDisplay(this) }}
+    `;
+    static props = {
+        incrementButton() {
+            return `&lt;button on:click=&quot;add(1)&quot;&gt;+1&lt;/button&gt;`;
+        },
+        countDisplay() {
+            return `{{ this.count }}`;
+        },
+        count: 0,
+        add(increment) {
+            this.count += increment;
+        }
+    };
+}
+customElement.define(&quot;my-counter&quot;, MyCounter);
+</code></pre>
+<div class='hidden-codepen'>
+<pre><code class="language-html">&lt;!-- Adds the custom element to the page --&gt;
+&lt;my-app&gt;&lt;/my-app&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+import { StacheElement } from &quot;can&quot;;
+
+class MyCounter extends StacheElement {
+    static view = `
+        {{ incrementButton(this) }}
+        {{ countDisplay(this) }}
+    `;
+    static props = {
+        incrementButton() {
+            return `&lt;button on:click=&quot;add(1)&quot;&gt;+1&lt;/button&gt;`;
+        },
+        countDisplay() {
+            return `{{ this.count }}`;
+        },
+        count: 0,
+        add(increment) {
+            this.count += increment;
+        }
+    };
+}
+customElements.define(&quot;my-counter&quot;, MyCounter);
+
+class MyApp extends StacheElement {
+    static view = `
+        {{&lt; incrementButton }}
+            &lt;button on:click=&quot;this.add(5)&quot;&gt;ADD 5!&lt;/button&gt;
+        {{/ incrementButton }}
+
+        {{&lt; countDisplay }}
+            You have counted to {{ this.count }}!
+        {{/ countDisplay }}
+
+        &lt;my-counter count:from=&quot;5&quot; incrementButton:from=&quot;incrementButton&quot; countDisplay:from=&quot;countDisplay&quot;&gt;&lt;/my-counter&gt;
+    `;
+}
+customElements.define(&quot;my-app&quot;, MyApp);
+&lt;/script&gt;
+</code></pre>
+</div>
+<div class='codepen'></div>
+<h2>Data Modeling</h2>
+<p>Connect data types to a restful service with <a href="can-rest-model.html" title="Connect a type to a restful service layer.">can-rest-model</a>:</p>
+<pre><code class="language-js">import { restModel } from &quot;can&quot;;
+import Todo from &quot;//canjs.com/demos/api/todo.mjs&quot;;
+import TodoList from &quot;//canjs.com/demos/api/todo-list.mjs&quot;;
+
+const todoConnection = restModel({
+    ObjectType: Todo,
+    ArrayType: TodoList,
+    url: &quot;/api/todos/{id}&quot;
+});
+</code></pre>
+<div class='codepen'></div>
+<p>Retrieve, create, update and destroy data programmatically:</p>
+<table>
+<tr>
+    <th>JavaScript API</th>
+    <th>Request</th>
+    <th>Response</th>
+</tr>
+<tr>
+<td>
+<pre><code class="language-js">Todo.getList({
+  // Selects only the todos that match
+  filter: {
+    complete: { $in: [false, null] }
+  },
+  // Sort the results of the selection
+  sort: &quot;-name&quot;,
+  // Paginate the sorted result
+  page: { start: 0, end: 19 }
+}) //-&gt; Promise&lt;TodoList[]&gt;
+</code></pre>
+</td>
+<td>
+<pre><code>GET /api/todos?
+  filter[complete][$in][]=false&amp;
+  filter[complete][$in][]=null&amp;
+  sort=-name&amp;
+  page[start]=0&amp;
+  page[end]=19
+
+
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">{
+  &quot;data&quot;: [
+    {
+      &quot;id&quot;: 20,
+      &quot;name&quot;: &quot;mow lawn&quot;,
+      &quot;complete&quot;: false
+    },
+    // ...
+  ]
+}
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-js">Todo.get({
+  id: 5
+}) //-&gt; Promise&lt;Todo&gt;
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code>GET /api/todos/5
+
+
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">{
+  &quot;id&quot;: 5,
+  &quot;name&quot;: &quot;do dishes&quot;,
+  &quot;complete&quot;: true
+}
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-js">const todo = new Todo({
+  name: &quot;make a model&quot;
+})
+todo.save()  //-&gt; Promise&lt;Todo&gt;
+
+
+</code></pre>
+</td>
+<td>
+<pre><code>POST /api/todos
+    {
+      &quot;name&quot;: &quot;make a model&quot;,
+      &quot;complete&quot;: false
+    }
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">{
+  &quot;id&quot;: 22,
+  &quot;name&quot;: &quot;make a model&quot;,
+  &quot;complete&quot;: false
+}
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-js">todo.complete = true;
+todo.save()  //-&gt; Promise&lt;Todo&gt;
+
+
+
+
+</code></pre>
+</td>
+<td>
+<pre><code>PUT /api/todos/22
+    {
+      &quot;name&quot;: &quot;make a model&quot;,
+      &quot;complete&quot;: true
+    }
+</code></pre>
+</td>
+<td>
+<pre><code class="language-js">{
+  &quot;id&quot;: 22,
+  &quot;name&quot;: &quot;make a model&quot;,
+  &quot;complete&quot;: true
+}
+</code></pre>
+</td>
+</tr>
+<tr>
+<td>
+<pre><code class="language-js">todo.destroy()  //-&gt; Promise&lt;Todo&gt;
+
+
+</code></pre>
+</td>
+<td>
+<pre><code>DELETE /api/todos/22
+
+
+</code></pre>
+</td>
+<td>
+<pre><code>Successful status code (2xx).
+Response body is not necessary.
+</code></pre>
+</td>
+</tr>
+</table>
+<p>Check the status of request:</p>
+<pre><code class="language-js">const todo = new Todo({ name: &quot;make a model&quot;});
+
+// Return if the todo hasn't been persisted
+todo.isNew()    //-&gt; true
+
+// Listen to when any todo is created:
+Todo.on(&quot;created&quot;, (ev, todo) =&gt; {});
+
+let savedPromise = todo.save();
+
+// Return if the todo is being created or updated
+todo.isSaving() //-&gt; true
+
+savedPromise.then(() =&gt; {
+    todo.isNew() //-&gt; false
+    todo.isSaving() //-&gt; false
+
+    let destroyedPromise = todo.destroy();
+
+    // Return if the todo is being destroyed
+    todo.isDestroying() //-&gt; true
+
+    destroyedPromise.then(() =&gt; {
+        todo.isDestroying() //-&gt; false
+    })
+});
+</code></pre>
+<p>Connect data types to a restful service and have CanJS automatically manage
+adding and removing items from lists with <a href="can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">can-realtime-rest-model</a>:</p>
+<pre><code class="language-js">import { realtimeRestModel } from &quot;can&quot;;
+
+// Define a real time restful model
+const todoConnection = realtimeRestModel({
+    ObjectType: Todo,
+    ArrayType: Todo.List,
+    url: &quot;/api/todos/{id}&quot;
+});
+
+// Update instances and lists from server-side events:
+var loc = window.location;
+const socket = new WebSocket('ws://'+loc.host+loc.pathname+&quot;/ws&quot;);
+
+socket.addEventListener(&quot;todo-created&quot;,(event) =&gt; {
+    todoConnection.createInstance( JSON.parse(event.data) );
+});
+
+socket.addEventListener(&quot;todo-updated&quot;,(event) =&gt; {
+    todoConnection.updateInstance( JSON.parse(event.data) );
+});
+
+socket.addEventListener(&quot;todo-removed&quot;,(event) =&gt; {
+    todoConnection.destroyInstance( JSON.parse(event.data) );
+});
+</code></pre>
+<p>Simulate a service layer where you can create, retrieve, update and delete (CRUD)
+records:</p>
+<pre><code class="language-js">import { fixture } from &quot;can&quot;;
+
+let todosStore = fixture.store([
+    { id: 0, name: &quot;use fixtures&quot;, complete: false }
+], Todo);
+
+fixture(&quot;/api/todos/{id}&quot;, todosStore);
+</code></pre>
+<h2>Routing</h2>
+<p>Define routing rules and initialize routing with <a href="can-route.html" title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">can-route</a>:</p>
+<pre><code class="language-js">import { route } from &quot;can&quot;;
+
+// Create two-way routing rule:
+route.register(&quot;{page}&quot;, { page: &quot;home&quot; });
+
+// Define routing data type
+class RouteData extends ObservableObject {
+    static props = {
+        page: String
+    };
+}
+
+// Connect routing system to an instance
+// of the routing data type
+route.data = new RouteData();
+// begin routing
+route.start();
+
+
+// Provide access to the route data to your application component
+class MyApp extends StacheElement {
+    static view = '&lt;page-picker page:from=&quot;this.routeData.page&quot;/&gt;';
+
+    static props = {
+        routeData: {
+            get default() {
+                return route.data;
+            }
+        }
+    };
+}
+</code></pre>
+<p>Create responsive links in <a href="can-stache.html" title="Live binding templates.">can-stache</a> views with <a href="can-stache-route-helpers.html" title="Adds routeUrl and routeCurrent helpers to stache.">can-stache-route-helpers</a>:</p>
+<pre><code class="language-html">&lt;a href=&quot;{{ routeUrl(page='todos') }}&quot;
+   class=&quot;{{# routeCurrent(page='todos') }}
+            inactive
+          {{ else }}
+            active
+          {{/ routeCurrent }}&quot;&gt;Todos
+&lt;/a&gt;
+</code></pre>
+<h2>Utilities</h2>
+<p>Make AJAX requests with <a href="can-ajax.html" title="Make an asynchronous HTTP (AJAX) request.">can-ajax</a>:</p>
+<pre><code class="language-js">import { ajax } from &quot;can-ajax&quot;;
+
+ajax({
+    url: &quot;http://query.yahooapis.com/v1/public/yql&quot;,
+    data: {
+        format: &quot;json&quot;,
+        q: 'select * from geo.places where text=&quot;sunnyvale, ca&quot;'
+    }
+}) //-&gt; Promise&lt;Object&gt;
+</code></pre>
+<p>Perform differences with <a href="can-diff.html" title="Utilities for comparing and applying differences between data structures.">can-diff</a>:</p>
+<pre><code class="language-js">diff.list([&quot;a&quot;,&quot;b&quot;], [&quot;a&quot;,&quot;c&quot;])
+//-&gt; [{ type: &quot;splice&quot;, index: 1, deleteCount: 1, insert: [&quot;c&quot;] }]
+
+diff.map({ a: &quot;a&quot; },{ a: &quot;A&quot; })
+//-&gt; [{ type: &quot;set&quot;, key: &quot;a&quot;, value: &quot;A&quot; }]
+</code></pre>
+<p>Read and store the results of <a href="https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Cross_browser_testing/Feature_detection">feature detection</a> with <a href="can-globals.html" title="An environment agnostic container for global variables. Useful for testing and server-side rendering (SSR), typically used internally by CanJS.">can-globals</a>:</p>
+<pre><code class="language-js">import { globals } from &quot;can&quot;;
+
+globals.getKeyValue(&quot;isNode&quot;)          //-&gt; false
+globals.getKeyValue(&quot;isBrowserWindow&quot;) //-&gt; true
+globals.getKeyValue(&quot;MutationObserver&quot;) //-&gt; MutationObserver
+</code></pre>
+<p>Read and write nested values with <a href="can-key.html" title="Utilities that read and write nested properties on objects and arrays.">can-key</a>:</p>
+<pre><code class="language-js">import { key } from &quot;can&quot;;
+
+const task = {
+    name: &quot;learn can-key&quot;,
+    owner: { name: { first: &quot;Justin&quot;, last: &quot;Meyer&quot; } }
+}
+
+key.delete(task, &quot;owner.name.first&quot;);
+key.get(task, &quot;owner.name.last&quot;) //-&gt; &quot;Meyer&quot;
+key.set(task, &quot;owner.name.first&quot;, &quot;Bohdi&quot;);
+</code></pre>
+<p>Parse a URI into its parts with <a href="can-parse-uri.html" title="can-parse-uri">can-parse-uri</a>:</p>
+<pre><code class="language-js">import { parseURI } from &quot;can&quot;;
+
+parseURI(&quot;http://foo:8080/bar.html?query#change&quot;)
+//-&gt; {
+//  authority: &quot;//foo:8080&quot;,
+//  hash: &quot;#change&quot;,
+//  host: &quot;foo:8080&quot;,
+//  hostname: &quot;foo&quot;,
+//  href: &quot;http://foo:8080/bar.html?query#change&quot;,
+//  pathname: &quot;/bar.html&quot;,
+//  port: &quot;8080&quot;,
+//  protocol: &quot;http:&quot;,
+//  search: &quot;?query&quot;
+// }
+</code></pre>
+<p>Convert a string into another primitive type with <a href="can-string-to-any.html" title="Turns a string representation of a primitive type back into the associated primitive.">can-string-to-any</a>:</p>
+<pre><code class="language-js">import { stringToAny } from &quot;can&quot;;
+stringToAny( &quot;NaN&quot; ); // -&gt; NaN
+stringToAny( &quot;44.4&quot; ); // -&gt; 44.4
+stringToAny( &quot;false&quot; ); // -&gt; false
+</code></pre>
+<p>Convert one string format to another string format with <a href="can-string.html" title="String utilities.">can-string</a>:</p>
+<pre><code class="language-js">import { string } from &quot;can&quot;;
+
+string.camelize(&quot;foo-bar&quot;)) //-&gt; &quot;fooBar&quot;
+string.capitalize(&quot;foo&quot;)    //-&gt; &quot;Foo&quot;
+string.esc(&quot;&lt;div&gt;foo&lt;/div&gt;&quot;)//-&gt; &quot;&amp;lt;div&amp;gt;foo&amp;lt;/div&amp;gt;&quot;
+string.hyphenate(&quot;fooBar&quot;)  //-&gt; &quot;foo-bar&quot;
+string.underscore(&quot;fooBar&quot;) //-&gt; &quot;foo_bar&quot;
+</code></pre>
+<p>Operate on any data type with <a href="can-reflect.html" title="Perform operations and read information on unknown data types.">can-reflect</a>:</p>
+<pre><code class="language-js">import { Reflect } from &quot;can&quot;;
+
+// Test the type:
+Reflect.isBuiltIn(new Date()) //-&gt; true
+Reflect.isBuiltIn(new Todo()) //-&gt; false
+Reflect.isConstructorLike(function(){}) //-&gt; false
+Reflect.isConstructorLike(Date)         //-&gt; true
+Reflect.isListLike([]) //-&gt; true
+Reflect.isListLike({}) //-&gt; false
+Reflect.isMapLike([]) //-&gt; true
+Reflect.isMapLike({}) //-&gt; true
+Reflect.isMoreListLikeThanMapLike([]) //-&gt; true
+Reflect.isMoreListLikeThanMapLike({}) //-&gt; false
+Reflect.isObservableLike(new Todo()) //-&gt; true
+Reflect.isObservableLike({})         //-&gt; false
+Reflect.isPlainObject({})         //-&gt; true
+Reflect.isPlainObject(new Todo()) //-&gt; false
+Reflect.isPromiseLike(Promise.resolve()) //-&gt; true
+Reflect.isPromiseLike({})                //-&gt; false
+Reflect.isValueLike(22) //-&gt; true
+Reflect.isValueLike({}) //-&gt; false
+
+// Read and mutate key-value data
+const obj = {};
+Reflect.setKeyValue(obj,&quot;prop&quot;,&quot;VALUE&quot;);
+Reflect.getKeyValue(obj,&quot;prop&quot;) //-&gt; &quot;VALUE&quot;
+Reflect.deleteKeyValue(obj,&quot;prop&quot;,&quot;VALUE&quot;);
+
+Reflect.assign(obj, { name: &quot;Payal&quot; });
+</code></pre>
+<p>Create types that work with <a href="can-reflect.convert.html" title="Convert one value to another type.">convert</a> using <a href="can-type.html" title="Define types that can verify values are of the correct type, or convert values to the correct type.">can-type</a>:</p>
+<pre><code class="language-js">import { Reflect, type } from &quot;can&quot;;
+
+const MaybeNumber = type.maybe(Number);
+
+Reflect.convert(42, MaybeNumber); // -&gt; 42
+Reflect.convert(null, MaybeNumber); // -&gt; null
+Reflect.convert(undefined, MaybeNumber); // -&gt; undefined
+Reflect.convert(&quot;hello world&quot;, MaybeNumber); // throws!
+
+const ConvertString = type.convert(String);
+
+Reflect.convert(42, ConvertString); // -&gt; &quot;42&quot;
+Reflect.convert(null, ConvertString); // -&gt; &quot;null&quot;
+Reflect.convert(undefined, ConvertString); // -&gt; &quot;undefined&quot;
+Reflect.convert(&quot;hello world&quot;, ConvertString); // -&gt; &quot;hello world&quot;
+
+const MaybeConvertBoolean = type.maybeConvert(Boolean);
+
+Reflect.convert(&quot;false&quot;, MaybeConvertBoolean); // -&gt; false
+Reflect.convert(null, MaybeConvertBoolean); // -&gt; null
+Reflect.convert(undefined, MaybeConvertBoolean); // -&gt; undefined
+Reflect.convert(&quot;hello world&quot;, MaybeConvertBoolean); // -&gt; true
+
+const StrictNumber = type.check(Number);
+
+Reflect.convert(42, StrictNumber); // -&gt; 42
+Reflect.convert(null, StrictNumber); // throws!
+Reflect.convert(undefined, StrictNumber); // throws!
+Reflect.convert(&quot;hello world&quot;, StrictNumber); // throws!
+</code></pre>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-canjs/can-api.md"},"description":"Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the\n[guides/technology-overview] page for background on the following APIs.\n\n","name":"api","title":"API Docs","type":"page","parent":"canjs","order":2,"outline":{"depth":1},"package":{"name":"can","version":"6.6.1","main":"can.js","scripts":{"preversion":"npm test","version":"git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/","postversion":"git push --tags && git checkout - && git branch -D release && git push","testee":"testee test/index.html --browsers firefox","testee-builders":"testee test/builders/test.html --browsers firefox","testee-production":"testee test/production.html --browsers firefox","testee-global-build":"testee test/global-build.html --browsers firefox","http-server":"http-server -p 3000 --silent","test":"npm run test-development && npm run test-production && npm run test-builders && npm run test-global-build","test-builders":"npm run build-webpack-test && npm run testee-builders","test-development":"npm run testee","test-global-build":"npm run build && bundlesize && npm run testee-global-build","test-local":"npm run build && npm run testee","test-production":"npm run build-tests && npm run testee-production","test-sauce-labs":"node test/test-sauce-labs.js","release:pre":"npm version prerelease && npm run build && npm publish --tag=pre","release:patch":"npm version patch && npm run build && npm publish","release:minor":"npm version minor && npm run build && npm publish","release:major":"npm version major && npm run build && npm publish","build":"node build.js","build-tests":"node test/build.js","build-webpack-test":"webpack --mode=production -o test/builders/webpack/bundle.js test/builders/webpack/index.js","document":"./pre-document.sh && npm run deps-bundle && bit-docs","document:force":"./pre-document.sh && npm run deps-bundle && bit-docs -fd","deps-bundle":"node build-dev-bundle"},"title":"CanJS","description":"MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.","keywords":["CanJS","DoneJS"],"author":{"name":"Bitovi","email":"contact@bitovi.com","web":"http://bitovi.com/"},"homepage":"http://canjs.com/","repository":{"type":"git","url":"git@github.com:canjs/canjs.git","github":"https://github.com/canjs/canjs"},"dependencies":{"can-ajax":"2.4.6","can-assign":"1.3.3","can-attribute-encoder":"1.1.4","can-attribute-observable":"2.0.2","can-bind":"1.5.1","can-child-nodes":"1.2.1","can-cid":"1.3.1","can-component":"5.0.0","can-compute":"4.1.1","can-connect":"4.0.2","can-connect-ndjson":"2.0.0","can-connect-tag":"2.0.0","can-construct":"3.5.6","can-construct-super":"3.2.1","can-control":"5.0.1","can-data-types":"1.2.1","can-debug":"2.0.7","can-deep-observable":"1.0.2","can-define":"2.8.0","can-define-backup":"2.1.2","can-define-lazy-value":"1.1.1","can-define-realtime-rest-model":"2.0.0","can-define-rest-model":"2.0.0","can-define-stream":"1.1.1","can-define-stream-kefir":"1.1.1","can-deparam":"1.2.3","can-diff":"1.5.0","can-dom-data":"1.0.3","can-dom-data-state":"1.1.2","can-dom-events":"1.3.11","can-dom-mutate":"2.0.8","can-event-dom-enter":"2.2.1","can-event-dom-radiochange":"2.2.1","can-event-queue":"1.1.8","can-fixture":"3.1.7","can-fixture-socket":"2.0.3","can-fragment":"1.3.1","can-globals":"1.2.2","can-kefir":"1.1.4","can-key":"1.2.1","can-key-tree":"1.2.2","can-list":"4.2.2","can-local-store":"1.0.1","can-log":"1.0.2","can-make-map":"1.2.2","can-map":"4.3.12","can-map-compat":"1.1.1","can-map-define":"4.4.0","can-memory-store":"1.0.3","can-namespace":"1.0.0","can-ndjson-stream":"1.0.2","can-observable-array":"1.1.4","can-observable-bindings":"1.3.3","can-observable-mixin":"1.0.10","can-observable-object":"1.1.4","can-observation":"4.2.0","can-observation-recorder":"1.3.1","can-observe":"2.3.2","can-param":"1.1.3","can-parse-uri":"1.2.2","can-query-logic":"1.2.2","can-queues":"1.3.2","can-realtime-rest-model":"2.0.0","can-reflect":"1.18.0","can-reflect-dependencies":"1.1.2","can-reflect-promise":"2.2.1","can-rest-model":"2.0.0","can-route":"5.0.2","can-route-hash":"1.0.2","can-route-mock":"1.0.2","can-route-pushstate":"6.0.0","can-set-legacy":"1.0.1","can-simple-dom":"1.7.1","can-simple-map":"4.3.3","can-simple-observable":"2.5.0","can-stache":"5.1.1","can-stache-bindings":"5.0.4","can-stache-converters":"5.0.0","can-stache-element":"1.2.0","can-stache-key":"1.4.3","can-stache-route-helpers":"2.0.0","can-stream":"1.1.1","can-stream-kefir":"1.2.1","can-string":"1.1.0","can-string-to-any":"1.2.1","can-super-model":"2.0.0","can-symbol":"1.6.5","can-type":"1.1.5","can-validate":"1.2.1","can-validate-interface":"1.0.3","can-validate-legacy":"2.0.1","can-validate-validatejs":"1.0.1","can-value":"1.1.2","can-vdom":"4.4.2","can-view-autorender":"6.0.0","can-view-callbacks":"5.0.0","can-view-live":"5.0.4","can-view-model":"4.0.3","can-view-parser":"4.1.3","can-view-scope":"4.13.6","can-view-target":"5.0.0","steal-stache":"5.0.0"},"devDependencies":{"@feathersjs/feathers":"^3.3.1","@feathersjs/socketio-client":"^1.2.1","@octokit/rest":"^16.27.3","@webcomponents/custom-elements":"^1.2.4","bit-docs":"^0.2.0","bundlesize":"^0.18.0","can-reflect-tests":"^1.0.0","can-test-helpers":"^1.1.1","core-js":"^2.5.7","es6-promise-polyfill":"^1.2.0","funcunit":"^3.4.2","gzip-size":"^4.1.0","http-server":"^0.11.1","jquery":"2.x - 3.x","jquery-ui":"^1.12.0","kefir":"^3.8.0","minimist":"^1.2.5","prop-types":"^15.5.10","qunit":"^2.9.2","semver":"^6.1.1","socket.io-client":"^2.2.0","steal":"^2.2.4","steal-conditional":"^1.1.3","steal-css":"^1.2.4","steal-qunit":"^2.0.0","steal-socket.io":"^4.0.9","steal-tools":"^2.2.5","test-saucelabs":"0.0.6","testee":"^0.9.0","version-and-release":"^0.1.1","webpack":"^4.12.0","webpack-cli":"^3.0.7"},"demos":["http://canjs.us/#examples","http://canjs.us/recipes"],"googleAnalyticsTrackingCode":"UA-2302003-11","licenses":[{"type":"MIT","url":"http://opensource.org/licenses/mit-license.php"}],"sideEffects":false,"steal":{"npmAlgorithm":"flat","main":"can","npmIgnore":["bit-docs","testee","async","saucelabs","test-saucelabs","wd","http-server"],"meta":{"socket.io-client/dist/socket.io":{"format":"cjs"}},"configDependencies":["./node_modules/steal-conditional/conditional.js"],"plugins":["steal-stache"]},"bit-docs":{"html":{"dependencies":{"normalize.css":"^5.0.0","steal-conditional":"^0.3.6","steal-stache":"^4.0.1"},"package":{"steal":{"configDependencies":["./node_modules/steal-conditional/conditional"]}},"static":[],"templates":[]},"dependencies":{"bit-docs-glob-finder":"^0.0.5","bit-docs-dev":"^0.0.3","bit-docs-js":"^0.0.6","bit-docs-tag-sourceref":"^0.0.3","bit-docs-generate-html":"^0.11.0","bit-docs-generate-searchmap":"^0.2.0","bit-docs-html-canjs":"3.0.0","bit-docs-prettify":"^0.3.0","bit-docs-html-highlight-line":"^0.5.3","bit-docs-tag-demo":"^0.5.3","bit-docs-tag-package":"^1.0.0","bit-docs-html-codepen-link":"^2.0.3","bit-docs-html-toc":"^1.1.1"},"glob":{"pattern":"{node_modules,docs}/{can-*,steal-stache}/**/*.{js,md}","ignore":["node_modules/can-namespace/**/*","node_modules/can-wait/examples/**/*","node_modules/can-*/dist/**/*","node_modules/*/node_modules/**/*","node_modules/can-debug/src/draw-graph/vis.js"]},"altVersions":{"5.33.3":"https://v5.canjs.com","4.3.0":"https://v4.canjs.com","3.14.1":"https://v3.canjs.com","2.3.35":"https://v2.canjs.com"},"parent":"canjs","minifyBuild":true,"codepen":[["\"can\"","\"//unpkg.com/can@6/core.mjs\""],["\"can/ecosystem\"","\"//unpkg.com/can@6/ecosystem.mjs\""],["\"can/everything\"","\"//unpkg.com/can@6/everything.mjs\""],["\"can/demos/technology-overview/mock-url\"","\"//unpkg.com/mock-url@^6.0.0/mock-url.mjs\""],["\"can/demos/technology-overview/route-mini-app-components\"","\"//unpkg.com/route-mini-app@^5.0.0/components.mjs\""],["return steal.import(","return import("],["\"can/demos/technology-overview/page-login\"","\"//unpkg.com/route-mini-app@^5.0.0/page-login.mjs\""],["`can/demos/technology-overview/page-${this.page}`","`//unpkg.com/route-mini-app@^5.0.0/page-${this.page}.mjs`"]]},"bundlesize":[{"path":"./core.min.mjs","maxSize":"106 kB"},{"path":"./core.mjs","maxSize":"314 kB"},{"path":"./dist/global/core.js","maxSize":"200 kB"}]},"templateRender":["<%","%>"],"subchildren":true,"comment":" ","codepen":[["\"can\"","\"//unpkg.com/can@6/core.mjs\""],["\"can/ecosystem\"","\"//unpkg.com/can@6/ecosystem.mjs\""],["\"can/everything\"","\"//unpkg.com/can@6/everything.mjs\""],["\"can/demos/technology-overview/mock-url\"","\"//unpkg.com/mock-url@^6.0.0/mock-url.mjs\""],["\"can/demos/technology-overview/route-mini-app-components\"","\"//unpkg.com/route-mini-app@^5.0.0/components.mjs\""],["return steal.import(","return import("],["\"can/demos/technology-overview/page-login\"","\"//unpkg.com/route-mini-app@^5.0.0/page-login.mjs\""],["`can/demos/technology-overview/page-${this.page}`","`//unpkg.com/route-mini-app@^5.0.0/page-${this.page}.mjs`"]],"pathToRoot":".."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="./static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix="."></div>
+
+	</body>
+</html>

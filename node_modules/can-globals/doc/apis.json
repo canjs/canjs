@@ -1,0 +1,7 @@
+[
+	"can-globals",
+	"can-globals/global/global",
+	"can-globals/document/document",
+	"can-globals/location/location",
+	"can-globals/mutation-observer/mutation-observer"
+]

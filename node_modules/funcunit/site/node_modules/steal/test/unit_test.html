@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Steal tests</title>
+		<link rel="stylesheet" type="text/css" href="../bower_components/qunit/qunit/qunit.css"/>
+	</head>
+	<body>
+
+		<h1 id="qunit-header">Steal Unit Test Suite</h1>
+
+		<h2 id="qunit-banner"></h2>
+		<div id="qunit-testrunner-toolbar"></div>
+		<h2 id="qunit-userAgent"></h2>
+		<ol id="qunit-tests"></ol>
+		<div id="qunit-test-area"></div>
+
+		<script src="../bower_components/qunit/qunit/qunit.js"></script>
+		<script src="../steal.js" config-main="@empty" main="@empty"
+			base-url="./"></script>
+		<script>
+		QUnit.config.autostart = false;
+		steal.import("config/config_test").then(function(){
+			QUnit.start();
+		});
+		</script>
+	</body>
+</html>

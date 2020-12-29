@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+	<head>
+		<link rel="stylesheet" href="../resources/jquery-ui-1.10.3.custom.css"/>
+	</head>
+
+	<body>
+		<div class="slider"></div>
+		<div class="value">0</div>
+
+		<script src="../resources/jquery.js"></script>
+		<script src="../resources/jquery-ui-1.10.3.custom.js"></script>
+
+		<script type="text/javascript">
+			var slider = $('.slider');
+
+			slider.slider();
+			slider.on('slidechange', function() {
+				var value = $(this).slider('option', 'value');
+				$('.value').text(value);
+			});
+		</script>
+	</body>
+</html>

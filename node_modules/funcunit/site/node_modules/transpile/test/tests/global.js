@@ -1,0 +1,1 @@
+var GLOBAL = "I don't like \"Quotes\"";

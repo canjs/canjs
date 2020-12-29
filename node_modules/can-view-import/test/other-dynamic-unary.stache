@@ -1,0 +1,3 @@
+<can-dynamic-import from="can-view-import/test/thing" />
+
+<span>hi there</span>

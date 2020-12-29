@@ -1,0 +1,26 @@
+<p>Current value of <code>myVal</code>: <code>[{{myVal}}]</code><br>
+Current value of <code>myNum</code>: <code>[{{myNum}}]</code></p>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">Validation Test</h3>
+	</div>
+	<div class="panel-body">
+		<form>
+			<label for="test1">MyVal <span class="text-danger"></span></label>
+			<div class="input-group" data-field="myVal">
+				<input class="form-control" id="test1" type="text" ($change)="updateValue(%element, 'myVal')" value="{{myVal}}">
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default" ($click)="validateField(., %element)">Validate</button>
+				</span>
+			</div>
+			<label for="test2">MyNum <span class="text-danger"></span></label>
+			<div class="input-group" data-field="myNum">
+				<input class="form-control" id="test2" type="text" ($change)="updateValue(%element, 'myNum')" value="{{myNum}}">
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default" ($click)="validateField(., %element)">Validate</button>
+				</span>
+			</div>
+		</form>
+	</div>
+</div>

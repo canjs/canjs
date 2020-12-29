@@ -1,0 +1,22 @@
+<script>
+	window.QUnit = window.parent.QUnit;
+	window.removeMyself = window.parent.removeMyself;
+</script>
+<script>
+
+	var worker = new Worker("dist/bundles/worker.js");
+
+	worker.addEventListener("message", function(e){
+		
+	if(typeof window !== "undefined" && window.QUnit) {
+
+		QUnit.equal(e.data.foo, "bar", "worker event value is right");
+		
+		QUnit.start();
+		removeMyself();
+	} else {
+		console.log("HELLP", e);
+	}
+
+	});
+</script>

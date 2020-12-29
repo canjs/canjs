@@ -1,0 +1,7 @@
+<script src="../node_modules/steal/steal.js" main="@empty">
+var queues = require("can-queues");
+var queue = new queues.Queue("my-queue");
+queue.log()
+queue.enqueue(console.log, console, ["say hi"], {});
+queue.flush();
+</script>

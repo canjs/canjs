@@ -1,0 +1,63 @@
+{{#if params}}
+	<h4>Arguments</h4>
+
+	<ol class="parameters">
+		{{#params}}
+		<li>
+			<code>{{name}}{{#if defaultValue}}={{defaultValue}}{{/if}}</code>
+			<em>{{#if types}}{{{makeTypesString types}}}{{/if}}{{#if optional}}<span class="optional">Optional{{#if variable}} Variable{{/if}}</span>{{/if}}</em>:
+			{{{makeLinks description}}}
+			
+			{{#types}}
+			{{#if options.length}}
+			<ul class="options">
+				{{#options}}
+				<li class="option">
+					<h5>{{name}} 
+						{{#if types}}<code>{{{makeTypesString types}}}</code>{{/if}}
+					</h5>
+					<div class="description">
+						{{{makeLinks description}}}
+					</div>
+				</li>
+				{{/options}}
+			</ul>
+			{{/if}}
+			{{/types}}
+		</li>
+		{{/params}}
+	</ol>
+{{/if}}
+{{#if returns}}
+	<h4>Returns</h4>
+	<div class="returns">
+		<em>{{{makeTypesString returns.types}}}</em>:
+		{{{makeLinks returns.description}}}
+		
+		
+		{{#getTypesWithDescriptions returns.types}}
+		<ul class="options">
+			{{#types}}
+			<li class="option">
+				<h5>{{name}} 
+					{{#if types}}<code>{{{makeTypesString types}}}</code>{{/if}}
+				</h5>
+				<div class="description">
+					{{{makeLinks description}}}
+				</div>
+			</li>
+			{{/types}}
+		</ul>
+		{{/getTypesWithDescriptions}}
+	</div>
+	
+{{/if}}
+{{#if context}}
+	<h4>This</h4>
+	<div class="returns">
+		<h4><code>{{{makeTypesString context.types}}}</code></h4>
+		<div class="description">
+			{{{makeLinks context.description}}}
+		</div>
+	</div>
+{{/if}}

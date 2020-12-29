@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+	<body>
+		<script src="../../node_modules/steal/steal.js">
+				var $ = require("funcunit/browser/jquery");
+
+				$("body").append("<a href='javascript://' class='show-confirm'>Show confirm</a><div class='results'></div>");
+				$('.show-confirm').click(function() {
+					if(window.confirm('confirm?')) {
+						$('.results').text('confirmed!');
+					}
+				});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/contribute/releasing-canjs.md
+	@page guides/contributing/releases
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Releasing CanJS | Contributing | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="Release and hosting information for CanJS maintainers.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Release and hosting information for CanJS maintainers.">
+	<meta property="og:title" content="Releasing CanJS | Contributing | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "Release and hosting information for CanJS maintainers.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Releasing CanJS | Contributing | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/contributing/releases" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="project-organization.html"
+							title="Learn about how CanJS is organized.">
+							Project Organization
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="bug-report.html"
+							title="Learn how to submit a bug report.">
+							Reporting Bugs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="feature-suggestion.html"
+							title="Learn how to suggest a feature.">
+							Suggesting Features
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="finding-ways-to-contribute.html"
+							title="There are many ways to contribute to CanJS, whether you’re a developer who wants to code, a designer who can help improve the design and usability of our projects, or someone who’s interested in helping other members of the community.">
+							Finding Ways to Contribute
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="developing-locally.html"
+							title="Learn how to set up your development environment, get the code, and verify that it’s working.">
+							Developing Locally
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="code.html"
+							title="Learn how to contribute a code change to CanJS. Read the adding-ecosystem-modules guide on how to make a plugin to CanJS.">
+							Changing the Code
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="documentation.html"
+							title="Learn how to improve CanJS’s site and documentation.">
+							Improving the Docs &amp; Site
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="site-style-guide.html"
+							title="Learn about the website’s design and styles.">
+							Site Style Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="adding-ecosystem-modules.html"
+							title="Learn how to add a new package to the CanJS toolkit.">
+							Making a New Package
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="api-design-guidelines.html"
+							title="Learn how to design APIs which are consistent with CanJS.">
+							API Design Guidelines
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="releases.html"
+							title="Release and hosting information for CanJS maintainers.">
+							Releasing CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="updating-the-site.html"
+							title="How to update the CanJS website.">
+							Updating the Site
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="evangelism.html"
+							title="Learn about resources that can help you spread the word about CanJS.">
+							Evangelism
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Releasing CanJS</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/contribute/releasing-canjs.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Release and hosting information for CanJS maintainers.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <p>For maintainers of CanJS and its submodules this guide describes</p>
+<ul>
+<li>How continuous integration is set up</li>
+<li>How dependencies are kept up to date</li>
+<li>How to make a releases of CanJS subprojects and the main package</li>
+</ul>
+<h2>Continuous Integration</h2>
+<h3>Travis CI</h3>
+<p>All repositories automatically run their tests in <a href="https://travis-ci.org/">Travis CI</a> using the <code>npm test</code> command (browser tests use Firefox as their target browser). If <code>npm test</code> is passing locally but not on Travis CI</p>
+<ul>
+<li>Try setting the <code>DEBUG=testee*</code> environment variable in <code>travis-ci.org/canjs/&lt;repository&gt;/settings</code> to get more information.</li>
+<li>Run the tests on an Ubuntu VM (e.g. <a href="https://www.virtualbox.org/wiki/Linux_Downloads">Ubuntu for Virtualbox</a>)</li>
+</ul>
+<h3>Saucelabs</h3>
+<p><a href="https://github.com/canjs/canjs">canjs/canjs</a> also runs the tests of all dependencies in the supported browsers on <a href="https://saucelabs.com">Saucelabs</a>:</p>
+<p><a href="https://saucelabs.com/u/canjs-not-master"><img src="https://saucelabs.com/browser-matrix/canjs-not-master.svg" alt="Sauce Test Status" /></a></p>
+<p>To view Saucelabs test runs and results, request an invite from a Saucelabs user that has access to the <code>canjs</code> Saucelabs project (existing users can send invites under <a href="https://saucelabs.com/beta/users/canjs">my account</a>). Saucelabs tests can be run locally via</p>
+<pre><code>npm run ci
+</code></pre>
+<h2>Updating dependencies with Greenkeeper</h2>
+<p>All CanJS repositories are set up with <a href="https://greenkeeper.io/">Greenkeeper</a>. Greenkeeper tracks dependencies and creates a branch for every new version coming in. This will trigger Travis CI to run the tests and if a dependency update breaks the tests or a breaking (major) version was released, it will create a pull request.</p>
+<p>Greenkeeper is free for open source projects and works on the CanJS organization level. To add a new project or change the status of an existing project:</p>
+<ul>
+<li>Install the command line via <code>npm install greenkeeper -g</code></li>
+<li>Run <code>greenkeeper login</code> to log in via GitHub</li>
+<li>For more information run <code>greenkeeper</code> or <code>greenkeeper start</code></li>
+<li>To enable a project, in the project folder run <code>greenkeeper enable</code></li>
+</ul>
+<h2>Making releases</h2>
+<p>With the exception of the <code>can</code> package, <strong>ALL subprojects</strong> MUST follow the <a href="http://semver.org/">Semantic Versioning</a> guidelines in the form of <code>MAJOR.MINOR.PATCH</code> for</p>
+<ul>
+<li><code>MAJOR</code> version when you make incompatible API changes,</li>
+<li><code>MINOR</code> version when you add functionality in a backwards-compatible manner, and</li>
+<li><code>PATCH</code> version when you make backwards-compatible bug fixes.</li>
+</ul>
+<p>Before making any release please make sure that</p>
+<ul>
+<li>You have write access to the GitHub repository you want to publish.</li>
+<li>Have an <a href="https://www.npmjs.com">npm</a> account and are logged in on the CLI tool (<code>npm whoami</code>).</li>
+<li>Your user is a collaborator on npm. You can ask an existing collaborator to add you. Existing collaborators can be listed via <code>npm owner ls &lt;packagename&gt;</code> or on the npm module page (e.g. <a href="https://www.npmjs.com/package/can-route">can-route</a>).</li>
+</ul>
+<h3>Releasing CanJS subprojects</h3>
+<p>All CanJS subprojects modules have the same structure which allows making releases through npm scripts.</p>
+<p>To make a release:</p>
+<ol>
+<li><p>Move to the <code>master</code> branch</p></li>
+<li><p>Fetch all latest changes from the repository</p></li>
+<li><p>Reinstall all Node modules in their latest version</p>
+<pre><code>git checkout master
+git fetch --all &amp;&amp; git rebase
+npm cache verify
+rm -rf node_modules
+npm install
+</code></pre></li>
+<li><p>Then run <code>npm run release:&lt;versiontype&gt;</code>. For example, to make a <code>PATCH</code> release:</p>
+<pre><code>npm run release:patch
+</code></pre></li>
+</ol>
+<p>This will run the tests, build, bump the version number accordingly and publish the module to <a href="https://www.npmjs.com/">npm</a>.</p>
+<h4>Making pre-releases</h4>
+<p>If you’re already a branch being used for pre-releases, you can run the following to make the next pre-release:</p>
+<pre><code>npm run release:pre
+</code></pre>
+<p>If you’re making the first pre-release, you can run one of the following commands, depending on how you need to bump the version:</p>
+<ul>
+<li>Major: <code>npm version premajor --preid=pre &amp;&amp; npm publish --tag=pre</code></li>
+<li>Minor: <code>npm version preminor --preid=pre &amp;&amp; npm publish --tag=pre</code></li>
+<li>Patch: <code>npm version prepatch --preid=pre &amp;&amp; npm publish --tag=pre</code></li>
+</ul>
+<h4>Publishing release notes</h4>
+<p>After you have released the project, you will need to update the release on GitHub. Make sure the newly created tag has been pushed to GitHub (<code>git push --tags</code>).</p>
+<p>Then go to <code>https://github.com/canjs/&lt;repository&gt;/releases</code> and edit the most recent tag. Give it a title and add any notes or links to issues, then click <code>Update release</code>.</p>
+<h3>Releasing the CanJS main project</h3>
+<p>The CanJS main project repository is at
+<a href="https://github.com/canjs/canjs">canjs/canjs</a> and published as the <code>can</code> package. We
+publish a <code>can</code> module so there is a specified version of the library packages that are
+<strong>integration tested</strong> to work together. A single <code>can</code> release can include multiple
+releases of library packages.</p>
+<p>The <code>can</code> package does <strong>not</strong> follow strict <a href="http://semver.org/">semantic versioning</a>
+guidelines. It still follows a <code>MAJOR.MINOR.PATCH</code> release names, but where:</p>
+<ul>
+<li><code>MAJOR</code> - Incompatible API changes in a library in the <a href="../../can-core.html" title="The best, most hardened and generally useful libraries in CanJS.">Core</a> or <a href="../../can-infrastructure.html" title="Utility libraries that power the core and ecosystem collection.">Infrastructure</a> collection.</li>
+<li><code>MINOR</code> - Either:
+<ul>
+<li>New features added <a href="../../can-core.html" title="The best, most hardened and generally useful libraries in CanJS.">Core</a> and <a href="../../can-infrastructure.html" title="Utility libraries that power the core and ecosystem collection.">Infrastructure</a> but still backwards-compatible.</li>
+<li>New <a href="../../can-ecosystem.html" title="Useful libraries that extend or add important features to the core collection.">Ecosystem</a> or <a href="../../can-legacy.html" title="Former libraries that we still accept patches for, but are not under active development.">Legacy</a> library added or removed to their respective collection.</li>
+</ul></li>
+<li><code>PATCH</code> - Either:
+<ul>
+<li>Bug fixes in <a href="../../can-core.html" title="The best, most hardened and generally useful libraries in CanJS.">Core</a> and <a href="../../can-infrastructure.html" title="Utility libraries that power the core and ecosystem collection.">Infrastructure</a>.</li>
+<li>A new release of a <a href="../../can-ecosystem.html" title="Useful libraries that extend or add important features to the core collection.">Ecosystem</a> or <a href="../../can-legacy.html" title="Former libraries that we still accept patches for, but are not under active development.">Legacy</a> library.</li>
+</ul></li>
+</ul>
+<p>The <code>can</code> package <strong>does</strong> follow strict <a href="http://semver.org/">semantic versioning</a> guidelines
+with respect to the <a href="../../can-core.html" title="The best, most hardened and generally useful libraries in CanJS.">Core</a> and <a href="../../can-infrastructure.html" title="Utility libraries that power the core and ecosystem collection.">Infrastructure</a> collections. If a
+new <a href="../../can-ecosystem.html" title="Useful libraries that extend or add important features to the core collection.">Ecosystem</a> or <a href="../../can-legacy.html" title="Former libraries that we still accept patches for, but are not under active development.">Legacy</a> package is added to <code>can</code>, it’s treated as a <code>MINOR</code> changes to <code>can</code>,
+any subsequent releases of those packages are treated as <code>PATCH</code> changes to <code>can</code>.</p>
+<p>When making a release, review the version number changes and collection of all packages that have changed within the release.  Then run <code>npm run release:&lt;versiontype&gt;</code>.</p>
+<p>For example, the following would be a <code>PATCH</code> release:</p>
+<pre><code>can-core-a       3.0.1 -&gt; 3.0.2
+can-core-b       3.0.1 -&gt; 3.0.10
+can-ecosystem-a  1.0.0 -&gt; 2.0.0
+</code></pre>
+<p>The following would be a <code>MINOR</code> release:</p>
+<pre><code>can-core-a       3.0.1 -&gt; 3.0.2
+can-core-b       3.0.1 -&gt; 3.0.10
+// this means can-ecosystem-b was added to the ecosystem collection
++ can-ecosystem-b 0.0.1  
+</code></pre>
+<p>The following would be a <code>MINOR</code> release:</p>
+<pre><code>can-core-a       3.0.1 -&gt; 3.0.2
+can-core-b       3.0.1 -&gt; 3.1.0
+can-ecosystem-a  1.0.0 -&gt; 1.0.1
+</code></pre>
+<p>The following would be a <code>MAJOR</code> release:</p>
+<pre><code>can-core-a           3.0.1 -&gt; 3.0.2
+can-core-b           3.0.1 -&gt; 3.1.0
+can-infrastructure-a 3.0.1 -&gt; 4.0.0
+</code></pre>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/contribute/releasing-canjs.md"},"description":"Release and hosting information for CanJS maintainers. \n","name":"guides/contributing/releases","title":"Releasing CanJS","type":"page","parent":"guides/contribute","order":10,"outline":{"depth":2},"comment":" ","pathToRoot":"../../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix="../.."></div>
+
+	</body>
+</html>

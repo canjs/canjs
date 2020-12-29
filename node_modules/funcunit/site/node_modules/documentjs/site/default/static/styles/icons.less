@@ -1,0 +1,147 @@
+/**
+* @stylesheet icons.less Icons
+* @parent Styles.theme
+*
+* @description
+* DocumentJS uses a custom icon font. Icons from this font, with their accompanying classes, are laid out below.
+* 
+* @demo demos/icons.html
+**/
+@font-face {
+    font-family: 'Bitstrap';
+    src: url('../fonts/bitstrapregular.eot');
+    src: url('../fonts/bitstrapregular.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/bitstrapregular.ttf') format('truetype'),
+         url("../fonts/Bitstrap-Regular.otf") format("otf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"],
+[class*=" icon-"],
+.icon-font {
+  font-family: Bitstrap;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: inherit;
+  display: inline;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  vertical-align: baseline;
+  background-image: none !important;
+  background-position: 0% 0%;
+  background-repeat: repeat;
+  
+  &:before, &:before{
+    text-decoration: inherit;
+    display: inline-block;
+    speak: none;
+  }
+}
+
+.icon-breakout:before                { content: "\e000"; }
+.icon-menudown:before                { content: "\e001"; }
+.icon-bits:before                { content: "\e002"; position:relative; left: -5px; }
+.icon-twitter:before               { content: "\e003"; }
+.icon-canjs:before               { content: "\e004"; }
+.icon-app:before               { content: "\e005"; }
+.icon-forum:before               { content: "\e006"; }
+.icon-chat:before               { content: "\e007"; }
+.icon-plugin:before               { content: "\e008"; }
+.icon-code:before               { content: "\e009"; }
+.icon-article:before               { content: "\e010"; }
+.icon-muscle:before               { content: "\e011"; }
+.icon-search:before               { content: "\e012"; }
+.icon-rocket:before               { content: "\e013"; }
+.icon-fork:before               { content: "\e014"; }
+.icon-menuright:before               { content: "\e017"; }
+.icon-next:before               { content: "\e015"; }
+.icon-prev:before               { content: "\e016"; }
+.icon-question:before               { content: "\e018"; }
+.icon-voteup:before               { content: "\e019"; }
+.icon-clock:before               { content: "\e020"; }
+.icon-mug:before               { content: "\e021"; }
+.icon-shirt:before               { content: "\e022"; }
+.icon-sticker:before               { content: "\e023"; }
+.icon-bug:before               { content: "\e024"; }
+.icon-rss:before               { content: "\e025"; }
+.icon-user:before               { content: "\e026"; }
+.icon-github:before               { content: "\e027"; }
+.icon-award:before               { content: "\e028"; }
+.icon-close:before               { content: "\e029"; }
+.icon-check:before               { content: "\e030"; }
+.icon-google:before               { content: "\e031"; }
+.icon-star:before               { content: "\e032"; }
+.icon-retweet:before               { content: "\e033"; }
+.icon-reply:before               { content: "\e034"; }
+.icon-bitovi:before               { content: "\e035"; }
+.icon-plus:before               { content: "\e036"; }
+.icon-minus:before               { content: "\e037"; }
+.icon-logout:before               { content: "\e038"; }
+.icon-lookright:before               { content: "\e039"; }
+.icon-lookleft:before               { content: "\e040"; }
+.icon-flag:before               { content: "\e041"; }
+.icon-flexible:before               { content: "\e042"; }
+.icon-photo:before               { content: "\e043"; }
+.icon-download:before               { content: "\e044"; }
+.icon-list:before               { content: "\e045"; }
+.icon-play:before               { content: "\e046"; }
+.icon-wizard-first:before               { content: "\e047"; }
+.icon-wizard:before               { content: "\e048"; }
+.icon-wizard-last:before               { content: "\e049"; }
+.icon-check:before               { content: "\e050"; }
+.icon-jmvc:before               { content: "\e052"; }
+.icon-funcunit:before               { content: "\e053"; }
+.icon-browsertest:before               { content: "\e054"; }
+.icon-arrow:before               { content: "\e055"; }
+
+/* Default */
+.arrow:before { 
+    content: "";
+    border-color:  @thunderStorm transparent;
+    border-style: solid;
+    border-width: 0 5px 5px 5px;
+    display: block;
+    height: 0;
+    width: 0;
+}
+/* Left */
+.arrow.left:before { 
+    border-color: transparent @thunderStorm ;
+    border-width: 5px 5px 5px 0;
+}
+
+/* Right */
+.arrow.right:before { 
+    border-color: transparent @thunderStorm ;
+    border-width: 5px 0 5px 5px;
+}
+/* Up */
+.arrow.up:before { 
+    border-color:  @thunderStorm transparent;
+    border-width: 0 5px 5px 5px;
+}
+/* Down */
+.arrow.down:before { 
+    border-color:  @thunderStorm transparent;
+    border-width: 5px 5px 0 5px;
+}
+
+ul.demo-icons {
+  list-style-type: none;
+  margin: 0;
+  padding-left: 0;
+  li {
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 20px;
+    width: 24%;
+  }
+  span {
+    font-size: 3em;
+  }
+  code {
+    font-size: .8em;
+  }
+}

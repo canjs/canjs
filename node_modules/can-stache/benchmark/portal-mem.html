@@ -1,0 +1,34 @@
+<button type="button">Run</button>
+
+<script src="../node_modules/steal/steal.js"></script>
+<script type="steal-module">
+	var stache = require("can-stache");
+	var globals = require("can-globals");
+	var domMutate = require("can-dom-mutate");
+	var domMutateNode = require("can-dom-mutate/node");
+	var DefineMap = require("can-define/map/map");
+
+	function run() {
+		var doc = document.implementation.createHTMLDocument("test");
+		globals.setKeyValue("document", doc);
+
+		var el = doc.createElement("div");
+		domMutateNode.appendChild.call(doc.body, el);
+
+		var template = stache("{{#portal(root)}}{{name}}{{/}}");
+		var vm = new DefineMap({name: "Matthew", root: el});
+
+		template(vm);
+
+		var stop = domMutate.onNodeRemoval(el, function() {
+			stop();
+			console.log("Removed");
+		});
+
+		domMutateNode.removeChild.call(doc.body, el);
+	}
+
+	document.querySelector('button').addEventListener('click', () => {
+		run();
+	});
+</script>

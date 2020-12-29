@@ -1,0 +1,2 @@
+<can-import from='test/tests/bar' module:to="bar" />
+{{ test(bar, scope) }}

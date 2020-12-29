@@ -1,0 +1,34 @@
+[
+    {"can-define": ["can-define.types.propDefinition","can-define.types"]},
+    {"can-define/map/map": [
+        {"static": ["can-define/map/map.extend","can-define/map/map.seal"]},
+        {"prototype": [
+            "can-define/map/map.prototype.each",
+            "can-define/map/map.prototype.toObject",
+            "can-define/map/map.prototype.serialize",
+            "can-define/map/map.prototype.get",
+            "can-define/map/map.prototype.set"
+        ]}
+    ]},
+    {"can-define/list/list": [
+        { "prototype": [
+            "can-define/list/list.prototype.item",
+            "can-define/list/list.prototype.items",
+            "can-define/list/list.prototype.each",
+            "can-define/list/list.prototype.forEach",
+            "can-define/list/list.prototype.splice",
+            "can-define/list/list.prototype.replace",
+            "can-define/list/list.prototype.push",
+            "can-define/list/list.prototype.unshift",
+            "can-define/list/list.prototype.pop",
+            "can-define/list/list.prototype.shift",
+            "can-define/list/list.prototype.indexOf",
+            "can-define/list/list.prototype.join",
+            "can-define/list/list.prototype.reverse",
+            "can-define/list/list.prototype.slice",
+            "can-define/list/list.prototype.concat"
+        ]
+        }
+        ]
+    }
+]

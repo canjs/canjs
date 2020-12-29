@@ -1,0 +1,2413 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/experiment/crud-beginner/crud-beginner.md
+	@page guides/crud-beginner
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>CRUD Guide | getting started | Guides | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+	<meta property="og:title" content="CRUD Guide | getting started | Guides | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "Learn how to build a basic CRUD app with CanJS in 30 minutes.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "CRUD Guide | getting started | Guides | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/crud-beginner" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>getting started</span>
+						
+	<ul>
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="crud-beginner.html"
+							title="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+							CRUD Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="setup.html"
+							title="Learn how to install CanJS in your environment.">
+							Setting Up CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="technology-overview.html"
+							title="Learn the basics of CanJS’s technology.">
+							Technology Overview
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>topics</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="html.html"
+							title="Learn how to update HTML and listen to user interactions.">
+							HTML
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="routing.html"
+							title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+							Routing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="data.html"
+							title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">
+							Service Layer
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="debugging.html"
+							title="Learn how to debug CanJS applications.">
+							Debugging
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="forms.html"
+							title="Learn how to create amazing &lt;form&gt;s with CanJS.">
+							Forms
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="testing.html"
+							title="Learn how to test CanJS applications.">
+							Testing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="logic.html"
+							title="Learn how to write observables in an organized, maintainable, and testable way.">
+							Logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="server-side-rendering.html"
+							title="Learn how to set up SSR for CanJS.">
+							Server-Side Rendering
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>app guides</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="chat.html"
+							title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+							Chat Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="todomvc.html"
+							title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+							TodoMVC Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/todomvc-with-steal.html"
+							title="This tutorial walks through building TodoMVC with StealJS. It includes KeyNote presentations covering CanJS core libraries.">
+							TodoMVC with StealJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>beginner recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/canvas-clock.html"
+							title="This beginner guide walks you through building a clock with the Canvas API.">
+							Canvas Clock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-simple.html"
+							title="This beginner guide walks through building a very simple credit card payment form.  It uses Stripe.js v2 API to create a token which can be used to create a charge.  It also performs simple validation on the payment form values.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-simple.html"
+							title="This beginner guide walks you through building a simple file navigation widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.0.0. Check out the file-navigator-advanced for an example that makes AJAX requests for its data and uses can-stache-element.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/signup-simple.html"
+							title="This beginner guide walks through building simple signup, login forms and a logout button.">
+							Signup and Login
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/video-player.html"
+							title="This beginner guide walks you through building custom video controls around a video element.">
+							Video Player
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/weather-report-simple.html"
+							title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.2.">
+							Weather Report
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>intermediate recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/cta-bus-map.html"
+							title="This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map. You&#x27;ll learn how to create a StacheElement that integrates with 3rd party widgets.">
+							CTA Bus Map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/modals.html"
+							title="This intermediate guide shows how to create a multiple modal form.">
+							Multiple Modals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/text-editor.html"
+							title="This intermediate guide walks you through building a basic rich text editor.">
+							Text Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/tinder-carousel.html"
+							title="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+							Tinder Carousel
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>advanced recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-advanced.html"
+							title="This advanced guide walks through building a simple credit card payment form with validations. It doesn’t use can-define. Instead it uses Kefir.js streams to make a ViewModel. can-kefir is used to make the Kefir streams observable to can-stache.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-advanced.html"
+							title="This advanced guide walks you through building a file navigation widget that requests data with fetch. It takes about 45 minutes to complete.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/playlist-editor.html"
+							title="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+							Playlist Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/search-list-details.html"
+							title="This advanced guide walks through building a Search, List, Details flow with lazy-loaded routes.">
+							Search, List, Details
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>upgrade</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-3.html"
+							title="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+							Migrating to CanJS 3
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-4.html"
+							title="This guide walks you through the step-by-step process to upgrade a 3.x app to CanJS 4.">
+							Migrating to CanJS 4
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-5.html"
+							title="This guide walks you through the process to upgrade a 4.x app to CanJS 5.x.">
+							Migrating to CanJS 5
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-6.html"
+							title="This guide walks you through the process to upgrade a 5.x app to CanJS 6.x.">
+							Migrating to CanJS 6
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="upgrade/using-codemods.html"
+							title="Learn how to migrate your app to CanJS 6 using can-migrate.">
+							Using Codemods
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>other</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="api.html"
+							title="This page walks through how to use and understand CanJS’s API documentation.">
+							Reading the API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>CRUD Guide</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/experiment/crud-beginner/crud-beginner.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Learn how to build a basic CRUD app with CanJS in 30 minutes.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <h2>Overview</h2>
+<p>In this tutorial, we’ll build a simple to-do app that lets you:</p>
+<ul>
+<li>Load a list of to-dos from an API</li>
+<li>Create new to-dos with a form</li>
+<li>Mark to-dos as “completed”</li>
+<li>Delete to-dos</li>
+</ul>
+<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="yLBPLgw" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6 — Basic Todo App">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/yLBPLgw/">
+  CanJS 6 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p><br>
+<p>This tutorial does not assume any prior knowledge of CanJS and is meant for complete beginners.
+We assume that you have have basic knowledge of HTML and JavaScript. If you don’t, start by
+going through <a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">MDN’s tutorials</a>.</p>
+<h2>Setup</h2>
+<p>We’ll use CodePen in this tutorial to edit code in our browser and immediately see the results.
+If you’re feeling adventurous and you’d like to set up the code locally, the <a href="setup.html" title="Learn how to install CanJS in your environment.">setup guide</a>
+has all the info you’ll need.</p>
+<p>To begin, click the “Edit on CodePen” button in the top right of the following embed:</p>
+<p class="codepen" data-height="170" data-theme-id="0" data-default-tab="js" data-user="bitovi" data-slug-hash="drZgqY" style="height: 170px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — CRUD Guide Step 1">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/drZgqY/">
+  CanJS 5 — CRUD Guide Step 1</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p><br>
+<p>The next two sections will explain what’s already in the HTML and JS tabs in the CodePen.</p>
+<h3>HTML</h3>
+<p>The CodePen above has one line of HTML already in it:</p>
+<pre><code class="language-html">&lt;todos-app&gt;&lt;/todos-app&gt;
+</code></pre>
+<p><code>&lt;todos-app&gt;</code> is a <a href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements">custom element</a>.
+When the browser encounters this element, it looks for the <code>todos-app</code> element to be defined in JavaScript.
+In just a little bit, we’ll define the <code>todos-app</code> element with CanJS.</p>
+<h3>JS</h3>
+<p>The CodePen above has three lines of JavaScript already in it:</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+</code></pre>
+<p>Instead of connecting to a real backend API or web service, we’ll use <a href="../can-fixture.html" title="Intercept AJAX requests and simulate the response.">fixtures</a>
+to “mock” an API. Whenever an <a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest">AJAX</a>
+request is made, the fixture will “capture” the request and instead respond with mock data.</p>
+<blockquote>
+<p><strong>Note:</strong> if you open your browser’s Network panel, you will <em>not</em> see any network requests.
+You can see the fixture requests and responses in your browser’s Console panel.</p>
+</blockquote>
+<p>How fixtures work is outside the scope of this tutorial and not necessary to understand to continue,
+but you can learn more in the <a href="../can-fixture.html" title="Intercept AJAX requests and simulate the response.">can-fixture</a> documentation.</p>
+<h2>Defining a custom element with CanJS</h2>
+<p>We mentioned above that CanJS helps you define custom elements.</p>
+<p>Add the following to the <strong>JS</strong> tab in your CodePen:</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+  `;
+
+  static props = {};
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='5-15,only'></div>
+<p>After you add the above code, you’ll see “Today’s to-dos” displayed in the result pane.</p>
+<p>We’ll break down what each of these lines does in the next couple sections.</p>
+<h3>Importing CanJS</h3>
+<p>With one line of code, we load CanJS from a CDN and import one of its modules:</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+  `;
+
+  static props = {};
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='5,only'></div>
+<p>Here’s what the different parts mean:</p>
+<ul>
+<li><code>import</code> is a keyword that <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import">loads modules from files</a>.</li>
+<li><code>StacheElement</code> is the <em>named export</em> from CanJS that lets us <a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">create custom element constructors</a>.</li>
+<li><code>//unpkg.com/can@6/core.mjs</code> loads the <code>core.mjs</code> file from CanJS 6; this is explained more thoroughly in the <a href="setup.html#Explanationofdifferentbuilds" title="Learn how to install CanJS in your environment.">setup guide</a>.</li>
+<li><code>unpkg.com</code> is a CDN that hosts packages like CanJS (<a href="https://www.npmjs.com/package/can">can</a>).</li>
+</ul>
+<h3>Defining a custom element</h3>
+<p>The <code>StacheElement</code> <em>named export</em> comes from CanJS’s <a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a> package.</p>
+<p>CanJS is composed of dozens of different packages that are responsible for different features.
+<a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a> is responsible for letting us define custom elements that can be
+used by the browser.</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+  `;
+
+  static props = {};
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='7-15,only'></div>
+<p>The <code>StacheElement</code> class can be extended to define a new custom element. It has two properties:</p>
+<ul>
+<li><a href="../can-stache-element/static.view.html" title="Provides a way to render the element's innerHTML using a can-stache template."><code>static view</code></a> is a <a href="../can-stache.html" title="Live binding templates.">stache template</a> that gets parsed by CanJS and inserted into the custom element; more on that later.</li>
+<li><a href="../can-stache-element/static.props.html" title="A static property used to create ObservableObject-like properties on each StacheElement instance."><code>static props</code></a> is an object that defines the properties available to the view.</li>
+</ul>
+<p>After calling <a href="https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define">customElements.define()</a>
+with the custom element’s tag name and constructor, a new instance of the <code>TodosApp</code> class will be instantiated every time
+<code>&lt;todos-app&gt;</code> is used.</p>
+<p>The <code>view</code> is pretty boring right now; it just renders <code>&lt;h1&gt;Today’s to-dos&lt;/h1&gt;</code>. In the next section, we’ll make it more interesting!</p>
+<blockquote>
+<p>Find something confusing or need help? <a href="https://bitovi.com/community/slack">Join our Slack</a> and post a question
+in the <a href="https://bitovi-community.slack.com/messages/CFC22NZ8A">#canjs channel</a>. We answer every question and we’re eager to help!</p>
+</blockquote>
+<h2>Rendering a template with data</h2>
+<p>A custom element’s <a href="../can-stache-element/static.view.html" title="Provides a way to render the element's innerHTML using a can-stache template.">view</a> has access to all the properties in the <a href="../can-stache-element/static.props.html" title="A static property used to create ObservableObject-like properties on each StacheElement instance.">props</a> object.</p>
+<p>Let’s update our custom element to be a little more interesting:</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;{{ this.title }}&lt;/h1&gt;
+  `;
+
+  static props = {
+    get title() {
+      return &quot;Today’s to-dos!&quot;;
+    }
+  };
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='9,13-15,only'></div>
+<p>Using this custom element will insert the following into the page:</p>
+<pre><code class="language-html">&lt;todos-app&gt;
+  &lt;h1&gt;Today’s to-dos!&lt;/h1&gt;
+&lt;/todos-app&gt;
+</code></pre>
+<p>The next two sections will explain these lines.</p>
+<h3>Defining properties</h3>
+<p>Each time a custom element is created, each property listed in <code>props</code> will be defined on the instance.</p>
+<p>We’ve added a <code>title</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get">getter</a>
+to our <code>props</code>, which returns the string <code>&quot;Today’s to-dos!&quot;</code>:</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;{{ this.title }}&lt;/h1&gt;
+  `;
+
+  static props = {
+    get title() {
+      return &quot;Today’s to-dos!&quot;;
+    }
+  };
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='13-15,only'></div>
+<h3>Reading properties in the stache template</h3>
+<p>Our <code>view</code> is a <a href="../can-stache.html" title="Live binding templates.">stache template</a>. Whenever stache encounters the <a href="../can-stache.tags.escaped.html" title="Insert the value of the expression into the output of the template.">double curlies (<code>{{ }}</code>)</a>,
+it looks inside them for an <em>expression</em> to evaluate.</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;{{ this.title }}&lt;/h1&gt;
+  `;
+
+  static props = {
+    get title() {
+      return &quot;Today’s to-dos!&quot;;
+    }
+  };
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='9,only'></div>
+<p><code>this</code> inside a stache template refers to the custom element, so <code>{{ this.title }}</code> makes stache
+read the <code>title</code> property on the custom element, which is how <code>&lt;h1&gt;Today’s to-dos!&lt;/h1&gt;</code> gets rendered in the page!</p>
+<blockquote>
+<p>Find something confusing or need help? <a href="https://bitovi.com/community/slack">Join our Slack</a> and post a question
+in the <a href="https://bitovi-community.slack.com/messages/CFC22NZ8A">#canjs channel</a>. We answer every question and we’re eager to help!</p>
+</blockquote>
+<h2>Connecting to a backend API</h2>
+<p>With most frameworks, you might use <a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest">XMLHttpRequest</a>,
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">fetch</a>, or a third-party library to make HTTP requests.</p>
+<p>CanJS provides abstractions for connecting to backend APIs so you can:</p>
+<ul>
+<li>Use a standard interface for creating, retrieving, updating, and deleting data.</li>
+<li>Avoid writing the requests yourself.</li>
+<li>Convert raw data from the server to typed data with properties and methods, <em>just like a custom element’s properties and methods</em>.</li>
+<li>Have your UI update whenever the model data changes.</li>
+<li>Prevent multiple instances of a given object or multiple lists of a given set from being created.</li>
+</ul>
+<p>In our app, let’s make a request to get all the to-dos sorted alphabetically by name. Note that we won’t
+see any to-dos in our app yet; we’ll get to that in just a little bit!</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import { realtimeRestModel, StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+  `;
+
+  static props = {
+    get todosPromise() {
+      return Todo.getList({ sort: &quot;name&quot; });
+    }
+  };
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='5-7,15-17,only'></div>
+<p>The next three sections will explain these lines.</p>
+<h3>Importing realtimeRestModel</h3>
+<p>First, we import <a href="../can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">realtimeRestModel</a>:</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import { realtimeRestModel, StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+  `;
+
+  static props = {
+    get todosPromise() {
+      return Todo.getList({ sort: &quot;name&quot; });
+    }
+  };
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='5,only'></div>
+<p>This module is responsible for creating new connections to APIs and new models (data types).</p>
+<h3>Creating a new model</h3>
+<p>Second, we call <code>realtimeRestModel()</code> with a string that represents the URLs that should be called for
+creating, retrieving, updating, and deleting data:</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import { realtimeRestModel, StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+  `;
+
+  static props = {
+    get todosPromise() {
+      return Todo.getList({ sort: &quot;name&quot; });
+    }
+  };
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='7,only'></div>
+<p><code>/api/todos/{id}</code> will map to these API calls:</p>
+<ul>
+<li><code>GET /api/todos</code> to retrieve all the to-dos</li>
+<li><code>POST /api/todos</code> to create a to-do</li>
+<li><code>GET /api/todos/1</code> to retrieve the to-do with <code>id=1</code></li>
+<li><code>PUT /api/todos/1</code> to update the to-do with <code>id=1</code></li>
+<li><code>DELETE /api/todos/1</code> to delete the to-do with <code>id=1</code></li>
+</ul>
+<p><code>realtimeRestModel()</code> returns what we call a <em>connection</em>. It’s just an object that has a <code>.ObjectType</code> property.</p>
+<p>The <code>Todo</code> is a new model that has these methods for making API calls:</p>
+<ul>
+<li><code>Todo.getList()</code> calls <code>GET /api/todos</code></li>
+<li><code>new Todo().save()</code> calls <code>POST /api/todos</code></li>
+<li><code>Todo.get({ id: 1 })</code> calls <code>GET /api/todos/1</code></li>
+</ul>
+<p>Additionally, once you have an instance of a <code>todo</code>, you can call these methods on it:</p>
+<ul>
+<li><code>todo.save()</code> calls <code>PUT /api/todos/1</code></li>
+<li><code>todo.destroy()</code> calls <code>DELETE /api/todos/1</code></li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong> the <a href="../api.html#DataModeling" title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the
+technology-overview page for background on the following APIs.">Data Modeling section in the API Docs</a> has a cheat sheet with
+each JavaScript call, the HTTP request that’s made, and the expected JSON response.</p>
+</blockquote>
+<h3>Fetching all the to-dos</h3>
+<p>Third, we add a new getter to our custom element:</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import { realtimeRestModel, StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+  `;
+
+  static props = {
+    get todosPromise() {
+      return Todo.getList({ sort: &quot;name&quot; });
+    }
+  };
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='15-17,only'></div>
+<p><code>Todo.getList({ sort: &quot;name&quot; })</code> will make a <code>GET</code> request to <code>/api/todos?sort=name</code>.
+It returns a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>
+that resolves with the data returned by the API.</p>
+<blockquote>
+<p>Find something confusing or need help? <a href="https://bitovi.com/community/slack">Join our Slack</a> and post a question
+in the <a href="https://bitovi-community.slack.com/messages/CFC22NZ8A">#canjs channel</a>. We answer every question and we’re eager to help!</p>
+</blockquote>
+<h2>Rendering a list of items</h2>
+<p>Now that we’ve learned how to fetch data from an API, let’s render the data in our custom element!</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import { realtimeRestModel, StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+    {{# if(this.todosPromise.isResolved) }}
+      &lt;ul&gt;
+        {{# for(todo of this.todosPromise.value) }}
+          &lt;li class=&quot;{{# if(todo.complete) }}done{{/ if }}&quot;&gt;
+            {{ todo.name }}
+          &lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    {{/ if }}
+  `;
+
+  static props = {
+    get todosPromise() {
+      return Todo.getList({ sort: &quot;name&quot; });
+    }
+  };
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='12-20,only'></div>
+<p>This template uses two stache helpers:</p>
+<ul>
+<li><a href="../can-stache.helpers.if.html" title="can-stache.helpers.if">#if()</a> checks whether the result of the expression inside is truthy.</li>
+<li><a href="../can-stache.helpers.for-of.html" title="Loop through a list of values, keys in an object, or integers.">#for(of)</a> loops through an array of values.</li>
+</ul>
+<p>This template also shows how we can read the state and value of a Promise:</p>
+<ul>
+<li><code>.isResolved</code> returns <code>true</code> when the Promise resolves with a value</li>
+<li><code>.value</code> returns the value with which the Promise was resolved</li>
+</ul>
+<p>So first, we check <code>#if(this.todosPromise.isResolved)</code> is true. If it is, we loop through all
+the to-dos (<code>#for(todo of this.todosPromise.value)</code>) and create a <code>todo</code> variable in our template.
+Then we read <code>{{ todo.name }}</code> to put the to-do’s name in the list. Additionally, the li’s class
+changes depending on <a href="../can-stache.helpers.if.html" title="can-stache.helpers.if">if</a> <code>todo.complete</code> is true or false.</p>
+<h2>Handling loading and error states</h2>
+<p>Now let’s also:</p>
+<ul>
+<li>Show “Loading…” when the to-dos list loading</li>
+<li>Show a message if there’s an error loading the to-dos</li>
+</ul>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import { realtimeRestModel, StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+    {{# if(this.todosPromise.isPending) }}
+      Loading todos…
+    {{/ if }}
+    {{# if(this.todosPromise.isRejected) }}
+      &lt;p&gt;Couldn’t load todos; {{ this.todosPromise.reason }}&lt;/p&gt;
+    {{/ if }}
+    {{# if(this.todosPromise.isResolved) }}
+      &lt;ul&gt;
+        {{# for(todo of this.todosPromise.value) }}
+          &lt;li class=&quot;{{# if(todo.complete) }}done{{/ if }}&quot;&gt;
+            {{ todo.name }}
+          &lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    {{/ if }}
+  `;
+
+  static props = {
+    get todosPromise() {
+      return Todo.getList({ sort: &quot;name&quot; });
+    }
+  };
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='12-17,only'></div>
+<p>This template shows how to read more state and an error from a Promise:</p>
+<ul>
+<li><code>.isPending</code> returns <code>true</code> when the Promise has neither been resolved nor rejected</li>
+<li><code>.isRejected</code> returns <code>true</code> when the Promise is rejected with an error</li>
+<li><code>.reason</code> returns the error with which the Promise was rejected</li>
+</ul>
+<p><code>isPending</code>, <code>isRejected</code>, and <code>isResolved</code> are all mutually-exclusive; only one of them will be true
+at any given time. The Promise will always start off as <code>isPending</code>, and then either change to <code>isRejected</code>
+if the request fails or <code>isResolved</code> if it succeeds.</p>
+<h2>Creating new items</h2>
+<p>CanJS makes it easy to create new instances of your model objects and save them to your backend API.</p>
+<p>In this section, we’ll add an <code>&lt;input&gt;</code> for new to-do names and a button for saving new to-dos.
+After a new to-do is created, we’ll reset the input so a new to-do’s name can be entered.</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import { realtimeRestModel, StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+    {{# if(this.todosPromise.isPending) }}
+      Loading todos…
+    {{/ if }}
+    {{# if(this.todosPromise.isRejected) }}
+      &lt;p&gt;Couldn’t load todos; {{ this.todosPromise.reason }}&lt;/p&gt;
+    {{/ if }}
+    {{# if(this.todosPromise.isResolved) }}
+      &lt;input placeholder=&quot;What needs to be done?&quot; value:bind=&quot;this.newName&quot;&gt;
+      &lt;button on:click=&quot;this.save()&quot; type=&quot;button&quot;&gt;Add&lt;/button&gt;
+      &lt;ul&gt;
+        {{# for(todo of this.todosPromise.value) }}
+          &lt;li class=&quot;{{# if(todo.complete) }}done{{/ if }}&quot;&gt;
+            {{ todo.name }}
+          &lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    {{/ if }}
+  `;
+
+  static props = {
+    newName: String,
+
+    get todosPromise() {
+      return Todo.getList({ sort: &quot;name&quot; });
+    }
+  };
+
+  save() {
+    const todo = new Todo({ name: this.newName });
+    todo.save();
+    this.newName = &quot;&quot;;
+  }
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='19-20,32,39-43,only'></div>
+<p>The next four sections will explain these lines.</p>
+<h3>Binding to input form elements</h3>
+<p>CanJS has one-way and two-way bindings in the form of:</p>
+<ul>
+<li><a href="../can-stache-bindings.twoWay.html" title="Two-way bind a value in the StacheElement, can-component ViewModel, or element to the parent scope.">&lt;child-element property:bind=&quot;key&quot;&gt;</a> (two-way binding a property on child element and parent element)</li>
+<li><a href="../can-stache-bindings.toChild.html" title="One-way bind a value in the parent scope to the StacheElement, can-component ViewModel, or element.">&lt;child-element property:from=&quot;key&quot;&gt;</a> (one-way binding to a child element’s property)</li>
+<li><a href="../can-stache-bindings.toParent.html" title="One-way bind a value from the StacheElement, can-component ViewModel, or element to the parent scope.">&lt;child-element property:to=&quot;key&quot;&gt;</a> (one-way binding to the parent element)</li>
+</ul>
+<p>Let’s examine our code more closely:</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import { realtimeRestModel, StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+    {{# if(this.todosPromise.isPending) }}
+      Loading todos…
+    {{/ if }}
+    {{# if(this.todosPromise.isRejected) }}
+      &lt;p&gt;Couldn’t load todos; {{ this.todosPromise.reason }}&lt;/p&gt;
+    {{/ if }}
+    {{# if(this.todosPromise.isResolved) }}
+      &lt;input placeholder=&quot;What needs to be done?&quot; value:bind=&quot;this.newName&quot;&gt;
+      &lt;button on:click=&quot;this.save()&quot; type=&quot;button&quot;&gt;Add&lt;/button&gt;
+      &lt;ul&gt;
+        {{# for(todo of this.todosPromise.value) }}
+          &lt;li class=&quot;{{# if(todo.complete) }}done{{/ if }}&quot;&gt;
+            {{ todo.name }}
+          &lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    {{/ if }}
+  `;
+
+  static props = {
+    newName: String,
+
+    get todosPromise() {
+      return Todo.getList({ sort: &quot;name&quot; });
+    }
+  };
+
+  save() {
+    const todo = new Todo({ name: this.newName });
+    todo.save();
+    this.newName = &quot;&quot;;
+  }
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='19,only'></div>
+<p><code>value:bind=&quot;this.newName&quot;</code> will create a binding between the input’s <code>value</code> property and
+the custom element’s <code>newName</code> property. When one of them changes, the other will be updated.</p>
+<p>If you’re wondering where we’ve defined the <code>newName</code> in the custom element… we’ll get there in just a moment. 😊</p>
+<h3>Listening for events</h3>
+<p>You can listen for events with the <a href="../can-stache-bindings.event.html" title="Respond to events on elements or component ViewModels.">&lt;child-element on:event=&quot;method()&quot;&gt;</a> syntax.</p>
+<p>Let’s look at our code again:</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import { realtimeRestModel, StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+    {{# if(this.todosPromise.isPending) }}
+      Loading todos…
+    {{/ if }}
+    {{# if(this.todosPromise.isRejected) }}
+      &lt;p&gt;Couldn’t load todos; {{ this.todosPromise.reason }}&lt;/p&gt;
+    {{/ if }}
+    {{# if(this.todosPromise.isResolved) }}
+      &lt;input placeholder=&quot;What needs to be done?&quot; value:bind=&quot;this.newName&quot;&gt;
+      &lt;button on:click=&quot;this.save()&quot; type=&quot;button&quot;&gt;Add&lt;/button&gt;
+      &lt;ul&gt;
+        {{# for(todo of this.todosPromise.value) }}
+          &lt;li class=&quot;{{# if(todo.complete) }}done{{/ if }}&quot;&gt;
+            {{ todo.name }}
+          &lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    {{/ if }}
+  `;
+
+  static props = {
+    newName: String,
+
+    get todosPromise() {
+      return Todo.getList({ sort: &quot;name&quot; });
+    }
+  };
+
+  save() {
+    const todo = new Todo({ name: this.newName });
+    todo.save();
+    this.newName = &quot;&quot;;
+  }
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='20,only'></div>
+<p>When the button emits a <code>click</code> event, the <code>save()</code> method on the custom element will be called.</p>
+<p>Again, you might be wondering where we’ve defined the <code>save()</code> method in the custom element… we’ll get there in just a moment. 😊</p>
+<h3>Defining custom properties</h3>
+<p>Earlier we said that:</p>
+<blockquote>
+<p><a href="../can-stache-element/static.props.html" title="A static property used to create ObservableObject-like properties on each StacheElement instance."><code>static props</code></a> is an object that defines the properties available to the view.</p>
+</blockquote>
+<p>This is true, although there’s more information to be known. The <code>static props</code> object is made up of <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">ObservableObject</a>-like
+property definitions that explicitly configure how a custom element’s properties are defined.</p>
+<p>We’ve been defining properties and methods on the custom element with the
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions#Defining_method_functions">standard JavaScript getter and method syntax</a>.</p>
+<p>Now we’re going to use <a href="../can-observable-object/object.types.property.html#function__" title="">ObservableObject’s constructor syntax</a> to define
+a property as a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>:</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import { realtimeRestModel, StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+    {{# if(this.todosPromise.isPending) }}
+      Loading todos…
+    {{/ if }}
+    {{# if(this.todosPromise.isRejected) }}
+      &lt;p&gt;Couldn’t load todos; {{ this.todosPromise.reason }}&lt;/p&gt;
+    {{/ if }}
+    {{# if(this.todosPromise.isResolved) }}
+      &lt;input placeholder=&quot;What needs to be done?&quot; value:bind=&quot;this.newName&quot;&gt;
+      &lt;button on:click=&quot;this.save()&quot; type=&quot;button&quot;&gt;Add&lt;/button&gt;
+      &lt;ul&gt;
+        {{# for(todo of this.todosPromise.value) }}
+          &lt;li class=&quot;{{# if(todo.complete) }}done{{/ if }}&quot;&gt;
+            {{ todo.name }}
+          &lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    {{/ if }}
+  `;
+
+  static props = {
+    newName: String,
+
+    get todosPromise() {
+      return Todo.getList({ sort: &quot;name&quot; });
+    }
+  };
+
+  save() {
+    const todo = new Todo({ name: this.newName });
+    todo.save();
+    this.newName = &quot;&quot;;
+  }
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='32,only'></div>
+<p>In the code above, we define a new <code>newName</code> property on the custom element as a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>.
+If this property is set to a value that’s not a <code>String</code>, CanJS will throw an error.
+If you instead want the value to be converted to a string, you could use <a href="../can-type/convert.html" title="Create a can-type.typeobject that converts values to the given type.">type.convert(String)</a>.</p>
+<p>You can specify any <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects">built-in</a>
+types that you want, including
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>,
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date">Date</a>,
+and <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a>.</p>
+<h3>Saving new items to the backend API</h3>
+<p>Now let’s look at the <code>save()</code> method on our custom element:</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import { realtimeRestModel, StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+    {{# if(this.todosPromise.isPending) }}
+      Loading todos…
+    {{/ if }}
+    {{# if(this.todosPromise.isRejected) }}
+      &lt;p&gt;Couldn’t load todos; {{ this.todosPromise.reason }}&lt;/p&gt;
+    {{/ if }}
+    {{# if(this.todosPromise.isResolved) }}
+      &lt;input placeholder=&quot;What needs to be done?&quot; value:bind=&quot;this.newName&quot;&gt;
+      &lt;button on:click=&quot;this.save()&quot; type=&quot;button&quot;&gt;Add&lt;/button&gt;
+      &lt;ul&gt;
+        {{# for(todo of this.todosPromise.value) }}
+          &lt;li class=&quot;{{# if(todo.complete) }}done{{/ if }}&quot;&gt;
+            {{ todo.name }}
+          &lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    {{/ if }}
+  `;
+
+  static props = {
+    newName: String,
+
+    get todosPromise() {
+      return Todo.getList({ sort: &quot;name&quot; });
+    }
+  };
+
+  save() {
+    const todo = new Todo({ name: this.newName });
+    todo.save();
+    this.newName = &quot;&quot;;
+  }
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='39-43,only'></div>
+<p>This code does three things:</p>
+<ol>
+<li>Creates a new to-do with the name typed into the <code>&lt;input&gt;</code> (<code>const todo = new Todo({ name: this.newName })</code>).</li>
+<li>Saves the new to-do to the backend API (<code>todo.save()</code>).</li>
+<li>Resets the <code>&lt;input&gt;</code> so a new to-do name can be typed in (<code>this.newName = &quot;&quot;</code>).</li>
+</ol>
+<p>You’ll notice that just like within the stache template, <code>this</code> inside the <code>save()</code> method refers to the
+custom element. This is how we can both read and write the custom element’s <code>newName</code> property.</p>
+<h3>New items are added to the right place in the sorted list</h3>
+<p>When <code>Todo.getList({ sort: &quot;name&quot; })</code> is called, CanJS makes a GET request to <code>/api/todos?sort=name</code>.</p>
+<p>When the array of to-dos comes back, CanJS associates that array with the query <code>{ sort: &quot;name&quot; }</code>.
+When new to-dos are created, they’re automatically added to the right spot in the list that’s returned.</p>
+<p><strong>Try adding a to-do in your CodePen!</strong> You don’t have to write any code to make sure the new to-do gets inserted
+into the right spot in the list.</p>
+<p>CanJS does this for filtering as well. If you make a query with a filter (e.g. <code>{ filter: { complete: true } }</code>),
+when items are added, edited, or deleted that match that filter, those lists will be updated automatically.</p>
+<blockquote>
+<p>Find something confusing or need help? <a href="https://bitovi.com/community/slack">Join our Slack</a> and post a question
+in the <a href="https://bitovi-community.slack.com/messages/CFC22NZ8A">#canjs channel</a>. We answer every question and we’re eager to help!</p>
+</blockquote>
+<h2>Updating existing items</h2>
+<p>CanJS also makes it easy to update existing instances of your model objects and save them to your backend API.</p>
+<p>In this section, we’ll add an <code>&lt;input type=&quot;checkbox&quot;&gt;</code> for marking a to-do as complete.
+We’ll also make it possible to click on a to-do to select it and edit its name.
+After either of these changes, we’ll save the to-do to the backend API.</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import {
+  realtimeRestModel,
+  StacheElement,
+  type
+} from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+    {{# if(this.todosPromise.isPending) }}
+      Loading todos…
+    {{/ if }}
+    {{# if(this.todosPromise.isRejected) }}
+      &lt;p&gt;Couldn’t load todos; {{ this.todosPromise.reason }}&lt;/p&gt;
+    {{/ if }}
+    {{# if(this.todosPromise.isResolved) }}
+      &lt;input placeholder=&quot;What needs to be done?&quot; value:bind=&quot;this.newName&quot;&gt;
+      &lt;button on:click=&quot;this.save()&quot; type=&quot;button&quot;&gt;Add&lt;/button&gt;
+      &lt;ul&gt;
+        {{# for(todo of this.todosPromise.value) }}
+          &lt;li class=&quot;{{# if(todo.complete) }}done{{/ if }}&quot;&gt;
+            &lt;label&gt;
+              &lt;input checked:bind=&quot;todo.complete&quot; on:change=&quot;todo.save()&quot; type=&quot;checkbox&quot;&gt;
+            &lt;/label&gt;
+            {{# eq(todo, this.selected) }}
+              &lt;input focused:from=&quot;true&quot; on:blur=&quot;this.saveTodo(todo)&quot; value:bind=&quot;todo.name&quot;&gt;
+            {{ else }}
+              &lt;span on:click=&quot;this.selected = todo&quot;&gt;
+                {{ todo.name }}
+              &lt;/span&gt;
+            {{/ eq }}
+          &lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    {{/ if }}
+  `;
+
+  static props = {
+    newName: String,
+    selected: type.maybe(Todo),
+
+    get todosPromise() {
+      return Todo.getList({ sort: &quot;name&quot; });
+    }
+  };
+
+  save() {
+    const todo = new Todo({ name: this.newName });
+    todo.save();
+    this.newName = &quot;&quot;;
+  }
+
+  saveTodo(todo) {
+    todo.save();
+    this.selected = null;
+  }
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='8,28-37,46,59-62,only'></div>
+<p>The next five sections will more thoroughly explain the code above.</p>
+<h3>Importing type</h3>
+<p>First, we import the <a href="../can-type.html" title="Define types that can verify values are of the correct type, or convert values to the correct type.">type</a> module:</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import {
+  realtimeRestModel,
+  StacheElement,
+  type
+} from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+    {{# if(this.todosPromise.isPending) }}
+      Loading todos…
+    {{/ if }}
+    {{# if(this.todosPromise.isRejected) }}
+      &lt;p&gt;Couldn’t load todos; {{ this.todosPromise.reason }}&lt;/p&gt;
+    {{/ if }}
+    {{# if(this.todosPromise.isResolved) }}
+      &lt;input placeholder=&quot;What needs to be done?&quot; value:bind=&quot;this.newName&quot;&gt;
+      &lt;button on:click=&quot;this.save()&quot; type=&quot;button&quot;&gt;Add&lt;/button&gt;
+      &lt;ul&gt;
+        {{# for(todo of this.todosPromise.value) }}
+          &lt;li class=&quot;{{# if(todo.complete) }}done{{/ if }}&quot;&gt;
+            &lt;label&gt;
+              &lt;input checked:bind=&quot;todo.complete&quot; on:change=&quot;todo.save()&quot; type=&quot;checkbox&quot;&gt;
+            &lt;/label&gt;
+            {{# eq(todo, this.selected) }}
+              &lt;input focused:from=&quot;true&quot; on:blur=&quot;this.saveTodo(todo)&quot; value:bind=&quot;todo.name&quot;&gt;
+            {{ else }}
+              &lt;span on:click=&quot;this.selected = todo&quot;&gt;
+                {{ todo.name }}
+              &lt;/span&gt;
+            {{/ eq }}
+          &lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    {{/ if }}
+  `;
+
+  static props = {
+    newName: String,
+    selected: type.maybe(Todo),
+
+    get todosPromise() {
+      return Todo.getList({ sort: &quot;name&quot; });
+    }
+  };
+
+  save() {
+    const todo = new Todo({ name: this.newName });
+    todo.save();
+    this.newName = &quot;&quot;;
+  }
+
+  saveTodo(todo) {
+    todo.save();
+    this.selected = null;
+  }
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='8,only'></div>
+<p>This module gives us helpers for type checking and conversion.</p>
+<h3>Binding to checkbox form elements</h3>
+<p>Every <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox" title="&lt;code&gt;&amp;lt;input type=&amp;quot;checkbox&amp;quot;&amp;gt;&lt;/code&gt;"><code>&lt;input type=&quot;checkbox&quot;&gt;</code></a>
+has a <code>checked</code> property. We <a href="../can-stache-bindings.twoWay.html" title="Two-way bind a value in the StacheElement, can-component ViewModel, or element to the parent scope.">bind</a> to it so if <code>todo.complete</code> is true or false,
+the checkbox is either checked or unchecked, respectively.</p>
+<p>Additionally, when the checkbox is clicked, <code>todo.complete</code> is updated to be <code>true</code> or <code>false</code>.</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import {
+  realtimeRestModel,
+  StacheElement,
+  type
+} from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+    {{# if(this.todosPromise.isPending) }}
+      Loading todos…
+    {{/ if }}
+    {{# if(this.todosPromise.isRejected) }}
+      &lt;p&gt;Couldn’t load todos; {{ this.todosPromise.reason }}&lt;/p&gt;
+    {{/ if }}
+    {{# if(this.todosPromise.isResolved) }}
+      &lt;input placeholder=&quot;What needs to be done?&quot; value:bind=&quot;this.newName&quot;&gt;
+      &lt;button on:click=&quot;this.save()&quot; type=&quot;button&quot;&gt;Add&lt;/button&gt;
+      &lt;ul&gt;
+        {{# for(todo of this.todosPromise.value) }}
+          &lt;li class=&quot;{{# if(todo.complete) }}done{{/ if }}&quot;&gt;
+            &lt;label&gt;
+              &lt;input checked:bind=&quot;todo.complete&quot; on:change=&quot;todo.save()&quot; type=&quot;checkbox&quot;&gt;
+            &lt;/label&gt;
+            {{# eq(todo, this.selected) }}
+              &lt;input focused:from=&quot;true&quot; on:blur=&quot;this.saveTodo(todo)&quot; value:bind=&quot;todo.name&quot;&gt;
+            {{ else }}
+              &lt;span on:click=&quot;this.selected = todo&quot;&gt;
+                {{ todo.name }}
+              &lt;/span&gt;
+            {{/ eq }}
+          &lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    {{/ if }}
+  `;
+
+  static props = {
+    newName: String,
+    selected: type.maybe(Todo),
+
+    get todosPromise() {
+      return Todo.getList({ sort: &quot;name&quot; });
+    }
+  };
+
+  save() {
+    const todo = new Todo({ name: this.newName });
+    todo.save();
+    this.newName = &quot;&quot;;
+  }
+
+  saveTodo(todo) {
+    todo.save();
+    this.selected = null;
+  }
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='29,only'></div>
+<p>We also listen for <a href="https://developer.mozilla.org/en-US/docs/Web/Events/change">change</a> events with the
+<a href="../can-stache-bindings.event.html" title="Respond to events on elements or component ViewModels.">on:event</a> syntax. When the input’s value changes, the
+<a href="../can-connect/can/map/map.prototype.save.html" title="Save or update client data to the persisted data source."><code>save()</code></a> method on the <code>todo</code> is called.</p>
+<h3>Checking for equality in templates</h3>
+<p>This section uses two stache helpers:</p>
+<ul>
+<li><a href="../can-stache.helpers.eq.html" title="Render something if two values are equal.">#eq()</a> checks whether all the arguments passed to it are <code>===</code></li>
+<li><a href="../can-stache.helpers.else.html" title="">{{ else }}</a> will only render if <code>#eq()</code> returns <code>false</code></li>
+</ul>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import {
+  realtimeRestModel,
+  StacheElement,
+  type
+} from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+    {{# if(this.todosPromise.isPending) }}
+      Loading todos…
+    {{/ if }}
+    {{# if(this.todosPromise.isRejected) }}
+      &lt;p&gt;Couldn’t load todos; {{ this.todosPromise.reason }}&lt;/p&gt;
+    {{/ if }}
+    {{# if(this.todosPromise.isResolved) }}
+      &lt;input placeholder=&quot;What needs to be done?&quot; value:bind=&quot;this.newName&quot;&gt;
+      &lt;button on:click=&quot;this.save()&quot; type=&quot;button&quot;&gt;Add&lt;/button&gt;
+      &lt;ul&gt;
+        {{# for(todo of this.todosPromise.value) }}
+          &lt;li class=&quot;{{# if(todo.complete) }}done{{/ if }}&quot;&gt;
+            &lt;label&gt;
+              &lt;input checked:bind=&quot;todo.complete&quot; on:change=&quot;todo.save()&quot; type=&quot;checkbox&quot;&gt;
+            &lt;/label&gt;
+            {{# eq(todo, this.selected) }}
+              &lt;input focused:from=&quot;true&quot; on:blur=&quot;this.saveTodo(todo)&quot; value:bind=&quot;todo.name&quot;&gt;
+            {{ else }}
+              &lt;span on:click=&quot;this.selected = todo&quot;&gt;
+                {{ todo.name }}
+              &lt;/span&gt;
+            {{/ eq }}
+          &lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    {{/ if }}
+  `;
+
+  static props = {
+    newName: String,
+    selected: type.maybe(Todo),
+
+    get todosPromise() {
+      return Todo.getList({ sort: &quot;name&quot; });
+    }
+  };
+
+  save() {
+    const todo = new Todo({ name: this.newName });
+    todo.save();
+    this.newName = &quot;&quot;;
+  }
+
+  saveTodo(todo) {
+    todo.save();
+    this.selected = null;
+  }
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='31,33,37,only'></div>
+<p>The code above checks whether <code>todo</code> is equal to <code>this.selected</code>. We haven’t added <code>selected</code>
+to our custom element yet, but we will in the next section!</p>
+<h3>Setting the selected to-do</h3>
+<p>When you listen for events with the <a href="../can-stache-bindings.event.html" title="Respond to events on elements or component ViewModels.">on:event</a> syntax, you can
+also <a href="../can-stache-bindings.event.html#on_VIEW_MODEL_OR_DOM_EVENT__KEY_VALUE_" title="Respond to events on elements or component ViewModels.">set property values</a>.</p>
+<p>Let’s examine this part of the code:</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import {
+  realtimeRestModel,
+  StacheElement,
+  type
+} from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+    {{# if(this.todosPromise.isPending) }}
+      Loading todos…
+    {{/ if }}
+    {{# if(this.todosPromise.isRejected) }}
+      &lt;p&gt;Couldn’t load todos; {{ this.todosPromise.reason }}&lt;/p&gt;
+    {{/ if }}
+    {{# if(this.todosPromise.isResolved) }}
+      &lt;input placeholder=&quot;What needs to be done?&quot; value:bind=&quot;this.newName&quot;&gt;
+      &lt;button on:click=&quot;this.save()&quot; type=&quot;button&quot;&gt;Add&lt;/button&gt;
+      &lt;ul&gt;
+        {{# for(todo of this.todosPromise.value) }}
+          &lt;li class=&quot;{{# if(todo.complete) }}done{{/ if }}&quot;&gt;
+            &lt;label&gt;
+              &lt;input checked:bind=&quot;todo.complete&quot; on:change=&quot;todo.save()&quot; type=&quot;checkbox&quot;&gt;
+            &lt;/label&gt;
+            {{# eq(todo, this.selected) }}
+              &lt;input focused:from=&quot;true&quot; on:blur=&quot;this.saveTodo(todo)&quot; value:bind=&quot;todo.name&quot;&gt;
+            {{ else }}
+              &lt;span on:click=&quot;this.selected = todo&quot;&gt;
+                {{ todo.name }}
+              &lt;/span&gt;
+            {{/ eq }}
+          &lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    {{/ if }}
+  `;
+
+  static props = {
+    newName: String,
+    selected: type.maybe(Todo),
+
+    get todosPromise() {
+      return Todo.getList({ sort: &quot;name&quot; });
+    }
+  };
+
+  save() {
+    const todo = new Todo({ name: this.newName });
+    todo.save();
+    this.newName = &quot;&quot;;
+  }
+
+  saveTodo(todo) {
+    todo.save();
+    this.selected = null;
+  }
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='34-36,46,only'></div>
+<p><code>on:click=&quot;this.selected = todo&quot;</code> will cause the custom element’s <code>selected</code> property to be set
+to the <code>todo</code> when the <code>&lt;span&gt;</code> is clicked.</p>
+<p>Additionally, we add <a href="../can-type/maybe.html" title="Create a strictly typed TypeObject that also accepts null and undefined values."><code>selected: type.maybe(Todo)</code></a> to the custom element.
+This allows us to set <code>selected</code> to either an instance of <code>Todo</code> or <code>null</code>.</p>
+<h3>Editing to-do names</h3>
+<p>After you click on a to-do’s name, we want the <code>&lt;span&gt;</code> to be replaced with an <code>&lt;input&gt;</code> that has the
+to-do’s name (and immediately give it focus). When the input loses focus, we want the to-do to be saved
+and the input to be replaced with the span again.</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import {
+  realtimeRestModel,
+  StacheElement,
+  type
+} from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+    {{# if(this.todosPromise.isPending) }}
+      Loading todos…
+    {{/ if }}
+    {{# if(this.todosPromise.isRejected) }}
+      &lt;p&gt;Couldn’t load todos; {{ this.todosPromise.reason }}&lt;/p&gt;
+    {{/ if }}
+    {{# if(this.todosPromise.isResolved) }}
+      &lt;input placeholder=&quot;What needs to be done?&quot; value:bind=&quot;this.newName&quot;&gt;
+      &lt;button on:click=&quot;this.save()&quot; type=&quot;button&quot;&gt;Add&lt;/button&gt;
+      &lt;ul&gt;
+        {{# for(todo of this.todosPromise.value) }}
+          &lt;li class=&quot;{{# if(todo.complete) }}done{{/ if }}&quot;&gt;
+            &lt;label&gt;
+              &lt;input checked:bind=&quot;todo.complete&quot; on:change=&quot;todo.save()&quot; type=&quot;checkbox&quot;&gt;
+            &lt;/label&gt;
+            {{# eq(todo, this.selected) }}
+              &lt;input focused:from=&quot;true&quot; on:blur=&quot;this.saveTodo(todo)&quot; value:bind=&quot;todo.name&quot;&gt;
+            {{ else }}
+              &lt;span on:click=&quot;this.selected = todo&quot;&gt;
+                {{ todo.name }}
+              &lt;/span&gt;
+            {{/ eq }}
+          &lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    {{/ if }}
+  `;
+
+  static props = {
+    newName: String,
+    selected: type.maybe(Todo),
+
+    get todosPromise() {
+      return Todo.getList({ sort: &quot;name&quot; });
+    }
+  };
+
+  save() {
+    const todo = new Todo({ name: this.newName });
+    todo.save();
+    this.newName = &quot;&quot;;
+  }
+
+  saveTodo(todo) {
+    todo.save();
+    this.selected = null;
+  }
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='32,59-62,only'></div>
+<p>Let’s break down the code above:</p>
+<ul>
+<li><code>focused:from=&quot;true&quot;</code> will set the input’s <code>focused</code> attribute to <code>true</code>, immediately giving the input focus</li>
+<li><code>on:blur=&quot;this.saveTodo(todo)&quot;</code> listens for the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/blur_event">blur event</a> (the input losing focus) so the custom element’s <code>saveTodo()</code> method is called</li>
+<li><code>value:bind=&quot;todo.name&quot;</code> binds the input’s value to the <code>name</code> property on the <code>todo</code></li>
+<li><code>saveTodo(todo)</code> in the custom element will call <a href="../can-connect/can/map/map.prototype.save.html" title="Save or update client data to the persisted data source."><code>save()</code></a> on the <code>todo</code> and reset the custom element’s <code>selected</code> property (so the input will disappear and just the to-do’s name is displayed)</li>
+</ul>
+<blockquote>
+<p>Find something confusing or need help? <a href="https://bitovi.com/community/slack">Join our Slack</a> and post a question
+in the <a href="https://bitovi-community.slack.com/messages/CFC22NZ8A">#canjs channel</a>. We answer every question and we’re eager to help!</p>
+</blockquote>
+<h2>Deleting items</h2>
+<p>Now there’s just one more feature we want to add to our app: deleting to-dos!</p>
+<pre><code class="language-js">// Creates a mock backend with 3 todos
+import { todoFixture } from &quot;//unpkg.com/can-demo-models@6/index.mjs&quot;;
+todoFixture(3);
+
+import {
+  realtimeRestModel,
+  StacheElement,
+  type
+} from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+class TodosApp extends StacheElement {
+  static view = `
+    &lt;h1&gt;Today’s to-dos&lt;/h1&gt;
+    {{# if(this.todosPromise.isPending) }}
+      Loading todos…
+    {{/ if }}
+    {{# if(this.todosPromise.isRejected) }}
+      &lt;p&gt;Couldn’t load todos; {{ this.todosPromise.reason }}&lt;/p&gt;
+    {{/ if }}
+    {{# if(this.todosPromise.isResolved) }}
+      &lt;input placeholder=&quot;What needs to be done?&quot; value:bind=&quot;this.newName&quot;&gt;
+      &lt;button on:click=&quot;this.save()&quot; type=&quot;button&quot;&gt;Add&lt;/button&gt;
+      &lt;ul&gt;
+        {{# for(todo of this.todosPromise.value) }}
+          &lt;li class=&quot;{{# if(todo.complete) }}done{{/ if }}&quot;&gt;
+            &lt;label&gt;
+              &lt;input checked:bind=&quot;todo.complete&quot; on:change=&quot;todo.save()&quot; type=&quot;checkbox&quot;&gt;
+            &lt;/label&gt;
+            {{# eq(todo, this.selected) }}
+              &lt;input focused:from=&quot;true&quot; on:blur=&quot;this.saveTodo(todo)&quot; value:bind=&quot;todo.name&quot;&gt;
+            {{ else }}
+              &lt;span on:click=&quot;this.selected = todo&quot;&gt;
+                {{ todo.name }}
+              &lt;/span&gt;
+            {{/ eq }}
+            &lt;button on:click=&quot;todo.destroy()&quot; type=&quot;button&quot;&gt;&lt;/button&gt;
+          &lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    {{/ if }}
+  `;
+
+  static props = {
+    newName: String,
+    selected: type.maybe(Todo),
+
+    get todosPromise() {
+      return Todo.getList({ sort: &quot;name&quot; });
+    }
+  };
+
+  save() {
+    const todo = new Todo({ name: this.newName });
+    todo.save();
+    this.newName = &quot;&quot;;
+  }
+
+  saveTodo(todo) {
+    todo.save();
+    this.selected = null;
+  }
+}
+
+customElements.define(&quot;todos-app&quot;, TodosApp);
+
+</code></pre>
+<div line-highlight='38,only'></div>
+<p>When the <code>&lt;button&gt;</code> is clicked, the to-do’s <a href="../can-connect/can/map/map.prototype.destroy.html" title="Delete an instance from the service via the connection.">destroy</a>
+method is called, which will make a <code>DELETE /api/todos/{id}</code> call to delete the to-do in the
+backend API.</p>
+<h2>Result</h2>
+<p>Congrats! You’ve built your first app with CanJS and learned all the basics.</p>
+<p>Here’s what your finished CodePen will look like:</p>
+<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="yLBPLgw" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/yLBPLgw/">
+  CanJS 6 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<h2>Next steps</h2>
+<p>If you’re ready to go through another guide, check out the <a href="chat.html" title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">Chat Guide</a>, which will walk you through
+building a real-time chat app. The <a href="todomvc.html" title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">TodoMVC Guide</a> is also another great guide to go through if you’re
+not sick of building to-do apps. ☑️</p>
+<p>If you’d rather learn about CanJS’s core technologies, the <a href="technology-overview.html" title="Learn the basics of CanJS’s technology.">Technology Overview</a> shows you the
+basics of how CanJS works. From there, the <a href="html.html" title="Learn how to update HTML and listen to user interactions.">HTML</a>, <a href="routing.html" title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">Routing</a>, and <a href="data.html" title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">Service Layer</a> guides
+offer more in-depth information on how CanJS works.</p>
+<p>If you haven’t already, <a href="https://bitovi.com/community/slack">join our Slack</a> and come say hello in the
+<a href="https://bitovi-community.slack.com/messages/CFMMLPNV7">#introductions channel</a>. We also have a
+<a href="https://bitovi-community.slack.com/messages/CFC22NZ8A">#canjs channel</a> for any comments or questions about CanJS.
+We answer every question and we’re eager to help!</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/experiment/crud-beginner/crud-beginner.md"},"description":"Learn how to build a basic CRUD app with CanJS in 30 minutes. \n","name":"guides/crud-beginner","title":"CRUD Guide","type":"page","parent":"guides/getting-started","order":1,"templateRender":["<%","%>"],"comment":" ","pathToRoot":"../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix=".."></div>
+
+	</body>
+</html>

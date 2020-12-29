@@ -1,0 +1,10 @@
+{
+	"name": "live-app",
+	"main": "main",
+	"version": "1.0.0",
+	"system": {
+		"configDependencies": [
+			"live-reload"
+		]
+	}
+}

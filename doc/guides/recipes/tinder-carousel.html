@@ -1,0 +1,2083 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/commitment/recipes/tinder-like-carousel/Tinder-Like-Carousel.md
+	@page guides/recipes/tinder-carousel
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Tinder Carousel | intermediate recipes | Guides | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+	<meta property="og:title" content="Tinder Carousel | intermediate recipes | Guides | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Tinder Carousel | intermediate recipes | Guides | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/recipes/tinder-carousel" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>getting started</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../crud-beginner.html"
+							title="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+							CRUD Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../setup.html"
+							title="Learn how to install CanJS in your environment.">
+							Setting Up CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../technology-overview.html"
+							title="Learn the basics of CanJS’s technology.">
+							Technology Overview
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>topics</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../html.html"
+							title="Learn how to update HTML and listen to user interactions.">
+							HTML
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../routing.html"
+							title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+							Routing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../data.html"
+							title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">
+							Service Layer
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../debugging.html"
+							title="Learn how to debug CanJS applications.">
+							Debugging
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../forms.html"
+							title="Learn how to create amazing &lt;form&gt;s with CanJS.">
+							Forms
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../testing.html"
+							title="Learn how to test CanJS applications.">
+							Testing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../logic.html"
+							title="Learn how to write observables in an organized, maintainable, and testable way.">
+							Logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../server-side-rendering.html"
+							title="Learn how to set up SSR for CanJS.">
+							Server-Side Rendering
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>app guides</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../chat.html"
+							title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+							Chat Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../todomvc.html"
+							title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+							TodoMVC Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="todomvc-with-steal.html"
+							title="This tutorial walks through building TodoMVC with StealJS. It includes KeyNote presentations covering CanJS core libraries.">
+							TodoMVC with StealJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>beginner recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="canvas-clock.html"
+							title="This beginner guide walks you through building a clock with the Canvas API.">
+							Canvas Clock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="credit-card-simple.html"
+							title="This beginner guide walks through building a very simple credit card payment form.  It uses Stripe.js v2 API to create a token which can be used to create a charge.  It also performs simple validation on the payment form values.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="file-navigator-simple.html"
+							title="This beginner guide walks you through building a simple file navigation widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.0.0. Check out the file-navigator-advanced for an example that makes AJAX requests for its data and uses can-stache-element.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="signup-simple.html"
+							title="This beginner guide walks through building simple signup, login forms and a logout button.">
+							Signup and Login
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="video-player.html"
+							title="This beginner guide walks you through building custom video controls around a video element.">
+							Video Player
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="weather-report-simple.html"
+							title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.2.">
+							Weather Report
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>intermediate recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="cta-bus-map.html"
+							title="This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map. You&#x27;ll learn how to create a StacheElement that integrates with 3rd party widgets.">
+							CTA Bus Map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="modals.html"
+							title="This intermediate guide shows how to create a multiple modal form.">
+							Multiple Modals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="text-editor.html"
+							title="This intermediate guide walks you through building a basic rich text editor.">
+							Text Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="tinder-carousel.html"
+							title="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+							Tinder Carousel
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>advanced recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="credit-card-advanced.html"
+							title="This advanced guide walks through building a simple credit card payment form with validations. It doesn’t use can-define. Instead it uses Kefir.js streams to make a ViewModel. can-kefir is used to make the Kefir streams observable to can-stache.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="file-navigator-advanced.html"
+							title="This advanced guide walks you through building a file navigation widget that requests data with fetch. It takes about 45 minutes to complete.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="playlist-editor.html"
+							title="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+							Playlist Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="search-list-details.html"
+							title="This advanced guide walks through building a Search, List, Details flow with lazy-loaded routes.">
+							Search, List, Details
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>upgrade</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../migrate-3.html"
+							title="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+							Migrating to CanJS 3
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../migrate-4.html"
+							title="This guide walks you through the step-by-step process to upgrade a 3.x app to CanJS 4.">
+							Migrating to CanJS 4
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../migrate-5.html"
+							title="This guide walks you through the process to upgrade a 4.x app to CanJS 5.x.">
+							Migrating to CanJS 5
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../migrate-6.html"
+							title="This guide walks you through the process to upgrade a 5.x app to CanJS 6.x.">
+							Migrating to CanJS 6
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../upgrade/using-codemods.html"
+							title="Learn how to migrate your app to CanJS 6 using can-migrate.">
+							Using Codemods
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>other</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../api.html"
+							title="This page walks through how to use and understand CanJS’s API documentation.">
+							Reading the API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Tinder Carousel</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/commitment/recipes/tinder-like-carousel/Tinder-Like-Carousel.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>This intermediate guide walks you through building a <a href="https://tinder.com/">Tinder</a>-like carousel. Learn how to build apps that use dragging user interactions.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <p>In this guide, you will learn how to create a custom <a href="https://tinder.com/">Tinder</a>-like
+carousel. The custom widget will have:</p>
+<ul>
+<li>Touch and drag functionality that works on mobile and desktop.</li>
+<li>Custom <code>&lt;button&gt;</code>’s for liking and disliking</li>
+</ul>
+<p>The final widget looks like:</p>
+<p class="codepen" data-height="536" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="QWLmPXo" style="height: 536px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6 Tinder-Like Carousel">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/QWLmPXo/">
+  CanJS 6 Tinder-Like Carousel</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<p>The following sections are broken down the following parts:</p>
+<ul>
+<li><strong>The problem</strong> - A description of what the section is trying to accomplish.</li>
+<li><strong>What you need to know</strong> - Information about CanJS that is useful for solving the problem.</li>
+<li><strong>The solution</strong> - The solution to the problem.</li>
+</ul>
+<h2>Setup</h2>
+<p><strong>START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED</strong>:</p>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="MWgGJgJ" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6 Tinder-Like Carousel">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/MWgGJgJ/">
+  CanJS 6 Tinder-Like Carousel</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<p>This CodePen loads CanJS (<code>import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;</code>).</p>
+<h3>The problem</h3>
+<p>When someone adds <code>&lt;evil-tinder&gt;&lt;/evil-tinder&gt;</code> to their HTML, we want the following HTML
+to show up:</p>
+<pre><code class="language-html">&lt;div class=&quot;header&quot;&gt;&lt;/div&gt;
+
+&lt;div class=&quot;images&quot;&gt;
+  &lt;div class=&quot;current&quot;&gt;
+    &lt;img src=&quot;https://user-images.githubusercontent.com/78602/40454720-7c3d984c-5eaf-11e8-9fa7-f68ddd33e3f0.jpg&quot;/&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;next&quot;&gt;
+    &lt;img src=&quot;https://user-images.githubusercontent.com/78602/40454716-76bef438-5eaf-11e8-9d29-5002260e96e1.jpg&quot;/&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;footer&quot;&gt;
+  &lt;button class=&quot;dissBtn&quot;&gt;Dislike&lt;/button&gt;
+  &lt;button class=&quot;likeBtn&quot;&gt;Like&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+<h3>What you need to know</h3>
+<p>To set up a basic CanJS application, you define a custom element in JavaScript and
+use the custom element in your page’s <code>HTML</code>.</p>
+<p>To define a custom element, extend <a href="../../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define">register it</a>
+with the tag name you want to use in the HTML.</p>
+<p>For example, we will use <code>&lt;evil-tinder&gt;</code> as our custom tag:</p>
+<pre><code class="language-js">class EvilTinder extends StacheElement {}
+customElements.define(&quot;evil-tinder&quot;, EvilTinder);
+</code></pre>
+<p>But this doesn’t do anything.  Components add their own HTML through their <a href="../../can-stache-element/static.view.html" title="Provides a way to render the element's innerHTML using a can-stache template.">view</a>
+property like this:</p>
+<pre><code class="language-js">class EvilTinder extends StacheElement {
+  static view = `
+    &lt;h2&gt;Evil-Tinder&lt;/h2&gt;
+  `,
+  static props = {};
+}
+customElements.define(&quot;evil-tinder&quot;, EvilTinder);
+</code></pre>
+<blockquote>
+<p><strong>NOTE:</strong> We’ll make use of the <code>props</code> object later.</p>
+</blockquote>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class EvilTinder extends StacheElement {
+  static view = `
+    &lt;div class=&quot;header&quot;&gt;&lt;/div&gt;
+
+    &lt;div class=&quot;images&quot;&gt;
+      &lt;div class=&quot;current&quot;&gt;
+        &lt;img src=&quot;https://user-images.githubusercontent.com/78602/40454720-7c3d984c-5eaf-11e8-9fa7-f68ddd33e3f0.jpg&quot;&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;next&quot;&gt;
+        &lt;img src=&quot;https://user-images.githubusercontent.com/78602/40454716-76bef438-5eaf-11e8-9d29-5002260e96e1.jpg&quot;&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;footer&quot;&gt;
+      &lt;button class=&quot;dissBtn&quot;&gt;Dislike&lt;/button&gt;
+      &lt;button class=&quot;likeBtn&quot;&gt;Like&lt;/button&gt;
+    &lt;/div&gt;
+  `;
+
+  static props = {};
+}
+
+customElements.define(&quot;evil-tinder&quot;, EvilTinder);
+
+</code></pre>
+<div line-highlight='3-25,only'></div>
+<p>Update the <code>&lt;body&gt;</code> element in the <strong>HTML</strong> tab to:</p>
+<pre><code class="language-html">&lt;evil-tinder&gt;&lt;/evil-tinder&gt;
+</code></pre>
+<h2>Show the current and next profile images</h2>
+<h3>The problem</h3>
+<p>Instead of hard-coding the current and next image URLs, we want to show the first two items
+in the following list of profiles:</p>
+<pre><code class="language-js">[
+  { name: &quot;gru&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454685-5cab196e-5eaf-11e8-87ac-4af6792994ed.jpg&quot; },
+  { name: &quot;hannibal&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454705-6bf4d3d8-5eaf-11e8-9562-2bd178485527.jpg&quot; },
+  { name: &quot;joker&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454830-e71178dc-5eaf-11e8-80ee-efd64911e35f.png&quot; },
+  { name: &quot;darth&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454681-59cffdb8-5eaf-11e8-94ac-4849ab08d90c.jpg&quot; },
+  { name: &quot;norman&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454709-6fecc536-5eaf-11e8-9eb5-3da39730adc4.jpg&quot; },
+  { name: &quot;stapuft&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454711-72b19d78-5eaf-11e8-9732-80155ff8bb52.jpg&quot; },
+  { name: &quot;dalek&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454672-566b4984-5eaf-11e8-808d-cb5afd445e89.jpg&quot; },
+  { name: &quot;wickedwitch&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454720-7c3d984c-5eaf-11e8-9fa7-f68ddd33e3f0.jpg&quot; },
+  { name: &quot;zod&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454722-802ef694-5eaf-11e8-8964-ca648368720d.jpg&quot; },
+  { name: &quot;venom&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454716-76bef438-5eaf-11e8-9d29-5002260e96e1.jpg&quot; }
+]
+</code></pre>
+<p>If we were to remove items on the <code>evil-tinder</code> component as follows, the images will update:</p>
+<pre><code class="language-js">document.querySelector(&quot;evil-tinder&quot;).profiles.shift()
+</code></pre>
+<h3>What you need to know</h3>
+<ul>
+<li><p>A component's <code>view</code> is rendered with its <a href="../../can-stache-element/static.props.html" title="A static property used to create ObservableObject-like properties on each StacheElement instance.">props</a>. For example, we can create
+a list of profiles and write out an <code>&lt;img&gt;</code> for each one like:</p>
+<pre><code class="language-js">class EvilTinder extends StacheElement {
+  static view = `
+    {{# for(profile of this.profiles) }}
+      &lt;img src=&quot;{{ profile.img }}&quot;&gt;
+    {{/ for }}
+  `;
+
+  static props = {
+    get default() {
+      return new ObservableArray([
+        { img: &quot;https://user-images.githubusercontent.com/78602/40454672-566b4984-5eaf-11e8-808d-cb5afd445e89.jpg&quot; },
+        { img: &quot;https://user-images.githubusercontent.com/78602/40454720-7c3d984c-5eaf-11e8-9fa7-f68ddd33e3f0.jpg&quot; }
+      ]);
+    }
+  };
+}
+customElements.define(&quot;evil-tinder&quot;, EvilTinder);
+</code></pre>
+<p>The <a href="../../can-observable-object/define/get-default.html" title="Returns the default value for instances of the defined type.  The default value is defined on demand, when the property is read for the first time.">get default()</a> behavior specifies the default value of the <code>profiles</code>
+property; <a href="../../can-observable-array.html" title="Create observable arrays with defined properties.">can-observable-array</a> is used to make sure the <code>view</code> is updated when <code>profiles</code> changes.</p>
+<p>The <code>view</code> uses <a href="../../can-stache.tags.escaped.html" title="Insert the value of the expression into the output of the template.">{{expression}}</a> to write out values from the component <code>props</code> into the DOM.</p></li>
+<li><p>Use a <a href="../../can-observable-object/define/get.html" title="Specify what happens when a certain property is read on an object. get functions
+are computed and automatically update themselves when a dependent
+observable value is changed.">getter</a> to derive a value from another
+value on the component <code>props</code>, this will allow us to get the next profile image:</p>
+<pre><code class="language-js">get currentProfile() {
+  return this.profiles[0];
+},
+</code></pre></li>
+</ul>
+<h3>How to verify it works</h3>
+<p>Run the following in the <strong>Console</strong> tab.  The background image should move to the foreground.</p>
+<pre><code class="language-js">document.querySelector(&quot;evil-tinder&quot;).profiles.shift()
+</code></pre>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class EvilTinder extends StacheElement {
+  static view = `
+    &lt;div class=&quot;header&quot;&gt;&lt;/div&gt;
+
+    &lt;div class=&quot;images&quot;&gt;
+      &lt;div class=&quot;current&quot;&gt;
+        &lt;img src=&quot;{{ this.currentProfile.img }}&quot;&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;next&quot;&gt;
+        &lt;img src=&quot;{{ this.nextProfile.img }}&quot;&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;footer&quot;&gt;
+      &lt;button class=&quot;dissBtn&quot;&gt;Dislike&lt;/button&gt;
+      &lt;button class=&quot;likeBtn&quot;&gt;Like&lt;/button&gt;
+    &lt;/div&gt;
+  `;
+
+  static props = {
+    profiles: {
+      get default() {
+        return new ObservableArray([
+          { name: &quot;gru&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454685-5cab196e-5eaf-11e8-87ac-4af6792994ed.jpg&quot; },
+          { name: &quot;hannibal&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454705-6bf4d3d8-5eaf-11e8-9562-2bd178485527.jpg&quot; },
+          { name: &quot;joker&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454830-e71178dc-5eaf-11e8-80ee-efd64911e35f.png&quot; },
+          { name: &quot;darth&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454681-59cffdb8-5eaf-11e8-94ac-4849ab08d90c.jpg&quot; },
+          { name: &quot;norman&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454709-6fecc536-5eaf-11e8-9eb5-3da39730adc4.jpg&quot; },
+          { name: &quot;stapuft&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454711-72b19d78-5eaf-11e8-9732-80155ff8bb52.jpg&quot; },
+          { name: &quot;dalek&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454672-566b4984-5eaf-11e8-808d-cb5afd445e89.jpg&quot; },
+          { name: &quot;wickedwitch&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454720-7c3d984c-5eaf-11e8-9fa7-f68ddd33e3f0.jpg&quot; },
+          { name: &quot;zod&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454722-802ef694-5eaf-11e8-8964-ca648368720d.jpg&quot; },
+          { name: &quot;venom&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454716-76bef438-5eaf-11e8-9d29-5002260e96e1.jpg&quot; }
+        ]);
+      }
+    },
+
+    get currentProfile() {
+      return this.profiles[0];
+    },
+
+    get nextProfile() {
+      return this.profiles[1];
+    }
+  };
+}
+
+customElements.define(&quot;evil-tinder&quot;, EvilTinder);
+
+</code></pre>
+<div line-highlight='9,12,23-37,only'></div>
+<h2>Add a like button</h2>
+<h3>The problem</h3>
+<ul>
+<li>When someone clicks the like button, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/log">console.log</a> <code>LIKED</code>, remove the first profile image, and show the next one in the list.</li>
+</ul>
+<h3>What you need to know</h3>
+<ul>
+<li><p>Use <a href="../../can-stache-bindings.event.html" title="Respond to events on elements or component ViewModels.">on:event</a> to call a function on the component when a DOM event happens:</p>
+<pre><code class="language-html">&lt;button on:click=&quot;doSomething()&quot;&gt;&lt;/button&gt;
+</code></pre></li>
+<li><p>Those functions (example: <code>doSomething</code>) are added as methods on the component like:</p>
+<pre><code class="language-js">class SomeElement extends StacheElement {
+  static view = `&lt;button on:click=&quot;doSomething('dance')&quot;&gt;&lt;/button&gt;`;
+  static props = { ... };
+  doSomething(cmd) {
+    alert(&quot;doing &quot; + cmd);
+  }
+}
+customElements.define(&quot;some-element&quot;, SomeElement);
+</code></pre></li>
+<li><p>Use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/shift">.shift</a> to remove an item from the start of an array:</p>
+<pre><code class="language-js">this.profiles.shift();
+</code></pre></li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class EvilTinder extends StacheElement {
+  static view = `
+    &lt;div class=&quot;header&quot;&gt;&lt;/div&gt;
+
+    &lt;div class=&quot;images&quot;&gt;
+      &lt;div class=&quot;current&quot;&gt;
+        &lt;img src=&quot;{{ this.currentProfile.img }}&quot;&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;next&quot;&gt;
+        &lt;img src=&quot;{{ this.nextProfile.img }}&quot;&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;footer&quot;&gt;
+      &lt;button class=&quot;dissBtn&quot;&gt;Dislike&lt;/button&gt;
+      &lt;button class=&quot;likeBtn&quot; 
+              on:click=&quot;this.like()&quot;&gt;Like&lt;/button&gt;
+    &lt;/div&gt;
+  `;
+
+  static props = {
+    profiles: {
+      get default() {
+        return new ObservableArray([
+          { name: &quot;gru&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454685-5cab196e-5eaf-11e8-87ac-4af6792994ed.jpg&quot; },
+          { name: &quot;hannibal&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454705-6bf4d3d8-5eaf-11e8-9562-2bd178485527.jpg&quot; },
+          { name: &quot;joker&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454830-e71178dc-5eaf-11e8-80ee-efd64911e35f.png&quot; },
+          { name: &quot;darth&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454681-59cffdb8-5eaf-11e8-94ac-4849ab08d90c.jpg&quot; },
+          { name: &quot;norman&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454709-6fecc536-5eaf-11e8-9eb5-3da39730adc4.jpg&quot; },
+          { name: &quot;stapuft&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454711-72b19d78-5eaf-11e8-9732-80155ff8bb52.jpg&quot; },
+          { name: &quot;dalek&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454672-566b4984-5eaf-11e8-808d-cb5afd445e89.jpg&quot; },
+          { name: &quot;wickedwitch&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454720-7c3d984c-5eaf-11e8-9fa7-f68ddd33e3f0.jpg&quot; },
+          { name: &quot;zod&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454722-802ef694-5eaf-11e8-8964-ca648368720d.jpg&quot; },
+          { name: &quot;venom&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454716-76bef438-5eaf-11e8-9d29-5002260e96e1.jpg&quot; }
+        ]);
+      }
+    },
+
+    get currentProfile() {
+      return this.profiles.get(0);
+    },
+
+    get nextProfile() {
+      return this.profiles.get(1);
+    }
+  };
+
+  like() {
+    console.log(&quot;LIKED&quot;);
+    this.profiles.shift();
+  }
+}
+
+customElements.define(&quot;evil-tinder&quot;, EvilTinder);
+
+</code></pre>
+<div line-highlight='18-19,50-53,only'></div>
+<h2>Add a nope button</h2>
+<h3>The problem</h3>
+<ul>
+<li>When someone clicks the nope button, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/log">console.log</a> <code>NOPED</code> and remove the first profile.</li>
+</ul>
+<h3>What you need to know</h3>
+<ul>
+<li>You know everything you need to know</li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class EvilTinder extends StacheElement {
+  static view = `
+    &lt;div class=&quot;header&quot;&gt;&lt;/div&gt;
+
+    &lt;div class=&quot;images&quot;&gt;
+      &lt;div class=&quot;current&quot;&gt;
+        &lt;img src=&quot;{{ this.currentProfile.img }}&quot;&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;next&quot;&gt;
+        &lt;img src=&quot;{{ this.nextProfile.img }}&quot;&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;footer&quot;&gt;
+      &lt;button class=&quot;dissBtn&quot;
+              on:click=&quot;this.nope()&quot;&gt;Dislike&lt;/button&gt;
+      &lt;button class=&quot;likeBtn&quot; 
+              on:click=&quot;this.like()&quot;&gt;Like&lt;/button&gt;
+    &lt;/div&gt;
+  `;
+
+  static props = {
+    profiles: {
+      get default() {
+        return new ObservableArray([
+          { name: &quot;gru&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454685-5cab196e-5eaf-11e8-87ac-4af6792994ed.jpg&quot; },
+          { name: &quot;hannibal&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454705-6bf4d3d8-5eaf-11e8-9562-2bd178485527.jpg&quot; },
+          { name: &quot;joker&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454830-e71178dc-5eaf-11e8-80ee-efd64911e35f.png&quot; },
+          { name: &quot;darth&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454681-59cffdb8-5eaf-11e8-94ac-4849ab08d90c.jpg&quot; },
+          { name: &quot;norman&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454709-6fecc536-5eaf-11e8-9eb5-3da39730adc4.jpg&quot; },
+          { name: &quot;stapuft&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454711-72b19d78-5eaf-11e8-9732-80155ff8bb52.jpg&quot; },
+          { name: &quot;dalek&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454672-566b4984-5eaf-11e8-808d-cb5afd445e89.jpg&quot; },
+          { name: &quot;wickedwitch&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454720-7c3d984c-5eaf-11e8-9fa7-f68ddd33e3f0.jpg&quot; },
+          { name: &quot;zod&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454722-802ef694-5eaf-11e8-8964-ca648368720d.jpg&quot; },
+          { name: &quot;venom&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454716-76bef438-5eaf-11e8-9d29-5002260e96e1.jpg&quot; }
+        ]);
+      }
+    },
+
+    get currentProfile() {
+      return this.profiles.get(0);
+    },
+
+    get nextProfile() {
+      return this.profiles.get(1);
+    }
+  };
+
+  like() {
+    console.log(&quot;LIKED&quot;);
+    this.profiles.shift();
+  }
+  
+  nope() {
+    console.log(&quot;NOPED&quot;);
+    this.profiles.shift();
+  }
+}
+
+customElements.define(&quot;evil-tinder&quot;, EvilTinder);
+
+</code></pre>
+<div line-highlight='17-18,56-59,only'></div>
+<h2>Drag and move the profile to the left and right</h2>
+<h3>The problem</h3>
+<p>In this section we will:</p>
+<ul>
+<li>Move the current profile to the left or right as user drags the image to the
+left or right.</li>
+<li>Implement drag functionality so it works on a mobile or desktop device.</li>
+<li>Move the <code>&lt;div class=&quot;current&quot;&gt;</code> element</li>
+</ul>
+<h3>What you need to know</h3>
+<p>We need to listen to when a user drags and update the <code>&lt;div class=&quot;current&quot;&gt;</code> element’s
+horizontal position to match how far the user has dragged.</p>
+<ul>
+<li>To update an element’s horizontal position with <a href="../../can-stache.html" title="Live binding templates.">can-stache</a> you can set the <code>element.style.left</code>
+property like:
+<pre><code class="language-HTML">&lt;div class=&quot;current&quot; style=&quot;left: {{ howFarWeHaveMoved }}px&quot;&gt;
+</code></pre></li>
+</ul>
+<p>The remaining problem is how to get a <code>howFarWeHaveMoved</code> property to update
+as the user creates a drag motion.</p>
+<ul>
+<li><p>Define a number property on the component <code>props</code> with:</p>
+<pre><code class="language-js">static props = {
+  // ...
+  howFarWeHaveMoved: Number
+};
+</code></pre></li>
+<li><p>A drag motion needs to be captured just not on the element itself, but on the
+entire <code>document</code>, we will setup the event binding in the <a href="../../can-stache-element/lifecycle-hooks.connected.html" title="A lifecycle hook called after the element is inserted into the document.">connected</a> hook of the component as follows:</p>
+<pre><code class="language-js">  class SomeElement extends StacheElement {
+    ...
+    connected() {
+      let current = el.querySelector(&quot;.current&quot;);
+    }
+  }
+</code></pre></li>
+<li><p>Desktop browsers dispatch mouse events. Mobile browsers dispatch touch events.
+<em>Most</em> desktop and dispatch <a href="https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events">Pointer events</a>.</p>
+<p>You can listen to pointer events with <a href="../../can-event-queue/map/map.listenTo.html" title="Listen to an event and register the binding for simplified unbinding.">listenTo</a> inside <code>connected</code> like:</p>
+<pre><code class="language-js">this.listenTo(current, &quot;pointerdown&quot;, (event) =&gt; { /* ... */ })
+</code></pre>
+<p>Drag motions on images in desktop browsers will attempt to drag the image unless
+this behavior is turned off.  It can be turned off with <code>draggable=&quot;false&quot;</code> like:</p>
+<pre><code class="language-html">&lt;img draggable=&quot;false&quot;&gt;
+</code></pre></li>
+<li><p>Pointer events dispatch with an <code>event</code> object that contains the position of
+the mouse or finger:</p>
+<pre><code class="language-js">this.listenTo(current, &quot;pointerdown&quot;, (event) =&gt; {
+  event.clientX //-&gt; 200
+});
+</code></pre>
+<p>On a pointerdown, this will be where the drag motion starts. Listen to
+<code>pointermove</code> to be notified as the user moves their mouse or finger.</p></li>
+<li><p>Listen to <code>pointermove</code> on the <code>document</code> instead of the dragged item to
+better tollerate drag motions that extend outside the dragged item.</p>
+<pre><code class="language-js">this.listenTo(document, &quot;pointermove&quot;, (event) =&gt; {
+
+});
+</code></pre>
+<p>The difference between <code>pointermove</code>’s position and <code>pointerdown</code>’s
+position is how far the current profile <code>&lt;div&gt;</code> should be moved.</p></li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class EvilTinder extends StacheElement {
+  static view = `
+    &lt;div class=&quot;header&quot;&gt;&lt;/div&gt;
+
+    &lt;div class=&quot;images&quot;&gt;
+      &lt;div class=&quot;current&quot; style=&quot;left: {{ this.howFarWeHaveMoved }}px&quot;&gt;
+        &lt;img 
+          src=&quot;{{ this.currentProfile.img }}&quot;
+          draggable=&quot;false&quot;
+        &gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;next&quot;&gt;
+        &lt;img src=&quot;{{ this.nextProfile.img }}&quot;&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;footer&quot;&gt;
+      &lt;button class=&quot;dissBtn&quot;
+              on:click=&quot;this.nope()&quot;&gt;Dislike&lt;/button&gt;
+      &lt;button class=&quot;likeBtn&quot;
+              on:click=&quot;this.like()&quot;&gt;Like&lt;/button&gt;
+    &lt;/div&gt;
+  `;
+
+  static props = {
+    profiles: {
+      get default() {
+        return new ObservableArray([
+          { name: &quot;gru&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454685-5cab196e-5eaf-11e8-87ac-4af6792994ed.jpg&quot; },
+          { name: &quot;hannibal&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454705-6bf4d3d8-5eaf-11e8-9562-2bd178485527.jpg&quot; },
+          { name: &quot;joker&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454830-e71178dc-5eaf-11e8-80ee-efd64911e35f.png&quot; },
+          { name: &quot;darth&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454681-59cffdb8-5eaf-11e8-94ac-4849ab08d90c.jpg&quot; },
+          { name: &quot;norman&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454709-6fecc536-5eaf-11e8-9eb5-3da39730adc4.jpg&quot; },
+          { name: &quot;stapuft&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454711-72b19d78-5eaf-11e8-9732-80155ff8bb52.jpg&quot; },
+          { name: &quot;dalek&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454672-566b4984-5eaf-11e8-808d-cb5afd445e89.jpg&quot; },
+          { name: &quot;wickedwitch&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454720-7c3d984c-5eaf-11e8-9fa7-f68ddd33e3f0.jpg&quot; },
+          { name: &quot;zod&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454722-802ef694-5eaf-11e8-8964-ca648368720d.jpg&quot; },
+          { name: &quot;venom&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454716-76bef438-5eaf-11e8-9d29-5002260e96e1.jpg&quot; }
+        ]);
+      }
+    },
+
+    howFarWeHaveMoved: Number,
+
+    get currentProfile() {
+      return this.profiles[0];
+    },
+
+    get nextProfile() {
+      return this.profiles[1];
+    }
+  };
+
+  like() {
+    console.log(&quot;LIKED&quot;);
+    this.profiles.shift();
+  }
+
+  nope() {
+    console.log(&quot;NOPED&quot;);
+    this.profiles.shift();
+  }
+
+  connected() {
+    let current = this.querySelector(&quot;.current&quot;);
+    let startingX;
+
+    this.listenTo(current, &quot;pointerdown&quot;, event =&gt; {
+      startingX = event.clientX;
+
+      this.listenTo(document, &quot;pointermove&quot;, event =&gt; {
+        this.howFarWeHaveMoved = event.clientX - startingX;
+      });
+    });
+  }
+}
+
+customElements.define(&quot;evil-tinder&quot;, EvilTinder);
+
+</code></pre>
+<div line-highlight='8-13,45,66-77,only'></div>
+<h2>Show liking animation when you drag to the right</h2>
+<h3>The problem</h3>
+<p>In this section, we will:</p>
+<ul>
+<li>Show a like &quot;stamp&quot; when the user has dragged the current profile to the right 100 pixels.</li>
+<li>The like stamp will appear when an element like <code>&lt;div class=&quot;result&quot;&gt;</code> has <code>liking</code>
+added to its class list.</li>
+</ul>
+<h3>What you need to know</h3>
+<ul>
+<li>Use <a href="../../can-stache.helpers.if.html" title="can-stache.helpers.if">if</a> to test if a value is truthy and add a value to an element’s class list like:
+<pre><code class="language-html">&lt;div class=&quot;result {{# if(liking) }}liking{{/ if}}&quot;&gt;
+</code></pre></li>
+<li>Use a <a href="../../can-observable-object/define/get.html" title="Specify what happens when a certain property is read on an object. get functions
+are computed and automatically update themselves when a dependent
+observable value is changed.">getter</a> to derive a value from another value:
+<pre><code class="language-js">get liking() {
+  return this.howFarWeHaveMoved &gt;= 100;
+},
+</code></pre></li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class EvilTinder extends StacheElement {
+  static view = `
+    &lt;div class=&quot;header&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;result {{# if(this.liking) }}liking{{/ if }}&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;images&quot;&gt;
+      &lt;div class=&quot;current&quot; style=&quot;left: {{ this.howFarWeHaveMoved }}px&quot;&gt;
+        &lt;img 
+          src=&quot;{{ this.currentProfile.img }}&quot;
+          draggable=&quot;false&quot;
+        &gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;next&quot;&gt;
+        &lt;img src=&quot;{{ this.nextProfile.img }}&quot;/&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;footer&quot;&gt;
+      &lt;button class=&quot;dissBtn&quot;
+              on:click=&quot;this.nope()&quot;&gt;Dislike&lt;/button&gt;
+      &lt;button class=&quot;likeBtn&quot;
+              on:click=&quot;this.like()&quot;&gt;Like&lt;/button&gt;
+    &lt;/div&gt;
+  `;
+
+  static props = {
+    profiles: {
+      get default() {
+        return new ObservableArray([
+          { name: &quot;gru&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454685-5cab196e-5eaf-11e8-87ac-4af6792994ed.jpg&quot; },
+          { name: &quot;hannibal&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454705-6bf4d3d8-5eaf-11e8-9562-2bd178485527.jpg&quot; },
+          { name: &quot;joker&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454830-e71178dc-5eaf-11e8-80ee-efd64911e35f.png&quot; },
+          { name: &quot;darth&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454681-59cffdb8-5eaf-11e8-94ac-4849ab08d90c.jpg&quot; },
+          { name: &quot;norman&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454709-6fecc536-5eaf-11e8-9eb5-3da39730adc4.jpg&quot; },
+          { name: &quot;stapuft&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454711-72b19d78-5eaf-11e8-9732-80155ff8bb52.jpg&quot; },
+          { name: &quot;dalek&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454672-566b4984-5eaf-11e8-808d-cb5afd445e89.jpg&quot; },
+          { name: &quot;wickedwitch&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454720-7c3d984c-5eaf-11e8-9fa7-f68ddd33e3f0.jpg&quot; },
+          { name: &quot;zod&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454722-802ef694-5eaf-11e8-8964-ca648368720d.jpg&quot; },
+          { name: &quot;venom&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454716-76bef438-5eaf-11e8-9d29-5002260e96e1.jpg&quot; }
+        ]);
+      }
+    },
+
+    howFarWeHaveMoved: Number,
+
+    get currentProfile() {
+      return this.profiles[0];
+    },
+
+    get nextProfile() {
+      return this.profiles[1];
+    },
+
+    get liking() {
+      return this.howFarWeHaveMoved &gt;= 100;
+    }
+  };
+
+  like() {
+    console.log(&quot;LIKED&quot;);
+    this.profiles.shift();
+  }
+
+  nope() {
+    console.log(&quot;NOPED&quot;);
+    this.profiles.shift();
+  }
+
+  connected() {
+    let current = this.querySelector(&quot;.current&quot;);
+    let startingX;
+
+    this.listenTo(current, &quot;pointerdown&quot;, event =&gt; {
+      startingX = event.clientX;
+
+      this.listenTo(document, &quot;pointermove&quot;, event =&gt; {
+        this.howFarWeHaveMoved = event.clientX - startingX;
+      });
+    });
+  }
+}
+
+customElements.define(&quot;evil-tinder&quot;, EvilTinder);
+
+</code></pre>
+<div line-highlight='6,55-57,only'></div>
+<h2>Show noping animation when you drag to the left</h2>
+<h3>The problem</h3>
+<ul>
+<li>Show a nope &quot;stamp&quot; when the user has dragged the current profile to the left 100 pixels.</li>
+<li>The nope stamp will appear when an element like <code>&lt;div class=&quot;result&quot;&gt;</code> has <code>noping</code>
+added to its class list.</li>
+</ul>
+<h3>What you need to know</h3>
+<p>You know everything you need to know!</p>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class EvilTinder extends StacheElement {
+  static view = `
+    &lt;div class=&quot;header&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;result {{# if(this.liking) }}liking{{/ if }}
+                       {{# if(this.noping) }}noping{{/ if }}&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;images&quot;&gt;
+      &lt;div class=&quot;current&quot; style=&quot;left: {{ this.howFarWeHaveMoved }}px&quot;&gt;
+        &lt;img 
+          src=&quot;{{ this.currentProfile.img }}&quot;
+          draggable=&quot;false&quot;
+        &gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;next&quot;&gt;
+        &lt;img src=&quot;{{ this.nextProfile.img }}&quot;/&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;footer&quot;&gt;
+      &lt;button class=&quot;dissBtn&quot;
+              on:click=&quot;this.nope()&quot;&gt;Dislike&lt;/button&gt;
+      &lt;button class=&quot;likeBtn&quot;
+              on:click=&quot;this.like()&quot;&gt;Like&lt;/button&gt;
+    &lt;/div&gt;
+  `;
+
+  static props = {
+    profiles: {
+      get default() {
+        return new ObservableArray([
+          { name: &quot;gru&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454685-5cab196e-5eaf-11e8-87ac-4af6792994ed.jpg&quot; },
+          { name: &quot;hannibal&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454705-6bf4d3d8-5eaf-11e8-9562-2bd178485527.jpg&quot; },
+          { name: &quot;joker&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454830-e71178dc-5eaf-11e8-80ee-efd64911e35f.png&quot; },
+          { name: &quot;darth&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454681-59cffdb8-5eaf-11e8-94ac-4849ab08d90c.jpg&quot; },
+          { name: &quot;norman&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454709-6fecc536-5eaf-11e8-9eb5-3da39730adc4.jpg&quot; },
+          { name: &quot;stapuft&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454711-72b19d78-5eaf-11e8-9732-80155ff8bb52.jpg&quot; },
+          { name: &quot;dalek&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454672-566b4984-5eaf-11e8-808d-cb5afd445e89.jpg&quot; },
+          { name: &quot;wickedwitch&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454720-7c3d984c-5eaf-11e8-9fa7-f68ddd33e3f0.jpg&quot; },
+          { name: &quot;zod&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454722-802ef694-5eaf-11e8-8964-ca648368720d.jpg&quot; },
+          { name: &quot;venom&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454716-76bef438-5eaf-11e8-9d29-5002260e96e1.jpg&quot; }
+        ]);
+      }
+    },
+
+    howFarWeHaveMoved: Number,
+
+    get currentProfile() {
+      return this.profiles[0];
+    },
+
+    get nextProfile() {
+      return this.profiles[1];
+    },
+
+    get liking() {
+      return this.howFarWeHaveMoved &gt;= 100;
+    },
+    
+    get noping() {
+      return this.howFarWeHaveMoved &lt;= -100;
+    }
+  };
+
+  like() {
+    console.log(&quot;LIKED&quot;);
+    this.profiles.shift();
+  }
+
+  nope() {
+    console.log(&quot;NOPED&quot;);
+    this.profiles.shift();
+  }
+
+  connected() {
+    let current = this.querySelector(&quot;.current&quot;);
+    let startingX;
+
+    this.listenTo(current, &quot;pointerdown&quot;, event =&gt; {
+      startingX = event.clientX;
+
+      this.listenTo(document, &quot;pointermove&quot;, event =&gt; {
+        this.howFarWeHaveMoved = event.clientX - startingX;
+      });
+    });
+  }
+}
+
+customElements.define(&quot;evil-tinder&quot;, EvilTinder);
+
+</code></pre>
+<div line-highlight='6-7,60-62,only'></div>
+<h2>On release, like or nope</h2>
+<h3>The problem</h3>
+<p>In this section, we will perform one of the following when the user completes their
+drag motion:</p>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/log">console.log</a> <code>like</code> and move to the next profile if the drag motion has moved at least 100 pixels to the right</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Console/log">console.log</a> <code>nope</code> and move to the next profile if the drag motion has moved at least 100 pixels to the left</li>
+<li>do nothing if the drag motion did not move 100 pixels horizontally</li>
+</ul>
+<p>And, we will perform the following no matter what state the drag motion ends:</p>
+<ul>
+<li>Reset the state of the application so it can accept further drag motions and the
+new profile image is centered horizontally.</li>
+</ul>
+<h3>What you need to know</h3>
+<ul>
+<li><p>Listen to <code>pointerup</code> to know when the user completes their drag motion:</p>
+<pre><code class="language-js">this.listenTo(document, &quot;pointerup&quot;, (event) =&gt; { });
+</code></pre></li>
+<li><p>To stopListening to the <code>pointermove</code> and <code>pointerup</code> events on the document with:</p>
+<pre><code class="language-js">this.stopListening(document);
+</code></pre></li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class EvilTinder extends StacheElement {
+  static view = `
+    &lt;div class=&quot;header&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;result {{# if(this.liking) }}liking{{/ if }}
+                       {{# if(this.noping) }}noping{{/ if }}&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;images&quot;&gt;
+      &lt;div class=&quot;current&quot; style=&quot;left: {{ this.howFarWeHaveMoved }}px&quot;&gt;
+        &lt;img 
+          src=&quot;{{ this.currentProfile.img }}&quot;
+          draggable=&quot;false&quot;
+        &gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;next&quot;&gt;
+        &lt;img src=&quot;{{ this.nextProfile.img }}&quot;/&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;footer&quot;&gt;
+      &lt;button class=&quot;dissBtn&quot;
+              on:click=&quot;this.nope()&quot;&gt;Dislike&lt;/button&gt;
+      &lt;button class=&quot;likeBtn&quot;
+              on:click=&quot;this.like()&quot;&gt;Like&lt;/button&gt;
+    &lt;/div&gt;
+  `;
+
+  static props = {
+    profiles: {
+      get default() {
+        return new ObservableArray([
+          { name: &quot;gru&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454685-5cab196e-5eaf-11e8-87ac-4af6792994ed.jpg&quot; },
+          { name: &quot;hannibal&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454705-6bf4d3d8-5eaf-11e8-9562-2bd178485527.jpg&quot; },
+          { name: &quot;joker&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454830-e71178dc-5eaf-11e8-80ee-efd64911e35f.png&quot; },
+          { name: &quot;darth&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454681-59cffdb8-5eaf-11e8-94ac-4849ab08d90c.jpg&quot; },
+          { name: &quot;norman&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454709-6fecc536-5eaf-11e8-9eb5-3da39730adc4.jpg&quot; },
+          { name: &quot;stapuft&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454711-72b19d78-5eaf-11e8-9732-80155ff8bb52.jpg&quot; },
+          { name: &quot;dalek&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454672-566b4984-5eaf-11e8-808d-cb5afd445e89.jpg&quot; },
+          { name: &quot;wickedwitch&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454720-7c3d984c-5eaf-11e8-9fa7-f68ddd33e3f0.jpg&quot; },
+          { name: &quot;zod&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454722-802ef694-5eaf-11e8-8964-ca648368720d.jpg&quot; },
+          { name: &quot;venom&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454716-76bef438-5eaf-11e8-9d29-5002260e96e1.jpg&quot; }
+        ]);
+      }
+    },
+
+    howFarWeHaveMoved: Number,
+
+    get currentProfile() {
+      return this.profiles[0];
+    },
+
+    get nextProfile() {
+      return this.profiles[1];
+    },
+
+    get liking() {
+      return this.howFarWeHaveMoved &gt;= 100;
+    },
+    
+    get noping() {
+      return this.howFarWeHaveMoved &lt;= -100;
+    }
+  };
+
+  like() {
+    console.log(&quot;LIKED&quot;);
+    this.profiles.shift();
+  }
+
+  nope() {
+    console.log(&quot;NOPED&quot;);
+    this.profiles.shift();
+  }
+
+  connected() {
+    let current = this.querySelector(&quot;.current&quot;);
+    let startingX;
+
+    this.listenTo(current, &quot;pointerdown&quot;, event =&gt; {
+      startingX = event.clientX;
+
+      this.listenTo(document, &quot;pointermove&quot;, event =&gt; {
+        this.howFarWeHaveMoved = event.clientX - startingX;
+      });
+      
+      this.listenTo(document, &quot;pointerup&quot;, event =&gt; {
+        this.howFarWeHaveMoved = event.clientX - startingX;
+
+        if (this.liking) {
+          this.like();
+        } else if (this.noping) {
+          this.nope();
+        }
+
+        this.howFarWeHaveMoved = 0;
+        this.stopListening(document);
+      });
+    });
+  }
+}
+
+customElements.define(&quot;evil-tinder&quot;, EvilTinder);
+
+</code></pre>
+<div line-highlight='86-97,only'></div>
+<h2>Add an empty profile</h2>
+<h3>The problem</h3>
+<p>In this section, we will:</p>
+<ul>
+<li>Show the following stop sign URL when the user runs out of profiles:
+<code>https://stickwix.com/wp-content/uploads/2016/12/Stop-Sign-NH.jpg</code>.</li>
+</ul>
+<h3>What you need to know</h3>
+<ul>
+<li><p>Use <a href="../../can-observable-object/define/get-default.html" title="Returns the default value for instances of the defined type.  The default value is defined on demand, when the property is read for the first time.">get default()</a> to create a default property value:</p>
+<pre><code class="language-js">emptyProfile: {
+  get default() {
+    return { img: &quot;https://stickwix.com/wp-content/uploads/2016/12/Stop-Sign-NH.jpg&quot; };
+  }
+},
+</code></pre></li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class EvilTinder extends StacheElement {
+  static view = `
+    &lt;div class=&quot;header&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;result {{# if(this.liking) }}liking{{/ if }}
+                       {{# if(this.noping) }}noping{{/ if }}&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;images&quot;&gt;
+      &lt;div class=&quot;current&quot; style=&quot;left: {{ this.howFarWeHaveMoved }}px&quot;&gt;
+        &lt;img 
+          src=&quot;{{ this.currentProfile.img }}&quot;
+          draggable=&quot;false&quot;
+        &gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;next&quot;&gt;
+        &lt;img src=&quot;{{ this.nextProfile.img }}&quot;/&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;footer&quot;&gt;
+      &lt;button class=&quot;dissBtn&quot;
+              on:click=&quot;this.nope()&quot;&gt;Dislike&lt;/button&gt;
+      &lt;button class=&quot;likeBtn&quot;
+              on:click=&quot;this.like()&quot;&gt;Like&lt;/button&gt;
+    &lt;/div&gt;
+  `;
+
+  static props = {
+    profiles: {
+      get default() {
+        return new ObservableArray([
+          { name: &quot;gru&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454685-5cab196e-5eaf-11e8-87ac-4af6792994ed.jpg&quot; },
+          { name: &quot;hannibal&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454705-6bf4d3d8-5eaf-11e8-9562-2bd178485527.jpg&quot; },
+          { name: &quot;joker&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454830-e71178dc-5eaf-11e8-80ee-efd64911e35f.png&quot; },
+          { name: &quot;darth&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454681-59cffdb8-5eaf-11e8-94ac-4849ab08d90c.jpg&quot; },
+          { name: &quot;norman&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454709-6fecc536-5eaf-11e8-9eb5-3da39730adc4.jpg&quot; },
+          { name: &quot;stapuft&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454711-72b19d78-5eaf-11e8-9732-80155ff8bb52.jpg&quot; },
+          { name: &quot;dalek&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454672-566b4984-5eaf-11e8-808d-cb5afd445e89.jpg&quot; },
+          { name: &quot;wickedwitch&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454720-7c3d984c-5eaf-11e8-9fa7-f68ddd33e3f0.jpg&quot; },
+          { name: &quot;zod&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454722-802ef694-5eaf-11e8-8964-ca648368720d.jpg&quot; },
+          { name: &quot;venom&quot;, img: &quot;https://user-images.githubusercontent.com/78602/40454716-76bef438-5eaf-11e8-9d29-5002260e96e1.jpg&quot; }
+        ]);
+      }
+    },
+
+    howFarWeHaveMoved: Number,
+
+    emptyProfile: {
+      get default() {
+        return {
+          img: &quot;https://stickwix.com/wp-content/uploads/2016/12/Stop-Sign-NH.jpg&quot;
+        };
+      }
+    },
+
+    get currentProfile() {
+      return this.profiles[0] || this.emptyProfile;
+    },
+
+    get nextProfile() {
+      return this.profiles[1] || this.emptyProfile;
+    },
+
+    get liking() {
+      return this.howFarWeHaveMoved &gt;= 100;
+    },
+    
+    get noping() {
+      return this.howFarWeHaveMoved &lt;= -100;
+    }
+  };
+
+  like() {
+    console.log(&quot;LIKED&quot;);
+    this.profiles.shift();
+  }
+
+  nope() {
+    console.log(&quot;NOPED&quot;);
+    this.profiles.shift();
+  }
+
+  connected() {
+    let current = this.querySelector(&quot;.current&quot;);
+    let startingX;
+
+    this.listenTo(current, &quot;pointerdown&quot;, event =&gt; {
+      startingX = event.clientX;
+
+      this.listenTo(document, &quot;pointermove&quot;, event =&gt; {
+        this.howFarWeHaveMoved = event.clientX - startingX;
+      });
+      
+      this.listenTo(document, &quot;pointerup&quot;, event =&gt; {
+        this.howFarWeHaveMoved = event.clientX - startingX;
+
+        if (this.liking) {
+          this.like();
+        } else if (this.noping) {
+          this.nope();
+        }
+
+        this.howFarWeHaveMoved = 0;
+        this.stopListening(document);
+      });
+    });
+  }
+}
+
+customElements.define(&quot;evil-tinder&quot;, EvilTinder);
+
+</code></pre>
+<div line-highlight='48-54,57,61,only'></div>
+<h2>Result</h2>
+<p>When finished, you should see something like the following CodePen:</p>
+<p class="codepen" data-height="536" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="QWLmPXo" style="height: 536px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6 Tinder-Like Carousel">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/QWLmPXo/">
+  CanJS 6 Tinder-Like Carousel</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/commitment/recipes/tinder-like-carousel/Tinder-Like-Carousel.md"},"description":"This intermediate guide walks you through building a [Tinder](https://tinder.com/)-like carousel. Learn how to build apps that use dragging user interactions.\n\n","name":"guides/recipes/tinder-carousel","title":"Tinder Carousel","type":"page","parent":"guides/recipes/intermediate","comment":" ","pathToRoot":"../../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix="../.."></div>
+
+	</body>
+</html>

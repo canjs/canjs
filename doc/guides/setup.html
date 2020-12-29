@@ -1,0 +1,2118 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/setup/setting-up-canjs.md
+	@page guides/setup
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Setting Up CanJS | getting started | Guides | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="Learn how to install CanJS in your environment.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Learn how to install CanJS in your environment.">
+	<meta property="og:title" content="Setting Up CanJS | getting started | Guides | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "Learn how to install CanJS in your environment.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Setting Up CanJS | getting started | Guides | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/setup" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>getting started</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="crud-beginner.html"
+							title="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+							CRUD Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="setup.html"
+							title="Learn how to install CanJS in your environment.">
+							Setting Up CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="technology-overview.html"
+							title="Learn the basics of CanJS’s technology.">
+							Technology Overview
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>topics</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="html.html"
+							title="Learn how to update HTML and listen to user interactions.">
+							HTML
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="routing.html"
+							title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+							Routing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="data.html"
+							title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">
+							Service Layer
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="debugging.html"
+							title="Learn how to debug CanJS applications.">
+							Debugging
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="forms.html"
+							title="Learn how to create amazing &lt;form&gt;s with CanJS.">
+							Forms
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="testing.html"
+							title="Learn how to test CanJS applications.">
+							Testing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="logic.html"
+							title="Learn how to write observables in an organized, maintainable, and testable way.">
+							Logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="server-side-rendering.html"
+							title="Learn how to set up SSR for CanJS.">
+							Server-Side Rendering
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>app guides</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="chat.html"
+							title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+							Chat Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="todomvc.html"
+							title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+							TodoMVC Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/todomvc-with-steal.html"
+							title="This tutorial walks through building TodoMVC with StealJS. It includes KeyNote presentations covering CanJS core libraries.">
+							TodoMVC with StealJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>beginner recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/canvas-clock.html"
+							title="This beginner guide walks you through building a clock with the Canvas API.">
+							Canvas Clock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-simple.html"
+							title="This beginner guide walks through building a very simple credit card payment form.  It uses Stripe.js v2 API to create a token which can be used to create a charge.  It also performs simple validation on the payment form values.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-simple.html"
+							title="This beginner guide walks you through building a simple file navigation widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.0.0. Check out the file-navigator-advanced for an example that makes AJAX requests for its data and uses can-stache-element.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/signup-simple.html"
+							title="This beginner guide walks through building simple signup, login forms and a logout button.">
+							Signup and Login
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/video-player.html"
+							title="This beginner guide walks you through building custom video controls around a video element.">
+							Video Player
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/weather-report-simple.html"
+							title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.2.">
+							Weather Report
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>intermediate recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/cta-bus-map.html"
+							title="This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map. You&#x27;ll learn how to create a StacheElement that integrates with 3rd party widgets.">
+							CTA Bus Map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/modals.html"
+							title="This intermediate guide shows how to create a multiple modal form.">
+							Multiple Modals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/text-editor.html"
+							title="This intermediate guide walks you through building a basic rich text editor.">
+							Text Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/tinder-carousel.html"
+							title="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+							Tinder Carousel
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>advanced recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-advanced.html"
+							title="This advanced guide walks through building a simple credit card payment form with validations. It doesn’t use can-define. Instead it uses Kefir.js streams to make a ViewModel. can-kefir is used to make the Kefir streams observable to can-stache.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-advanced.html"
+							title="This advanced guide walks you through building a file navigation widget that requests data with fetch. It takes about 45 minutes to complete.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/playlist-editor.html"
+							title="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+							Playlist Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/search-list-details.html"
+							title="This advanced guide walks through building a Search, List, Details flow with lazy-loaded routes.">
+							Search, List, Details
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>upgrade</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-3.html"
+							title="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+							Migrating to CanJS 3
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-4.html"
+							title="This guide walks you through the step-by-step process to upgrade a 3.x app to CanJS 4.">
+							Migrating to CanJS 4
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-5.html"
+							title="This guide walks you through the process to upgrade a 4.x app to CanJS 5.x.">
+							Migrating to CanJS 5
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-6.html"
+							title="This guide walks you through the process to upgrade a 5.x app to CanJS 6.x.">
+							Migrating to CanJS 6
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="upgrade/using-codemods.html"
+							title="Learn how to migrate your app to CanJS 6 using can-migrate.">
+							Using Codemods
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>other</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="api.html"
+							title="This page walks through how to use and understand CanJS’s API documentation.">
+							Reading the API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Setting Up CanJS</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/setup/setting-up-canjs.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Learn how to install CanJS in your environment.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <style>
+span[title] {
+    color: green;
+    cursor: pointer;
+}
+</style>
+<h2>Choosing the right environment</h2>
+<p>CanJS has a variety of packages, modules, and files ready to meet the needs of any development environment. This section is for people who aren’t sure what they
+want. The following lists common scenarios and provides links to
+the guide(s) that most closely satisfy that scenario.</p>
+<ul>
+<li>I just want to play, make a demo, or learn CanJS right now! 👉 Use the <a href="#ImportingthecoreESmodulebundle">ES module bundle</a> or an <a href="#OnlineCodeEditors">online code editor</a>.</li>
+<li>I use webpack 👉 <a href="#webpack">webpack</a></li>
+<li>I use StealJS 👉 <a href="#StealJS">StealJS</a></li>
+<li>I use Browserify 👉 <a href="#Browserify">Browserify</a></li>
+<li>I want server-side rendering, progressive loading, continuous integration, testing,
+and a whole lot more 👉 <a href="#DoneJS">DoneJS</a></li>
+<li>I want to maximize long term flexibility 👉 <a href="#Installingindividualpackages">Importing individual packages</a></li>
+</ul>
+<p>If this page doesn't have what you need, please
+ask on the <a href="https://forums.bitovi.com/c/canjs">forums</a> or
+<a href="https://www.bitovi.com/community/slack">Slack</a> (<a href="https://bitovi-community.slack.com/messages/CFC22NZ8A">#canjs channel</a>).</p>
+<h2>Explanation of different builds</h2>
+<p>CanJS has a variety of packages, modules, and files ready to meet the needs of
+any development environment. This section gives technical details on these items.</p>
+<ul>
+<li><p><strong>The individual packages.</strong></p>
+<p>CanJS is composed from over 80 individual packages.  For example <a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">StacheElement</a>
+is actually the <a href="https://www.npmjs.com/package/can-stache-element">can-stache-element</a> package, housed
+in its own <a href="https://github.com/canjs/can-stache-element">GitHub repository</a>. The modules within
+these packages are written in ES5 JavaScript and CommonJS, so they can be imported by <a href="https://webpack.js.org/">webpack</a>, <a href="http://browserify.org/">Browserify</a>, <a href="https://stealjs.com/">StealJS</a>, and a do not require transpiling.</p>
+<p>Apps that need long-term flexibility should install these packages directly. Direct installation
+means you can upgrade a small part of CanJS when needed.</p></li>
+<li><p><strong>The <code>can</code> package</strong></p>
+<p>CanJS publishes a
+<a href="https://www.npmjs.com/package/can">can package</a> to <a href="https://www.npmjs.com/">npm</a>. It contains:</p>
+<ul>
+<li><p><code>./can.js</code> - The main export, imports every CanJS subproject and exports it as
+a ES named export. For example, <code>can.js</code> looks like this:</p>
+<pre><code class="language-js">export { default as StacheElement } from &quot;can-stache-element&quot;;
+export { default as restModel } from &quot;can-rest-model&quot;;
+// ...
+</code></pre>
+<p>Most module loaders setups with tree-shaking (ex: webpack 2 and StealJS 2)
+use this module. Import named exports from the <code>can</code> package like this:</p>
+<pre><code class="language-js">import { StacheElement, restModel } from &quot;can&quot;;
+</code></pre></li>
+<li><p><code>./core.mjs</code> - An ESM module with the named exports of each <a href="../can-core.html" title="The best, most hardened and generally useful libraries in CanJS.">Core</a> package bundled
+together in a single file. This is useful for examples and prototyping in modern browsers that
+support ES modules and for real-world apps that use just what is in core CanJS.
+It's hosted statically on <code>unpkg</code> and can be downloaded <a href="https://unpkg.com/can@6/core.mjs">here</a>.</p>
+<p>You can import directly from the file as follows:</p>
+<pre><code class="language-html">&lt;script type=&quot;module&quot;&gt;
+import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class MyApp extends StacheElement {
+  static view = `Hello {{ this.name }}!`;
+
+  static props = {
+    name: &quot;world&quot;
+  };
+}
+
+customElements.define(&quot;my-app&quot;, MyApp);
+&lt;/script&gt;
+</code></pre></li>
+<li><p><code>./core.min.mjs</code> - A minified version of <code>./core.mjs</code>.</p></li>
+<li><p><code>./dist/global/core.js</code> - A JavaScript file that exports a <code>can</code> object with
+core named exports on it. Use this if you want to create a demo or example that will
+work in browsers that do not support ESM.</p></li>
+<li><p><code>./everything.mjs</code> - An ESM module with named exports of every<span title="can-zone and ylem are not included">٭</span> package bundled
+together. This is useful for examples and prototyping in modern browsers that
+support ES modules. It's hosted statically on <code>unpkg</code> and can be
+downloaded here.</p>
+<p>You can import directly from the file as follows:</p>
+<pre><code class="language-html">&lt;script type=&quot;module&quot;&gt;
+  import { StacheElement } from &quot;//unpkg.com/can@6/everything.mjs&quot;;
+
+  class MyApp extends StacheElement {
+    static view = `Hello {{ this.name }}!`;
+    static props = {
+      name: &quot;world&quot;
+    };
+  }
+
+  customElements.define(&quot;my-app&quot;, MyApp);
+&lt;/script&gt;
+</code></pre>
+<p>This file is large as it includes nearly every extension to
+CanJS. Using this module in production, without tree-shaking, is
+not advised!</p></li>
+<li><p><code>./everything.min.mjs</code> - A minified version of <code>./everything.mjs</code>.</p></li>
+<li><p><code>./dist/global/everything.js</code> - A JavaScript file that exports a <code>can</code> object with
+every<span title="can-zone and ylem are not included">٭</span> named export. Use this if you want to create a demo or example that will
+work in browsers that do not support ESM.</p></li>
+</ul></li>
+</ul>
+<h2>Hosted setup options (no download needed)</h2>
+<p>The following sections show setting up CanJS with scripts hosted online. These are
+the easiest ways of setting up CanJS for experimentation.</p>
+<h3>Importing the core ES module bundle</h3>
+<p>The easiest way to get started with CanJS is to <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import">import</a>
+the bundled ES module from <a href="https://unpkg.com/">unpkg</a>. This is perfect for
+demos, examples, or even small apps!</p>
+<p>The following <code>HTML</code> page imports CanJS and uses it to define a custom element:</p>
+<pre><code class="language-html">&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;CanJS + Modules&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;my-app&gt;&lt;/my-app&gt;
+
+    &lt;script type=&quot;module&quot;&gt;
+    import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+    class MyApp extends StacheElement {
+      static view = `CanJS {{ this.feels }} modules`;
+      static props = {
+        feels: &quot;😍&quot;
+      };
+    }
+
+    customElements.define(&quot;my-app&quot;, MyApp);
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>The previous example works in all modern browsers, even Edge! If you want to support
+older browsers, use the <a href="#IncludingthecoreJavaScriptbundle">traditional JavaScript bundle</a> or one of the module loader setups (webpack, StealJS).</p>
+<p>This build only includes CanJS’s <a href="../can-core.html" title="The best, most hardened and generally useful libraries in CanJS.">Core</a> and <a href="../can-infrastructure.html" title="Utility libraries that power the core and ecosystem collection.">Infrastructure</a> modules. All modules are exported as named exports. For example, if you want the <a href="../can-ajax.html" title="Make an asynchronous HTTP (AJAX) request.">can-ajax</a> infrastructure module, import it as follows:</p>
+<pre><code class="language-js">import { StacheElement, ajax } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class MyApp extends StacheElement {
+  static view = `
+      CanJS {{ this.feels }} modules.
+      The server says: {{ this.messagePromise.value }}
+  `;
+  static props = {
+    feels: &quot;😍&quot;,
+    get messagePromise() {
+      return ajax({ url: &quot;/message&quot; });
+    }
+  };
+}
+
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre>
+<div line-highlight='1'></div>
+<p>If you want an <a href="../can-ecosystem.html" title="Useful libraries that extend or add important features to the core collection.">Ecosystem</a> module like <a href="../can-stache-converters.html" title="Provides a set of converters useful for two-way binding with form elements such as &lt;input&gt; and &lt;select&gt;.">can-stache-converters</a>, you can use
+the <a href="#ImportingtheeverythingESmodulebundle">Everything ES module bundle</a>, but the everything bundle should not be used in production as it
+loads every module in CanJS.</p>
+<p><details>
+<summary>
+Minified core bundle
+</summary></p>
+<p>If you use the core ES module, make sure to switch to
+its minified version (<code>//unpkg.com/can@6/core.min.mjs</code>) in production like this:</p>
+<pre><code class="language-js">import { StacheElement, ajax } from &quot;//unpkg.com/can@6/core.min.mjs&quot;;
+
+class MyApp extends StacheElement {
+  static view = `
+      CanJS {{ this.feels }} modules.
+      The server says: {{ this.messagePromise.value }}
+  `;
+  static props = {
+    feels:  &quot;😍&quot;,
+    get messagePromise() {
+      return ajax({ url: &quot;/message&quot; });
+    }
+  };
+}
+
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre>
+<p><strong>NOTE:</strong> Every use of
+the unminified URL (<code>//unpkg.com/can@6/core.mjs</code>) must be updated to
+the minified version (<code>//unpkg.com/can@6/core.min.mjs</code>).</p>
+<p></details></p>
+<p><details>
+<summary>
+Importing multiple modules
+</summary></p>
+<p>The code that uses CanJS doesn't have to be within the <code>HTML</code> page itself. Instead you can import modules
+that import CanJS. The following shows putting components into their own modules:</p>
+<ul>
+<li><p><strong>index.html</strong></p>
+<pre><code class="language-html">&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;CanJS + Modules&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;my-app&gt;&lt;/my-app&gt;
+
+    &lt;script type=&quot;module&quot; src=&quot;./app.mjs&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre></li>
+<li><p><strong>app.mjs</strong></p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+import &quot;./my-greeting.mjs&quot;;
+import &quot;./my-counter.mjs&quot;;
+
+class MyApp extends StacheElement {
+  static view = `&lt;my-greeting/&gt;&lt;my-counter/&gt;`;
+  static props = {
+    feels: &quot;😍&quot;
+  };
+}
+
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre></li>
+<li><p><strong>my-greeting.mjs</strong></p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class MyGreeting extends StacheElement {
+  static view = `&lt;h1&gt;CanJS {{ this.feels }} modules&lt;/h1&gt;`;
+  static props = {
+    feels: &quot;😍&quot;
+  };
+}
+
+customElements.define(&quot;my-greetin&quot;, MyGreeting);
+</code></pre></li>
+<li><p><strong>my-counter.mjs</strong></p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class MyCounter extends StacheElement {
+  static view = `
+      Count: &lt;span&gt;{{ this.count }}&lt;/span&gt;
+      &lt;button on:click=&quot;this.increment()&quot;&gt;+1&lt;/button&gt;
+  `;
+  static props = {
+    count: 0
+  };
+  increment() {
+    this.count++;
+  }
+}
+
+customElements.define(&quot;my-counter&quot;, MyCounter);
+</code></pre></li>
+</ul>
+<p></details></p>
+<h3>Importing the everything ES module bundle</h3>
+<p>The <a href="#ImportingthecoreESmodulebundle">core ES module bundle</a> only includes CanJS’s
+<a href="../can-core.html" title="The best, most hardened and generally useful libraries in CanJS.">Core</a> modules.  This doesn't include <a href="../can-ecosystem.html" title="Useful libraries that extend or add important features to the core collection.">Ecosystem</a> modules like <a href="../can-stache-converters.html" title="Provides a set of converters useful for two-way binding with form elements such as &lt;input&gt; and &lt;select&gt;.">can-stache-converters</a>.  The
+everything bundle hosted at <code>https://unpkg.com/can@6/everything.mjs</code> includes every CanJS module (except for <code>can-zone</code> and <code>ylem</code>).</p>
+<p>The following shows importing and using <a href="../can-stache-converters.html" title="Provides a set of converters useful for two-way binding with form elements such as &lt;input&gt; and &lt;select&gt;.">can-stache-converters</a> from <code>everything.mjs</code>:</p>
+<pre><code class="language-html">&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;CanJS + Modules&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;my-app&gt;&lt;/my-app&gt;
+
+    &lt;script type=&quot;module&quot;&gt;
+    import { StacheElement, stache, stacheConverters, type } from &quot;//unpkg.com/can@6/everything.mjs&quot;;
+
+    stache.addConverter(stacheConverters);
+
+    class MyApp extends StacheElement {
+      static view = `
+          &lt;p&gt;Enter a value: &lt;input on:input:value:to=&quot;string-to-any(this.enteredValue)&quot;/&gt;&lt;/p&gt;
+          &lt;p&gt;You've typed a(n) {{ this.enteredType }}&lt;/p&gt;
+      `;
+      static props = {
+        enteredValue: type.Any,
+        get enteredType(){
+            return typeof this.enteredValue;
+        }
+      };
+    }
+
+    customElements.define(&quot;my-app&quot;, MyApp);
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>The everything bundle does not include:</p>
+<ul>
+<li>[can-zone] (https://github.com/canjs/can-zone)</li>
+<li><a href="https://github.com/bitovi/ylem">ylem</a></li>
+</ul>
+<h3>Online Code Editors</h3>
+<p>The following are CanJS examples in various online code editors.</p>
+<p><strong>Hello World</strong></p>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="bGGNgyx" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6.0 - Counter">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/bGGNgyx">
+  CanJS 6.0 - Counter</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<ul>
+<li><a href="https://codepen.io/bitovi/pen/bGGNgyx?editors=1000">CodePen</a></li>
+</ul>
+<p><strong>Routing Example</strong></p>
+<ul>
+<li><a href="https://codepen.io/bitovi/pen/drRodZ?editors=1000">CodePen</a></li>
+</ul>
+<p><strong>Model Example</strong></p>
+<ul>
+<li><a href="https://codepen.io/matthewp/pen/bGbxpRL?editors=1000">CodePen</a></li>
+</ul>
+<h2>StealJS</h2>
+<blockquote>
+<p>You can skip these instructions by
+<a href="https://github.com/canjs/stealjs-example/tree/can-6">cloning this example repo on GitHub</a>.</p>
+</blockquote>
+<p><a href="#Node_jsandnpm">After setting up Node.js and npm</a>, install <code>can</code> and <a href="https://stealjs.com">StealJS</a> from npm:</p>
+<pre><code class="language-bash">npm install can@6 steal@2 --save
+</code></pre>
+<p>Next, add the following <a href="https://stealjs.com/docs/StealJS.configuration.html">steal configuration</a>
+to your <code>package.json</code>:</p>
+<pre><code>{
+  &quot;name&quot;: &quot;my-canjs-app&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;description&quot;: &quot;&quot;,
+  &quot;main&quot;: &quot;index.js&quot;,
+  &quot;scripts&quot;: {
+    &quot;start&quot;: &quot;http-server -c-1&quot;,
+    &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;
+  },
+  &quot;steal&quot;: {
+    &quot;babelOptions&quot;: {
+      &quot;plugins&quot;: [&quot;transform-class-properties&quot;]
+    },
+    &quot;plugins&quot;: [&quot;can&quot;]
+  },
+  &quot;keywords&quot;: [],
+  &quot;author&quot;: &quot;&quot;,
+  &quot;license&quot;: &quot;ISC&quot;,
+  &quot;dependencies&quot;: {
+    &quot;can&quot;: &quot;^6.0.0&quot;,
+    &quot;steal&quot;: &quot;^2.0.0&quot;
+  },
+  &quot;devDependencies&quot;: {
+    &quot;http-server&quot;: &quot;^0.11.0&quot;
+  }
+}
+</code></pre>
+<div line-highlight='10-15,only'></div>
+<p>Next, create an <code>app.stache</code> template for your app:</p>
+<pre><code class="language-html">{{! app.stache }}
+&lt;h1&gt;{{ this.message }}&lt;/h1&gt;
+</code></pre>
+<p>Next, create an <code>index.js</code> module for your application. Import <a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">StacheElement</a> and
+your template to say “Hello World”:</p>
+<pre><code class="language-js">// index.js
+import { StacheElement } from &quot;can&quot;;
+import view from &quot;./app.stache&quot;;
+
+class MyApp extends StacheElement {
+  static view = view;
+
+  static props = {
+    message: {
+      default: &quot;Hello World&quot;
+    }
+  };
+};
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre>
+<p>Finally, create an <code>index.html</code> page that loads <code>steal.js</code> and includes your
+<code>&lt;my-app&gt;</code> component:</p>
+<pre><code class="language-html">&lt;!doctype html&gt;
+&lt;title&gt;CanJS and StealJS&lt;/title&gt;
+&lt;script src=&quot;./node_modules/steal/steal.js&quot; main&gt;&lt;/script&gt;
+&lt;my-app&gt;&lt;/my-app&gt;
+</code></pre>
+<div line-highlight='3-4'></div>
+<p>Now you can load that page in your browser at one of the addresses the HTTP
+server showed you earlier (something like <a href="http://localhost:8080/" title="http://localhost:8080/">http://localhost:8080/</a>). You should
+see “Hello World” on the page—if you don’t,
+<a href="https://www.bitovi.com/community/slack">join our Slack</a> (<a href="https://bitovi-community.slack.com/messages/CFC22NZ8A">#canjs channel</a>)
+and we can help you figure out what
+went wrong.</p>
+<p>Ready to build an app with CanJS? Check out our <a href="chat.html" title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">Chat Guide</a> or one of our recipes!</p>
+<h2>webpack</h2>
+<blockquote>
+<p>You can skip these instructions by
+<a href="https://github.com/canjs/webpack-example/tree/can-6">cloning the can-6 branch of this example repo on GitHub</a>.</p>
+</blockquote>
+<p><a href="#Node_jsandnpm">After setting up Node.js and npm</a>, install <code>can</code>, <a href="https://webpack.js.org">webpack</a>
+(with <a href="https://www.npmjs.com/package/can-stache-loader">can-stache-loader</a>) from npm:</p>
+<pre><code class="language-bash">npm install can@6 --save
+</code></pre>
+<pre><code class="language-bash">npm install webpack@4 webpack-cli@3 can-stache-loader@2 --save-dev
+</code></pre>
+<p>Next, create an <code>app.stache</code> template for your app:</p>
+<pre><code class="language-html">{{! app.stache }}
+&lt;h1&gt;{{ this.message }}&lt;/h1&gt;
+</code></pre>
+<p>Next, create an <code>index.js</code> module for your application. Import <a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">StacheElement</a>
+and your template to say “Hello World”:</p>
+<pre><code class="language-js">// index.js
+import { StacheElement } from &quot;can&quot;;
+import view from &quot;./app.stache&quot;;
+
+class MyApp extends StacheElement {
+  static view = view;
+
+  static props = {
+    message: &quot;Hello World&quot;
+  };
+};
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre>
+<p>Next, we will create a <code>webpack.config.js</code> that enables tree-shaking in development:</p>
+<pre><code class="language-js">const path = require('path');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const webpack = require(&quot;webpack&quot;);
+
+module.exports = {
+  entry: './index.js',
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist')
+  },
+  mode: &quot;development&quot;,
+  module: {
+   rules: [
+      {
+        test: /\.stache$/,
+        use: {
+          loader: 'can-stache-loader'
+        }
+      }
+    ]
+  },
+  plugins: [
+    new webpack.optimize.SideEffectsFlagPlugin(),
+    new UglifyJSPlugin({
+        sourceMap: true,
+        uglifyOptions: { compress: false, mangle: false, dead_code: true }
+    })
+  ]
+};
+</code></pre>
+<p>Next, run webpack from your terminal:</p>
+<pre><code class="language-bash">./node_modules/.bin/webpack
+</code></pre>
+<p>Finally, create an <code>index.html</code> page that loads <code>dist/bundle.js</code> and includes
+your <code>&lt;my-app&gt;</code> component:</p>
+<pre><code class="language-html">&lt;!doctype html&gt;
+&lt;title&gt;CanJS and webpack&lt;/title&gt;
+&lt;script src=&quot;./dist/bundle.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;my-app&gt;&lt;/my-app&gt;
+</code></pre>
+<div line-highlight='3-4'></div>
+<p>Now you can load that page in your browser at one of the addresses the HTTP
+server showed you earlier (something like <a href="http://localhost:8080/" title="http://localhost:8080/">http://localhost:8080/</a>). You should
+see “Hello World” on the page — if you don’t, <a href="https://www.bitovi.com/community/slack">join our Slack</a>
+and we can help you figure out what
+went wrong.</p>
+<p><details>
+<summary>
+Production build
+</summary></p>
+<p>To build the app to production, create a <code>webpack.config.prod.js</code> that configures
+webpack for a production build:</p>
+<pre><code class="language-js">const path = require('path');
+
+module.exports = {
+  entry: './index.js',
+  module: {
+   rules: [
+      {
+        test: /\.stache$/,
+        use: {
+          loader: 'can-stache-loader'
+        }
+      }
+    ]
+  },
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist')
+  },
+  mode: &quot;production&quot;,
+  rules: [
+      {
+        test: /\.stache$/,
+        use: {
+          loader: 'can-stache-loader'
+        }
+      }
+  ]
+};
+</code></pre>
+<p>Next run webpack in your terminal with the production configuration:</p>
+<pre><code class="language-bash">./node_modules/.bin/webpack --config webpack.config.prod.js
+</code></pre>
+<p>Now you can load that page in your browser at one of the addresses the HTTP
+server showed you earlier (something like <a href="http://localhost:8080/" title="http://localhost:8080/">http://localhost:8080/</a>). You should
+see “Hello World” on the page and the <code>bundle.js</code> size should be much smaller. If there's a problem,
+<a href="https://www.bitovi.com/community/slack">join our Slack</a> and we can help you figure out what
+went wrong.</p>
+<p></details></p>
+<p>Ready to build an app with CanJS? Check out our <a href="chat.html" title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">Chat Guide</a> or one of our
+[guides/recipes]!</p>
+<h2>Browserify</h2>
+<p>Unlike webpack and StealJS, Browserify does not support ES Modules (<code>import &quot;module&quot;</code>) and tree-shaking
+natively.  Instead, it’s standard practice to import files with CommonJS (<code>require(&quot;module&quot;)</code>). Therefore, there are two
+commonly used setups:</p>
+<p><details>
+<summary>
+Using CommonJS to require CanJS’s individual packages
+</summary></p>
+<blockquote>
+<p>You can skip these instructions by
+<a href="https://github.com/canjs/browserify-simple-example/tree/can-6">cloning this example repo on GitHub</a>.</p>
+</blockquote>
+<p>Browserify does not support tree-shaking, so the individual packages must be required.  This means that
+instead of importing <a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">StacheElement</a> like:</p>
+<pre><code class="language-js">const StacheElement = require(&quot;can&quot;).StacheElement;
+</code></pre>
+<p>You should do it like:</p>
+<pre><code class="language-js">const StacheElement = require(&quot;can-stache-element&quot;);
+</code></pre>
+<p><a href="#Node_jsandnpm">After setting up Node.js and npm</a>, install <a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a>
+and Browserify from npm:</p>
+<pre><code class="language-bash">npm install can-stache-element --save
+npm install browserify --save-dev
+</code></pre>
+<p>Next, create a component:</p>
+<pre><code class="language-js">// index.js
+const StacheElement = require(&quot;can-stache-element&quot;);
+
+class MyApp extends StacheElement {
+  static get view() {
+      return `&lt;h1&gt;{{ this.message }}&lt;/h1&gt;`;
+  }
+
+  static get props() {
+    return {
+      message: &quot;Hello World&quot;
+    };
+  }
+};
+
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre>
+<p>Next, run Browserify from your terminal:</p>
+<pre><code class="language-bash">./node_modules/browserify/bin/cmd.js --debug --entry index.js --outfile dist/bundle.js
+</code></pre>
+<p>Finally, create an <code>index.html</code> page that loads <code>dist/bundle.js</code> and includes
+your <code>&lt;my-app&gt;</code> component:</p>
+<pre><code class="language-html">&lt;!doctype html&gt;
+&lt;title&gt;CanJS and Browserify&lt;/title&gt;
+&lt;script src=&quot;./dist/bundle.js&quot;&gt;&lt;/script&gt;
+&lt;my-app&gt;&lt;/my-app&gt;
+</code></pre>
+<div line-highlight='3-4'></div>
+<p>Now you can load that page in your browser at one of the addresses the HTTP
+server showed you earlier (something like <a href="http://localhost:8080/" title="http://localhost:8080/">http://localhost:8080/</a>). You should
+see “Hello World” on the page—if you don’t, <a href="https://www.bitovi.com/community/slack">join our Slack</a>
+and we can help you figure out what
+went wrong.</p>
+<p></details></p>
+<p><details>
+<summary>
+Using ES Modules to import CanJS’s individual packages using BabelJS
+</summary></p>
+<blockquote>
+<p>You can skip these instructions by
+<a href="https://github.com/canjs/browserify-example/tree/can-6">cloning this example repo on GitHub</a>.</p>
+</blockquote>
+<p>Browserify does not support tree-shaking, so the individual packages must be imported.  This means that
+instead of importing <a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">StacheElement</a> like:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;can&quot;;
+</code></pre>
+<p>You should do it like:</p>
+<pre><code class="language-js">import StacheElement from &quot;can-stache-element&quot;;
+</code></pre>
+<p><a href="#Node_jsandnpm">After setting up Node.js and npm</a>, install <a href="../can-component.html" title="Create a custom element that can be used to manage widgets or application logic.">can-component</a>
+and Browserify (with various plugins) from npm:</p>
+<pre><code class="language-bash">npm install can-component --save
+npm install browserify stringify babelify babel-core babel-preset-env --save-dev
+</code></pre>
+<p>By default, Browserify works with CommonJS modules (with <code>require()</code> statements).
+To use it with ES6 modules (with <code>import</code> statements), configure the
+<a href="https://www.npmjs.com/package/babelify">babelify</a> plugin in your <code>package.json</code>.
+We’ll also include the <a href="https://www.npmjs.com/package/stringify">stringify</a>
+configuration for loading <a href="../can-stache.html" title="Live binding templates.">can-stache</a> templates:</p>
+<pre><code>{
+  &quot;name&quot;: &quot;my-canjs-app&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;description&quot;: &quot;&quot;,
+  &quot;main&quot;: &quot;index.js&quot;,
+  &quot;scripts&quot;: {
+    &quot;start&quot;: &quot;http-server -c-1&quot;,
+    &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;
+  },
+  &quot;browserify&quot;: {
+    &quot;transform&quot;: [ [ &quot;babelify&quot;, { &quot;presets&quot;: [&quot;env&quot;] } ] ]
+  },
+  &quot;stringify&quot;: {
+    &quot;appliesTo&quot;: { &quot;includeExtensions&quot;: [&quot;.stache&quot;] }
+  },
+  &quot;keywords&quot;: [],
+  &quot;author&quot;: &quot;&quot;,
+  &quot;license&quot;: &quot;ISC&quot;,
+  &quot;dependencies&quot;: {
+    &quot;can-stache-element&quot;: &quot;^1.0.0&quot;
+  },
+  &quot;devDependencies&quot;: {
+    &quot;@babel/core&quot;: &quot;^7.6.2&quot;,
+    &quot;@babel/plugin-proposal-class-properties&quot;: &quot;^7.5.5&quot;,
+    &quot;@babel/preset-env&quot;: &quot;^7.6.2&quot;,
+    &quot;babelify&quot;: &quot;^10.0.0&quot;,
+    &quot;browserify&quot;: &quot;^16.5.0&quot;,
+    &quot;http-server&quot;: &quot;^0.11.0&quot;,
+    &quot;stringify&quot;: &quot;^5.2.0&quot;
+  }
+}
+</code></pre>
+<div line-highlight='10-15,only'></div>
+<p>Next, create an <code>app.stache</code> template for your app:</p>
+<pre><code class="language-html">{{! app.stache }}
+&lt;h1&gt;{{ this.message }}&lt;/h1&gt;
+</code></pre>
+<p>Next, create an <code>index.js</code> module for your application. Import <a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a>
+and your template to say “Hello World”:</p>
+<pre><code class="language-js">// index.js
+import StacheElement from &quot;can-stache-element&quot;;
+import view from &quot;./app.stache&quot;;
+
+class MyApp extends StacheElement {
+  static view = view;
+
+  static get props = {
+    message: &quot;Hello World&quot;
+  };
+};
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre>
+<p>Next, run Browserify from your terminal:</p>
+<pre><code class="language-bash">./node_modules/browserify/bin/cmd.js --debug --transform babelify --transform stringify --entry index.js --outfile dist/bundle.js
+</code></pre>
+<p>Finally, create an <code>index.html</code> page that loads <code>dist/bundle.js</code> and includes
+your <code>&lt;my-app&gt;</code> component:</p>
+<pre><code class="language-html">&lt;!doctype html&gt;
+&lt;title&gt;CanJS and Browserify&lt;/title&gt;
+&lt;script src=&quot;./dist/bundle.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;my-app&gt;&lt;/my-app&gt;
+</code></pre>
+<div line-highlight='3-4'></div>
+<p>Now you can load that page in your browser at one of the addresses the HTTP
+server showed you earlier (something like <a href="http://localhost:8080/" title="http://localhost:8080/">http://localhost:8080/</a>). You should
+see “Hello World” on the page—if you don’t, <a href="https://www.bitovi.com/community/slack">join our Slack</a>
+and we can help you figure out what
+went wrong.</p>
+<p></details></p>
+<p>Ready to build an app with CanJS? Check out our <a href="chat.html" title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">Chat Guide</a> or one of our
+recipes!</p>
+<h2>DoneJS</h2>
+<p><a href="http://donejs.com/"><img src="https://www.bitovi.com/hubfs/Imported_Blog_Media/donejs-logo-ie.png" alt="DoneJS.com" title="DoneJS Logo" /></a></p>
+<p>CanJS is part of the fabulous <a href="http://donejs.com">DoneJS</a> framework. DoneJS is built around CanJS, and
+adds:</p>
+<ul>
+<li><a href="https://donejs.com/Features.html#ios-android-and-desktop-builds">iOS, Android, and desktop builds</a></li>
+<li><a href="https://donejs.com/Features.html#server-side-rendered">Server-side rendering</a> (Isomorphic / UniversalJS)</li>
+<li><a href="https://donejs.com/Features.html#progressive-loading">Progressive loading</a></li>
+<li><a href="https://donejs.com/Features.html#continuous-integration--deployment">Continuous integration (testing) and continuous deployment</a></li>
+<li><a href="https://donejs.com/Features.html#generators">Code generators</a></li>
+</ul>
+<p>and many other <a href="https://donejs.com/Features.html">features</a>.</p>
+<p>To use CanJS within DoneJS, first install the DoneJS cli:</p>
+<pre><code class="language-bash">npm install -g donejs
+</code></pre>
+<p>Then, generate a new app:</p>
+<pre><code class="language-bash">donejs add app hello-world --yes
+</code></pre>
+<p>Then go into that application directory:</p>
+<pre><code class="language-bash">cd hello-world
+</code></pre>
+<p>And start development by running:</p>
+<pre><code class="language-bash">donejs develop
+</code></pre>
+<p>Go to <a href="http://localhost:8080/">http://localhost:8080/</a> to see our application showing a default homepage.</p>
+<p>We strongly encourage people to go through DoneJS's <a href="https://donejs.com/Guide.html">Quick start guide</a>
+and then its <a href="https://donejs.com/place-my-order.html">In-depth guide</a> to get a feel for all of
+DoneJS's features.</p>
+<h2>Script tags setups</h2>
+<p>This section helps guide setups that do not use a module loader like webpack and StealJS, and instead
+concatenate scripts, often with a tool like <a href="https://gruntjs.com/">Grunt</a> and <a href="https://gulpjs.com/">Gulp</a>, and non-node projects like the <a href="http://guides.rubyonrails.org/asset_pipeline.html">Rails Asset Pipeline</a>.</p>
+<p>In short, these projects should use the &quot;global&quot; build.  That build can be either:</p>
+<ul>
+<li>downloaded at <a href="http://unpkg.com/dist/global/core.js">unpkg.com/dist/global/core.js</a>, or</li>
+<li>installed via npm:
+<pre><code class="language-bash">npm install can
+</code></pre>
+and found in <code>./node_modules/can/dist/global/core.js</code>.</li>
+</ul>
+<p>With CanJS downloaded or installed, use it to create an <code>index.html</code> page with a <code>&lt;script&gt;</code> tag:</p>
+<pre><code class="language-html">&lt;!doctype html&gt;
+&lt;title&gt;My CanJS App&lt;/title&gt;
+&lt;script src=&quot;./node_modules/can/dist/global/core.js&quot;&gt;&lt;/script&gt;
+
+&lt;my-app&gt;&lt;/my-app&gt;
+
+&lt;script type=&quot;text/stache&quot; id=&quot;app-template&quot;&gt;
+  &lt;h1&gt;{{ this.message }}&lt;/h1&gt;
+&lt;/script&gt;
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+  const { stache, StacheElement } = can;
+  const template = stache.from(&quot;app-template&quot;);
+
+  class MyApp extends StacheElement {
+    static view = template;
+
+    static props = {
+      message: &quot;Hello World&quot;
+    };
+  }
+
+  customElements.define(&quot;my-app&quot;, MyApp);
+&lt;/script&gt;
+</code></pre>
+<div line-highlight='3'></div>
+<p>This build only includes CanJS’s <a href="../can-core.html" title="The best, most hardened and generally useful libraries in CanJS.">Core</a> and <a href="../can-infrastructure.html" title="Utility libraries that power the core and ecosystem collection.">Infrastructure</a> modules and all of CanJS’s named exports are available on the <a href="../can-namespace.html" title="Namespace where can-* packages are registered.">can</a> object. For example, if you want the <a href="../can-ajax.html" title="Make an asynchronous HTTP (AJAX) request.">can-ajax</a> infrastructure module, use it like <code>can.ajax</code>:</p>
+<pre><code class="language-js">class MyApp extends can.StacheElement {
+  static view = `
+    CanJS {{ this.feels }} modules.
+    The server says: {{ this.messagePromise.value }}
+  `;
+  static props = {
+    feels: { default: &quot;😍&quot; },
+    get messagePromise() {
+      return can.ajax({ url: &quot;/message&quot; });
+    }
+  };
+}
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre>
+<div line-highlight='10'></div>
+<p>If you want to use <a href="../can-ecosystem.html" title="Useful libraries that extend or add important features to the core collection.">Ecosystem</a> modules, you can use <code>./node_modules/can/dist/global/everything.js</code>. However,
+this file is quite large and shouldn't be used in production so you will want to make your own custom version of
+<code>everything.js</code> containing only the modules you need. Unfortunately, we haven't posted instructions on how to do this yet, even though it’s relatively easy. Please tell us on
+<a href="https://www.bitovi.com/community/slack">Slack</a> to hurry up and do it already!</p>
+<h2>Hosted traditional <code>&lt;script&gt;</code> tags setups</h2>
+<p>If you support older browsers that do not support modules (Internet Explorer 11),
+the following sections detail detail how to use hosted JavaScript files work with traditional <code>&lt;script&gt;</code> tags.</p>
+<p>If you only support browsers that do support modules please follow the <a href="#ImportingthecoreESmodulebundle">Importing the core ES module bundle with module scripts</a> setup.</p>
+<h3>Including the core JavaScript bundle</h3>
+<p>If you want your demo, example, or small app to work in browsers that do not support ES modules,
+then you can use the CDN hosted JavaScript bundle on <a href="https://unpkg.com/#/">unpkg</a>.</p>
+<p>The following <code>HTML</code> page includes CanJS and uses it to define a custom element:</p>
+<pre><code class="language-html">&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;CanJS + Modules&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;my-app&gt;&lt;/my-app&gt;
+
+    &lt;script src=&quot;//unpkg.com/can@6/dist/global/core.js&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;
+    class MyApp extends can.StacheElement {
+      static view = `CanJS {{ this.feels }} modules`;
+
+      static props = {
+        feels: &quot;😍&quot;
+      };
+    }
+
+    customElements.define(&quot;my-app&quot;, MyApp);
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>This build only includes CanJS’s <a href="../can-core.html" title="The best, most hardened and generally useful libraries in CanJS.">Core</a> and <a href="../can-infrastructure.html" title="Utility libraries that power the core and ecosystem collection.">Infrastructure</a> modules and all of CanJS’s named exports are available on the
+<code>can</code> object. For example, if you want the <a href="../can-ajax.html" title="Make an asynchronous HTTP (AJAX) request.">can-ajax</a> infrastructure module, use it like <code>can.ajax</code>:</p>
+<pre><code class="language-js">class MyApp extends can.StacheElement {
+  static view = `
+      CanJS {{ this.feels }} modules.
+      The server says: {{ this.messagePromise.value }}
+  `;
+
+  static props = {
+    feels: &quot;😍&quot;,
+    get messagePromise() {
+      return can.ajax({ url: &quot;/message&quot; });
+    }
+  };
+}
+
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre>
+<div line-highlight='10'></div>
+<p>If you want an <a href="../can-ecosystem.html" title="Useful libraries that extend or add important features to the core collection.">Ecosystem</a> module like <a href="../can-stache-converters.html" title="Provides a set of converters useful for two-way binding with form elements such as &lt;input&gt; and &lt;select&gt;.">can-stache-converters</a>, you can use
+the <a href="#IncludingtheeverythingJavaScriptbundle">everything JavaScript bundle</a>, but the everything bundle should not be used in production as it
+loads every module in CanJS.</p>
+<h3>Including the everything JavaScript bundle</h3>
+<p>The <a href="#IncludingthecoreJavaScriptbundle">core JavaScript bundle</a> only includes CanJS’s
+<a href="../can-core.html" title="The best, most hardened and generally useful libraries in CanJS.">Core</a> modules.  This doesn't include ecosystem modules like <a href="../can-stache-converters.html" title="Provides a set of converters useful for two-way binding with form elements such as &lt;input&gt; and &lt;select&gt;.">can-stache-converters</a>.  The everything bundle hosted at <code>https://unpkg.com/can@6/everything.mjs</code> includes every CanJS module (except for <a href="https://github.com/canjs/can-zone">can-zone</a> and <a href="https://github.com/bitovi/ylem">ylem</a>.</p>
+<pre><code class="language-html">&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;title&gt;CanJS + Modules&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;my-app&gt;&lt;/my-app&gt;
+
+    &lt;script type=&quot;module&quot;&gt;
+    import { stache, stacheConverters, StacheElement, type } from &quot;//unpkg.com/can@6/everything.mjs&quot;;
+
+    stache.addConverter(stacheConverters);
+
+    class MyApp extends StacheElement {
+        static view = `
+            &lt;p&gt;Enter a value: &lt;input on:input:value:to=&quot;string-to-any(this.enteredValue)&quot;/&gt;&lt;/p&gt;
+            &lt;p&gt;You've typed a(n) {{ this.enteredType }}&lt;/p&gt;
+        `;
+
+        static props = {
+          enteredValue: type.Any,
+          get enteredType(){
+              return typeof this.enteredValue;
+          }
+        };
+    };
+    customElements.define(&quot;my-app&quot;, MyApp);
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>The everything bundle does not include:</p>
+<ul>
+<li><a href="https://github.com/canjs/can-zone">can-zone</a></li>
+<li><a href="https://github.com/bitovi/ylem">ylem</a></li>
+</ul>
+<h2>Advanced Setup Recommendations</h2>
+<p>The following are suggestions to advanced users to maximize maintainability.</p>
+<h3>Installing individual packages</h3>
+<p>To maximize flexibility, we recommend installing and importing individual packages and modules
+instead of the named exports from the <code>can</code> package.</p>
+<p>For example, instead of importing named exports from the <code>can</code> module like:</p>
+<pre><code class="language-js">import { ObservableObject, StacheElement } from &quot;can&quot;;
+</code></pre>
+<p>These packages should be individually installed:</p>
+<pre><code class="language-bash">npm install can-stache-element can-observable-object
+</code></pre>
+<p>And they should be imported as follows:</p>
+<pre><code class="language-js">import StacheElement from &quot;can-stache-define-element&quot;;
+import ObservableObject from &quot;can-define-object&quot;
+</code></pre>
+<p><details></p>
+<p><summary>
+Why should I do all that boilerplate?!?!
+</summary></p>
+<p>CanJS’s individual packages are released independently of one another.  This allows
+you to update one package without having to upgrade all the other ones when a new <code>can</code>
+package is published.</p>
+<p></details></p>
+<p><details></p>
+<p><summary>
+Can I avoid that boilerplate?
+</summary></p>
+<p>You can create your own <code>&quot;can&quot;</code> module or package by importing and exporting
+the CanJS packages and modules as named exports.</p>
+<p>For example, after installing the packages you need, you can create <code>my-can.js</code> that looks like</p>
+<pre><code class="language-js">// my-can.js
+export { default as StacheElement } from &quot;can-stache-element&quot;;
+export { default as restModel } from &quot;can-rest-model&quot;;
+// ...
+</code></pre>
+<p>And then import the named exports from &quot;my-can&quot;:</p>
+<pre><code class="language-js">import { restModel, StacheElement } from &quot;./my-can&quot;;
+</code></pre>
+<p></details></p>
+<h2>Prerequisites</h2>
+<p>The following sections detail how to install prerequisites common to some of the
+setups above.</p>
+<h3>Node.js and npm</h3>
+<p>Many of the following sections rely on Node.js and npm installed. Please follow these steps to
+get Node.js, npm, and a local file server installed.</p>
+<p>First, <a href="https://docs.npmjs.com/getting-started/installing-node">go through npm’s guide to installing Node.js and npm</a>.
+If you’re new to development, that page has <a href="https://docs.npmjs.com/getting-started/installing-node#learn-more">additional resources</a>
+for learning about Node.js, npm, using a command-line terminal, and more.</p>
+<p>Next, create a new directory on your computer and navigate to that directory in
+your terminal.</p>
+<p>In your terminal, <a href="https://docs.npmjs.com/cli/init">create a new package.json</a>:</p>
+<pre><code class="language-bash">npm init -y
+</code></pre>
+<p>Next, install <a href="https://www.npmjs.com/package/http-server">http-server</a>
+(so you can load the files we create):</p>
+<pre><code class="language-bash">npm install http-server --save-dev
+</code></pre>
+<p>Next, add a <a href="https://docs.npmjs.com/cli/start">start script</a> to run the
+HTTP server. Add the following line to your <code>package.json</code>:</p>
+<pre><code>{
+  &quot;name&quot;: &quot;my-canjs-app&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;description&quot;: &quot;&quot;,
+  &quot;main&quot;: &quot;index.js&quot;,
+  &quot;scripts&quot;: {
+    &quot;start&quot;: &quot;http-server -c-1&quot;,
+    &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;
+  },
+  &quot;keywords&quot;: [],
+  &quot;author&quot;: &quot;&quot;,
+  &quot;license&quot;: &quot;ISC&quot;,
+  &quot;devDependencies&quot;: {
+    &quot;http-server&quot;: &quot;^0.11.0&quot;
+  }
+}
+</code></pre>
+<div line-highlight='7,only'></div>
+<p>Last, start the HTTP server from your terminal:</p>
+<pre><code class="language-bash">npm start
+</code></pre>
+<p>When the server starts, it’ll tell you the addresses you can open in your
+browser to see your project. They will be similar to <a href="http://localhost:8080/" title="http://localhost:8080/">http://localhost:8080/</a>.</p>
+<p>Next, you can choose to use <a href="#StealJS">StealJS</a>, <a href="#webpack">webpack</a>, or
+<a href="#Browserify">Browserify</a> to load your project.</p>
+<h2>IE 11 Support</h2>
+<p>CanJS is compatible with Internet Explorer 11, with a few caveats that are discussed below.</p>
+<h3>Promises</h3>
+<p>CanJS uses <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promises</a>, which are not supported in IE 11. A Promise polyfill such as the one in <a href="https://www.npmjs.com/package/core-js#ecmascript-6-promise">core-js</a> or the many others available on <a href="https://www.npmjs.com/search?q=promise%20polyfill">npm</a> can be used to enable Promise support in any environment or setup.</p>
+<p>If using StealJS 1.x, a promise polyfill is included by default. With StealJS 2.x, a Promise polyfill can be added by using the <code>steal-with-promises.js</code> or the <code>bundlePromisePolyfill</code> <a href="https://stealjs.com/docs/steal-tools.BuildOptions.html">build option</a>:</p>
+<pre><code class="language-js">const stealTools = require(&quot;steal-tools&quot;);
+
+stealTools.build({
+  config: __dirname + &quot;/package.json!npm&quot;
+}, {
+  bundlePromisePolyfill: true
+});
+</code></pre>
+<div line-highlight='6,only'></div>
+<p>If you are using <a href="https://webpack.js.org">webpack</a> you can import <a href="https://www.npmjs.com/package/core-js">core-js</a> to include the polyfill. Be sure to import it at the top of your main JavaScript module like so:</p>
+<pre><code class="language-js">import &quot;core-js/stable&quot;;
+</code></pre>
+<h3>New packages</h3>
+<p>The following packages are new in CanJS 6 and are based on the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy">Proxy</a> object, which is not supported in IE 11 and cannot be polyfilled:</p>
+<ul>
+<li><a href="../can-observable-array.html" title="Create observable arrays with defined properties.">can-observable-array</a></li>
+<li><a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a></li>
+<li><a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a></li>
+</ul>
+<p>Instead, you should use <a href="../can-component.html" title="Create a custom element that can be used to manage widgets or application logic.">can-component</a> and <a href="../can-define.html" title="Defines observable properties and their behavior on a prototype object. This function is not commonly used directly. map
+and list are more commonly used. Types and
+behaviors shared by both map
+and list are documented here.">can-define</a>, both of which continue to support IE 11.</p>
+<h3>Updated packages</h3>
+<p>The following packages have been updated to use the new packages mentioned above:</p>
+<ul>
+<li><a href="../can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">can-realtime-rest-model</a></li>
+<li><a href="../can-rest-model.html" title="Connect a type to a restful service layer.">can-rest-model</a></li>
+<li><a href="../can-route.html" title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">can-route</a></li>
+</ul>
+<p>If you’re using <a href="../can-define.html" title="Defines observable properties and their behavior on a prototype object. This function is not commonly used directly. map
+and list are more commonly used. Types and
+behaviors shared by both map
+and list are documented here.">can-define</a>, you’ll need to:</p>
+<ul>
+<li>Use <a href="../can-define-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">can-define-realtime-rest-model</a> instead of <a href="../can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">can-realtime-rest-model</a></li>
+<li>Use <a href="../can-define-rest-model.html" title="Connect a type to a restful service layer.">can-define-rest-model</a> instead of <a href="../can-rest-model.html" title="Connect a type to a restful service layer.">can-rest-model</a></li>
+<li>Map <a href="../can-route.html" title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">can-route</a> to use a different default <a href="../can-route.data.html" title="An observable key-value object used to cross bind to the url observable can-route.urlData. Set it to cross-bind a top level state object (Application ViewModel) to can-route.">data</a></li>
+</ul>
+<p>Below are directions for how to map the default <a href="../can-route.data.html" title="An observable key-value object used to cross bind to the url observable can-route.urlData. Set it to cross-bind a top level state object (Application ViewModel) to can-route.">data</a> with different module loaders:</p>
+<h4>StealJS</h4>
+<blockquote>
+<p><strong>Note:</strong> <a href="https://github.com/canjs/stealjs-example/tree/can-6-ie">This repo on GitHub</a>
+is a working example of the instructions below.</p>
+</blockquote>
+<p>Add the following configuration to your <code>package.json</code>:</p>
+<pre><code class="language-js">{
+  &quot;name&quot;: &quot;my-canjs-app&quot;,
+  &quot;version&quot;: &quot;1.0.0&quot;,
+  &quot;description&quot;: &quot;&quot;,
+  &quot;main&quot;: &quot;index.js&quot;,
+  &quot;scripts&quot;: {
+    &quot;start&quot;: &quot;http-server -c-1&quot;,
+    &quot;test&quot;: &quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;
+  },
+  &quot;steal&quot;: {
+    &quot;babelOptions&quot;: {
+      &quot;plugins&quot;: [&quot;transform-class-properties&quot;]
+    },
+    &quot;paths&quot;: {
+      &quot;can-route*src/routedata&quot;: &quot;node_modules/can-route/src/routedata-definemap.js&quot;
+    },
+    &quot;plugins&quot;: [&quot;can&quot;]
+  },
+  &quot;keywords&quot;: [],
+  &quot;author&quot;: &quot;&quot;,
+  &quot;license&quot;: &quot;ISC&quot;,
+  &quot;dependencies&quot;: {
+    &quot;can&quot;: &quot;^6.0.0&quot;,
+    &quot;steal&quot;: &quot;^2.0.0&quot;
+  },
+  &quot;devDependencies&quot;: {
+    &quot;http-server&quot;: &quot;^0.11.0&quot;
+  }
+}
+</code></pre>
+<div line-highlight='14-16,only'></div>
+<p>If you have HTML pages that read their configuration from something other than your <code>package.json</code>,
+you may add a <code>&lt;script&gt;</code> element before including <code>steal-with-promises.js</code> in your HTML page:</p>
+<pre><code class="language-html">&lt;script&gt;
+  steal = {
+    paths: {
+      &quot;can-route*src/routedata&quot;: &quot;node_modules/can-route/src/routedata-definemap.js&quot;
+    }
+  };
+&lt;/script&gt;
+&lt;script src=&quot;node_modules/steal/steal-with-promises.js&quot; main&gt;&lt;/script&gt;
+</code></pre>
+<div line-highlight='1-7'></div>
+<h4>webpack</h4>
+<p>Coming soon!</p>
+<p>In <a href="https://webpack.js.org">webpack</a> you should use <a href="https://webpack.js.org/plugins/normal-module-replacement-plugin/">NormalModuleReplacementPlugin</a> to replace the <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">ObservableObject</a> version of <a href="../can-route.data.html" title="An observable key-value object used to cross bind to the url observable can-route.urlData. Set it to cross-bind a top level state object (Application ViewModel) to can-route.">route.data</a> with a <a href="../can-define/map/map.html" title="Create observable objects.">can-define/map/map</a> implmentation:</p>
+<p><strong>webpack.config.js</strong></p>
+<pre><code class="language-js">module.exports = {
+  plugins: [
+    new webpack.NormalModuleReplacementPlugin(
+      /can-route\/src\/routedata/,
+      &quot;./routedata-definemap.js&quot;
+    )
+    // ...
+  ]
+}
+</code></pre>
+<p><a href="https://github.com/canjs/webpack-example/tree/can-6-ie">See this starter app</a> for the full configuration.</p>
+<h4>Browserify</h4>
+<p>See <a href="https://github.com/canjs/browserify-example/tree/can-6-ie">this example repo</a> for configuration on using Browserify with CanJS 6. Since with Browserify we recommend using the individual packages, it's as simple as using the correct package versions.</p>
+<h3>Other caveats</h3>
+<p>The ecosystem packages <a href="../can-define-backup.html" title="">can-define-backup</a> and <a href="../can-observe.html" title="Create observable objects, arrays, and functions that work like plain JavaScript objects, arrays, and functions.">can-observe</a> use other features that are not fully supported by IE 11.</p>
+<p><a href="../can-define-backup.html" title="">can-define-backup</a> uses <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap">WeakMap</a>, and although <code>WeakMap</code> is supported in IE 11, there are issues with using <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal">sealed</a> objects as keys in WeakMaps. <a href="../can-define-backup.html" title="">can-define-backup</a> can be used in IE 11 as long as the DefineMap being backed up is not <a href="../can-define/map/map.seal.html" title="Defines if instances of the map should be sealed in development.">sealed</a>, or a polyfill such as the one in <a href="https://github.com/zloirock/core-js/#weakmap">core-js</a> is used.</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/setup/setting-up-canjs.md"},"description":"Learn how to install CanJS in your environment. \n","name":"guides/setup","title":"Setting Up CanJS","type":"page","parent":"guides/getting-started","order":2,"outline":{"depth":2},"comment":" ","pathToRoot":"../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix=".."></div>
+
+	</body>
+</html>

@@ -1,0 +1,2086 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/topics/data/customizing-connections/customizing-connections.md
+	@page guides/data-customizing-connections
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Customizing Connections | Service Layer | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="Learn the layers that make up can-connect and how to implement custom connection functionality.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Learn the layers that make up can-connect and how to implement custom connection functionality.">
+	<meta property="og:title" content="Customizing Connections | Service Layer | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "Learn the layers that make up can-connect and how to implement custom connection functionality.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Customizing Connections | Service Layer | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/data-customizing-connections" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>getting started</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="crud-beginner.html"
+							title="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+							CRUD Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="setup.html"
+							title="Learn how to install CanJS in your environment.">
+							Setting Up CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="technology-overview.html"
+							title="Learn the basics of CanJS’s technology.">
+							Technology Overview
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>topics</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="html.html"
+							title="Learn how to update HTML and listen to user interactions.">
+							HTML
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="routing.html"
+							title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+							Routing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="data.html"
+							title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">
+							Service Layer
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="data-introduction.html"
+							title="Learn how to get, create, update, and delete backend service layer data.">
+							Introduction
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="data-configuring-requests.html"
+							title="URL, query, and response formats for making requests.">
+							Configuring Requests
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="data-managing-sessions.html"
+							title="Learn how to use can/session to manage user session state in CanJS apps.">
+							Managing Sessions
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="data-customizing-connections.html"
+							title="Learn the layers that make up can-connect and how to implement custom connection functionality.">
+							Customizing Connections
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="debugging.html"
+							title="Learn how to debug CanJS applications.">
+							Debugging
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="forms.html"
+							title="Learn how to create amazing &lt;form&gt;s with CanJS.">
+							Forms
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="testing.html"
+							title="Learn how to test CanJS applications.">
+							Testing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="logic.html"
+							title="Learn how to write observables in an organized, maintainable, and testable way.">
+							Logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="server-side-rendering.html"
+							title="Learn how to set up SSR for CanJS.">
+							Server-Side Rendering
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>app guides</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="chat.html"
+							title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+							Chat Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="todomvc.html"
+							title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+							TodoMVC Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/todomvc-with-steal.html"
+							title="This tutorial walks through building TodoMVC with StealJS. It includes KeyNote presentations covering CanJS core libraries.">
+							TodoMVC with StealJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>beginner recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/canvas-clock.html"
+							title="This beginner guide walks you through building a clock with the Canvas API.">
+							Canvas Clock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-simple.html"
+							title="This beginner guide walks through building a very simple credit card payment form.  It uses Stripe.js v2 API to create a token which can be used to create a charge.  It also performs simple validation on the payment form values.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-simple.html"
+							title="This beginner guide walks you through building a simple file navigation widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.0.0. Check out the file-navigator-advanced for an example that makes AJAX requests for its data and uses can-stache-element.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/signup-simple.html"
+							title="This beginner guide walks through building simple signup, login forms and a logout button.">
+							Signup and Login
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/video-player.html"
+							title="This beginner guide walks you through building custom video controls around a video element.">
+							Video Player
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/weather-report-simple.html"
+							title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.2.">
+							Weather Report
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>intermediate recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/cta-bus-map.html"
+							title="This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map. You&#x27;ll learn how to create a StacheElement that integrates with 3rd party widgets.">
+							CTA Bus Map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/modals.html"
+							title="This intermediate guide shows how to create a multiple modal form.">
+							Multiple Modals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/text-editor.html"
+							title="This intermediate guide walks you through building a basic rich text editor.">
+							Text Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/tinder-carousel.html"
+							title="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+							Tinder Carousel
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>advanced recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-advanced.html"
+							title="This advanced guide walks through building a simple credit card payment form with validations. It doesn’t use can-define. Instead it uses Kefir.js streams to make a ViewModel. can-kefir is used to make the Kefir streams observable to can-stache.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-advanced.html"
+							title="This advanced guide walks you through building a file navigation widget that requests data with fetch. It takes about 45 minutes to complete.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/playlist-editor.html"
+							title="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+							Playlist Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/search-list-details.html"
+							title="This advanced guide walks through building a Search, List, Details flow with lazy-loaded routes.">
+							Search, List, Details
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>upgrade</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-3.html"
+							title="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+							Migrating to CanJS 3
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-4.html"
+							title="This guide walks you through the step-by-step process to upgrade a 3.x app to CanJS 4.">
+							Migrating to CanJS 4
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-5.html"
+							title="This guide walks you through the process to upgrade a 4.x app to CanJS 5.x.">
+							Migrating to CanJS 5
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-6.html"
+							title="This guide walks you through the process to upgrade a 5.x app to CanJS 6.x.">
+							Migrating to CanJS 6
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="upgrade/using-codemods.html"
+							title="Learn how to migrate your app to CanJS 6 using can-migrate.">
+							Using Codemods
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>other</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="api.html"
+							title="This page walks through how to use and understand CanJS’s API documentation.">
+							Reading the API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Customizing Connections</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/topics/data/customizing-connections/customizing-connections.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Learn the layers that make up <a href="../can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a> and how to implement custom connection functionality.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <h2>Introduction</h2>
+<p>CanJS provides several convenient ways of creating service layer interfaces (i.e connections) for your data models (i.e Lists &amp; Maps). These include <a href="../can-rest-model.html" title="Connect a type to a restful service layer.">can-rest-model</a>, <a href="../can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">can-realtime-rest-model</a> and <a href="../can-super-model.html" title="Connect a type to a restful data source, automatically manage lists, combine requests, and use a fall-through localstorage cache.">can-super-model</a>. Underneath the surface, these are all just pre-defined sets of the building blocks of <a href="../can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a>, <strong><em>behaviors</em></strong>.</p>
+<p>These pre-defined sets of <strong><em>built-in behaviors</em></strong> <a href="data-configuring-requests.html" title="URL, query, and response formats for making requests.">can be configured to cover many use cases</a>, but developers may need to modify their service integrations more extensively than what's possible with configuration alone. This could be to add new features or integrate with unusual backends not supported by the included behaviors. Deep customization of this sort is accomplished by creating connections that include new <strong><em>custom behaviors</em></strong>. Custom behaviors may <a href="#extend"><em>extend</em></a> or <a href="#implement"><em>replace</em></a> the functionality of built-in behaviors. Consequently, authors of custom behaviors need to have good knowledge of the functionality provided by existing behaviors and the points of interaction between them.</p>
+<p>This guide covers the knowledge you need to write your own <strong><em>custom behaviors</em></strong>:</p>
+<ul>
+<li>how to implement <strong><em>behaviors</em></strong>, the <em>layers</em> of a connection</li>
+<li>the importance of <strong><em>behavior ordering</em></strong></li>
+<li>the <strong><em>interfaces</em></strong> and their <strong><em>interface methods</em></strong>, the <em>extension points</em> used to implement behaviors</li>
+</ul>
+<h2>Interfaces Overview</h2>
+<p>Interfaces in <a href="../can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a> refer to categorizations of related methods that may be implemented by a behavior. These methods define how the layers (behaviors) of <a href="../can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a> interact with each other, and the public API of the connection. As an example, the <a href="../can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a> &quot;Data Interface&quot; is made up of methods like the following:</p>
+<table>
+    <thead>
+        <tr>
+            <th colspan="2">
+                Data Interface
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><a href="../can-connect/connection.getData.html" title="Retrieves a record."><code>getData(query)</code></a></td>
+            <td>Fetch the raw data of the persisted instance identified by the query.</td>
+        </tr>
+        <tr>
+            <td><a href="../can-connect/connection.getListData.html" title="Retrieves list of records for the given set."><code>getListData(query)</code></a></td>
+            <td>Fetch the raw data of the set of persisted instances identified by the query.</td>
+        </tr>
+        <tr>
+            <td><a href="../can-connect/connection.createData.html" title="Creates a new record in the connection."><code>createData(data)</code></a></td>
+            <td>Make a request to persist the raw data in the passed argument.</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                ... and several others
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>Essentially, interfaces are a loose specification of shared &quot;extension points&quot; that are used in the implementation of behaviors. For example, the following shows two behaviors that implement the same extension point differently; one using XHR, another using <a href="https://developer.mozilla.org/en/docs/Web/API/Fetch_API"><code>fetch</code></a>:</p>
+<pre><code class="language-js">import { connect } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+// two behaviors that implement the `getListData` method of the `Data Interface`
+
+const xhrData = connect.behavior('xhr-data', (previousPrototype) =&gt; {
+    return {
+        getListData() {
+            return new Promise((resolve, reject) =&gt; {
+                const request = new XMLHttpRequest();
+                request.addEventListener(&quot;load&quot;, function() {
+                    resolve(JSON.parse(this.responseText));
+                });
+                request.open(&quot;GET&quot;, this.url);
+                request.send();
+            });
+        }
+        // ... an actual DataInterface implementation would also implement:
+        //     getData, createData, updateData, destroyData
+    };
+});
+
+const fetchData = connect.behavior(
+    'fetch-data',
+    (previousPrototype) =&gt; {
+        return {
+            getListData() {
+                return fetch(this.url).then(response =&gt; response.json());
+            }
+            // ... an actual DataInterface implementation would also implement:
+            //     getData, createData, updateData, destroyData
+        };
+    }
+);
+
+const connectionOptions = {
+    url: 'https://jsonplaceholder.typicode.com/todos/',
+};
+
+const xhrConn = xhrData(connectionOptions);
+const fetchConn = fetchData(connectionOptions);
+
+xhrConn.getListData({}).then(data =&gt;
+    console.log(`Used XHR to load ${data.length} todos.`)
+);
+fetchConn.getListData({}).then(data =&gt;
+    console.log(`Used fetch to load ${data.length} todos.`)
+);
+
+</code></pre>
+<div line-highlight='3,5-20,22-33,only'></div>
+<div class='codepen'></div>
+<p>Considering interfaces are just potential points of extension, an entire interface doesn't need to be implemented for a connection to function. For example, <a href="../can-connect/connection.getSets.html" title="Gets the sets that are available in the connection.">getQueries</a> isn’t implemented by <a href="../can-connect/data/url/url.html" title=""><code>data/url</code></a>. Behaviors implement <em>parts</em> of an interface.</p>
+<p>As an example of how interfaces are used as extension points, the <a href="../can-connect/DataInterface.html" title="The most common raw data methods."><code>Data Interface</code></a> defines ~20 methods, but the <a href="../can-connect/data/url/url.html" title=""><code>data/url</code></a> behavior only <a href="#implement"><em>implements</em></a> 5 of them. <a href="../can-connect/connection.getListData.html" title="Retrieves list of records for the given set."><code>getListData</code></a> is one of those 5 methods and its implementation simply makes an HTTP request. The other behaviors in a connection might <a href="#extend"><em>extend</em></a> <a href="../can-connect/data/url/url.html" title=""><code>data/url</code></a>'s <a href="../can-connect/data/url/url.getListData.html" title=""><code>getListData</code></a>, possibly to add <a href="../can-connect/data/combine-requests/combine-requests.html" title="Combines multiple incoming lists requests into a single list request when possible.">request combining</a> or <a href="../can-connect/cache-requests/cache-requests.html" title="Cache response data and use it to prevent unnecessary future requests or make future requests smaller.">request caching</a>. Alternatively, other behaviors may implement methods from another interface which <a href="#consume"><em>consume</em></a> <a href="../can-connect/data/url/url.getListData.html" title=""><code>getListData</code></a>. A common scenario would be <a href="../can-connect/connection.getList.html" title="Gets a can-connect.List of instances."><code>getList</code></a> from the <a href="../can-connect/InstanceInterface.html" title="The methods used to create, retrieve, update and destroy typed instances with a connection."><code>Instance Interface</code></a>, whose implementation would call the <a href="../can-connect/connection.getListData.html" title="Retrieves list of records for the given set."><code>getListData</code></a> implementation of this connection.</p>
+<p><a id="behaviors-overview"></a></p>
+<h2>Behaviors Overview</h2>
+<p>Behaviors are the &quot;layers&quot; of <a href="../can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a> connections. A connection is an object with a prototype chain made of behavior instances. The default export of behavior modules are &quot;object extension functions&quot; that add an instance of the behavior to the prototype chain of the passed object instance, and by chaining these functions, connections are built:</p>
+<pre><code class="language-js">import { connect, QueryLogic } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+const connectionOptions = {
+    url: 'https://jsonplaceholder.typicode.com/todos/{id}',
+    queryLogic: new QueryLogic({ identity: [&quot;id&quot;] }),
+};
+
+const baseInstance = connect.base(connectionOptions);
+const dataUrlInstance = connect.dataUrl(base);
+const connection = connect.dataCombineRequests(dataUrl);
+connection.init();
+
+// connection prototype chain is made up of the behavior instances
+console.log(
+    `First proto: ${connection.__proto__ === dataUrlInstance}`
+);
+console.log(
+    `Second proto: ${connection.__proto__.__proto__ === baseInstance}`
+);
+console.log(
+    `Third proto: ${connection.__proto__.__proto__.__proto__ === connectionOptions}`
+);
+
+connection.getData({id: 5}).then((result) =&gt; {
+    console.log(`Fetched Todo JSON: `, result);
+});
+
+</code></pre>
+<div line-highlight='8-11,13-22,only'></div>
+<div class='codepen'></div>
+<p>Illustrating the prototype chain in the example above:</p>
+<div>
+<img src="https://docs.google.com/drawings/d/e/2PACX-1vQgK18R6Vw-zfFtQj5LMjb_Pf8PoWJQ9clVECyZ1n4hslYKhzhdrkTJwkXVqaVw7JGMWKfqPye44ezY/pub?w=415&amp;h=609">
+</div>
+<p>Behaviors can be:</p>
+<ul>
+<li><strong><em>Implementers</em></strong>: simply implementing interface methods</li>
+<li><strong><em>Consumers</em></strong>:  using interface methods provided by other behaviors</li>
+<li><strong><em>Extenders</em></strong>: adding to other behavior's implementations of interface methods</li>
+</ul>
+<p><a id="implement"></a>
+To be a method <strong><em>implementer</em></strong>, a behavior just needs to include that method as part of their definition. The following implements <a href="../can-connect/connection.getListData.html" title="Retrieves list of records for the given set."><code>getListData</code></a>:</p>
+<pre><code class="language-js">import { connect } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+// a behavior that implements the `getListData` method of the `Data Interface`
+const fetchData = connect.behavior(
+    'fetch-data',
+    (previousPrototype) =&gt; {
+        return {
+            getListData() {
+                return fetch(this.url).then(response =&gt; response.json());
+            }
+            // ... a complete Data Interface implementation would also implement:
+            //     getData, createData, updateData, destroyData
+        };
+    }
+);
+
+const connectionOptions = {
+    url: 'https://jsonplaceholder.typicode.com/todos/',
+};
+
+const fetchConn = fetchData(connectionOptions);
+
+fetchConn.getListData({}).then(data =&gt;
+    console.log(`Used fetch to load ${data.length} todos.`)
+);
+
+</code></pre>
+<div line-highlight='4-15,only'></div>
+<div class='codepen'></div>
+<p>Being a method <strong><em>consumer</em></strong> just means calling a method on the connection. Here the behavior is consuming the <a href="../can-connect/data/url/url.getData.html" title=""><code>getData</code></a> method:</p>
+<pre><code class="language-js">import { ObservableObject, QueryLogic, connect } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class Todo extends ObservableObject {
+  static props = {
+    id: {
+      identity: true,
+      type: Number
+    },
+    userId: Number,
+    title: String,
+    completed: Boolean,
+    lastAccessedDate: String,
+  }
+}
+
+// a behavior that implements the `getList` method of the `Instance Interface`,
+// consumes from `getListData`
+const todoConstructor = connect.behavior(
+    'todo-constructor',
+    (previousPrototype) =&gt; {
+        return {
+            get(query) {
+                return this.getData(query).then((data) =&gt; new Todo(data));
+            }
+            // ... an actual Instance Interface implementation would also implement:
+            //     getList, destroy, save &amp; update
+        };
+    }
+);
+
+const connectionOptions = {
+    url: 'https://jsonplaceholder.typicode.com/todos/{id}',
+    queryLogic: new QueryLogic(Todo)
+};
+
+const connection = todoConstructor(connect.dataUrl(connect.base(
+    connectionOptions
+)));
+connection.init();
+
+connection.get({id: 5}).then((result) =&gt; {
+    console.log(`Fetched A Todo: `, result);
+});
+
+</code></pre>
+<div line-highlight='18-29,only'></div>
+<div class='codepen'></div>
+<p><a id="extend"></a>
+<strong><em>Extending</em></strong> is a bit more complicated. Property access on a connection works like any ordinary JavaScript object, the property is first searched for on the &quot;base&quot; object instance, before searching up the objects on the base object's prototype chain. Since behaviors are instances on that chain, a behavior can override an implementation of a method from a behavior higher in the prototype chain. That feature, with behaviors being able to reference the prototype higher than them in the chain, is what allows them to extend interface methods. This is done by overriding a method and calling the previous implementation as part of that overriding implementation. The following extends <a href="../can-connect/data/url/url.getData.html" title=""><code>getData</code></a> to add some logging:</p>
+<pre><code class="language-js">import { ObservableObject, QueryLogic, connect } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class Todo extends ObservableObject {
+  static props = {
+    id: {
+      identity: true,
+      type: Number
+    },
+    userId: Number,
+    title: String,
+    completed: Boolean,
+    lastAccessedDate: String,
+  }
+}
+
+// a behavior that extends the `getData` method of the `Data Interface`, to add
+// logging whenever a single instance is loaded
+const loggingBehavior = connect.behavior(
+    'data-logging',
+    (previousPrototype) =&gt; {
+        return {
+            getData(query) {
+                return previousPrototype.getData(query).then((data) =&gt; {
+                    console.log(
+                        `Successfully fetched ${this.Map.shortName} ${this.id(data)} data from server.`
+                    );
+                    return data;
+                });
+            }
+        };
+    }
+);
+
+const connectionOptions = {
+    url: 'https://jsonplaceholder.typicode.com/todos/{id}',
+    queryLogic: new QueryLogic(Todo),
+    ObjectType: Todo,
+};
+
+const connection = connect.constructor(loggingBehavior(connect.dataUrl(connect.base(
+    connectionOptions
+))));
+connection.init();
+
+connection.get({id: 5}).then((instance) =&gt; {
+    document.body.innerText = JSON.stringify(instance, null, 4);
+});
+
+</code></pre>
+<div line-highlight='18-32, only'></div>
+<div class='codepen'></div>
+<h3>Calling From Root vs Calling On Previous Behavior</h3>
+<p>As we've explained, <strong><em>extender</em></strong> and <strong><em>consumers</em></strong> both make calls to interface methods within the connection, but there's a distinction regarding <em>how</em> they make those calls that's worth highlighting. Typically when <strong><em>consumers</em></strong> call an interface method they call it on the connection object, which looks like <code>this.getData()</code>. That causes a lookup for <a href="../can-connect/connection.getData.html" title="Retrieves a record."><code>getData</code></a> starting at the &quot;root&quot; of the connection prototype chain. In contrast, when an <strong><em>extender</em></strong> calls the method they're extending, they call it on the behavior above them in the prototype chain e.g <code>previousBehavior.getData()</code>. This causes a lookup on the portion of the prototype chain higher than the current behavior.</p>
+<h2>Interface Index</h2>
+<p>A listing of the interfaces of <a href="../can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a> and their most commonly used methods:</p>
+<style>
+table {
+<p>}
+td, th {
+text-align: left;
+padding: 1em;
+}
+td:first-child, th:first-child {
+padding-left: 0;
+}
+td:last-child, th:last-child {
+padding-right: 0;
+}
+table code {
+white-space: nowrap;
+}
+tbody tr {
+border-top: 1px solid black;
+}</p>
+</style>
+<table>
+    <thead><th>Interface Name</th><th>Summary</th></thead>
+    <tbody>
+        <tr>
+            <td><a href="../can-connect/DataInterface.html" title="The most common raw data methods.">Data</a></td>
+            <td>
+                The methods used by behaviors to get or mutate information in some form of persisted storage. These methods only operate on *raw* data comprised of plain JS Objects, Arrays and primitive types.<br/><br/>
+            The most common interface methods of the <a href="../can-connect/DataInterface.html" title="The most common raw data methods.">DataInterface</a> are:
+            <ul>
+                <li><a href="../can-connect/connection.getData.html" title="Retrieves a record."><code>getData</code></a></li>
+                <li><a href="../can-connect/connection.getListData.html" title="Retrieves list of records for the given set."><code>getListData</code></a></li>
+                <li><a href="../can-connect/connection.createData.html" title="Creates a new record in the connection."><code>createData</code></a></li>
+                <li><a href="../can-connect/connection.updateData.html" title="Updates a record in the collection."><code>updateData</code></a></li>
+                <li><a href="../can-connect/connection.destroyData.html" title="Destroys a record in the collection."><code>destroyData</code></a></li>
+            </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="../can-connect/InstanceInterface.html" title="The methods used to create, retrieve, update and destroy typed instances with a connection.">Instance</a></td>
+            <td>
+                The methods used by behaviors to persist or mutate already persisted *typed* objects.<br/><br/>
+            The most common interface methods of the <a href="../can-connect/InstanceInterface.html" title="The methods used to create, retrieve, update and destroy typed instances with a connection.">InstanceInterface</a> are:
+            <ul>
+                <li><a href="../can-connect/connection.get.html" title=""><code>get</code></a></li>
+                <li><a href="../can-connect/connection.getList.html" title="Gets a can-connect.List of instances."><code>getList</code></a></li>
+                <li><a href="../can-connect/connection.save.html" title="Create or update an instance."><code>save</code></a></li>
+                <li><a href="../can-connect/connection.destroy.html" title="Destroy an instance."><code>destroy</code></a></li>
+            </ul>           
+            </td>
+        </tr>
+        <tr>
+          <td>Transition</td>
+          <td>
+            The methods used to transition between raw data and instances. The interface bridges the gap between the Data & Instance interfaces.<br/><br/>
+            The most common methods of this interface are:
+            <ul>
+          <li>hydrateInstance</li>
+          <li>hydrateList</li>
+          <li>serializeInstance</li>
+          <li>serializeList</li>
+            </ul>
+          </td>
+        </tr>
+    </tbody>
+</table>
+<h2>Built-In Behavior Index</h2>
+<p>A listing of the behaviors provided by <a href="../can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a> and a short description of their functionality:</p>
+<table>
+    <thead><th>Behavior Name</th><th>Summary</th></thead>
+    <tbody>
+    <tr>
+      <td>
+        <a href="../can-connect/base/base.html" title="The first behavior added to every can-connect connection. Provides methods to uniquely identify instances and
+lists."><code>base</code></a>
+      </td>
+      <td>Provides option accessor and convenience methods required by other behaviors. Included in every connection. Not something that would typically be customized.</td>
+    </tr>    
+        <tr>
+            <td>
+                <a href="../can-connect/cache-requests/cache-requests.html" title="Cache response data and use it to prevent unnecessary future requests or make future requests smaller."><code>cache-requests</code></a>
+            </td>
+            <td>Cache response data and use it for future requests.</td>
+        </tr>
+        <tr>
+            <td>
+                <a href="../can-local-store.html" title="Create, update, delete and query data saved in localStorage."><code>can-local-store</code></a>
+            </td>
+            <td>Implement a LocalStorage caching connection.</td>
+        </tr>
+        <tr>
+            <td>
+                <a href="../can-memory-store.html" title="Create, update, delete and query data saved in memory."><code>can-memory-store</code></a>
+            </td>
+            <td>Implement an in-memory caching connection.</td>
+        </tr>
+        <tr>
+            <td>
+                <a href="../can-connect/can/constructor-hydrate/constructor-hydrate.html" title="Check the store.instanceStore when creating new instances of the connected
+map._Map type. Return an existing instance if a match is found. Prevents duplication of
+instances when instances are created outside of the can-connect connection."><code>can/constructor-hydrate</code></a>
+            </td>
+            <td>Always check the instanceStore when creating new instances of the connection `Map` type.</td>
+        </tr>                       
+        <tr>
+            <td>
+                <a href="../can-connect/can/map/map.html" title="Integrate a can-connect connection with a DefineMap type."><code>can/map</code></a>
+            </td>
+            <td>Create `Map` or `List` instances from responses. Adds connection-aware convenience methods to configured types.</td>
+        </tr>
+        <tr>
+            <td>
+                <a href="../can-connect/can/ref/ref.html" title="Handle references to instances in the data returned by the server. Allows several means of loading referenced instances, determined on-the-fly."><code>can/ref</code></a>
+            </td>
+            <td>Handle references to other instances in the raw data responses.</td>
+        </tr>               
+    <tr>
+      <td>
+        <a href="../can-connect/constructor/constructor.html" title="Adds an interface to interact with custom types via the connection instead of plain Objects and Arrays."><code>constructor</code></a>
+      </td>
+      <td>Manage persistence of instances of a provided constructor function or list type.</td>
+    </tr>
+    <tr>
+      <td>
+        <a href="../can-connect/constructor/store/store.html" title="Adds support for keeping references to active lists and instances. Prevents different copies of an instance from
+being used by the application at once. Allows other behaviors to look up instances currently active in the
+application."><code>constructor/store</code></a>
+      </td>
+      <td>Prevent multiple instances of a given id or multiple lists of a given set from being created.</td>
+    </tr>
+        <tr>
+            <td>
+                <a href="../can-connect/data/callbacks/callbacks.html" title="Extend DataInterface methods to call callbacks with the raw response data."><code>data/callbacks</code></a>
+            </td>
+            <td>Add callback hooks that are passed the results of the DataInterface request methods.</td>
+        </tr>    
+        <tr>
+            <td>
+                <a href="../can-connect/data/callbacks-cache/callbacks-cache.html" title="Implements the data interface callbacks to call the base.cacheConnection
+DataInterface. These calls keep the base.cacheConnection contents
+up to date."><code>data/callbacks-cache</code></a>
+            </td>
+            <td>Listen for `data/callbacks` and update the cache when requests complete.</td>
+        </tr>           
+        <tr>
+            <td>
+                <a href="../can-connect/data/combine-requests/combine-requests.html" title="Combines multiple incoming lists requests into a single list request when possible."><code>data/combine-requests</code></a>
+            </td>
+            <td>Combine overlapping or redundant requests</td>
+        </tr>        
+        <tr>
+            <td>
+                <a href="../can-connect/data/parse/parse.html" title="Extract response data into a format needed for other extensions."><code>data/parse</code></a>
+            </td>
+            <td>Convert response data into a format needed for other behaviors.</td>
+        </tr>
+        <tr>
+            <td>
+                <a href="../can-connect/data/url/url.html" title=""><code>data/url</code></a>
+            </td>
+            <td>Persist data to RESTful HTTP services.</td>
+        </tr>       
+        <tr>
+            <td>
+                <a href="../can-connect/real-time/real-time.html" title="Update lists to include or exclude instances based
+on set logic."><code>real-time</code></a>
+            </td>
+            <td>Lists updated when instances are created or deleted.</td>
+        </tr>
+    </tbody>
+</table>
+<h2>Ordering Behaviors</h2>
+<p>When placing a custom behavior in the prototype chain it's important to know what interface methods you intend to implement and those you intend to extend. You may not be the only implementer of a method and for your implementation to be executed, your behavior will need to be lower in the prototype chain. When extending an interface method you may want your extension to run before all other extensions, after all extensions, or at some point between particular extensions. Behaviors lower in the chain execute before extensions higher in the chain.</p>
+<p>The built-in behaviors of <code>can-connect</code> have a canonical order to ensure they function. Understanding this order may help you better understand where your custom behavior should be ordered:</p>
+<table>
+    <thead>
+        <tr>
+            <th>
+                Behavior Name
+            </th>
+            <th>
+                Reason For Position
+            </th>
+        </tr>
+      <tr>
+        <td></td>
+        <td>
+        <blockquote><i><b>Note:</b></i> Behaviors here are listed from highest in the prototype chain to lowest.</blockquote>
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <a href="../can-connect/base/base.html" title="The first behavior added to every can-connect connection. Provides methods to uniquely identify instances and
+lists."><code>base</code></a>
+            </td>
+            <td>
+                Implements option accessor and convenience methods. Positioned highest in the prototype chain since this is basic "helper" functionality used to implement other behaviors.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="../can-connect/data/url/url.html" title=""><code>data/url</code></a>
+            </td>
+            <td>
+                Implements the raw data manipulation methods of the `Data Interface`. Thus it needs to be placed higher than any behaviors that would consume or extend the data manipulation methods.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="../can-connect/data/parse/parse.html" title="Extract response data into a format needed for other extensions."><code>data/parse</code></a>
+            </td>
+            <td>
+                Extends the data manipulation methods of `Data Interface` to mutate the response received. Thus it needs to be lower in the proto chain than the implementation of those methods, but higher than any users of those methods.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="../can-connect/cache-requests/cache-requests.html" title="Cache response data and use it to prevent unnecessary future requests or make future requests smaller."><code>cache-requests</code></a>
+            </td>
+            <td>
+                Extends the data fetching methods of `Data Interface` to modifies call to it, fulfilling the call from the <a href="../can-connect/base/base.cacheConnection.html" title="An underlying can-connect connection used when fetching data from a cache."><code>cacheConnection</code></a> if possible. Thus it needs to be lower in the proto chain than the implementation of those methods, but higher than any users of those methods. Positioned lower than `data/parse` so parsed data is cached.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="../can-connect/data/combine-requests/combine-requests.html" title="Combines multiple incoming lists requests into a single list request when possible."><code>combine-requests</code></a>
+            </td>
+            <td>
+                Extends the data fetching methods of `Data Interface` to modifies call to it, combining requests if possible. Positioned lower than other extensions of the data fetching methods so their extensions to functionality benefit the combined request.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="../can-connect/data/worker/worker.html" title="Connects a connection to another connection in a worker thread."><code>data/worker</code></a>
+            </td>
+            <td>
+              Implements the data fetching methods of the `Data Interface` to redirect calls to them to a worker thread. This behavior should come lower in the prototype chain than the behaviors extending the data fetching methods. This is so that the calls are redirected to the worker as early as possible, keeping all processing related to the data fetching methods isolated to the worker.
+            </td>
+        </tr>       
+        <tr>
+            <td>
+                <a href="../can-connect/constructor/constructor.html" title="Adds an interface to interact with custom types via the connection instead of plain Objects and Arrays."><code>constructor</code></a>
+            </td>
+            <td>
+                Implements instance manipulation methods of the `Instance Interface`. Thus it needs to be placed higher than users of these methods.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="../can-connect/constructor/store/store.html" title="Adds support for keeping references to active lists and instances. Prevents different copies of an instance from
+being used by the application at once. Allows other behaviors to look up instances currently active in the
+application."><code>constructor/store</code></a>
+            </td>
+            <td>
+                Extends the instance management methods of the `Instance Interface` modifying them to prevent recreating instances that are already actively used in the app, and provides references to active instances to other behaviors. Thus it's positioned lower than `constructor` but higher other behaviors which depend on those `Instance Interface` methods.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="../can-connect/can/map/map.html" title="Integrate a can-connect connection with a DefineMap type."><code>can/map</code></a>
+            </td>
+            <td>
+                Extends the instance management methods of the `Instance Interface` to integrate can-connect more tightly with CanJS `Map` & `List` types. Thus it's positioned lower than `constructor`.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="../can-connect/can/ref/ref.html" title="Handle references to instances in the data returned by the server. Allows several means of loading referenced instances, determined on-the-fly."><code>can/ref</code></a>
+            </td>
+            <td>
+                Exposes connection functionality as an instantiable type that enables modeling of the relationships between persisted instance types. Expects CanJS instances to be created by the connection so this is positioned below `can/map`.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="../can-connect/fall-through-cache/fall-through-cache.html" title="Add fall-through caching with the cacheConnection."><code>fall-through-cache</code></a>
+            </td>
+            <td>
+                Extends instance hydration and data fetching functionality to immediately return using data from a cache while simultaneously making a request, updating the instance when the request completes. This is positioned lower than `constructor` so that the `Instance Interface` hydration methods can be extended.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="../can-connect/real-time/real-time.html" title="Update lists to include or exclude instances based
+on set logic."><code>real-time</code></a>
+            </td>
+            <td>
+              Extends the instance creation methods so new or updated instances are added to existing Lists where appropriate. This is positoned lower in the prototype chain so that other `Instance Interface` extensions can be overridden to modify when certain actions execute.
+              <blockquote>
+                <i><b>Note:</b></i> <a href="../can-connect/real-time/real-time.html" title="Update lists to include or exclude instances based
+on set logic."><code>real-time</code></a> depends on:
+                <ul>
+                    <li><a href="../can-connect/constructor/callbacks-once/callbacks-once.html" title="Prevents duplicate calls to the instance callback methods."><code>constructor/callbacks-once</code></a></li>
+                    <li>
+                        <a href="../can-connect/data/callbacks/callbacks.html" title="Extend DataInterface methods to call callbacks with the raw response data."><code>data/callbacks</code></a>
+                    </li>
+                      <li>
+                        <a href="../can-connect/constructor/store/store.html" title="Adds support for keeping references to active lists and instances. Prevents different copies of an instance from
+being used by the application at once. Allows other behaviors to look up instances currently active in the
+application."><code>constructor/store</code></a>
+                    </li>
+                </ul>
+                These (or equivalent custom behaviors) must be included as part of the connection.
+              </blockquote>
+            </td>
+        </tr>    
+        <tr>
+            <td>
+                <a href="../can-connect/data/callbacks-cache/callbacks-cache.html" title="Implements the data interface callbacks to call the base.cacheConnection
+DataInterface. These calls keep the base.cacheConnection contents
+up to date."><code>data/callbacks-cache</code></a>
+            </td>
+            <td>
+              Implements the `Data Interface` callbacks triggered by the `data/callbacks` behavior to keep a cache updated with changes to data. Typically positioned immediately above `data/callbacks` in the prototype chain so that it's the first behavior to react to changes to data via the callbacks.
+            </td>
+        </tr>    
+        <tr>
+            <td>
+                <a href="../can-connect/data/callbacks/callbacks.html" title="Extend DataInterface methods to call callbacks with the raw response data."><code>data/callbacks</code></a>
+            </td>
+            <td>
+              Extends the `Data Interface` data fetching methods to know when modifications to data have taken place, in turn calling the `Data Interface` callbacks, notifying higher behaviors that an execution of a data fetching method has completed. This behavior is positioned very low in the prototype chain since the `Data Interface` callbacks are intended to run after a data fetching method is "complete" and no further behaviors extend them.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="../can-connect/constructor/callbacks-once/callbacks-once.html" title="Prevents duplicate calls to the instance callback methods."><code>constructor/callbacks-once</code></a>
+            </td>
+            <td>
+              Extends the `Instance Interface` callback methods to prevent duplicated calls to them. This behavior is positioned very low in the prototype chain since the prevention of duplicate calls should take place as early as possible.  
+            </td>
+        </tr>    
+    </tbody>
+</table>
+<h2>Combining Behaviors</h2>
+<p>The combining of behaviors by chaining functions (as shown in the <a href="#behaviors-overview">Behaviors Overview</a>) is very straightforward but can be tedious to read when combining many behaviors. <a href="../can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a> offers the <a href="../can-connect.html#connect_behaviors_options_" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins)."><code>connect</code></a> function to assemble behaviors, but to make it clearer to users how connections are assembled we now suggest that users deviating from the pre-built connections (e.g <a href="../can-rest-model.html" title="Connect a type to a restful service layer.">can-rest-model</a>) assemble their behaviors themselves.</p>
+<p>One way behaviors can be assembled cleanly is by using the <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce"><code>reduce</code></a> method of arrays which iterates over the elements of an array, assembling a result:</p>
+<blockquote>
+<p><strong><em>Note:</em></strong> the <code>init</code> function must be called after creating the connection to initialize some behaviors. When using the <a href="../can-connect.html#connect_behaviors_options_" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins)."><code>connect</code></a> function this is called automatically.</p>
+</blockquote>
+<pre><code class="language-js">import { ObservableObject, QueryLogic, connect } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class Todo extends ObservableObject {
+  static props = {
+    id: {
+      identity: true,
+      type: Number
+    },
+    userId: Number,
+    title: String,
+    completed: Boolean,
+    lastAccessedDate: String,
+  }
+}
+
+const behaviors = [
+    connect.base,
+    connect.dataUrl,
+    connect.dataParse,
+    connect.constructor,
+];
+
+const connectionOptions = {
+    url: 'https://jsonplaceholder.typicode.com/todos/{id}',
+    queryLogic: new QueryLogic(Todo)
+};
+
+const connection = behaviors.reduce(
+    (connection, behavior) =&gt; behavior(connection),
+    connectionOptions
+);
+connection.init();
+
+connection.get({id: 5}).then((result) =&gt; {
+    console.log(`Fetched A Todo: `, result);
+});
+
+</code></pre>
+<div line-highlight='16-21, 28-31, only'></div>
+<div class='codepen'></div>
+<h2>Practical Custom Behavior Examples</h2>
+<p>As a demo of the concepts shown above, below are examples of custom behaviors that add functionality via behavior implementation, consumption, and extension.</p>
+<h3>Fetch-based data/url</h3>
+<p>The following is an <strong><em>implementer</em></strong> behavior that implements the same functionality as the <a href="../can-connect/data/url/url.html" title=""><code>data/url</code></a> behavior, but using the newer <a href="https://developer.mozilla.org/en/docs/Web/API/Fetch_API">fetch API</a> rather than the XHR API. This behavior may be useful if you want a feature <a href="https://developer.mozilla.org/en/docs/Web/API/Fetch_API">fetch</a> offers, like the ability to abort a request.</p>
+<pre><code class="language-js">import { connect, key } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+function _getRequestURLAndMethod(connUrl, requestName, params) {
+    let url = null;
+    let method = null;
+
+    if (connUrl[requestName]) {
+        [method, url] = connUrl[requestName].split(/ (.+)/);
+    } else {
+        switch(requestName) {
+            case 'getListData':
+                url = connUrl;
+                method = 'GET';
+                break;
+            case 'createData':
+                url = connUrl;
+                method = 'POST';
+                break;
+            case 'getData':
+                url = connUrl+&quot;/{id}&quot;;
+                method = 'GET';
+                break;
+            case 'updateData':
+                url = connUrl+&quot;/{id}&quot;;
+                method = 'PUT';
+                break;
+            case 'destroyData':
+                url = connUrl+&quot;/{id}&quot;;
+                method = 'DELETE';
+                break;
+        }
+    }
+
+    url = key.replaceWith(url, params, (key, value) =&gt; encodeURIComponent(value), true);
+
+    return { url, method };
+}
+
+function _makeFetchRequest({ url, method }, params) {
+    return fetch(url, {
+        method,
+        credentials: 'same-origin',
+        body: method !== 'GET' ? JSON.stringify(params) : undefined,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(
+        response =&gt; {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error(`Server did not produce a successful response code: ${response.status}`);
+            }
+        },
+        error =&gt; {
+            console.log('There has been a network error during fetch execution: ', error.message);
+        }
+    );
+}
+
+const fetchData = connect.behavior(
+    'fetch-data',
+    () =&gt; {
+        return {
+            getListData(params) {
+                return _makeFetchRequest(
+                    _getRequestURLAndMethod(this.url, 'getListData', params),
+                    params
+                );
+            },
+            getData(params) {
+                return _makeFetchRequest(
+                    _getRequestURLAndMethod(this.url, 'getData', params),
+                    params
+                );
+            },
+            createData(params) {
+                return _makeFetchRequest(
+                    _getRequestURLAndMethod(this.url, 'createData', params),
+                    params
+                );
+            },
+            updateData(params) {
+                return _makeFetchRequest(
+                    _getRequestURLAndMethod(this.url, 'updateData', params),
+                    params
+                );
+            },
+            destroyData(params) {
+                return _makeFetchRequest(
+                    _getRequestURLAndMethod(this.url, 'destroyData', params),
+                    params
+                );
+            },
+        };
+    }
+);
+
+const connectionOptions = {
+    url: 'https://jsonplaceholder.typicode.com/todos',
+};
+
+const fetchConn = fetchData(connectionOptions);
+
+fetchConn.getListData({}).then(data =&gt;
+    console.log(`Used fetch to load ${data.length} todos.`)
+);
+
+</code></pre>
+<div class='codepen'></div>
+<h3>WebSocket update channel</h3>
+<p>The following is a <strong><em>consumer</em></strong> behavior that uses the API of <a href="../can-connect/real-time/real-time.html" title="Update lists to include or exclude instances based
+on set logic."><code>real-time</code></a> to allow real-time updates of models from a web socket connection. A behavior like this may be useful if your API allows you to subscribe via WebSocket to receive notifications of changes to models.</p>
+<pre><code class="language-html">&lt;script type=&quot;module&quot;&gt;
+    import { connect, ObservableObject, QueryLogic, realtimeRestModel, stache, type } from &quot;//unpkg.com/can@6/everything.mjs&quot;;
+
+    class Todo extends ObservableObject {
+        static get props() {
+            return {
+                id: {
+                    identity: true,
+                    type: type.maybeConvert(Number)
+                },
+                userId: type.maybeConvert(Number),
+                title: type.maybeConvert(String),
+                completed: type.maybeConvert(Boolean)
+            };
+        }
+    }
+
+    const websocketSidechannel = connect.behavior('websocket-sidechannel', (previousPrototype) =&gt; {
+        return {
+            init() {
+                // start listening to websocket when connection is built
+                this.websocket.onmessage(({data}) =&gt; {
+                    // merge partial instance from websocket with existing data
+                    const mergedData = Object.assign(this.instanceStore.get(data.id), data);
+                    this.updateInstance(mergedData);
+                });
+                previousPrototype.init();
+            },
+        }
+    });
+
+    // an object taking the place of an open websocket for the purpose of this test
+    // receives a message updating a todo as completed every 3 seconds, starting
+    //  from the first todo
+    const mockWebsocket = {
+        id: 1,
+        onmessage(listener) {
+            setInterval(() =&gt; {
+                // send a message completing a todo 3 seconds
+                listener({ data: { id: this.id, completed: true }});
+                this.id = this.id + 1;
+            }, 3000);
+        }
+    };
+
+    const template = stache(`
+        {{# for(todo of this.todos)}}
+        &lt;li&gt;{{todo.title}} - {{todo.completed}}&lt;/li&gt;
+        {{/ for}}
+    `);
+
+    const connectionOptions = {
+        url: 'https://jsonplaceholder.typicode.com/todos/',
+        queryLogic: new QueryLogic(Todo),
+        ObjectType: Todo,
+        websocket: mockWebsocket,
+    };
+    const connection = websocketSidechannel(realtimeRestModel(connectionOptions));
+    connection.init();
+
+    connection.getList({}).then((todos) =&gt; {
+        document.getElementById('todos').appendChild(template({todos}));
+    });
+&lt;/script&gt;
+&lt;ul id=&quot;todos&quot;&gt;&lt;/ul&gt;
+
+</code></pre>
+<div class='codepen'></div>
+<h3>Auto-updating Field</h3>
+<p>The following is a <strong><em>extender</em></strong> behavior that extends the <a href="../can-connect/constructor/constructor.createdInstance.html" title="A method run whenever a new instance has been saved to the data source. Updates the instance with response data."><code>createdInstance</code></a> callbacks to update instances with a &quot;last viewed&quot; time.</p>
+<pre><code class="language-js">import { connect, restModel, QueryLogic, ObservableObject } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class Todo extends ObservableObject {
+  static props = {
+    id: {
+      identity: true,
+      type: Number
+    },
+    userId: Number,
+    title: String,
+    completed: Boolean,
+    lastAccessedDate: String,
+  }
+}
+
+const updateLastAccessed = connect.behavior(
+    'update-last-accessed',
+    (previousBehavior) =&gt; {
+        function updateLastAccessed(instance) {
+            instance.lastAccessedDate = new Date().toISOString();
+            instance.save().then(() =&gt; console.log('Updated last accessed time for: ', instance));
+        };
+
+        return {
+            get() {
+                return previousBehavior.get.apply(this, arguments).then((instance) =&gt; {
+                    updateLastAccessed(instance);
+                    return instance;
+                });
+            },
+            getList() {
+                return previousBehavior.getList.apply(this, arguments).then((list) =&gt; {
+                    list.forEach((instance) =&gt; updateLastAccessed(instance));
+                    return list;
+                });
+            },
+        };
+    }
+);
+
+const connectionOptions = {
+    url: 'https://jsonplaceholder.typicode.com/todos/',
+    queryLogic: new QueryLogic(Todo),
+    ObjectType: Todo,
+};
+
+const connection = updateLastAccessed(restModel(connectionOptions));
+
+connection.getList({}).then(data =&gt;
+    console.log(`Loaded ${data.length} todos.`)
+);
+
+</code></pre>
+<div class='codepen'></div>
+<h2>A Review of <code>instance.save</code> Execution</h2>
+<p>To illustrate the interactions between a connection's behaviors we're going to trace the execution of the most typical way of persisting a model. That is calling the <a href="../can-connect/can/map/map.prototype.save.html" title="Save or update client data to the persisted data source."><code>save</code></a> method on an instance of a <a href="../can-define/map/map.html" title="Create observable objects.">CanJS Map</a> that's been passed as the <a href="../can-connect/can/map/map._Map.html" title="Specify the type of the DefineMap that should be instantiated by the connection."><code>Map</code></a> option to a connection; in this case a connection created by <a href="../can-rest-model.html" title="Connect a type to a restful service layer.">can-rest-model</a>. The behaviors in <a href="../can-rest-model.html" title="Connect a type to a restful service layer.">can-rest-model</a> are:</p>
+<ol>
+<li><a href="../can-connect/data/url/url.html" title=""><code>data/url</code></a></li>
+<li><a href="../can-connect/data/parse/parse.html" title="Extract response data into a format needed for other extensions."><code>data/parse</code></a></li>
+<li><a href="../can-connect/constructor/constructor.html" title="Adds an interface to interact with custom types via the connection instead of plain Objects and Arrays."><code>constructor</code></a></li>
+<li><a href="../can-connect/can/map/map.html" title="Integrate a can-connect connection with a DefineMap type."><code>can/map</code></a></li>
+</ol>
+<p>We'll show how the instance methods of these behaviors interact to produce the final results and maintain the state of the connection:</p>
+<h3>Illustration Slides</h3>
+<iframe src="https://docs.google.com/presentation/d/e/2PACX-1vSZYzx_ml8F94NCWIJlq5zLDIX_td5xaaGPsppSBQ68vUfQAbPjtMbzNyIhUXgBsgcpx96vBco0NMNN/embed?start=false" frameborder="0" width="640" height="399" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+<h3>Step-by-step Explanation</h3>
+<style>
+div.spaced > ol > li {
+  margin-bottom: 16px;
+}
+</style>
+<div class='spaced'>
+<ol>
+<li><p>A user calls <a href="../can-connect/can/map/map.prototype.save.html" title="Save or update client data to the persisted data source."><code>save</code></a> on an instance of one of their <a href="../can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a>'d models:</p>
+<pre><code class="language-js">class Todo extends ObservableObject { /* ... */ }
+Todo.connection = restModel({
+    ObjectType: Todo,
+    ...
+});
+const todoInstance = new Todo({ value: 'say hello to world' });
+todoInstance.save().then( /* ... */ )
+</code></pre>
+ <div line-highlight='7'></div>
+<p><code>todoInstance.save()</code> returns a promise that resolves when all the connection's promise handlers for the request are completed (in step 9).</p></li>
+<li><p>The <a href="../can-connect/can/map/map.prototype.save.html" title="Save or update client data to the persisted data source."><code>save</code></a> method is not a default part of CanJS observable instances, rather it is added to the Todo prototype by the <a href="../can-connect/can/map/map.html" title="Integrate a can-connect connection with a DefineMap type."><code>can/map</code></a> behavior during the creation of the connection. The implementation of <a href="../can-connect/can/map/map.prototype.save.html" title="Save or update client data to the persisted data source."><code>save</code></a> in <a href="../can-connect/can/map/map.html" title="Integrate a can-connect connection with a DefineMap type."><code>can/map</code></a> calls the <a href="../can-connect/connection.save.html" title="Create or update an instance."><code>save</code></a> method of the connection with the instance:</p>
+<pre><code class="language-js">connection.save(instance);
+</code></pre></li>
+<li><p>At this point the lowest behavior with an implementation of <a href="../can-connect/InstanceInterface.html" title="The methods used to create, retrieve, update and destroy typed instances with a connection."><code>InstanceInterface</code></a> <a href="../can-connect/connection.save.html" title="Create or update an instance."><code>save</code></a> in the connection prototype chain is called. In this case it's the <a href="../can-connect/constructor/constructor.html" title="Adds an interface to interact with custom types via the connection instead of plain Objects and Arrays."><code>constructor</code></a> behavior. This implementation checks to see if the instance already has an identity value, which means it existed before this request. If it did already exist, an update request is made to the backend by calling the <a href="../can-connect/DataInterface.html" title="The most common raw data methods."><code>Data Interface</code></a> method <a href="../can-connect/connection.updateData.html" title="Updates a record in the collection."><code>updateData</code></a>, otherwise <a href="../can-connect/connection.createData.html" title="Creates a new record in the connection."><code>createData</code></a> which happens in this case. The promise returned from <a href="../can-connect/connection.createData.html" title="Creates a new record in the connection."><code>createData</code></a> has a handler added which will execute in step 7.</p></li>
+<li><p><a href="../can-connect/connection.createData.html" title="Creates a new record in the connection."><code>createData</code></a> is called on <a href="../can-connect/data/parse/parse.html" title="Extract response data into a format needed for other extensions."><code>data/parse</code></a>. This behavior is an extension that reformats the response returned by the implementation of <a href="../can-connect/connection.createData.html" title="Creates a new record in the connection."><code>createData</code></a>. It calls <a href="../can-connect/connection.createData.html" title="Creates a new record in the connection."><code>createData</code></a> on the behaviors higher in the chain and attaches a promise handler which will execute in step 6.</p></li>
+<li><p><a href="../can-connect/data/url/url.createData.html" title=""><code>createData</code></a> is called on <a href="../can-connect/data/url/url.html" title=""><code>data/url</code></a>. It makes a request to the server and returns a promise for the response data.</p></li>
+<li><p>Once the server responds, the promise handlers begin running. First to run is the one attached by <a href="../can-connect/data/parse/parse.html" title="Extract response data into a format needed for other extensions."><code>data/parse</code></a>, reformatting the response if appropriate.</p></li>
+<li><p>The next and last <a href="../can-connect/data/url/url.createData.html" title=""><code>createData</code></a> promise handler to run is the one attached by <a href="../can-connect/constructor/constructor.html" title="Adds an interface to interact with custom types via the connection instead of plain Objects and Arrays."><code>constructor</code></a>. It calls the appropriate <a href="../can-connect/InstanceInterface.html" title="The methods used to create, retrieve, update and destroy typed instances with a connection."><code>Instance Interface</code></a> callback either <a href="../can-connect/constructor/constructor.updatedInstance.html" title="A method run whenever an existing instance has been saved to the data source. Overwrites the instance with response
+data."><code>updatedInstance</code></a>, or in this case <a href="../can-connect/constructor/constructor.createdInstance.html" title="A method run whenever a new instance has been saved to the data source. Updates the instance with response data."><code>createdInstance</code></a>.</p></li>
+<li><p><a href="../can-connect/can/map/map.html" title="Integrate a can-connect connection with a DefineMap type."><code>can/map</code></a> is the lowest behavior in the prototype chain that has a <a href="../can-connect/can/map/map.createdInstance.html" title="Implements the constructor.createdInstance callback so it dispatches an event and
+updates the instance."><code>createdInstance</code></a> callback, so it's called first. It updates the instance that was passed to <code>connection.save</code> with any new data in the response and emits a <code>created</code> event on the Map constructor. <a href="../can-connect/can/map/map.html" title="Integrate a can-connect connection with a DefineMap type."><code>can/map</code></a> is an implementer of <a href="../can-connect/can/map/map.createdInstance.html" title="Implements the constructor.createdInstance callback so it dispatches an event and
+updates the instance."><code>createdInstance</code></a> not an extender, so at this point <a href="../can-connect/constructor/constructor.createdInstance.html" title="A method run whenever a new instance has been saved to the data source. Updates the instance with response data."><code>createdInstance</code></a> callbacks are finished running.</p></li>
+<li><p>Now that the <a href="../can-connect/constructor/constructor.createdInstance.html" title="A method run whenever a new instance has been saved to the data source. Updates the instance with response data."><code>createdInstance</code></a> callbacks initiated by <a href="../can-connect/constructor/constructor.html" title="Adds an interface to interact with custom types via the connection instead of plain Objects and Arrays."><code>constructor</code></a> are finished, we resume the execution of <a href="../can-connect/connection.save.html" title="Create or update an instance."><code>save</code></a> promise handlers. The only remaining handlers are any attached to the promise returned from <a href="../can-connect/can/map/map.prototype.save.html" title="Save or update client data to the persisted data source."><code>instance.save()</code></a>. The connection execution is now complete and that user-facing promise is resolved.</p></li>
+</ol>
+</div>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/topics/data/customizing-connections/customizing-connections.md"},"description":"Learn the layers that make up [can-connect] and how to implement custom connection functionality. \n","name":"guides/data-customizing-connections","title":"Customizing Connections","type":"page","parent":"guides/data","order":4,"outline":{"depth":3},"comment":" ","codepen":[["\"can\"","\"//unpkg.com/can@6/core.mjs\""],["\"can/ecosystem\"","\"//unpkg.com/can@6/ecosystem.mjs\""],["\"can/everything\"","\"//unpkg.com/can@6/everything.mjs\""],["\"can/demos/technology-overview/mock-url\"","\"//unpkg.com/mock-url@^6.0.0/mock-url.mjs\""],["\"can/demos/technology-overview/route-mini-app-components\"","\"//unpkg.com/route-mini-app@^5.0.0/components.mjs\""],["return steal.import(","return import("],["\"can/demos/technology-overview/page-login\"","\"//unpkg.com/route-mini-app@^5.0.0/page-login.mjs\""],["`can/demos/technology-overview/page-${this.page}`","`//unpkg.com/route-mini-app@^5.0.0/page-${this.page}.mjs`"]],"pathToRoot":"../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix=".."></div>
+
+	</body>
+</html>

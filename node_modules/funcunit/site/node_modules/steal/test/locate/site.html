@@ -1,0 +1,18 @@
+<body>
+<div class="logo">
+
+</div>
+<script>
+	window.QUnit = window.parent.QUnit;
+	window.removeMyself = window.parent.removeMyself;
+	steal = {
+		paths: {
+			"$less": "../ext/less.js",
+			"$css": "../ext/css.js",
+			"stache": "stache.js"
+		}
+	};
+</script>
+<script type="text/javascript" src='../bower_components/steal/steal.js'
+        main='main' data-config="config.js"></script>
+</body>

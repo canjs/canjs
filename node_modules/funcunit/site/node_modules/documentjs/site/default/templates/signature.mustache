@@ -1,0 +1,103 @@
+<h2 id="{{makeSignatureId code params returns context}}">{{{makeSignature code}}}
+{{#if release}}<span class="pull-right release">{{release}}</span>{{/if}}</h2>
+<div class="signature-wrapper">
+{{{chain "makeHtml" "makeLinks" description}}}
+{{#if params}}
+	<h3>Parameters</h3>
+
+	<ol class="parameters">
+		{{#params}}
+		<li class="parameter">
+			<h4>{{name}}{{#if defaultValue}}<code>={{defaultValue}}</code>{{/if}}
+				{{#if types}}<code>{{{makeTypesString types}}}</code>{{/if}}{{#if optional}}<span class="pull-right optional">Optional{{#if variable}} Variable{{/if}}</span>{{/if}}</h4>
+			<div class="description">
+				{{{chain "makeHtml" "makeLinks" description}}}
+			</div>
+			{{#types}}
+			{{#if options.length}}
+			<ul class="options">
+				{{#options}}
+				<li class="option">
+					<h5>{{name}} 
+						{{#if types}}<code>{{{makeTypesString types}}}</code>{{/if}}
+					</h5>
+					<div class="description">
+						{{{chain "makeHtml" "makeLinks" description}}}
+					</div>
+				</li>
+				{{/options}}
+			</ul>
+			{{/if}}
+			{{/types}}
+		</li>
+		{{/params}}
+	</ol>
+{{/if}}
+{{#if returns}}
+	<h3>Returns</h3>
+	<div class="returns">
+		<h4><code>{{{makeTypesString returns.types}}}</code></h4>
+		<div class="description">
+			{{{chain "makeHtml" "makeLinks" returns.description}}}
+		</div>
+		
+		{{#getTypesWithDescriptions returns.types}}
+		<ul class="options">
+			{{#types}}
+			<li class="option">
+				<h5>{{name}} 
+					{{#if types}}<code>{{{makeTypesString types}}}</code>{{/if}}
+				</h5>
+				<div class="description">
+					{{{chain "makeHtml" "makeLinks" description}}}
+				</div>
+			</li>
+			{{/types}}
+		</ul>
+		{{/getTypesWithDescriptions}}
+	</div>
+	
+{{/if}}
+{{#if context}}
+	<h3>This</h3>
+	<div class="returns">
+		<h4><code>{{{makeTypesString context.types}}}</code></h4>
+		<div class="description">
+			{{{chain "makeHtml" "makeLinks" context.description}}}
+		</div>
+	</div>
+{{/if}}
+
+{{#if options.length}}
+  <h3>Properties</h3>
+  
+  <ol class="parameters">
+	{{#options}}
+	<li class="parameter">
+		<h4>{{name}}{{#if defaultValue}}<code>={{defaultValue}}</code>{{/if}}
+			{{#if types}}<code>{{{makeTypesString types}}}</code>{{/if}}{{#if optional}}<span class="pull-right optional">Optional</span>{{/if}}</h4>
+		<div class="description">
+			{{{chain "makeHtml" "makeLinks" description}}}
+		</div>
+		{{#types}}
+		{{#if params.length}}
+		<ul class="options">
+			{{#params}}
+			<li class="option">
+				<h5>{{name}} 
+					{{#if types}}<code>{{{makeTypesString types}}}</code>{{/if}}
+				</h5>
+				<div class="description">
+					{{{chain "makeHtml" "makeLinks" description}}}
+				</div>
+			</li>
+			{{/params}}
+		</ul>
+		{{/if}}
+		{{/types}}
+	</li>
+	{{/options}}
+</ol>
+{{/if}}
+
+</div>

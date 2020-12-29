@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-canjs/canjs.md
+	@page canjs
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="CanJS is a JavaScript framework for building CRUD apps in fewer lines of code.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="CanJS is a JavaScript framework for building CRUD apps in fewer lines of code.">
+	<meta property="og:title" content="CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "CanJS is a JavaScript framework for building CRUD apps in fewer lines of code.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="doc/static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="canjs" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="doc/about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="doc/guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="doc/api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="doc/community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="doc/guides/contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="doc/about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="doc/guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="doc/api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="doc/community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="doc/guides/contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>CanJS — Build CRUD apps in fewer lines of code.</h1>
+			<ul class="title-social">
+				
+				<li>
+					<a class="npm-button" href="https://www.npmjs.com/package/can">
+						<img src="https://img.shields.io/badge/npm%20package-6.6.1-brightgreen.svg" alt="npm package badge" />
+					</a>
+				</li>
+				<li>
+					<a class="github-button nav-social" href="https://github.com/canjs/canjs" data-show-count="true">Star</a>
+				</li>
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-canjs/canjs.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>CanJS is a JavaScript framework for building CRUD apps in fewer lines of code.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <style>
+.on-this-page-table {
+  display: none;
+}
+abbr[title] {
+  text-decoration: underline #c4c4c3;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
+  color: #1A1E1F;
+  border-bottom: none;
+  margin: 0;
+  padding: 0;
+}
+h2 {
+  font-size: 32px;
+  line-height: 1;
+  margin-bottom: 15px;
+}
+h3 {
+  font-size: 28px;
+  line-height: 1;
+  color: #282C33;
+  margin-bottom: 10px;
+}
+code[class*=language-]:before {
+  content: "";
+  background-color: #f5f5f5;
+  height: 25px;
+  width:100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-bottom: solid 1px #dfdfdf;
+}
+p + ul {
+  margin-top: 0;
+}
+.title .description {
+  display: none;
+}
+.btn {
+  display: inline-flex;
+  border-radius: 5px;
+  background-color: #3e7abe;
+  margin: 0 auto;
+  padding: 13px 23px;
+  font-size: 24px;
+  color: #fff;
+  letter-spacing: 0;
+  text-align: center;
+}
+.body {margin: 0}
+.caption {
+  display: flex;
+  margin: 15px 30px;
+  font-style: italic;
+  line-height: 1.5;
+}
+.title {
+  margin: 0;
+  padding: 0;
+}
+.page-type {
+  display:none;
+  float: none;
+  height: 0;
+  margin: 0;
+  padding: 0;
+}
+.gray-callout {
+  background-color: #E2E1E0;
+  display: flex;
+  flex-wrap: wrap;
+}
+.gray-callout p {
+  margin-bottom: 0;
+}
+.hero-section {
+  display: flex;
+  align-items: center;
+  max-height: 400px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.hero-secton h2 {
+  margin-bottom: 0;
+}
+.hero-section .left-col {
+  padding: 30px 0 0 60px;
+}
+.hero-section .right-col {
+  flex: 1;
+}
+.hero-section .right-col img {
+  margin-top: 40px;
+  max-height: 370px;
+}
+.hero-section .btn {
+  margin: 30px 0;
+}
+.hero-logo {
+  fill: #3e7abe;
+  width: 300px;
+  height: 118px;
+}
+.single-col-wrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 1440px;
+  margin: 40px auto;
+  width: 100%;
+}
+.single-col-wrapper .content-wrapper {
+  margin-left: 30px;
+  margin-right: 30px;
+}
+.single-col-wrapper .btn-wrapper {
+  margin: 45px auto 30px auto;
+  text-align: center;
+  width: 100%;
+}
+.three-col-wrapper {
+  display: flex;
+  max-width: 1440px;
+  text-align: center;
+  margin: auto;
+}
+.three-col-wrapper .col-container {
+  margin: 40px 30px;
+  text-align: left;
+  width: 33.33%;
+}
+.three-col-wrapper .col-container h3 {
+  transition: all .3s ease-in-out;
+}
+.three-col-wrapper .col-container .content {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+.three-col-wrapper .col-container .content-details {
+  min-height: 225px;
+}
+.three-col-wrapper .col-container .content-image {
+  text-align: center;
+  margin: auto;
+}
+.three-col-wrapper .col-container .modal-layer {
+  margin-top: -10px;
+}
+.three-col-wrapper .col-container .real-time-list {
+  margin-top: -19px;
+}
+.three-col-wrapper .col-container .content object {
+  margin: auto;
+  min-width: 280px;
+}
+.three-col-wrapper a.col-container {
+  border: 3px solid transparent;
+  transition: all .3s ease-in-out;
+}
+.three-col-wrapper a.col-container:hover {
+  text-decoration: none;
+  border: 3px solid #0288C9;
+}
+.three-col-wrapper a.col-container:hover h3 {
+  border-bottom: 1px solid #0288C9;
+}
+.social {
+  display: flex;
+  flex-direction: column;
+  padding: 40px 30px;
+}
+.social h2 {
+  margin-bottom: 15px;
+}
+.social .social-two-col {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  margin: auto;
+  max-width: 1375px;
+}
+.social-two-col .left-col {
+  display: flex;
+  flex-direction: column;
+  margin-right: 60px;
+}
+.social-two-col .right-col {
+  display: flex;
+}
+.social-two-col p {
+  padding-bottom: 0;
+}
+.social-two-col .right-col a {
+  margin-right: 45px;
+}
+.social-two-col .right-col a:last-of-type {
+  margin-right: 5px;
+}
+.social-two-col img {
+  height: 40px;
+}
+.social-two-col .github {
+  height: 35px;
+}
+.code-overview {
+  display: flex;
+  flex-direction: column;
+  max-width: 1440px;
+  margin: auto;
+}
+.code-overview h3 {
+  font-weight: 500;
+}
+.code-proof {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 40px 30px 20px;
+}
+.code-proof:last-of-type {
+  margin-bottom: 40px;
+}
+.code-proof .left-col {
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+  margin-right: 60px;
+}
+.code-proof .right-col {
+  align-items: center;
+  display: flex;
+  flex: 2;
+}
+.code-proof .code-toolbar {
+  text-align: center;
+  margin: auto;
+  width: 560px;
+}
+.clients {
+  display: flex;
+  flex-direction: column;
+  padding: 45px 30px;
+}
+.clients-single-col {
+  display: flex;
+  flex-direction: column;
+  max-width: 1455px;
+  margin: auto;
+  text-align: center;
+  width: 100%;
+}
+.clients h2 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+.client-logos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.client-logos img {
+  height: 32px;
+  margin: 10px;
+}
+.two-col-wrapper {
+  display: flex;
+  max-width: 1440px;
+  margin: 50px auto
+}
+.two-col-wrapper div {
+  width: 50%;
+  margin-left: 30px;
+  margin-right: 30px;
+}
+.two-col-wrapper img {
+  max-width: 100%;
+}
+.footer .btn {
+  margin: 45px auto;
+}
+.footer-single-col {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.sm-bundle-svg {
+    float: right;
+    height: 60px;
+    margin-top: -15px;
+    margin-left: 15px;
+}
+.line-numbers-rows {
+  display: none;
+}
+pre[class*=language-] {
+  margin-top: 0;
+}
+pre[class*=language-].line-numbers.line-numbers code {
+  padding: 40px 15px 15px;
+}
+.social-links {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: flex;
+  list-style: none;
+  margin: 15px 0;
+  padding: 0;
+  flex-basis: 100%;
+  align-self: flex-start;
+}
+.social-links li {
+  margin-right: 15px;
+}
+@media (min-width: 1699px) {
+  .three-col-wrapper .col-container .content {
+    flex-direction: column;
+  }
+}
+@media (max-width: 1699px) {
+  .three-col-wrapper .col-container .content {
+    flex-direction: column;
+  }
+  .three-col-wrapper .col-container .content object,
+  .three-col-wrapper .col-container .content .code-toolbar {
+    margin-bottom: 15px;
+  }
+}
+@media (max-width: 1229px) {
+  .hero-section {
+    background-position: 110%;
+  }
+  .hero-section .left-col {
+    width: 50%;
+    padding-top: 60px;
+  }
+  .social-two-col .right-col {
+    flex-direction: column;
+  }
+  .social-two-col .right-col a {
+    margin-right: 30px;
+    margin-bottom: 30px;
+  }
+  .social-two-col .right-col a:last-of-type {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+}
+@media (max-width: 1159px) {
+  .code-proof .left-col {
+    width: 100%;
+    flex: none;
+  }
+  .code-proof .right-col {
+    width: 100%;
+    flex: none;
+  }
+}
+@media (max-width: 1099px) {
+  .three-col-wrapper {
+    flex-wrap: wrap;
+  }
+  .three-col-wrapper .col-container {
+    width: 100%;
+    margin: 10px 30px;
+  }
+  .three-col-wrapper .col-container:first-of-type {
+    margin-top: 40px;
+  }
+  .three-col-wrapper .col-container:last-of-type {
+    margin-right: 10px;
+    margin-bottom: 20px;
+  }
+  .three-col-wrapper .col-container .content {
+    flex-direction: row;
+  }
+  .three-col-wrapper .col-container .content object,
+  .three-col-wrapper .col-container .content .code-toolbar {
+    margin: auto 0 auto 30px;
+  }
+  .three-col-wrapper .col-container .modal-layer {
+    margin-top: 0;
+  }
+  .three-col-wrapper .col-container .real-time-list {
+    margin-top: 0;
+  }
+}
+@media (max-width: 999px) {
+  .hero-section {
+    background-position: 50vw 100%;
+  }
+  .hero-section .left-col {
+    width: 50%;
+    padding-top: 60px;
+  }
+}
+@media (max-width: 899px) {
+  .hero-section .left-col {
+      padding: 45px 0 0 45px;
+  }
+  .social .social-two-col {
+    flex-wrap: wrap;
+  }
+  .social .social-two-col .left-col {
+    flex-wrap: wrap;
+    width: 100%;
+    margin-right: 0;
+  }
+  .social .social-two-col .right-col {
+    align-items: baseline;
+    flex-direction: row;
+    width: 100%;
+    margin-top: 10px;
+  }
+  .social-two-col .right-col a {
+    margin-right: 30px;
+    margin-bottom: 30px;
+  }
+  .social-two-col .right-col a:last-of-type {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+  .code-proof {
+    flex-wrap: wrap;
+  }
+  .code-proof .left-col {
+    width: 100%;
+    margin-right: 0;
+  }
+  .two-col-wrapper {
+    flex-wrap: wrap;
+  }
+  .two-col-wrapper div {
+    width: 100%;
+  }
+  .three-col-wrapper .col-container .content {
+    flex-direction: column;
+  }
+  .three-col-wrapper .col-container .content-details {
+    min-height: 0;
+  }
+}
+@media (max-width: 759px) {
+  .hero-section {
+    background-image: none;
+  }
+  .hero-section .left-col {
+    width: 100%;
+    padding: 30px 30px 0 30px;
+    height: unset;
+  }
+  .hero-section .right-col {
+    display: none;
+  }
+  .social {
+    padding-right: 30px;
+    padding-left: 30px;
+  }
+  .social-two-col .right-col {
+    flex-wrap: wrap;
+  }
+  .caption {
+    margin-right: 15px;
+    margin-left: 15px;
+  }
+  .code-proof .code-toolbar {
+    width: 100%;
+  }
+}
+@media (max-width: 529px) {
+  .hero-logo {
+    width: 260px;
+  }
+  .three-col-wrapper .col-container:last-of-type {
+    margin-right: 30px;
+    margin-bottom: 20px;
+  }
+  .three-col-wrapper .col-container .content {
+    flex-direction: column;
+  }
+  .three-col-wrapper .col-container .content object,
+  .three-col-wrapper .col-container .content .code-toolbar {
+    margin-bottom: 15px;
+    margin-left: 0;
+  }
+  .three-col-wrapper .col-container .content .code-toolbar {
+    margin-top: 10px;
+  }
+  .social-two-col img {
+    height: 30px;
+  }
+  .social .social-two-col .right-col {
+    margin-top: 0;
+  }
+  .social .social-two-col .right-col a {
+    margin-bottom: 0;
+  }
+}
+</style>
+<div class="gray-callout max-container">
+  <div class="hero-section">
+    <div class="left-col">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 365.7 144.4" class="hero-logo"><path d="M265.5 142.6l-7-13.8-1-2 2-1 5.8-3.6c1.6-1 3-2.2 4-3.2s2-2 2.6-3.2c.6-1 1.2-2.3 1.5-3.5l.3-1c0-.6.2-1 .3-1.3.5-2.2.7-4.8.7-7.8V37H298.6v68.2c0 3-.4 5.8-.8 8.6l-.3 1.6c0 .5-.2 1-.4 1.7-.6 3-1.7 5.6-3.2 8.2-1 2-2.4 3.7-4 5.4-1.4 1.6-3.2 3.2-5.3 4.7-.6.5-1.2 1-1.8 1.3l-2 1.2c-3.5 2-7.6 3.8-12.5 5.4l-2 .6-.7-1.6zm64.7-19.8c-2.3 0-4.4 0-6.3-.2-2 0-3.8-.3-5.6-.6l-4.8-1-4.3-1-3.7-1.6c-1.2-.5-2.3-1-3.3-1.6l-1.8-1 .7-2 5.4-13.7.8-2 2 .8c.4 0 .7.2 1 .3l1 .4c1.5.5 3 1 4.5 1.3l3 .7 3.2.4 3.6.3c1.3.2 2.6.2 4 .2 2.2 0 4.2-.2 5.8-.5.4 0 .6 0 .7-.2l3-1c0-.2.3-.4.5-.5.2 0 .3-.3.5-.5.7-.7 1-1.7 1-2.8 0-.7 0-1.3-.4-2l-1.6-1.6-2.8-1.7c-1-.6-2.3-1.2-3.6-1.7l-4.5-1.8c-1.2-.5-2.8-1-4.7-2l-5-2.3-4.5-2.8c-1.6-1-3-2.3-4.3-3.6-1.3-1.3-2.4-2.8-3.4-4.4l-.8-1.5-.7-1.5c-1-2.7-1.5-6-1.6-9.3 0-2.2.3-4 .7-6 .6-2 1.3-3.6 2.2-5.2 1-1.5 2-3 3.2-4.2 1.2-1.3 2.6-2.4 4-3.4 1.6-1 3.2-1.8 4.8-2.5 1.7-.8 3.4-1.4 5.2-1.8 1.8-.5 3.6-.8 5.4-1 1.8-.2 3.7-.3 5.6-.3h6l1 .2c1.3 0 2.7.3 4 .6l1.4.2 1.2.3c2 .4 4 1 5.7 1.6 1.2.3 2.4.8 3.4 1.2 1.2.4 2.3 1 3.3 1.4l2 1-.8 2L356 58l-.8 1.8-2-.6-5.6-1.6-2.8-.7-3-.6-3-.3H335c-1.7 0-3.2.2-4.4.5-1 .2-1.8.6-2.3 1-.2 0-.3.2-.4.3-.2 0-.3.2-.4.4-.4.6-.6 1.2-.6 2v.7c.3.6 1 1.3 2 2 .8.6 1.8 1.2 3 1.8 1 .6 2.3 1.2 3.7 1.8l1.2.5 1.2.6 6.8 3 5 2.5 4.7 3c1.5 1.2 3 2.5 4.3 3.8 1.3 1.4 2.5 3 3.4 4.5 1 1.7 2 3.5 2.4 5.5.5 2 .8 4 .8 6.4v2l-.3 2c-.4 3-1.4 6-3 8.4-1 1.7-2 3.3-3.5 4.7-1.4 1.4-3 2.6-4.7 3.7-1.6 1-3.4 2-5.3 2.7-2 .7-3.8 1.3-6 1.8-2 .5-4 .8-6.2 1-2 .2-4.2.3-6.3.3zM77.7 114c-14.2 3.8-30.2 6.4-45 3.5-5.8-1-11-3.5-16-7-5-3.7-8.8-9-12-16.2-3-7.2-4.7-17-4.7-29 0-12.3 2-22 5.6-29.5 3.4-7.4 7.7-13 13-16.7 5.4-3.6 10.8-6 16.6-7.3C41 10.5 46 10 50.7 10c7 0 22 2 29.2 6.7v23.8c-7.5-3.8-18-5.7-26-6-2.6 0-5 .4-7.4 1-2.4.6-4.6 2-6.6 4-1.8 2.2-3.3 5.4-4.4 9.4-1.4 4-2 9.4-2 16.2 0 6 .5 10.8 1.6 14.5.8 3.8 1.8 7 3.6 9 6.5 7.6 20.8 5 30.5 2.4.8 8 2.8 16.4 8.4 23z"/><path d="M132.3 67.3l-6 .2c-6.4 0-11 1-13.8 3.4-3 2.2-4.3 6.3-4.2 12.4 0 5 1 8.4 2.8 10.3 2 2 4.4 2.7 7.2 2.6 3.5 0 6-1 8.7-2.3v10.3c0 3.4.5 6 1.6 8-4 1.7-6.3 3-10.5 4.2-5 1.5-10 2.5-13.6 2.6-23.8.8-29.8-17-29.8-33.8 0-7.2 1.4-13 4.2-17.7 2.6-4.6 5.8-8 9.7-10.3 4.2-2.5 8.4-4.2 13-5.2 4.4-.7 8.5-1 12.4-1H132v-6.2c0-4-1-6.8-3.2-8-2-1.3-5.6-2-10.3-2-5.8.2-28.2 2.5-33.3 5.8V16c11.6-4.4 31.8-6 38.7-6 12-.2 21.8 2 29.7 6.3 4 2.6 6.8 6.2 9 10.7 2 4.8 3 10.8 3 18l.2 72h-.2v.5h-9.6c-11 0-24 1.2-24-14.3V67.3zM171.6 12h28.6l4.4 10.7c0-.3 3.4-2.5 10-6.4 3-1.8 6.8-3 11-4.4 4-1.3 8.2-2 12.8-2 9-.2 16.2 2 21.7 6.5 5.7 4.7 8.6 13 8.6 24.8v61.5c0 15.5-13 14.3-24 14.3H235V45.4c0-3.5-.5-6-1.8-7-1.2-1.3-3.8-1.8-7.3-1.8-5.2 0-9.7 1-14 3l-7 3.5v74.2H172L171.6 12zM286 0c8.6 0 15.7 7 15.7 15.7 0 8.6-7 15.7-15.7 15.7-8.6 0-15.7-7-15.7-15.7S277.3 0 286 0z"/></svg>
+      <h2>Build <abbr title="Apps that Create, Read, Update, and Delete data">CRUD apps</abbr> in fewer lines of code</h2>
+      <a href="./doc/guides/crud-beginner.html" class="btn">Learn how to build this CRUD app</a>
+    </div>
+    <div class="right-col">
+      <img src="docs/images/hero-image.svg" width="642" height="370" />
+    </div>
+  </div>
+</div>
+<div class="three-col-wrapper">
+  <div class="col-container">
+    <div class="content">
+      <div class="content-details">
+        <h3>Model layer</h3>
+        <p>Components shouldn’t be concerned with how data is fetched, updated, or cached.</p>
+        <p>
+          CanJS provides the right abstractions for your model code to be cleanly separated from your UI code.
+          <a href="#model-layer">Learn&nbsp;more…</a>
+        </p>
+      </div>
+      <div class="content-image modal-layer">
+        <object type="image/svg+xml" data="docs/images/animations/model-layer-still.svg"></object>
+      </div>
+    </div>
+  </div>
+  <div class="col-container">
+    <div class="content">
+      <div class="content-details">
+        <h3>Promises in templates</h3>
+        <p>CanJS’s <a href="doc/can-stache.html" title="Live binding templates.">stache templating language</a> can directly read the state and values from <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promises</a>.</p>
+        <p>
+          No need to write any extra code to determine whether a Promise is pending, resolved, or rejected.
+          <a href="#promises-in-templates">Learn&nbsp;more…</a>
+        </p>
+      </div>
+      <div class="content-image">
+<pre><code class="language-html">{{# if(this.promise.isPending) }}
+  Loading…
+{{/ if }}
+{{# if(this.promise.isRejected) }}
+  Error: {{ this.promise.reason }}
+{{/ if }}
+{{# if(this.promise.isResolved) }}
+  Result: {{ this.promise.value }}
+{{/ if }}
+</code></pre>
+</div>
+</div>
+  </div>
+  <div class="col-container">
+    <div class="content">
+      <div class="content-details">
+        <h3>Real-time list updating</h3>
+        <p>After data is created, updated, or destroyed, CanJS automatically updates your lists for you.</p>
+        <p>
+          Filtering and sorting are preserved, so you don’t have to manually update your lists or fetch the same data again.
+          <a href="#real-time-list-updating">Learn&nbsp;more…</a>
+        </p>
+      </div>
+      <div class="content-image real-time-list">
+        <object type="image/svg+xml" data="docs/images/animations/realtime-amin.svg"></object>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="gray-callout social">
+  <div class="social-two-col">
+    <div class="left-col">
+      <h2>We have your back</h2>
+      <p>CanJS is backed by <a href="https://www.bitovi.com/">Bitovi</a>, a company built on using and publishing open source software. We answer every question on <a href="https://bitovi.com/community/slack">our Slack</a> and <a href="https://forums.bitovi.com/">our Discourse forums</a>. We want to help you get started with CanJS!</p>
+      <ul class="social-links">
+        <li>
+          <a class="github-button nav-social" href="https://github.com/canjs/canjs" data-count-href="/canjs/canjs/stargazers" data-show-count="true">Star</a>
+        </li>
+        <li>
+          <a href="https://twitter.com/canjs" class="twitter-follow-button nav-social" data-show-count="true" data-show-screen-name="false">Follow @canjs</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </li>
+      </ul>
+    </div>
+    <div class="right-col">
+      <a href="https://bitovi.com/community/slack">
+        <img alt="Slack" src="../docs/images/logos/slack.svg" />
+      </a>
+      <a href="https://forums.bitovi.com/">
+        <img alt="Discourse" src="../docs/images/logos/discourse.svg" />
+      </a>
+    </div>
+  </div>
+</div>
+<div class="code-overview">
+  <div class="code-proof">
+    <div class="left-col">
+      <h3 id="model-layer">Model layer</h3>
+<p>With a single line of code, CanJS creates a model that represents the objects returned by a backend API.
+See how <code>Todo</code> is created by passing a URL to <a href="doc/can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">realtimeRestModel()</a>.</p>
+<p>The model layer is responsible for making GET, POST, PUT, and DELETE requests to your backend.
+With your component UI code using the model’s standard interface to make requests, if the backend API changes,
+you only have to configure the model and not change every component that uses that backend API.</p>
+<p>By default, CanJS assumes your backend API is RESTful. If your backend API isn’t RESTful, that’s ok!
+CanJS has configuration options for you to control how it makes requests, parses data, and more.</p>
+</div>
+<div class="right-col">
+<pre><code class="language-js">import { realtimeRestModel } from &quot;can&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+// Get todos sorted by name
+const todosPromise = Todo.getList({sort: &quot;name&quot;});
+todosPromise.then(todos =&gt; {
+  // Your backend API might return something like:
+  // todos = [ {name: &quot;a&quot;}, {name: &quot;b&quot;}, {name: &quot;c&quot;} ]
+});
+</code></pre>
+</div>
+</div>
+<div class="code-proof">
+<div class="left-col">
+<h3 id="promises-in-templates">Promises in templates</h3>
+<p>CanJS’s <a href="doc/can-stache.html" title="Live binding templates.">stache templating language</a> is similar to Handlebars and Mustache.
+Wherever you see <code>{{ }}</code> in a template, CanJS evaluates the expression inside to either
+print a value or perform some basic logic, like <a href="doc/can-stache.helpers.if.html" title="can-stache.helpers.if">#if</a> and
+<a href="doc/can-stache.helpers.for-of.html" title="Loop through a list of values, keys in an object, or integers.">#for(of)</a>.</p>
+<p>Stache is able to read the state and value of Promises. See <code>isPending</code>, <code>isRejected</code>,
+and <code>isResolved</code> being read on <code>this.todosPromise</code> in the example code? Those return
+true depending on the current state of the Promise. <code>reason</code> is provided if the
+Promise is rejected with an error, and <code>value</code> contains the resolved value if
+the promise succeeds.</p>
+<p>These helpers make it much easier to include loading and error states in your app.
+We promise you’ll love writing your templates this way.</p>
+</div>
+<div class="right-col">
+<pre><code class="language-html">{{# if(this.todosPromise.isPending) }}
+    Loading todos…
+{{/ if }}
+{{# if(this.todosPromise.isRejected) }}
+    Error: {{ this.todosPromise.reason.message }}
+{{/ if }}
+{{# if(this.todosPromise.isResolved) }}
+    &lt;ul&gt;
+        {{# for(todo of this.todosPromise.value) }}
+            &lt;li&gt;
+                {{ todo.name }}
+            &lt;/li&gt;
+        {{/ for }}
+    &lt;/ul&gt;
+{{/ if }}
+</code></pre>
+</div>
+</div>
+<div class="code-proof">
+  <div class="left-col">
+    <h3 id="real-time-list-updating">Real-time list updating</h3>
+<p>Here you can see CanJS’s model layer in action. When <code>Todo.getList({sort: &quot;name&quot;})</code> is called,
+CanJS makes a GET request to <code>/api/todos?sort=name</code></p>
+<p>When the array of to-dos comes back, CanJS associates that array with the query <code>{sort: &quot;name&quot;}</code>.
+When new to-dos are created, they’re added to the list that’s returned <em>automatically</em>, and
+in the right spot! You don’t have to write any code to make sure the new to-do gets inserted
+into the right spot in the list.</p>
+<p>CanJS does this for filtering as well. If you make a query with a filter (e.g. <code>{filter: {complete: true}}</code>),
+when items are added, edited, or deleted that match that filter, those lists will be updated automatically.</p>
+<p>Save yourself time by not writing code that updates your app’s UI.</p>
+</div>
+<div class="right-col">
+<pre><code class="language-js">import { realtimeRestModel } from &quot;can&quot;;
+
+const Todo = realtimeRestModel(&quot;/api/todos/{id}&quot;).ObjectType;
+
+// Get completed todos
+Todo.getList({sort: &quot;name&quot;}).then(todos =&gt; {
+  // Let’s assume the API came back with
+  // todos = [ {name: &quot;a&quot;}, {name: &quot;c&quot;} ]
+
+  // Create a new todo client-side
+  const newTodo = new Todo({name: &quot;b&quot;});
+
+  // The todos list is immediately updated with the
+  // new to-do in the right place, alphabetically:
+  // todos = [ {name: &quot;a&quot;}, {name: &quot;b&quot;}, {name: &quot;d&quot;} ]
+});
+</code></pre>
+</div>
+</div>
+</div>
+<div class="gray-callout footer">
+  <div class="footer-single-col">
+    <a href="./doc/guides/crud-beginner.html" class="btn">Take the CRUD Tutorial</a>
+  </div>
+</div>
+<div class="single-col-wrapper">
+<div class="content-wrapper">
+<h2>Get started with just a few lines of code</h2>
+<p>Below is an entire app that shows off some of the best features of CanJS:</p>
+<ul>
+<li>One line of code to create a model from the data returned by a backend API (with <a href="doc/can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">realtimeRestModel</a>).</li>
+<li><code>isPending</code>, <code>isRejected</code>, <code>isResolved</code>, and <code>value</code> helpers for directly reading the state of a Promise.</li>
+<li>When you add a to-do, it automatically gets inserted into the list in the right position.</li>
+</ul>
+<p class="codepen" data-height="560" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="dBKzBZ" style="height: 560px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 5 — Basic Todo App">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/dBKzBZ/">
+  CanJS 5 — Basic Todo App</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+  <script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+  <span class="caption">Type in a new to-do and click “Add” to see it appear in the list. Notice that new to-dos are inserted in alphabetical order, without any code that explicitly inserts the new one in the right place!</span>
+  <div class="btn-wrapper">
+    <a href="./doc/guides/crud-beginner.html" class="btn">Learn how to build this CRUD app</a>
+  </div>
+</div>
+</div>
+<a class="gray-callout clients" href="./doc/guides/who-uses-canjs.html">
+  <div class="clients-single-col">
+    <h2>Who Uses CanJS?</h2>
+    <div class="client-logos">
+      <img alt="Chase" src="../docs/images/logos/chase.svg" />
+      <img alt="Bitovi" src="../docs/images/logos/bitovi.svg" />
+      <img alt="Apple" src="../docs/images/logos/apple.svg" />
+      <img alt="Delta" src="../docs/images/logos/delta.svg" />
+      <img alt="HP" src="../docs/images/logos/hp.svg" />
+      <img alt="FedEx" src="../docs/images/logos/fedex.svg" />
+      <img alt="Tucows" src="../docs/images/logos/tucows.svg" />
+    </div>
+  </div>
+</a>
+<div class="two-col-wrapper">
+  <div class="">
+    <h3>Use DevTools to debug your app</h3>
+    <p>Use the CanJS DevTools to edit your app’s state at runtime, visualize the dependency graphs between elements and state, and debug changes to observables.</p>
+    <h3>Small bundle size</h3>
+    <object type="image/svg+xml" class="sm-bundle-svg" data="docs/images/3D-Isometric-Cardboard-Box-opt.svg"></object>
+    <p>At 72 KB gzipped, CanJS provides all the tools you need at a small size.</p>
+  </div>
+  <div class="">
+    <h3>Browser support</h3>
+    <p>CanJS supports Internet Explorer 11, Chrome, Edge, Firefox, and Safari.</p>
+    <img src="https://saucelabs.com/browser-matrix/canjs-not-master.svg" alt="Sauce Test Status" />
+  </div>
+</div>
+<div class="gray-callout footer">
+  <div class="footer-single-col">
+    <a href="./doc/guides/crud-beginner.html" class="btn">Take the CRUD Tutorial</a>
+  </div>
+</div>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-canjs/canjs.md"},"description":"CanJS is a JavaScript framework for building CRUD apps in fewer lines of code. \n","name":"canjs","title":"CanJS — Build CRUD apps in fewer lines of code.","type":"page","dest":"../index","outline":{"depth":0},"package":{"name":"can","version":"6.6.1","main":"can.js","scripts":{"preversion":"npm test","version":"git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/","postversion":"git push --tags && git checkout - && git branch -D release && git push","testee":"testee test/index.html --browsers firefox","testee-builders":"testee test/builders/test.html --browsers firefox","testee-production":"testee test/production.html --browsers firefox","testee-global-build":"testee test/global-build.html --browsers firefox","http-server":"http-server -p 3000 --silent","test":"npm run test-development && npm run test-production && npm run test-builders && npm run test-global-build","test-builders":"npm run build-webpack-test && npm run testee-builders","test-development":"npm run testee","test-global-build":"npm run build && bundlesize && npm run testee-global-build","test-local":"npm run build && npm run testee","test-production":"npm run build-tests && npm run testee-production","test-sauce-labs":"node test/test-sauce-labs.js","release:pre":"npm version prerelease && npm run build && npm publish --tag=pre","release:patch":"npm version patch && npm run build && npm publish","release:minor":"npm version minor && npm run build && npm publish","release:major":"npm version major && npm run build && npm publish","build":"node build.js","build-tests":"node test/build.js","build-webpack-test":"webpack --mode=production -o test/builders/webpack/bundle.js test/builders/webpack/index.js","document":"./pre-document.sh && npm run deps-bundle && bit-docs","document:force":"./pre-document.sh && npm run deps-bundle && bit-docs -fd","deps-bundle":"node build-dev-bundle"},"title":"CanJS","description":"MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.","keywords":["CanJS","DoneJS"],"author":{"name":"Bitovi","email":"contact@bitovi.com","web":"http://bitovi.com/"},"homepage":"http://canjs.com/","repository":{"type":"git","url":"git@github.com:canjs/canjs.git","github":"https://github.com/canjs/canjs"},"dependencies":{"can-ajax":"2.4.6","can-assign":"1.3.3","can-attribute-encoder":"1.1.4","can-attribute-observable":"2.0.2","can-bind":"1.5.1","can-child-nodes":"1.2.1","can-cid":"1.3.1","can-component":"5.0.0","can-compute":"4.1.1","can-connect":"4.0.2","can-connect-ndjson":"2.0.0","can-connect-tag":"2.0.0","can-construct":"3.5.6","can-construct-super":"3.2.1","can-control":"5.0.1","can-data-types":"1.2.1","can-debug":"2.0.7","can-deep-observable":"1.0.2","can-define":"2.8.0","can-define-backup":"2.1.2","can-define-lazy-value":"1.1.1","can-define-realtime-rest-model":"2.0.0","can-define-rest-model":"2.0.0","can-define-stream":"1.1.1","can-define-stream-kefir":"1.1.1","can-deparam":"1.2.3","can-diff":"1.5.0","can-dom-data":"1.0.3","can-dom-data-state":"1.1.2","can-dom-events":"1.3.11","can-dom-mutate":"2.0.8","can-event-dom-enter":"2.2.1","can-event-dom-radiochange":"2.2.1","can-event-queue":"1.1.8","can-fixture":"3.1.7","can-fixture-socket":"2.0.3","can-fragment":"1.3.1","can-globals":"1.2.2","can-kefir":"1.1.4","can-key":"1.2.1","can-key-tree":"1.2.2","can-list":"4.2.2","can-local-store":"1.0.1","can-log":"1.0.2","can-make-map":"1.2.2","can-map":"4.3.12","can-map-compat":"1.1.1","can-map-define":"4.4.0","can-memory-store":"1.0.3","can-namespace":"1.0.0","can-ndjson-stream":"1.0.2","can-observable-array":"1.1.4","can-observable-bindings":"1.3.3","can-observable-mixin":"1.0.10","can-observable-object":"1.1.4","can-observation":"4.2.0","can-observation-recorder":"1.3.1","can-observe":"2.3.2","can-param":"1.1.3","can-parse-uri":"1.2.2","can-query-logic":"1.2.2","can-queues":"1.3.2","can-realtime-rest-model":"2.0.0","can-reflect":"1.18.0","can-reflect-dependencies":"1.1.2","can-reflect-promise":"2.2.1","can-rest-model":"2.0.0","can-route":"5.0.2","can-route-hash":"1.0.2","can-route-mock":"1.0.2","can-route-pushstate":"6.0.0","can-set-legacy":"1.0.1","can-simple-dom":"1.7.1","can-simple-map":"4.3.3","can-simple-observable":"2.5.0","can-stache":"5.1.1","can-stache-bindings":"5.0.4","can-stache-converters":"5.0.0","can-stache-element":"1.2.0","can-stache-key":"1.4.3","can-stache-route-helpers":"2.0.0","can-stream":"1.1.1","can-stream-kefir":"1.2.1","can-string":"1.1.0","can-string-to-any":"1.2.1","can-super-model":"2.0.0","can-symbol":"1.6.5","can-type":"1.1.5","can-validate":"1.2.1","can-validate-interface":"1.0.3","can-validate-legacy":"2.0.1","can-validate-validatejs":"1.0.1","can-value":"1.1.2","can-vdom":"4.4.2","can-view-autorender":"6.0.0","can-view-callbacks":"5.0.0","can-view-live":"5.0.4","can-view-model":"4.0.3","can-view-parser":"4.1.3","can-view-scope":"4.13.6","can-view-target":"5.0.0","steal-stache":"5.0.0"},"devDependencies":{"@feathersjs/feathers":"^3.3.1","@feathersjs/socketio-client":"^1.2.1","@octokit/rest":"^16.27.3","@webcomponents/custom-elements":"^1.2.4","bit-docs":"^0.2.0","bundlesize":"^0.18.0","can-reflect-tests":"^1.0.0","can-test-helpers":"^1.1.1","core-js":"^2.5.7","es6-promise-polyfill":"^1.2.0","funcunit":"^3.4.2","gzip-size":"^4.1.0","http-server":"^0.11.1","jquery":"2.x - 3.x","jquery-ui":"^1.12.0","kefir":"^3.8.0","minimist":"^1.2.5","prop-types":"^15.5.10","qunit":"^2.9.2","semver":"^6.1.1","socket.io-client":"^2.2.0","steal":"^2.2.4","steal-conditional":"^1.1.3","steal-css":"^1.2.4","steal-qunit":"^2.0.0","steal-socket.io":"^4.0.9","steal-tools":"^2.2.5","test-saucelabs":"0.0.6","testee":"^0.9.0","version-and-release":"^0.1.1","webpack":"^4.12.0","webpack-cli":"^3.0.7"},"demos":["http://canjs.us/#examples","http://canjs.us/recipes"],"googleAnalyticsTrackingCode":"UA-2302003-11","licenses":[{"type":"MIT","url":"http://opensource.org/licenses/mit-license.php"}],"sideEffects":false,"steal":{"npmAlgorithm":"flat","main":"can","npmIgnore":["bit-docs","testee","async","saucelabs","test-saucelabs","wd","http-server"],"meta":{"socket.io-client/dist/socket.io":{"format":"cjs"}},"configDependencies":["./node_modules/steal-conditional/conditional.js"],"plugins":["steal-stache"]},"bit-docs":{"html":{"dependencies":{"normalize.css":"^5.0.0","steal-conditional":"^0.3.6","steal-stache":"^4.0.1"},"package":{"steal":{"configDependencies":["./node_modules/steal-conditional/conditional"]}},"static":[],"templates":[]},"dependencies":{"bit-docs-glob-finder":"^0.0.5","bit-docs-dev":"^0.0.3","bit-docs-js":"^0.0.6","bit-docs-tag-sourceref":"^0.0.3","bit-docs-generate-html":"^0.11.0","bit-docs-generate-searchmap":"^0.2.0","bit-docs-html-canjs":"3.0.0","bit-docs-prettify":"^0.3.0","bit-docs-html-highlight-line":"^0.5.3","bit-docs-tag-demo":"^0.5.3","bit-docs-tag-package":"^1.0.0","bit-docs-html-codepen-link":"^2.0.3","bit-docs-html-toc":"^1.1.1"},"glob":{"pattern":"{node_modules,docs}/{can-*,steal-stache}/**/*.{js,md}","ignore":["node_modules/can-namespace/**/*","node_modules/can-wait/examples/**/*","node_modules/can-*/dist/**/*","node_modules/*/node_modules/**/*","node_modules/can-debug/src/draw-graph/vis.js"]},"altVersions":{"5.33.3":"https://v5.canjs.com","4.3.0":"https://v4.canjs.com","3.14.1":"https://v3.canjs.com","2.3.35":"https://v2.canjs.com"},"parent":"canjs","minifyBuild":true,"codepen":[["\"can\"","\"//unpkg.com/can@6/core.mjs\""],["\"can/ecosystem\"","\"//unpkg.com/can@6/ecosystem.mjs\""],["\"can/everything\"","\"//unpkg.com/can@6/everything.mjs\""],["\"can/demos/technology-overview/mock-url\"","\"//unpkg.com/mock-url@^6.0.0/mock-url.mjs\""],["\"can/demos/technology-overview/route-mini-app-components\"","\"//unpkg.com/route-mini-app@^5.0.0/components.mjs\""],["return steal.import(","return import("],["\"can/demos/technology-overview/page-login\"","\"//unpkg.com/route-mini-app@^5.0.0/page-login.mjs\""],["`can/demos/technology-overview/page-${this.page}`","`//unpkg.com/route-mini-app@^5.0.0/page-${this.page}.mjs`"]]},"bundlesize":[{"path":"./core.min.mjs","maxSize":"106 kB"},{"path":"./core.mjs","maxSize":"314 kB"},{"path":"./dist/global/core.js","maxSize":"200 kB"}]},"templateRender":["<%","%>"],"comment":" ","pathToRoot":""};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="doc/static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix="doc"></div>
+
+	</body>
+</html>

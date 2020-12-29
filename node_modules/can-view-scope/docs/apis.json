@@ -1,0 +1,10 @@
+[
+	{"can-view-scope": [
+		{"prototype": [
+			"can-view-scope.add",
+			"can-view-scope.attr",
+			"can-view-scope.compute",
+			"can-view-scope.computeData"
+		]}
+	]}
+]

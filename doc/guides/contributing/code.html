@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/contribute/changing-the-code.md
+	@page guides/contributing/code
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Changing the Code | Contributing | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="Learn how to contribute a code change to CanJS. Read the adding-ecosystem-modules guide on how to make a plugin to CanJS.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Learn how to contribute a code change to CanJS. Read the adding-ecosystem-modules guide on how to make a plugin to CanJS.">
+	<meta property="og:title" content="Changing the Code | Contributing | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "Learn how to contribute a code change to CanJS. Read the adding-ecosystem-modules guide on how to make a plugin to CanJS.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Changing the Code | Contributing | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/contributing/code" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="project-organization.html"
+							title="Learn about how CanJS is organized.">
+							Project Organization
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="bug-report.html"
+							title="Learn how to submit a bug report.">
+							Reporting Bugs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="feature-suggestion.html"
+							title="Learn how to suggest a feature.">
+							Suggesting Features
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="finding-ways-to-contribute.html"
+							title="There are many ways to contribute to CanJS, whether you’re a developer who wants to code, a designer who can help improve the design and usability of our projects, or someone who’s interested in helping other members of the community.">
+							Finding Ways to Contribute
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="developing-locally.html"
+							title="Learn how to set up your development environment, get the code, and verify that it’s working.">
+							Developing Locally
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="code.html"
+							title="Learn how to contribute a code change to CanJS. Read the adding-ecosystem-modules guide on how to make a plugin to CanJS.">
+							Changing the Code
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="documentation.html"
+							title="Learn how to improve CanJS’s site and documentation.">
+							Improving the Docs &amp; Site
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="site-style-guide.html"
+							title="Learn about the website’s design and styles.">
+							Site Style Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="adding-ecosystem-modules.html"
+							title="Learn how to add a new package to the CanJS toolkit.">
+							Making a New Package
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="api-design-guidelines.html"
+							title="Learn how to design APIs which are consistent with CanJS.">
+							API Design Guidelines
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="releases.html"
+							title="Release and hosting information for CanJS maintainers.">
+							Releasing CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="updating-the-site.html"
+							title="How to update the CanJS website.">
+							Updating the Site
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="evangelism.html"
+							title="Learn about resources that can help you spread the word about CanJS.">
+							Evangelism
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Changing the Code</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/contribute/changing-the-code.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Learn how to contribute a code change to CanJS. Read the <a href="adding-ecosystem-modules.html" title="Learn how to add a new package to the CanJS toolkit.">Making a New Package</a> guide on how to make a plugin to CanJS.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <p>Now that your computer is set up to <a href="developing-locally.html" title="Learn how to set up your development environment, get the code, and verify that it’s working.">develop CanJS locally</a>, you can make changes in your local repository.</p>
+<p>The CanJS projects generally follow the <a href="https://help.github.com/articles/github-flow/">GitHub flow</a>. This section will briefly explain how you can make changes on your computer and submit a pull request to have those changes merged into the main project.</p>
+<h2>Creating a new branch</h2>
+<p>Starting in the CanJS repository you have cloned to your computer, you can create a new branch:</p>
+<pre><code class="language-shell">git checkout -b your-branch-name
+</code></pre>
+<p>Replace <code>your-branch-name</code> with the name of your feature branch, e.g. <code>git checkout -b html5-fix</code> to create a <code>html5-fix</code> branch.</p>
+<h2>Style guide</h2>
+<p>Our code generally follows <a href="https://contribute.jquery.org/style-guide/js/">jQuery’s coding conventions</a>.</p>
+<p>Where possible, CanJS code uses:</p>
+<ul>
+<li>Tabs not spaces</li>
+<li>JSHint</li>
+<li>CommonJS not ES6</li>
+<li>jQuery’s <a href="https://contribute.jquery.org/style-guide/js/">coding conventions</a></li>
+</ul>
+<p>Below are some other recommendations for how to write/document CanJS code.</p>
+<h3>Use <code>this</code> in stache expressions</h3>
+<p>Write:</p>
+<pre><code class="language-html">Count: &lt;span&gt;{{ this.count }}&lt;/span&gt;
+&lt;button on:click='this.increment()'&gt;+1&lt;/button&gt;
+</code></pre>
+<p>…instead of:</p>
+<pre><code class="language-html">Count: &lt;span&gt;{{ count }}&lt;/span&gt;
+&lt;button on:click='increment()'&gt;+1&lt;/button&gt;
+</code></pre>
+<h3>Name classes</h3>
+<p>Write:</p>
+<pre><code class="language-js">class MyCounter extends StacheElement { }
+customElements.define(&quot;my-counter&quot;, MyCounter);
+</code></pre>
+<p>…instead of:</p>
+<pre><code class="language-js">customElements.define(&quot;my-counter&quot;, class extends StacheElement {
+});
+</code></pre>
+<h3>Use class fields for static properties</h3>
+<p>Write:</p>
+<pre><code class="language-js">class MyCounter extends StacheElement {
+  static view = `
+  `;
+  static props = {
+  };
+}
+</code></pre>
+<p>…instead of:</p>
+<pre><code class="language-js">class MyCounter extends StacheElement {
+  static get view() {
+    return `
+    `;
+  }
+  static get props() {
+    return {
+    };
+  }
+}
+</code></pre>
+<h3>Order classes</h3>
+<ol>
+<li>view</li>
+<li>props</li>
+<li>lifecycle methods</li>
+<li>other methods</li>
+</ol>
+<pre><code class="language-js">class MyCounter extends StacheElement {
+  static view = `
+  `;
+  static props = {
+  };
+  connected() {
+  }
+  myMethod() {
+  }
+}
+</code></pre>
+<h3>Use <code>for(of)</code> instead of <code>each</code> and scope walking</h3>
+<p>Write:</p>
+<pre><code class="language-js">static view = `
+  {{# for(item of items) }}
+    {{# for(subitem of item.subitems) }}
+      {{ this.query }}
+    {{/ for }}
+  {{/ for }}
+`;
+</code></pre>
+<p>…instead of:</p>
+<pre><code class="language-js">  {{# each(items) }}
+    {{# each(this.subitems) }}
+      {{ ../../query }}
+    {{/ each }}
+  {{/ each }}
+</code></pre>
+<h3>Use the “strictest” type possible</h3>
+<p>The CanJS 6 codemods will change all types to use <code>type.maybeConvert</code> because this matches the behavior of <code>can-define</code>. Usually we can be more strict than this and use either the raw type (like <code>id: Number</code>), <code>type.convert</code>, or <code>type.maybe</code>.</p>
+<h3>Space out your stache</h3>
+<p>https://canjs.com/doc/can-stache.html#Spacingandformatting</p>
+<p><strong>TLDR:</strong></p>
+<ul>
+<li>Put a space after opening stache tags (<code>{{</code>, <code>{{{</code>, <code>{{#</code>,<code>{{/</code>, <code>{{&lt;</code>, <code>{{!</code>, <code>{{^</code>, <code>{{&gt;</code>)</li>
+<li>Put a space before closing stache tags (<code>}}</code>, <code>}}}</code>)</li>
+</ul>
+<h3>Don’t use propertyDefaults unless it is necessary</h3>
+<p>The codemods add this to ObservableObjects and StacheElements:</p>
+<pre><code class="language-js">static get propertyDefaults() {
+  return DeepObservable;
+}
+</code></pre>
+<p>This is added because this reproduces the behavior of <code>DefineMap</code>; however, this should not be needed by most of our guides. This is only needed in cases where a property is set to an object or array that has nested objects or arrays that need to be observable, otherwise it should be removed.</p>
+<h3>Replace <code>(event, newValue)</code> with <code>({ value })</code></h3>
+<p>This:</p>
+<pre><code class="language-js">listenTo(&quot;event&quot;, ( event, value ) =&gt; {
+});
+</code></pre>
+<p>…can now be this:</p>
+<pre><code class="language-js">listenTo(&quot;event&quot;, ({ value }) =&gt; {
+});
+</code></pre>
+<h2>Updating tests</h2>
+<p>The <a href="https://github.com/canjs/canjs/tree/master/test"><code>test</code> directory</a> contains files related to testing the code in the repository. When fixing bugs or writing new features, you should update the existing tests or create new tests to cover your changes.</p>
+<p>After updating the tests, run <code>npm test</code> to make sure the tests pass.</p>
+<h2>Updating the documentation</h2>
+<p>The <a href="https://github.com/canjs/canjs/tree/master/docs"><code>docs</code></a> and <a href="https://github.com/canjs/canjs/tree/master/guides"><code>guides</code></a> directories contain the files used to generate <a href="https://canjs.com/">CanJS.com</a>.</p>
+<h2>Submitting a pull request</h2>
+<p>Once you’ve made your changes and run the tests, you can push your branch to GitHub:</p>
+<pre><code class="language-shell">git push origin your-branch-name
+</code></pre>
+<p>Make sure you replace <code>your-branch-name</code> with the name of your branch. For example, <code>git push origin html5-fix</code>.</p>
+<p>Next, submit a pull request! On GitHub, navigate to Pull Requests and click the
+“New Pull Request” button. Give your PR a meaningful title and provide details
+about the change in the description, including a link to the issue(s) your PR
+addresses. If applicable, please include a screenshot or gif to demonstrate your
+change. This makes it easier for reviewers to verify that it works for them.
+<a href="http://www.cockos.com/licecap/">LICEcap</a> is a great tool for making gifs.</p>
+<p>When finished, press “Send pull request”. The core team will be notified of your
+submission and will let you know of any problems or a targeted release date.</p>
+<p>GitHub has additional documentation on <a href="https://help.github.com/articles/creating-a-pull-request-from-a-fork/">creating a pull request from a fork</a> that you might find useful.</p>
+<p>If you enjoy making these kinds of fixes and want to directly influence CanJS’s direction,
+consider joining our <a href="https://donejs.com/About.html#core-team">Core team</a>.</p>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/contribute/changing-the-code.md"},"description":"Learn how to contribute a code change to CanJS. Read the [guides/contributing/adding-ecosystem-modules] guide on how to make a plugin to CanJS.\n\n","name":"guides/contributing/code","title":"Changing the Code","type":"page","parent":"guides/contribute","order":5,"comment":" ","pathToRoot":"../../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix="../.."></div>
+
+	</body>
+</html>

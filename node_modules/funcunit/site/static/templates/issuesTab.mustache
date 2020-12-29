@@ -1,0 +1,33 @@
+<div class="tab-description issues">
+	<h1>Top Issues</h1>
+	
+	<div class="pull-right categories">
+		
+		<div class="button-container"><a href="https://github.com/bitovi/canjs/issues/new" class="button">+ New Issue</a></div>
+		
+		<div class="center">
+		<iframe src="https://ghbtns.com/github-btn.html?user=bitovi&repo=canjs&type=watch&count=true"
+		        allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
+
+		<iframe src="https://ghbtns.com/github-btn.html?user=bitovi&repo=canjs&type=fork&count=true"
+		        allowtransparency="true" frameborder="0" scrolling="0" width="95" height="20"></iframe>
+		</div><!-- center -->
+		
+		{{! >templates/githubFollowers.mustache }}
+		
+
+	</div><!-- categories -->
+			
+	<div class="posts">
+		<div class="bithub-content">
+		{{#issues}}
+		{{>docs/static/templates/githubIssue.mustache}}
+		{{/issues}}
+		{{^issues}}
+		<div class="loading"/>
+		{{/issues}}
+		</div>
+	</div>
+	
+	<br class="clear" />
+</div>

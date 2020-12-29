@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/experiment/technology/routing.md
+	@page guides/routing
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Routing | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+	<meta property="og:title" content="Routing | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Routing | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/routing" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>getting started</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="crud-beginner.html"
+							title="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+							CRUD Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="setup.html"
+							title="Learn how to install CanJS in your environment.">
+							Setting Up CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="technology-overview.html"
+							title="Learn the basics of CanJS’s technology.">
+							Technology Overview
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>topics</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="html.html"
+							title="Learn how to update HTML and listen to user interactions.">
+							HTML
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="routing.html"
+							title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+							Routing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="data.html"
+							title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">
+							Service Layer
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="debugging.html"
+							title="Learn how to debug CanJS applications.">
+							Debugging
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="forms.html"
+							title="Learn how to create amazing &lt;form&gt;s with CanJS.">
+							Forms
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="testing.html"
+							title="Learn how to test CanJS applications.">
+							Testing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="logic.html"
+							title="Learn how to write observables in an organized, maintainable, and testable way.">
+							Logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="server-side-rendering.html"
+							title="Learn how to set up SSR for CanJS.">
+							Server-Side Rendering
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>app guides</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="chat.html"
+							title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+							Chat Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="todomvc.html"
+							title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+							TodoMVC Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/todomvc-with-steal.html"
+							title="This tutorial walks through building TodoMVC with StealJS. It includes KeyNote presentations covering CanJS core libraries.">
+							TodoMVC with StealJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>beginner recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/canvas-clock.html"
+							title="This beginner guide walks you through building a clock with the Canvas API.">
+							Canvas Clock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-simple.html"
+							title="This beginner guide walks through building a very simple credit card payment form.  It uses Stripe.js v2 API to create a token which can be used to create a charge.  It also performs simple validation on the payment form values.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-simple.html"
+							title="This beginner guide walks you through building a simple file navigation widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.0.0. Check out the file-navigator-advanced for an example that makes AJAX requests for its data and uses can-stache-element.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/signup-simple.html"
+							title="This beginner guide walks through building simple signup, login forms and a logout button.">
+							Signup and Login
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/video-player.html"
+							title="This beginner guide walks you through building custom video controls around a video element.">
+							Video Player
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/weather-report-simple.html"
+							title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.2.">
+							Weather Report
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>intermediate recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/cta-bus-map.html"
+							title="This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map. You&#x27;ll learn how to create a StacheElement that integrates with 3rd party widgets.">
+							CTA Bus Map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/modals.html"
+							title="This intermediate guide shows how to create a multiple modal form.">
+							Multiple Modals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/text-editor.html"
+							title="This intermediate guide walks you through building a basic rich text editor.">
+							Text Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/tinder-carousel.html"
+							title="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+							Tinder Carousel
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>advanced recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-advanced.html"
+							title="This advanced guide walks through building a simple credit card payment form with validations. It doesn’t use can-define. Instead it uses Kefir.js streams to make a ViewModel. can-kefir is used to make the Kefir streams observable to can-stache.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-advanced.html"
+							title="This advanced guide walks you through building a file navigation widget that requests data with fetch. It takes about 45 minutes to complete.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/playlist-editor.html"
+							title="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+							Playlist Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/search-list-details.html"
+							title="This advanced guide walks through building a Search, List, Details flow with lazy-loaded routes.">
+							Search, List, Details
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>upgrade</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-3.html"
+							title="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+							Migrating to CanJS 3
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-4.html"
+							title="This guide walks you through the step-by-step process to upgrade a 3.x app to CanJS 4.">
+							Migrating to CanJS 4
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-5.html"
+							title="This guide walks you through the process to upgrade a 4.x app to CanJS 5.x.">
+							Migrating to CanJS 5
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-6.html"
+							title="This guide walks you through the process to upgrade a 5.x app to CanJS 6.x.">
+							Migrating to CanJS 6
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="upgrade/using-codemods.html"
+							title="Learn how to migrate your app to CanJS 6 using can-migrate.">
+							Using Codemods
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>other</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="api.html"
+							title="This page walks through how to use and understand CanJS’s API documentation.">
+							Reading the API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Routing</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/experiment/technology/routing.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <style>
+table.panels .background td {
+  background: #f4f4f4;
+  padding: 5px 5px 5px 5px;
+  border: solid 1px white;
+  margin: 1px;
+  vertical-align: top;
+}
+table.panels pre {
+  margin-top: 0px;
+}
+.obs {
+  color: #800020;
+}
+</style>
+<h2>Overview</h2>
+<blockquote>
+<p><strong>NOTE</strong> This guide uses hash-based routing instead of pushstate because hash-based routing
+is easier to setup. Pushstate routing requires server-support. Use <a href="../can-route-pushstate.html" title="An observable that can be used as can-route's can-route.urlData.">can-route-pushstate</a> for pushstate-based applications. The use of <a href="../can-route-pushstate.html" title="An observable that can be used as can-route's can-route.urlData.">can-route-pushstate</a> is almost identical to <a href="../can-route.html" title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">can-route</a>.</p>
+</blockquote>
+<p><a href="../can-route.html" title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">can-route</a> is used to setup a bi-directional relationship with an <span class="obs">observable</span> and
+the browser’s <a href="https://developer.mozilla.org/en-US/docs/Web/API/Location">location</a> (the <em>URL</em>).</p>
+<p><img 
+alt=""
+class="bit-docs-screenshot"
+src="../../docs/can-guides/experiment/technology/observable-routing.svg" /></p>
+<p>When the <span class="obs">observable</span> changes, the <em>URL</em> will be updated. When the <em>URL</em> changes
+the <span class="obs">observable</span> will be updated.</p>
+<p>The following example uses <a href="../can-route.html" title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">can-route</a> to cross-bind the <em>URL</em> to an <span class="obs">observable</span>’s state. To
+see the cross-binding in action, try:</p>
+<ol>
+<li><p>Changing the <em>URL</em>’s <em>hash</em> to <code>#!&amp;page=products</code>. Notice the observable state updates.</p></li>
+<li><p>Change the <span class="obs">observable</span>’s state to:</p>
+<pre><code class="language-js">{
+ &quot;page&quot;: &quot;products&quot;,
+ &quot;id&quot;: &quot;foosball&quot;
+}
+</code></pre>
+<p>Notice the <em>URL</em> updates.</p></li>
+<li><p>Click the back button (<code>⇦</code>). Notice the observable state updates.</p></li>
+</ol>
+<p class="codepen" data-height="388" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="wvwQzGZ" style="height: 388px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6 - routing two-way binding">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/wvwQzGZ/">
+  CanJS 6 - routing two-way binding</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<p>The binding between the <em>URL</em> and the observable is set by setting <a href="../can-route.data.html" title="An observable key-value object used to cross bind to the url observable can-route.urlData. Set it to cross-bind a top level state object (Application ViewModel) to can-route.">route.data</a> and
+calling <a href="../can-route.start.html" title="Initializes the two way relationship between the url and route.data.">route.start()</a> as follows:</p>
+<pre><code class="language-html">&lt;mock-url&gt;&lt;/mock-url&gt;
+&lt;p&gt;observable’s state:&lt;/p&gt;
+&lt;bit-json-editor&gt;&lt;/bit-json-editor&gt;
+&lt;script src=&quot;//unpkg.com/mock-url@^6.0.0&quot; type=&quot;module&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;//unpkg.com/bit-json-editor@^6.0.0&quot; type=&quot;module&quot;&gt;&lt;/script&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+import { ObservableObject, route } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+var observable = new ObservableObject();
+
+route.data = observable;
+route.start();
+
+// Set up the json editor to edit the observable.
+document.querySelector(&quot;bit-json-editor&quot;).data = observable;
+&lt;/script&gt;
+
+&lt;style&gt;
+bit-json-editor {
+  height: 200px;
+}
+&lt;/style&gt;
+</code></pre>
+<div line-highlight='12-13'></div>
+<div class='codepen'></div>
+<p><br></p>
+<p>Often, the observable is an instance of a custom type. For example, you can connect the <code>myCounter</code> observable from
+the <a href="technology-overview.html#Key_ValueObservables" title="Learn the basics of CanJS’s technology.">Technology Overview’s Key-Value Observables section</a> to <code>window.location</code> with:</p>
+<pre><code class="language-html">&lt;mock-url&gt;&lt;/mock-url&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+  // Imports the &lt;mock-url&gt; element that provides
+  // a fake back, forward, and URL controls.
+  import &quot;//unpkg.com/mock-url@^6.0.0&quot;;
+
+  import { route, ObservableObject } from &quot;can&quot;;
+
+  class Counter extends ObservableObject {
+    static props = {
+      count: 0
+    };
+    increment() {
+      this.count += 1;
+    }
+  }
+
+  window.myCounter = new Counter();
+
+  route.data = myCounter;
+  route.start();
+&lt;/script&gt;
+</code></pre>
+<div line-highlight='21-22'></div>
+<div class='codepen'></div>
+<p>This will add <code>#!&amp;count=0</code> to the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Location">location</a> hash.</p>
+<pre><code class="language-js">myCounter.increment()
+window.location.hash  //-&gt; &quot;#!&amp;count=1&quot;
+
+history.back()
+myCounter.count       //-&gt; 0
+window.location.hash  //-&gt; &quot;#!&amp;count=0&quot;
+</code></pre>
+<p>Now, if you called <code>myCounter.increment()</code> in the console, the <code>window.location</code> will
+change to <code>#!count=1</code>. If you hit the back-button, <code>myCounter.count</code> would be
+back to <code>0</code>:</p>
+<div class='demo_wrapper' data-demo-src='demos/technology-overview/route-counter.html'></div>
+<div class='codepen'></div>
+<p>By default, <code>can-route</code> serializes the observable’s data with <a href="../can-param.html" title="Serialize an object or array into a query string.">can-param</a>,
+so that the following observable data produces the following URL hashes:</p>
+<pre><code class="language-js">{ foo: &quot;bar&quot; }          //-&gt; &quot;#!&amp;foo=bar&quot;
+{ foo: [ &quot;bar&quot;, &quot;baz&quot; ] } //-&gt; &quot;#!&amp;foo[]=bar&amp;foo[]=baz&quot;
+{ foo: { bar: &quot;baz&quot; } }   //-&gt; &quot;#!&amp;foo[bar]=baz&quot;
+{ foo: &quot;bar &amp; baz&quot; }    //-&gt; &quot;#!&amp;foo=bar+%26+baz&quot;
+</code></pre>
+<blockquote>
+<p><strong>NOTE</strong> <a href="../can-route.html" title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">can-route</a> uses hash-bangs (<code>#!</code>) to comply with a now-deprecated
+<a href="https://developers.google.com/webmasters/ajax-crawling/docs/getting-started">Google SEO</a>
+recommendation.</p>
+</blockquote>
+<p>You can register routes that control the relationship between the
+observable and the browser’s location. The following registers
+a translation between URLs and route properties:</p>
+<pre><code class="language-js">route.register(&quot;{count}&quot;)
+</code></pre>
+<p>This results in the following translation between observable data and URL hashes:</p>
+<pre><code class="language-js">{ count: 0 }                  //-&gt; &quot;#!0&quot;
+{ count: 1 }                  //-&gt; &quot;#!1&quot;
+{ count: 1, type: &quot;counter&quot; } //-&gt; &quot;#!1&amp;type=counter&quot;
+</code></pre>
+<p>You can add data when the URL is matched. The following registers
+data for when the URL is matched:</p>
+<pre><code class="language-js">route.register(&quot;products&quot;, { page: &quot;products&quot; });
+route.register(&quot;products/{id}&quot;, { page: &quot;products&quot; })
+</code></pre>
+<p>This results in the following translation between observable data and URL hashes:</p>
+<pre><code class="language-js">{ page: &quot;products&quot; }          //-&gt; &quot;#!products&quot;
+{ page: &quot;products&quot;, id: 4 }   //-&gt; &quot;#!products/4&quot;
+</code></pre>
+<p>Registering the empty route (<code>&quot;&quot;</code>) provides initial state for the
+application. The following makes sure the count starts at 0 when the hash is empty:</p>
+<pre><code class="language-js">route.register(&quot;&quot;, { count: 0 });
+</code></pre>
+<div class='demo_wrapper' data-demo-src='demos/technology-overview/route-counter-registered.html'></div>
+<div class='codepen'></div>
+<h2>Routing and the root component</h2>
+<p>Understanding how to use <a href="../can-route.html" title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">can-route</a> within an application comprised of <a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a>s
+and their <a href="../can-stache.html" title="Live binding templates.">can-stache</a> views and <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">observable</a> properties can be tricky.</p>
+<p>We’ll use the following example to help make sense of it:</p>
+<div class='demo_wrapper' data-demo-src='demos/technology-overview/route-mini-app.html'></div>
+<div class='codepen'></div>
+<p>This example shows the <code>&lt;page-login&gt;</code> component until someone has logged in. Once they have
+done that, it shows a particular component based upon the hash. If the hash is empty (<code>&quot;&quot;</code> or <code>&quot;#!&quot;</code>),
+the <code>&lt;page-home&gt;</code> component is shown. If the hash is like <code>tasks/{taskId}</code> it will show the <code>&lt;task-editor&gt;</code> component we created previously. (<em>NOTE: We will show how to persist changes
+to tasks in a upcoming service layer section.</em>)</p>
+<p>Switching between different components is managed by a <code>&lt;my-app&gt;</code> component. The topology of
+the application looks like:</p>
+<p><img
+src="../../docs/can-guides/experiment/technology/routing-app-overview.svg"
+alt="The my-app component on top. The page-home, page-login, task-editor nodes are children of my-app. percent-slider component is a child of task-editor."
+class="bit-docs-screenshot"
+style="width: 600px"
+/></p>
+<p>In most applications, <a href="../can-route.html" title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">can-route</a> is connected to a property on the top-level component. We are
+going to go through the process of building <code>&lt;my-app&gt;</code> and connecting it to <a href="../can-route.html" title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">can-route</a>. This is
+usually done in five steps:</p>
+<ol>
+<li>Define the top-level component's <a href="../can-stache-element/static.props.html" title="A static property used to create ObservableObject-like properties on each StacheElement instance.">props</a>.</li>
+<li>Create an observable key-value object on the component to represent the state of <a href="../can-route.html" title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">can-route</a>.</li>
+<li>Connect this observable to the routing <a href="../can-route.data.html" title="An observable key-value object used to cross bind to the url observable can-route.urlData. Set it to cross-bind a top level state object (Application ViewModel) to can-route.">data</a>.</li>
+<li>Have the top-level component’s <a href="../can-stache-element/static.view.html" title="Provides a way to render the element's innerHTML using a can-stache template.">view</a> display the current sub-components based on its state.</li>
+<li>Register routes that translate between the URL and the application state.</li>
+</ol>
+<h2>Connect a component to can-route</h2>
+<p>To connect a component to can-route, we first need to create a basic component. The
+following creates a <code>&lt;my-app&gt;</code> component that includes links that will change the
+route’s page property:</p>
+<pre><code class="language-js">import { StacheElement, stacheRouteHelpers } from &quot;can&quot;;
+
+class MyApp extends StacheElement {
+  static view = `
+    The current page is .
+    &lt;a href=&quot;{{ routeUrl(page='home') }}&quot;&gt;Home&lt;/a&gt;
+    &lt;a href=&quot;{{ routeUrl(page='tasks') }}&quot;&gt;Tasks&lt;/a&gt;
+  `;
+
+  static props = {};
+}
+
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre>
+<blockquote>
+<p><strong>NOTE:</strong> Your html needs a <code>&lt;my-app&gt;&lt;/my-app&gt;</code> element to be able to see the
+component’s content. It should say &quot;The current page is .&quot;.</p>
+</blockquote>
+<p>To connect the component to the url, we:</p>
+<ul>
+<li>add a property to the component <code>props</code> object to hold the <a href="../can-route.data.html" title="An observable key-value object used to cross bind to the url observable can-route.urlData. Set it to cross-bind a top level state object (Application ViewModel) to can-route.">route.data</a> key-value observable.</li>
+<li>call <a href="../can-route.start.html" title="Initializes the two way relationship between the url and route.data.">route.start</a> to bind the observable key-value object to the URL.</li>
+</ul>
+<p>We also display the <code>routeData.page</code> property.</p>
+<pre><code class="language-js">import { route, StacheElement, stacheRouteHelpers } from &quot;can&quot;;
+
+class MyApp extends StacheElement {
+  static view = `
+    The current page is {{ this.routeData.page }}.
+    &lt;a href=&quot;{{ routeUrl(page='home') }}&quot;&gt;Home&lt;/a&gt;
+    &lt;a href=&quot;{{ routeUrl(page='tasks') }}&quot;&gt;Tasks&lt;/a&gt;
+  `;
+
+  static props = {
+    routeData: {
+      get default() {
+        route.start();
+        return route.data;
+      }
+    }
+  };
+}
+
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre>
+<div line-highlight='1,5,11-16'></div>
+<p>At this point, changes in the URL will cause changes in the <code>routeData.page</code>
+property. See this by clicking the links and the back/refresh buttons below:</p>
+<div class='demo_wrapper' data-demo-src='demos/technology-overview/route-mini-app-start.html'></div>
+<div class='codepen'></div>
+<h2>Display the right sub-components</h2>
+<p>Programmatically instatiated components can be used to create an instance of the
+component that should be displayed for each route. We’ll use an <a href="../can-stache.tags.escaped.html" title="Insert the value of the expression into the output of the template.">{{expression}}</a>
+to display a <code>componentToShow</code> property that we will implement in the component <a href="../can-stache-element/static.props.html" title="A static property used to create ObservableObject-like properties on each StacheElement instance.">props</a>:</p>
+<pre><code class="language-js">import { route, StacheElement, stacheRouteHelpers } from &quot;can&quot;;
+
+class MyApp extends StacheElement {
+  static view: `
+    {{ this.componentToShow }}
+  `;
+
+  static props = {
+    routeData: {
+      get default() {
+        route.start();
+        return route.data;
+      }
+    }
+  };
+}
+
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre>
+<div line-highlight='5,only'></div>
+<p>The <code>componentToShow</code> getter will return an instance of the component that should be shown.</p>
+<p>The first step toward making this possible is to import the constructors for each <a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a>:</p>
+<pre><code class="language-js">import { route, StacheElement, stacheRouteHelpers } from &quot;can&quot;;
+import { PageHome, PageLogin, TaskEditor } from &quot;can/demos/technology-overview/route-mini-app-components&quot;;
+
+class MyApp extends StacheElement {
+  static view: `
+    {{ this.componentToShow }}
+  `;
+
+  static props = {
+    routeData: {
+      get default() {
+        route.start();
+        return route.data;
+      }
+    }
+  };
+}
+
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre>
+<div line-highlight='2,only'></div>
+<p>Once the component constructors are imported, they can be used to create an instance of the correct component in the <code>componentToShow</code> getter:</p>
+<pre><code class="language-js">import { route, StacheElement, stacheRouteHelpers } from &quot;can&quot;;
+import { PageHome, PageLogin, TaskEditor } from &quot;can/demos/technology-overview/route-mini-app-components&quot;;
+
+class MyApp extends StacheElement {
+  static view = `
+    {{ this.componentToShow }}
+  `;
+
+  static props = {
+    routeData: {
+      get default() {
+        route.start();
+        return route.data;
+      }
+    },
+
+    get componentToShow() {
+      if (!this.isLoggedIn) {
+        return new PageLogin();
+      }
+
+      switch(this.page) {
+        case &quot;home&quot;:
+          return new PageHome();
+        case &quot;tasks&quot;:
+          return new TaskEditor();
+        default:
+          const page404 = document.createElement(&quot;h2&quot;);
+          page404.innerHTML = &quot;Page Missing&quot;;
+          return page404;
+      }
+    }
+  };
+}
+
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre>
+<div line-highlight='17-32,only'></div>
+<h2>Pass data to sub-components</h2>
+<p>Now the correct components will be displayed; however, the application will not be fully functional yet because these components do not have the state values they need in order to function correctly. <a href="../can-value.html" title="Get an observable that’s bound to a specific property on another object.">can-value</a> can be used to set up one-way and two-way bindings between the root component and each sub-component.</p>
+<p>The Login page needs a property <code>isLoggedIn</code> that represents whether the user is logged in. Since the login page handles logging in, it will need to be able to update this value, so we use <a href="../can-value.bind.html" title="Get an observable for getting and setting a property on an object.">value.bind</a> to two-way bind this property.</p>
+<p>To hook this up, we implement the <code>isLoggedIn</code> property on the <code>my-app</code> component and pass it to the
+<code>Login</code> page through <code>can-stache-element</code> <a href="../can-stache-element/lifecycle-methods.bindings.html" title="Programmatically instantiate a component">bindings</a>:</p>
+<pre><code class="language-js">import { route, StacheElement, stacheRouteHelpers, value } from &quot;can&quot;;
+import { PageHome, PageLogin, TaskEditor } from &quot;can/demos/technology-overview/route-mini-app-components&quot;;
+import &quot;can/demos/technology-overview/mock-url&quot;;
+
+class MyApp extends StacheElement {
+  static view = `
+    {{ this.componentToShow }}
+  `;
+
+  static props = {
+    routeData: {
+      get default() {
+        route.start();
+        return route.data;
+      }
+    },
+
+    get componentToShow() {
+      if (!this.isLoggedIn) {
+        return new PageLogin().bindings({
+          isLoggedIn: value.bind(this, &quot;isLoggedIn&quot;)
+        });
+      }
+
+      switch (this.routeData.page) {
+        case &quot;home&quot;:
+          return new PageHome();
+        case &quot;tasks&quot;:
+          return new TaskEditor();
+        default:
+          const page404 = document.createElement(&quot;h2&quot;);
+          page404.innerHTML = &quot;Page Missing&quot;;
+          return page404;
+      }
+    },
+
+    isLoggedIn: false
+  };
+}
+
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre>
+<div line-highlight='1,20-22,37,only'></div>
+<p>The <code>TaskEditor</code> page also needs to know the id of the task that is being edited. This property can be bound directly to the <code>routeData</code> object:</p>
+<pre><code class="language-js">import { route, StacheElement, stacheRouteHelpers, value } from &quot;can&quot;;
+import { PageHome, PageLogin, TaskEditor } from &quot;can/demos/technology-overview/route-mini-app-components&quot;;
+import &quot;can/demos/technology-overview/mock-url&quot;;
+
+class MyApp extends StacheElement {
+  static view = `
+    {{ this.componentToShow }}
+  `;
+
+  static props = {
+    routeData: {
+      get default() {
+        route.start();
+        return route.data;
+      }
+    },
+
+    get componentToShow() {
+      if (!this.isLoggedIn) {
+        return new PageLogin().bindings({
+          isLoggedIn: value.bind(this, &quot;isLoggedIn&quot;)
+        });
+      }
+
+      switch (this.routeData.page) {
+        case &quot;home&quot;:
+          return new PageHome();
+        case &quot;tasks&quot;:
+          return new TaskEditor().bindings({
+            id: value.bind(this.routeData, &quot;taskId&quot;)
+          });
+        default:
+          const page404 = document.createElement(&quot;h2&quot;);
+          page404.innerHTML = &quot;Page Missing&quot;;
+          return page404;
+      }
+    },
+
+    isLoggedIn: false
+  };
+}
+
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre>
+<div line-highlight='29-31,only'></div>
+<p>Lastly, a <code>logout</code> function needs to be passed to the <code>PageHome</code> and <code>TaskEditor</code> components. Since this is a function and is not observable, it can be passed directly to these components without using <a href="../can-value.html" title="Get an observable that’s bound to a specific property on another object.">can-value</a>.</p>
+<blockquote>
+<p><strong>Note:</strong> make sure to use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind">Function.prototype.bind()</a> so that the <code>this</code> will correctly be the element, even when called from a child component.</p>
+</blockquote>
+<pre><code class="language-js">import { route, StacheElement, stacheRouteHelpers, value } from &quot;can&quot;;
+import { PageHome, PageLogin, TaskEditor } from &quot;can/demos/technology-overview/route-mini-app-components&quot;;
+import &quot;can/demos/technology-overview/mock-url&quot;;
+
+class MyApp extends StacheElement {
+  static view = `
+    {{ this.componentToShow }}
+  `;
+
+  static props = {
+    routeData: {
+      get default() {
+        route.start();
+        return route.data;
+      }
+    },
+
+    get componentToShow() {
+      if (!this.isLoggedIn) {
+        return new PageLogin().bindings({
+          isLoggedIn: value.bind(this, &quot;isLoggedIn&quot;)
+        });
+      }
+
+      switch (this.routeData.page) {
+        case &quot;home&quot;:
+          return new PageHome().bindings({
+            logout: this.logout.bind(this)
+          });
+        case &quot;tasks&quot;:
+          return new TaskEditor().bindings({
+            id: value.bind(this.routeData, &quot;taskId&quot;),
+            logout: this.logout.bind(this)
+          });
+        default:
+          const page404 = document.createElement(&quot;h2&quot;);
+          page404.innerHTML = &quot;Page Missing&quot;;
+          return page404;
+      }
+    },
+
+    isLoggedIn: false
+  };
+
+  logout() {
+    this.isLoggedIn = false;
+  }
+}
+
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre>
+<div line-highlight='27-29,33,45-47,only'></div>
+<h2>Register routes</h2>
+<p>Currently, after the user logs in, the application will show <code>&lt;h2&gt;Page Missing&lt;/h2&gt;</code> because if the URL hash is empty, <code>page</code> property will be undefined. To have <code>page</code>
+be <code>&quot;home&quot;</code>, one would have to navigate to <code>&quot;#!&amp;page=home&quot;</code> … yuck!</p>
+<p>We want the <code>page</code> property to be <code>&quot;home&quot;</code> when the hash is empty. Furthermore,
+we want URLs like <code>#!tasks</code> to set the <code>page</code> property. We can do that
+by registering the following route:</p>
+<pre><code class="language-js">route.register(&quot;{page}&quot;, { page: &quot;home&quot; });
+</code></pre>
+<p>Finally, we want <code>#!tasks/5</code> to set <code>page</code> to <code>&quot;tasks&quot;</code> and <code>taskId</code>
+to <code>&quot;5&quot;</code>. Registering the following route does that:</p>
+<pre><code class="language-js">route.register(&quot;tasks/{taskId}&quot;, { page: &quot;tasks&quot; });
+</code></pre>
+<p>Register these routes just before calling <code>route.start</code>:</p>
+<pre><code class="language-js">import { route, StacheElement, stacheRouteHelpers, value } from &quot;can&quot;;
+import { PageHome, PageLogin, TaskEditor } from &quot;can/demos/technology-overview/route-mini-app-components&quot;;
+import &quot;can/demos/technology-overview/mock-url&quot;;
+
+class MyApp extends StacheElement {
+  static view = `
+    {{ this.componentToShow }}
+  `;
+
+  static props = {
+    routeData: {
+      get default() {
+        route.register(&quot;{page}&quot;, { page: &quot;home&quot; });
+        route.register(&quot;tasks/{taskId}&quot;, { page: &quot;tasks&quot; });
+        route.start();
+        return route.data;
+      }
+    },
+
+    get componentToShow() {
+      if (!this.isLoggedIn) {
+        return new PageLogin().bindings({
+          isLoggedIn: value.bind(this, &quot;isLoggedIn&quot;)
+        });
+      }
+
+      switch (this.routeData.page) {
+        case &quot;home&quot;:
+          return new PageHome();
+        case &quot;tasks&quot;:
+          return new TaskEditor().bindings({
+            id: value.bind(this.routeData, &quot;taskId&quot;),
+            logout: this.logout.bind(this)
+          });
+        default:
+          const page404 = document.createElement(&quot;h2&quot;);
+          page404.innerHTML = &quot;Page Missing&quot;;
+          return page404;
+      }
+    },
+
+    isLoggedIn: false
+  };
+
+  logout() {
+    this.isLoggedIn = false;
+  }
+}
+
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre>
+<div line-highlight='13-14,only'></div>
+<p>Now the mini application is able to translate changes in the URL to
+properties on the <code>routeData</code> property of the component. When the component’s
+property changes, the view updates the page.</p>
+<div class='demo_wrapper' data-demo-src='demos/technology-overview/route-mini-app.html'></div>
+<div class='codepen'></div>
+<h2>Progressively load the sub-components</h2>
+<p>Progressive loading is a technique that allows the application to only load the code for the each route when the route is displayed. This prevents loading code for pages the user may never visit.</p>
+<p>When using progressive loading, the code for each route will be imported using a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import#Dynamic_Imports">dynamic import</a> instead of the static <code>import { Page... } from &quot;...components&quot;</code> syntax.</p>
+<blockquote>
+<p><strong>Note:</strong> dynamic imports may not be natively supported in every browser, but similar functionality is available in <a href="https://stealjs.com/docs/steal.import.html">StealJS</a> and <a href="https://webpack.js.org/api/module-methods/#import-">webpack</a>.</p>
+</blockquote>
+<p>Dynamic imports return a promise that will resolve once the code is loaded, so the <code>componentToShow</code> property will become a promise. The <a href="../can-reflect-promise.html" title="Expose an observable, Map-like API on Promise types.">can-reflect-promise</a> package makes it easy to use promises directly in <a href="../can-stache.html" title="Live binding templates.">can-stache</a>. The view can be updated to display the <code>value</code> of the promise once it is resolved:</p>
+<pre><code class="language-js">import { route, StacheElement, stacheRouteHelpers, value } from &quot;can&quot;;
+import &quot;can/demos/technology-overview/mock-url&quot;;
+
+class MyApp extends StacheElement {
+  static view = `
+    {{# if(this.componentToShow.isResolved) }}
+      {{ this.componentToShow.value }}
+    {{/ if }}
+  `;
+
+  static props = {
+    routeData: {
+      get default() {
+        route.register(&quot;{page}&quot;, { page: &quot;home&quot; });
+        route.register(&quot;tasks/{taskId}&quot;, { page: &quot;tasks&quot; });
+        route.start();
+        return route.data;
+      }
+    },
+
+    get componentToShow() {
+      if (!this.isLoggedIn) {
+        return new PageLogin().bindings({
+          isLoggedIn: value.bind(this, &quot;isLoggedIn&quot;)
+        });
+      }
+
+      switch (this.routeData.page) {
+        case &quot;home&quot;:
+          return new PageHome().bindings({
+            logout: this.logout.bind(this)
+          });
+        case &quot;tasks&quot;:
+          return new TaskEditor().bindings({
+            id: value.bind(this.routeData, &quot;taskId&quot;),
+            logout: this.logout.bind(this)
+          });
+        default:
+          const page404 = document.createElement(&quot;h2&quot;);
+          page404.innerHTML = &quot;Page Missing&quot;;
+          return page404;
+      }
+    },
+
+    isLoggedIn: false
+  };
+
+  logout() {
+    this.isLoggedIn = false;
+  }
+}
+
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre>
+<div line-highlight='6-8,only'></div>
+<blockquote>
+<p>Note, <a href="../can-reflect-promise.html" title="Expose an observable, Map-like API on Promise types.">can-reflect-promise</a> also adds <code>isPending</code> and <code>isRejected</code> properties to promises so that the view can handle these states as well.</p>
+</blockquote>
+<p>Then update the <code>componentToShow</code> getter to import the correct module. The value passed to the promise’s <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then">then</a> method will be a module object with a property for each of the module’s exports. In this example, the component constructor is the default export, so an instance of the component can be created using <code>new module.default({ /* ... */ })</code>. Returning the instances from the <code>then</code> method will set <code>componentToShow.value</code> to the component instance:</p>
+<pre><code class="language-js">import { route, StacheElement, stacheRouteHelpers, value } from &quot;can&quot;;
+import &quot;can/demos/technology-overview/mock-url&quot;;
+
+class MyApp extends StacheElement {
+  static view = `
+    {{# if(this.componentToShow.isResolved) }}
+      {{ this.componentToShow.value }}
+    {{/ if }}
+  `;
+
+  static props = {
+    routeData: {
+      get default() {
+        route.register(&quot;{page}&quot;, { page: &quot;home&quot; });
+        route.register(&quot;tasks/{taskId}&quot;, { page: &quot;tasks&quot; });
+        route.start();
+        return route.data;
+      }
+    },
+
+    get componentToShow() {
+      if (!this.isLoggedIn) {
+        return import(&quot;can/demos/technology-overview/page-login&quot;).then(
+          module =&gt; {
+            return new module.default().bindings({
+              isLoggedIn: value.bind(this, &quot;isLoggedIn&quot;)
+            });
+          }
+        );
+      }
+
+      return import(
+        `can/demos/technology-overview/page-${this.routeData.page}`
+      ).then(module =&gt; {
+        switch (this.routeData.page) {
+          case &quot;home&quot;:
+            return new module.default().bindings({
+              logout: this.logout.bind(this)
+            });
+          case &quot;tasks&quot;:
+            return new module.default().bindings({
+              id: value.from(this.routeData, &quot;taskId&quot;),
+              logout: this.logout.bind(this)
+            });
+          default:
+            const page404 = document.createElement(&quot;h2&quot;);
+            page404.innerHTML = &quot;Page Missing&quot;;
+            return page404;
+        }
+      });
+    },
+
+    isLoggedIn: false
+  };
+
+  logout() {
+    this.isLoggedIn = false;
+  }
+}
+
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre>
+<div line-highlight='23-25,29,32-34,37,41,50,only'></div>
+<p>The application is now progressively loading the code for each route:</p>
+<div class='demo_wrapper' data-demo-src='demos/technology-overview/route-mini-app-progressive.html'></div>
+<div class='codepen'></div>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/experiment/technology/routing.md"},"description":"Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.\n\n","name":"guides/routing","title":"Routing","type":"page","parent":"guides/topics","order":3,"outline":{"depth":2},"comment":" ","codepen":[["\"can\"","\"//unpkg.com/can@6/core.mjs\""],["\"can/ecosystem\"","\"//unpkg.com/can@6/ecosystem.mjs\""],["\"can/everything\"","\"//unpkg.com/can@6/everything.mjs\""],["\"can/demos/technology-overview/mock-url\"","\"//unpkg.com/mock-url@^6.0.0/mock-url.mjs\""],["\"can/demos/technology-overview/route-mini-app-components\"","\"//unpkg.com/route-mini-app@^5.0.0/components.mjs\""],["return steal.import(","return import("],["\"can/demos/technology-overview/page-login\"","\"//unpkg.com/route-mini-app@^5.0.0/page-login.mjs\""],["`can/demos/technology-overview/page-${this.page}`","`//unpkg.com/route-mini-app@^5.0.0/page-${this.page}.mjs`"]],"pathToRoot":"../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix=".."></div>
+
+	</body>
+</html>

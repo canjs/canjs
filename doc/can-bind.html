@@ -1,0 +1,2828 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: node_modules/can-bind/doc/can-bind.md
+	@module can-bind
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>can-bind | Observables | API Docs | CanJS</title>
+	<meta name="description" content="Updates one observable value with the value of another observable.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Updates one observable value with the value of another observable.">
+	<meta property="og:title" content="can-bind | Observables | API Docs | CanJS">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "git://github.com/canjs/can-bind.git",
+			"description": "Updates one observable value with the value of another observable.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "can-bind | Observables | API Docs | CanJS",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "1.5.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="./static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="can-bind" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="guides/contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>Observables</span>
+						
+	<ul>
+		
+			
+				
+					<li class="current
+           						parent
+           						expanded">
+						<a class="module"
+							href="can-bind.html"
+							title="Updates one observable value with the value of another observable.">
+							can-bind
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>prototype</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-bind.prototype.parentValue.html"
+							title="Returns the parent’s value.">
+							parentValue
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-bind.prototype.start.html"
+							title="Start listening to the child &amp; parent observables and set their values depending on their current state and the options provided to the binding when initialized.">
+							start
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-bind.prototype.startChild.html"
+							title="Start listening to the child observable.">
+							startChild
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-bind.prototype.startParent.html"
+							title="Start listening to the parent observable.">
+							startParent
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-bind.prototype.stop.html"
+							title="Stop listening to the observables.">
+							stop
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-compute.html"
+							title="Create an observable value.">
+							can-compute
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-debug.html"
+							title="Useful debugging utilities.">
+							can-debug
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-deep-observable.html"
+							title="Create observable objects where nested objects and arrays are also observable.">
+							can-deep-observable
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define.html"
+							title="Defines observable properties and their behavior on a prototype object. This function is not commonly used directly. map and list are more commonly used. Types and behaviors shared by both map and list are documented here.">
+							can-define
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define/list/list.html"
+							title="Create observable lists.">
+							can-define/list/list
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define/map/map.html"
+							title="Create observable objects.">
+							can-define/map/map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-backup.html"
+							title="">
+							can-define-backup
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-stream.html"
+							title="Add useful stream conversion methods to a supplied map or list constructor using a stream interface such as can-stream-kefir.">
+							can-define-stream
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-stream-kefir.html"
+							title="Export a function that takes a map or list constructor and uses can-stream-kefir to create streamable properties.">
+							can-define-stream-kefir
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-event-queue.html"
+							title="Mixin observable behavior to your types.">
+							can-event-queue
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-kefir.html"
+							title="Integrate KefirJS streams directly within can-stache and other parts of CanJS.">
+							can-kefir
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-list.html"
+							title="">
+							can-list
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-map.html"
+							title="Create observable objects.">
+							can-map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-map-compat.html"
+							title="can-map-compat">
+							can-map-compat
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-map-define.html"
+							title="Defines the type, initial value, get, set, remove, and serialize behavior for attributes of a Map.">
+							can-map-define
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observable-array.html"
+							title="Create observable arrays with defined properties.">
+							can-observable-array
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observable-object.html"
+							title="Create observable objects used to manage state in explicitly defined ways.">
+							can-observable-object
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observation.html"
+							title="Create observable values that derive their value from other observable values.">
+							can-observation
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observation-recorder.html"
+							title="Specify how to listen to changes in a value being read and record those specifications between two points in time. Record observables being read and indicate how to listen to changes in a value being read.">
+							can-observation-recorder
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observe.html"
+							title="Create observable objects, arrays, and functions that work like plain JavaScript objects, arrays, and functions.">
+							can-observe
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-simple-map.html"
+							title="A performant live-bound map.">
+							can-simple-map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-simple-observable.html"
+							title="Create an observable value.">
+							can-simple-observable
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stream.html"
+							title="Create useful stream methods from a minimal stream wrapper implementation.">
+							can-stream
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stream-kefir.html"
+							title="Convert observable values into streams. Kefir is used to provide the stream functionality.">
+							can-stream-kefir
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-value.html"
+							title="Get an observable that’s bound to a specific property on another object.">
+							can-value
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Views</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-attribute-observable.html"
+							title="Create an observable value from an element&#x27;s property or attribute.">
+							can-attribute-observable
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-component.html"
+							title="Create a custom element that can be used to manage widgets or application logic.">
+							can-component
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observable-bindings.html"
+							title="">
+							can-observable-bindings
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache.html"
+							title="Live binding templates.">
+							can-stache
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-bindings.html"
+							title="Listen to events and create one-way and two-way bindings.">
+							can-stache-bindings
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-converters.html"
+							title="Provides a set of converters useful for two-way binding with form elements such as &lt;input&gt; and &lt;select&gt;.">
+							can-stache-converters
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-element.html"
+							title="Create a custom element with ObservableObject-like properties and stache views.">
+							can-stache-element
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-route-helpers.html"
+							title="Adds routeUrl and routeCurrent helpers to stache.">
+							can-stache-route-helpers
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-autorender.html"
+							title="A module that automatically renders script and other elements with the can-autorender attribute. This function is useful to know when the templates have finished rendering.">
+							can-view-autorender
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-callbacks.html"
+							title="Registered callbacks for behaviors">
+							can-view-callbacks
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-import.html"
+							title="">
+							can-view-import
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-live.html"
+							title="Setup live-binding between the DOM and a compute manually.">
+							can-view-live
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-model.html"
+							title="Gets the ViewModel of an element.">
+							can-view-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-parser.html"
+							title="Parse HTML and mustache tokens.">
+							can-view-parser
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-scope.html"
+							title="Create a lookup node for keys.">
+							can-view-scope
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-target.html"
+							title="">
+							can-view-target
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="steal-stache.html"
+							title="A StealJS extension that allows stache templates as dependencies.">
+							steal-stache
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Data Modeling</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-connect.html"
+							title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">
+							can-connect
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-connect-ndjson.html"
+							title="Get a list of data from an NDJSON service endpoint.">
+							can-connect-ndjson
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-connect-tag.html"
+							title="Create custom elements that can be used to retrieve model instances.">
+							can-connect-tag
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-realtime-rest-model.html"
+							title="Connect a type to a restful data source and automatically manage lists.">
+							can-define-realtime-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-rest-model.html"
+							title="Connect a type to a restful service layer.">
+							can-define-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-fixture.html"
+							title="Intercept AJAX requests and simulate the response.">
+							can-fixture
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-fixture-socket.html"
+							title="Simulate socket.io services.">
+							can-fixture-socket
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-local-store.html"
+							title="Create, update, delete and query data saved in localStorage.">
+							can-local-store
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-memory-store.html"
+							title="Create, update, delete and query data saved in memory.">
+							can-memory-store
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-ndjson-stream.html"
+							title="Parses an NDJSON stream into a stream of JavaScript objects.">
+							can-ndjson-stream
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-query-logic.html"
+							title="Perform data queries and compare queries against each other. Provides logic useful for data caching and real-time behavior.">
+							can-query-logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-realtime-rest-model.html"
+							title="Connect a type to a restful data source and automatically manage lists.">
+							can-realtime-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-rest-model.html"
+							title="Connect a type to a restful service layer.">
+							can-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-set-legacy.html"
+							title="can-set-legacy supports a legacy can-set API that creates a can-query-logic instance.">
+							can-set-legacy
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-super-model.html"
+							title="Connect a type to a restful data source, automatically manage lists, combine requests, and use a fall-through localstorage cache.">
+							can-super-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Routing</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-deparam.html"
+							title="Deserialize a query string into an array or object.">
+							can-deparam
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-param.html"
+							title="Serialize an object or array into a query string.">
+							can-param
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route.html"
+							title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">
+							can-route
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route-hash.html"
+							title="An observable that is cross bound to the window.location.hash.">
+							can-route-hash
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route-mock.html"
+							title="Simulate routing without having to change the URL.">
+							can-route-mock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route-pushstate.html"
+							title="An observable that can be used as can-route&#x27;s can-route.urlData.">
+							can-route-pushstate
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>JS Utilities</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-assign.html"
+							title="A simplified version of Object.assign, which only accepts a single source argument.">
+							can-assign
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-lazy-value.html"
+							title="can-define-lazy-value">
+							can-define-lazy-value
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-diff.html"
+							title="Utilities for comparing and applying differences between data structures.">
+							can-diff
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-globals.html"
+							title="An environment agnostic container for global variables. Useful for testing and server-side rendering (SSR), typically used internally by CanJS.">
+							can-globals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-join-uris.html"
+							title="Join together a URI path to a base.">
+							can-join-uris
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-key.html"
+							title="Utilities that read and write nested properties on objects and arrays.">
+							can-key
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-key-tree.html"
+							title="Store values in a tree structure.">
+							can-key-tree
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-make-map.html"
+							title="Convert a comma-separated string into a plain JavaScript object.">
+							can-make-map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-parse-uri.html"
+							title="can-parse-uri">
+							can-parse-uri
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-queues.html"
+							title="A light weight queue system for scheduling tasks.">
+							can-queues
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-string.html"
+							title="String utilities.">
+							can-string
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-string-to-any.html"
+							title="Turns a string representation of a primitive type back into the associated primitive.">
+							can-string-to-any
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>DOM Utilities</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-ajax.html"
+							title="Make an asynchronous HTTP (AJAX) request.">
+							can-ajax
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-attribute-encoder.html"
+							title="Encode and decode attribute names.">
+							can-attribute-encoder
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-child-nodes.html"
+							title="">
+							can-child-nodes
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-control.html"
+							title="Create organized, memory-leak free, rapidly performing, stateful controls with declarative event binding. Use Control to create UI controls like tabs, grids, and context menus, and organize them into higher-order business rules with can.route. It can serve as both a traditional view and a traditional controller.">
+							can-control
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-dom-data.html"
+							title="Associate key/value pair data with a DOM node in a memory-safe way.">
+							can-dom-data
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-dom-events.html"
+							title="Listen to DOM events and special events, and register special events.">
+							can-dom-events
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-dom-mutate.html"
+							title="Dispatch and listen for DOM mutations.">
+							can-dom-mutate
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-event-dom-enter.html"
+							title="Watch for when enter keys are pressed on a DomEventTarget.">
+							can-event-dom-enter
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-event-dom-radiochange.html"
+							title="A custom event for listening to changes of inputs with type &quot;radio&quot;, which fires when a conflicting radio input changes. A &quot;conflicting&quot; radio button has the same &quot;name&quot; attribute and exists within in the same form, or lack thereof. This event coordinates state bound to whether a radio is checked. The &quot;change&quot; event does not fire for deselected radios. By using this event instead, deselected radios receive notification.">
+							can-event-dom-radiochange
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-fragment.html"
+							title="Convert a String, HTMLElement, documentFragment, contentArray, or object with a can.toDOM symbol into a documentFragment.">
+							can-fragment
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Data Validation</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-type.html"
+							title="Define types that can verify values are of the correct type, or convert values to the correct type.">
+							can-type
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate.html"
+							title="Shared utilities and type definitions to process validation errors.">
+							can-validate
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate-interface.html"
+							title="can-validate-interface provides simple property existence validation. Use to prevent errors resulting from missing properties on input objects.">
+							can-validate-interface
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate-legacy.html"
+							title="A plugin for CanJS that wraps any validation library to can.validate. Can-Validate doesn&#x27;t do any validation of its own but instead provides some abstraction to your library of choice. The chosen library is registered with can-validate using a shim.">
+							can-validate-legacy
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate-validatejs.html"
+							title="Create can-validate.validator functions using validate.js.">
+							can-validate-validatejs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Typed Data</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-cid.html"
+							title="Utility for getting a unique identifier for an object.">
+							can-cid
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-construct.html"
+							title="Provides a way to easily use the power of prototypal inheritance without worrying about hooking up all the particulars yourself. Use can-construct.extend to create an inheritable constructor function of your own.">
+							can-construct
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-construct-super.html"
+							title="can.Construct.super is a plugin that makes it easier to call base functions from inside inheriting functions.">
+							can-construct-super
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-data-types.html"
+							title="A package of type objects that are used to test if a value is a member of the type and convert values to the type.">
+							can-data-types
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-namespace.html"
+							title="Namespace where can-* packages are registered.">
+							can-namespace
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-reflect.html"
+							title="Perform operations and read information on unknown data types.">
+							can-reflect
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-reflect-dependencies.html"
+							title="Functions to keep track of observable dependencies.">
+							can-reflect-dependencies
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-reflect-promise.html"
+							title="Expose an observable, Map-like API on Promise types.">
+							can-reflect-promise
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-types.html"
+							title="A stateful container for CanJS type information.">
+							can-types
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Polyfills</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-symbol.html"
+							title="Symbols used to detail how CanJS may operate on different objects CanJS has a consistent internal interface for objects to interact with each other, and this is also important for interop with external libraries.  CanJS uses symbols to identify object types, property access methods, and for event handling. can-symbol also has a polyfill function that will fake symbols on unsupported platforms.">
+							can-symbol
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-vdom.html"
+							title="A browser-lite environment for Node.js or a worker thread.">
+							can-vdom
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-core.html"
+							title="The best, most hardened and generally useful libraries in CanJS.">
+							Core
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						">
+						<a class="page"
+							href="can-infrastructure.html"
+							title="Utility libraries that power the core and ecosystem collection.">
+							Infrastructure
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-global.html"
+							title="can-global">
+							can-global
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-test-helpers.html"
+							title="Common utilities for effectively testing the features of CanJS.">
+							can-test-helpers
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-ecosystem.html"
+							title="Useful libraries that extend or add important features to the core collection.">
+							Ecosystem
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-legacy.html"
+							title="Former libraries that we still accept patches for, but are not under active development.">
+							Legacy
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>can-bind</h1>
+			<ul class="title-social">
+				
+				<li>
+					<a class="npm-button" href="https://www.npmjs.com/package/can-bind">
+						<img src="https://img.shields.io/badge/npm%20package-1.5.1-brightgreen.svg" alt="npm package badge" />
+					</a>
+				</li>
+				<li>
+					<a class="github-button nav-social" href="https://github.com/canjs/can-bind" data-show-count="true">Star</a>
+				</li>
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/can-bind/edit/master/doc/can-bind.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Updates one observable value with the value of another observable.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+<div class="signature">
+  <h2 class="signature-title">
+    <code>new Bind(options)</code>
+  </h2>
+  <p><a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> is used to keep two observable values in sync with each other. These
+two observable values, the <code>child</code> and <code>parent</code>, can be tied together by a
+couple of core options:</p>
+<ul>
+<li><code>childToParent</code>: when the child’s value changes, update the parent.</li>
+<li><code>parentToChild</code>: when the parent’s value changes, update the child.</li>
+</ul>
+<p>If only one of these two options is true, we call that a “one-way binding;”
+likewise, if both are true, then it’s a two-way binding.</p>
+<p>Here’s an example of setting up a two-way binding:</p>
+<pre><code class="language-js">import Bind from &quot;can-bind&quot;;
+import DefineMap from &quot;can-define/map/map&quot;;
+import value from &quot;can-value&quot;;
+
+const childMap = new DefineMap({childProp: &quot;child value&quot;});
+const parentMap = new DefineMap({parentProp: &quot;parent value&quot;});
+
+const binding = new Bind({
+  child: value.bind(childMap, &quot;childProp&quot;),
+  parent: value.bind(parentMap, &quot;parentProp&quot;)
+});
+</code></pre>
+<p><a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> gives you more options to control how the binding works; see the
+documentation below for a brief explanation of each option, and read further
+below to learn more about options such as <code>cycles</code>, <code>onInitDoNotUpdateChild</code>, <code>onInitDoNotUpdateParent</code>,
+<code>onInitSetUndefinedParentIfChildIsDefined</code>, and <code>sticky</code>.</p>
+<p>New <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> instances have the following methods:</p>
+<ul>
+<li><a href="can-bind.prototype.start.html" title="Start listening to the child &amp; parent observables and set their values depending on their current state and the options provided to the binding
+when initialized.">start</a>: turn on both bindings (if they’re not already turned on) and sync the values (depending on the options passed in)</li>
+<li><a href="can-bind.prototype.startChild.html" title="Start listening to the child observable.">startChild</a>: turn on just the child binding</li>
+<li><a href="can-bind.prototype.startParent.html" title="Start listening to the parent observable.">startParent</a>: turn on just the parent binding</li>
+<li><a href="can-bind.prototype.stop.html" title="Stop listening to the observables.">stop</a>: turn off both bindings</li>
+</ul>
+<p>The binding instance also has one property, <a href="can-bind.prototype.parentValue.html" title="Returns the parent’s value.">parentValue</a>,
+which returns the value of the parent observable.</p>
+
+  
+  <div class="parameters">
+    <h3 class="parameters-title" data-skip>Parameters</h3>
+      <ol>
+        
+          <li><b>options</b> <code>{Object}</code>: <p>An object with multiple options:</p>
+<ul>
+<li><strong>child</strong> <code>{ObservableValue|ObservableEmitter}</code>: Required; the child observable. It should support either <a href="can-symbol/symbols/onValue.html" title="Defines how observables can listen to the object's value changing.">can.onValue symbol</a> or <a href="can-symbol/symbols/onEmit.html" title="Defines how observables can listen to the object's value whenever it is emitted.">can.onEmit symbol</a> methods.  If <a href="can-symbol/symbols/onEmit.html" title="Defines how observables can listen to the object's value whenever it is emitted.">can.onEmit symbol</a> is provided, the parent value will be updated whenever a value is emitted.  If <a href="can-symbol/symbols/onValue.html" title="Defines how observables can listen to the object's value changing.">can.onValue symbol</a> is provided, the parent value will be updated whenever the value changes.</li>
+<li><strong>childToParent</strong> <code>{Boolean}</code>: Optional; by default, <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> will check if the child has the <a href="can-symbol/symbols/getValue.html" title="Defines a function that returns the object's current value when called.">can.getValue symbol</a> and either <code>setParent</code> is provided or the parent has the <a href="can-symbol/symbols/setValue.html" title="Define a function that sets the object's value.">can.setValue symbol</a>; providing this option overrides those checks with the option’s value (e.g. <code>false</code> will force the binding to be one-way parent-to-child).</li>
+<li><strong>cycles</strong> <code>{Number}</code>: Optional; defaults to <code>0</code>. When an observable’s value is changed in a two-way binding, the number of times it can be changed again as a result of setting the other observable. This can be any number greater than 0 if <code>sticky</code> is undefined; otherwise, an error will be thrown if this is provided with <code>sticky</code>.</li>
+<li><strong>onInitDoNotUpdateChild</strong> <code>{Boolean}</code>: Optional; defaults to <code>false</code>. If <code>true</code>, then never set the child when starting a binding.</li>
+<li><strong>onInitDoNotUpdateParent</strong> <code>{Boolean}</code>: Optional; defaults to <code>false</code>. If <code>true</code>, then never set the parent when starting a binding.</li>
+<li><strong>onInitSetUndefinedParentIfChildIsDefined</strong> <code>{Boolean}</code>: Optional; defaults to <code>true</code>: when the binding is started, if the parent’s value is undefined and the child’s value is defined, then set the parent to the child’s value.</li>
+<li><strong>parent</strong> <code>{ObservableValue|ObservableEmitter}</code>: Required; the parent observable. It should support either <a href="can-symbol/symbols/onValue.html" title="Defines how observables can listen to the object's value changing.">can.onValue symbol</a> or <a href="can-symbol/symbols/onEmit.html" title="Defines how observables can listen to the object's value whenever it is emitted.">can.onEmit symbol</a> methods.  If <a href="can-symbol/symbols/onEmit.html" title="Defines how observables can listen to the object's value whenever it is emitted.">can.onEmit symbol</a> is provided, the child value will be updated whenever a value is emitted.  If <a href="can-symbol/symbols/onValue.html" title="Defines how observables can listen to the object's value changing.">can.onValue symbol</a> is provided, the child value will be updated whenever the value changes.</li>
+<li><strong>parentToChild</strong> <code>{Boolean}</code>: Optional; by default, <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> will check if the parent has the <a href="can-symbol/symbols/getValue.html" title="Defines a function that returns the object's current value when called.">can.getValue symbol</a> and either <code>setChild</code> is provided or the child has the <a href="can-symbol/symbols/setValue.html" title="Define a function that sets the object's value.">can.setValue symbol</a>; providing this option overrides those checks with the option’s value (e.g. <code>false</code> will force the binding to be one-way child-to-parent).</li>
+<li><strong>priority</strong> <code>{Number}</code>: Optional; a number to <a href="can-reflect/setPriority.html" title="Provide a priority for when an observable that derives its value should be re-evaluated.">set as the priority</a> for the child and parent observables.</li>
+<li><strong>queue</strong> <code>{String}</code>: Optional (by default, <code>&quot;domUI&quot;</code>); the name of the queue in which to listen for changes. Acceptable values include <code>&quot;notify&quot;</code>, <code>&quot;derive&quot;</code>, and <code>&quot;domUI&quot;</code>.</li>
+<li><strong>setChild</strong> <code>{function(parentValue, child)}</code>: Optional; a custom function for setting the child observable’s value. This function is called in the <code>queue</code> provided. Arguments to the function include:
+<ul>
+<li><strong>parentValue</strong> <code>{*}</code>: the parent’s value.</li>
+<li><strong>child</strong> <code>{ObservableValue}</code>: the child observable.</li>
+</ul></li>
+<li><strong>setParent</strong> <code>{function(childValue, parent)}</code>: Optional; a custom function for setting the parent observable’s value. This function is called in the <code>queue</code> provided. Arguments to the function include:
+<ul>
+<li><strong>childValue</strong> <code>{*}</code>: the child’s value.</li>
+<li><strong>parent</strong> <code>{ObservableValue}</code>: the parent observable.</li>
+</ul></li>
+<li><strong>sticky</strong> <code>{String}</code>: Optional; defaults to <code>undefined</code>. Right now <code>&quot;childSticksToParent&quot;</code> is the only other allowed value, and it will try to make the child matches the parent’s value after setting the parent.</li>
+<li><strong>updateChildName</strong> <code>{String}</code>: Optional; a debugging name for the function that listens to the parent’s value and updates the child.</li>
+<li><strong>updateParentName</strong> <code>{String}</code>: Optional; a debugging name for the function that listens to the child’s value and updates the parent.</li>
+</ul>
+</li>
+        
+      </ol>
+  </div>
+  
+  
+  <div class="returns">
+    <h3 class="returns-title" data-skip>Returns</h3>
+     <p> <code>{<a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a>}</code>: <p>A new binding instance.</p>
+</p>
+  </div>
+  
+  
+</div>
+
+
+
+
+
+  
+    <section class="body">
+    <h2>Use</h2>
+<p><a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> is mostly used as infrastructure for modules like <a href="can-route.html" title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">can-route</a> and
+<a href="can-stache-bindings.html" title="Listen to events and create one-way and two-way bindings.">can-stache-bindings</a>, but you might find it useful in your application if you
+need to bind the values of two observables together. Let’s look at an example
+from <a href="can-component.html" title="Create a custom element that can be used to manage widgets or application logic.">can-component</a>’s documentation:</p>
+<pre><code class="language-js">import Component from &quot;can-component&quot;;
+
+Component.extend({
+  tag: &quot;my-app&quot;,
+  ViewModel: {
+    connectedCallback: function() {
+      this.listenTo( &quot;websitesCount&quot;, function( event, count ) {
+        this.paginate.count = count;
+      } );
+      return this.stopListening.bind( this );
+    },
+    paginate: {
+      value: function() {
+        return new Paginate( {
+          limit: 5
+        } );
+      }
+    },
+    websitesCount: {
+      get: function( lastValue, setValue ) {
+        this.websitesPromise.then( function( websites ) {
+          setValue( websites.count );
+        } );
+      }
+    },
+    websitesPromise: {
+      get: function() {
+        return Website.getList( {
+          limit: this.paginate.limit,
+          offset: this.paginate.offset
+        } );
+      }
+    }
+  }
+} );
+</code></pre>
+<div line-highlight='7-10,only'></div>
+<p>In this example, we <a href="can-event-queue/map/map.listenTo.html" title="Listen to an event and register the binding for simplified unbinding.">listenTo</a> the <code>websitesCount</code>
+property for changes so we can update the <code>paginate.count</code> property.</p>
+<p>This can be better expressed with <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> and <a href="can-value.html" title="Get an observable that’s bound to a specific property on another object.">can-value</a>:</p>
+<pre><code class="language-js">import Bind from &quot;can-bind&quot;;
+import Component from &quot;can-component&quot;;
+import value from &quot;can-value&quot;;
+
+Component.extend({
+  tag: &quot;my-app&quot;,
+  ViewModel: {
+    connectedCallback: function() {
+      const binding = new Bind({
+        parent: value.from(this, &quot;websitesCount&quot;),
+        child: value.to(this, &quot;paginate.count&quot;)
+      });
+      binding.start();
+      return binding.stop.bind(binding);
+    },
+    paginate: {
+      value: function() {
+        return new Paginate( {
+          limit: 5
+        } );
+      }
+    },
+    websitesCount: {
+      get: function( lastValue, setValue ) {
+        this.websitesPromise.then( function( websites ) {
+          setValue( websites.count );
+        } );
+      }
+    },
+    websitesPromise: {
+      get: function() {
+        return Website.getList( {
+          limit: this.paginate.limit,
+          offset: this.paginate.offset
+        } );
+      }
+    }
+  }
+} );
+</code></pre>
+<div line-highlight='9-14,only'></div>
+<p><a href="can-value.html" title="Get an observable that’s bound to a specific property on another object.">can-value</a> is used to get the value <a href="can-value.from.html" title="Get an observable for getting (but not setting) a property on an object.">from</a> <code>websitesCount</code> and
+assign it <a href="can-value.to.html" title="Get an observable for setting (but not getting) a property on an object.">to</a> <code>paginate.count</code>. You’ll want to immediately
+<a href="can-bind.prototype.start.html" title="Start listening to the child &amp; parent observables and set their values depending on their current state and the options provided to the binding
+when initialized.">start</a> the binding and then return the
+<a href="can-bind.prototype.stop.html" title="Stop listening to the observables.">stop</a> method from <a href="can-component/connectedCallback.html" title="A lifecycle hook called after the component's element is inserted into the document.">connectedCallback</a> so the
+binding is turned off when the component is torn down.</p>
+<h3>Customizing how the child &amp; parent are set</h3>
+<p>You can optionally provide <code>setChild</code> and/or <code>setParent</code> functions to customize
+how the child and parent values are set.</p>
+<p>Here’s an example that’s similar to what <a href="can-route.html" title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">can-route</a> does to bind a page’s URL
+(a string) to the app’s state (an object):</p>
+<pre><code class="language-js">import Bind from &quot;can-bind&quot;;
+import DefineMap from &quot;can-define/map/map&quot;;
+import deparam from &quot;can-deparam&quot;;
+import Observation from &quot;can-observation&quot;;
+import param from &quot;can-param&quot;;
+import SimpleObservable from &quot;can-simple-observable&quot;;
+
+// The parent will be a string
+const parent = new SimpleObservable(&quot;prop=value&quot;);
+
+// The child will be an object
+const map = new DefineMap({});
+const child = new Observation(function() { return map.serialize(); });
+
+// Set up the binding
+const binding = new Bind({
+  child: child,
+  parent: parent,
+  setChild: function(newValue) {
+    const objectValue = deparam(newValue);
+    map.update(objectValue);
+  },
+  setParent: function(newValue) {
+    const stringValue = param(newValue);
+    parent.set(stringValue);
+  }
+});
+
+// Turn on the binding
+binding.start();
+</code></pre>
+<p>Given the binding above, when the parent’s value changes (for example):</p>
+<pre><code class="language-js">parent.set(&quot;prop=15&quot;);
+</code></pre>
+<p><a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> will call <code>setChild(&quot;prop=15&quot;)</code>, so the child’s value is converted to
+<code>{prop: &quot;15&quot;}</code>.</p>
+<p>Likewise, when the child’s value changes:</p>
+<pre><code class="language-js">map.set({
+    prop: 22
+});
+</code></pre>
+<p><a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> will call <code>setParent({ prop: 22 })</code>, so the parent’s value is
+converted to <code>&quot;prop=22&quot;</code>.</p>
+<h2>How initialization works</h2>
+<p>When <a href="can-bind.prototype.start.html" title="Start listening to the child &amp; parent observables and set their values depending on their current state and the options provided to the binding
+when initialized.">start</a> is called, it starts listening for changes to the
+child &amp; parent observables and then tries to sync their values, depending on:</p>
+<ol>
+<li>Whether the child or parent is equal to <code>undefined</code>.</li>
+<li>The values of the <code>onInitDoNotUpdateChild</code>, <code>onInitDoNotUpdateParent</code> and <code>onInitSetUndefinedParentIfChildIsDefined</code> options.</li>
+<li>If it’s a one-way or two-way binding.</li>
+</ol>
+<p>See the <a href="can-bind.prototype.start.html" title="Start listening to the child &amp; parent observables and set their values depending on their current state and the options provided to the binding
+when initialized.">start</a> documentation for more information about how
+initialization works.</p>
+<h2>How cycles &amp; stickiness work</h2>
+<p>There are two options that dictate how two-way bindings work:</p>
+<ul>
+<li><code>cycles</code>: the number of times an observable can be updated as a result of the other observable being updated.</li>
+<li><code>sticky</code>: if <code>&quot;childSticksToParent&quot;</code>, then <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> will try to make the child match the parent’s value after the parent is set (if they do not already match).</li>
+</ul>
+<p>Both of these options are described in more detail below.</p>
+<h3>Cycles</h3>
+<p>The <code>cycles</code> option restricts the number of times a loop can be made while
+updating the child or parent observables.</p>
+<p>Let’s imagine child and parent observables that always increment their value by
+one when they’re set:</p>
+<pre><code class="language-js">import Bind from &quot;can-bind&quot;;
+import SettableObservable from &quot;can-simple-observable/settable/settable&quot;;
+
+const child = new SettableObservable(function(newValue) {
+    return newValue + 1;
+}, null, 0);
+const parent = new SettableObservable(function(newValue) {
+    return newValue + 1;
+}, null, 0);
+
+const binding = new Bind({
+  child: child,
+  parent: parent
+});
+</code></pre>
+<p>If we set the child’s value to 1 (<code>child.set(1)</code>), it’ll increment its value to
+2, then set the parent to 2, which will increment its value to 3, then set the
+child… we’re in an infinite loop!</p>
+<p>The <code>cycles</code> option protects against that: whichever value you set first, it
+will only allow that value to be set <code>cycles</code> number of times as a result of the
+binding.</p>
+<p>In our example, with <code>cycles: 0</code>, the child would not be updated to 3. If
+<code>cycles: 1</code>, then the child could be updated to 3 (and increment itself to 4),
+then set the parent to 4 (which would be incremented to 5); one additional loop
+is allowed, but no more.</p>
+<h3>Stickiness</h3>
+<p>The <code>sticky</code> option adds another behavior as part of the update process.</p>
+<p>When <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a>’s internal <code>_updateParent</code> method is called, the parent’s value is set to
+the child’s value. With <code>sticky: &quot;childSticksToParent&quot;</code>, the parent’s value is
+checked <em>after</em> it’s set; if it doesn’t match the child’s value, then the child
+is set to the parent’s new value.</p>
+<p>This option is useful when the parent changes its own value, which might include
+ignoring the value it is being set to.</p>
+<p>Let’s imagine a parent observable that ignores being set to <code>undefined</code>:</p>
+<pre><code class="language-js">import Bind from &quot;can-bind&quot;;
+import canReflect from &quot;can-reflect&quot;;
+import SimpleObservable from &quot;can-simple-observable&quot;;
+
+// Both the child &amp; parent values start at 15
+const child = new SimpleObservable(15);
+const parent = new SimpleObservable(15);
+
+// If something tries to set the parent to undefined, ignore it
+canReflect.assignSymbols(parent, {
+  &quot;can.setValue&quot;: function(newVal) {
+    if (newVal !== undefined) {
+      this.set(newVal);
+    }
+  }
+});
+
+// Create a two-way binding with sticky: &quot;childSticksToParent&quot;
+const binding = new Bind({
+  child: child,
+  parent: parent,
+  sticky: &quot;childSticksToParent&quot;
+});
+</code></pre>
+<p>If we set the child’s value to <code>undefined</code> (<code>child.set(undefined)</code>),
+<a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a>’s internal <code>_updateParent</code> method will be called to set the parent to
+<code>undefined</code>; this will be ignored, so the parent’s value will remain at <code>15</code>.
+With the <code>sticky: &quot;childSticksToParent&quot;</code> option, <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> will see that the
+child and parent values are not the same, and will set the child to the parent’s
+value (<code>15</code>).</p>
+<h2>Debugging</h2>
+<h3>Naming functions</h3>
+<p><a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> sets up an internal <code>_updateChild</code> method to listen for changes to the
+parent; when it changes, <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> updates the child to match the parent.
+Likewise, its internal <code>_updateParent</code> method listens for changes to the child;
+when it changes, <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> updates the parent to match the child.</p>
+<p>If you provide the <code>updateChildName</code> and <code>updateParentName</code> options, <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a>
+will assign those names to their respective update functions so they show up
+better in a debugger. For example, providing <code>updateChildName</code> will name
+<a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a>’s internal <code>_updateChild</code> method, so if you have a breakpoint when the child is
+set, you can see this name in the debugger.</p>
+<h3>Mutation dependency data</h3>
+<p><a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> automatically sets up the correct <a href="can-reflect-dependencies.html" title="Functions to keep track of observable dependencies.">can-reflect-dependencies</a> mutation
+data for both the child and the parent. For example, when
+<a href="can-bind.prototype.start.html" title="Start listening to the child &amp; parent observables and set their values depending on their current state and the options provided to the binding
+when initialized.">start</a> is called on a one-way child-to-parent binding,
+<a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> will call <a href="can-reflect-dependencies.addMutatedBy.html" title="Register (one to many) mutation dependencies.">addMutatedBy</a> to register the
+child as a mutator of the parent and set the <code>@can.getChangesDependencyRecord</code>
+symbol on <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a>’s internal <code>_updateParent</code> method to indicate that it mutates the
+parent.</p>
+<p>When <a href="can-bind.prototype.stop.html" title="Stop listening to the observables.">stop</a> is called, <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> tears down the mutation
+dependency data it sets up by calling <a href="can-reflect-dependencies.deleteMutatedBy.html" title="Unregister (one to many) mutation dependencies.">deleteMutatedBy</a>
+and removing the <code>@can.getChangesDependencyRecord</code> symbol from the update
+function(s).</p>
+<h2>Warnings</h2>
+<h3>can-bind: attempting to update</h3>
+<p>In some circumstances, you might come across a warning like this with a two-way
+binding:</p>
+<pre><code>can-bind: attempting to update parent SettableObservable&lt;PARENT&gt; to new value: 3
+…but the parent semaphore is at 0 and the child semaphore is at 1. The number of allowed updates is 0.
+The parent value will remain unchanged; it’s currently: 2.
+Read https://canjs.com/doc/can-bind.html#Warnings for more information. Printing mutation history:
+</code></pre>
+<p>In summary, <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> is trying to warn you that it could not make the child
+and parent values match. This might indicate that there’s a bug in your code.</p>
+<p>Let’s look again at the example in the cycles section above:</p>
+<pre><code class="language-js">import {Bind, value} from &quot;can&quot;;
+
+// Child and parent observable values
+const parent = value.returnedBy(function PARENT(newValue){
+    return newValue + 1;
+}, null, 0);
+
+const child = value.returnedBy(function CHILD(newValue){
+    return newValue + 1;
+}, null, 1);
+
+// Create and start the binding
+const binding = new Bind({
+  parent: parent,
+  child: child
+});
+binding.start();
+
+// Set the parent to 1
+parent.set(1);
+</code></pre>
+<p>In the example above, both the child and parent values will increment themselves
+by 1 every time they’re set. When <code>parent</code> is set to 1, it will increment itself
+to 2; <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> listens for when the parent changes and
+will set the child to 2, and it will increment itself to 3. <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a>’s
+internal <code>_updateParent</code> listener will then try to set the <code>parent</code> to
+3, but because <code>cycles</code> is 0 by default, an infinite loop will be prevented.</p>
+<p><a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> will show you a warning in this circumstance. Let’s look at parts of
+the error message again:</p>
+<blockquote>
+<p>can-bind updateValue: attempting to update parent SettableObservable&lt;&gt; to new value: 3</p>
+</blockquote>
+<p>This is saying that <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> is trying to set the parent’s value to 3
+(because that’s the child’s new value).</p>
+<blockquote>
+<p>…but the parent semaphore is at 0 and the child semaphore is at 1. The number of allowed updates is 0.</p>
+</blockquote>
+<p>A semaphore is used to keep track of the number of updates to the child and
+parent values within one cycle. This is explained more in the
+<a href="#Howitworks">how it works</a> section below, but to explain what it means here:
+the child was updated 1 time in response to the parent being changed, but there
+are 0 updates allowed (this number is 2 * <code>cycles</code>, which is 0 by default). This
+is how <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> determined that it shouldn’t allow the parent to be set again.</p>
+<blockquote>
+<p>The parent value will remain unchanged; it’s currently: 2</p>
+</blockquote>
+<p>Since the parent won’t be update to the child’s new value, it will remain at its
+current value (2 in this example).</p>
+<p>CanJS will also print out the mutations that caused the changes and their logStack:</p>
+<pre><code>child SettableObservable&lt;CHILD&gt; set.
+parent SettableObservable&lt;PARENT&gt; NOT set.
+</code></pre>
+<p>Read <a href="can-queues.logStack.html" title="Log the tasks that were run that resulted in the current line of code being executed.">logStack</a> for more information about what is printed here.</p>
+<h2>How it works</h2>
+<blockquote>
+<p><strong>Note:</strong> this section is non-normative and is only provided as a reference to
+<em>why</em> <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a> works the way it does. The implementation described in this
+section is subject to change between releases. Do not depend on any of this
+information when using <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a>.</p>
+</blockquote>
+<h3>How does initialization work with the cycles and sticky options?</h3>
+<p><a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a>’s initialization code is meant to replicate
+<a href="https://github.com/canjs/can-stache-bindings/blob/82ce7c98fdccd6558d3c908b6b7b183e1258b0d2/can-stache-bindings.js#L1026-L1054">how can-stache-bindings used to work</a>.
+See the <a href="can-bind.prototype.start.html" title="Start listening to the child &amp; parent observables and set their values depending on their current state and the options provided to the binding
+when initialized.">start</a> documentation for more information about how
+the values are synchronized.</p>
+<h3>In a two-way binding, what’s the difference between a value being the child vs. parent?</h3>
+<p><a href="https://github.com/canjs/can-stache-bindings/blob/82ce7c98fdccd6558d3c908b6b7b183e1258b0d2/can-stache-bindings.js#L655-L772">can-stache-binding’s old binding code</a>
+had very different different code paths for updating the child and parent values.
+This included only have a single semaphore to track cyclical updates, sometimes
+calling <a href="can-reflect.setValue.html" title="Set the value of a mutable object.">setValue</a> in a batch, and only implementing “stickiness” on
+one side of the binding (parent setting child).</p>
+<p>In <a href="can-bind.html" title="Updates one observable value with the value of another observable.">can-bind</a>, all of those differences go away; the child and parent listeners
+are implemented exactly the same. The only difference in how the child and parent
+values are treated is how initialization works; read the
+<a href="can-bind.prototype.start.html" title="Start listening to the child &amp; parent observables and set their values depending on their current state and the options provided to the binding
+when initialized.">start</a> documentation for more information about how the
+<code>onInitDoNotUpdateChild</code> and <code>onInitSetUndefinedParentIfChildIsDefined</code> options
+influence how the two values are set when the binding is turned on.</p>
+<h3>On init, why do we call _updateChild/_updateParent instead of setChild/setParent?</h3>
+<p>Let’s say we have a two-way binding with a defined parent and <code>undefined</code> child.
+When the binding is initialized, the child’s value will be set to match the
+parent (because the child is <code>undefined</code>). The listeners are already active when
+the initial values are set, so the child listener will fire and want to update
+the parent to match the child. This is prevented by the semaphore that’s
+incremented when <code>_updateParent</code> is called.</p>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"node_modules/can-bind/doc/can-bind.md"},"description":"Updates one observable value with the value of another observable. \n","type":"module","title":"","types":[{"type":"function","returns":{"types":[{"type":"undefined"}]},"params":[]}],"name":"can-bind","package":{"author":{"name":"Bitovi","email":"core@donejs.com","url":"https://canjs.com/"},"bugs":{"url":"https://github.com/canjs/can-bind/issues"},"bundleDependencies":false,"dependencies":{"can-assign":"^1.3.1","can-log":"^1.0.2","can-namespace":"1.0.0","can-queues":"^1.2.0","can-reflect":"^1.15.0","can-reflect-dependencies":"^1.1.1","can-symbol":"^1.6.0"},"deprecated":false,"description":"Updates one observable value with the value of another observable.","devDependencies":{"can-observation":"^4.0.1","can-simple-map":"^4.0.1","can-simple-observable":"^2.0.4","can-test-helpers":"^1.1.2","can-value":"<2.0.0","jshint":"^2.9.1","steal":"^2.0.0","steal-qunit":"^2.0.0","steal-tools":"^2.0.0","testee":"^0.9.0"},"homepage":"https://canjs.com/doc/can-bind.html","license":"MIT","main":"can-bind","name":"can-bind","repository":{"type":"git","url":"git://github.com/canjs/can-bind.git"},"scripts":{"build":"node build.js","jshint":"jshint ./*.js ./test/*.js --config","postpublish":"git push --tags && git push","preversion":"npm test","release:major":"npm version major && npm publish","release:minor":"npm version minor && npm publish","release:patch":"npm version patch && npm publish","test":"npm run jshint && npm run testee","testee":"testee test/test.html --browsers firefox"},"steal":{"main":"can-bind","configDependencies":["live-reload"],"npmIgnore":["steal-tools","testee"]},"version":"1.5.1"},"parent":"can-observables","collection":"can-infrastructure","signatures":[{"code":"new Bind(options)","description":"\n\n[can-bind] is used to keep two observable values in sync with each other. These\ntwo observable values, the `child` and `parent`, can be tied together by a\ncouple of core options:\n\n- `childToParent`: when the child’s value changes, update the parent.\n- `parentToChild`: when the parent’s value changes, update the child.\n\nIf only one of these two options is true, we call that a “one-way binding;”\nlikewise, if both are true, then it’s a two-way binding.\n\nHere’s an example of setting up a two-way binding:\n\n```js\nimport Bind from \"can-bind\";\nimport DefineMap from \"can-define/map/map\";\nimport value from \"can-value\";\n\nconst childMap = new DefineMap({childProp: \"child value\"});\nconst parentMap = new DefineMap({parentProp: \"parent value\"});\n\nconst binding = new Bind({\n  child: value.bind(childMap, \"childProp\"),\n  parent: value.bind(parentMap, \"parentProp\")\n});\n```\n\n[can-bind] gives you more options to control how the binding works; see the\ndocumentation below for a brief explanation of each option, and read further\nbelow to learn more about options such as `cycles`, `onInitDoNotUpdateChild`, `onInitDoNotUpdateParent`,\n`onInitSetUndefinedParentIfChildIsDefined`, and `sticky`.\n\nNew [can-bind] instances have the following methods:\n\n- [can-bind.prototype.start]: turn on both bindings (if they’re not already turned on) and sync the values (depending on the options passed in)\n- [can-bind.prototype.startChild]: turn on just the child binding\n- [can-bind.prototype.startParent]: turn on just the parent binding\n- [can-bind.prototype.stop]: turn off both bindings\n\nThe binding instance also has one property, [can-bind.prototype.parentValue],\nwhich returns the value of the parent observable.\n","params":[{"types":[{"type":"Object","options":[]}],"name":"options","description":"An object with multiple options:\n  - **child** `{ObservableValue|ObservableEmitter}`: Required; the child observable. It should support either [can-symbol/symbols/onValue can.onValue symbol] or [can-symbol/symbols/onEmit can.onEmit symbol] methods.  If [can-symbol/symbols/onEmit can.onEmit symbol] is provided, the parent value will be updated whenever a value is emitted.  If [can-symbol/symbols/onValue can.onValue symbol] is provided, the parent value will be updated whenever the value changes.\n  - **childToParent** `{Boolean}`: Optional; by default, [can-bind] will check if the child has the [can-symbol/symbols/getValue can.getValue symbol] and either `setParent` is provided or the parent has the [can-symbol/symbols/setValue can.setValue symbol]; providing this option overrides those checks with the option’s value (e.g. `false` will force the binding to be one-way parent-to-child).\n  - **cycles** `{Number}`: Optional; defaults to `0`. When an observable’s value is changed in a two-way binding, the number of times it can be changed again as a result of setting the other observable. This can be any number greater than 0 if `sticky` is undefined; otherwise, an error will be thrown if this is provided with `sticky`.\n  - **onInitDoNotUpdateChild** `{Boolean}`: Optional; defaults to `false`. If `true`, then never set the child when starting a binding.\n  - **onInitDoNotUpdateParent** `{Boolean}`: Optional; defaults to `false`. If `true`, then never set the parent when starting a binding.\n  - **onInitSetUndefinedParentIfChildIsDefined** `{Boolean}`: Optional; defaults to `true`: when the binding is started, if the parent’s value is undefined and the child’s value is defined, then set the parent to the child’s value.\n  - **parent** `{ObservableValue|ObservableEmitter}`: Required; the parent observable. It should support either [can-symbol/symbols/onValue can.onValue symbol] or [can-symbol/symbols/onEmit can.onEmit symbol] methods.  If [can-symbol/symbols/onEmit can.onEmit symbol] is provided, the child value will be updated whenever a value is emitted.  If [can-symbol/symbols/onValue can.onValue symbol] is provided, the child value will be updated whenever the value changes.\n  - **parentToChild** `{Boolean}`: Optional; by default, [can-bind] will check if the parent has the [can-symbol/symbols/getValue can.getValue symbol] and either `setChild` is provided or the child has the [can-symbol/symbols/setValue can.setValue symbol]; providing this option overrides those checks with the option’s value (e.g. `false` will force the binding to be one-way child-to-parent).\n  - **priority** `{Number}`: Optional; a number to [can-reflect/setPriority set as the priority] for the child and parent observables.\n  - **queue** `{String}`: Optional (by default, `\"domUI\"`); the name of the queue in which to listen for changes. Acceptable values include `\"notify\"`, `\"derive\"`, and `\"domUI\"`.\n  - **setChild** `{function(parentValue, child)}`: Optional; a custom function for setting the child observable’s value. This function is called in the `queue` provided. Arguments to the function include:\n    - **parentValue** `{*}`: the parent’s value.\n    - **child** `{ObservableValue}`: the child observable.\n  - **setParent** `{function(childValue, parent)}`: Optional; a custom function for setting the parent observable’s value. This function is called in the `queue` provided. Arguments to the function include:\n    - **childValue** `{*}`: the child’s value.\n    - **parent** `{ObservableValue}`: the parent observable.\n  - **sticky** `{String}`: Optional; defaults to `undefined`. Right now `\"childSticksToParent\"` is the only other allowed value, and it will try to make the child matches the parent’s value after setting the parent.\n  - **updateChildName** `{String}`: Optional; a debugging name for the function that listens to the parent’s value and updates the child.\n  - **updateParentName** `{String}`: Optional; a debugging name for the function that listens to the child’s value and updates the parent."}],"returns":{"types":[{"type":"can-bind"}],"description":"A new binding instance.\n"}}],"_curParam":{"types":[{"type":"Object","options":[]}],"name":"options","description":"An object with multiple options:\n  - **child** `{ObservableValue|ObservableEmitter}`: Required; the child observable. It should support either [can-symbol/symbols/onValue can.onValue symbol] or [can-symbol/symbols/onEmit can.onEmit symbol] methods.  If [can-symbol/symbols/onEmit can.onEmit symbol] is provided, the parent value will be updated whenever a value is emitted.  If [can-symbol/symbols/onValue can.onValue symbol] is provided, the parent value will be updated whenever the value changes.\n  - **childToParent** `{Boolean}`: Optional; by default, [can-bind] will check if the child has the [can-symbol/symbols/getValue can.getValue symbol] and either `setParent` is provided or the parent has the [can-symbol/symbols/setValue can.setValue symbol]; providing this option overrides those checks with the option’s value (e.g. `false` will force the binding to be one-way parent-to-child).\n  - **cycles** `{Number}`: Optional; defaults to `0`. When an observable’s value is changed in a two-way binding, the number of times it can be changed again as a result of setting the other observable. This can be any number greater than 0 if `sticky` is undefined; otherwise, an error will be thrown if this is provided with `sticky`.\n  - **onInitDoNotUpdateChild** `{Boolean}`: Optional; defaults to `false`. If `true`, then never set the child when starting a binding.\n  - **onInitDoNotUpdateParent** `{Boolean}`: Optional; defaults to `false`. If `true`, then never set the parent when starting a binding.\n  - **onInitSetUndefinedParentIfChildIsDefined** `{Boolean}`: Optional; defaults to `true`: when the binding is started, if the parent’s value is undefined and the child’s value is defined, then set the parent to the child’s value.\n  - **parent** `{ObservableValue|ObservableEmitter}`: Required; the parent observable. It should support either [can-symbol/symbols/onValue can.onValue symbol] or [can-symbol/symbols/onEmit can.onEmit symbol] methods.  If [can-symbol/symbols/onEmit can.onEmit symbol] is provided, the child value will be updated whenever a value is emitted.  If [can-symbol/symbols/onValue can.onValue symbol] is provided, the child value will be updated whenever the value changes.\n  - **parentToChild** `{Boolean}`: Optional; by default, [can-bind] will check if the parent has the [can-symbol/symbols/getValue can.getValue symbol] and either `setChild` is provided or the child has the [can-symbol/symbols/setValue can.setValue symbol]; providing this option overrides those checks with the option’s value (e.g. `false` will force the binding to be one-way child-to-parent).\n  - **priority** `{Number}`: Optional; a number to [can-reflect/setPriority set as the priority] for the child and parent observables.\n  - **queue** `{String}`: Optional (by default, `\"domUI\"`); the name of the queue in which to listen for changes. Acceptable values include `\"notify\"`, `\"derive\"`, and `\"domUI\"`.\n  - **setChild** `{function(parentValue, child)}`: Optional; a custom function for setting the child observable’s value. This function is called in the `queue` provided. Arguments to the function include:\n    - **parentValue** `{*}`: the parent’s value.\n    - **child** `{ObservableValue}`: the child observable.\n  - **setParent** `{function(childValue, parent)}`: Optional; a custom function for setting the parent observable’s value. This function is called in the `queue` provided. Arguments to the function include:\n    - **childValue** `{*}`: the child’s value.\n    - **parent** `{ObservableValue}`: the parent observable.\n  - **sticky** `{String}`: Optional; defaults to `undefined`. Right now `\"childSticksToParent\"` is the only other allowed value, and it will try to make the child matches the parent’s value after setting the parent.\n  - **updateChildName** `{String}`: Optional; a debugging name for the function that listens to the parent’s value and updates the child.\n  - **updateParentName** `{String}`: Optional; a debugging name for the function that listens to the child’s value and updates the parent."},"_curReturn":{"types":[{"type":"can-bind"}],"description":"A new binding instance.\n"},"comment":" ","pathToRoot":".."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="./static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix="."></div>
+
+	</body>
+</html>

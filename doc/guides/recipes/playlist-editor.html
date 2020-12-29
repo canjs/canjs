@@ -1,0 +1,2952 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/commitment/recipes/playlist-editor/playlist-editor.md
+	@page guides/recipes/playlist-editor
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Playlist Editor | advanced recipes | Guides | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+	<meta property="og:title" content="Playlist Editor | advanced recipes | Guides | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Playlist Editor | advanced recipes | Guides | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/recipes/playlist-editor" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>getting started</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../crud-beginner.html"
+							title="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+							CRUD Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../setup.html"
+							title="Learn how to install CanJS in your environment.">
+							Setting Up CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../technology-overview.html"
+							title="Learn the basics of CanJS’s technology.">
+							Technology Overview
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>topics</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../html.html"
+							title="Learn how to update HTML and listen to user interactions.">
+							HTML
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../routing.html"
+							title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+							Routing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../data.html"
+							title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">
+							Service Layer
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../debugging.html"
+							title="Learn how to debug CanJS applications.">
+							Debugging
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../forms.html"
+							title="Learn how to create amazing &lt;form&gt;s with CanJS.">
+							Forms
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../testing.html"
+							title="Learn how to test CanJS applications.">
+							Testing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../logic.html"
+							title="Learn how to write observables in an organized, maintainable, and testable way.">
+							Logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../server-side-rendering.html"
+							title="Learn how to set up SSR for CanJS.">
+							Server-Side Rendering
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>app guides</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../chat.html"
+							title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+							Chat Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../todomvc.html"
+							title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+							TodoMVC Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="todomvc-with-steal.html"
+							title="This tutorial walks through building TodoMVC with StealJS. It includes KeyNote presentations covering CanJS core libraries.">
+							TodoMVC with StealJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>beginner recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="canvas-clock.html"
+							title="This beginner guide walks you through building a clock with the Canvas API.">
+							Canvas Clock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="credit-card-simple.html"
+							title="This beginner guide walks through building a very simple credit card payment form.  It uses Stripe.js v2 API to create a token which can be used to create a charge.  It also performs simple validation on the payment form values.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="file-navigator-simple.html"
+							title="This beginner guide walks you through building a simple file navigation widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.0.0. Check out the file-navigator-advanced for an example that makes AJAX requests for its data and uses can-stache-element.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="signup-simple.html"
+							title="This beginner guide walks through building simple signup, login forms and a logout button.">
+							Signup and Login
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="video-player.html"
+							title="This beginner guide walks you through building custom video controls around a video element.">
+							Video Player
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="weather-report-simple.html"
+							title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.2.">
+							Weather Report
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>intermediate recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="cta-bus-map.html"
+							title="This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map. You&#x27;ll learn how to create a StacheElement that integrates with 3rd party widgets.">
+							CTA Bus Map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="modals.html"
+							title="This intermediate guide shows how to create a multiple modal form.">
+							Multiple Modals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="text-editor.html"
+							title="This intermediate guide walks you through building a basic rich text editor.">
+							Text Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="tinder-carousel.html"
+							title="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+							Tinder Carousel
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>advanced recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="credit-card-advanced.html"
+							title="This advanced guide walks through building a simple credit card payment form with validations. It doesn’t use can-define. Instead it uses Kefir.js streams to make a ViewModel. can-kefir is used to make the Kefir streams observable to can-stache.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="file-navigator-advanced.html"
+							title="This advanced guide walks you through building a file navigation widget that requests data with fetch. It takes about 45 minutes to complete.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="playlist-editor.html"
+							title="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+							Playlist Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="search-list-details.html"
+							title="This advanced guide walks through building a Search, List, Details flow with lazy-loaded routes.">
+							Search, List, Details
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>upgrade</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../migrate-3.html"
+							title="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+							Migrating to CanJS 3
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../migrate-4.html"
+							title="This guide walks you through the step-by-step process to upgrade a 3.x app to CanJS 4.">
+							Migrating to CanJS 4
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../migrate-5.html"
+							title="This guide walks you through the process to upgrade a 4.x app to CanJS 5.x.">
+							Migrating to CanJS 5
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../migrate-6.html"
+							title="This guide walks you through the process to upgrade a 5.x app to CanJS 6.x.">
+							Migrating to CanJS 6
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../upgrade/using-codemods.html"
+							title="Learn how to migrate your app to CanJS 6 using can-migrate.">
+							Using Codemods
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>other</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../api.html"
+							title="This page walks through how to use and understand CanJS’s API documentation.">
+							Reading the API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Playlist Editor</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/commitment/recipes/playlist-editor/playlist-editor.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses <a href="https://jquerypp.com" title="jQuery++">jQuery++</a> for
+drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes
+an hour to complete.</p>
+<blockquote>
+<p>This recipe uses YouTube API Services and follows <a href="https://www.youtube.com/t/terms">YouTube Terms of Service</a>
+and <a href="https://policies.google.com/privacy">Google Privacy Policy</a></p>
+</blockquote>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <p>The final widget looks like:</p>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="zYOaXwm" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Playlist Editor (Advanced) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/zYOaXwm">
+  Playlist Editor (Advanced) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<p>To use the widget:</p>
+<ol>
+<li><em>Click</em> <strong>Sign In</strong> to give access to the app to create playlists on your behalf.</li>
+<li><em>Type</em> search terms in <strong>Search for videos</strong> and hit <em>enter</em>.</li>
+<li><em>Drag</em> and <em>drop</em> those videos into the playlist area (<strong>Drag video here</strong>).</li>
+<li><em>Click</em> <strong>Create Playlist</strong>.</li>
+<li><em>Enter</em> a name in the popup.</li>
+<li><em>Navigate</em> to your <a href="https://www.youtube.com/">YouTube</a> channel to verify the playlist was created.</li>
+</ol>
+<p><strong>START THIS TUTORIAL BY CLICKING THE “EDIT ON CODEPEN” BUTTON IN THE TOP RIGHT CORNER OF THE FOLLOWING EMBED:</strong>:</p>
+<p class="codepen" data-height="144" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="wZyLXb" style="height: 144px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Playlist Editor (Advanced) [Starter]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/wZyLXb/">
+  Playlist Editor (Advanced) [Starter]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<p>The following sections are broken down into:</p>
+<ul>
+<li>Problem — A description of what the section is trying to accomplish.</li>
+<li>What you need to know — Information about CanJS that is useful for solving the problem.</li>
+<li>Solution — The solution to the problem.</li>
+</ul>
+<p>The following video goes through this recipe:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/0GLa33tdDTg" frameborder="0" allowfullscreen></iframe>
+<h2>Set up CanJS and Load Google API</h2>
+<h3>The problem</h3>
+<p>In this section, we will:</p>
+<ol>
+<li>Load Google’s JS API client, <code>gapi</code>, and initialize it to make requests on behalf of
+the registered &quot;CanJS Playlist&quot; app.</li>
+<li>Set up a basic CanJS application.</li>
+<li>Use the basic CanJS application to show when Google’s JS API has finished loading.</li>
+</ol>
+<h3>What you need to know</h3>
+<ul>
+<li><p>The preferred way of loading Google’s JS API is with an <code>async</code> script tag like:</p>
+<pre><code class="language-html">&lt;script async defer src=&quot;https://apis.google.com/js/api.js&quot;
+  onload=&quot;this.onload=function(){}; googleScriptLoaded();&quot;
+  onreadystatechange=&quot;if (this.readyState === 'complete') this.onload();&quot;&gt;
+&lt;/script&gt;
+</code></pre>
+<p>The <code>async</code> attribute allows other JS to execute while the <code>api.js</code> file is loading.
+Once complete, this will call a <code>googleScriptLoaded</code> function.</p></li>
+<li><p>Once <code>api.js</code> is loaded, it adds the <a href="https://developers.google.com/api-client-library/javascript/reference/referencedocs">gapi</a>
+object to the window.  This is Google’s JS API.  It can be used to load other APIs that extend the <code>gapi</code> library.</p>
+<p>The following can be used to load the OAuth2 GAPI libraries:</p>
+<pre><code class="language-js">gapi.load(&quot;client:auth2&quot;, completeCallback);
+</code></pre>
+<p>Once this functionality is loaded, we can tell <code>gapi</code> to make requests on behalf of a registered
+application.  In this case, the following keys enable this client to make requests on behalf of the
+&quot;CanJS Playlist&quot; application:</p>
+<pre><code class="language-js">gapi.client.init({
+  apiKey: &quot;AIzaSyAbHbOuFtJRvTX731PQXGSTy59eh5rEiE0&quot;,
+  clientId: &quot;764983721035-85cbj35n0kmkmrba10f4jtte8fhpst84.apps.googleusercontent.com&quot;,
+  discoveryDocs: [ &quot;https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest&quot; ],
+  scope: &quot;https://www.googleapis.com/auth/youtube&quot;
+}).then( completeCallback )
+</code></pre>
+<p>To use your own key, you can follow the instructions <a href="https://developers.google.com/youtube/v3/getting-started">here</a>. This is not required to complete this guide.</p></li>
+<li><p>Instead of callbacks, CanJS favors <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promises</a> to manage
+asynchronous behavior. A promise can be created like:</p>
+<pre><code class="language-js">const messagePromise = new Promise(function(resolve, reject) {
+  setTimeout(function() {
+    resolve(&quot;Hello There&quot;);
+  }, 1000);
+});
+</code></pre>
+<p><code>resolve</code> should be called once the promise has a value.  <code>reject</code> should be called
+if something goes wrong (like an error).  We say the <code>messagePromise</code> <em>resolves</em> with
+<code>&quot;Hello There&quot;</code> after one second.</p>
+<p>Anyone can listen to when <code>messagePromise</code> resolves with a value like:</p>
+<pre><code class="language-js">messagePromise.then(function(messageValue) {
+  messageValue //-&gt; &quot;Hello There&quot;
+});
+</code></pre>
+<p>CanJS can use promises in its <a href="../../can-stache.html" title="Live binding templates.">can-stache</a> templates.  More on that below.</p></li>
+<li><p>A basic CanJS application is a live-bound template (or view) rendered with the component’s <a href="../../can-stache-element/static.props.html" title="A static property used to create ObservableObject-like properties on each StacheElement instance.">props</a>.</p>
+<pre><code class="language-js">import { StacheElement } from &quot;can&quot;;
+
+class MyApp extends StacheElement {
+  static view = `&lt;h1&gt;{{ message }}&lt;/h1&gt;`;
+
+  static props = {
+    message: &quot;Hello World&quot;
+  };
+}
+
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre></li>
+<li><p>Mount a <a href="../../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a> by its custom tag like:</p>
+<pre><code class="language-html">&lt;my-app&gt;&lt;/my-app&gt;
+</code></pre></li>
+<li><p>Use <a href="../../can-stache.helpers.if.html" title="can-stache.helpers.if">{{# if(value) }}</a> to do <code>if/else</code> branching in <a href="../../can-stache.html" title="Live binding templates.">can-stache</a>.</p></li>
+<li><p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promises</a> are observable with <a href="../../can-stache.html" title="Live binding templates.">can-stache</a>.  Given a promise <code>somePromise</code>, you can:</p>
+<ul>
+<li>Check if the promise is loading like: <code>{{# if(somePromise.isPending) }}</code>.</li>
+<li>Loop through the resolved value of the promise like: <code>{{# for(item of somePromise.value) }}</code>.</li>
+</ul></li>
+</ul>
+<ul>
+<li><p><a href="../../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">ObservableObject</a> can be used to define the behavior of observable objects like:</p>
+<pre><code class="language-js">import { ObservableObject } from &quot;can&quot;;
+
+class Type extends ObservableObject {
+  static props = {
+    message: String
+  };
+}
+</code></pre></li>
+<li><p><a href="../../can-stache-element/static.props.html" title="A static property used to create ObservableObject-like properties on each StacheElement instance.">props</a> are <a href="../../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">ObservableObject</a> like
+properties used to control the behavior of a custom element.</p>
+<pre><code class="language-js">import { StacheElement } from &quot;can&quot;;
+
+class PlaylistEditor extends StacheElement {
+  static view = `...`;
+  static props = {
+    message: String
+  };
+}
+
+customElements.define(&quot;playlist-editor&quot;, PlaylistEditor);
+</code></pre></li>
+<li><p><a href="../../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">ObservableObjec</a>s can specify a default value and a type:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;can&quot;;
+
+class PlaylistEditor extends StacheElement {
+  static view = `...`;
+  static props = {
+    message: { type: String, default: &quot;Hello World&quot; }
+  };
+}
+
+customElements.define(&quot;playlist-editor&quot;, PlaylistEditor);
+</code></pre></li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>HTML</strong> to:</p>
+<blockquote>
+<p><strong>Note:</strong> use your own <code>clientId</code> if you use this code outside this guide and CodePen.</p>
+</blockquote>
+<pre><code class="language-html">&lt;playlist-editor&gt;&lt;/playlist-editor&gt;
+
+&lt;script src=&quot;https://code.jquery.com/jquery-2.2.4.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://unpkg.com/jquerypp@2/dist/global/jquerypp.js&quot;&gt;&lt;/script&gt;
+
+&lt;script&gt;
+window.googleApiLoadedPromise = new Promise(function(resolve) {
+    window.googleScriptLoaded = function() {
+        gapi.load(&quot;client:auth2&quot;, function() {
+            gapi.client.init({
+                apiKey: &quot;AIzaSyBcnGGOryOnmjUC09T78VCFEqRQRgvPnAc&quot;,
+                clientId: &quot;764983721035-85cbj35n0kmkmrba10f4jtte8fhpst84.apps.googleusercontent.com&quot;,
+                discoveryDocs: [ &quot;https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest&quot; ],
+                scope: &quot;https://www.googleapis.com/auth/youtube&quot;
+            }).then(resolve);
+        });
+    }
+});
+&lt;/script&gt;
+
+&lt;script async defer src=&quot;https://apis.google.com/js/api.js&quot;
+    onload=&quot;this.onload=function(){}; googleScriptLoaded();&quot;
+    onreadystatechange=&quot;if (this.readyState === 'complete') this.onload();&quot;&gt;
+&lt;/script&gt;
+
+</code></pre>
+<div line-highlight='1-24,only'></div>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class PlaylistEditor extends StacheElement {
+    static view = `
+      {{# if(this.googleApiLoadedPromise.isPending) }}
+          &lt;div&gt;Loading Google API…&lt;/div&gt;
+      {{ else }}
+          &lt;div&gt;Loaded Google API&lt;/div&gt;
+      {{/ if }}
+    `;
+
+    static props = {
+        googleApiLoadedPromise: {
+            get default() {
+                return googleApiLoadedPromise;
+            }
+        }
+    };
+}
+
+customElements.define(&quot;playlist-editor&quot;, PlaylistEditor);
+</code></pre>
+<div line-highlight='1-21,only'></div>
+<h2>Sign in and out</h2>
+<h3>The problem</h3>
+<p>In this section, we will:</p>
+<ol>
+<li>Show a <code>Sign In</code> button that signs a person into their Google account.</li>
+<li>Show a <code>Sign Out</code> button that signs a person out of their Google account.</li>
+<li>Automatically know via Google’s API when the user signs in and out, and update the
+page accordingly.</li>
+<li>Show a welcome message with the user’s given name.</li>
+</ol>
+<h3>What you need to know</h3>
+<ul>
+<li><p>Once the Google API has been fully loaded, information about the
+currently authenticated user can be found in the <code>googleAuth</code> object.  This
+can be retrieved like:</p>
+<pre><code class="language-js">googleApiLoadedPromise.then(function() {
+  const googleAuth = gapi.auth2.getAuthInstance()
+});
+</code></pre>
+<p>With <code>googleAuth</code>, you can:</p>
+<ul>
+<li>Know if someone is signed in: <code>googleAuth.isSignedIn.get()</code></li>
+<li>Sign someone in: <code>googleAuth.signIn()</code></li>
+<li>Sign someone out: <code>googleAuth.signOut()</code></li>
+<li>Listen to when someone’s signedIn status changes: <code>googleAuth.isSignedIn.listen(callback)</code></li>
+<li>Get the user’s name: <code>googleAuth.currentUser.get().getBasicProfile().getGivenName()</code></li>
+</ul></li>
+</ul>
+<ul>
+<li><p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/get">ES5 getter syntax</a> can
+be used to define a component property that changes when another property changes.  For example,
+the following defines an <code>signedOut</code> property that is the opposite of the <code>signedIn</code> property:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;can&quot;;
+
+class PlaylistEditor extends StacheElement {
+  static view = `...`;
+  static props = {
+    signedIn: Boolean,
+    get signedOut() {
+      return !this.signedIn;
+    }
+  };
+}
+
+customElements.define(&quot;playlist-editor&quot;, PlaylistEditor);
+</code></pre></li>
+<li><p>Use <a href="../../can-observable-object/define/async.html" title="async
+Specify an asynchronous property whose value will be resolved later. async
+properties are computed and automatically update themselves when a dependent
+observable value is changed.">asynchronous getters</a> to get data from asynchronous sources.  For example:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;can&quot;;
+
+class MyApp extends StacheElement {
+  static view = `...`;
+  static props = {
+    property: {
+      async(resolve) {
+        apiLoadedPromise
+          .then(function() {
+            resolve(api.getValue());
+          });
+      }
+    }
+  };
+}
+
+customElements.define(&quot;my-app&quot;, MyApp);
+</code></pre></li>
+<li><p><a href="../../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a> <a href="../../can-stache-element/lifecycle-hooks.connected.html" title="A lifecycle hook called after the element is inserted into the document.">connected</a> hook can be used to perform initialization behavior.  For example, the following might initialize <code>googleApiLoadedPromise</code>:</p>
+<pre><code class="language-js">import { StacheElement, type } from &quot;can&quot;;
+
+class PlaylistEditor extends StacheElement {
+  static view = `...`;
+  static props = {
+    googleApiLoadedPromise: type.Any,
+  };
+  connected() {
+    this.googleApiLoadedPromise = googleApiLoadedPromise;
+  }
+}
+
+customElements.define(&quot;playlist-editor&quot;, PlaylistEditor);
+</code></pre></li>
+<li><p><a href="../../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">ObservableObject</a>’s <a href="../../can-event-queue/map/map.listenTo.html" title="Listen to an event and register the binding for simplified unbinding.">listenTo</a> lets you listen on changes in a component. This can be used to change values when other values change.  The following will increment
+<code>nameChange</code> everytime the <code>name</code> property changes:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;can&quot;;
+
+class MyApp extends StacheElement {
+  static view = `...`;
+  static props = {
+    name: String,
+    nameChange: Number
+  };
+  connected() {
+    this.listenTo(&quot;name&quot;, () =&gt; {
+      this.nameChange += 1;
+    });
+  }
+}
+</code></pre>
+<blockquote>
+<p><strong>Note:</strong> EventStreams provide a much better way of doing this.  Check out <a href="../../can-define-stream-kefir.html" title="Export a function that takes a map or list constructor and uses can-stream-kefir to create streamable properties.">can-define-stream-kefir</a>.</p>
+</blockquote></li>
+<li><p>Use <a href="../../can-stache-bindings.event.html" title="Respond to events on elements or component ViewModels.">on:EVENT</a> to listen to an event on an element and call a method in <a href="../../can-stache.html" title="Live binding templates.">can-stache</a>.  For example, the following calls <code>sayHi()</code> when the <code>&lt;div&gt;</code> is clicked.</p>
+<pre><code class="language-html">&lt;div on:click=&quot;sayHi()&quot;&gt; &lt;!-- ... --&gt; &lt;/div&gt;
+</code></pre></li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import { StacheElement, type } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class PlaylistEditor extends StacheElement {
+    static view = `
+        {{# if(this.googleApiLoadedPromise.isPending) }}
+            &lt;div&gt;Loading Google API…&lt;/div&gt;
+        {{ else }}
+            {{# if(this.signedIn) }}
+                Welcome {{ this.givenName }}! &lt;button on:click=&quot;this.googleAuth.signOut()&quot;&gt;Sign Out&lt;/button&gt;
+            {{ else }}
+                &lt;button on:click=&quot;this.googleAuth.signIn()&quot;&gt;Sign In&lt;/button&gt;
+            {{/ if }}
+        {{/ if }}
+    `;
+
+    static props = {
+        googleApiLoadedPromise: {
+            get default() {
+                return googleApiLoadedPromise;
+            }
+        },
+
+        googleAuth: {
+            async(resolve) {
+                this.googleApiLoadedPromise.then(() =&gt; {
+                    resolve(gapi.auth2.getAuthInstance());
+                });
+            }
+        },
+
+        signedIn: Boolean,
+
+        get givenName() {
+            return (
+                this.googleAuth &amp;&amp;
+                this.googleAuth.currentUser
+                    .get()
+                    .getBasicProfile()
+                    .getGivenName()
+            );
+        }
+    };
+
+    connected() {
+        this.listenTo(&quot;googleAuth&quot;, ({ value: googleAuth }) =&gt; {
+            this.signedIn = googleAuth.isSignedIn.get();
+            googleAuth.isSignedIn.listen(isSignedIn =&gt; {
+                this.signedIn = isSignedIn;
+            });
+        });
+    }
+}
+
+customElements.define(&quot;playlist-editor&quot;, PlaylistEditor);
+
+</code></pre>
+<div line-highlight='8-12,23-41,44-51,only'></div>
+<h2>Search for videos</h2>
+<h3>The problem</h3>
+<p>In this section, we will:</p>
+<ol>
+<li>Create a search <code>&lt;input&gt;</code> where a user can type a search query.</li>
+<li>When the user types more than 2 characters, get a list of video search results and display
+them to the user.</li>
+</ol>
+<h3>What you need to know</h3>
+<ul>
+<li><p>Use <a href="../../can-stache-bindings.twoWay.html" title="Two-way bind a value in the StacheElement, can-component ViewModel, or element to the parent scope.">value:bind</a> to setup a two-way binding in <a href="../../can-stache.html" title="Live binding templates.">can-stache</a>.  For example, the following keeps <code>searchQuery</code> and the input’s <code>value</code> in sync:</p>
+<pre><code class="language-html">&lt;input value:bind=&quot;searchQuery&quot;&gt;
+</code></pre></li>
+<li><p>Use <code>gapi.client.youtube.search.list</code> to search YouTube like:</p>
+<pre><code class="language-js">const googlePromise = gapi.client.youtube.search.list({
+  q: &quot;dogs&quot;,
+  part: &quot;snippet&quot;,
+  type: &quot;video&quot;
+}).then(function(response) {
+  response //-&gt; {
+           //     result: {
+           //       items: [
+           //         {
+           //           id: {videoId: &quot;ajsadfa&quot;},
+           //           snippet: {
+           //             title: &quot;dogs&quot;,
+           //             thumbnails: {default: {url: &quot;https://example.com/dog.png&quot;}}
+           //           }
+           //         }
+           //       ]
+           //     }
+           //   }
+});
+</code></pre></li>
+<li><p>To convert a <code>googlePromise</code> to a native <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a> use:</p>
+<pre><code class="language-js">new Promise(function(resolve, reject) {
+  googlePromise.then(resolve, reject);      
+})
+</code></pre></li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class PlaylistEditor extends StacheElement {
+    static view = `
+        {{# if(this.googleApiLoadedPromise.isPending) }}
+            &lt;div&gt;Loading Google API…&lt;/div&gt;
+        {{ else }}
+            {{# if(this.signedIn) }}
+                Welcome {{ this.givenName }}! &lt;button on:click=&quot;this.googleAuth.signOut()&quot;&gt;Sign Out&lt;/button&gt;
+            {{ else }}
+                &lt;button on:click=&quot;this.googleAuth.signIn()&quot;&gt;Sign In&lt;/button&gt;
+            {{/ if }}
+
+            &lt;div&gt;
+                &lt;input value:bind=&quot;this.searchQuery&quot; placeholder=&quot;Search for videos&quot;&gt;
+            &lt;/div&gt;
+
+            {{# if(this.searchResultsPromise.isPending) }}
+                &lt;div class=&quot;loading&quot;&gt;Loading videos…&lt;/div&gt;
+            {{/ if }}
+
+            {{# if(this.searchResultsPromise.isResolved) }}
+                &lt;ul class=&quot;source&quot;&gt;
+                    {{# for(searchResult of this.searchResultsPromise.value) }}
+                        &lt;li&gt;
+                            &lt;a href=&quot;https://www.youtube.com/watch?v={{ searchResult.id.videoId }}&quot; target=&quot;_blank&quot;&gt;
+                                &lt;img src=&quot;{{ searchResult.snippet.thumbnails.default.url }}&quot; width=&quot;50px&quot;&gt;
+                            &lt;/a&gt;
+                            {{ searchResult.snippet.title }}
+                        &lt;/li&gt;
+                    {{/ for }}
+                &lt;/ul&gt;
+            {{/ if }}
+        {{/ if }}
+    `;
+
+    static props = {
+        googleApiLoadedPromise: {
+            get default() {
+                return googleApiLoadedPromise;
+            }
+        },
+
+        googleAuth: {
+            async(resolve) {
+                this.googleApiLoadedPromise.then(() =&gt; {
+                    resolve(gapi.auth2.getAuthInstance());
+                });
+            }
+        },
+
+        signedIn: Boolean,
+
+        get givenName() {
+            return (
+                this.googleAuth &amp;&amp;
+                this.googleAuth.currentUser
+                    .get()
+                    .getBasicProfile()
+                    .getGivenName()
+            );
+        },
+
+        searchQuery: &quot;&quot;,
+
+        get searchResultsPromise() {
+            if (this.searchQuery.length &gt; 2) {
+                return gapi.client.youtube.search
+                    .list({
+                        q: this.searchQuery,
+                        part: &quot;snippet&quot;,
+                        type: &quot;video&quot;
+                    })
+                    .then(response =&gt; {
+                        console.info(&quot;Search results:&quot;, response.result.items);
+                        return response.result.items;
+                    });
+            }
+        }
+    };
+
+    connected() {
+        this.listenTo(&quot;googleAuth&quot;, ({ value: googleAuth }) =&gt; {
+            this.signedIn = googleAuth.isSignedIn.get();
+            googleAuth.isSignedIn.listen(isSignedIn =&gt; {
+                this.signedIn = isSignedIn;
+            });
+        });
+    }
+}
+
+customElements.define(&quot;playlist-editor&quot;, PlaylistEditor);
+
+</code></pre>
+<div line-highlight='14-33,64-79,only'></div>
+<h2>Drag videos</h2>
+<h3>The problem</h3>
+<p>In this section, we will:</p>
+<ol>
+<li>Let a user drag around a cloned representation of the searched videos.</li>
+</ol>
+<h3>What you need to know</h3>
+<ul>
+<li><p>The <a href="https://jquerypp.com/">jQuery++</a> library (which is already included on the page), supports
+the following <code>drag</code> events:</p>
+<ul>
+<li><code>dragdown</code> - the mouse cursor is pressed down</li>
+<li><code>draginit</code> - the drag motion is started</li>
+<li><code>dragmove</code> - the drag is moved</li>
+<li><code>dragend</code> - the drag has ended</li>
+<li><code>dragover</code> - the drag is over a drop point</li>
+<li><code>dragout</code> - the drag moved out of a drop point</li>
+</ul>
+<p>You can bind on them manually with jQuery like:</p>
+<pre><code class="language-js">$(element).on(&quot;draginit&quot;, function(ev, drag) {
+  drag.limit($(this).parent());
+  drag.horizontal();
+});
+</code></pre>
+<p>Notice that <code>drag</code> is the 2nd argument to the event.  You can listen to
+<code>drag</code> events in <a href="../../can-stache.html" title="Live binding templates.">can-stache</a> and pass the <code>drag</code> argument to a function like:</p>
+<pre><code class="language-html">on:draginit=&quot;startedDrag(scope.arguments[1])&quot;
+</code></pre></li>
+<li><p>You can use <a href="../../can-dom-events/helpers/add-jquery-events.html" title="Add jQuery’s special events to the global registry.">addJQueryEvents()</a>
+to listen to custom jQuery events (such as jQuery++’s <code>draginit</code> above):</p>
+<pre><code class="language-js">import { addJQueryEvents } from &quot;can&quot;;
+
+addJQueryEvents(jQuery);
+</code></pre></li>
+<li><p>The <code>drag.ghost()</code> method copies the elements being dragged and drags that
+instead. The <code>.ghost()</code> method returns the copied elements
+wrapped with jQuery.  Add the <code>ghost</code> className to style the ghost elements, like:</p>
+<pre><code class="language-js">drag.ghost().addClass(&quot;ghost&quot;);
+</code></pre></li>
+<li><p>To add a method to a <a href="../../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a>, just add a function shown below:</p>
+<pre><code class="language-js">import { StacheElement } from &quot;can&quot;;
+
+class PlaylistEditor extends StacheElement {
+  static view = `...`;
+  static props = { ... };
+  startedDrag() {
+    console.log(&quot;you did it!&quot;)
+  }
+}
+</code></pre></li>
+<li><p>Certain browsers have default drag behaviors for certain elements like <code>&lt;a&gt;</code> and <code>&lt;img&gt;</code>
+that can be prevented with the <code>draggable=&quot;false&quot;</code> attribute.</p></li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import { addJQueryEvents, StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+addJQueryEvents(jQuery);
+
+class PlaylistEditor extends StacheElement {
+    static view = `
+        {{# if(this.googleApiLoadedPromise.isPending) }}
+            &lt;div&gt;Loading Google API…&lt;/div&gt;
+        {{ else }}
+            {{# if(this.signedIn) }}
+                Welcome {{ this.givenName }}! &lt;button on:click=&quot;this.googleAuth.signOut()&quot;&gt;Sign Out&lt;/button&gt;
+            {{ else }}
+                &lt;button on:click=&quot;this.googleAuth.signIn()&quot;&gt;Sign In&lt;/button&gt;
+            {{/ if }}
+
+            &lt;div&gt;
+                &lt;input value:bind=&quot;this.searchQuery&quot; placeholder=&quot;Search for videos&quot;&gt;
+            &lt;/div&gt;
+
+            {{# if(this.searchResultsPromise.isPending) }}
+                &lt;div class=&quot;loading&quot;&gt;Loading videos…&lt;/div&gt;
+            {{/ if }}
+
+            {{# if(this.searchResultsPromise.isResolved) }}
+                &lt;ul class=&quot;source&quot;&gt;
+                    {{# for(searchResult of this.searchResultsPromise.value) }}
+                        &lt;li on:draginit=&quot;this.videoDrag(scope.arguments[1])&quot;&gt;
+                            &lt;a draggable=&quot;false&quot; href=&quot;https://www.youtube.com/watch?v={{ searchResult.id.videoId }}&quot; target=&quot;_blank&quot;&gt;
+                                &lt;img draggable=&quot;false&quot; src=&quot;{{ searchResult.snippet.thumbnails.default.url }}&quot; width=&quot;50px&quot;&gt;
+                            &lt;/a&gt;
+                            {{ searchResult.snippet.title }}
+                        &lt;/li&gt;
+                    {{/ for }}
+                &lt;/ul&gt;
+            {{/ if }}
+        {{/ if }}
+    `;
+
+    static props = {
+        googleApiLoadedPromise: {
+            get default() {
+                return googleApiLoadedPromise;
+            }
+        },
+
+        googleAuth: {
+            async(resolve) {
+                this.googleApiLoadedPromise.then(() =&gt; {
+                    resolve(gapi.auth2.getAuthInstance());
+                });
+            }
+        },
+
+        signedIn: Boolean,
+
+        get givenName() {
+            return (
+                this.googleAuth &amp;&amp;
+                this.googleAuth.currentUser
+                    .get()
+                    .getBasicProfile()
+                    .getGivenName()
+            );
+        },
+
+        searchQuery: &quot;&quot;,
+
+        get searchResultsPromise() {
+            if (this.searchQuery.length &gt; 2) {
+                return gapi.client.youtube.search
+                    .list({
+                        q: this.searchQuery,
+                        part: &quot;snippet&quot;,
+                        type: &quot;video&quot;
+                    })
+                    .then(response =&gt; {
+                        console.info(&quot;Search results:&quot;, response.result.items);
+                        return response.result.items;
+                    });
+            }
+        }
+    };
+
+    connected() {
+        this.listenTo(&quot;googleAuth&quot;, ({ value: googleAuth }) =&gt; {
+            this.signedIn = googleAuth.isSignedIn.get();
+            googleAuth.isSignedIn.listen(isSignedIn =&gt; {
+                this.signedIn = isSignedIn;
+            });
+        });
+    }
+
+    videoDrag(drag) {
+        drag.ghost().addClass(&quot;ghost&quot;);
+    }
+}
+
+customElements.define(&quot;playlist-editor&quot;, PlaylistEditor);
+
+</code></pre>
+<div line-highlight='1,3,27-29,93-95,only'></div>
+<h2>Drop videos</h2>
+<h3>The problem</h3>
+<p>In this section, we will:</p>
+<ol>
+<li>Allow a user to drop videos on a playlist element.</li>
+<li>When the user drags a video over the playlist element, a placeholder of the
+video will appear in the first position of the playlist.</li>
+<li>If the video is dragged out of the playlist element, the placeholder will be removed.</li>
+<li>If the video is dropped on the playlist element, it will be added to the playlist’s
+list of videos.</li>
+<li>Prepare for inserting the placeholder or video in any position in the list.</li>
+</ol>
+<h3>What you need to know</h3>
+<ul>
+<li><p>The <code>PlaylistEditor</code> element should maintain a list of playlist videos (<code>playlistVideos</code>) and
+the placeholder video (<code>dropPlaceholderData</code>) separately.  It can combine these
+two values into a single value (<code>videosWithDropPlaceholder</code>) of the videos to display to the
+user.  On a high-level, this might look like:</p>
+<pre><code class="language-js">import { StacheElement, type, ObservableArray } from &quot;can&quot;;
+
+class PlaylistEditor extends StacheElement {
+  static view = `...`;
+  static props = {
+    // ...
+    // { video: video, index: 0 }
+    dropPlaceholderData: type.Any,
+
+    // [video1, video2, ...]
+    playlistVideos: {
+      get default() {
+        return new ObservableArray();
+      }
+    },
+
+    get videosWithDropPlaceholder() {
+      const copyOfPlaylistVideos = this.placeListVideos.map( /* ... */ );
+      // insert this.dropPlaceholderData into copyOfPlaylistVideos
+      return copyOfPlaylistVideos;
+    }
+  };
+}
+</code></pre></li>
+<li><p>The methods that add a placeholder (<code>addDropPlaceholder</code>) and
+add video to the playlist (<code>addVideo</code>) should take an index like:</p>
+<pre><code class="language-js">addDropPlaceholder(index, video) { /* ... */ }
+addVideo(index, video) { /* ... */ }
+</code></pre>
+<p>These functions will be called with <code>0</code> as the index for this section.</p></li>
+<li><p>jQuery++ supports the following <a href="https://jquerypp.com/#drop">drop</a> events:</p>
+<ul>
+<li>dropinit - the drag motion is started, drop positions are calculated</li>
+<li>dropover - a drag moves over a drop element, called once as the drop is dragged over the element</li>
+<li>dropout - a drag moves out of the drop element</li>
+<li>dropmove - a drag is moved over a drop element, called repeatedly as the element is moved</li>
+<li>dropon - a drag is released over a drop element</li>
+<li>dropend - the drag motion has completed</li>
+</ul>
+<p>You can bind on them manually with jQuery like:</p>
+<pre><code class="language-js">$(element).on(&quot;dropon&quot;, (ev, drop, drag) =&gt; { /* ... */ });
+</code></pre>
+<p>Notice that <code>drop</code> is now the 2nd argument to the event.  You can listen to
+<code>drop</code> events in <a href="../../can-stache.html" title="Live binding templates.">can-stache</a>, and pass the <code>drag</code> argument to a function, like:</p>
+<pre><code class="language-html">on:dropon=&quot;addVideo(scope.arguments[2])&quot;
+</code></pre></li>
+<li><p>You will need to associate the drag objects with the video being dragged so
+you know which video is being dropped when a <code>drop</code> happens. The following
+utilities help create that association:</p>
+<ul>
+<li><p>The <code>drag.element</code> is the jQuery-wrapped element that the user initiated the
+drag motion upon.</p></li>
+<li><p>CanJS’s <a href="../../can-stache.helpers.domData.html" title="Associate data with an HTML element. This is useful for integrating with other technologies.">{{ domData(&quot;DATANAME&quot;) }}</a> helper lets you
+associate custom data with an element. The following
+saves the current <code>context</code> of the <code>&lt;li&gt;</code> as <code>&quot;dragData&quot;</code> on the <code>&lt;li&gt;</code>:</p>
+<pre><code class="language-html">&lt;li on:draginit=&quot;this.videoDrag(scope.arguments[1])&quot;
+    {{domData(&quot;dragData&quot;)}}&gt;&lt;/li&gt;
+</code></pre></li>
+<li><p><a href="../../can-dom-data.get.html" title="Get data that was stored in a DOM Node using the specified key.">domData.get()</a> can access this data like:</p>
+<pre><code class="language-js">import { domData } from &quot;can&quot;;
+
+domData.get(drag.element[0], &quot;dragData&quot;);
+</code></pre></li>
+</ul></li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import {
+    addJQueryEvents,
+    ObservableArray,
+    StacheElement,
+    type
+} from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+addJQueryEvents(jQuery);
+
+class PlaylistEditor extends StacheElement {
+    static view = `
+        {{# if(this.googleApiLoadedPromise.isPending) }}
+            &lt;div&gt;Loading Google API…&lt;/div&gt;
+        {{ else }}
+            {{# if(this.signedIn) }}
+                Welcome {{ this.givenName }}! &lt;button on:click=&quot;this.googleAuth.signOut()&quot;&gt;Sign Out&lt;/button&gt;
+            {{ else }}
+                &lt;button on:click=&quot;this.googleAuth.signIn()&quot;&gt;Sign In&lt;/button&gt;
+            {{/ if }}
+
+            &lt;div&gt;
+                &lt;input value:bind=&quot;this.searchQuery&quot; placeholder=&quot;Search for videos&quot;&gt;
+            &lt;/div&gt;
+
+            {{# if(this.searchResultsPromise.isPending) }}
+                &lt;div class=&quot;loading&quot;&gt;Loading videos…&lt;/div&gt;
+            {{/ if }}
+
+            {{# if(this.searchResultsPromise.isResolved) }}
+                &lt;ul class=&quot;source&quot;&gt;
+                    {{# for(searchResult of this.searchResultsPromise.value) }}
+                        &lt;li on:draginit=&quot;this.videoDrag(scope.arguments[1])&quot; 
+                                {{ domData(&quot;dragData&quot;, searchResult) }}&gt;
+                            &lt;a draggable=&quot;false&quot; href=&quot;https://www.youtube.com/watch?v={{ searchResult.id.videoId }}&quot; target=&quot;_blank&quot;&gt;
+                                &lt;img draggable=&quot;false&quot; src=&quot;{{ searchResult.snippet.thumbnails.default.url }}&quot; width=&quot;50px&quot;&gt;
+                            &lt;/a&gt;
+                            {{ searchResult.snippet.title }}
+                        &lt;/li&gt;
+                    {{/ for }}
+                &lt;/ul&gt;
+            {{/ if }}
+
+            {{# if(this.searchResultsPromise.value.length) }}
+                &lt;div class=&quot;new-playlist&quot;&gt;
+                    &lt;ul
+                        on:dropover=&quot;this.addDropPlaceholder(0,this.getDragData(scope.arguments[2]))&quot;
+                        on:dropout=&quot;this.clearDropPlaceholder()&quot;
+                        on:dropon=&quot;this.addVideo(0,this.getDragData(scope.arguments[2]))&quot;
+                    &gt;
+                        {{# for(videoWithDropPlaceholder of this.videosWithDropPlaceholder) }}
+                            &lt;li class=&quot;{{# if(videoWithDropPlaceholder.isPlaceholder) }}placeholder{{/ if }}&quot;&gt;
+                                &lt;a href=&quot;https://www.youtube.com/watch?v={{ videoWithDropPlaceholder.video.id.videoId }}&quot; target=&quot;_blank&quot;&gt;
+                                    &lt;img src=&quot;{{ videoWithDropPlaceholder.video.snippet.thumbnails.default.url }}&quot; width=&quot;50px&quot;&gt;
+                                &lt;/a&gt;
+
+                                {{ videoWithDropPlaceholder.video.snippet.title }}
+                            &lt;/li&gt;
+                        {{ else }}
+                            &lt;div class=&quot;content&quot;&gt;Drag video here&lt;/div&gt;
+                        {{/ for }}
+                    &lt;/ul&gt;
+                &lt;/div&gt;
+            {{/ if }}
+        {{/ if }}
+    `;
+
+    static props = {
+        googleApiLoadedPromise: {
+            get default() {
+                return googleApiLoadedPromise;
+            }
+        },
+
+        googleAuth: {
+            async(resolve) {
+                this.googleApiLoadedPromise.then(() =&gt; {
+                    resolve(gapi.auth2.getAuthInstance());
+                });
+            }
+        },
+
+        signedIn: Boolean,
+
+        get givenName() {
+            return (
+                this.googleAuth &amp;&amp;
+                this.googleAuth.currentUser
+                    .get()
+                    .getBasicProfile()
+                    .getGivenName()
+            );
+        },
+
+        searchQuery: &quot;&quot;,
+
+        dropPlaceholderData: type.Any,
+
+        playlistVideos: {
+            get default() {
+                return new ObservableArray();
+            }
+        },
+
+        get searchResultsPromise() {
+            if (this.searchQuery.length &gt; 2) {
+                return gapi.client.youtube.search
+                    .list({
+                        q: this.searchQuery,
+                        part: &quot;snippet&quot;,
+                        type: &quot;video&quot;
+                    })
+                    .then(response =&gt; {
+                        console.info(&quot;Search results:&quot;, response.result.items);
+                        return response.result.items;
+                    });
+            }
+        },
+
+        get videosWithDropPlaceholder() {
+            const copy = this.playlistVideos.map(video =&gt; {
+                return {
+                    video: video,
+                    isPlaceholder: false
+                };
+            });
+            if (this.dropPlaceholderData) {
+                copy.splice(this.dropPlaceholderData.index, 0, {
+                    video: this.dropPlaceholderData.video,
+                    isPlaceholder: true
+                });
+            }
+            return copy;
+        }
+    };
+
+    connected() {
+        this.listenTo(&quot;googleAuth&quot;, ({ value: googleAuth }) =&gt; {
+            this.signedIn = googleAuth.isSignedIn.get();
+            googleAuth.isSignedIn.listen(isSignedIn =&gt; {
+                this.signedIn = isSignedIn;
+            });
+        });
+    }
+
+    videoDrag(drag) {
+        drag.ghost().addClass(&quot;ghost&quot;);
+    }
+
+    getDragData(drag) {
+        return can.domData.get(drag.element[0], &quot;dragData&quot;);
+    }
+
+    addDropPlaceholder(index, video) {
+        this.dropPlaceholderData = {
+            index: index,
+            video: video
+        };
+    }
+
+    clearDropPlaceholder() {
+        this.dropPlaceholderData = null;
+    }
+
+    addVideo(index, video) {
+        this.dropPlaceholderData = null;
+        if (index &gt;= this.playlistVideos.length) {
+            this.playlistVideos.push(video);
+        } else {
+            this.playlistVideos.splice(index, 0, video);
+        }
+    }
+}
+
+customElements.define(&quot;playlist-editor&quot;, PlaylistEditor);
+
+</code></pre>
+<div line-highlight='33,43-63,119-133,149-171,only'></div>
+<h2>Drop videos in order</h2>
+<h3>The problem</h3>
+<p>In this section, we will:</p>
+<ol>
+<li>Allow a user to drop videos in order they prefer.</li>
+</ol>
+<h3>What you need to know</h3>
+<ul>
+<li><p>[can-stache-elements StacheElement]s are best left knowing very little about the DOM. This
+makes them more easily unit-testable.  To make this interaction, we need to know where the
+mouse is in relation to the playlist’s videos.  This requires a lot of DOM interaction
+and is best done outside the element.</p>
+<p>Specifically, we’d like to translate the <code>dropmove</code> and <code>dropon</code> events
+into other events that let people know where the <code>dropmove</code> and <code>dropon</code> events
+are happening in relationship to the <strong>drop target</strong>’s child elements.</p>
+<p>Our goal is to:</p>
+<ul>
+<li><p>Translate <code>dropmove</code> into <code>sortableplaceholderat</code> events
+that dispatch events with the <code>index</code> where a placeholder should be inserted
+and the <code>dragData</code> of what is being dragged.</p></li>
+<li><p>Translate <code>dropon</code> into <code>sortableinsertat</code> events
+that dispatch events with the <code>index</code> where the dragged item should be inserted
+and the <code>dragData</code> of what is being dragged.</p></li>
+</ul></li>
+<li><p><a href="../../can-control.html" title="Create organized, memory-leak free, rapidly performing, stateful controls with declarative event binding. Use Control to create UI
+controls like tabs, grids, and context menus,
+and organize them into higher-order business rules with
+can.route. It can serve as both a traditional view and a traditional controller.">Control</a> is useful for listening to events on an element in a memory-safe
+way.  Use <a href="../../can-control.extend.html" title="">extend</a> to define a <code>Control</code> type, as follows:</p>
+<pre><code class="language-js">import { Control } from &quot;can&quot;;
+
+const Sortable = Control.extend({
+  // Event handlers and methods
+});
+</code></pre>
+<p>To listen to events (like <code>dragmove</code>) on a control, use an event handler with <code>{element} EVENTNAME</code>,
+as follows:</p>
+<pre><code class="language-js">import { Control } from &quot;can&quot;;
+
+const Sortable = Control.extend({
+  &quot;{element} dropmove&quot;: function(el, ev, drop, drag) {
+    // do stuff on dropmove like call method:
+    this.method();
+  },
+  method() {
+    // do something
+  }
+});
+</code></pre>
+<p>Use <code>new Control(element)</code> to create a control on an element.  The following
+would setup the <code>dropmove</code> binding on <code>el</code>:</p>
+<pre><code class="language-js">new Sortable(el);
+</code></pre></li>
+<li><p><a href="../../can-view-callbacks.attr.html" title="Register custom behavior for an attribute.">viewCallbacks.attr()</a> can listen to when a custom attribute is
+found in a <a href="../../can-stache.html" title="Live binding templates.">can-stache</a> template like:</p>
+<pre><code class="language-js">import { viewCallbacks } from &quot;can&quot;;
+
+viewCallbacks.attr(&quot;sortable&quot;, function(el, attrData) {});
+</code></pre>
+<p>This can be useful to create controls on an element with that attribute.  For example, if a user has:</p>
+<pre><code class="language-html">&lt;ul sortable&gt;
+  &lt;!-- ... --&gt;
+&lt;/ul&gt;
+</code></pre>
+<p>The following will create the <code>Sortable</code> control on that <code>&lt;ul&gt;</code>:</p>
+<pre><code class="language-js">import { viewCallbacks } from &quot;can&quot;;
+
+viewCallbacks.attr(&quot;sortable&quot;, function(el) {
+  new Sortable(el);
+});
+</code></pre></li>
+<li><p>Use <a href="../../can-dom-events.dispatch.html" title="Create and dispatch a configured event on the target.">domEvents.dispatch()</a> to fire custom events:</p>
+<pre><code class="language-js">import { domEvents } from &quot;can&quot;;
+
+domEvents.dispatch(element, {
+  type: &quot;sortableinsertat&quot;,
+  index: 0,
+  dragData: dragData
+});
+</code></pre></li>
+<li><p>Access the event object in a <a href="../../can-stache-bindings.event.html" title="Respond to events on elements or component ViewModels.">on:event</a> with <a href="../../can-stache/keys/scope.html#scope_event" title="The template context">scope.event</a>, like:</p>
+<pre><code class="language-html">on:sortableinsertat=&quot;addVideo(scope.event.index, scope.event.dragData)&quot;
+</code></pre></li>
+<li><p>Mouse events like <code>click</code> and <code>dropmove</code> and <code>dropon</code> have a <code>pageY</code> property that
+tells how many pixels down the page a user’s mouse is.</p></li>
+<li><p><a href="https://api.jquery.com/offset/">jQuery.offset</a> returns an element’s position on the page.</p></li>
+<li><p><a href="https://api.jquery.com/height/">jQuery.height</a> returns an element’s height.</p></li>
+<li><p>If the mouse position is below an element’s center, the placeholder should be inserted
+after the element.  If the mouse position is above an element’s center, it should be inserted
+before the element.</p></li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import {
+    addJQueryEvents,
+    Control,
+    StacheElement,
+    domData,
+    domEvents,
+    ObservableArray,
+    type,
+    viewCallbacks
+} from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+addJQueryEvents(jQuery);
+
+const Sortable = Control.extend({
+    &quot;{element} dropmove&quot;: function(el, ev, drop, drag) {
+        this.fireEventForDropPosition(ev, drop, drag, &quot;sortableplaceholderat&quot;);
+    },
+    &quot;{element} dropon&quot;: function(el, ev, drop, drag) {
+        this.fireEventForDropPosition(ev, drop, drag, &quot;sortableinsertat&quot;);
+    },
+    fireEventForDropPosition: function(ev, drop, drag, eventName) {
+        const dragData = domData.get(drag.element[0], &quot;dragData&quot;);
+
+        const sortables = $(this.element).children();
+
+        for (var i = 0; i &lt; sortables.length; i++) {
+            //check if cursor is past 1/2 way
+            const sortable = $(sortables[i]);
+            if (
+                ev.pageY &lt; Math.floor(sortable.offset().top + sortable.height() / 2)
+            ) {
+                // index at which it needs to be inserted before
+                domEvents.dispatch(this.element, {
+                    type: eventName,
+                    index: i,
+                    dragData: dragData
+                });
+                return;
+            }
+        }
+        if (!sortables.length) {
+            domEvents.dispatch(this.element, {
+                type: eventName,
+                index: 0,
+                dragData: dragData
+            });
+        } else {
+            domEvents.dispatch(this.element, {
+                type: eventName,
+                index: i,
+                dragData: dragData
+            });
+        }
+    }
+});
+
+viewCallbacks.attr(&quot;sortable&quot;, function(el) {
+    new Sortable(el);
+});
+
+class PlaylistEditor extends StacheElement {
+    static view = `
+        {{# if(this.googleApiLoadedPromise.isPending) }}
+            &lt;div&gt;Loading Google API…&lt;/div&gt;
+        {{ else }}
+            {{# if(this.signedIn) }}
+                Welcome {{ this.givenName }}! &lt;button on:click=&quot;this.googleAuth.signOut()&quot;&gt;Sign Out&lt;/button&gt;
+            {{ else }}
+                &lt;button on:click=&quot;this.googleAuth.signIn()&quot;&gt;Sign In&lt;/button&gt;
+            {{/ if }}
+
+            &lt;div&gt;
+                &lt;input value:bind=&quot;this.searchQuery&quot; placeholder=&quot;Search for videos&quot;&gt;
+            &lt;/div&gt;
+
+            {{# if(this.searchResultsPromise.isPending) }}
+                &lt;div class=&quot;loading&quot;&gt;Loading videos…&lt;/div&gt;
+            {{/ if }}
+
+            {{# if(this.searchResultsPromise.isResolved) }}
+                &lt;ul class=&quot;source&quot;&gt;
+                    {{# for(searchResult of this.searchResultsPromise.value) }}
+                        &lt;li on:draginit=&quot;this.videoDrag(scope.arguments[1])&quot; 
+                                {{ domData(&quot;dragData&quot;, searchResult) }}&gt;
+                            &lt;a draggable=&quot;false&quot; href=&quot;https://www.youtube.com/watch?v={{ searchResult.id.videoId }}&quot; target=&quot;_blank&quot;&gt;
+                                &lt;img draggable=&quot;false&quot; src=&quot;{{ searchResult.snippet.thumbnails.default.url }}&quot; width=&quot;50px&quot;&gt;
+                            &lt;/a&gt;
+                            {{ searchResult.snippet.title }}
+                        &lt;/li&gt;
+                    {{/ for }}
+                &lt;/ul&gt;
+            {{/ if }}
+
+            {{# if(this.searchResultsPromise.value.length) }}
+                &lt;div class=&quot;new-playlist&quot;&gt;
+                    &lt;ul
+                        sortable
+                        on:sortableplaceholderat=&quot;this.addDropPlaceholder(scope.event.index, scope.event.dragData)&quot;
+                        on:sortableinsertat=&quot;this.addVideo(scope.event.index, scope.event.dragData)&quot;
+                        on:dropout=&quot;this.clearDropPlaceholder()&quot;
+                    &gt;
+                        {{# for(videoWithDropPlaceholder of this.videosWithDropPlaceholder) }}
+                            &lt;li class=&quot;{{# if(videoWithDropPlaceholder.isPlaceholder) }}placeholder{{/ if }}&quot;&gt;
+                                &lt;a href=&quot;https://www.youtube.com/watch?v={{ videoWithDropPlaceholder.video.id.videoId }}&quot; target=&quot;_blank&quot;&gt;
+                                    &lt;img src=&quot;{{ videoWithDropPlaceholder.video.snippet.thumbnails.default.url }}&quot; width=&quot;50px&quot;&gt;
+                                &lt;/a&gt;
+
+                                {{ videoWithDropPlaceholder.video.snippet.title }}
+                            &lt;/li&gt;
+                        {{ else }}
+                            &lt;div class=&quot;content&quot;&gt;Drag video here&lt;/div&gt;
+                        {{/ for }}
+                    &lt;/ul&gt;
+                &lt;/div&gt;
+            {{/ if }}
+        {{/ if }}
+    `;
+
+    static props = {
+        googleApiLoadedPromise: {
+            get default() {
+                return googleApiLoadedPromise;
+            }
+        },
+
+        googleAuth: {
+            async(resolve) {
+                this.googleApiLoadedPromise.then(() =&gt; {
+                    resolve(gapi.auth2.getAuthInstance());
+                });
+            }
+        },
+
+        signedIn: Boolean,
+
+        get givenName() {
+            return (
+                this.googleAuth &amp;&amp;
+                this.googleAuth.currentUser
+                    .get()
+                    .getBasicProfile()
+                    .getGivenName()
+            );
+        },
+
+        searchQuery: &quot;&quot;,
+
+        dropPlaceholderData: type.Any,
+
+        playlistVideos: {
+            get default() {
+                return new ObservableArray();
+            }
+        },
+
+        get searchResultsPromise() {
+            if (this.searchQuery.length &gt; 2) {
+                return gapi.client.youtube.search
+                    .list({
+                        q: this.searchQuery,
+                        part: &quot;snippet&quot;,
+                        type: &quot;video&quot;
+                    })
+                    .then(response =&gt; {
+                        console.info(&quot;Search results:&quot;, response.result.items);
+                        return response.result.items;
+                    });
+            }
+        },
+
+        get videosWithDropPlaceholder() {
+            const copy = this.playlistVideos.map(video =&gt; {
+                return {
+                    video: video,
+                    isPlaceholder: false
+                };
+            });
+            if (this.dropPlaceholderData) {
+                copy.splice(this.dropPlaceholderData.index, 0, {
+                    video: this.dropPlaceholderData.video,
+                    isPlaceholder: true
+                });
+            }
+            return copy;
+        }
+    };
+
+    connected() {
+        this.listenTo(&quot;googleAuth&quot;, ({ value: googleAuth }) =&gt; {
+            this.signedIn = googleAuth.isSignedIn.get();
+            googleAuth.isSignedIn.listen(isSignedIn =&gt; {
+                this.signedIn = isSignedIn;
+            });
+        });
+    }
+
+    videoDrag(drag) {
+        drag.ghost().addClass(&quot;ghost&quot;);
+    }
+
+    getDragData(drag) {
+        return can.domData.get(drag.element[0], &quot;dragData&quot;);
+    }
+
+    addDropPlaceholder(index, video) {
+        this.dropPlaceholderData = {
+            index: index,
+            video: video
+        };
+    }
+
+    clearDropPlaceholder() {
+        this.dropPlaceholderData = null;
+    }
+
+    addVideo(index, video) {
+        this.dropPlaceholderData = null;
+        if (index &gt;= this.playlistVideos.length) {
+            this.playlistVideos.push(video);
+        } else {
+            this.playlistVideos.splice(index, 0, video);
+        }
+    }
+}
+
+customElements.define(&quot;playlist-editor&quot;, PlaylistEditor);
+
+</code></pre>
+<div line-highlight='3,6,9,14-55,57-59,96-101,only'></div>
+<h2>Revert videos not dropped on playlist</h2>
+<h3>The problem</h3>
+<p>In this section, we will:</p>
+<ol>
+<li>Revert videos not dropped on the playlist. If a user drags a video, but does not drop it on the playlist, show
+an animation returning the video to its original place.</li>
+</ol>
+<h3>What you need to know</h3>
+<ul>
+<li>If you call <code>drag.revert()</code>, the drag element will animate back to its original position.</li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import {
+    addJQueryEvents,
+    Control,
+    StacheElement,
+    domData,
+    domEvents,
+    ObservableArray,
+    type,
+    viewCallbacks
+} from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+addJQueryEvents(jQuery);
+
+const Sortable = Control.extend({
+    &quot;{element} dropinit&quot;: function() {
+        this.droppedOn = false;
+    },
+    &quot;{element} dropmove&quot;: function(el, ev, drop, drag) {
+        this.fireEventForDropPosition(ev, drop, drag, &quot;sortableplaceholderat&quot;);
+    },
+    &quot;{element} dropon&quot;: function(el, ev, drop, drag) {
+        this.droppedOn = true;
+        this.fireEventForDropPosition(ev, drop, drag, &quot;sortableinsertat&quot;);
+    },
+    &quot;{element} dropend&quot;: function(el, ev, drop, drag) {
+        if (!this.droppedOn) {
+            drag.revert();
+        }
+    },
+    fireEventForDropPosition: function(ev, drop, drag, eventName) {
+        const dragData = domData.get(drag.element[0], &quot;dragData&quot;);
+
+        const sortables = $(this.element).children();
+
+        for (var i = 0; i &lt; sortables.length; i++) {
+            //check if cursor is past 1/2 way
+            const sortable = $(sortables[i]);
+            if (
+                ev.pageY &lt; Math.floor(sortable.offset().top + sortable.height() / 2)
+            ) {
+                // index at which it needs to be inserted before
+                domEvents.dispatch(this.element, {
+                    type: eventName,
+                    index: i,
+                    dragData: dragData
+                });
+                return;
+            }
+        }
+        if (!sortables.length) {
+            domEvents.dispatch(this.element, {
+                type: eventName,
+                index: 0,
+                dragData: dragData
+            });
+        } else {
+            domEvents.dispatch(this.element, {
+                type: eventName,
+                index: i,
+                dragData: dragData
+            });
+        }
+    }
+});
+
+viewCallbacks.attr(&quot;sortable&quot;, function(el) {
+    new Sortable(el);
+});
+
+class PlaylistEditor extends StacheElement {
+    static view = `
+        {{# if(this.googleApiLoadedPromise.isPending) }}
+            &lt;div&gt;Loading Google API…&lt;/div&gt;
+        {{ else }}
+            {{# if(this.signedIn) }}
+                Welcome {{ this.givenName }}! &lt;button on:click=&quot;this.googleAuth.signOut()&quot;&gt;Sign Out&lt;/button&gt;
+            {{ else }}
+                &lt;button on:click=&quot;this.googleAuth.signIn()&quot;&gt;Sign In&lt;/button&gt;
+            {{/ if }}
+
+            &lt;div&gt;
+                &lt;input value:bind=&quot;this.searchQuery&quot; placeholder=&quot;Search for videos&quot;&gt;
+            &lt;/div&gt;
+
+            {{# if(this.searchResultsPromise.isPending) }}
+                &lt;div class=&quot;loading&quot;&gt;Loading videos…&lt;/div&gt;
+            {{/ if }}
+
+            {{# if(this.searchResultsPromise.isResolved) }}
+                &lt;ul class=&quot;source&quot;&gt;
+                    {{# for(searchResult of this.searchResultsPromise.value) }}
+                        &lt;li on:draginit=&quot;this.videoDrag(scope.arguments[1])&quot; 
+                                {{ domData(&quot;dragData&quot;, searchResult) }}&gt;
+                            &lt;a draggable=&quot;false&quot; href=&quot;https://www.youtube.com/watch?v={{ searchResult.id.videoId }}&quot; target=&quot;_blank&quot;&gt;
+                                &lt;img draggable=&quot;false&quot; src=&quot;{{ searchResult.snippet.thumbnails.default.url }}&quot; width=&quot;50px&quot;&gt;
+                            &lt;/a&gt;
+                            {{ searchResult.snippet.title }}
+                        &lt;/li&gt;
+                    {{/ for }}
+                &lt;/ul&gt;
+            {{/ if }}
+
+            {{# if(this.searchResultsPromise.value.length) }}
+                &lt;div class=&quot;new-playlist&quot;&gt;
+                    &lt;ul
+                        sortable
+                        on:sortableplaceholderat=&quot;this.addDropPlaceholder(scope.event.index, scope.event.dragData)&quot;
+                        on:sortableinsertat=&quot;this.addVideo(scope.event.index, scope.event.dragData)&quot;
+                        on:dropout=&quot;this.clearDropPlaceholder()&quot;
+                    &gt;
+                        {{# for(videoWithDropPlaceholder of this.videosWithDropPlaceholder) }}
+                            &lt;li class=&quot;{{# if(videoWithDropPlaceholder.isPlaceholder) }}placeholder{{/ if }}&quot;&gt;
+                                &lt;a href=&quot;https://www.youtube.com/watch?v={{ videoWithDropPlaceholder.video.id.videoId }}&quot; target=&quot;_blank&quot;&gt;
+                                    &lt;img src=&quot;{{ videoWithDropPlaceholder.video.snippet.thumbnails.default.url }}&quot; width=&quot;50px&quot;&gt;
+                                &lt;/a&gt;
+
+                                {{ videoWithDropPlaceholder.video.snippet.title }}
+                            &lt;/li&gt;
+                        {{ else }}
+                            &lt;div class=&quot;content&quot;&gt;Drag video here&lt;/div&gt;
+                        {{/ for }}
+                    &lt;/ul&gt;
+                &lt;/div&gt;
+            {{/ if }}
+        {{/ if }}
+    `;
+
+    static props = {
+        googleApiLoadedPromise: {
+            get default() {
+                return googleApiLoadedPromise;
+            }
+        },
+
+        googleAuth: {
+            async(resolve) {
+                this.googleApiLoadedPromise.then(() =&gt; {
+                    resolve(gapi.auth2.getAuthInstance());
+                });
+            }
+        },
+
+        signedIn: Boolean,
+
+        get givenName() {
+            return (
+                this.googleAuth &amp;&amp;
+                this.googleAuth.currentUser
+                    .get()
+                    .getBasicProfile()
+                    .getGivenName()
+            );
+        },
+
+        searchQuery: &quot;&quot;,
+
+        dropPlaceholderData: type.Any,
+
+        playlistVideos: {
+            get default() {
+                return new ObservableArray();
+            }
+        },
+
+        get searchResultsPromise() {
+            if (this.searchQuery.length &gt; 2) {
+                return gapi.client.youtube.search
+                    .list({
+                        q: this.searchQuery,
+                        part: &quot;snippet&quot;,
+                        type: &quot;video&quot;
+                    })
+                    .then(response =&gt; {
+                        console.info(&quot;Search results:&quot;, response.result.items);
+                        return response.result.items;
+                    });
+            }
+        },
+
+        get videosWithDropPlaceholder() {
+            const copy = this.playlistVideos.map(video =&gt; {
+                return {
+                    video: video,
+                    isPlaceholder: false
+                };
+            });
+            if (this.dropPlaceholderData) {
+                copy.splice(this.dropPlaceholderData.index, 0, {
+                    video: this.dropPlaceholderData.video,
+                    isPlaceholder: true
+                });
+            }
+            return copy;
+        }
+    };
+
+    connected() {
+        this.listenTo(&quot;googleAuth&quot;, ({ value: googleAuth }) =&gt; {
+            this.signedIn = googleAuth.isSignedIn.get();
+            googleAuth.isSignedIn.listen(isSignedIn =&gt; {
+                this.signedIn = isSignedIn;
+            });
+        });
+    }
+
+    videoDrag(drag) {
+        drag.ghost().addClass(&quot;ghost&quot;);
+    }
+
+    getDragData(drag) {
+        return can.domData.get(drag.element[0], &quot;dragData&quot;);
+    }
+
+    addDropPlaceholder(index, video) {
+        this.dropPlaceholderData = {
+            index: index,
+            video: video
+        };
+    }
+
+    clearDropPlaceholder() {
+        this.dropPlaceholderData = null;
+    }
+
+    addVideo(index, video) {
+        this.dropPlaceholderData = null;
+        if (index &gt;= this.playlistVideos.length) {
+            this.playlistVideos.push(video);
+        } else {
+            this.playlistVideos.splice(index, 0, video);
+        }
+    }
+}
+
+customElements.define(&quot;playlist-editor&quot;, PlaylistEditor);
+
+</code></pre>
+<div line-highlight='15-17,22,25-28,only'></div>
+<h2>Create a playlist</h2>
+<h3>The problem</h3>
+<p>In this section, we will:</p>
+<ol>
+<li>Add a <code>Create Playlist</code> button that prompts the user for the playlist name.</li>
+<li>After the user enters the name, the playlist is saved.</li>
+<li>Disable the button while the playlist is being created.</li>
+<li>Empty the playlist after it is created.</li>
+</ol>
+<h3>What you need to know</h3>
+<ul>
+<li><p>Use <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/prompt" title="https://developer.mozilla.org/en-US/docs/Web/API/Window/prompt">https://developer.mozilla.org/en-US/docs/Web/API/Window/prompt</a> to prompt a user for a simple string value.</p></li>
+<li><p>YouTube <em>only</em> allows you to create a playlist and add items to it.</p>
+<p>To create a playlist:</p>
+<pre><code class="language-js">let lastPromise = gapi.client.youtube.playlists.insert({
+  part: &quot;snippet,status&quot;,
+  resource: {
+    snippet: {
+      title: PLAYLIST_NAME,
+      description: &quot;A private playlist created with the YouTube API and CanJS&quot;
+    },
+    status: {
+      privacyStatus: &quot;private&quot;
+    }
+  }
+}).then(function(response) {
+  response //-&gt;{} response.result.id
+  // result: {
+  //   id: &quot;lk2asf8o&quot;
+  // }
+});
+</code></pre>
+<p>To insert something onto the end of it:</p>
+<pre><code class="language-js">gapi.client.youtube.playlistItems.insert({
+  part: &quot;snippet&quot;,
+  resource: {
+    snippet: {
+      playlistId: playlistId,
+      resourceId: video.id
+    }
+  }
+}).then();
+</code></pre></li>
+<li><p>These requests must run in order.  You can make one request run after another, like:</p>
+<pre><code class="language-js">lastPromise = makeRequest(1);
+
+lastPromise = lastPromise.then(function() {
+  return makeRequest(2);    
+});
+
+lastPromise = lastPromise.then(function() {
+  return makeRequest(3);    
+});
+</code></pre>
+<p>When a callback to <code>.then</code> returns a promise, <code>.then</code> returns a promise that resolves
+after the <em>inner</em> promise has been resolved.</p></li>
+<li><p>Use <a href="../../can-stache-bindings.toChild.html" title="One-way bind a value in the parent scope to the StacheElement, can-component ViewModel, or element.">{disabled:from=&quot;boolean&quot;}</a> to make an input disabled, like:</p>
+<pre><code class="language-html">&lt;button disabled:from=&quot;createPlaylistPromise.isPending()&quot;&gt;
+</code></pre></li>
+<li><p>When the promise has finished, set the <code>playlistVideos</code> property back to an empty list. This
+can be done by listening to <code>createPlaylistPromise</code>:</p>
+<pre><code class="language-js">this.listenTo(&quot;createPlaylistPromise&quot;, function({ value: promise }) { /* ... */ })
+</code></pre></li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<pre><code class="language-js">import {
+  addJQueryEvents,
+  Control,
+  domData,
+  domEvents,
+  ObservableArray,
+  StacheElement,
+  type,
+  viewCallbacks
+} from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+addJQueryEvents(jQuery);
+
+const Sortable = Control.extend({
+  &quot;{element} dropinit&quot;: function() {
+    this.droppedOn = false;
+  },
+  &quot;{element} dropmove&quot;: function(el, ev, drop, drag) {
+    this.fireEventForDropPosition(ev, drop, drag, &quot;sortableplaceholderat&quot;);
+  },
+  &quot;{element} dropon&quot;: function(el, ev, drop, drag) {
+    this.droppedOn = true;
+    this.fireEventForDropPosition(ev, drop, drag, &quot;sortableinsertat&quot;);
+  },
+  &quot;{element} dropend&quot;: function(el, ev, drop, drag) {
+    if (!this.droppedOn) {
+      drag.revert();
+    }
+  },
+  fireEventForDropPosition(ev, drop, drag, eventName) {
+    const dragData = domData.get(drag.element[0], &quot;dragData&quot;);
+    const sortables = $(this.element).children();
+
+    for (var i = 0; i &lt; sortables.length; i++) {
+      //check if cursor is past 1/2 way
+      const sortable = $(sortables[i]);
+      if (
+        ev.pageY &lt; Math.floor(sortable.offset().top + sortable.height() / 2)
+      ) {
+        // index at which it needs to be inserted before
+        domEvents.dispatch(this.element, {
+          type: eventName,
+          index: i,
+          dragData: dragData
+        });
+        return;
+      }
+    }
+    if (!sortables.length) {
+      domEvents.dispatch(this.element, {
+        type: eventName,
+        index: 0,
+        dragData: dragData
+      });
+    } else {
+      domEvents.dispatch(this.element, {
+        type: eventName,
+        index: i,
+        dragData: dragData
+      });
+    }
+  }
+});
+
+viewCallbacks.attr(&quot;sortable&quot;, el =&gt; {
+  new Sortable(el);
+});
+
+class PlaylistEditor extends StacheElement {
+  static view = `
+    {{# if(this.googleApiLoadedPromise.isPending) }}
+        &lt;div&gt;Loading Google API…&lt;/div&gt;
+    {{ else }}
+      {{# if(this.signedIn) }}
+        Welcome {{ this.givenName }}! &lt;button on:click=&quot;this.googleAuth.signOut()&quot;&gt;Sign Out&lt;/button&gt;
+      {{ else }}
+        &lt;button on:click=&quot;this.googleAuth.signIn()&quot;&gt;Sign In&lt;/button&gt;
+      {{/ if }}
+
+      &lt;div&gt;
+        &lt;input value:bind=&quot;this.searchQuery&quot; placeholder=&quot;Search for videos&quot;&gt;
+      &lt;/div&gt;
+
+      {{# if(this.searchResultsPromise.isPending) }}
+        &lt;div class=&quot;loading&quot;&gt;Loading videos…&lt;/div&gt;
+      {{/ if }}
+
+      {{# if(this.searchResultsPromise.isResolved) }}
+        &lt;ul class=&quot;source&quot;&gt;
+          {{# for(searchResult of this.searchResultsPromise.value) }}
+            &lt;li 
+              on:draginit=&quot;this.videoDrag(scope.arguments[1])&quot;
+              {{ domData(&quot;dragData&quot;, searchResult) }}
+            &gt;
+              &lt;a draggable=&quot;false&quot; href=&quot;https://www.youtube.com/watch?v={{ searchResult.id.videoId }}&quot; target='_blank'&gt;
+                &lt;img draggable=&quot;false&quot; src=&quot;{{ searchResult.snippet.thumbnails.default.url }}&quot; width=&quot;50px&quot;&gt;
+              &lt;/a&gt;
+              {{ searchResult.snippet.title }}
+            &lt;/li&gt;
+          {{/ for }}
+        &lt;/ul&gt;
+
+        {{# if(this.searchResultsPromise.value.length) }}
+          &lt;div class=&quot;new-playlist&quot;&gt;
+            &lt;ul
+              sortable
+              on:sortableplaceholderat=&quot;this.addDropPlaceholder(scope.event.index, scope.event.dragData)&quot;
+              on:sortableinsertat=&quot;this.addVideo(scope.event.index, scope.event.dragData)&quot;
+              on:dropout=&quot;this.clearDropPlaceholder()&quot;
+            &gt;
+              {{# for(videoWithDropPlaceholder of this.videosWithDropPlaceholder) }}
+                &lt;li class=&quot;{{# if(videoWithDropPlaceholder.isPlaceholder) }}placeholder{{/ if }}&quot;&gt;
+                  &lt;a href=&quot;https://www.youtube.com/watch?v={{ videoWithDropPlaceholder.video.id.videoId }}&quot; target='_blank'&gt;
+                    &lt;img src=&quot;{{ videoWithDropPlaceholder.video.snippet.thumbnails.default.url }}&quot; width=&quot;50px&quot;&gt;
+                  &lt;/a&gt;
+                  {{ videoWithDropPlaceholder.video.snippet.title }}
+                &lt;/li&gt;
+              {{else}}
+                &lt;div class=&quot;content&quot;&gt;Drag video here&lt;/div&gt;
+              {{/ for }}
+            &lt;/ul&gt;
+            {{# if(this.playlistVideos.length) }}
+              &lt;button 
+                on:click=&quot;this.createPlaylist()&quot;
+                disabled:from=&quot;this.createPlaylistPromise.isPending()&quot;
+              &gt;
+                Create Playlist
+              &lt;/button&gt;
+            {{/ if }}
+          &lt;/div&gt;
+        {{/ if }}
+
+      {{/ if }}
+    {{/ if }}
+  `;
+
+  static props = {
+    signedIn: Boolean,
+
+    googleApiLoadedPromise: {
+      get default() {
+        return googleApiLoadedPromise;
+      }
+    },
+
+    googleAuth: {
+      async(resolve) {
+        this.googleApiLoadedPromise.then(() =&gt; {
+          resolve(gapi.auth2.getAuthInstance());
+        });
+      }
+    },
+
+    searchQuery: &quot;&quot;,
+
+    dropPlaceholderData: type.Any,
+
+    playlistVideos: {
+      get default() {
+        return new ObservableArray();
+      }
+    },
+
+    createPlaylistPromise: type.Any,
+
+    get givenName() {
+      return (
+        this.googleAuth &amp;&amp;
+        this.googleAuth.currentUser
+          .get()
+          .getBasicProfile()
+          .getGivenName()
+      );
+    },
+
+    get searchResultsPromise() {
+      if (this.searchQuery.length &gt; 2) {
+        return gapi.client.youtube.search
+          .list({
+            q: this.searchQuery,
+            part: &quot;snippet&quot;,
+            type: &quot;video&quot;
+          })
+          .then(response =&gt; {
+            console.info(&quot;Search results:&quot;, response.result.items);
+            return response.result.items;
+          });
+      }
+    },
+
+    get videosWithDropPlaceholder() {
+      const copy = this.playlistVideos.map(video =&gt; {
+        return {
+          video: video,
+          isPlaceholder: false
+        };
+      });
+      if (this.dropPlaceholderData) {
+        copy.splice(this.dropPlaceholderData.index, 0, {
+          video: this.dropPlaceholderData.video,
+          isPlaceholder: true
+        });
+      }
+      return copy;
+    }
+  };
+
+  connected() {
+    this.listenTo(&quot;googleAuth&quot;, ({ value: googleAuth }) =&gt; {
+      this.signedIn = googleAuth.isSignedIn.get();
+      googleAuth.isSignedIn.listen(isSignedIn =&gt; {
+        this.signedIn = isSignedIn;
+      });
+    });
+
+    this.listenTo(&quot;createPlaylistPromise&quot;, ({ value: promise }) =&gt; {
+      if (promise) {
+        promise.then(() =&gt; {
+          this.playlistVideos = [];
+          this.createPlaylistPromise = null;
+        });
+      }
+    });
+  }
+
+  videoDrag(drag) {
+    drag.ghost().addClass(&quot;ghost&quot;);
+  }
+
+  getDragData(drag) {
+    return domData.get(drag.element[0], &quot;dragData&quot;);
+  }
+
+  addDropPlaceholder(index, video) {
+    this.dropPlaceholderData = {
+      index: index,
+      video: video
+    };
+  }
+
+  clearDropPlaceholder() {
+    this.dropPlaceholderData = null;
+  }
+
+  addVideo(index, video) {
+    this.dropPlaceholderData = null;
+    if (index &gt;= this.playlistVideos.length) {
+      this.playlistVideos.push(video);
+    } else {
+      this.playlistVideos.splice(index, 0, video);
+    }
+  }
+
+  createPlaylist() {
+    const playlistName = prompt(&quot;What would you like to name your playlist?&quot;);
+    if (!playlistName) {
+      return;
+    }
+
+    let playlistId;
+    let lastPromise = gapi.client.youtube.playlists
+      .insert({
+        part: &quot;snippet,status&quot;,
+        resource: {
+          snippet: {
+            title: playlistName,
+            description:
+              &quot;A private playlist created with the YouTube API and CanJS&quot;
+          },
+          status: {
+            privacyStatus: &quot;private&quot;
+          }
+        }
+      })
+      .then(response =&gt; {
+        playlistId = response.result.id;
+      });
+
+    const playlistVideos = this.playlistVideos.slice();
+    playlistVideos.forEach(video =&gt; {
+      lastPromise = lastPromise.then(() =&gt; {
+        return gapi.client.youtube.playlistItems
+          .insert({
+            part: &quot;snippet&quot;,
+            resource: {
+              snippet: {
+                playlistId: playlistId,
+                resourceId: video.id
+              }
+            }
+          });
+      });
+    });
+
+    this.createPlaylistPromise = lastPromise;
+  }
+}
+
+customElements.define(&quot;playlist-editor&quot;, PlaylistEditor);
+
+</code></pre>
+<div line-highlight='122-129,164,216-223,254-296,only'></div>
+<h2>Result</h2>
+<p>Congrats! <em>You now have your very own YouTube Playlist Editor</em>.</p>
+<p>When finished, you should see something like the following CodePen:</p>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="result" data-user="bitovi" data-slug-hash="zYOaXwm" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="Playlist Editor (Advanced) [Finished]">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/zYOaXwm">
+  Playlist Editor (Advanced) [Finished]</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/commitment/recipes/playlist-editor/playlist-editor.md"},"description":"Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses [https://jquerypp.com jQuery++] for\ndrag/drop events. It shows using custom attributes and custom events.  This advanced guide takes\nan hour to complete.\n\n> This recipe uses YouTube API Services and follows [YouTube Terms of Service](https://www.youtube.com/t/terms) \n> and [Google Privacy Policy](https://policies.google.com/privacy)\n\n","name":"guides/recipes/playlist-editor","title":"Playlist Editor","type":"page","parent":"guides/recipes/advanced","comment":" ","pathToRoot":"../../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix="../.."></div>
+
+	</body>
+</html>

@@ -1,0 +1,40 @@
+<body>
+<div id='out'></div>
+<script src="../../node_modules/steal/steal.js" main="@empty"></script>
+
+
+
+<script type='text/mustache' id='app-template'>
+<foo-bar {foo}="foo" {bar}="bar"></foo-bar>
+</script>
+<script type='text/javascript'> 
+steal("can/component", "can/map/define","can/view/stache"
+	,function() {
+
+		can.Component.extend({
+			tag : 'foo-bar',
+			leakScope : false,
+			viewModel : {
+				define : {
+					foo : {
+						set : function(newVal) {
+							console.log('foo set to ' + newVal);
+						}
+					},
+					bar : {
+						set : function(newVal) {
+							console.log('bar set to ' + newVal);
+						}
+					}
+				}
+			}
+		});
+
+		var vm = new can.Map({
+			bar : 'test'
+		});
+
+		$('#out').html(can.view('app-template')(vm));
+	});
+</script>
+</body>

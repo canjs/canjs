@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/experiment/chat/chat.md
+	@page guides/chat
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Chat Guide | app guides | Guides | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+	<meta property="og:title" content="Chat Guide | app guides | Guides | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Chat Guide | app guides | Guides | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/chat" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>getting started</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="crud-beginner.html"
+							title="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+							CRUD Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="setup.html"
+							title="Learn how to install CanJS in your environment.">
+							Setting Up CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="technology-overview.html"
+							title="Learn the basics of CanJS’s technology.">
+							Technology Overview
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>topics</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="html.html"
+							title="Learn how to update HTML and listen to user interactions.">
+							HTML
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="routing.html"
+							title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+							Routing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="data.html"
+							title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">
+							Service Layer
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="debugging.html"
+							title="Learn how to debug CanJS applications.">
+							Debugging
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="forms.html"
+							title="Learn how to create amazing &lt;form&gt;s with CanJS.">
+							Forms
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="testing.html"
+							title="Learn how to test CanJS applications.">
+							Testing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="logic.html"
+							title="Learn how to write observables in an organized, maintainable, and testable way.">
+							Logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="server-side-rendering.html"
+							title="Learn how to set up SSR for CanJS.">
+							Server-Side Rendering
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>app guides</span>
+						
+	<ul>
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="chat.html"
+							title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+							Chat Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="todomvc.html"
+							title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+							TodoMVC Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/todomvc-with-steal.html"
+							title="This tutorial walks through building TodoMVC with StealJS. It includes KeyNote presentations covering CanJS core libraries.">
+							TodoMVC with StealJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>beginner recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/canvas-clock.html"
+							title="This beginner guide walks you through building a clock with the Canvas API.">
+							Canvas Clock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-simple.html"
+							title="This beginner guide walks through building a very simple credit card payment form.  It uses Stripe.js v2 API to create a token which can be used to create a charge.  It also performs simple validation on the payment form values.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-simple.html"
+							title="This beginner guide walks you through building a simple file navigation widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.0.0. Check out the file-navigator-advanced for an example that makes AJAX requests for its data and uses can-stache-element.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/signup-simple.html"
+							title="This beginner guide walks through building simple signup, login forms and a logout button.">
+							Signup and Login
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/video-player.html"
+							title="This beginner guide walks you through building custom video controls around a video element.">
+							Video Player
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/weather-report-simple.html"
+							title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.2.">
+							Weather Report
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>intermediate recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/cta-bus-map.html"
+							title="This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map. You&#x27;ll learn how to create a StacheElement that integrates with 3rd party widgets.">
+							CTA Bus Map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/modals.html"
+							title="This intermediate guide shows how to create a multiple modal form.">
+							Multiple Modals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/text-editor.html"
+							title="This intermediate guide walks you through building a basic rich text editor.">
+							Text Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/tinder-carousel.html"
+							title="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+							Tinder Carousel
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>advanced recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-advanced.html"
+							title="This advanced guide walks through building a simple credit card payment form with validations. It doesn’t use can-define. Instead it uses Kefir.js streams to make a ViewModel. can-kefir is used to make the Kefir streams observable to can-stache.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-advanced.html"
+							title="This advanced guide walks you through building a file navigation widget that requests data with fetch. It takes about 45 minutes to complete.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/playlist-editor.html"
+							title="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+							Playlist Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/search-list-details.html"
+							title="This advanced guide walks through building a Search, List, Details flow with lazy-loaded routes.">
+							Search, List, Details
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>upgrade</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-3.html"
+							title="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+							Migrating to CanJS 3
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-4.html"
+							title="This guide walks you through the step-by-step process to upgrade a 3.x app to CanJS 4.">
+							Migrating to CanJS 4
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-5.html"
+							title="This guide walks you through the process to upgrade a 4.x app to CanJS 5.x.">
+							Migrating to CanJS 5
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-6.html"
+							title="This guide walks you through the process to upgrade a 5.x app to CanJS 6.x.">
+							Migrating to CanJS 6
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="upgrade/using-codemods.html"
+							title="Learn how to migrate your app to CanJS 6 using can-migrate.">
+							Using Codemods
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>other</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="api.html"
+							title="This page walks through how to use and understand CanJS’s API documentation.">
+							Reading the API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Chat Guide</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/experiment/chat/chat.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>This guide will walk you through building a real-time chat application with CanJS’s <a href="../can-core.html" title="The best, most hardened and generally useful libraries in CanJS.">Core libraries</a>.  It takes about 30 minutes to complete.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <h2>The Goal</h2>
+<p>We are building the following functionality:</p>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="OJLgEbx" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6.0 Chat - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/OJLgEbx/">
+  CanJS 6.0 Chat - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<h2>Setup</h2>
+<p>The easiest way to get started is to <em>Fork</em> the following CodePen by clicking the <strong>Edit On CodePen</strong> button on the top right:</p>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="PoYjaWK" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6.0 Chat - Start">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/PoYjaWK/">
+  CanJS 6.0 Chat - Start</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<p>The CodePen is configured to load <a href="https://getbootstrap.com/" title="Bootstrap">Bootstrap</a> for its styles and <a href="https://socket.io/" title="socket.io">socket.io</a> for a socket
+library.  It will be connecting to a RESTful and real-time service layer at <a href="https://chat.donejs.com/api/messages" title="https://chat.donejs.com/api/messages">https://chat.donejs.com/api/messages</a>.</p>
+<p>The CodePen also importing <a href="setup.html##ImportingthecoreESmodulebundle" title="Learn how to install CanJS in your environment.">core.mjs</a>, which exports all of CanJS's <a href="../can-core.html" title="The best, most hardened and generally useful libraries in CanJS.">Core</a> APIs as named exports. The following is how
+you can import different APIs into your app:</p>
+<pre><code class="language-js">import { ObservableObject, StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+</code></pre>
+<p>Read <a href="setup.html" title="Learn how to install CanJS in your environment.">Setting Up CanJS</a> for instructions on how to set up CanJS in a real app.
+Check out <a href="https://donejs.com/Guide.html" title="the DoneJS version of this guide">the DoneJS version of this guide</a>.</p>
+<h2>Hello World</h2>
+<p>In this section, we will:</p>
+<ul>
+<li>Show a big “Chat Home” title within a Bootstrap container.</li>
+<li>Make it so when “Chat Home” is clicked, an exclamation mark (“!”) is added to the end of the title.</li>
+</ul>
+<p>In your CodePen, update the <code>HTML</code> panel to:</p>
+<ul>
+<li>Use the <code>&lt;chat-app&gt;</code> element we will define in the <code>JS</code> panel.</li>
+</ul>
+<pre><code class="language-html">&lt;chat-app&gt;&lt;/chat-app&gt;
+
+</code></pre>
+<div line-highlight='1'></div>
+<p>Update the <code>JavaScript</code> panel to:</p>
+<ul>
+<li>Define an application class (<code>chat-app</code>) by extending <a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a> class. Its definition includes:
+<ul>
+<li>A <a href="../can-stache.html" title="Live binding templates.">can-stache</a> <code>view</code> that contains the contents of the <code>chat-app</code> element.  This view:
+<ul>
+<li>Inserts a <code>message</code> value within a responsive Bootstrap container using <a href="../can-stache.tags.escaped.html" title="Insert the value of the expression into the output of the template.">{{expression}}</a>.</li>
+<li>Listen for <code>click</code> events and call <code>addExcitement</code> with <a href="../can-stache-bindings.event.html" title="Respond to events on elements or component ViewModels.">on:event</a>.</li>
+</ul></li>
+<li>A <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a> <code>props</code> definition.  This definition includes:
+<ul>
+<li>A <code>message</code> property that is a <a href="../can-define.types.html" title="Specify a type to convert values to. Type coercion only applies when setting a property.
+All types leave null and undefined as is except for
+the &quot;htmlbool&quot; type converter.">string</a>
+value <a href="../can-define.types.default.html" title="Returns the default value for instances of the defined type.  The default value is defined on demand, when the property
+is read for the first time.">initialized</a> to <code>&quot;Chat Home&quot;</code>.</li>
+</ul></li>
+<li>An <code>addExcitement</code> method that adds <code>&quot;!&quot;</code> to the end of the <code>message</code> property.
+<ul>
+<li>Register the customElement.</li>
+</ul></li>
+</ul></li>
+</ul>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class ChatApp extends StacheElement {
+    static view = `
+        &lt;div class=&quot;container&quot;&gt;
+            &lt;div class=&quot;row&quot;&gt;
+                &lt;div class=&quot;col-sm-8 col-sm-offset-2&quot;&gt;
+                    &lt;h1 class=&quot;page-header text-center&quot; on:click=&quot;this.addExcitement()&quot;&gt;
+                        {{ this.message }}
+                    &lt;/h1&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    `;
+
+    static props = {
+        // Properties
+        message: {
+            type: String,
+            default: &quot;Chat Home&quot;
+        }
+    };
+
+    addExcitement() {
+        this.message = this.message + &quot;!&quot;;
+    }
+};
+customElements.define(&quot;chat-app&quot;, ChatApp);
+
+</code></pre>
+<div line-highlight='1,3-28'></div>
+<p>When complete, you should see a large “Chat Home” title in the <code>Output</code> panel.  Click on it and
+things will get really exciting!</p>
+<video controls>
+   <source src="../../docs/can-guides/experiment/chat/1-hello-world/completed.webm" type="video/webm">
+   <source src="../../docs/can-guides/experiment/chat/1-hello-world/completed.ogg" type="video/ogg">
+</video>
+<p>This step sets up the essential basics of a CanJS application — a <a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a>
+custom element with a <a href="../can-stache.html" title="Live binding templates.">can-stache</a> view and <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a> props.</p>
+<p>The properties and methods the <code>view</code> uses are defined in the <code>props</code> and on the <code>class</code>.  We defined a <code>message</code> and an <code>addExcitement</code> method.</p>
+<p>The templates are a dialect of <a href="https://github.com/janl/mustache.js">mustache</a> and <a href="https://github.com/wycats/handlebars.js/">handlebars</a> syntax.  The
+mustache syntax allows a very terse writing style for the most common
+patterns within templates:</p>
+<ul>
+<li>inserting data with <a href="../can-stache.tags.escaped.html" title="Insert the value of the expression into the output of the template.">{{expression}}</a></li>
+<li>looping with <a href="../can-stache.helpers.for-of.html" title="Loop through a list of values, keys in an object, or integers.">for(of)</a></li>
+<li>branching with <a href="../can-stache.helpers.if.html" title="can-stache.helpers.if">if</a> or <a href="../can-stache.helpers.is.html" title="">{{#is(expressions)}}</a></li>
+</ul>
+<blockquote>
+<p><strong>Key take-away:</strong> You define method and property behaviors.
+The methods can be called by <a href="../can-stache.html" title="Live binding templates.">can-stache</a> <code>view</code>s.  The <code>StacheElement</code>
+properties can be observed by <a href="../can-stache.html" title="Live binding templates.">can-stache</a> <code>view</code>s.</p>
+</blockquote>
+<h2>Route between two pages</h2>
+<p>In this section we will:</p>
+<ul>
+<li>Create a <strong>home page</strong> and <strong>chat messages page</strong> that the user can navigate between
+with links and the browser’s back and forward button.</li>
+</ul>
+<p>Update the <code>JavaScript</code> panel to:</p>
+<ul>
+<li>Update the <code>chat-app</code> <code>view</code> to:
+<ul>
+<li>Check if the <code>StacheElement</code>’s <code>routeData.page</code> property is <code>&quot;home&quot;</code>.  If it is, render the <strong>home
+page</strong>’s content.  If it’s not, it will render the <strong>chat messages page</strong>’s content with the   <a href="../can-stache.helpers.else.html" title="">{{else}}</a> helper.</li>
+<li>Use <a href="../can-stache-route-helpers.routeUrl.html" title="Returns a url using route.url.">routeUrl(hashes)</a> to create the right link URLs so that <code>page</code>
+will be set on <a href="../can-route.data.html" title="An observable key-value object used to cross bind to the url observable can-route.urlData. Set it to cross-bind a top level state object (Application ViewModel) to can-route.">route.data</a> to either <code>&quot;home&quot;</code> or <code>&quot;chat&quot;</code>.</li>
+</ul></li>
+<li>Update the <code>chat-app</code> <code>props</code> to:
+<ul>
+<li>Setup a connection between the <a href="../can-route.data.html" title="An observable key-value object used to cross bind to the url observable can-route.urlData. Set it to cross-bind a top level state object (Application ViewModel) to can-route.">route.data</a> state and the <code>props</code> <code>routeData</code> property by:
+<ul>
+<li>Defining a <code>routeData</code> property with a <a href="../can-define.types.default.html" title="Returns the default value for instances of the defined type.  The default value is defined on demand, when the property
+is read for the first time.">default</a> value
+that returns the <a href="../can-route.data.html" title="An observable key-value object used to cross bind to the url observable can-route.urlData. Set it to cross-bind a top level state object (Application ViewModel) to can-route.">route.data</a>.</li>
+<li>Create a pretty routing rule so if the URL looks like <code>&quot;#!chat&quot;</code>, the <code>page</code> property of
+<a href="../can-route.data.html" title="An observable key-value object used to cross bind to the url observable can-route.urlData. Set it to cross-bind a top level state object (Application ViewModel) to can-route.">route.data</a> will be set to <code>chat</code> with <a href="../can-route.register.html" title="Create a route matching rule.">register</a>.  If there is nothing in the hash, <code>page</code>
+will be set to <code>&quot;home&quot;</code>.</li>
+<li>Initialize the url’s values on <a href="../can-route.data.html" title="An observable key-value object used to cross bind to the url observable can-route.urlData. Set it to cross-bind a top level state object (Application ViewModel) to can-route.">route.data</a> and set up the two-way connection with
+<a href="../can-route.start.html" title="Initializes the two way relationship between the url and route.data.">start</a>.</li>
+</ul></li>
+</ul></li>
+</ul>
+<pre><code class="language-js">import { route, StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class ChatApp extends StacheElement {
+    static view = `
+        &lt;div class=&quot;container&quot;&gt;
+            &lt;div class=&quot;row&quot;&gt;
+                &lt;div class=&quot;col-sm-8 col-sm-offset-2&quot;&gt;
+                    {{# eq(this.routeData.page, 'home') }}
+                        &lt;h1 class=&quot;page-header text-center&quot; on:click=&quot;this.addExcitement()&quot;&gt;
+                            {{ this.message }}
+                        &lt;/h1&gt;
+                        &lt;a href=&quot;{{ routeUrl(page='chat') }}&quot;
+                            class=&quot;btn btn-primary btn-block btn-lg&quot;&gt;
+                            Start chat
+                        &lt;/a&gt;
+                    {{ else }}
+                        &lt;h1 class=&quot;page-header text-center&quot;&gt;
+                        Chat Messages
+                    &lt;/h1&gt;
+                    &lt;h5&gt;&lt;a href=&quot;{{ routeUrl(page='home') }}&quot;&gt;Home&lt;/a&gt;&lt;/h5&gt;
+                    {{/ eq }}
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    `;
+
+    static props = {
+        // Properties
+        message: {
+            type: String,
+            default: &quot;Chat Home&quot;
+        },
+
+        routeData: {
+            get default() {
+                route.register(&quot;{page}&quot;,{page: &quot;home&quot;});
+                route.start();
+                return route.data;
+            }
+        }
+    };
+
+    addExcitement() {
+        this.message = this.message + &quot;!&quot;;
+    }
+};
+customElements.define(&quot;chat-app&quot;, ChatApp);
+
+</code></pre>
+<div line-highlight='1,8-21,35-40,only'></div>
+<p>When complete, you should be able to toggle between the two pages.  If you type:</p>
+<pre><code>window.location.hash
+</code></pre>
+<p>in CodePen’s console tab after clicking a new page, you will be able to see the hash change between <code>!#</code> and <code>#!chat</code>.</p>
+<p>This step sets up basic routing between different “pages” in an application.
+CanJS’s routing is based on the values accessible to the application <code>props</code>.  When
+those properties change, different content is shown.</p>
+<p>We connected the application <code>props</code> to the routing system by having the
+<code>props</code>'s <code>routeData</code> property return <a href="../can-route.data.html" title="An observable key-value object used to cross bind to the url observable can-route.urlData. Set it to cross-bind a top level state object (Application ViewModel) to can-route.">can-route.data</a>.
+We initialized that connection between <a href="../can-route.data.html" title="An observable key-value object used to cross bind to the url observable can-route.urlData. Set it to cross-bind a top level state object (Application ViewModel) to can-route.">can-route.data</a> and the url with <a href="../can-route.start.html" title="Initializes the two way relationship between the url and route.data.">can-route.start</a>.</p>
+<p>This makes it so if the <code>routeData.page</code> property changes, the browser’s URL will change.  If the browser’s URL changes, the <code>routeData.page</code> property changes.</p>
+<blockquote>
+<p><strong>Key take-away:</strong>  <a href="../can-route.html" title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">can-route</a> two-way binds changes in the browser’s URL to
+the application <code>props</code> and vice versa.  Use changes in
+the application <code>props</code> to control which content is shown.</p>
+</blockquote>
+<h2>Chat Messages Component</h2>
+<p>In this section, we will:</p>
+<ul>
+<li>Define and use a custom <code>&lt;chat-messages&gt;</code> element that contains the behavior of the <strong>chat messages page</strong>.</li>
+</ul>
+<p>Update the <code>JavaScript</code> panel to:</p>
+<ul>
+<li>Define a <code>&lt;chat-messages&gt;</code> custom element with <a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a>.  It's <code>view</code> will
+contain the content of the <strong>chat messages page</strong>.</li>
+<li>Update <code>&lt;chat-app&gt;</code>’s <code>view</code> to create a <code>&lt;chat-messages&gt;</code> element.</li>
+</ul>
+<pre><code class="language-js">import { route, StacheElement, type } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class ChatMessages extends StacheElement {
+    static view = `
+        &lt;h1 class=&quot;page-header text-center&quot;&gt;
+            Chat Messages
+        &lt;/h1&gt;
+        &lt;h5&gt;&lt;a href=&quot;{{ routeUrl(page='home') }}&quot;&gt;Home&lt;/a&gt;&lt;/h5&gt;
+    `;
+};
+customElements.define(&quot;chat-messages&quot;, ChatMessages);
+
+class ChatApp extends StacheElement {
+    static view = `
+        &lt;div class=&quot;container&quot;&gt;
+            &lt;div class=&quot;row&quot;&gt;
+                &lt;div class=&quot;col-sm-8 col-sm-offset-2&quot;&gt;
+                    {{# eq(this.routeData.page, 'home') }}
+                        &lt;h1 class=&quot;page-header text-center&quot; on:click=&quot;this.addExcitement()&quot;&gt;
+                            {{ this.message }}
+                        &lt;/h1&gt;
+                        &lt;a href=&quot;{{ routeUrl(page='chat') }}&quot;
+                            class=&quot;btn btn-primary btn-block btn-lg&quot;&gt;
+                            Start chat
+                        &lt;/a&gt;
+                    {{ else }}
+                        &lt;chat-messages/&gt;
+                    {{/ eq }}
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    `;
+
+    static props = {
+        // Properties
+        message: {
+            type: String,
+            default: &quot;Chat Home&quot;
+        },
+
+        routeData: {
+            get default() {
+                route.register(&quot;{page}&quot;,{page: &quot;home&quot;});
+                route.start();
+                return route.data;
+            }
+        }
+    };
+
+    addExcitement() {
+        this.message = this.message + &quot;!&quot;;
+    }
+};
+customElements.define(&quot;chat-app&quot;, ChatApp);
+
+</code></pre>
+<div line-highlight='3-11,27,only'></div>
+<p>When complete, you should see the same behavior as the previous step. You should
+be able to click back and forth between the two different pages.</p>
+<p>This step creates the <code>&lt;chat-messages&gt;</code> custom element.  Custom elements are used
+to represent some grouping of related (and typically visual) functionality such as:</p>
+<ul>
+<li>Widgets like <code>&lt;my-slider&gt;</code> or <code>&lt;acme-navigation&gt;</code>.</li>
+<li>Pages like <code>&lt;chat-login&gt;</code> or <code>&lt;chat-messages&gt;</code>.</li>
+</ul>
+<p>Custom elements are the macroscopic building blocks of an application.  They
+are the <a href="https://en.wikipedia.org/wiki/Orchestration_(computing)">orchestration pieces</a>
+used to assemble the application into a whole.</p>
+<p>For example, an application’s template might assemble many custom elements
+to work together like:</p>
+<pre><code class="language-html">{{# if(session) }}
+  &lt;app-toolbar selectedFiles:bind=&quot;selectedFiles&quot;/&gt;
+  &lt;app-directory selectedFiles:bind=&quot;selectedFiles&quot;/&gt;
+  &lt;app-files selectedFiles:bind=&quot;selectedFiles&quot;/&gt;
+  &lt;app-file-details selectedFiles:bind=&quot;selectedFiles&quot;/&gt;
+{{ else }}
+  &lt;app-login/&gt;
+{{/ if }}
+</code></pre>
+<p>Breaking down an application into many isolated and potentially reusable components
+is a critical piece of CanJS software architecture.</p>
+<p>Custom elements are defined with <a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a>.  By default, their <code>view</code> only
+has access to the data in the <code>props</code>.  You can use <a href="../can-stache-bindings.html" title="Listen to events and create one-way and two-way bindings.">event and data bindings</a>
+like <a href="../can-stache-bindings.toChild.html" title="One-way bind a value in the parent scope to the StacheElement, can-component ViewModel, or element.">key:from</a> and <a href="../can-stache-bindings.twoWay.html" title="Two-way bind a value in the StacheElement, can-component ViewModel, or element to the parent scope.">key:bind</a> to pass data
+between custom elements.</p>
+<blockquote>
+<p><strong>Key take-away:</strong>  <a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a> makes custom elements. Break down your application
+into many bite-sized custom elements.</p>
+</blockquote>
+<h2>List Messages</h2>
+<p>In this section, we will:</p>
+<ul>
+<li>Display messages from <a href="https://chat.donejs.com/api/messages">https://chat.donejs.com/api/messages</a> when <code>messagesPromise.isResolved</code>.</li>
+<li>Show a “Loading…” message while the messages are loading (<code>messagesPromise.isPending</code>).</li>
+<li>Show an error if those messages fail to load (<code>messagesPromise.isRejected</code>).</li>
+</ul>
+<p>Update the <code>JavaScript</code> panel to:</p>
+<ul>
+<li>Define a <code>Message</code> type with <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">can-observable-object</a>.</li>
+<li>Define a <code>MessageList</code> type that contains <code>Message</code> items.</li>
+<li>Connect the <code>Message</code> and <code>Message.List</code> type to
+the RESTful messages service at <code>https://chat.donejs.com/api/messages</code>
+using <a href="../can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">can-realtime-rest-model</a>.</li>
+<li>Update the <code>&lt;chat-messages&gt;</code>’s <code>view</code> to:
+<ul>
+<li>Check if the messages are in the process of loading and show a loading indicator.</li>
+<li>Check if the messages failed to load and display the reason for the failure.</li>
+<li>If messages successfully loaded, list each message’s name and body.  If there
+are no messages, write out “No messages”.</li>
+</ul></li>
+<li>Update the <code>&lt;chat-messages&gt;</code>’s <code>props</code> to:
+<ul>
+<li>Define a <code>messagesPromise</code> property on <code>ChatMessages</code> that’s
+<a href="../can-define.types.default.html" title="Returns the default value for instances of the defined type.  The default value is defined on demand, when the property
+is read for the first time.">default</a> is initialized to a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>
+that represents the loading of all messages using <a href="../can-connect/can/map/map.getList.html" title="Retrieve a list of instance.">getList</a>.</li>
+</ul></li>
+</ul>
+<pre><code class="language-js">import {
+    ObservableArray,
+    ObservableObject,
+    realtimeRestModel,
+    route,
+    StacheElement,
+    type,
+} from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class Message extends ObservableObject {
+    static props = {
+        id: type.maybeConvert(Number),
+        name: type.maybeConvert(String),
+        body: type.maybeConvert(String),
+        created_at: type.maybeConvert(Date)
+    };
+}
+
+class MessageList extends ObservableArray {
+    static props = {};
+
+    static items = Message;
+}
+
+const MessageConnection = realtimeRestModel({
+    url: {
+        resource: 'https://chat.donejs.com/api/messages',
+        contentType: 'application/x-www-form-urlencoded'
+    },
+    ObjectType: Message,
+    ArrayType: MessageList
+});
+
+class ChatMessages extends StacheElement {
+    static view = `
+        &lt;h1 class=&quot;page-header text-center&quot;&gt;
+            Chat Messages
+        &lt;/h1&gt;
+        &lt;h5&gt;&lt;a href=&quot;{{ routeUrl(page='home') }}&quot;&gt;Home&lt;/a&gt;&lt;/h5&gt;
+
+        {{# if(this.messagesPromise.isPending) }}
+            &lt;div class=&quot;list-group-item list-group-item-info&quot;&gt;
+                &lt;h4 class=&quot;list-group-item-heading&quot;&gt;Loading…&lt;/h4&gt;
+            &lt;/div&gt;
+        {{/ if }}
+        {{# if(this.messagesPromise.isRejected) }}
+            &lt;div class=&quot;list-group-item list-group-item-danger&quot;&gt;
+                &lt;h4 class=&quot;list-group3-item-heading&quot;&gt;Error&lt;/h4&gt;
+                &lt;p class=&quot;list-group-item-text&quot;&gt;{{ this.messagesPromise.reason }}&lt;/p&gt;
+            &lt;/div&gt;
+        {{/ if }}
+        {{# if(this.messagesPromise.isResolved) }}
+            {{# for(message of this.messagesPromise.value) }}
+                &lt;div class=&quot;list-group-item&quot;&gt;
+                    &lt;h4 class=&quot;list-group3--item-heading&quot;&gt;{{ message.name }}&lt;/h4&gt;
+                    &lt;p class=&quot;list-group-item-text&quot;&gt;{{ message.body }}&lt;/p&gt;
+                &lt;/div&gt;
+            {{ else }}
+                &lt;div class=&quot;list-group-item&quot;&gt;
+                    &lt;h4 class=&quot;list-group-item-heading&quot;&gt;No messages&lt;/h4&gt;
+                &lt;/div&gt;
+            {{/ for }}
+        {{/ if }}
+    `;
+
+    static props = {
+        // Properties
+        messagesPromise: {
+            get default() {
+                return Message.getList({});
+            }
+        }
+    };
+}
+customElements.define(&quot;chat-messages&quot;, ChatMessages);
+
+class ChatApp extends StacheElement {
+    static view = `
+        &lt;div class=&quot;container&quot;&gt;
+            &lt;div class=&quot;row&quot;&gt;
+            &lt;div class=&quot;col-sm-8 col-sm-offset-2&quot;&gt;
+                {{# eq(this.routeData.page, 'home') }}
+                    &lt;h1 class=&quot;page-header text-center&quot; on:click=&quot;this.addExcitement()&quot;&gt;
+                        {{ this.message }}
+                    &lt;/h1&gt;
+                    &lt;a href=&quot;{{ routeUrl(page='chat') }}&quot;
+                        class=&quot;btn btn-primary btn-block btn-lg&quot;&gt;
+                        Start chat
+                    &lt;/a&gt;
+                {{ else }}
+                    &lt;chat-messages/&gt;
+                {{/ eq }}
+            &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    `;
+
+    static props = {
+        // Properties
+        message: {
+            type: String,
+            default: &quot;Chat Home&quot;
+        },
+
+        routeData: {
+            get default() {
+                route.register(&quot;{page}&quot;,{page: &quot;home&quot;});
+                route.start();
+                return route.data;
+            }
+        }
+    };
+
+    addExcitement() {
+        this.message = this.message + &quot;!&quot;;
+    }
+}
+customElements.define(&quot;chat-app&quot;, ChatApp);
+
+</code></pre>
+<div line-highlight='1-9,11-35,39-76,only'></div>
+<p>When complete, you should see a list of messages in the <strong>chat messages page</strong>.</p>
+<p>This step creates a <code>Message</code> model by first creating the <code>Message</code> type
+and then connecting it to a messages service at <code>https://chat.donejs.com/api/messages</code>.</p>
+<h3>Explanation</h3>
+<p>The <a href="../can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">can-realtime-rest-model</a> mixin adds <a href="../can-connect/can/map/map.html" title="Integrate a can-connect connection with a DefineMap type.">methods</a> to the <code>Message</code> type that let you:</p>
+<ul>
+<li><p>Get a list of messages:</p>
+<pre><code class="language-js">Message.getList({}).then(function(messages){})
+</code></pre></li>
+<li><p>Get a single message:</p>
+<pre><code class="language-js">Message.get({id: 5}).then(function(message){})
+</code></pre></li>
+<li><p>Create a message on the server:</p>
+<pre><code class="language-js">message = new Message({name: &quot;You&quot;, body: &quot;Hello World&quot;})
+message.save()
+</code></pre></li>
+<li><p>Update a message on the server:</p>
+<pre><code class="language-js">message.body = &quot;Welcome Earth!&quot;;
+message.save();
+</code></pre></li>
+<li><p>Delete message on the server:</p>
+<pre><code class="language-js">message.destroy();
+</code></pre></li>
+</ul>
+<p>There are also methods to let you know when a message
+<a href="../can-connect/can/map/map.prototype.isNew.html" title="If the data is not in the dat">isNew</a>,
+<a href="../can-connect/can/map/map.prototype.isSaving.html" title="Returns if the instance is currently being saved.">isSaving</a>, and
+<a href="../can-connect/can/map/map.prototype.isDestroying.html" title="Returns if the instance is currently being destroyed.">isDestroying</a>.</p>
+<p>With the message model created, it’s used to load and list messages on the server.</p>
+<blockquote>
+<p><strong>Key take-away:</strong> Create a model for your data’s schema and use it to communicate with a backend server.</p>
+</blockquote>
+<h2>Create Messages</h2>
+<p>In this section, we will:</p>
+<ul>
+<li>Add the ability to create messages on the server and have them added to the list of messages.</li>
+</ul>
+<p>Update the <code>&lt;chat-messages&gt;</code> <strong>view</strong> to:</p>
+<ul>
+<li>Create a form to enter a message’s <code>name</code> and <code>body</code>.</li>
+<li>When the form is submitted, call <code>send</code> on the <code>ChatMessages</code> with <a href="../can-stache-bindings.event.html" title="Respond to events on elements or component ViewModels.">on:event</a>.</li>
+<li>Connect the first <code>&lt;input&gt;</code>’s <code>value</code> to the <code>ChatMessages</code>’s <code>name</code> property with <a href="../can-stache-bindings.twoWay.html" title="Two-way bind a value in the StacheElement, can-component ViewModel, or element to the parent scope.">key:bind</a>.</li>
+<li>Connect the second <code>&lt;input&gt;</code>’s <code>value</code> to the <code>ChatMessages</code>’s <code>body</code> property with <a href="../can-stache-bindings.twoWay.html" title="Two-way bind a value in the StacheElement, can-component ViewModel, or element to the parent scope.">key:bind</a>.</li>
+</ul>
+<p>Update the <code>&lt;chat-messages&gt;</code> <strong>props</strong> to:</p>
+<ul>
+<li>Define a <code>name</code> and <code>body</code> property on <code>ChatMessages</code>.</li>
+<li>Define a <code>send</code> method on <code>ChatMessages</code> that creates a new <code>Message</code> and sends it to the server.</li>
+</ul>
+<pre><code class="language-js">import {
+    ObservableArray,
+    ObservableObject,
+    realtimeRestModel,
+    route,
+    StacheElement,
+    type,
+} from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class Message extends ObservableObject {
+    static props = {
+        id: Number,
+        name: String,
+        body: String,
+        created_at: type.maybeConvert(Date)
+    };
+}
+
+class MessageList extends ObservableArray {
+    static props = {};
+
+    static items = Message
+}
+
+const MessageConnection = realtimeRestModel({
+    url: {
+        resource: 'https://chat.donejs.com/api/messages',
+        contentType: 'application/x-www-form-urlencoded'
+    },
+    ObjectType: Message,
+    ArrayType: MessageList
+});
+
+class ChatMessages extends StacheElement {
+    static view = `
+        &lt;h1 class=&quot;page-header text-center&quot;&gt;
+            Chat Messages
+        &lt;/h1&gt;
+        &lt;h5&gt;&lt;a href=&quot;{{ routeUrl(page='home') }}&quot;&gt;Home&lt;/a&gt;&lt;/h5&gt;
+
+        {{# if(this.messagesPromise.isPending) }}
+            &lt;div class=&quot;list-group-item list-group-item-info&quot;&gt;
+                &lt;h4 class=&quot;list-group-item-heading&quot;&gt;Loading…&lt;/h4&gt;
+            &lt;/div&gt;
+        {{/ if }}
+        {{# if(this.messagesPromise.isRejected) }}
+            &lt;div class=&quot;list-group-item list-group-item-danger&quot;&gt;
+                &lt;h4 class=&quot;list-group3-item-heading&quot;&gt;Error&lt;/h4&gt;
+                &lt;p class=&quot;list-group-item-text&quot;&gt;{{ this.messagesPromise.reason }}&lt;/p&gt;
+            &lt;/div&gt;
+        {{/ if }}
+        {{# if(this.messagesPromise.isResolved) }}
+            {{# for(message of this.messagesPromise.value) }}
+                &lt;div class=&quot;list-group-item&quot;&gt;
+                    &lt;h4 class=&quot;list-group3--item-heading&quot;&gt;{{ message.name }}&lt;/h4&gt;
+                    &lt;p class=&quot;list-group-item-text&quot;&gt;{{ message.body }}&lt;/p&gt;
+                &lt;/div&gt;
+            {{ else }}
+                &lt;div class=&quot;list-group-item&quot;&gt;
+                    &lt;h4 class=&quot;list-group-item-heading&quot;&gt;No messages&lt;/h4&gt;
+                &lt;/div&gt;
+            {{/ for }}
+        {{/ if }}
+
+        &lt;form class=&quot;row&quot; on:submit=&quot;this.send(scope.event)&quot;&gt;
+                &lt;div class=&quot;col-sm-3&quot;&gt;
+                    &lt;input type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Your name&quot;
+                                    value:bind=&quot;this.name&quot;/&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;col-sm-6&quot;&gt;
+                    &lt;input type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Your message&quot;
+                                    value:bind=&quot;this.body&quot;/&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;col-sm-3&quot;&gt;
+                    &lt;input type=&quot;submit&quot; class=&quot;btn btn-primary btn-block&quot; value=&quot;Send&quot;/&gt;
+                &lt;/div&gt;
+        &lt;/form&gt;
+    `;
+
+    static props = {
+        // Properties
+        messagesPromise: {
+            get default() {
+                return Message.getList({});
+            }
+        },
+
+        name: String,
+        body: String
+    };
+
+    send(event) {
+        event.preventDefault();
+
+        new Message({
+                name: this.name,
+                body: this.body
+        }).save().then(() =&gt; {
+                this.body = &quot;&quot;;
+        });
+    }
+}
+customElements.define(&quot;chat-messages&quot;, ChatMessages);
+
+class ChatApp extends StacheElement {
+    static view = `
+        &lt;div class=&quot;container&quot;&gt;
+            &lt;div class=&quot;row&quot;&gt;
+            &lt;div class=&quot;col-sm-8 col-sm-offset-2&quot;&gt;
+                {{# eq(this.routeData.page, 'home') }}
+                    &lt;h1 class=&quot;page-header text-center&quot; on:click=&quot;this.addExcitement()&quot;&gt;
+                        {{ this.message }}
+                    &lt;/h1&gt;
+                    &lt;a href=&quot;{{ routeUrl(page='chat') }}&quot;
+                        class=&quot;btn btn-primary btn-block btn-lg&quot;&gt;
+                            Start chat
+                    &lt;/a&gt;
+                {{ else }}
+                    &lt;chat-messages/&gt;
+                {{/ eq }}
+            &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    `;
+
+    static props = {
+        // Properties
+        message: {
+            type: String,
+            default: &quot;Chat Home&quot;
+        },
+
+        routeData: {
+            get default() {
+                route.register(&quot;{page}&quot;,{page: &quot;home&quot;});
+                route.start();
+                return route.data;
+            }
+        }
+    };
+
+    addExcitement() {
+        this.message = this.message + &quot;!&quot;;
+    }
+}
+customElements.define(&quot;chat-app&quot;, ChatApp);
+
+</code></pre>
+<div line-highlight='68-80,91-104,only'></div>
+<p>When complete, you will be able to create messages and have them appear in the list.</p>
+<p>This step sets up a form to create a <code>Message</code> on the server.
+Notice that the new <code>Message</code> automatically appears in the list of messages. This
+is because <a href="../can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">can-realtime-rest-model</a> adds the <a href="../can-connect/real-time/real-time.html" title="Update lists to include or exclude instances based
+on set logic.">real-time</a> behavior.  The
+<a href="../can-connect/real-time/real-time.html" title="Update lists to include or exclude instances based
+on set logic.">real-time</a> behavior automatically inserts newly created messages into
+lists that they belong within.  This is one of CanJS’s best features — automatic list management.</p>
+<blockquote>
+<p><strong>Key take-away:</strong> CanJS will add, remove, and update lists for you automatically.</p>
+</blockquote>
+<h2>Real Time</h2>
+<p>In this section, we will:</p>
+<ul>
+<li>Listen to messages created by other users and add them to the list of messages.</li>
+</ul>
+<p>Update the <code>JavaScript</code> panel to:</p>
+<ul>
+<li>Create a <a href="https://socket.io/" title="https://socket.io/">https://socket.io/</a> connection (<code>socket</code>).</li>
+<li>Listen for when messages are created, updated, and destroyed, and call the
+corresponding <a href="../can-connect/real-time/real-time.html" title="Update lists to include or exclude instances based
+on set logic.">real-time</a> methods.</li>
+</ul>
+<pre><code class="language-js">import {
+    ObservableArray,
+    ObservableObject,
+    realtimeRestModel,
+    route,
+    StacheElement,
+    type,
+} from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class Message extends ObservableObject {
+    static props = {
+        id: Number,
+        name: String,
+        body: String,
+        created_at: Date
+    };
+
+    static propertyDefaults = DeepObservable;
+}
+
+class MessageList extends ObservableArray {
+    static props = {};
+
+    static items = Message;
+}
+
+const MessageConnection = realtimeRestModel({
+    url: {
+        resource: 'https://chat.donejs.com/api/messages',
+        contentType: 'application/x-www-form-urlencoded'
+    },
+    ObjectType: Message,
+    ArrayType: MessageList
+});
+
+const socket = io('https://chat.donejs.com');
+
+socket.on('messages created', function(message){
+    MessageConnection.createInstance(message);
+});
+socket.on('messages updated', function(message){
+    MessageConnection.updateInstance(message);
+});
+socket.on('messages removed', function(message){
+    MessageConnection.destroyInstance(message);
+});
+
+class ChatMessages extends StacheElement {
+    static view = `
+        &lt;h1 class=&quot;page-header text-center&quot;&gt;
+                Chat Messages
+        &lt;/h1&gt;
+        &lt;h5&gt;&lt;a href=&quot;{{ routeUrl(page='home') }}&quot;&gt;Home&lt;/a&gt;&lt;/h5&gt;
+
+        {{# if(this.messagesPromise.isPending) }}
+            &lt;div class=&quot;list-group-item list-group-item-info&quot;&gt;
+                &lt;h4 class=&quot;list-group-item-heading&quot;&gt;Loading…&lt;/h4&gt;
+            &lt;/div&gt;
+        {{/ if }}
+        {{# if(this.messagesPromise.isRejected) }}
+            &lt;div class=&quot;list-group-item list-group-item-danger&quot;&gt;
+                &lt;h4 class=&quot;list-group3-item-heading&quot;&gt;Error&lt;/h4&gt;
+                &lt;p class=&quot;list-group-item-text&quot;&gt;{{ this.messagesPromise.reason }}&lt;/p&gt;
+            &lt;/div&gt;
+        {{/ if }}
+        {{# if(this.messagesPromise.isResolved) }}
+            {{# for(message of this.messagesPromise.value) }}
+                &lt;div class=&quot;list-group-item&quot;&gt;
+                    &lt;h4 class=&quot;list-group3--item-heading&quot;&gt;{{ message.name }}&lt;/h4&gt;
+                    &lt;p class=&quot;list-group-item-text&quot;&gt;{{ message.body }}&lt;/p&gt;
+                &lt;/div&gt;
+            {{ else }}
+                &lt;div class=&quot;list-group-item&quot;&gt;
+                    &lt;h4 class=&quot;list-group-item-heading&quot;&gt;No messages&lt;/h4&gt;
+                &lt;/div&gt;
+            {{/ for }}
+        {{/ if }}
+
+        &lt;form class=&quot;row&quot; on:submit=&quot;this.send(scope.event)&quot;&gt;
+            &lt;div class=&quot;col-sm-3&quot;&gt;
+                &lt;input type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Your name&quot;
+                    value:bind=&quot;this.name&quot;/&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;col-sm-6&quot;&gt;
+                &lt;input type=&quot;text&quot; class=&quot;form-control&quot; placeholder=&quot;Your message&quot;
+                    value:bind=&quot;this.body&quot;/&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;col-sm-3&quot;&gt;
+                &lt;input type=&quot;submit&quot; class=&quot;btn btn-primary btn-block&quot; value=&quot;Send&quot;/&gt;
+            &lt;/div&gt;
+        &lt;/form&gt;
+    `;
+
+    static props = {
+        // Properties
+        messagesPromise: {
+            get default() {
+                return Message.getList({});
+            }
+        },
+
+        name: type.maybeConvert(String),
+        body: type.maybeConvert(String)
+    };
+
+    send(event) {
+        event.preventDefault();
+
+        new Message({
+                name: this.name,
+                body: this.body
+        }).save().then(() =&gt; {
+                this.body = &quot;&quot;;
+        });
+    }
+}
+customElements.define(&quot;chat-messages&quot;, ChatMessages);
+
+class ChatApp extends StacheElement {
+    static view = `
+        &lt;div class=&quot;container&quot;&gt;
+            &lt;div class=&quot;row&quot;&gt;
+                &lt;div class=&quot;col-sm-8 col-sm-offset-2&quot;&gt;
+                    {{# eq(this.routeData.page, 'home') }}
+                        &lt;h1 class=&quot;page-header text-center&quot; on:click=&quot;this.addExcitement()&quot;&gt;
+                            {{ this.message }}
+                        &lt;/h1&gt;
+                        &lt;a href=&quot;{{ routeUrl(page='chat') }}&quot;
+                            class=&quot;btn btn-primary btn-block btn-lg&quot;&gt;
+                            Start chat
+                        &lt;/a&gt;
+                    {{ else }}
+                        &lt;chat-messages/&gt;
+                    {{/ eq }}
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    `;
+
+    static props = {
+        // Properties
+        message: {
+            type: String,
+            default: &quot;Chat Home&quot;
+        },
+
+        routeData: {
+            get default() {
+                route.register(&quot;{page}&quot;,{page: &quot;home&quot;});
+                route.start();
+                return route.data;
+            }
+        }
+    };
+
+    addExcitement() {
+        this.message = this.message + &quot;!&quot;;
+    }
+}
+customElements.define(&quot;chat-app&quot;, ChatApp);
+
+</code></pre>
+<div line-highlight='37-47,only'></div>
+<p>When complete, you can open up the same CodePen in another window, create a
+message, and it will appear in the first CodePen’s messages list.</p>
+<p>This step connects to a <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" title="WebSocket API">WebSocket API</a>
+that pushes messages when <code>Message</code>s are created, updated or destroyed. By calling the
+<a href="../can-connect/real-time/real-time.html" title="Update lists to include or exclude instances based
+on set logic.">real-time</a> methods when these events happen, CanJS will automatically
+update the messages list.</p>
+<blockquote>
+<p><strong>Key take-away:</strong> CanJS will add, remove, and update lists for you automatically.  It’s
+awesome!</p>
+</blockquote>
+<h2>Result</h2>
+<p>When finished, you should see something like the following CodePen:</p>
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="OJLgEbx" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6.0 Chat - Final">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/OJLgEbx/">
+  CanJS 6.0 Chat - Final</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/experiment/chat/chat.md"},"description":"This guide will walk you through building a real-time chat application with CanJS’s [can-core Core libraries].  It takes about 30 minutes to complete.\n\n","name":"guides/chat","title":"Chat Guide","type":"page","parent":"guides/experiment","order":1,"templateRender":["<%","%>"],"comment":" ","pathToRoot":"../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix=".."></div>
+
+	</body>
+</html>

@@ -1,0 +1,18 @@
+import 'less_paths/folder/main.less!';
+
+if(typeof window !== "undefined" && window.QUnit) {
+	var image = new Image();
+	image.onload = function(){
+		QUnit.ok(true, "image loaded");
+		QUnit.start();
+		removeMyself();
+	};
+	image.onerror = function(){
+		QUnit.ok(false, "image not loaded");
+		QUnit.start();
+		removeMyself();
+	};
+	image.src = $("#test-element").css("background-image").replace(/url\("?/,"").replace(/"?\)/,"");
+} else {
+	console.log("background-image", $("#test-element").css("background-image"));
+}

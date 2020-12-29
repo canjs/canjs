@@ -1,0 +1,17 @@
+<script>
+    window.QUnit = window.parent.QUnit;
+    window.removeMyself = window.parent.removeMyself;
+</script>
+<script>
+    steal = {
+        foo: 'bar'
+    };
+</script>
+<script src="../steal.js" data-foo="foo"></script>
+<script>
+    steal.done().then(function(){
+        QUnit.ok(System.foo,"foo");
+        QUnit.start();
+        removeMyself();
+    });
+</script>

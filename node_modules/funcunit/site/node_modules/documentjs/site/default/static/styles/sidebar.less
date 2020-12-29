@@ -1,0 +1,300 @@
+/**
+* @stylesheet sidebar.less Sidebar
+* @parent Styles.baseline-elements 4
+
+* @description
+* Styles the sidebar navigation.
+**/
+
+
+// Sidebar structure
+.sidebar {
+  width:  255px;
+  margin-top: 20px;
+  background-color: @sidebarBackground;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 15px;
+  border-radius: 5px 0 0 5px;
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  li.active {
+    z-index: 20;
+  }
+  .primary-grouping {
+    padding-bottom: 10px;
+  }
+}
+
+/**
+* @styles sidebar-versions Versions
+*
+* @description
+* Select menu used to display the documentation
+*
+* @demo demos/versions.html
+**/
+.sidebar {
+   .versions, 
+   #versions {
+    position: absolute;
+    right: 5px;
+    top: 7px;
+    font-size: 15px;
+    option {
+      font-size: 15px;
+    }
+  }
+}
+// Hack for chrome so we can change the size
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+ .sidebar #versions { border-color: @cloud; }
+}
+
+
+/**
+* @styles sidebar-list List Items
+*
+* @description
+* Styles the groups of lists shown on the sidebar.
+*
+* @demo demos/lists.html
+**/
+.sidebar {
+  .api {
+    .heading span {
+      text-transform: uppercase;
+      color: @darkSkies;
+      line-height: 24px;
+      display: block;
+      font-weight: bold;
+    }
+    li {
+      font-size: 15px;
+      line-height: 24px;
+      text-indent: 15px;
+      position: relative;
+      a {
+        display: block;
+        border: 1px solid @haze;
+      }
+    }
+    ul ul li a:hover {
+      background: @haze;
+    }
+    li li li li a {
+      font-size: 13px;
+      color: @thunderStorm;
+    }
+    > li > ul {
+      display: none;
+    }
+    > li.active {
+      position: relative;
+      z-index: 0;
+      
+      > ul {
+        display: block;
+      }
+    }
+    
+    li.active.collapsed > :not(a) {
+      display:none;
+    }
+    li li li {
+      text-indent: 30px;
+    }
+    li li li li {
+      text-indent: 45px;
+    }
+    ul.projects {
+      padding-top: 10px;
+    }
+    a, a:hover {
+      text-decoration: none;
+      color: @darkSkies;
+      font-style: normal;
+    }
+    li.active  {
+      z-index: 20;
+    }
+    > li.active > a {
+      font-size: 17px;
+      font-weight: normal;
+      line-height: 40px;
+      color: @thunderStorm;
+      display: block;
+      border: none;
+    }
+    > li > a:hover,
+    > li > a:hover {
+      color: @night;
+    }
+    
+    li li.parent {
+      text-indent: 30px;
+    }
+    li li li.parent {
+      text-indent: 40px;
+    }
+    li li.parent:before {
+      left: 20px;
+    }
+    li li li.parent li {
+      text-indent: 50px;
+    }
+    li.parent:before {
+      content: "";
+      border-color: transparent @cloud;
+      border-style: solid;
+      border-width: 0.3em 0 0.3em 0.5em;
+      display: block;
+      height: 0;
+      width: 0;
+      position: absolute;
+      top: 10px;
+      left: 30px;
+    }
+    li.parent.expanded:before {
+      -webkit-transform:rotate(90deg);
+      -moz-transform:rotate(90deg);
+      -o-transform:rotate(90deg);
+      -ms-transform:rotate(90deg);
+      transform:rotate(90deg);
+      z-index: 1;
+    }
+    li li.active > a, .sidebar .api li li.active > a:hover {
+      position: relative;
+      display : block;
+      height:25px;
+      margin-left: 1px;
+    }
+    li li.active > a:hover {
+      background: none;
+    }
+    /* This is the caret/triangle that points out of the container to the page on active items */
+    li li.active > a:after {
+      position:absolute;
+      content : ' ';
+      right:-12px;
+      top:-7px;
+      height : 14px;
+      width: 14px;
+      z-index : 1;
+      width: 0; 
+      height: 0; 
+      border-top: 20px solid transparent;
+      border-bottom: 20px solid transparent;
+      border-left: 20px solid @sidebarBackground
+    }
+    li li.active > a:before {
+      position: absolute;
+      content: '';
+      display: block;
+      border-left: 4px solid @darkSkies;
+      width: 5px;
+      height: 20px;
+      left: 5px;
+      top: 4px;
+    }
+    li li li.active > a:before {
+      left: 20px;
+    }
+  } // api ends
+} // sidebar ends
+
+
+/**
+* @styles cascading-list Cascading List
+*
+* @description
+* Styles `.sidebar-title` as a child of the `.api` list, and up to 5 levels before inheriting the styles of level 1.
+*
+* @demo demos/cascading-list.html
+**/
+.sidebar {
+  .api {
+    li.active > a.sidebar-title  {
+      font-size: 24px;
+      background-color: @darkSkies;
+      border-radius: 5px 0 0 0;
+      margin-bottom:20px;
+    }
+    li.active:nth-child(2) > a.sidebar-title,
+    li.active:nth-child(3) > a.sidebar-title,
+    li.active:nth-child(4) > a.sidebar-title,
+    li.active:nth-child(5) > a.sidebar-title {
+      font-size: 18px;
+      border-radius: 0;
+      margin:-20px 0 20px 0;      
+    } 
+    li.active:nth-child(2) > a.sidebar-title {
+      background: lighten(@darkSkies, 10%);
+    } 
+    li.active:nth-child(3) > a.sidebar-title {
+      background: lighten(@darkSkies, 20%);   
+    }
+    li.active:nth-child(4) > a.sidebar-title {
+      background: lighten(@darkSkies, 30%);   
+    }        
+    li.active:nth-child(5) > a.sidebar-title {
+      background: lighten(@darkSkies, 40%);   
+    }  
+
+    &.cascading {
+      > .active > a {
+        color: @clear;
+        background: @colorNav;
+        border: none;
+      }
+      > .parent {
+        z-index: 1;
+        text-indent: 15px;
+        margin-left: 0px;
+        margin-right: 0px;
+      }
+      /* The caret that points down from an active parent element to the child below */
+      > .active:before,
+      > .active:nth-child(2):before,
+      > .active:nth-child(3):before,
+      > .active:nth-child(4):before,
+      > .active:nth-child(5):before   {
+        position:absolute;
+        content : ' ';
+        left:10px;
+        top:30px;
+        z-index : -1;
+        width: 0; 
+        height: 0; 
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        border-top: 20px solid @darkSkies;
+      }
+      > .active:nth-child(2):before {
+        border-top: 20px solid lighten(@darkSkies, 10%);
+      }
+      > .active:nth-child(3):before {
+        border-top: 20px solid lighten(@darkSkies, 20%);
+      }   
+      > .active:nth-child(4):before {
+        border-top: 20px solid lighten(@darkSkies, 30%);
+      }
+      > .active:nth-child(5):before {
+        border-top: 20px solid lighten(@darkSkies, 40%);
+      }               
+    } // cascading ends 
+  } // api ends
+} // sidebar ends
+
+
+.zIndexer(10);
+
+.zIndexer(@n, @i: 1) when (@i =< @n) {
+  .sidebar .api.cascading > li:nth-child(@{i}){
+    z-index: 21-@i;
+  }
+  .zIndexer(@n, (@i + 1));
+}

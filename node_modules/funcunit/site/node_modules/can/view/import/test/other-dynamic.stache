@@ -1,0 +1,5 @@
+<can-import from="./thing">
+
+</can-import>
+
+<span>hi there</span>

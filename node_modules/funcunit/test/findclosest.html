@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Synthetic Typing Test</title>
+	</head>
+
+	<body>
+		<div class="baz">
+			<div id="foo">
+				<a href="javascript://">Holler!</a>
+				<div class="combo">combo</div>
+			</div>
+			<div class="combo">combo</div>
+			<div class="another">another</div>
+		</div>
+
+		<script src="../node_modules/steal/steal.js">
+        var $ = require("funcunit/browser/jquery");
+
+				$(document.documentElement).click(function(ev) {
+					$(ev.target).addClass("iWasClicked");
+				});
+		</script>
+	</body>
+</html>

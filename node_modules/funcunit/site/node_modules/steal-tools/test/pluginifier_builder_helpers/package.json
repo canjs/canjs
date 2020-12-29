@@ -1,0 +1,20 @@
+{
+  "name": "tabs",
+  "version": "0.5.0-pre.2",
+  "dependencies": {
+    "jquery": ">2.0",
+    "cssify": "^0.6.0"
+  },
+  "system": {
+    "directories": {
+      "lib" : "src"
+    }
+  },
+  "main": "tabs",
+  "browser": {
+    "transform": [ "cssify" ]
+  },
+  "browserify": {
+    "transform": ["cssify"]
+  }
+}

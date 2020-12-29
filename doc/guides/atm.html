@@ -1,0 +1,5700 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/experiment/atm/atm.md
+	@page guides/atm
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>ATM Guide | app guides | Guides | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="This guide will walk you through building and testing an Automated Teller Machine (ATM) application with CanJS’s Core libraries.  You’ll learn how to do test driven development (TDD) and manage complex state.  It takes about 2 hours to complete.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="This guide will walk you through building and testing an Automated Teller Machine (ATM) application with CanJS’s Core libraries.  You’ll learn how to do test driven development (TDD) and manage complex state.  It takes about 2 hours to complete.">
+	<meta property="og:title" content="ATM Guide | app guides | Guides | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "This guide will walk you through building and testing an Automated Teller Machine (ATM) application with CanJS’s Core libraries.  You’ll learn how to do test driven development (TDD) and manage complex state.  It takes about 2 hours to complete.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "ATM Guide | app guides | Guides | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/atm" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>getting started</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="crud-beginner.html"
+							title="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+							CRUD Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="setup.html"
+							title="Learn how to install CanJS in your environment.">
+							Setting Up CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="technology-overview.html"
+							title="Learn the basics of CanJS’s technology.">
+							Technology Overview
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>topics</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="html.html"
+							title="Learn how to update HTML and listen to user interactions.">
+							HTML
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="routing.html"
+							title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+							Routing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="data.html"
+							title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">
+							Service Layer
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="debugging.html"
+							title="Learn how to debug CanJS applications.">
+							Debugging
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="forms.html"
+							title="Learn how to create amazing &lt;form&gt;s with CanJS.">
+							Forms
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="testing.html"
+							title="Learn how to test CanJS applications.">
+							Testing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="logic.html"
+							title="Learn how to write observables in an organized, maintainable, and testable way.">
+							Logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="server-side-rendering.html"
+							title="Learn how to set up SSR for CanJS.">
+							Server-Side Rendering
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>app guides</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="chat.html"
+							title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+							Chat Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="todomvc.html"
+							title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+							TodoMVC Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/todomvc-with-steal.html"
+							title="This tutorial walks through building TodoMVC with StealJS. It includes KeyNote presentations covering CanJS core libraries.">
+							TodoMVC with StealJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>beginner recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/canvas-clock.html"
+							title="This beginner guide walks you through building a clock with the Canvas API.">
+							Canvas Clock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-simple.html"
+							title="This beginner guide walks through building a very simple credit card payment form.  It uses Stripe.js v2 API to create a token which can be used to create a charge.  It also performs simple validation on the payment form values.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-simple.html"
+							title="This beginner guide walks you through building a simple file navigation widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.0.0. Check out the file-navigator-advanced for an example that makes AJAX requests for its data and uses can-stache-element.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/signup-simple.html"
+							title="This beginner guide walks through building simple signup, login forms and a logout button.">
+							Signup and Login
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/video-player.html"
+							title="This beginner guide walks you through building custom video controls around a video element.">
+							Video Player
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/weather-report-simple.html"
+							title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.2.">
+							Weather Report
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>intermediate recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/cta-bus-map.html"
+							title="This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map. You&#x27;ll learn how to create a StacheElement that integrates with 3rd party widgets.">
+							CTA Bus Map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/modals.html"
+							title="This intermediate guide shows how to create a multiple modal form.">
+							Multiple Modals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/text-editor.html"
+							title="This intermediate guide walks you through building a basic rich text editor.">
+							Text Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/tinder-carousel.html"
+							title="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+							Tinder Carousel
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>advanced recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-advanced.html"
+							title="This advanced guide walks through building a simple credit card payment form with validations. It doesn’t use can-define. Instead it uses Kefir.js streams to make a ViewModel. can-kefir is used to make the Kefir streams observable to can-stache.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-advanced.html"
+							title="This advanced guide walks you through building a file navigation widget that requests data with fetch. It takes about 45 minutes to complete.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/playlist-editor.html"
+							title="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+							Playlist Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/search-list-details.html"
+							title="This advanced guide walks through building a Search, List, Details flow with lazy-loaded routes.">
+							Search, List, Details
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>upgrade</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-3.html"
+							title="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+							Migrating to CanJS 3
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-4.html"
+							title="This guide walks you through the step-by-step process to upgrade a 3.x app to CanJS 4.">
+							Migrating to CanJS 4
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-5.html"
+							title="This guide walks you through the process to upgrade a 4.x app to CanJS 5.x.">
+							Migrating to CanJS 5
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-6.html"
+							title="This guide walks you through the process to upgrade a 5.x app to CanJS 6.x.">
+							Migrating to CanJS 6
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="upgrade/using-codemods.html"
+							title="Learn how to migrate your app to CanJS 6 using can-migrate.">
+							Using Codemods
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>other</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="api.html"
+							title="This page walks through how to use and understand CanJS’s API documentation.">
+							Reading the API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>ATM Guide</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/experiment/atm/atm.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>This guide will walk you through building and testing an Automated Teller Machine (ATM) application with CanJS’s
+<a href="../can-core.html" title="The best, most hardened and generally useful libraries in CanJS.">Core libraries</a>.  You’ll learn how to do test driven development (TDD)
+and manage complex state.  It takes about 2 hours to complete.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <h2>Overview</h2>
+<p>Check out the final app:</p>
+<p><a class="jsbin-embed" href="https://jsbin.com/novonij/4/embed?js,output">JS Bin on jsbin.com</a></p>
+<p>Notice it has tests at the bottom of the <code>Output</code> tab.</p>
+<h2>Setup</h2>
+<p>The easiest way to get started is to clone the following JS&nbsp;Bin by clicking the <strong>JS&nbsp;Bin</strong> button on the top left:</p>
+<p><a class="jsbin-embed" href="https://jsbin.com/novonij/1/embed?html,js,output">JS Bin on jsbin.com</a></p>
+<p>The JS Bin is designed to run both the application and its tests in the <code>OUTPUT</code>
+tab.  To set this up, the <strong>HTML</strong> tab:</p>
+<ul>
+<li><p>Loads QUnit for its testing library.  It also includes the <code>&lt;div id=&quot;qunit&quot;&gt;&lt;/div&gt;</code>
+element where QUnit’s test results will be written to.</p></li>
+<li><p>Loads <a href="https://unpkg.com/can@3/dist/global/can.all.js">can.all.js</a>, which
+is a script that includes all of CanJS core under a single global <code>can</code> namespace.</p>
+<p>Generally speaking, you should not use the global <code>can</code> script, but instead you
+should import things directly with a module loader like <a href="https://stealjs.com">StealJS</a>,
+WebPack or Browserify.  Read <a href="setup.html" title="Learn how to install CanJS in your environment.">Setting Up CanJS</a> for instructions on how to set up CanJS in a real app.</p></li>
+<li><p>Includes the content for an <code>app-template</code> <a href="../can-stache.html" title="Live binding templates.">can-stache</a> template. This template
+provides the title for the ATM app and uses the <code>&lt;atm-machine&gt;</code> custom <a href="../can-component.html" title="Create a custom element that can be used to manage widgets or application logic.">can-component</a>
+element that will eventually provide the ATM functionality.</p></li>
+</ul>
+<p>The <code>JavaScript</code> tab is split into two sections:</p>
+<ul>
+<li><code>CODE</code> - The ATM’s models, view-models and component code will go here.</li>
+<li><code>TESTS</code> - The ATM’s tests will go here.</li>
+</ul>
+<p>Normally, your application’s code and tests will be in separate files and loaded
+by different html pages, but we combine them here to fit within JS&nbsp;Bin’s limitations.</p>
+<p>The <code>CODE</code> section renders the <code>app-template</code> with:</p>
+<pre><code class="language-js">document.body.insertBefore(
+    can.stache.from(&quot;app-template&quot;)({}),
+    document.body.firstChild
+);
+</code></pre>
+<p>The <code>TESTS</code> section labels which module will be tested:</p>
+<pre><code class="language-js">QUnit.module(&quot;ATM system&quot;, {});
+</code></pre>
+<h2>Mock out switching between pages</h2>
+<p>In this section, we will mock out which pages will be shown as the <code>state</code>
+of the <code>ATM</code> changes.</p>
+<p>Update the <strong>HTML</strong> tab to:</p>
+<ul>
+<li>Switch between different pages of the application as the <code>ATM</code> view-model’s <code>state</code> property changes
+with <a href="../can-stache.helpers.switch.html" title="">switch</a>.</li>
+</ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta name=&quot;description&quot; content=&quot;CanJS 3.0 - ATM Guide - Setup&quot;&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot;&gt;
+  &lt;title&gt;JS Bin&lt;/title&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;script type='text/stache' id='atm-template'&gt;
+&lt;div class=&quot;screen&quot;&gt;
+    &lt;div class=&quot;screen-content&quot;&gt;
+        &lt;div class=&quot;screen-glass&quot;&gt;
+
+            {{# switch(state) }}
+                {{# case(&quot;readingCard&quot;) }}
+                    &lt;h2&gt;Reading Card&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;readingPin&quot;) }}
+                    &lt;h2&gt;Reading Pin&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;choosingTransaction&quot;) }}
+                    &lt;h2&gt;Choose Transaction&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;pickingAccount&quot;) }}
+                    &lt;h2&gt;Pick Account&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;depositInfo&quot;) }}
+                    &lt;h2&gt;Deposit&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;withdrawalInfo&quot;) }}
+                    &lt;h2&gt;Withdraw&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;successfulTransaction&quot;) }}
+                    &lt;h2&gt;Transaction Successful!&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;printingReceipt&quot;) }}
+                    &lt;h2&gt;Printing Receipt&lt;/h2&gt;
+                {{/ case }}
+
+                {{# default }}
+                    &lt;h2&gt;Error&lt;/h2&gt;
+                    &lt;p&gt;Invalid state - {{ state }}&lt;/p&gt;
+                {{/ default }}
+
+            {{/ switch }}
+
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/script&gt;
+
+&lt;script type='text/stache' id='app-template'&gt;
+&lt;div class=&quot;title&quot;&gt;
+    &lt;h1&gt;canATM&lt;/h1&gt;
+&lt;/div&gt;
+&lt;atm-machine/&gt;
+&lt;/script&gt;
+
+&lt;script src=&quot;https://unpkg.com/can@4/dist/global/can.all.js&quot;&gt;&lt;/script&gt;
+
+&lt;div id=&quot;qunit&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://code.jquery.com/qunit/qunit-1.12.0.css&quot;&gt;
+&lt;script src=&quot;https://code.jquery.com/qunit/qunit-1.12.0.js&quot;&gt;&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+<div line-highlight='12-60,only'></div>
+<p>Update the <code>JavaScript</code> tab to:</p>
+<ul>
+<li>Create the <code>ATM</code> view-model with a <code>state</code> property initialized to <code>readingCard</code> with <a href="../can-define/map/map.html" title="Create observable objects.">can-define/map/map</a>.</li>
+<li>Create an <code>&lt;atm-machine&gt;</code> custom element with <a href="../can-component.html" title="Create a custom element that can be used to manage widgets or application logic.">can-component</a>.</li>
+</ul>
+<pre><code class="language-js">// ========================================
+// CODE
+// ========================================
+
+var ATM = can.DefineMap.extend({
+    state: {type: &quot;string&quot;, default: &quot;readingCard&quot;}
+});
+
+can.Component.extend({
+    tag: &quot;atm-machine&quot;,
+    view: can.stache.from(&quot;atm-template&quot;),
+    ViewModel: ATM,
+});
+
+document.body.insertBefore(
+    can.stache.from(&quot;app-template&quot;)({}),
+    document.body.firstChild
+);
+
+// ========================================
+// TESTS
+// ========================================
+
+QUnit.module(&quot;ATM system&quot;, {});
+
+</code></pre>
+<div line-highlight='5-13,only'></div>
+<p>When complete, you should see the <strong>“Reading Card”</strong> title.</p>
+<p>This step includes all the potential pages the <code>state</code>
+property can transition between:</p>
+<ul>
+<li>readingCard</li>
+<li>readingPin</li>
+<li>choosingTransaction</li>
+<li>pickingAccount</li>
+<li>depositInfo</li>
+<li>withdrawalInfo</li>
+<li>successfulTransaction</li>
+<li>printingReceipt</li>
+</ul>
+<p>Each of those states are present in the following state diagram:</p>
+<p><img height="693" src="../../docs/can-guides/experiment/atm/1-pages-template/state-diagram.png" width="808"></p>
+<p>We’ll build out these pages once we build the <code>Card</code> and <code>Transaction</code> sub-models that will make building the ATM view model easier.</p>
+<h2>Card tests</h2>
+<p>In this section, we will:</p>
+<ul>
+<li>Design an API for an ATM <code>Card</code></li>
+<li>Write out tests for the card.</li>
+</ul>
+<p>An ATM <code>Card</code> will take a card <code>number</code> and <code>pin</code>. It will start out as
+having a <code>state</code> of  <code>&quot;unverified&quot;</code>. It will have a <code>verify</code> method
+that will change the <code>state</code> to <code>&quot;verifying&quot;</code>, and if the response is successful,
+<code>state</code> will change to <code>&quot;verified&quot;</code>.</p>
+<p>Update the <code>JavaScript</code> tab to:</p>
+<ul>
+<li>Make the fake data request delay <code>1ms</code> by setting <a href="../can-fixture.delay.html" title="Sets the delay until a response is fired.">delay</a> to <code>1</code> before every test and
+restoring it to <code>2s</code> after every test runs.</li>
+<li>Write a test that creates a valid card, calls <code>.verify()</code>, and asserts the <code>state</code> is <code>&quot;verified&quot;</code>.</li>
+<li>Write a test that creates an invalid card, calls <code>.verify()</code>, and asserts the <code>state</code> is <code>&quot;invalid&quot;</code>.</li>
+</ul>
+<pre><code class="language-js">// ========================================
+// CODE
+// ========================================
+
+var ATM = can.DefineMap.extend({
+    state: {type: &quot;string&quot;, default: &quot;readingCard&quot;}
+});
+
+can.Component.extend({
+    tag: &quot;atm-machine&quot;,
+    view: can.stache.from(&quot;atm-template&quot;),
+    ViewModel: ATM,
+});
+
+document.body.insertBefore(
+    can.stache.from(&quot;app-template&quot;)({}),
+    document.body.firstChild
+);
+
+// ========================================
+// TESTS
+// ========================================
+
+QUnit.module(&quot;ATM system&quot;, {
+    setup: function() {
+        can.fixture.delay = 1;
+    },
+    teardown: function() {
+        can.fixture.delay = 2000;
+    }
+});
+
+QUnit.asyncTest(&quot;Valid Card&quot;, function() {
+
+    var c = new Card({
+        number: &quot;01234567890&quot;,
+        pin: 1234
+    });
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;verified&quot;, &quot;card is verified&quot;);
+
+        QUnit.start();
+    });
+});
+
+QUnit.asyncTest(&quot;Invalid Card&quot;, function() {
+
+    var c = new Card({});
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;invalid&quot;, &quot;card is invalid&quot;);
+
+        QUnit.start();
+    });
+});
+
+</code></pre>
+<div line-highlight='24-70,only'></div>
+<p>When complete, you should have a breaking test.  Now let’s make it pass.</p>
+<h2>Card model</h2>
+<p>In this section, we will:</p>
+<ul>
+<li>Implement the <code>Card</code> model so that all the tests pass.</li>
+</ul>
+<p>Update the <code>JavaScript</code> tab to:</p>
+<ul>
+<li>Simulate the <code>/verifyCard</code> with <a href="../can-fixture.html" title="Intercept AJAX requests and simulate the response.">can-fixture</a>. It will return a successful response if
+the request body has a <code>number</code> and <code>pin</code>, or a <code>400</code> if not.</li>
+<li>Use <a href="../can-define/map/map.html" title="Create observable objects.">can-define/map/map</a> to define the <code>Card</code> model, including:
+<ul>
+<li>a <code>number</code> and a <code>pin</code> property.</li>
+<li>a <code>state</code> property initialized to <code>unverified</code> that is not part of the card’s <a href="../can-define.types.serialize.html" title="Defines custom serialization behavior for a property.">serialize</a>d  data.</li>
+<li>a <code>verify</code> method that posts the card’s data to <code>/verifyCard</code> and updates the <code>state</code>
+accordingly.</li>
+</ul></li>
+</ul>
+<pre><code class="language-js">// ========================================
+// CODE
+// ========================================
+
+can.fixture({
+    &quot;/verifyCard&quot;: function(request, response) {
+        if (!request.data || !request.data.number || !request.data.pin) {
+            response(400, {});
+        } else {
+            return {};
+        }
+    }
+});
+can.fixture.delay = 1000;
+
+var Card = can.DefineMap.extend({
+    number: &quot;string&quot;,
+    pin: &quot;string&quot;,
+    state: {
+        default: &quot;unverified&quot;,
+        serialize: false
+    },
+    verify: function() {
+
+        this.state = &quot;verifying&quot;;
+
+        var self = this;
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/verifyCard&quot;,
+            data: this.serialize()
+        }).then(
+            function() {
+                self.state = &quot;verified&quot;;
+                return self;
+            },
+            function() {
+                self.state = &quot;invalid&quot;;
+                return self;
+            });
+    }
+});
+
+var ATM = can.DefineMap.extend({
+    state: {type: &quot;string&quot;, default: &quot;readingCard&quot;}
+});
+
+can.Component.extend({
+    tag: &quot;atm-machine&quot;,
+    view: can.stache.from(&quot;atm-template&quot;),
+    ViewModel: ATM,
+});
+
+document.body.insertBefore(
+    can.stache.from(&quot;app-template&quot;)({}),
+    document.body.firstChild
+);
+
+// ========================================
+// TESTS
+// ========================================
+
+QUnit.module(&quot;ATM system&quot;, {
+    setup: function() {
+        can.fixture.delay = 1;
+    },
+    teardown: function() {
+        can.fixture.delay = 2000;
+    }
+});
+
+QUnit.asyncTest(&quot;Valid Card&quot;, function() {
+
+    var c = new Card({
+        number: &quot;01234567890&quot;,
+        pin: 1234
+    });
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;verified&quot;, &quot;card is verified&quot;);
+
+        QUnit.start();
+    });
+});
+
+QUnit.asyncTest(&quot;Invalid Card&quot;, function() {
+
+    var c = new Card({});
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;invalid&quot;, &quot;card is invalid&quot;);
+
+        QUnit.start();
+    });
+});
+
+</code></pre>
+<div line-highlight='5-42,only'></div>
+<p>When complete, all tests should pass.</p>
+<p>In this step, you implemented a <code>Card</code> model that encapsulates the behavior of its own state.</p>
+<h2>Deposit test</h2>
+<p>In this section, we will:</p>
+<ul>
+<li>Design an API retrieving <code>Account</code>s.</li>
+<li>Design an API for a <code>Deposit</code> type.</li>
+<li>Write out tests for the <code>Deposit</code> type.</li>
+</ul>
+<p>An <code>Account</code> will have an <code>id</code>, <code>name</code>, and <code>balance</code>.  We’ll use <a href="../can-connect.html" title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">can-connect</a> to add a
+<a href="../can-connect/can/map/map.getList.html" title="Retrieve a list of instance.">getList</a> method that retrieves an account given a <code>card</code>.</p>
+<p>A <code>Deposit</code> will take a <code>card</code>, an <code>amount</code>, and an <code>account</code>.  Deposits will start out having
+a <code>state</code> of <code>&quot;invalid&quot;</code>.  When the deposit has a <code>card</code>, <code>amount</code> and <code>account</code>, the <code>state</code>
+will change to <code>&quot;ready&quot;</code>.  Once the deposit is ready, the <code>.execute()</code> method will change the state
+to <code>&quot;executing&quot;</code> and then to <code>&quot;executed&quot;</code> once the transaction completes.</p>
+<p>Update the <code>JavaScript</code> tab to:</p>
+<ul>
+<li>Create a <code>deposit</code> with an <code>amount</code> and a <code>card</code>.</li>
+<li>Check that the <code>state</code> is <code>&quot;invalid&quot;</code> because there is no <code>account</code>.</li>
+<li>Use <code>Account.getList</code> to get the accounts for the card and:
+<ul>
+<li>set the <code>deposit.accounts</code> to the first account.</li>
+<li>remember the starting <code>balance</code>.</li>
+</ul></li>
+<li>Use <a href="../can-event-queue/map/map.on.html" title="A shorthand method for listening to event.">on</a> to listen for <code>state</code> changes. When <code>state</code> is:
+<ul>
+<li><code>&quot;ready&quot;</code>, <code>.execute()</code> the transaction.</li>
+<li><code>&quot;executed&quot;</code>, verify the new account balance.</li>
+</ul></li>
+</ul>
+<pre><code class="language-js">// ========================================
+// CODE
+// ========================================
+
+can.fixture({
+    &quot;/verifyCard&quot;: function(request, response) {
+        if (!request.data || !request.data.number || !request.data.pin) {
+            response(400, {});
+        } else {
+            return {};
+        }
+    }
+});
+can.fixture.delay = 1000;
+
+var Card = can.DefineMap.extend({
+    number: &quot;string&quot;,
+    pin: &quot;string&quot;,
+    state: {
+        default: &quot;unverified&quot;,
+        serialize: false
+    },
+    verify: function() {
+
+        this.state = &quot;verifying&quot;;
+
+        var self = this;
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/verifyCard&quot;,
+            data: this.serialize()
+        }).then(
+            function() {
+                self.state = &quot;verified&quot;;
+                return self;
+            },
+            function() {
+                self.state = &quot;invalid&quot;;
+                return self;
+            });
+    }
+});
+
+var ATM = can.DefineMap.extend({
+    state: {type: &quot;string&quot;, default: &quot;readingCard&quot;}
+});
+
+can.Component.extend({
+    tag: &quot;atm-machine&quot;,
+    view: can.stache.from(&quot;atm-template&quot;),
+    ViewModel: ATM,
+});
+
+document.body.insertBefore(
+    can.stache.from(&quot;app-template&quot;)({}),
+    document.body.firstChild
+);
+
+// ========================================
+// TESTS
+// ========================================
+
+QUnit.module(&quot;ATM system&quot;, {
+    setup: function() {
+        can.fixture.delay = 1;
+    },
+    teardown: function() {
+        can.fixture.delay = 2000;
+    }
+});
+
+QUnit.asyncTest(&quot;Valid Card&quot;, function() {
+
+    var c = new Card({
+        number: &quot;01234567890&quot;,
+        pin: 1234
+    });
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;verified&quot;, &quot;card is verified&quot;);
+
+        QUnit.start();
+    });
+});
+
+QUnit.asyncTest(&quot;Invalid Card&quot;, function() {
+
+    var c = new Card({});
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;invalid&quot;, &quot;card is invalid&quot;);
+
+        QUnit.start();
+    });
+});
+
+QUnit.asyncTest(&quot;Deposit&quot;, 6, function() {
+
+    var card = new Card({
+        number: &quot;0123456789&quot;,
+        pin: &quot;1122&quot;
+    });
+
+    var deposit = new Deposit({
+        amount: 100,
+        card: card
+    });
+
+    equal(deposit.state, &quot;invalid&quot;);
+
+    var startingBalance;
+
+    Account.getList(card.serialize()).then(function(accounts) {
+        QUnit.ok(true, &quot;got accounts&quot;);
+        deposit.account = accounts[0];
+        startingBalance = accounts[0].balance;
+    });
+
+    deposit.on(&quot;state&quot;, function(ev, newVal) {
+        if (newVal === &quot;ready&quot;) {
+
+            QUnit.ok(true, &quot;deposit is ready&quot;);
+            deposit.execute();
+
+        } else if (newVal === &quot;executing&quot;) {
+
+            QUnit.ok(true, &quot;executing a deposit&quot;);
+
+        } else if (newVal === &quot;executed&quot;) {
+
+            QUnit.ok(true, &quot;executed a deposit&quot;);
+            equal(deposit.account.balance, 100 + startingBalance);
+            start();
+
+        }
+    });
+});
+
+</code></pre>
+<div line-highlight='111-151,only'></div>
+<p>When complete, the <strong>Deposit</strong> test should run, but error because <em>Deposit is not defined</em>.</p>
+<blockquote>
+<p><strong>Optional:</strong> Challenge yourself by writing the <strong>Withdrawal</strong> test on your own.  How is it different than the <strong>Deposit</strong> test?</p>
+</blockquote>
+<h2>Transaction, Deposit, and Withdrawal models</h2>
+<p>In this section, we will:</p>
+<ul>
+<li>Implement the <code>Account</code> model.</li>
+<li>Implement a base <code>Transaction</code> model and extend it into <code>Deposit</code> and
+<code>Withdrawal</code> models.</li>
+<li>Get the <strong>Deposit</strong> test to pass.</li>
+</ul>
+<p>Update the <code>JavaScript</code> tab to:</p>
+<ul>
+<li>Simulate <code>/accounts</code> to return <code>Account</code> data with <a href="../can-fixture.html" title="Intercept AJAX requests and simulate the response.">can-fixture</a>.</li>
+<li>Simulate <code>/deposit</code> to always return a successful result.</li>
+<li>Simulate <code>/withdrawal</code> to always return a successful result.</li>
+<li>Define the <code>Account</code> model to:
+<ul>
+<li>have an <code>id</code> property.</li>
+<li>have a <code>balance</code> property.</li>
+<li>have a <code>name</code> property.</li>
+</ul></li>
+<li>Define an <code>Account.List</code> type with <a href="../can-define/list/list.html" title="Create observable lists.">can-define/list/list</a>.</li>
+<li>Connect <code>Account</code> and <code>Account.List</code> types to the RESTful <code>/accounts</code> endpoint using <a href="../can-connect/can/base-map/base-map.html" title="Create connection with many of the best behaviors in can-connect and hook it up to
+a map.">can-connect/can/base-map/base-map</a>.</li>
+<li>Define the <code>Transaction</code> model to:
+<ul>
+<li>have <code>account</code> and <code>card</code> properties.</li>
+<li>have <code>executing</code> and <code>executed</code> properties that track if the transaction is executing or has executed.</li>
+<li>have a <code>rejected</code> property that stores the error given for a failed transaction.</li>
+<li>have an <strong>abstract</strong> <code>ready</code> property that <code>Deposit</code> and <code>Withdrawal</code> will implement to return <code>true</code>
+when the transaction is in an executable state.</li>
+<li>have a <code>state</code> property that reads other stateful properties and returns a string representation
+of the state.</li>
+<li>have an <strong>abstract</strong> <code>executeStart</code> method that <code>Deposit</code> and <code>Withdrawal</code> will implement to
+execute the transaction and return a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a> that resolves when the transaction is complete.</li>
+<li>have an <strong>abstract</strong> <code>executeEnd</code> method that <code>Deposit</code> and <code>Withdrawal</code> will implement to
+update the transactions values (typically the <code>account</code> balance) if the transaction is successfully completed.</li>
+<li>have an <code>execute</code> method that calls <code>.executeStart()</code> and <code>executeEnd()</code> and keeps the stateful
+properties updated correctly.</li>
+</ul></li>
+<li>Define the <code>Deposit</code> model to:
+<ul>
+<li>have an <code>amount</code> property.</li>
+<li>implement <code>ready</code> to return <code>true</code> when the amount is greater than <code>0</code> and there’s an <code>account</code>
+and <code>card</code>.</li>
+<li>implement <code>executeStart</code> to <code>POST</code> the deposit information to <code>/deposit</code></li>
+<li>implement <code>executeEnd</code> to update the account balance.</li>
+</ul></li>
+<li>Define the <code>Withdrawal</code> model to behave in the same way as <code>Deposit</code> except that
+it <code>POST</code>s the withdrawal information to <code>/withdrawal</code>.</li>
+</ul>
+<pre><code class="language-js">// ========================================
+// CODE
+// ========================================
+
+can.fixture({
+    &quot;/verifyCard&quot;: function(request, response) {
+        if (!request.data || !request.data.number || !request.data.pin) {
+            response(400, {});
+        } else {
+            return {};
+        }
+    },
+    &quot;/accounts&quot;: function() {
+        return {
+            data: [{
+                balance: 100,
+                id: 1,
+                name: &quot;checking&quot;
+            }, {
+                balance: 10000,
+                id: 2,
+                name: &quot;savings&quot;
+            }]
+        };
+    },
+    &quot;/deposit&quot;: function() {
+        return {};
+    },
+    &quot;/withdrawal&quot;: function() {
+        return {};
+    }
+});
+can.fixture.delay = 1000;
+
+var Card = can.DefineMap.extend({
+    number: &quot;string&quot;,
+    pin: &quot;string&quot;,
+    state: {
+        default: &quot;unverified&quot;,
+        serialize: false
+    },
+    verify: function() {
+
+        this.state = &quot;verifying&quot;;
+
+        var self = this;
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/verifyCard&quot;,
+            data: this.serialize()
+        }).then(
+            function() {
+                self.state = &quot;verified&quot;;
+                return self;
+            },
+            function() {
+                self.state = &quot;invalid&quot;;
+                return self;
+            });
+    }
+});
+
+var Account = can.DefineMap.extend(&quot;Account&quot;, {
+    id: &quot;number&quot;,
+    balance: &quot;number&quot;,
+    name: &quot;string&quot;
+});
+Account.List = can.DefineList.extend(&quot;AccountList&quot;, {
+    &quot;*&quot;: Account
+});
+
+can.connect.baseMap({
+    url: &quot;/accounts&quot;,
+    Map: Account,
+    List: Account.List,
+    name: &quot;accounts&quot;
+});
+
+var Transaction = can.DefineMap.extend({
+    account: Account,
+    card: Card,
+    executing: {
+        type: &quot;boolean&quot;,
+        default: false
+    },
+    executed: {
+        type: &quot;boolean&quot;,
+        default: false
+    },
+    rejected: &quot;any&quot;,
+    get ready(){
+        throw new Error(&quot;Transaction::ready must be provided by extended type&quot;);
+    },
+    get state() {
+        if (this.rejected) {
+            return &quot;rejected&quot;;
+        }
+        if (this.executed) {
+            return &quot;executed&quot;;
+        }
+        if (this.executing) {
+            return &quot;executing&quot;;
+        }
+        // make sure there’s an amount, account, and card
+        if (this.ready) {
+            return &quot;ready&quot;;
+        }
+        return &quot;invalid&quot;;
+    },
+    executeStart: function(){
+        throw new Error(&quot;Transaction::executeStart must be provided by extended type&quot;);
+    },
+    executeEnd: function(){
+        throw new Error(&quot;Transaction::executeEnd must be provided by extended type&quot;);
+    },
+    execute: function() {
+        if (this.state === &quot;ready&quot;) {
+
+            this.executing = true;
+
+            var def = this.executeStart(),
+                self = this;
+
+            def.then(function() {
+                can.queues.batch.start();
+                self.assign({
+                    executing: false,
+                    executed: true
+                });
+                self.executeEnd();
+                can.queues.batch.stop();
+            }, function(reason){
+                self.assign({
+                    executing: false,
+                    executed: true,
+                    rejected: reason
+                });
+            });
+        }
+    }
+});
+
+var Deposit = Transaction.extend({
+    amount: &quot;number&quot;,
+    get ready() {
+        return this.amount &gt; 0 &amp;&amp;
+            this.account &amp;&amp;
+            this.card;
+    },
+    executeStart: function() {
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/deposit&quot;,
+            data: {
+                card: this.card.serialize(),
+                accountId: this.account.id,
+                amount: this.amount
+            }
+        });
+    },
+    executeEnd: function(data) {
+        this.account.balance = this.account.balance + this.amount;
+    }
+});
+
+var Withdrawal = Transaction.extend({
+    amount: &quot;number&quot;,
+    get ready() {
+        return this.amount &gt; 0 &amp;&amp;
+            this.account &amp;&amp;
+            this.card;
+    },
+    executeStart: function() {
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/withdrawal&quot;,
+            data: {
+                card: this.card.serialize(),
+                accountId: this.account.id,
+                amount: this.amount
+            }
+        });
+    },
+    executeEnd: function(data) {
+        this.account.balance = this.account.balance - this.amount;
+    }
+});
+
+var ATM = can.DefineMap.extend({
+    state: {type: &quot;string&quot;, default: &quot;readingCard&quot;}
+});
+
+can.Component.extend({
+    tag: &quot;atm-machine&quot;,
+    view: can.stache.from(&quot;atm-template&quot;),
+    ViewModel: ATM,
+});
+
+document.body.insertBefore(
+    can.stache.from(&quot;app-template&quot;)({}),
+    document.body.firstChild
+);
+
+// ========================================
+// TESTS
+// ========================================
+
+QUnit.module(&quot;ATM system&quot;, {
+    setup: function() {
+        can.fixture.delay = 1;
+    },
+    teardown: function() {
+        can.fixture.delay = 2000;
+    }
+});
+
+QUnit.asyncTest(&quot;Valid Card&quot;, function() {
+
+    var c = new Card({
+        number: &quot;01234567890&quot;,
+        pin: 1234
+    });
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;verified&quot;, &quot;card is verified&quot;);
+
+        QUnit.start();
+    });
+});
+
+QUnit.asyncTest(&quot;Invalid Card&quot;, function() {
+
+    var c = new Card({});
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;invalid&quot;, &quot;card is invalid&quot;);
+
+        QUnit.start();
+    });
+});
+
+QUnit.asyncTest(&quot;Deposit&quot;, 6, function() {
+
+    var card = new Card({
+        number: &quot;0123456789&quot;,
+        pin: &quot;1122&quot;
+    });
+
+    var deposit = new Deposit({
+        amount: 100,
+        card: card
+    });
+
+    equal(deposit.state, &quot;invalid&quot;);
+
+    var startingBalance;
+
+    Account.getList(card.serialize()).then(function(accounts) {
+        QUnit.ok(true, &quot;got accounts&quot;);
+        deposit.account = accounts[0];
+        startingBalance = accounts[0].balance;
+    });
+
+    deposit.on(&quot;state&quot;, function(ev, newVal) {
+        if (newVal === &quot;ready&quot;) {
+
+            QUnit.ok(true, &quot;deposit is ready&quot;);
+            deposit.execute();
+
+        } else if (newVal === &quot;executing&quot;) {
+
+            QUnit.ok(true, &quot;executing a deposit&quot;);
+
+        } else if (newVal === &quot;executed&quot;) {
+
+            QUnit.ok(true, &quot;executed a deposit&quot;);
+            equal(deposit.account.balance, 100 + startingBalance);
+            start();
+
+        }
+    });
+});
+
+</code></pre>
+<div line-highlight='13-31,63-187,only'></div>
+<p>When complete, the <strong>Deposit</strong> tests will pass.</p>
+<h2>Reading Card page and test</h2>
+<p>In this section, we will:</p>
+<ul>
+<li>Allow the user to enter a card number and go to the <strong>Reading Pin</strong> page.</li>
+<li>Add tests to the <strong>ATM Basics</strong> test.</li>
+</ul>
+<p>Update the <strong>HTML</strong> tab to:</p>
+<ul>
+<li>Allow a user to call <code>cardNumber</code> with the <code>&lt;input&gt;</code>’s <code>value</code>.</li>
+</ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta name=&quot;description&quot; content=&quot;CanJS 3.0 - ATM Guide - Setup&quot;&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot;&gt;
+  &lt;title&gt;JS Bin&lt;/title&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;script type='text/stache' id='atm-template'&gt;
+&lt;div class=&quot;screen&quot;&gt;
+    &lt;div class=&quot;screen-content&quot;&gt;
+        &lt;div class=&quot;screen-glass&quot;&gt;
+
+            {{# switch(state) }}
+                {{# case(&quot;readingCard&quot;) }}
+                    &lt;h2&gt;Reading Card&lt;/h2&gt;
+                    &lt;p&gt;Welcome to canATM where there are &lt;strong&gt;never&lt;/strong&gt;
+                      fees!
+                    &lt;/p&gt;
+                    &lt;p&gt;
+                        Enter Card Number:
+                        &lt;input name=&quot;card&quot; on:enter=&quot;cardNumber(scope.element.value)&quot;&gt;
+                    &lt;/p&gt;
+                {{/ case }}
+
+                {{# case(&quot;readingPin&quot;) }}
+                    &lt;h2&gt;Reading Pin&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;choosingTransaction&quot;) }}
+                    &lt;h2&gt;Choose Transaction&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;pickingAccount&quot;) }}
+                    &lt;h2&gt;Pick Account&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;depositInfo&quot;) }}
+                    &lt;h2&gt;Deposit&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;withdrawalInfo&quot;) }}
+                    &lt;h2&gt;Withdraw&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;successfulTransaction&quot;) }}
+                    &lt;h2&gt;Transaction Successful!&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;printingReceipt&quot;) }}
+                    &lt;h2&gt;Printing Receipt&lt;/h2&gt;
+                {{/ case }}
+
+                {{# default }}
+                    &lt;h2&gt;Error&lt;/h2&gt;
+                    &lt;p&gt;Invalid state - {{ state }}&lt;/p&gt;
+                {{/ default }}
+
+            {{/ switch }}
+
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/script&gt;
+
+&lt;script type='text/stache' id='app-template'&gt;
+&lt;div class=&quot;title&quot;&gt;
+    &lt;h1&gt;canATM&lt;/h1&gt;
+&lt;/div&gt;
+&lt;atm-machine/&gt;
+&lt;/script&gt;
+
+&lt;script src=&quot;https://unpkg.com/can@4/dist/global/can.all.js&quot;&gt;&lt;/script&gt;
+
+&lt;div id=&quot;qunit&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://code.jquery.com/qunit/qunit-1.12.0.css&quot;&gt;
+&lt;script src=&quot;https://code.jquery.com/qunit/qunit-1.12.0.js&quot;&gt;&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+<div line-highlight='20-26,only'></div>
+<p>Update the <code>JavaScript</code> tab to:</p>
+<ul>
+<li>Declare a <code>card</code> property.</li>
+<li>Derive a <code>state</code> property that changes to <code>&quot;readingPin&quot;</code> when <code>card</code> is defined.</li>
+<li>Add a <code>cardNumber</code> that creates a <code>card</code> with the provided <code>number</code>.</li>
+</ul>
+<pre><code class="language-js">// ========================================
+// CODE
+// ========================================
+
+can.fixture({
+    &quot;/verifyCard&quot;: function(request, response) {
+        if (!request.data || !request.data.number || !request.data.pin) {
+            response(400, {});
+        } else {
+            return {};
+        }
+    },
+    &quot;/accounts&quot;: function() {
+        return {
+            data: [{
+                balance: 100,
+                id: 1,
+                name: &quot;checking&quot;
+            }, {
+                balance: 10000,
+                id: 2,
+                name: &quot;savings&quot;
+            }]
+        };
+    },
+    &quot;/deposit&quot;: function() {
+        return {};
+    },
+    &quot;/withdrawal&quot;: function() {
+        return {};
+    }
+});
+can.fixture.delay = 1000;
+
+var Card = can.DefineMap.extend({
+    number: &quot;string&quot;,
+    pin: &quot;string&quot;,
+    state: {
+        default: &quot;unverified&quot;,
+        serialize: false
+    },
+    verify: function() {
+
+        this.state = &quot;verifying&quot;;
+
+        var self = this;
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/verifyCard&quot;,
+            data: this.serialize()
+        }).then(
+            function() {
+                self.state = &quot;verified&quot;;
+                return self;
+            },
+            function() {
+                self.state = &quot;invalid&quot;;
+                return self;
+            });
+    }
+});
+
+var Account = can.DefineMap.extend(&quot;Account&quot;, {
+    id: &quot;number&quot;,
+    balance: &quot;number&quot;,
+    name: &quot;string&quot;
+});
+Account.List = can.DefineList.extend(&quot;AccountList&quot;, {
+    &quot;*&quot;: Account
+});
+
+can.connect.baseMap({
+    url: &quot;/accounts&quot;,
+    Map: Account,
+    List: Account.List,
+    name: &quot;accounts&quot;
+});
+
+var Transaction = can.DefineMap.extend({
+    account: Account,
+    card: Card,
+    executing: {
+        type: &quot;boolean&quot;,
+        default: false
+    },
+    executed: {
+        type: &quot;boolean&quot;,
+        default: false
+    },
+    rejected: &quot;any&quot;,
+    get ready(){
+        throw new Error(&quot;Transaction::ready must be provided by extended type&quot;);
+    },
+    get state() {
+        if (this.rejected) {
+            return &quot;rejected&quot;;
+        }
+        if (this.executed) {
+            return &quot;executed&quot;;
+        }
+        if (this.executing) {
+            return &quot;executing&quot;;
+        }
+        // make sure there’s an amount, account, and card
+        if (this.ready) {
+            return &quot;ready&quot;;
+        }
+        return &quot;invalid&quot;;
+    },
+    executeStart: function(){
+        throw new Error(&quot;Transaction::executeStart must be provided by extended type&quot;);
+    },
+    executeEnd: function(){
+        throw new Error(&quot;Transaction::executeEnd must be provided by extended type&quot;);
+    },
+    execute: function() {
+        if (this.state === &quot;ready&quot;) {
+
+            this.executing = true;
+
+            var def = this.executeStart(),
+                self = this;
+
+            def.then(function() {
+                can.queues.batch.start();
+                self.assign({
+                    executing: false,
+                    executed: true
+                });
+                self.executeEnd();
+                can.queues.batch.stop();
+            }, function(reason){
+                self.assign({
+                    executing: false,
+                    executed: true,
+                    rejected: reason
+                });
+            });
+        }
+    }
+});
+
+var Deposit = Transaction.extend({
+    amount: &quot;number&quot;,
+    get ready() {
+        return this.amount &gt; 0 &amp;&amp;
+            this.account &amp;&amp;
+            this.card;
+    },
+    executeStart: function() {
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/deposit&quot;,
+            data: {
+                card: this.card.serialize(),
+                accountId: this.account.id,
+                amount: this.amount
+            }
+        });
+    },
+    executeEnd: function(data) {
+        this.account.balance = this.account.balance + this.amount;
+    }
+});
+
+var Withdrawal = Transaction.extend({
+    amount: &quot;number&quot;,
+    get ready() {
+        return this.amount &gt; 0 &amp;&amp;
+            this.account &amp;&amp;
+            this.card;
+    },
+    executeStart: function() {
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/withdrawal&quot;,
+            data: {
+                card: this.card.serialize(),
+                accountId: this.account.id,
+                amount: this.amount
+            }
+        });
+    },
+    executeEnd: function(data) {
+        this.account.balance = this.account.balance - this.amount;
+    }
+});
+
+var ATM = can.DefineMap.extend({
+    // stateful properties
+    card: Card,
+
+    // derived properties
+    get state(){
+        if(this.card) {
+            return &quot;readingPin&quot;;
+        }
+        return &quot;readingCard&quot;;
+    },
+    // methods
+    cardNumber: function(number) {
+        this.card = new Card({
+            number: number
+        });
+    }
+});
+
+can.Component.extend({
+    tag: &quot;atm-machine&quot;,
+    view: can.stache.from(&quot;atm-template&quot;),
+    ViewModel: ATM,
+});
+
+document.body.insertBefore(
+    can.stache.from(&quot;app-template&quot;)({}),
+    document.body.firstChild
+);
+
+// ========================================
+// TESTS
+// ========================================
+
+QUnit.module(&quot;ATM system&quot;, {
+    setup: function() {
+        can.fixture.delay = 1;
+    },
+    teardown: function() {
+        can.fixture.delay = 2000;
+    }
+});
+
+QUnit.asyncTest(&quot;Valid Card&quot;, function() {
+
+    var c = new Card({
+        number: &quot;01234567890&quot;,
+        pin: 1234
+    });
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;verified&quot;, &quot;card is verified&quot;);
+
+        QUnit.start();
+    });
+});
+
+QUnit.asyncTest(&quot;Invalid Card&quot;, function() {
+
+    var c = new Card({});
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;invalid&quot;, &quot;card is invalid&quot;);
+
+        QUnit.start();
+    });
+});
+
+QUnit.asyncTest(&quot;Deposit&quot;, 6, function() {
+
+    var card = new Card({
+        number: &quot;0123456789&quot;,
+        pin: &quot;1122&quot;
+    });
+
+    var deposit = new Deposit({
+        amount: 100,
+        card: card
+    });
+
+    equal(deposit.state, &quot;invalid&quot;);
+
+    var startingBalance;
+
+    Account.getList(card.serialize()).then(function(accounts) {
+        QUnit.ok(true, &quot;got accounts&quot;);
+        deposit.account = accounts[0];
+        startingBalance = accounts[0].balance;
+    });
+
+    deposit.on(&quot;state&quot;, function(ev, newVal) {
+        if (newVal === &quot;ready&quot;) {
+
+            QUnit.ok(true, &quot;deposit is ready&quot;);
+            deposit.execute();
+
+        } else if (newVal === &quot;executing&quot;) {
+
+            QUnit.ok(true, &quot;executing a deposit&quot;);
+
+        } else if (newVal === &quot;executed&quot;) {
+
+            QUnit.ok(true, &quot;executed a deposit&quot;);
+            equal(deposit.account.balance, 100 + startingBalance);
+            start();
+
+        }
+    });
+});
+
+QUnit.asyncTest(&quot;ATM basics&quot;, function() {
+
+    var atm = new ATM();
+
+    equal(atm.state, &quot;readingCard&quot;, &quot;starts at reading card state&quot;);
+
+    atm.cardNumber(&quot;01233456789&quot;);
+
+    equal(atm.state, &quot;readingPin&quot;, &quot;moves to reading card state&quot;);
+
+    QUnit.start();
+});
+
+</code></pre>
+<div line-highlight='190-205,313-325,only'></div>
+<p>When complete, you should be able to enter a card number and see the <strong>Reading Pin</strong>
+page.</p>
+<h2>Reading Pin page and test</h2>
+<p>In this section, we will:</p>
+<ul>
+<li>Allow the user to enter a pin number and go to the <strong>Choosing Transaction</strong> page.</li>
+<li>Add tests to the <strong>ATM Basics</strong> test.</li>
+</ul>
+<p>Update the <strong>HTML</strong> tab to:</p>
+<ul>
+<li>Call <code>pinNumber</code> with the <code>&lt;input&gt;</code>’s <code>value</code>.</li>
+<li>Disable the <code>&lt;input&gt;</code> while the pin is being verified.</li>
+<li>Show a loading icon while the pin is being verified.</li>
+</ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta name=&quot;description&quot; content=&quot;CanJS 3.0 - ATM Guide - Setup&quot;&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot;&gt;
+  &lt;title&gt;JS Bin&lt;/title&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;script type='text/stache' id='atm-template'&gt;
+&lt;div class=&quot;screen&quot;&gt;
+    &lt;div class=&quot;screen-content&quot;&gt;
+        &lt;div class=&quot;screen-glass&quot;&gt;
+
+            {{# switch(state) }}
+                {{# case(&quot;readingCard&quot;) }}
+                    &lt;h2&gt;Reading Card&lt;/h2&gt;
+                    &lt;p&gt;Welcome to canATM where there are &lt;strong&gt;never&lt;/strong&gt;
+                      fees!
+                    &lt;/p&gt;
+                    &lt;p&gt;
+                        Enter Card Number:
+                        &lt;input name=&quot;card&quot; on:enter=&quot;cardNumber(scope.element.value)&quot;&gt;
+                    &lt;/p&gt;
+                {{/ case }}
+
+                {{# case(&quot;readingPin&quot;) }}
+                    &lt;h2&gt;Reading Pin&lt;/h2&gt;
+                    &lt;p&gt;
+                        Enter Pin Number:
+                        &lt;input name=&quot;pin&quot; type=&quot;password&quot;
+                            autofocus
+                            {{# is(card.state, &quot;verifying&quot;) }}DISABLED{{/ is }}
+                            on:enter=&quot;pinNumber(scope.element.value)&quot;/&gt;
+
+                        {{# is(card.state, &quot;verifying&quot;) }}
+                            &lt;div class='warn'&gt;
+                                &lt;p&gt;
+                                &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                                verifying
+                                &lt;/p&gt;
+                            &lt;/div&gt;
+                        {{/ is }}
+                    &lt;/p&gt;
+                    &lt;a href=&quot;javascript://&quot; on:click=&quot;exit()&quot;&gt;exit&lt;/a&gt;
+                {{/ case }}
+
+                {{# case(&quot;choosingTransaction&quot;) }}
+                    &lt;h2&gt;Choose Transaction&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;pickingAccount&quot;) }}
+                    &lt;h2&gt;Pick Account&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;depositInfo&quot;) }}
+                    &lt;h2&gt;Deposit&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;withdrawalInfo&quot;) }}
+                    &lt;h2&gt;Withdraw&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;successfulTransaction&quot;) }}
+                    &lt;h2&gt;Transaction Successful!&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;printingReceipt&quot;) }}
+                    &lt;h2&gt;Printing Receipt&lt;/h2&gt;
+                {{/ case }}
+
+                {{# default }}
+                    &lt;h2&gt;Error&lt;/h2&gt;
+                    &lt;p&gt;Invalid state - {{ state }}&lt;/p&gt;
+                {{/ default }}
+
+            {{/ switch }}
+
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/script&gt;
+
+&lt;script type='text/stache' id='app-template'&gt;
+&lt;div class=&quot;title&quot;&gt;
+    &lt;h1&gt;canATM&lt;/h1&gt;
+&lt;/div&gt;
+&lt;atm-machine/&gt;
+&lt;/script&gt;
+
+&lt;script src=&quot;https://unpkg.com/can@4/dist/global/can.all.js&quot;&gt;&lt;/script&gt;
+
+&lt;div id=&quot;qunit&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://code.jquery.com/qunit/qunit-1.12.0.css&quot;&gt;
+&lt;script src=&quot;https://code.jquery.com/qunit/qunit-1.12.0.js&quot;&gt;&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+<div line-highlight='31-47,only'></div>
+<p>Update the <code>ATM</code> view model in the <code>CODE</code> section of the <code>JavaScript</code> tab to:</p>
+<ul>
+<li>Define an <code>accountsPromise</code> property that will contain a list of accounts for the <code>card</code>.</li>
+<li>Define a <code>transactions</code> property that will contain a list of transactions for this session.</li>
+<li>Update <code>state</code> to be in the <code>&quot;choosingTransaction&quot;</code> state when the <code>card</code> is verified.</li>
+<li>Define a <code>pinNumber</code> method that updates the <code>card</code>’s <code>pin</code>, calls <code>.verify()</code>,
+and initializes the <code>accountsPromise</code> and <code>transactions</code> properties.</li>
+</ul>
+<p>Update the <code>TESTS</code> section of the <code>JavaScript</code> tab to:</p>
+<ul>
+<li>Test whether calling <code>pinNumber</code> moves the <code>state</code> to <code>&quot;choosingTransaction&quot;</code>.</li>
+</ul>
+<pre><code class="language-js">// ========================================
+// CODE
+// ========================================
+
+can.fixture({
+    &quot;/verifyCard&quot;: function(request, response) {
+        if (!request.data || !request.data.number || !request.data.pin) {
+            response(400, {});
+        } else {
+            return {};
+        }
+    },
+    &quot;/accounts&quot;: function() {
+        return {
+            data: [{
+                balance: 100,
+                id: 1,
+                name: &quot;checking&quot;
+            }, {
+                balance: 10000,
+                id: 2,
+                name: &quot;savings&quot;
+            }]
+        };
+    },
+    &quot;/deposit&quot;: function() {
+        return {};
+    },
+    &quot;/withdrawal&quot;: function() {
+        return {};
+    }
+});
+can.fixture.delay = 1000;
+
+var Card = can.DefineMap.extend({
+    number: &quot;string&quot;,
+    pin: &quot;string&quot;,
+    state: {
+        default: &quot;unverified&quot;,
+        serialize: false
+    },
+    verify: function() {
+
+        this.state = &quot;verifying&quot;;
+
+        var self = this;
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/verifyCard&quot;,
+            data: this.serialize()
+        }).then(
+            function() {
+                self.state = &quot;verified&quot;;
+                return self;
+            },
+            function() {
+                self.state = &quot;invalid&quot;;
+                return self;
+            });
+    }
+});
+
+var Account = can.DefineMap.extend(&quot;Account&quot;, {
+    id: &quot;number&quot;,
+    balance: &quot;number&quot;,
+    name: &quot;string&quot;
+});
+Account.List = can.DefineList.extend(&quot;AccountList&quot;, {
+    &quot;*&quot;: Account
+});
+
+can.connect.baseMap({
+    url: &quot;/accounts&quot;,
+    Map: Account,
+    List: Account.List,
+    name: &quot;accounts&quot;
+});
+
+var Transaction = can.DefineMap.extend({
+    account: Account,
+    card: Card,
+    executing: {
+        type: &quot;boolean&quot;,
+        default: false
+    },
+    executed: {
+        type: &quot;boolean&quot;,
+        default: false
+    },
+    rejected: &quot;any&quot;,
+    get ready(){
+        throw new Error(&quot;Transaction::ready must be provided by extended type&quot;);
+    },
+    get state() {
+        if (this.rejected) {
+            return &quot;rejected&quot;;
+        }
+        if (this.executed) {
+            return &quot;executed&quot;;
+        }
+        if (this.executing) {
+            return &quot;executing&quot;;
+        }
+        // make sure there’s an amount, account, and card
+        if (this.ready) {
+            return &quot;ready&quot;;
+        }
+        return &quot;invalid&quot;;
+    },
+    executeStart: function(){
+        throw new Error(&quot;Transaction::executeStart must be provided by extended type&quot;);
+    },
+    executeEnd: function(){
+        throw new Error(&quot;Transaction::executeEnd must be provided by extended type&quot;);
+    },
+    execute: function() {
+        if (this.state === &quot;ready&quot;) {
+
+            this.executing = true;
+
+            var def = this.executeStart(),
+                self = this;
+
+            def.then(function() {
+                can.queues.batch.start();
+                self.assign({
+                    executing: false,
+                    executed: true
+                });
+                self.executeEnd();
+                can.queues.batch.stop();
+            }, function(reason){
+                self.assign({
+                    executing: false,
+                    executed: true,
+                    rejected: reason
+                });
+            });
+        }
+    }
+});
+
+var Deposit = Transaction.extend({
+    amount: &quot;number&quot;,
+    get ready() {
+        return this.amount &gt; 0 &amp;&amp;
+            this.account &amp;&amp;
+            this.card;
+    },
+    executeStart: function() {
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/deposit&quot;,
+            data: {
+                card: this.card.serialize(),
+                accountId: this.account.id,
+                amount: this.amount
+            }
+        });
+    },
+    executeEnd: function(data) {
+        this.account.balance = this.account.balance + this.amount;
+    }
+});
+
+var Withdrawal = Transaction.extend({
+    amount: &quot;number&quot;,
+    get ready() {
+        return this.amount &gt; 0 &amp;&amp;
+            this.account &amp;&amp;
+            this.card;
+    },
+    executeStart: function() {
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/withdrawal&quot;,
+            data: {
+                card: this.card.serialize(),
+                accountId: this.account.id,
+                amount: this.amount
+            }
+        });
+    },
+    executeEnd: function(data) {
+        this.account.balance = this.account.balance - this.amount;
+    }
+});
+
+var ATM = can.DefineMap.extend({
+    // stateful properties
+    card: Card,
+    accountsPromise: &quot;any&quot;,
+    transactions: can.DefineList,
+
+    // derived properties
+    get state(){
+        if(this.card) {
+            if (this.card.state === &quot;verified&quot;) {
+                return &quot;choosingTransaction&quot;;
+            }
+            return &quot;readingPin&quot;;
+        }
+        return &quot;readingCard&quot;;
+    },
+
+    // methods
+    cardNumber: function(number) {
+        this.card = new Card({
+            number: number
+        });
+    },
+    pinNumber: function(pin) {
+        var card = this.card;
+
+        card.pin = pin;
+        this.transactions = new can.DefineList();
+        this.accountsPromise = card.verify().then(function(card) {
+
+            return Account.getList(card.serialize());
+        });
+    },
+    exit: function(){
+        this.assign({
+            card: null,
+            accountsPromise: null,
+            transactions: null
+        });
+    }
+});
+
+can.Component.extend({
+    tag: &quot;atm-machine&quot;,
+    view: can.stache.from(&quot;atm-template&quot;),
+    ViewModel: ATM,
+});
+
+document.body.insertBefore(
+    can.stache.from(&quot;app-template&quot;)({}),
+    document.body.firstChild
+);
+
+// ========================================
+// TESTS
+// ========================================
+
+QUnit.module(&quot;ATM system&quot;, {
+    setup: function() {
+        can.fixture.delay = 1;
+    },
+    teardown: function() {
+        can.fixture.delay = 2000;
+    }
+});
+
+QUnit.asyncTest(&quot;Valid Card&quot;, function() {
+
+    var c = new Card({
+        number: &quot;01234567890&quot;,
+        pin: 1234
+    });
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;verified&quot;, &quot;card is verified&quot;);
+
+        QUnit.start();
+    });
+});
+
+QUnit.asyncTest(&quot;Invalid Card&quot;, function() {
+
+    var c = new Card({});
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;invalid&quot;, &quot;card is invalid&quot;);
+
+        QUnit.start();
+    });
+});
+
+QUnit.asyncTest(&quot;Deposit&quot;, 6, function() {
+
+    var card = new Card({
+        number: &quot;0123456789&quot;,
+        pin: &quot;1122&quot;
+    });
+
+    var deposit = new Deposit({
+        amount: 100,
+        card: card
+    });
+
+    equal(deposit.state, &quot;invalid&quot;);
+
+    var startingBalance;
+
+    Account.getList(card.serialize()).then(function(accounts) {
+        QUnit.ok(true, &quot;got accounts&quot;);
+        deposit.account = accounts[0];
+        startingBalance = accounts[0].balance;
+    });
+
+    deposit.on(&quot;state&quot;, function(ev, newVal) {
+        if (newVal === &quot;ready&quot;) {
+
+            QUnit.ok(true, &quot;deposit is ready&quot;);
+            deposit.execute();
+
+        } else if (newVal === &quot;executing&quot;) {
+
+            QUnit.ok(true, &quot;executing a deposit&quot;);
+
+        } else if (newVal === &quot;executed&quot;) {
+
+            QUnit.ok(true, &quot;executed a deposit&quot;);
+            equal(deposit.account.balance, 100 + startingBalance);
+            start();
+
+        }
+    });
+});
+
+QUnit.asyncTest(&quot;ATM basics&quot;, function() {
+
+    var atm = new ATM();
+
+    equal(atm.state, &quot;readingCard&quot;, &quot;starts at reading card state&quot;);
+
+    atm.cardNumber(&quot;01233456789&quot;);
+
+    equal(atm.state, &quot;readingPin&quot;, &quot;moves to reading card state&quot;);
+
+    atm.pinNumber(&quot;1234&quot;);
+
+    ok(atm.state, &quot;readingPin&quot;, &quot;remain in the reading pin state until verifyied&quot;);
+
+    atm.on(&quot;state&quot;, function(ev, newVal) {
+
+        if (newVal === &quot;choosingTransaction&quot;) {
+            QUnit.ok(true, &quot;in choosingTransaction&quot;);
+            QUnit.start();
+        }
+    });
+});
+
+</code></pre>
+<div line-highlight='192-193,198-200,212-228,346-356,only'></div>
+<p>When complete, you should be able to enter a card and pin number and see the <strong>Choosing Transaction</strong>
+page.</p>
+<h2>Choosing Transaction page and test</h2>
+<p>In this section, we will:</p>
+<ul>
+<li>Allow the user to pick a transaction type and go to the <strong>Picking Account</strong> page.</li>
+<li>Add tests to the <strong>ATM Basics</strong> test.</li>
+</ul>
+<p>Update the <strong>HTML</strong> tab to:</p>
+<ul>
+<li>Have buttons for choosing a deposit, withdrawal, or print a receipt and exit.</li>
+</ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta name=&quot;description&quot; content=&quot;CanJS 3.0 - ATM Guide - Setup&quot;&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot;&gt;
+  &lt;title&gt;JS Bin&lt;/title&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;script type='text/stache' id='atm-template'&gt;
+&lt;div class=&quot;screen&quot;&gt;
+    &lt;div class=&quot;screen-content&quot;&gt;
+        &lt;div class=&quot;screen-glass&quot;&gt;
+
+            {{# switch(state) }}
+                {{# case(&quot;readingCard&quot;) }}
+                    &lt;h2&gt;Reading Card&lt;/h2&gt;
+                    &lt;p&gt;Welcome to canATM where there are &lt;strong&gt;never&lt;/strong&gt;
+                      fees!
+                    &lt;/p&gt;
+                    &lt;p&gt;
+                        Enter Card Number:
+                        &lt;input name=&quot;card&quot; on:enter=&quot;cardNumber(scope.element.value)&quot;&gt;
+                    &lt;/p&gt;
+                {{/ case }}
+
+                {{# case(&quot;readingPin&quot;) }}
+                    &lt;h2&gt;Reading Pin&lt;/h2&gt;
+                    &lt;p&gt;
+                        Enter Pin Number:
+                        &lt;input name=&quot;pin&quot; type=&quot;password&quot;
+                            autofocus
+                            {{# is(card.state, &quot;verifying&quot;) }}DISABLED{{/ is }}
+                            on:enter=&quot;pinNumber(scope.element.value)&quot;/&gt;
+
+                        {{# is(card.state, &quot;verifying&quot;) }}
+                            &lt;div class='warn'&gt;
+                                &lt;p&gt;
+                                &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                                verifying
+                                &lt;/p&gt;
+                            &lt;/div&gt;
+                        {{/ is }}
+                    &lt;/p&gt;
+                    &lt;a href=&quot;javascript://&quot; on:click=&quot;exit()&quot;&gt;exit&lt;/a&gt;
+                {{/ case }}
+
+                {{# case(&quot;choosingTransaction&quot;) }}
+                    &lt;h2&gt;Choose Transaction&lt;/h2&gt;
+                    &lt;p&gt;What would you like to do?&lt;/p&gt;
+                    &lt;nav&gt;
+                        &lt;ul&gt;
+                            &lt;li on:click=&quot;chooseDeposit()&quot;&gt;Deposit&lt;/li&gt;
+                            &lt;li on:click=&quot;chooseWithdraw()&quot;&gt;Withdraw&lt;/li&gt;
+                            &lt;li on:click=&quot;printReceiptAndExit()&quot;&gt;Exit&lt;/li&gt;
+                        &lt;/ul&gt;
+                    &lt;/nav&gt;
+                {{/ case }}
+
+                {{# case(&quot;pickingAccount&quot;) }}
+                    &lt;h2&gt;Pick Account&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;depositInfo&quot;) }}
+                    &lt;h2&gt;Deposit&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;withdrawalInfo&quot;) }}
+                    &lt;h2&gt;Withdraw&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;successfulTransaction&quot;) }}
+                    &lt;h2&gt;Transaction Successful!&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;printingReceipt&quot;) }}
+                    &lt;h2&gt;Printing Receipt&lt;/h2&gt;
+                {{/ case }}
+
+                {{# default }}
+                    &lt;h2&gt;Error&lt;/h2&gt;
+                    &lt;p&gt;Invalid state - {{ state }}&lt;/p&gt;
+                {{/ default }}
+
+            {{/ switch }}
+
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/script&gt;
+
+&lt;script type='text/stache' id='app-template'&gt;
+&lt;div class=&quot;title&quot;&gt;
+    &lt;h1&gt;canATM&lt;/h1&gt;
+&lt;/div&gt;
+&lt;atm-machine/&gt;
+&lt;/script&gt;
+
+&lt;script src=&quot;https://unpkg.com/can@4/dist/global/can.all.js&quot;&gt;&lt;/script&gt;
+
+&lt;div id=&quot;qunit&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://code.jquery.com/qunit/qunit-1.12.0.css&quot;&gt;
+&lt;script src=&quot;https://code.jquery.com/qunit/qunit-1.12.0.js&quot;&gt;&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+<div line-highlight='52-59,only'></div>
+<p>Update the <code>ATM</code> view model in the <code>CODE</code> section of the <code>JavaScript</code> tab to:</p>
+<ul>
+<li>Define a <code>currentTransaction</code> property that when set, adds the previous <code>currentTransaction</code>
+to the list of <code>transactions</code>.</li>
+<li>Update the <code>state</code> property to <code>&quot;pickingAccount&quot;</code> when there is a <code>currentTransaction</code>.</li>
+<li>Update the <code>exit</code> method to clear the <code>currentTransaction</code> property.</li>
+<li>Define <code>chooseDeposit</code> that creates a <code>Deposit</code> and sets it as the <code>currentTransaction</code>.</li>
+<li>Define <code>chooseWithdraw</code> that creates a <code>Withdraw</code> and sets it as the <code>currentTransaction</code>.</li>
+</ul>
+<p>Update the <code>TESTS</code> section of the <code>JavaScript</code> tab to:</p>
+<ul>
+<li>Call <code>.chooseDeposit()</code> and verify that the state moves to <code>&quot;pickingAccount&quot;</code>.</li>
+</ul>
+<pre><code class="language-js">// ========================================
+// CODE
+// ========================================
+
+can.fixture({
+    &quot;/verifyCard&quot;: function(request, response) {
+        if (!request.data || !request.data.number || !request.data.pin) {
+            response(400, {});
+        } else {
+            return {};
+        }
+    },
+    &quot;/accounts&quot;: function() {
+        return {
+            data: [{
+                balance: 100,
+                id: 1,
+                name: &quot;checking&quot;
+            }, {
+                balance: 10000,
+                id: 2,
+                name: &quot;savings&quot;
+            }]
+        };
+    },
+    &quot;/deposit&quot;: function() {
+        return {};
+    },
+    &quot;/withdrawal&quot;: function() {
+        return {};
+    }
+});
+can.fixture.delay = 1000;
+
+var Card = can.DefineMap.extend({
+    number: &quot;string&quot;,
+    pin: &quot;string&quot;,
+    state: {
+        default: &quot;unverified&quot;,
+        serialize: false
+    },
+    verify: function() {
+
+        this.state = &quot;verifying&quot;;
+
+        var self = this;
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/verifyCard&quot;,
+            data: this.serialize()
+        }).then(
+            function() {
+                self.state = &quot;verified&quot;;
+                return self;
+            },
+            function() {
+                self.state = &quot;invalid&quot;;
+                return self;
+            });
+    }
+});
+
+var Account = can.DefineMap.extend(&quot;Account&quot;, {
+    id: &quot;number&quot;,
+    balance: &quot;number&quot;,
+    name: &quot;string&quot;
+});
+Account.List = can.DefineList.extend(&quot;AccountList&quot;, {
+    &quot;*&quot;: Account
+});
+
+can.connect.baseMap({
+    url: &quot;/accounts&quot;,
+    Map: Account,
+    List: Account.List,
+    name: &quot;accounts&quot;
+});
+
+var Transaction = can.DefineMap.extend({
+    account: Account,
+    card: Card,
+    executing: {
+        type: &quot;boolean&quot;,
+        default: false
+    },
+    executed: {
+        type: &quot;boolean&quot;,
+        default: false
+    },
+    rejected: &quot;any&quot;,
+    get ready(){
+        throw new Error(&quot;Transaction::ready must be provided by extended type&quot;);
+    },
+    get state() {
+        if (this.rejected) {
+            return &quot;rejected&quot;;
+        }
+        if (this.executed) {
+            return &quot;executed&quot;;
+        }
+        if (this.executing) {
+            return &quot;executing&quot;;
+        }
+        // make sure there’s an amount, account, and card
+        if (this.ready) {
+            return &quot;ready&quot;;
+        }
+        return &quot;invalid&quot;;
+    },
+    executeStart: function(){
+        throw new Error(&quot;Transaction::executeStart must be provided by extended type&quot;);
+    },
+    executeEnd: function(){
+        throw new Error(&quot;Transaction::executeEnd must be provided by extended type&quot;);
+    },
+    execute: function() {
+        if (this.state === &quot;ready&quot;) {
+
+            this.executing = true;
+
+            var def = this.executeStart(),
+                self = this;
+
+            def.then(function() {
+                can.queues.batch.start();
+                self.assign({
+                    executing: false,
+                    executed: true
+                });
+                self.executeEnd();
+                can.queues.batch.stop();
+            }, function(reason){
+                self.assign({
+                    executing: false,
+                    executed: true,
+                    rejected: reason
+                });
+            });
+        }
+    }
+});
+
+var Deposit = Transaction.extend({
+    amount: &quot;number&quot;,
+    get ready() {
+        return this.amount &gt; 0 &amp;&amp;
+            this.account &amp;&amp;
+            this.card;
+    },
+    executeStart: function() {
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/deposit&quot;,
+            data: {
+                card: this.card.serialize(),
+                accountId: this.account.id,
+                amount: this.amount
+            }
+        });
+    },
+    executeEnd: function(data) {
+        this.account.balance = this.account.balance + this.amount;
+    }
+});
+
+var Withdrawal = Transaction.extend({
+    amount: &quot;number&quot;,
+    get ready() {
+        return this.amount &gt; 0 &amp;&amp;
+            this.account &amp;&amp;
+            this.card;
+    },
+    executeStart: function() {
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/withdrawal&quot;,
+            data: {
+                card: this.card.serialize(),
+                accountId: this.account.id,
+                amount: this.amount
+            }
+        });
+    },
+    executeEnd: function(data) {
+        this.account.balance = this.account.balance - this.amount;
+    }
+});
+
+var ATM = can.DefineMap.extend({
+    // stateful properties
+    card: Card,
+    accountsPromise: &quot;any&quot;,
+    transactions: can.DefineList,
+    currentTransaction: {
+        set: function(newTransaction) {
+            var currentTransaction = this.currentTransaction;
+            if (this.transactions &amp;&amp; currentTransaction &amp;&amp;
+                currentTransaction.state === &quot;executed&quot;) {
+
+                this.transactions.push(currentTransaction);
+            }
+            return newTransaction;
+        }
+    },
+
+    // derived properties
+    get state(){
+
+        if (this.currentTransaction) {
+            return &quot;pickingAccount&quot;;
+        }
+
+        if(this.card) {
+            if (this.card.state === &quot;verified&quot;) {
+                return &quot;choosingTransaction&quot;;
+            }
+            return &quot;readingPin&quot;;
+        }
+        return &quot;readingCard&quot;;
+    },
+
+    // methods
+    cardNumber: function(number) {
+        this.card = new Card({
+            number: number
+        });
+    },
+    pinNumber: function(pin) {
+        var card = this.card;
+
+        card.pin = pin;
+        this.transactions = new can.DefineList();
+        this.accountsPromise = card.verify().then(function(card) {
+
+            return Account.getList(card.serialize());
+        });
+    },
+    exit: function(){
+        this.assign({
+            card: null,
+            accountsPromise: null,
+            transactions: null,
+            currentTransaction: null
+        });
+    },
+    chooseDeposit: function() {
+        this.currentTransaction = new Deposit({
+            card: this.card
+        });
+    },
+    chooseWithdraw: function() {
+        this.currentTransaction = new Withdrawal({
+            card: this.card
+        });
+    }
+});
+
+can.Component.extend({
+    tag: &quot;atm-machine&quot;,
+    view: can.stache.from(&quot;atm-template&quot;),
+    ViewModel: ATM,
+});
+
+document.body.insertBefore(
+    can.stache.from(&quot;app-template&quot;)({}),
+    document.body.firstChild
+);
+
+// ========================================
+// TESTS
+// ========================================
+
+QUnit.module(&quot;ATM system&quot;, {
+    setup: function() {
+        can.fixture.delay = 1;
+    },
+    teardown: function() {
+        can.fixture.delay = 2000;
+    }
+});
+
+QUnit.asyncTest(&quot;Valid Card&quot;, function() {
+
+    var c = new Card({
+        number: &quot;01234567890&quot;,
+        pin: 1234
+    });
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;verified&quot;, &quot;card is verified&quot;);
+
+        QUnit.start();
+    });
+});
+
+QUnit.asyncTest(&quot;Invalid Card&quot;, function() {
+
+    var c = new Card({});
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;invalid&quot;, &quot;card is invalid&quot;);
+
+        QUnit.start();
+    });
+});
+
+QUnit.asyncTest(&quot;Deposit&quot;, 6, function() {
+
+    var card = new Card({
+        number: &quot;0123456789&quot;,
+        pin: &quot;1122&quot;
+    });
+
+    var deposit = new Deposit({
+        amount: 100,
+        card: card
+    });
+
+    equal(deposit.state, &quot;invalid&quot;);
+
+    var startingBalance;
+
+    Account.getList(card.serialize()).then(function(accounts) {
+        QUnit.ok(true, &quot;got accounts&quot;);
+        deposit.account = accounts[0];
+        startingBalance = accounts[0].balance;
+    });
+
+    deposit.on(&quot;state&quot;, function(ev, newVal) {
+        if (newVal === &quot;ready&quot;) {
+
+            QUnit.ok(true, &quot;deposit is ready&quot;);
+            deposit.execute();
+
+        } else if (newVal === &quot;executing&quot;) {
+
+            QUnit.ok(true, &quot;executing a deposit&quot;);
+
+        } else if (newVal === &quot;executed&quot;) {
+
+            QUnit.ok(true, &quot;executed a deposit&quot;);
+            equal(deposit.account.balance, 100 + startingBalance);
+            start();
+
+        }
+    });
+});
+
+QUnit.asyncTest(&quot;ATM basics&quot;, function() {
+
+    var atm = new ATM();
+
+    equal(atm.state, &quot;readingCard&quot;, &quot;starts at reading card state&quot;);
+
+    atm.cardNumber(&quot;01233456789&quot;);
+
+    equal(atm.state, &quot;readingPin&quot;, &quot;moves to reading card state&quot;);
+
+    atm.pinNumber(&quot;1234&quot;);
+
+    ok(atm.state, &quot;readingPin&quot;, &quot;remain in the reading pin state until verifyied&quot;);
+
+    atm.on(&quot;state&quot;, function(ev, newVal) {
+
+        if (newVal === &quot;choosingTransaction&quot;) {
+
+            QUnit.ok(true, &quot;in choosingTransaction&quot;);
+            atm.chooseDeposit();
+
+        } else if (newVal === &quot;pickingAccount&quot;) {
+
+            QUnit.ok(true, &quot;in picking account state&quot;);
+            QUnit.start();
+
+        }
+    });
+});
+
+</code></pre>
+<div line-highlight='194-204,209-211,243,246-255,363,382-389,only'></div>
+<blockquote>
+<p><strong>Note:</strong> We will define <code>printReceiptAndExit</code> later!</p>
+</blockquote>
+<h2>Picking Account page and test</h2>
+<p>In this section, we will:</p>
+<ul>
+<li>Allow the user to pick an account and go to either the  <strong>Deposit Info</strong> or
+<strong>Withdrawal Info</strong> page.</li>
+<li>Add tests to the <strong>ATM Basics</strong> test.</li>
+</ul>
+<p>Update the <strong>HTML</strong> tab to:</p>
+<ul>
+<li>Write out a <em>“Loading Accounts…”</em> message while the accounts are loading.</li>
+<li>Write out the accounts when loaded.</li>
+<li>Call <code>chooseAccount()</code> when an account is clicked.</li>
+</ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta name=&quot;description&quot; content=&quot;CanJS 3.0 - ATM Guide - Setup&quot;&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot;&gt;
+  &lt;title&gt;JS Bin&lt;/title&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;script type='text/stache' id='atm-template'&gt;
+&lt;div class=&quot;screen&quot;&gt;
+    &lt;div class=&quot;screen-content&quot;&gt;
+        &lt;div class=&quot;screen-glass&quot;&gt;
+
+            {{# switch(state) }}
+                {{# case(&quot;readingCard&quot;) }}
+                    &lt;h2&gt;Reading Card&lt;/h2&gt;
+                    &lt;p&gt;Welcome to canATM where there are &lt;strong&gt;never&lt;/strong&gt;
+                      fees!
+                    &lt;/p&gt;
+                    &lt;p&gt;
+                        Enter Card Number:
+                        &lt;input name=&quot;card&quot; on:enter=&quot;cardNumber(scope.element.value)&quot;&gt;
+                    &lt;/p&gt;
+                {{/ case }}
+
+                {{# case(&quot;readingPin&quot;) }}
+                    &lt;h2&gt;Reading Pin&lt;/h2&gt;
+                    &lt;p&gt;
+                        Enter Pin Number:
+                        &lt;input name=&quot;pin&quot; type=&quot;password&quot;
+                            autofocus
+                            {{# is(card.state, &quot;verifying&quot;) }}DISABLED{{/ is }}
+                            on:enter=&quot;pinNumber(scope.element.value)&quot;/&gt;
+
+                        {{# is(card.state, &quot;verifying&quot;) }}
+                            &lt;div class='warn'&gt;
+                                &lt;p&gt;
+                                &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                                verifying
+                                &lt;/p&gt;
+                            &lt;/div&gt;
+                        {{/ is }}
+                    &lt;/p&gt;
+                    &lt;a href=&quot;javascript://&quot; on:click=&quot;exit()&quot;&gt;exit&lt;/a&gt;
+                {{/ case }}
+
+                {{# case(&quot;choosingTransaction&quot;) }}
+                    &lt;h2&gt;Choose Transaction&lt;/h2&gt;
+                    &lt;p&gt;What would you like to do?&lt;/p&gt;
+                    &lt;nav&gt;
+                        &lt;ul&gt;
+                            &lt;li on:click=&quot;chooseDeposit()&quot;&gt;Deposit&lt;/li&gt;
+                            &lt;li on:click=&quot;chooseWithdraw()&quot;&gt;Withdraw&lt;/li&gt;
+                            &lt;li on:click=&quot;printReceiptAndExit()&quot;&gt;Exit&lt;/li&gt;
+                        &lt;/ul&gt;
+                    &lt;/nav&gt;
+                {{/ case }}
+
+                {{# case(&quot;pickingAccount&quot;) }}
+                    &lt;h2&gt;Pick Account&lt;/h2&gt;
+                    &lt;p&gt;Please pick your account:&lt;/p&gt;
+                    {{# if(accountsPromise.isPending) }}
+                        &lt;div class='warn'&gt;
+                            &lt;p&gt;
+                                &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                                Loading Accounts…
+                            &lt;/p&gt;
+                        &lt;/div&gt;
+                    {{ else }}
+                        &lt;ul&gt;
+                            {{# for(account of accountsPromise.value) }}
+                                &lt;li on:click=&quot;this.chooseAccount(account)&quot;&gt;{{ account.name }} - ${{ account.balance }}&lt;/li&gt;
+                            {{/ for }}
+                        &lt;/ul&gt;
+                    {{/ if }}
+                {{/ case }}
+
+                {{# case(&quot;depositInfo&quot;) }}
+                    &lt;h2&gt;Deposit&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;withdrawalInfo&quot;) }}
+                    &lt;h2&gt;Withdraw&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;successfulTransaction&quot;) }}
+                    &lt;h2&gt;Transaction Successful!&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;printingReceipt&quot;) }}
+                    &lt;h2&gt;Printing Receipt&lt;/h2&gt;
+                {{/ case }}
+
+                {{# default }}
+                    &lt;h2&gt;Error&lt;/h2&gt;
+                    &lt;p&gt;Invalid state - {{ state }}&lt;/p&gt;
+                {{/ default }}
+
+            {{/ switch }}
+
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/script&gt;
+
+&lt;script type='text/stache' id='app-template'&gt;
+&lt;div class=&quot;title&quot;&gt;
+    &lt;h1&gt;canATM&lt;/h1&gt;
+&lt;/div&gt;
+&lt;atm-machine/&gt;
+&lt;/script&gt;
+
+&lt;script src=&quot;https://unpkg.com/can@4/dist/global/can.all.js&quot;&gt;&lt;/script&gt;
+
+&lt;div id=&quot;qunit&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://code.jquery.com/qunit/qunit-1.12.0.css&quot;&gt;
+&lt;script src=&quot;https://code.jquery.com/qunit/qunit-1.12.0.js&quot;&gt;&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+<div line-highlight='64-78,only'></div>
+<p>Update the <code>ATM</code> view model in the <code>CODE</code> section of the <code>JavaScript</code> tab to:</p>
+<ul>
+<li>Change <code>state</code> to check if the <code>currentTransaction</code> has an <code>account</code> and update the
+value to <code>&quot;depositInfo&quot;</code> or <code>&quot;withdrawalInfo&quot;</code>, depending on the <code>currentTransaction</code>’s type.</li>
+<li>Add a <code>chooseAccount</code> method that sets the <code>currentTransaction</code>’s <code>account</code>.</li>
+</ul>
+<p>Update the <code>TESTS</code> section of the <code>JavaScript</code> tab to:</p>
+<ul>
+<li>Call <code>.chooseAccount()</code> with the first account loaded.</li>
+<li>Verify the state changes to <code>&quot;depositInfo&quot;</code>.</li>
+</ul>
+<pre><code class="language-js">// ========================================
+// CODE
+// ========================================
+
+can.fixture({
+    &quot;/verifyCard&quot;: function(request, response) {
+        if (!request.data || !request.data.number || !request.data.pin) {
+            response(400, {});
+        } else {
+            return {};
+        }
+    },
+    &quot;/accounts&quot;: function() {
+        return {
+            data: [{
+                balance: 100,
+                id: 1,
+                name: &quot;checking&quot;
+            }, {
+                balance: 10000,
+                id: 2,
+                name: &quot;savings&quot;
+            }]
+        };
+    },
+    &quot;/deposit&quot;: function() {
+        return {};
+    },
+    &quot;/withdrawal&quot;: function() {
+        return {};
+    }
+});
+can.fixture.delay = 1000;
+
+var Card = can.DefineMap.extend({
+    number: &quot;string&quot;,
+    pin: &quot;string&quot;,
+    state: {
+        default: &quot;unverified&quot;,
+        serialize: false
+    },
+    verify: function() {
+
+        this.state = &quot;verifying&quot;;
+
+        var self = this;
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/verifyCard&quot;,
+            data: this.serialize()
+        }).then(
+            function() {
+                self.state = &quot;verified&quot;;
+                return self;
+            },
+            function() {
+                self.state = &quot;invalid&quot;;
+                return self;
+            });
+    }
+});
+
+var Account = can.DefineMap.extend(&quot;Account&quot;, {
+    id: &quot;number&quot;,
+    balance: &quot;number&quot;,
+    name: &quot;string&quot;
+});
+Account.List = can.DefineList.extend(&quot;AccountList&quot;, {
+    &quot;*&quot;: Account
+});
+
+can.connect.baseMap({
+    url: &quot;/accounts&quot;,
+    Map: Account,
+    List: Account.List,
+    name: &quot;accounts&quot;
+});
+
+var Transaction = can.DefineMap.extend({
+    account: Account,
+    card: Card,
+    executing: {
+        type: &quot;boolean&quot;,
+        default: false
+    },
+    executed: {
+        type: &quot;boolean&quot;,
+        default: false
+    },
+    rejected: &quot;any&quot;,
+    get ready(){
+        throw new Error(&quot;Transaction::ready must be provided by extended type&quot;);
+    },
+    get state() {
+        if (this.rejected) {
+            return &quot;rejected&quot;;
+        }
+        if (this.executed) {
+            return &quot;executed&quot;;
+        }
+        if (this.executing) {
+            return &quot;executing&quot;;
+        }
+        // make sure there’s an amount, account, and card
+        if (this.ready) {
+            return &quot;ready&quot;;
+        }
+        return &quot;invalid&quot;;
+    },
+    executeStart: function(){
+        throw new Error(&quot;Transaction::executeStart must be provided by extended type&quot;);
+    },
+    executeEnd: function(){
+        throw new Error(&quot;Transaction::executeEnd must be provided by extended type&quot;);
+    },
+    execute: function() {
+        if (this.state === &quot;ready&quot;) {
+
+            this.executing = true;
+
+            var def = this.executeStart(),
+                self = this;
+
+            def.then(function() {
+                can.queues.batch.start();
+                self.assign({
+                    executing: false,
+                    executed: true
+                });
+                self.executeEnd();
+                can.queues.batch.stop();
+            }, function(reason){
+                self.assign({
+                    executing: false,
+                    executed: true,
+                    rejected: reason
+                });
+            });
+        }
+    }
+});
+
+var Deposit = Transaction.extend({
+    amount: &quot;number&quot;,
+    get ready() {
+        return this.amount &gt; 0 &amp;&amp;
+            this.account &amp;&amp;
+            this.card;
+    },
+    executeStart: function() {
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/deposit&quot;,
+            data: {
+                card: this.card.serialize(),
+                accountId: this.account.id,
+                amount: this.amount
+            }
+        });
+    },
+    executeEnd: function(data) {
+        this.account.balance = this.account.balance + this.amount;
+    }
+});
+
+var Withdrawal = Transaction.extend({
+    amount: &quot;number&quot;,
+    get ready() {
+        return this.amount &gt; 0 &amp;&amp;
+            this.account &amp;&amp;
+            this.card;
+    },
+    executeStart: function() {
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/withdrawal&quot;,
+            data: {
+                card: this.card.serialize(),
+                accountId: this.account.id,
+                amount: this.amount
+            }
+        });
+    },
+    executeEnd: function(data) {
+        this.account.balance = this.account.balance - this.amount;
+    }
+});
+
+var ATM = can.DefineMap.extend({
+    // stateful properties
+    card: Card,
+    accountsPromise: &quot;any&quot;,
+    transactions: can.DefineList,
+    currentTransaction: {
+        set: function(newTransaction) {
+            var currentTransaction = this.currentTransaction;
+            if (this.transactions &amp;&amp; currentTransaction &amp;&amp;
+                currentTransaction.state === &quot;executed&quot;) {
+
+                this.transactions.push(currentTransaction);
+            }
+            return newTransaction;
+        }
+    },
+
+    // derived properties
+    get state(){
+
+        if (this.currentTransaction) {
+            if (this.currentTransaction.account) {
+                if (this.currentTransaction instanceof Deposit) {
+                    return &quot;depositInfo&quot;;
+                } else {
+                    return &quot;withdrawalInfo&quot;;
+                }
+            }
+
+            return &quot;pickingAccount&quot;;
+        }
+
+        if(this.card) {
+            if (this.card.state === &quot;verified&quot;) {
+                return &quot;choosingTransaction&quot;;
+            }
+            return &quot;readingPin&quot;;
+        }
+        return &quot;readingCard&quot;;
+    },
+
+    // methods
+    cardNumber: function(number) {
+        this.card = new Card({
+            number: number
+        });
+    },
+    pinNumber: function(pin) {
+        var card = this.card;
+
+        card.pin = pin;
+        this.transactions = new can.DefineList();
+        this.accountsPromise = card.verify().then(function(card) {
+
+            return Account.getList(card.serialize());
+        });
+    },
+    exit: function(){
+        this.assign({
+            card: null,
+            accountsPromise: null,
+            transactions: null,
+            currentTransaction: null
+        });
+    },
+    chooseDeposit: function() {
+        this.currentTransaction = new Deposit({
+            card: this.card
+        });
+    },
+    chooseWithdraw: function() {
+        this.currentTransaction = new Withdrawal({
+            card: this.card
+        });
+    },
+    chooseAccount: function(account) {
+        this.currentTransaction.account = account;
+    }
+});
+
+can.Component.extend({
+    tag: &quot;atm-machine&quot;,
+    view: can.stache.from(&quot;atm-template&quot;),
+    ViewModel: ATM,
+});
+
+document.body.insertBefore(
+    can.stache.from(&quot;app-template&quot;)({}),
+    document.body.firstChild
+);
+
+// ========================================
+// TESTS
+// ========================================
+
+QUnit.module(&quot;ATM system&quot;, {
+    setup: function() {
+        can.fixture.delay = 1;
+    },
+    teardown: function() {
+        can.fixture.delay = 2000;
+    }
+});
+
+QUnit.asyncTest(&quot;Valid Card&quot;, function() {
+
+    var c = new Card({
+        number: &quot;01234567890&quot;,
+        pin: 1234
+    });
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;verified&quot;, &quot;card is verified&quot;);
+
+        QUnit.start();
+    });
+});
+
+QUnit.asyncTest(&quot;Invalid Card&quot;, function() {
+
+    var c = new Card({});
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;invalid&quot;, &quot;card is invalid&quot;);
+
+        QUnit.start();
+    });
+});
+
+QUnit.asyncTest(&quot;Deposit&quot;, 6, function() {
+
+    var card = new Card({
+        number: &quot;0123456789&quot;,
+        pin: &quot;1122&quot;
+    });
+
+    var deposit = new Deposit({
+        amount: 100,
+        card: card
+    });
+
+    equal(deposit.state, &quot;invalid&quot;);
+
+    var startingBalance;
+
+    Account.getList(card.serialize()).then(function(accounts) {
+        QUnit.ok(true, &quot;got accounts&quot;);
+        deposit.account = accounts[0];
+        startingBalance = accounts[0].balance;
+    });
+
+    deposit.on(&quot;state&quot;, function(ev, newVal) {
+        if (newVal === &quot;ready&quot;) {
+
+            QUnit.ok(true, &quot;deposit is ready&quot;);
+            deposit.execute();
+
+        } else if (newVal === &quot;executing&quot;) {
+
+            QUnit.ok(true, &quot;executing a deposit&quot;);
+
+        } else if (newVal === &quot;executed&quot;) {
+
+            QUnit.ok(true, &quot;executed a deposit&quot;);
+            equal(deposit.account.balance, 100 + startingBalance);
+            start();
+
+        }
+    });
+});
+
+QUnit.asyncTest(&quot;ATM basics&quot;, function() {
+
+    var atm = new ATM();
+
+    equal(atm.state, &quot;readingCard&quot;, &quot;starts at reading card state&quot;);
+
+    atm.cardNumber(&quot;01233456789&quot;);
+
+    equal(atm.state, &quot;readingPin&quot;, &quot;moves to reading card state&quot;);
+
+    atm.pinNumber(&quot;1234&quot;);
+
+    ok(atm.state, &quot;readingPin&quot;, &quot;remain in the reading pin state until verifyied&quot;);
+
+    atm.on(&quot;state&quot;, function(ev, newVal) {
+
+        if (newVal === &quot;choosingTransaction&quot;) {
+
+            QUnit.ok(true, &quot;in choosingTransaction&quot;);
+            atm.chooseDeposit();
+
+        } else if (newVal === &quot;pickingAccount&quot;) {
+
+            QUnit.ok(true, &quot;in picking account state&quot;);
+            atm.accountsPromise.then(function(accounts){
+                atm.chooseAccount(accounts[0]);
+            });
+
+        } else if (newVal === &quot;depositInfo&quot;) {
+
+            QUnit.ok(true, &quot;in depositInfo state&quot;);
+            QUnit.start();
+
+        }
+    });
+});
+
+</code></pre>
+<div line-highlight='210-216,264-266,398-407,only'></div>
+<h2>Deposit Info page and test</h2>
+<p>In this section, we will:</p>
+<ul>
+<li>Allow the user to enter the amount of a deposit and go to the <strong>Successful Transaction</strong> page.</li>
+<li>Add tests to the <strong>ATM Basics</strong> test.</li>
+</ul>
+<p>Update the <strong>HTML</strong> tab to:</p>
+<ul>
+<li>Ask the user how much they would like to deposit into the account.</li>
+<li>Update <code>currentTransaction.amount</code> with an <code>&lt;input&gt;</code>’s <code>value</code>.</li>
+<li>If the transaction is executing, show a spinner.</li>
+<li>If the transaction is not executed:
+<ul>
+<li>show a <strong>Deposit</strong> button that will be
+active only once the transaction has a value.</li>
+<li>show a <strong>cancel</strong> button that will clear this transaction.</li>
+</ul></li>
+</ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta name=&quot;description&quot; content=&quot;CanJS 3.0 - ATM Guide - Setup&quot;&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot;&gt;
+  &lt;title&gt;JS Bin&lt;/title&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;script type='text/stache' id='atm-template'&gt;
+&lt;div class=&quot;screen&quot;&gt;
+    &lt;div class=&quot;screen-content&quot;&gt;
+        &lt;div class=&quot;screen-glass&quot;&gt;
+
+            {{# switch(state) }}
+                {{# case(&quot;readingCard&quot;) }}
+                    &lt;h2&gt;Reading Card&lt;/h2&gt;
+                    &lt;p&gt;Welcome to canATM where there are &lt;strong&gt;never&lt;/strong&gt;
+                      fees!
+                    &lt;/p&gt;
+                    &lt;p&gt;
+                        Enter Card Number:
+                        &lt;input name=&quot;card&quot; on:enter=&quot;cardNumber(scope.element.value)&quot;&gt;
+                    &lt;/p&gt;
+                {{/ case }}
+
+                {{# case(&quot;readingPin&quot;) }}
+                    &lt;h2&gt;Reading Pin&lt;/h2&gt;
+                    &lt;p&gt;
+                        Enter Pin Number:
+                        &lt;input name=&quot;pin&quot; type=&quot;password&quot;
+                            autofocus
+                            {{# is(card.state, &quot;verifying&quot;) }}DISABLED{{/ is }}
+                            on:enter=&quot;pinNumber(scope.element.value)&quot;/&gt;
+
+                        {{# is(card.state, &quot;verifying&quot;) }}
+                            &lt;div class='warn'&gt;
+                                &lt;p&gt;
+                                &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                                verifying
+                                &lt;/p&gt;
+                            &lt;/div&gt;
+                        {{/ is }}
+                    &lt;/p&gt;
+                    &lt;a href=&quot;javascript://&quot; on:click=&quot;exit()&quot;&gt;exit&lt;/a&gt;
+                {{/ case }}
+
+                {{# case(&quot;choosingTransaction&quot;) }}
+                    &lt;h2&gt;Choose Transaction&lt;/h2&gt;
+                    &lt;p&gt;What would you like to do?&lt;/p&gt;
+                    &lt;nav&gt;
+                        &lt;ul&gt;
+                            &lt;li on:click=&quot;chooseDeposit()&quot;&gt;Deposit&lt;/li&gt;
+                            &lt;li on:click=&quot;chooseWithdraw()&quot;&gt;Withdraw&lt;/li&gt;
+                            &lt;li on:click=&quot;printReceiptAndExit()&quot;&gt;Exit&lt;/li&gt;
+                        &lt;/ul&gt;
+                    &lt;/nav&gt;
+                {{/ case }}
+
+                {{# case(&quot;pickingAccount&quot;) }}
+                    &lt;h2&gt;Pick Account&lt;/h2&gt;
+                    &lt;p&gt;Please pick your account:&lt;/p&gt;
+                    {{# if(accountsPromise.isPending) }}
+                        &lt;div class='warn'&gt;
+                            &lt;p&gt;
+                                &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                                Loading Accounts…
+                            &lt;/p&gt;
+                        &lt;/div&gt;
+                    {{ else }}
+                        &lt;ul&gt;
+                            {{# for(account of accountsPromise.value) }}
+                                &lt;li on:click=&quot;this.chooseAccount(account)&quot;&gt;{{ account.name }} - ${{ account.balance }}&lt;/li&gt;
+                            {{/ for }}
+                        &lt;/ul&gt;
+                    {{/ if }}
+                {{/ case }}
+
+                {{# case(&quot;depositInfo&quot;) }}
+                    &lt;h2&gt;Deposit&lt;/h2&gt;
+                    &lt;p&gt;
+                        How much would you like to deposit
+                        into {{ currentTransaction.account.name }}
+                        (${{ currentTransaction.account.balance }})?
+
+                        &lt;input name=&quot;deposit&quot; value:bind=&quot;currentTransaction.amount&quot;/&gt;
+                    &lt;/p&gt;
+
+                    {{# eq(currentTransaction.state, &quot;executing&quot;) }}
+                        &lt;div class='warn'&gt;
+                            &lt;p&gt;
+                            &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                            executing
+                            &lt;/p&gt;
+                        &lt;/div&gt;
+                    {{ else }}
+                        &lt;button on:click=&quot;currentTransaction.execute()&quot;
+                            {{^ eq currentTransaction.state &quot;ready&quot; }}DISABLED{{/ eq }}&gt;
+                            Deposit
+                        &lt;/button&gt;
+                        &lt;a href=&quot;javascript://&quot; on:click=&quot;removeTransaction()&quot;&gt;cancel&lt;/a&gt;
+                    {{/ eq }}
+                {{/ case }}
+
+                {{# case(&quot;withdrawalInfo&quot;) }}
+                    &lt;h2&gt;Withdraw&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;successfulTransaction&quot;) }}
+                    &lt;h2&gt;Transaction Successful!&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;printingReceipt&quot;) }}
+                    &lt;h2&gt;Printing Receipt&lt;/h2&gt;
+                {{/ case }}
+
+                {{# default }}
+                    &lt;h2&gt;Error&lt;/h2&gt;
+                    &lt;p&gt;Invalid state - {{ state }}&lt;/p&gt;
+                {{/ default }}
+
+            {{/ switch }}
+
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/script&gt;
+
+&lt;script type='text/stache' id='app-template'&gt;
+&lt;div class=&quot;title&quot;&gt;
+    &lt;h1&gt;canATM&lt;/h1&gt;
+&lt;/div&gt;
+&lt;atm-machine/&gt;
+&lt;/script&gt;
+
+&lt;script src=&quot;https://unpkg.com/can@4/dist/global/can.all.js&quot;&gt;&lt;/script&gt;
+
+&lt;div id=&quot;qunit&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://code.jquery.com/qunit/qunit-1.12.0.css&quot;&gt;
+&lt;script src=&quot;https://code.jquery.com/qunit/qunit-1.12.0.js&quot;&gt;&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+<div line-highlight='83-104,only'></div>
+<p>Update the <code>ATM</code> view model in the <code>JavaScript</code> tab to:</p>
+<ul>
+<li>Change <code>state</code> to <code>&quot;successfulTransaction&quot;</code> if the <code>currentTransaction</code> was executed.</li>
+<li>Add a <code>removeTransaction</code> method that removes the <code>currentTransaction</code>, which will revert state
+to <code>&quot;choosingTransaction&quot;</code>.</li>
+</ul>
+<p>Update the <code>ATM basics</code> test in the <code>JavaScript</code> tab to:</p>
+<ul>
+<li>Add an <code>amount</code> to the <code>currentTransaction</code>.</li>
+<li>Make sure the <code>currentTransaction</code> is <code>ready</code> to be executed.</li>
+<li>Execute the <code>currentTransaction</code> and make sure that the <code>state</code> stays as <code>&quot;depositInfo&quot;</code> until
+the transaction is successful.</li>
+<li>Verify the state changed to <code>&quot;successfulTransaction&quot;</code>.</li>
+</ul>
+<pre><code class="language-js">// ========================================
+// CODE
+// ========================================
+
+can.fixture({
+    &quot;/verifyCard&quot;: function(request, response) {
+        if (!request.data || !request.data.number || !request.data.pin) {
+            response(400, {});
+        } else {
+            return {};
+        }
+    },
+    &quot;/accounts&quot;: function() {
+        return {
+            data: [{
+                balance: 100,
+                id: 1,
+                name: &quot;checking&quot;
+            }, {
+                balance: 10000,
+                id: 2,
+                name: &quot;savings&quot;
+            }]
+        };
+    },
+    &quot;/deposit&quot;: function() {
+        return {};
+    },
+    &quot;/withdrawal&quot;: function() {
+        return {};
+    }
+});
+can.fixture.delay = 1000;
+
+var Card = can.DefineMap.extend({
+    number: &quot;string&quot;,
+    pin: &quot;string&quot;,
+    state: {
+        default: &quot;unverified&quot;,
+        serialize: false
+    },
+    verify: function() {
+
+        this.state = &quot;verifying&quot;;
+
+        var self = this;
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/verifyCard&quot;,
+            data: this.serialize()
+        }).then(
+            function() {
+                self.state = &quot;verified&quot;;
+                return self;
+            },
+            function() {
+                self.state = &quot;invalid&quot;;
+                return self;
+            });
+    }
+});
+
+var Account = can.DefineMap.extend(&quot;Account&quot;, {
+    id: &quot;number&quot;,
+    balance: &quot;number&quot;,
+    name: &quot;string&quot;
+});
+Account.List = can.DefineList.extend(&quot;AccountList&quot;, {
+    &quot;*&quot;: Account
+});
+
+can.connect.baseMap({
+    url: &quot;/accounts&quot;,
+    Map: Account,
+    List: Account.List,
+    name: &quot;accounts&quot;
+});
+
+var Transaction = can.DefineMap.extend({
+    account: Account,
+    card: Card,
+    executing: {
+        type: &quot;boolean&quot;,
+        default: false
+    },
+    executed: {
+        type: &quot;boolean&quot;,
+        default: false
+    },
+    rejected: &quot;any&quot;,
+    get ready(){
+        throw new Error(&quot;Transaction::ready must be provided by extended type&quot;);
+    },
+    get state() {
+        if (this.rejected) {
+            return &quot;rejected&quot;;
+        }
+        if (this.executed) {
+            return &quot;executed&quot;;
+        }
+        if (this.executing) {
+            return &quot;executing&quot;;
+        }
+        // make sure there’s an amount, account, and card
+        if (this.ready) {
+            return &quot;ready&quot;;
+        }
+        return &quot;invalid&quot;;
+    },
+    executeStart: function(){
+        throw new Error(&quot;Transaction::executeStart must be provided by extended type&quot;);
+    },
+    executeEnd: function(){
+        throw new Error(&quot;Transaction::executeEnd must be provided by extended type&quot;);
+    },
+    execute: function() {
+        if (this.state === &quot;ready&quot;) {
+
+            this.executing = true;
+
+            var def = this.executeStart(),
+                self = this;
+
+            def.then(function() {
+                can.queues.batch.start();
+                self.assign({
+                    executing: false,
+                    executed: true
+                });
+                self.executeEnd();
+                can.queues.batch.stop();
+            }, function(reason){
+                self.assign({
+                    executing: false,
+                    executed: true,
+                    rejected: reason
+                });
+            });
+        }
+    }
+});
+
+var Deposit = Transaction.extend({
+    amount: &quot;number&quot;,
+    get ready() {
+        return this.amount &gt; 0 &amp;&amp;
+            this.account &amp;&amp;
+            this.card;
+    },
+    executeStart: function() {
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/deposit&quot;,
+            data: {
+                card: this.card.serialize(),
+                accountId: this.account.id,
+                amount: this.amount
+            }
+        });
+    },
+    executeEnd: function(data) {
+        this.account.balance = this.account.balance + this.amount;
+    }
+});
+
+var Withdrawal = Transaction.extend({
+    amount: &quot;number&quot;,
+    get ready() {
+        return this.amount &gt; 0 &amp;&amp;
+            this.account &amp;&amp;
+            this.card;
+    },
+    executeStart: function() {
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/withdrawal&quot;,
+            data: {
+                card: this.card.serialize(),
+                accountId: this.account.id,
+                amount: this.amount
+            }
+        });
+    },
+    executeEnd: function(data) {
+        this.account.balance = this.account.balance - this.amount;
+    }
+});
+
+var ATM = can.DefineMap.extend({
+    // stateful properties
+    card: Card,
+    accountsPromise: &quot;any&quot;,
+    transactions: can.DefineList,
+    currentTransaction: {
+        set: function(newTransaction) {
+            var currentTransaction = this.currentTransaction;
+            if (this.transactions &amp;&amp; currentTransaction &amp;&amp;
+                currentTransaction.state === &quot;executed&quot;) {
+
+                this.transactions.push(currentTransaction);
+            }
+            return newTransaction;
+        }
+    },
+
+    // derived properties
+    get state(){
+
+        if (this.currentTransaction) {
+            if (this.currentTransaction.state === &quot;executed&quot;) {
+                return &quot;successfulTransaction&quot;;
+            }
+
+            if (this.currentTransaction.account) {
+                if (this.currentTransaction instanceof Deposit) {
+                    return &quot;depositInfo&quot;;
+                } else {
+                    return &quot;withdrawalInfo&quot;;
+                }
+            }
+
+            return &quot;pickingAccount&quot;;
+        }
+
+        if(this.card) {
+            if (this.card.state === &quot;verified&quot;) {
+                return &quot;choosingTransaction&quot;;
+            }
+            return &quot;readingPin&quot;;
+        }
+        return &quot;readingCard&quot;;
+    },
+
+    // methods
+    cardNumber: function(number) {
+        this.card = new Card({
+            number: number
+        });
+    },
+    pinNumber: function(pin) {
+        var card = this.card;
+
+        card.pin = pin;
+        this.transactions = new can.DefineList();
+        this.accountsPromise = card.verify().then(function(card) {
+
+            return Account.getList(card.serialize());
+        });
+    },
+    exit: function(){
+        this.assign({
+            card: null,
+            accountsPromise: null,
+            transactions: null,
+            currentTransaction: null
+        });
+    },
+    chooseDeposit: function() {
+        this.currentTransaction = new Deposit({
+            card: this.card
+        });
+    },
+    chooseWithdraw: function() {
+        this.currentTransaction = new Withdrawal({
+            card: this.card
+        });
+    },
+    chooseAccount: function(account) {
+        this.currentTransaction.account = account;
+    },
+    removeTransaction: function() {
+        this.currentTransaction = null;
+    }
+});
+
+can.Component.extend({
+    tag: &quot;atm-machine&quot;,
+    view: can.stache.from(&quot;atm-template&quot;),
+    ViewModel: ATM,
+});
+
+document.body.insertBefore(
+    can.stache.from(&quot;app-template&quot;)({}),
+    document.body.firstChild
+);
+
+// ========================================
+// TESTS
+// ========================================
+
+QUnit.module(&quot;ATM system&quot;, {
+    setup: function() {
+        can.fixture.delay = 1;
+    },
+    teardown: function() {
+        can.fixture.delay = 2000;
+    }
+});
+
+QUnit.asyncTest(&quot;Valid Card&quot;, function() {
+
+    var c = new Card({
+        number: &quot;01234567890&quot;,
+        pin: 1234
+    });
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;verified&quot;, &quot;card is verified&quot;);
+
+        QUnit.start();
+    });
+});
+
+QUnit.asyncTest(&quot;Invalid Card&quot;, function() {
+
+    var c = new Card({});
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;invalid&quot;, &quot;card is invalid&quot;);
+
+        QUnit.start();
+    });
+});
+
+QUnit.asyncTest(&quot;Deposit&quot;, 6, function() {
+
+    var card = new Card({
+        number: &quot;0123456789&quot;,
+        pin: &quot;1122&quot;
+    });
+
+    var deposit = new Deposit({
+        amount: 100,
+        card: card
+    });
+
+    equal(deposit.state, &quot;invalid&quot;);
+
+    var startingBalance;
+
+    Account.getList(card.serialize()).then(function(accounts) {
+        QUnit.ok(true, &quot;got accounts&quot;);
+        deposit.account = accounts[0];
+        startingBalance = accounts[0].balance;
+    });
+
+    deposit.on(&quot;state&quot;, function(ev, newVal) {
+        if (newVal === &quot;ready&quot;) {
+
+            QUnit.ok(true, &quot;deposit is ready&quot;);
+            deposit.execute();
+
+        } else if (newVal === &quot;executing&quot;) {
+
+            QUnit.ok(true, &quot;executing a deposit&quot;);
+
+        } else if (newVal === &quot;executed&quot;) {
+
+            QUnit.ok(true, &quot;executed a deposit&quot;);
+            equal(deposit.account.balance, 100 + startingBalance);
+            start();
+
+        }
+    });
+});
+
+QUnit.asyncTest(&quot;ATM basics&quot;, function() {
+
+    var atm = new ATM();
+
+    equal(atm.state, &quot;readingCard&quot;, &quot;starts at reading card state&quot;);
+
+    atm.cardNumber(&quot;01233456789&quot;);
+
+    equal(atm.state, &quot;readingPin&quot;, &quot;moves to reading card state&quot;);
+
+    atm.pinNumber(&quot;1234&quot;);
+
+    ok(atm.state, &quot;readingPin&quot;, &quot;remain in the reading pin state until verifyied&quot;);
+
+    atm.on(&quot;state&quot;, function(ev, newVal) {
+
+        if (newVal === &quot;choosingTransaction&quot;) {
+
+            QUnit.ok(true, &quot;in choosingTransaction&quot;);
+            atm.chooseDeposit();
+
+        } else if (newVal === &quot;pickingAccount&quot;) {
+
+            QUnit.ok(true, &quot;in picking account state&quot;);
+            atm.accountsPromise.then(function(accounts){
+                atm.chooseAccount(accounts[0]);
+            });
+
+        } else if (newVal === &quot;depositInfo&quot;) {
+
+            QUnit.ok(true, &quot;in depositInfo state&quot;);
+            var currentTransaction = atm.currentTransaction;
+            currentTransaction.amount = 120;
+            QUnit.ok(currentTransaction.ready, &quot;we are ready to execute&quot;);
+            currentTransaction.execute();
+            QUnit.equal(atm.state, &quot;depositInfo&quot;, &quot;in deposit state until successful&quot;);
+
+        } else if (newVal === &quot;successfulTransaction&quot;) {
+
+            QUnit.ok(true, &quot;in successfulTransaction state&quot;);
+            QUnit.start();
+
+        }
+    });
+});
+
+</code></pre>
+<div line-highlight='189,210-212,271-273,381,412-423,only'></div>
+<p>When complete, you should be able to enter a deposit amount and see that
+the transaction was successful.</p>
+<h2>Withdrawal Info page</h2>
+<p>In this section, we will:</p>
+<ul>
+<li>Allow the user to enter the amount of a withdrawal and go to the <strong>Successful Transaction</strong> page.</li>
+</ul>
+<p>Update the <strong>HTML</strong> tab to:</p>
+<ul>
+<li>Add a <strong>Withdraw</strong> page that works very similar to the <strong>Deposit</strong> page.</li>
+</ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta name=&quot;description&quot; content=&quot;CanJS 3.0 - ATM Guide - Setup&quot;&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot;&gt;
+  &lt;title&gt;JS Bin&lt;/title&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;script type='text/stache' id='atm-template'&gt;
+&lt;div class=&quot;screen&quot;&gt;
+    &lt;div class=&quot;screen-content&quot;&gt;
+        &lt;div class=&quot;screen-glass&quot;&gt;
+
+            {{# switch(state) }}
+                {{# case(&quot;readingCard&quot;) }}
+                    &lt;h2&gt;Reading Card&lt;/h2&gt;
+                    &lt;p&gt;Welcome to canATM where there are &lt;strong&gt;never&lt;/strong&gt;
+                      fees!
+                    &lt;/p&gt;
+                    &lt;p&gt;
+                        Enter Card Number:
+                        &lt;input name=&quot;card&quot; on:enter=&quot;cardNumber(scope.element.value)&quot;&gt;
+                    &lt;/p&gt;
+                {{/ case }}
+
+                {{# case(&quot;readingPin&quot;) }}
+                    &lt;h2&gt;Reading Pin&lt;/h2&gt;
+                    &lt;p&gt;
+                        Enter Pin Number:
+                        &lt;input name=&quot;pin&quot; type=&quot;password&quot;
+                            autofocus
+                            {{# is(card.state, &quot;verifying&quot;) }}DISABLED{{/ is }}
+                            on:enter=&quot;pinNumber(scope.element.value)&quot;/&gt;
+
+                        {{# is(card.state, &quot;verifying&quot;) }}
+                            &lt;div class='warn'&gt;
+                                &lt;p&gt;
+                                &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                                verifying
+                                &lt;/p&gt;
+                            &lt;/div&gt;
+                        {{/ is }}
+                    &lt;/p&gt;
+                    &lt;a href=&quot;javascript://&quot; on:click=&quot;exit()&quot;&gt;exit&lt;/a&gt;
+                {{/ case }}
+
+                {{# case(&quot;choosingTransaction&quot;) }}
+                    &lt;h2&gt;Choose Transaction&lt;/h2&gt;
+                    &lt;p&gt;What would you like to do?&lt;/p&gt;
+                    &lt;nav&gt;
+                        &lt;ul&gt;
+                            &lt;li on:click=&quot;chooseDeposit()&quot;&gt;Deposit&lt;/li&gt;
+                            &lt;li on:click=&quot;chooseWithdraw()&quot;&gt;Withdraw&lt;/li&gt;
+                            &lt;li on:click=&quot;printReceiptAndExit()&quot;&gt;Exit&lt;/li&gt;
+                        &lt;/ul&gt;
+                    &lt;/nav&gt;
+                {{/ case }}
+
+                {{# case(&quot;pickingAccount&quot;) }}
+                    &lt;h2&gt;Pick Account&lt;/h2&gt;
+                    &lt;p&gt;Please pick your account:&lt;/p&gt;
+                    {{# if(accountsPromise.isPending) }}
+                        &lt;div class='warn'&gt;
+                            &lt;p&gt;
+                                &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                                Loading Accounts…
+                            &lt;/p&gt;
+                        &lt;/div&gt;
+                    {{ else }}
+                        &lt;ul&gt;
+                            {{# for(account of accountsPromise.value) }}
+                                &lt;li on:click=&quot;this.chooseAccount(account)&quot;&gt;{{ account.name }} - ${{ account.balance }}&lt;/li&gt;
+                            {{/ for }}
+                        &lt;/ul&gt;
+                    {{/ if }}
+                {{/ case }}
+
+                {{# case(&quot;depositInfo&quot;) }}
+                    &lt;h2&gt;Deposit&lt;/h2&gt;
+                    &lt;p&gt;
+                        How much would you like to deposit
+                        into {{ currentTransaction.account.name }}
+                        (${{ currentTransaction.account.balance }})?
+
+                        &lt;input name=&quot;deposit&quot; value:bind=&quot;currentTransaction.amount&quot;/&gt;
+                    &lt;/p&gt;
+
+                    {{# eq(currentTransaction.state, &quot;executing&quot;) }}
+                        &lt;div class='warn'&gt;
+                            &lt;p&gt;
+                            &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                            executing
+                            &lt;/p&gt;
+                        &lt;/div&gt;
+                    {{ else }}
+                        &lt;button on:click=&quot;currentTransaction.execute()&quot;
+                            {{^ eq currentTransaction.state &quot;ready&quot; }}DISABLED{{/ eq }}&gt;
+                            Deposit
+                        &lt;/button&gt;
+                        &lt;a href=&quot;javascript://&quot; on:click=&quot;removeTransaction()&quot;&gt;cancel&lt;/a&gt;
+                    {{/ eq }}
+                {{/ case }}
+
+                {{# case(&quot;withdrawalInfo&quot;) }}
+                    &lt;h2&gt;Withdraw&lt;/h2&gt;
+                    &lt;p&gt;
+                        How much would you like to withdraw
+                        from {{ currentTransaction.account.name }}
+                        (${{ currentTransaction.account.balance }})?
+
+                        &lt;input name=&quot;withdrawl&quot; value:bind=&quot;currentTransaction.amount&quot;/&gt;
+                    &lt;/p&gt;
+                    {{# eq(currentTransaction.state, &quot;executing&quot;) }}
+                        &lt;div class='warn'&gt;
+                            &lt;p&gt;
+                            &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                            executing
+                            &lt;/p&gt;
+                        &lt;/div&gt;
+                    {{ else }}
+                        &lt;button on:click=&quot;currentTransaction.execute()&quot;
+                            {{^ eq currentTransaction.state &quot;ready&quot; }}DISABLED{{/ eq }}&gt;
+                            Withdraw
+                        &lt;/button&gt;
+                        &lt;a href=&quot;javascript://&quot; on:click=&quot;removeTransaction()&quot;&gt;cancel&lt;/a&gt;
+                    {{/ eq }}
+                {{/ case }}
+
+                {{# case(&quot;successfulTransaction&quot;) }}
+                    &lt;h2&gt;Transaction Successful!&lt;/h2&gt;
+                {{/ case }}
+
+                {{# case(&quot;printingReceipt&quot;) }}
+                    &lt;h2&gt;Printing Receipt&lt;/h2&gt;
+                {{/ case }}
+
+                {{# default }}
+                    &lt;h2&gt;Error&lt;/h2&gt;
+                    &lt;p&gt;Invalid state - {{ state }}&lt;/p&gt;
+                {{/ default }}
+
+            {{/ switch }}
+
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/script&gt;
+
+&lt;script type='text/stache' id='app-template'&gt;
+&lt;div class=&quot;title&quot;&gt;
+    &lt;h1&gt;canATM&lt;/h1&gt;
+&lt;/div&gt;
+&lt;atm-machine/&gt;
+&lt;/script&gt;
+
+&lt;script src=&quot;https://unpkg.com/can@4/dist/global/can.all.js&quot;&gt;&lt;/script&gt;
+
+&lt;div id=&quot;qunit&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://code.jquery.com/qunit/qunit-1.12.0.css&quot;&gt;
+&lt;script src=&quot;https://code.jquery.com/qunit/qunit-1.12.0.js&quot;&gt;&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+<div line-highlight='109-129,only'></div>
+<p>When complete, you should be able to enter a withdrawal amount and see that
+the transaction was successful.</p>
+<blockquote>
+<p><strong>Optional:</strong> Challenge yourself by adding a test for the <code>withdrawalInfo</code> state of an <code>atm</code> instance.  Consider the progression of states needed to make it to the <code>withdrawalInfo</code> state.  How is it different from the <strong>ATM basics</strong> test we already have?</p>
+</blockquote>
+<h2>Transaction Successful page</h2>
+<p>In this section, we will:</p>
+<ul>
+<li>Show the result of the transaction.</li>
+</ul>
+<p>Update the <strong>HTML</strong> tab to:</p>
+<ul>
+<li>List out the account balance.</li>
+<li>Add buttons to:
+<ul>
+<li>start another transaction, or</li>
+<li>print a receipt and exit the ATM (<code>printReceiptAndExit</code> will be implemented in the next section).</li>
+</ul></li>
+</ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta name=&quot;description&quot; content=&quot;CanJS 3.0 - ATM Guide - Setup&quot;&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot;&gt;
+  &lt;title&gt;JS Bin&lt;/title&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;script type='text/stache' id='atm-template'&gt;
+&lt;div class=&quot;screen&quot;&gt;
+    &lt;div class=&quot;screen-content&quot;&gt;
+        &lt;div class=&quot;screen-glass&quot;&gt;
+
+            {{# switch(state) }}
+                {{# case(&quot;readingCard&quot;) }}
+                    &lt;h2&gt;Reading Card&lt;/h2&gt;
+                    &lt;p&gt;Welcome to canATM where there are &lt;strong&gt;never&lt;/strong&gt;
+                      fees!
+                    &lt;/p&gt;
+                    &lt;p&gt;
+                        Enter Card Number:
+                        &lt;input name=&quot;card&quot; on:enter=&quot;cardNumber(scope.element.value)&quot;&gt;
+                    &lt;/p&gt;
+                {{/ case }}
+
+                {{# case(&quot;readingPin&quot;) }}
+                    &lt;h2&gt;Reading Pin&lt;/h2&gt;
+                    &lt;p&gt;
+                        Enter Pin Number:
+                        &lt;input name=&quot;pin&quot; type=&quot;password&quot;
+                            autofocus
+                            {{# is(card.state, &quot;verifying&quot;) }}DISABLED{{/ is }}
+                            on:enter=&quot;pinNumber(scope.element.value)&quot;/&gt;
+
+                        {{# is(card.state, &quot;verifying&quot;) }}
+                            &lt;div class='warn'&gt;
+                                &lt;p&gt;
+                                &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                                verifying
+                                &lt;/p&gt;
+                            &lt;/div&gt;
+                        {{/ is }}
+                    &lt;/p&gt;
+                    &lt;a href=&quot;javascript://&quot; on:click=&quot;exit()&quot;&gt;exit&lt;/a&gt;
+                {{/ case }}
+
+                {{# case(&quot;choosingTransaction&quot;) }}
+                    &lt;h2&gt;Choose Transaction&lt;/h2&gt;
+                    &lt;p&gt;What would you like to do?&lt;/p&gt;
+                    &lt;nav&gt;
+                        &lt;ul&gt;
+                            &lt;li on:click=&quot;chooseDeposit()&quot;&gt;Deposit&lt;/li&gt;
+                            &lt;li on:click=&quot;chooseWithdraw()&quot;&gt;Withdraw&lt;/li&gt;
+                            &lt;li on:click=&quot;printReceiptAndExit()&quot;&gt;Exit&lt;/li&gt;
+                        &lt;/ul&gt;
+                    &lt;/nav&gt;
+                {{/ case }}
+
+                {{# case(&quot;pickingAccount&quot;) }}
+                    &lt;h2&gt;Pick Account&lt;/h2&gt;
+                    &lt;p&gt;Please pick your account:&lt;/p&gt;
+                    {{# if(accountsPromise.isPending) }}
+                        &lt;div class='warn'&gt;
+                            &lt;p&gt;
+                                &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                                Loading Accounts…
+                            &lt;/p&gt;
+                        &lt;/div&gt;
+                    {{ else }}
+                        &lt;ul&gt;
+                            {{# for(account of accountsPromise.value) }}
+                                &lt;li on:click=&quot;this.chooseAccount(account)&quot;&gt;{{ account.name }} - ${{ account.balance }}&lt;/li&gt;
+                            {{/ for }}
+                        &lt;/ul&gt;
+                    {{/ if }}
+                {{/ case }}
+
+                {{# case(&quot;depositInfo&quot;) }}
+                    &lt;h2&gt;Deposit&lt;/h2&gt;
+                    &lt;p&gt;
+                        How much would you like to deposit
+                        into {{ currentTransaction.account.name }}
+                        (${{ currentTransaction.account.balance }})?
+
+                        &lt;input name=&quot;deposit&quot; value:bind=&quot;currentTransaction.amount&quot;/&gt;
+                    &lt;/p&gt;
+
+                    {{# eq(currentTransaction.state, &quot;executing&quot;) }}
+                        &lt;div class='warn'&gt;
+                            &lt;p&gt;
+                            &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                            executing
+                            &lt;/p&gt;
+                        &lt;/div&gt;
+                    {{ else }}
+                        &lt;button on:click=&quot;currentTransaction.execute()&quot;
+                            {{^ eq currentTransaction.state &quot;ready&quot; }}DISABLED{{/ eq }}&gt;
+                            Deposit
+                        &lt;/button&gt;
+                        &lt;a href=&quot;javascript://&quot; on:click=&quot;removeTransaction()&quot;&gt;cancel&lt;/a&gt;
+                    {{/ eq }}
+                {{/ case }}
+
+                {{# case(&quot;withdrawalInfo&quot;) }}
+                    &lt;h2&gt;Withdraw&lt;/h2&gt;
+                    &lt;p&gt;
+                        How much would you like to withdraw
+                        from {{ currentTransaction.account.name }}
+                        (${{ currentTransaction.account.balance }})?
+
+                        &lt;input name=&quot;withdrawl&quot; value:bind=&quot;currentTransaction.amount&quot;/&gt;
+                    &lt;/p&gt;
+                    {{# eq(currentTransaction.state, &quot;executing&quot;) }}
+                        &lt;div class='warn'&gt;
+                            &lt;p&gt;
+                            &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                            executing
+                            &lt;/p&gt;
+                        &lt;/div&gt;
+                    {{ else }}
+                        &lt;button on:click=&quot;currentTransaction.execute()&quot;
+                            {{^ eq currentTransaction.state &quot;ready&quot; }}DISABLED{{/ eq }}&gt;
+                            Withdraw
+                        &lt;/button&gt;
+                        &lt;a href=&quot;javascript://&quot; on:click=&quot;removeTransaction()&quot;&gt;cancel&lt;/a&gt;
+                    {{/ eq }}
+                {{/ case }}
+
+                {{# case(&quot;successfulTransaction&quot;) }}
+                    &lt;h2&gt;Transaction Successful!&lt;/h2&gt;
+                    &lt;p&gt;
+                        {{ currentTransaction.account.name }} has
+                        ${{ currentTransaction.account.balance }}.
+                    &lt;/p&gt;
+                    &lt;p&gt;What would you like to do?&lt;/p&gt;
+                    &lt;nav&gt;
+                        &lt;ul&gt;
+                            &lt;li on:click=&quot;removeTransaction()&quot;&gt;Another transaction&lt;/li&gt;
+                            &lt;li on:click=&quot;printReceiptAndExit()&quot;&gt;Exit&lt;/li&gt;
+                        &lt;/ul&gt;
+                    &lt;/nav&gt;
+                {{/ case }}
+
+                {{# case(&quot;printingReceipt&quot;) }}
+                    &lt;h2&gt;Printing Receipt&lt;/h2&gt;
+                {{/ case }}
+
+                {{# default }}
+                    &lt;h2&gt;Error&lt;/h2&gt;
+                    &lt;p&gt;Invalid state - {{ state }}&lt;/p&gt;
+                {{/ default }}
+
+            {{/ switch }}
+
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/script&gt;
+
+&lt;script type='text/stache' id='app-template'&gt;
+&lt;div class=&quot;title&quot;&gt;
+    &lt;h1&gt;canATM&lt;/h1&gt;
+&lt;/div&gt;
+&lt;atm-machine/&gt;
+&lt;/script&gt;
+
+&lt;script src=&quot;https://unpkg.com/can@4/dist/global/can.all.js&quot;&gt;&lt;/script&gt;
+
+&lt;div id=&quot;qunit&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://code.jquery.com/qunit/qunit-1.12.0.css&quot;&gt;
+&lt;script src=&quot;https://code.jquery.com/qunit/qunit-1.12.0.js&quot;&gt;&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+<div line-highlight='134-144,only'></div>
+<p>When complete, you should be able to make a deposit or withdrawal, see the updated account balance,
+then start another transaction.</p>
+<h2>Printing Recipe page and test</h2>
+<p>In this section, we will make it possible to:</p>
+<ul>
+<li>See a receipt of all transactions</li>
+<li>Exit the ATM.</li>
+</ul>
+<p>Update the <strong>HTML</strong> tab to:</p>
+<ul>
+<li>List out all the transactions the user has completed.</li>
+<li>List out the final value of all accounts.</li>
+</ul>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta name=&quot;description&quot; content=&quot;CanJS 3.0 - ATM Guide - Setup&quot;&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width&quot;&gt;
+  &lt;title&gt;JS Bin&lt;/title&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;script type='text/stache' id='atm-template'&gt;
+&lt;div class=&quot;screen&quot;&gt;
+    &lt;div class=&quot;screen-content&quot;&gt;
+        &lt;div class=&quot;screen-glass&quot;&gt;
+
+            {{# switch(state) }}
+                {{# case(&quot;readingCard&quot;) }}
+                    &lt;h2&gt;Reading Card&lt;/h2&gt;
+                    &lt;p&gt;Welcome to canATM where there are &lt;strong&gt;never&lt;/strong&gt;
+                      fees!
+                    &lt;/p&gt;
+                    &lt;p&gt;
+                        Enter Card Number:
+                        &lt;input name=&quot;card&quot; on:enter=&quot;cardNumber(scope.element.value)&quot;&gt;
+                    &lt;/p&gt;
+                {{/ case }}
+
+                {{# case(&quot;readingPin&quot;) }}
+                    &lt;h2&gt;Reading Pin&lt;/h2&gt;
+                    &lt;p&gt;
+                        Enter Pin Number:
+                        &lt;input name=&quot;pin&quot; type=&quot;password&quot;
+                            autofocus
+                            {{# is(card.state, &quot;verifying&quot;) }}DISABLED{{/ is }}
+                            on:enter=&quot;pinNumber(scope.element.value)&quot;/&gt;
+
+                        {{# is(card.state, &quot;verifying&quot;) }}
+                            &lt;div class='warn'&gt;
+                                &lt;p&gt;
+                                &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                                verifying
+                                &lt;/p&gt;
+                            &lt;/div&gt;
+                        {{/ is }}
+                    &lt;/p&gt;
+                    &lt;a href=&quot;javascript://&quot; on:click=&quot;exit()&quot;&gt;exit&lt;/a&gt;
+                {{/ case }}
+
+                {{# case(&quot;choosingTransaction&quot;) }}
+                    &lt;h2&gt;Choose Transaction&lt;/h2&gt;
+                    &lt;p&gt;What would you like to do?&lt;/p&gt;
+                    &lt;nav&gt;
+                        &lt;ul&gt;
+                            &lt;li on:click=&quot;chooseDeposit()&quot;&gt;Deposit&lt;/li&gt;
+                            &lt;li on:click=&quot;chooseWithdraw()&quot;&gt;Withdraw&lt;/li&gt;
+                            &lt;li on:click=&quot;printReceiptAndExit()&quot;&gt;Exit&lt;/li&gt;
+                        &lt;/ul&gt;
+                    &lt;/nav&gt;
+                {{/ case }}
+
+                {{# case(&quot;pickingAccount&quot;) }}
+                    &lt;h2&gt;Pick Account&lt;/h2&gt;
+                    &lt;p&gt;Please pick your account:&lt;/p&gt;
+                    {{# if(accountsPromise.isPending) }}
+                        &lt;div class='warn'&gt;
+                            &lt;p&gt;
+                                &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                                Loading Accounts…
+                            &lt;/p&gt;
+                        &lt;/div&gt;
+                    {{ else }}
+                        &lt;ul&gt;
+                            {{# for(account of accountsPromise.value) }}
+                                &lt;li on:click=&quot;this.chooseAccount(account)&quot;&gt;{{ account.name }} - ${{ account.balance }}&lt;/li&gt;
+                            {{/ for }}
+                        &lt;/ul&gt;
+                    {{/ if }}
+                {{/ case }}
+
+                {{# case(&quot;depositInfo&quot;) }}
+                    &lt;h2&gt;Deposit&lt;/h2&gt;
+                    &lt;p&gt;
+                        How much would you like to deposit
+                        into {{ currentTransaction.account.name }}
+                        (${{ currentTransaction.account.balance }})?
+
+                        &lt;input name=&quot;deposit&quot; value:bind=&quot;currentTransaction.amount&quot;/&gt;
+                    &lt;/p&gt;
+
+                    {{# eq(currentTransaction.state, &quot;executing&quot;) }}
+                        &lt;div class='warn'&gt;
+                            &lt;p&gt;
+                            &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                            executing
+                            &lt;/p&gt;
+                        &lt;/div&gt;
+                    {{ else }}
+                        &lt;button on:click=&quot;currentTransaction.execute()&quot;
+                            {{^ eq currentTransaction.state &quot;ready&quot; }}DISABLED{{/ eq }}&gt;
+                            Deposit
+                        &lt;/button&gt;
+                        &lt;a href=&quot;javascript://&quot; on:click=&quot;removeTransaction()&quot;&gt;cancel&lt;/a&gt;
+                    {{/ eq }}
+                {{/ case }}
+
+                {{# case(&quot;withdrawalInfo&quot;) }}
+                    &lt;h2&gt;Withdraw&lt;/h2&gt;
+                    &lt;p&gt;
+                        How much would you like to withdraw
+                        from {{ currentTransaction.account.name }}
+                        (${{ currentTransaction.account.balance }})?
+
+                        &lt;input name=&quot;withdrawl&quot; value:bind=&quot;currentTransaction.amount&quot;/&gt;
+                    &lt;/p&gt;
+                    {{# eq(currentTransaction.state, &quot;executing&quot;) }}
+                        &lt;div class='warn'&gt;
+                            &lt;p&gt;
+                            &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                            executing
+                            &lt;/p&gt;
+                        &lt;/div&gt;
+                    {{ else }}
+                        &lt;button on:click=&quot;currentTransaction.execute()&quot;
+                            {{^ eq currentTransaction.state &quot;ready&quot; }}DISABLED{{/ eq }}&gt;
+                            Withdraw
+                        &lt;/button&gt;
+                        &lt;a href=&quot;javascript://&quot; on:click=&quot;removeTransaction()&quot;&gt;cancel&lt;/a&gt;
+                    {{/ eq }}
+                {{/ case }}
+
+                {{# case(&quot;successfulTransaction&quot;) }}
+                    &lt;h2&gt;Transaction Successful!&lt;/h2&gt;
+                    &lt;p&gt;
+                        {{ currentTransaction.account.name }} has
+                        ${{ currentTransaction.account.balance }}.
+                    &lt;/p&gt;
+                    &lt;p&gt;What would you like to do?&lt;/p&gt;
+                    &lt;nav&gt;
+                        &lt;ul&gt;
+                            &lt;li on:click=&quot;removeTransaction()&quot;&gt;Another transaction&lt;/li&gt;
+                            &lt;li on:click=&quot;printReceiptAndExit()&quot;&gt;Exit&lt;/li&gt;
+                        &lt;/ul&gt;
+                    &lt;/nav&gt;
+                {{/ case }}
+
+                {{# case(&quot;printingReceipt&quot;) }}
+                    &lt;h2&gt;Printing Receipt&lt;/h2&gt;
+                    &lt;h3&gt;Transactions&lt;/h3&gt;
+                    &lt;ul&gt;
+                        {{# if(transactions.length) }}
+                            {{# for(transaction of transactions) }}
+                                &lt;li&gt;{{ this.actionName(transaction) }} ${{ transaction.amount }} {{ this.actionPrep(transaction) }} {{ transaction.account.name }}&lt;/li&gt;
+                            {{/ for }}
+                        {{ else }}
+                            &lt;li&gt;None&lt;/li&gt;
+                        {{/ if }}
+                    &lt;/ul&gt;
+                    &lt;h3&gt;Accounts&lt;/h3&gt;
+                    &lt;ul&gt;
+                        {{# for(account of accountsPromise.value) }}
+                            &lt;li on:click=&quot;this.chooseAccount(account)&quot;&gt;{{ account.name }} - ${{ account.balance }}&lt;/li&gt;
+                        {{/ for }}
+                    &lt;/ul&gt;
+                    &lt;div class='warn'&gt;
+                        &lt;p&gt;
+                            &lt;img src=&quot;https://canjs.com/docs/images/loader.gif&quot;/&gt;
+                            printing
+                        &lt;/p&gt;
+                    &lt;/div&gt;
+                {{/ case }}
+
+                {{# default }}
+                    &lt;h2&gt;Error&lt;/h2&gt;
+                    &lt;p&gt;Invalid state - {{ state }}&lt;/p&gt;
+                {{/ default }}
+
+            {{/ switch }}
+
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/script&gt;
+
+&lt;script type='text/stache' id='app-template'&gt;
+&lt;div class=&quot;title&quot;&gt;
+    &lt;h1&gt;canATM&lt;/h1&gt;
+&lt;/div&gt;
+&lt;atm-machine/&gt;
+&lt;/script&gt;
+
+&lt;script src=&quot;https://unpkg.com/can@4/dist/global/can.all.js&quot;&gt;&lt;/script&gt;
+
+&lt;div id=&quot;qunit&quot;&gt;&lt;/div&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://code.jquery.com/qunit/qunit-1.12.0.css&quot;&gt;
+&lt;script src=&quot;https://code.jquery.com/qunit/qunit-1.12.0.js&quot;&gt;&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+<div line-highlight='149-170,only'></div>
+<p>Update the <code>ATM</code> view model in the <code>JavaScript</code> tab to:</p>
+<ul>
+<li>Add a <code>printingReceipt</code> and <code>receiptTime</code> property.</li>
+<li>Change the <code>state</code> to <code>&quot;printingReceipt&quot;</code> when <code>printingReceipt</code> is true.</li>
+<li>Make <code>.exit</code> set <code>printingReceipt</code> to <code>null</code>.</li>
+<li>Add a <code>printReceiptAndExit</code> method that:
+<ul>
+<li>clears the current transaction, which will add the currentTransaction to the list of transactions.</li>
+<li>sets <code>printingReceipt</code> to <code>true</code> for <code>printingReceipt</code> time.</li>
+</ul></li>
+</ul>
+<p>Update the <code>ATM basics</code> test in the <code>JavaScript</code> tab to:</p>
+<ul>
+<li>Shorten the default <code>receiptTime</code> so the tests move quickly.</li>
+<li>Call <code>printReceiptAndExit</code> and make sure that the <code>state</code> changes to <code>&quot;printingReceipt&quot;</code> and
+then to <code>&quot;readingCard&quot;</code> and ensure that sensitive information is cleared from the ATM.</li>
+</ul>
+<pre><code class="language-js">// ========================================
+// CODE
+// ========================================
+
+can.fixture({
+    &quot;/verifyCard&quot;: function(request, response) {
+        if (!request.data || !request.data.number || !request.data.pin) {
+            response(400, {});
+        } else {
+            return {};
+        }
+    },
+    &quot;/accounts&quot;: function() {
+        return {
+            data: [{
+                balance: 100,
+                id: 1,
+                name: &quot;checking&quot;
+            }, {
+                balance: 10000,
+                id: 2,
+                name: &quot;savings&quot;
+            }]
+        };
+    },
+    &quot;/deposit&quot;: function() {
+        return {};
+    },
+    &quot;/withdrawal&quot;: function() {
+        return {};
+    }
+});
+can.fixture.delay = 1000;
+
+var Card = can.DefineMap.extend({
+    number: &quot;string&quot;,
+    pin: &quot;string&quot;,
+    state: {
+        default: &quot;unverified&quot;,
+        serialize: false
+    },
+    verify: function() {
+
+        this.state = &quot;verifying&quot;;
+
+        var self = this;
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/verifyCard&quot;,
+            data: this.serialize()
+        }).then(
+            function() {
+                self.state = &quot;verified&quot;;
+                return self;
+            },
+            function() {
+                self.state = &quot;invalid&quot;;
+                return self;
+            });
+    }
+});
+
+var Account = can.DefineMap.extend(&quot;Account&quot;, {
+    id: &quot;number&quot;,
+    balance: &quot;number&quot;,
+    name: &quot;string&quot;
+});
+Account.List = can.DefineList.extend(&quot;AccountList&quot;, {
+    &quot;*&quot;: Account
+});
+
+can.connect.baseMap({
+    url: &quot;/accounts&quot;,
+    Map: Account,
+    List: Account.List,
+    name: &quot;accounts&quot;
+});
+
+var Transaction = can.DefineMap.extend({
+    account: Account,
+    card: Card,
+    executing: {
+        type: &quot;boolean&quot;,
+        default: false
+    },
+    executed: {
+        type: &quot;boolean&quot;,
+        default: false
+    },
+    rejected: &quot;any&quot;,
+    get ready(){
+        throw new Error(&quot;Transaction::ready must be provided by extended type&quot;);
+    },
+    get state() {
+        if (this.rejected) {
+            return &quot;rejected&quot;;
+        }
+        if (this.executed) {
+            return &quot;executed&quot;;
+        }
+        if (this.executing) {
+            return &quot;executing&quot;;
+        }
+        // make sure there’s an amount, account, and card
+        if (this.ready) {
+            return &quot;ready&quot;;
+        }
+        return &quot;invalid&quot;;
+    },
+    executeStart: function(){
+        throw new Error(&quot;Transaction::executeStart must be provided by extended type&quot;);
+    },
+    executeEnd: function(){
+        throw new Error(&quot;Transaction::executeEnd must be provided by extended type&quot;);
+    },
+    execute: function() {
+        if (this.state === &quot;ready&quot;) {
+
+            this.executing = true;
+
+            var def = this.executeStart(),
+                self = this;
+
+            def.then(function() {
+                can.queues.batch.start();
+                self.assign({
+                    executing: false,
+                    executed: true
+                });
+                self.executeEnd();
+                can.queues.batch.stop();
+            }, function(reason){
+                self.assign({
+                    executing: false,
+                    executed: true,
+                    rejected: reason
+                });
+            });
+        }
+    }
+});
+
+var Deposit = Transaction.extend({
+    amount: &quot;number&quot;,
+    get ready() {
+        return this.amount &gt; 0 &amp;&amp;
+            this.account &amp;&amp;
+            this.card;
+    },
+    executeStart: function() {
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/deposit&quot;,
+            data: {
+                card: this.card.serialize(),
+                accountId: this.account.id,
+                amount: this.amount
+            }
+        });
+    },
+    executeEnd: function(data) {
+        this.account.balance = this.account.balance + this.amount;
+    }
+});
+
+var Withdrawal = Transaction.extend({
+    amount: &quot;number&quot;,
+    get ready() {
+        return this.amount &gt; 0 &amp;&amp;
+            this.account &amp;&amp;
+            this.card;
+    },
+    executeStart: function() {
+        return can.ajax({
+            type: &quot;POST&quot;,
+            url: &quot;/withdrawal&quot;,
+            data: {
+                card: this.card.serialize(),
+                accountId: this.account.id,
+                amount: this.amount
+            }
+        });
+    },
+    executeEnd: function(data) {
+        this.account.balance = this.account.balance - this.amount;
+    }
+});
+
+var ATM = can.DefineMap.extend({
+    // stateful properties
+    card: Card,
+    accountsPromise: &quot;any&quot;,
+    transactions: can.DefineList,
+    currentTransaction: {
+        set: function(newTransaction) {
+            var currentTransaction = this.currentTransaction;
+            if (this.transactions &amp;&amp; currentTransaction &amp;&amp;
+                currentTransaction.state === &quot;executed&quot;) {
+
+                this.transactions.push(currentTransaction);
+            }
+            return newTransaction;
+        }
+    },
+    printingReceipt: &quot;boolean&quot;,
+    receiptTime: {
+        default: 5000,
+        type: &quot;number&quot;
+    },
+
+    // derived properties
+    get state(){
+        if (this.printingReceipt) {
+            return &quot;printingReceipt&quot;;
+        }
+        if (this.currentTransaction) {
+            if (this.currentTransaction.state === &quot;executed&quot;) {
+                return &quot;successfulTransaction&quot;;
+            }
+
+            if (this.currentTransaction.account) {
+                if (this.currentTransaction instanceof Deposit) {
+                    return &quot;depositInfo&quot;;
+                } else {
+                    return &quot;withdrawalInfo&quot;;
+                }
+            }
+
+            return &quot;pickingAccount&quot;;
+        }
+
+        if(this.card) {
+            if (this.card.state === &quot;verified&quot;) {
+                return &quot;choosingTransaction&quot;;
+            }
+            return &quot;readingPin&quot;;
+        }
+        return &quot;readingCard&quot;;
+    },
+
+    // methods
+    cardNumber: function(number) {
+        this.card = new Card({
+            number: number
+        });
+    },
+    pinNumber: function(pin) {
+        var card = this.card;
+
+        card.pin = pin;
+        this.transactions = new can.DefineList();
+        this.accountsPromise = card.verify().then(function(card) {
+
+            return Account.getList(card.serialize());
+        });
+    },
+    exit: function(){
+        this.assign({
+            card: null,
+            accountsPromise: null,
+            transactions: null,
+            currentTransaction: null,
+            printingReceipt: null
+        });
+    },
+    printReceiptAndExit: function() {
+        this.currentTransaction = null;
+        this.printingReceipt = true;
+        var self = this;
+        setTimeout(function() {
+            self.exit();
+        }, this.receiptTime);
+    },
+    chooseDeposit: function() {
+        this.currentTransaction = new Deposit({
+            card: this.card
+        });
+    },
+    chooseWithdraw: function() {
+        this.currentTransaction = new Withdrawal({
+            card: this.card
+        });
+    },
+    chooseAccount: function(account) {
+        this.currentTransaction.account = account;
+    },
+    removeTransaction: function() {
+        this.currentTransaction = null;
+    }
+});
+
+can.Component.extend({
+    tag: &quot;atm-machine&quot;,
+    view: can.stache.from(&quot;atm-template&quot;),
+    ViewModel: ATM,
+});
+
+document.body.insertBefore(
+    can.stache.from(&quot;app-template&quot;)({}),
+    document.body.firstChild
+);
+
+// ========================================
+// TESTS
+// ========================================
+
+QUnit.module(&quot;ATM system&quot;, {
+    setup: function() {
+        can.fixture.delay = 1;
+    },
+    teardown: function() {
+        can.fixture.delay = 2000;
+    }
+});
+
+QUnit.asyncTest(&quot;Valid Card&quot;, function() {
+
+    var c = new Card({
+        number: &quot;01234567890&quot;,
+        pin: 1234
+    });
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;verified&quot;, &quot;card is verified&quot;);
+
+        QUnit.start();
+    });
+});
+
+QUnit.asyncTest(&quot;Invalid Card&quot;, function() {
+
+    var c = new Card({});
+
+    QUnit.equal(c.state, &quot;unverified&quot;);
+
+    c.verify();
+
+    QUnit.equal(c.state, &quot;verifying&quot;, &quot;card is verifying&quot;);
+
+    c.on(&quot;state&quot;, function(ev, newVal) {
+
+        QUnit.equal(newVal, &quot;invalid&quot;, &quot;card is invalid&quot;);
+
+        QUnit.start();
+    });
+});
+
+QUnit.asyncTest(&quot;Deposit&quot;, 6, function() {
+
+    var card = new Card({
+        number: &quot;0123456789&quot;,
+        pin: &quot;1122&quot;
+    });
+
+    var deposit = new Deposit({
+        amount: 100,
+        card: card
+    });
+
+    equal(deposit.state, &quot;invalid&quot;);
+
+    var startingBalance;
+
+    Account.getList(card.serialize()).then(function(accounts) {
+        QUnit.ok(true, &quot;got accounts&quot;);
+        deposit.account = accounts[0];
+        startingBalance = accounts[0].balance;
+    });
+
+    deposit.on(&quot;state&quot;, function(ev, newVal) {
+        if (newVal === &quot;ready&quot;) {
+
+            QUnit.ok(true, &quot;deposit is ready&quot;);
+            deposit.execute();
+
+        } else if (newVal === &quot;executing&quot;) {
+
+            QUnit.ok(true, &quot;executing a deposit&quot;);
+
+        } else if (newVal === &quot;executed&quot;) {
+
+            QUnit.ok(true, &quot;executed a deposit&quot;);
+            equal(deposit.account.balance, 100 + startingBalance);
+            start();
+
+        }
+    });
+});
+
+QUnit.asyncTest(&quot;ATM basics&quot;, function() {
+
+    var atm = new ATM();
+
+    equal(atm.state, &quot;readingCard&quot;, &quot;starts at reading card state&quot;);
+
+    atm.cardNumber(&quot;01233456789&quot;);
+
+    equal(atm.state, &quot;readingPin&quot;, &quot;moves to reading card state&quot;);
+
+    atm.pinNumber(&quot;1234&quot;);
+
+    ok(atm.state, &quot;readingPin&quot;, &quot;remain in the reading pin state until verifyied&quot;);
+
+    atm.on(&quot;state&quot;, function(ev, newVal) {
+
+        if (newVal === &quot;choosingTransaction&quot;) {
+
+            QUnit.ok(true, &quot;in choosingTransaction&quot;);
+            atm.chooseDeposit();
+
+        } else if (newVal === &quot;pickingAccount&quot;) {
+
+            QUnit.ok(true, &quot;in picking account state&quot;);
+            atm.accountsPromise.then(function(accounts){
+                atm.chooseAccount(accounts[0]);
+            });
+
+        } else if (newVal === &quot;depositInfo&quot;) {
+
+            QUnit.ok(true, &quot;in depositInfo state&quot;);
+            var currentTransaction = atm.currentTransaction;
+            currentTransaction.amount = 120;
+            QUnit.ok(currentTransaction.ready, &quot;we are ready to execute&quot;);
+            currentTransaction.execute();
+            QUnit.equal(atm.state, &quot;depositInfo&quot;, &quot;in deposit state until successful&quot;);
+
+        } else if (newVal === &quot;successfulTransaction&quot;) {
+
+            QUnit.ok(true, &quot;in successfulTransaction state&quot;);
+            atm.receiptTime = 100;
+            atm.printReceiptAndExit();
+
+        } else if (newVal === &quot;printingReceipt&quot;) {
+
+            QUnit.ok(true, &quot;in printingReceipt state&quot;);
+
+        } else if (newVal === &quot;readingCard&quot;) {
+
+            QUnit.ok(true, &quot;in readingCard state&quot;);
+            QUnit.ok(!atm.card, &quot;card is removed&quot;);
+            QUnit.ok(!atm.transactions, &quot;transactions removed&quot;);
+            QUnit.start();
+
+        }
+    });
+});
+
+</code></pre>
+<div line-highlight='189,205-209,213-215,263,266-273,397,437-451,only'></div>
+<p>When complete, you have a working ATM!  Cha-ching!</p>
+<script src="https://static.jsbin.com/js/embed.min.js?4.0.4"></script>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/experiment/atm/atm.md"},"description":"\nThis guide will walk you through building and testing an Automated Teller Machine (ATM) application with CanJS’s\n[can-core Core libraries].  You’ll learn how to do test driven development (TDD)\nand manage complex state.  It takes about 2 hours to complete.\n","name":"guides/atm","title":"ATM Guide","type":"page","parent":"guides/experiment","order":3,"hide":true,"comment":" ","pathToRoot":"../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix=".."></div>
+
+	</body>
+</html>

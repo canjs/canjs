@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<title>Memory tests</title>
+<button type="button">Run me</button>
+<div id="root"></div>
+<script src="../node_modules/steal/steal.js"></script>
+<script type="steal-module">
+	var DefineMap = require("can-define/map/map");
+	var Component = require("can-component");
+	var nodeLists = require("can-view-nodelist");
+	var domMutateNode = require("can-dom-mutate/node");
+	var stache = require("can-stache");
+
+	var MyComponent = Component.extend({
+		tag: "my-thing",
+		view: "Hello world",
+		ViewModel: { count: "number" }
+	});
+
+	var ViewModel = DefineMap.extend({
+		count: { default: 0 },
+
+		get component() {
+			var count = this.count;
+
+			if(count === 2) {
+				return document.createElement('div');
+			}
+
+
+			var comp = new MyComponent({ count });
+			return Promise.resolve(comp);
+		}
+	});
+
+	async function run() {
+		var vm = new ViewModel();
+		var frag = stache(`
+			<span>Count: {{count}}</span>
+			{{#if(component.isResolved)}}
+				<div>{{component.value}}</div>
+			{{/if}}
+		`)(vm);
+
+		vm.count++;
+
+		setTimeout(() => {
+			vm.count++;
+
+			domMutateNode.appendChild.call(root, frag);
+			setTimeout(() => {
+				while(root.firstChild) {
+					domMutateNode.removeChild.call(root, root.firstChild);
+				}
+			}, 100)
+		}, 100);
+	}
+
+	document.querySelector('button').addEventListener('click', run);
+</script>

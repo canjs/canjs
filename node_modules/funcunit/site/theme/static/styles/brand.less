@@ -1,0 +1,81 @@
+.brand {
+  color: #fff;
+  border-left: 1px solid rgba(255, 255, 255, 0);
+  border-right: 1px solid rgba(255, 255, 255, 0);
+  display: block;
+  line-height: @headerHeight;
+  text-indent: -9999px;
+  height: @headerHeight;
+  width: @logoWidth;
+  text-align: left;
+  background-image: none;
+  text-decoration: none;
+  position: relative;
+  top: 0;
+  left: 0;
+  &:before {
+    text-decoration: none;
+    content: @logo;
+    speak: none;
+    color: #fff;
+    line-height: 20px;
+    font-family: func;
+    font-size: 90px;
+    .text-shadow;
+    position: absolute;
+    top: 16px;
+    left: 0px;
+    width: @logoWidth;
+    text-indent: 0px;
+  }
+}
+
+.content {
+  border: 0;
+}
+
+header {
+  .brand.funcunit:after {
+    content: "\e001";
+    color: @light;
+    text-indent: 0;
+    font-size: 25px;
+    font-family: Bitstrap;
+    line-height: @headerHeight;
+    position: absolute;
+    right: 5px;
+    .text-shadow;
+    &:hover .brand.funcunit:after {
+      color: @light;
+      text-shadow: none;
+    }
+  }
+  .logo-menu:hover .brand.funcunit {
+    background-color: #fff;
+    border-left: 1px solid #d5d5d5;
+    border-right: 1px solid #d5d5d5;
+    color: #fff;
+    text-shadow: none;
+    opacity: 1;
+  }
+  .logo-menu:hover .brand.funcunit:before {
+    color: @dark;
+    text-shadow: none;
+  }
+  .logo-menu:hover .dropdown-menu,
+  .bitovi-menu:hover .dropdown-menu {
+    display: block;
+    visibility: visible;
+  }
+}
+
+footer {
+  .brand:before {
+    color: #bababa;
+    .text-shadow-light;
+    line-height: @footerHeight/2+7;
+  }
+  .brand:hover:before {
+    color: #929191;
+  }
+}

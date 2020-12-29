@@ -1,0 +1,40 @@
+<html>
+	<head>
+		<title>&lt;can-import&gt; demo</title>
+	</head>
+	<body>
+		<script type="text/stache" id="template">
+			<div>
+			<button can-click="toggle">Toggle</button>
+			</div>
+
+			{{#if showHello}}
+
+			<can-import from="can/view/import/demo/hello">
+				{{#eq state "pending"}}
+					<span>Loading {{state}}</span>
+				{{/eq}}
+
+				{{#eq state "resolved"}}
+					<hello-world></hello-world>
+				{{/eq}}
+			</can-import>
+
+			{{else}}
+				<span>Lonely in here</span>
+			{{/if}}
+		</script>
+		<script src="../../../node_modules/steal/steal.js" main="@empty">
+			var can = require("can");
+			require("can/view/stache/");
+
+			var renderer = can.view("template");
+			$(document.body).append(renderer(new can.Map({
+				showHello: false,
+				toggle: function(){
+					this.attr("showHello", !this.attr("showHello"));
+				}
+			})));
+		</script>
+	</body>
+</html>

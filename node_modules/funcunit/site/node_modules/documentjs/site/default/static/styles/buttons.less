@@ -1,0 +1,26 @@
+/**
+* @stylesheet buttons.less Buttons
+* @parent Styles.baseline-elements
+*
+* @description
+* All defined button styles and states belong here, including any "helper class" button style options, like `default`, `primary` etc. DocumentJS only has one defined button, which does not need any additional classes. 
+*
+* The same button styles have been applied to a button class, for use on other html elements emulating a button.
+*
+* @demo demos/buttons.html
+**/
+button, .button {
+	background-color: @colorLinks;
+	border: 1px solid darken(@colorLinks, 10%);
+	color: @clear;
+	.text-shadow;
+	border-radius: 2px;
+	padding: 5px 15px;
+	position: relative;
+	font-size: 14px;
+	line-height: 18px;
+	text-decoration: none;
+	&:hover, &.active {
+		background-color: darken(@colorLinks, 10%);
+	}
+}

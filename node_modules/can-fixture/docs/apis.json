@@ -1,0 +1,22 @@
+[
+  {"can-fixture": [
+    {"can-fixture.requestHandler": [
+      "can-fixture.response"
+    ]}
+  ]},
+  "can-fixture.rand",
+  "can-fixture.delay",
+  "can-fixture.on",
+  "can-fixture.fixtures",
+  "can-fixture.store",
+  {"StoreType": [
+    "Store.prototype.getListData",
+    "Store.prototype.getData",
+    "Store.prototype.createData",
+    "Store.prototype.updateData",
+    "Store.prototype.destroyData",
+    "Store.prototype.reset",
+    "Store.prototype.get",
+    "Store.prototype.getList"
+  ]}
+]

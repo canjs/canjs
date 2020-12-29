@@ -1,0 +1,16 @@
+<h2 id="version">
+	<select id='versions' style='display:none'></select>
+</h2>
+<ul class="api">
+	<!-- First Level -->
+	{{#eachFirstLevelChildren}}
+	   <li class="search-container{{#ifHasOrIsActive}} active{{/ifHasOrIsActive}}">
+	   		<a href="{{urlTo name}}" data-search="{{#if title}}{{title}}{{else}}{{{name}}}{{/if}}">
+				{{makeTitle}}
+			</a>
+			{{#ifHasOrIsActive}}
+				{{> active-menu.mustache}}
+			{{/ifHasOrIsActive}}
+	   </li>
+	{{/eachFirstLevelChildren}}
+</ul>

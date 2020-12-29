@@ -1,0 +1,14 @@
+<title>funcunit</title>
+<script src="node_modules/steal/steal.js" main="test/test">
+	var $ = FuncUnit.jQuery;
+	$(document).ready(function(){
+		$("#tester").click(function(ev){
+			ev.preventDefault();
+			$(ev.target).text("Changed");
+		});
+	});
+</script>
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+<a id="tester" href="#">Click Me</a>
+<iframe src="test/myapp.html" name="myapp"></iframe>

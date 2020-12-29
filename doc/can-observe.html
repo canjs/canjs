@@ -1,0 +1,3072 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: node_modules/can-observe/doc/can-observe.md
+	@module can-observe
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>can-observe | Observables | API Docs | CanJS</title>
+	<meta name="description" content="Create observable objects, arrays, and functions that work like plain JavaScript objects, arrays, and functions.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Create observable objects, arrays, and functions that work like plain JavaScript objects, arrays, and functions.">
+	<meta property="og:title" content="can-observe | Observables | API Docs | CanJS">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "git+https://github.com/canjs/can-observe.git",
+			"description": "Create observable objects, arrays, and functions that work like plain JavaScript objects, arrays, and functions.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "can-observe | Observables | API Docs | CanJS",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "2.3.2"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="./static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="can-observe" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="guides/contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>Observables</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-bind.html"
+							title="Updates one observable value with the value of another observable.">
+							can-bind
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-compute.html"
+							title="Create an observable value.">
+							can-compute
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-debug.html"
+							title="Useful debugging utilities.">
+							can-debug
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-deep-observable.html"
+							title="Create observable objects where nested objects and arrays are also observable.">
+							can-deep-observable
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define.html"
+							title="Defines observable properties and their behavior on a prototype object. This function is not commonly used directly. map and list are more commonly used. Types and behaviors shared by both map and list are documented here.">
+							can-define
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define/list/list.html"
+							title="Create observable lists.">
+							can-define/list/list
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define/map/map.html"
+							title="Create observable objects.">
+							can-define/map/map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-backup.html"
+							title="">
+							can-define-backup
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-stream.html"
+							title="Add useful stream conversion methods to a supplied map or list constructor using a stream interface such as can-stream-kefir.">
+							can-define-stream
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-stream-kefir.html"
+							title="Export a function that takes a map or list constructor and uses can-stream-kefir to create streamable properties.">
+							can-define-stream-kefir
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-event-queue.html"
+							title="Mixin observable behavior to your types.">
+							can-event-queue
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-kefir.html"
+							title="Integrate KefirJS streams directly within can-stache and other parts of CanJS.">
+							can-kefir
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-list.html"
+							title="">
+							can-list
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-map.html"
+							title="Create observable objects.">
+							can-map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-map-compat.html"
+							title="can-map-compat">
+							can-map-compat
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-map-define.html"
+							title="Defines the type, initial value, get, set, remove, and serialize behavior for attributes of a Map.">
+							can-map-define
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observable-array.html"
+							title="Create observable arrays with defined properties.">
+							can-observable-array
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observable-object.html"
+							title="Create observable objects used to manage state in explicitly defined ways.">
+							can-observable-object
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observation.html"
+							title="Create observable values that derive their value from other observable values.">
+							can-observation
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observation-recorder.html"
+							title="Specify how to listen to changes in a value being read and record those specifications between two points in time. Record observables being read and indicate how to listen to changes in a value being read.">
+							can-observation-recorder
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						parent
+           						expanded">
+						<a class="module"
+							href="can-observe.html"
+							title="Create observable objects, arrays, and functions that work like plain JavaScript objects, arrays, and functions.">
+							can-observe
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>Properties</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe/defineProperty.html"
+							title="Define a rich property behavior on a proxy-wrapped object.">
+							defineProperty
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe.Array.html"
+							title="Create observable Array instances or types.">
+							Array
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe.Object.html"
+							title="Create observable key-value instances or types.">
+							Object
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Decorators</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe.async.html"
+							title="Create observable key-value instances or types.">
+							async
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe.resolver.html"
+							title="Create observable key-value instances or types.">
+							resolver
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Object Behaviors</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe/can.isBound.html"
+							title="See @@can.isBound">
+							@can.isBound
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe/can.offKeyValue.html"
+							title="See @@can.offKeyValue">
+							@can.offKeyValue
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe/can.offPatches.html"
+							title="See @@can.offPatches">
+							@can.offPatches
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe/can.onKeyValue.html"
+							title="See @@can.onKeyValue">
+							@can.onKeyValue
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe/can.onPatches.html"
+							title="See @@can.onPatches">
+							@can.onPatches
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Array Behaviors</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe/pop.html"
+							title="Remove an element from the end of an observe array.">
+							pop
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe/push.html"
+							title="Add elements to the end of an observe array.">
+							push
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe/reverse.html"
+							title="Reverses the order of the observe array.">
+							reverse
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe/shift.html"
+							title="Removes the first element from an array.">
+							shift
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe/sort.html"
+							title="Sort the elements in an array.">
+							sort
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe/splice.html"
+							title="Insert and remove elements from an observe array.">
+							splice
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe/unshift.html"
+							title="Add elements to the start of an observe array.">
+							unshift
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Function Behaviors</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe/can.computedPropertyDefinitions.html"
+							title="Object containing rich property behaviors for a proxy-wrapped object.">
+							@can.computedPropertyDefinitions
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe/can.defineInstanceKey.html"
+							title="See @@can.defineInstanceKey">
+							@can.defineInstanceKey
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe/can.offInstanceBoundChange.html"
+							title="See @@can.offInstanceBoundChange">
+							@can.offInstanceBoundChange
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe/can.offInstancePatches.html"
+							title="See @@can.offInstancePatches">
+							@can.offInstancePatches
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe/can.onInstanceBoundChange.html"
+							title="See @@can.onInstanceBoundChange">
+							@can.onInstanceBoundChange
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="property"
+							href="can-observe/can.onInstancePatches.html"
+							title="See @@can.onInstancePatches">
+							@can.onInstancePatches
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-simple-map.html"
+							title="A performant live-bound map.">
+							can-simple-map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-simple-observable.html"
+							title="Create an observable value.">
+							can-simple-observable
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stream.html"
+							title="Create useful stream methods from a minimal stream wrapper implementation.">
+							can-stream
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stream-kefir.html"
+							title="Convert observable values into streams. Kefir is used to provide the stream functionality.">
+							can-stream-kefir
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-value.html"
+							title="Get an observable that’s bound to a specific property on another object.">
+							can-value
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Views</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-attribute-observable.html"
+							title="Create an observable value from an element&#x27;s property or attribute.">
+							can-attribute-observable
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-component.html"
+							title="Create a custom element that can be used to manage widgets or application logic.">
+							can-component
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observable-bindings.html"
+							title="">
+							can-observable-bindings
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache.html"
+							title="Live binding templates.">
+							can-stache
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-bindings.html"
+							title="Listen to events and create one-way and two-way bindings.">
+							can-stache-bindings
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-converters.html"
+							title="Provides a set of converters useful for two-way binding with form elements such as &lt;input&gt; and &lt;select&gt;.">
+							can-stache-converters
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-element.html"
+							title="Create a custom element with ObservableObject-like properties and stache views.">
+							can-stache-element
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-route-helpers.html"
+							title="Adds routeUrl and routeCurrent helpers to stache.">
+							can-stache-route-helpers
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-autorender.html"
+							title="A module that automatically renders script and other elements with the can-autorender attribute. This function is useful to know when the templates have finished rendering.">
+							can-view-autorender
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-callbacks.html"
+							title="Registered callbacks for behaviors">
+							can-view-callbacks
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-import.html"
+							title="">
+							can-view-import
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-live.html"
+							title="Setup live-binding between the DOM and a compute manually.">
+							can-view-live
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-model.html"
+							title="Gets the ViewModel of an element.">
+							can-view-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-parser.html"
+							title="Parse HTML and mustache tokens.">
+							can-view-parser
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-scope.html"
+							title="Create a lookup node for keys.">
+							can-view-scope
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-target.html"
+							title="">
+							can-view-target
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="steal-stache.html"
+							title="A StealJS extension that allows stache templates as dependencies.">
+							steal-stache
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Data Modeling</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-connect.html"
+							title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">
+							can-connect
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-connect-ndjson.html"
+							title="Get a list of data from an NDJSON service endpoint.">
+							can-connect-ndjson
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-connect-tag.html"
+							title="Create custom elements that can be used to retrieve model instances.">
+							can-connect-tag
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-realtime-rest-model.html"
+							title="Connect a type to a restful data source and automatically manage lists.">
+							can-define-realtime-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-rest-model.html"
+							title="Connect a type to a restful service layer.">
+							can-define-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-fixture.html"
+							title="Intercept AJAX requests and simulate the response.">
+							can-fixture
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-fixture-socket.html"
+							title="Simulate socket.io services.">
+							can-fixture-socket
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-local-store.html"
+							title="Create, update, delete and query data saved in localStorage.">
+							can-local-store
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-memory-store.html"
+							title="Create, update, delete and query data saved in memory.">
+							can-memory-store
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-ndjson-stream.html"
+							title="Parses an NDJSON stream into a stream of JavaScript objects.">
+							can-ndjson-stream
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-query-logic.html"
+							title="Perform data queries and compare queries against each other. Provides logic useful for data caching and real-time behavior.">
+							can-query-logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-realtime-rest-model.html"
+							title="Connect a type to a restful data source and automatically manage lists.">
+							can-realtime-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-rest-model.html"
+							title="Connect a type to a restful service layer.">
+							can-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-set-legacy.html"
+							title="can-set-legacy supports a legacy can-set API that creates a can-query-logic instance.">
+							can-set-legacy
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-super-model.html"
+							title="Connect a type to a restful data source, automatically manage lists, combine requests, and use a fall-through localstorage cache.">
+							can-super-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Routing</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-deparam.html"
+							title="Deserialize a query string into an array or object.">
+							can-deparam
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-param.html"
+							title="Serialize an object or array into a query string.">
+							can-param
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route.html"
+							title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">
+							can-route
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route-hash.html"
+							title="An observable that is cross bound to the window.location.hash.">
+							can-route-hash
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route-mock.html"
+							title="Simulate routing without having to change the URL.">
+							can-route-mock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route-pushstate.html"
+							title="An observable that can be used as can-route&#x27;s can-route.urlData.">
+							can-route-pushstate
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>JS Utilities</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-assign.html"
+							title="A simplified version of Object.assign, which only accepts a single source argument.">
+							can-assign
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-lazy-value.html"
+							title="can-define-lazy-value">
+							can-define-lazy-value
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-diff.html"
+							title="Utilities for comparing and applying differences between data structures.">
+							can-diff
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-globals.html"
+							title="An environment agnostic container for global variables. Useful for testing and server-side rendering (SSR), typically used internally by CanJS.">
+							can-globals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-join-uris.html"
+							title="Join together a URI path to a base.">
+							can-join-uris
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-key.html"
+							title="Utilities that read and write nested properties on objects and arrays.">
+							can-key
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-key-tree.html"
+							title="Store values in a tree structure.">
+							can-key-tree
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-make-map.html"
+							title="Convert a comma-separated string into a plain JavaScript object.">
+							can-make-map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-parse-uri.html"
+							title="can-parse-uri">
+							can-parse-uri
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-queues.html"
+							title="A light weight queue system for scheduling tasks.">
+							can-queues
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-string.html"
+							title="String utilities.">
+							can-string
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-string-to-any.html"
+							title="Turns a string representation of a primitive type back into the associated primitive.">
+							can-string-to-any
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>DOM Utilities</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-ajax.html"
+							title="Make an asynchronous HTTP (AJAX) request.">
+							can-ajax
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-attribute-encoder.html"
+							title="Encode and decode attribute names.">
+							can-attribute-encoder
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-child-nodes.html"
+							title="">
+							can-child-nodes
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-control.html"
+							title="Create organized, memory-leak free, rapidly performing, stateful controls with declarative event binding. Use Control to create UI controls like tabs, grids, and context menus, and organize them into higher-order business rules with can.route. It can serve as both a traditional view and a traditional controller.">
+							can-control
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-dom-data.html"
+							title="Associate key/value pair data with a DOM node in a memory-safe way.">
+							can-dom-data
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-dom-events.html"
+							title="Listen to DOM events and special events, and register special events.">
+							can-dom-events
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-dom-mutate.html"
+							title="Dispatch and listen for DOM mutations.">
+							can-dom-mutate
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-event-dom-enter.html"
+							title="Watch for when enter keys are pressed on a DomEventTarget.">
+							can-event-dom-enter
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-event-dom-radiochange.html"
+							title="A custom event for listening to changes of inputs with type &quot;radio&quot;, which fires when a conflicting radio input changes. A &quot;conflicting&quot; radio button has the same &quot;name&quot; attribute and exists within in the same form, or lack thereof. This event coordinates state bound to whether a radio is checked. The &quot;change&quot; event does not fire for deselected radios. By using this event instead, deselected radios receive notification.">
+							can-event-dom-radiochange
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-fragment.html"
+							title="Convert a String, HTMLElement, documentFragment, contentArray, or object with a can.toDOM symbol into a documentFragment.">
+							can-fragment
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Data Validation</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-type.html"
+							title="Define types that can verify values are of the correct type, or convert values to the correct type.">
+							can-type
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate.html"
+							title="Shared utilities and type definitions to process validation errors.">
+							can-validate
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate-interface.html"
+							title="can-validate-interface provides simple property existence validation. Use to prevent errors resulting from missing properties on input objects.">
+							can-validate-interface
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate-legacy.html"
+							title="A plugin for CanJS that wraps any validation library to can.validate. Can-Validate doesn&#x27;t do any validation of its own but instead provides some abstraction to your library of choice. The chosen library is registered with can-validate using a shim.">
+							can-validate-legacy
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate-validatejs.html"
+							title="Create can-validate.validator functions using validate.js.">
+							can-validate-validatejs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Typed Data</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-cid.html"
+							title="Utility for getting a unique identifier for an object.">
+							can-cid
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-construct.html"
+							title="Provides a way to easily use the power of prototypal inheritance without worrying about hooking up all the particulars yourself. Use can-construct.extend to create an inheritable constructor function of your own.">
+							can-construct
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-construct-super.html"
+							title="can.Construct.super is a plugin that makes it easier to call base functions from inside inheriting functions.">
+							can-construct-super
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-data-types.html"
+							title="A package of type objects that are used to test if a value is a member of the type and convert values to the type.">
+							can-data-types
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-namespace.html"
+							title="Namespace where can-* packages are registered.">
+							can-namespace
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-reflect.html"
+							title="Perform operations and read information on unknown data types.">
+							can-reflect
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-reflect-dependencies.html"
+							title="Functions to keep track of observable dependencies.">
+							can-reflect-dependencies
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-reflect-promise.html"
+							title="Expose an observable, Map-like API on Promise types.">
+							can-reflect-promise
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-types.html"
+							title="A stateful container for CanJS type information.">
+							can-types
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Polyfills</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-symbol.html"
+							title="Symbols used to detail how CanJS may operate on different objects CanJS has a consistent internal interface for objects to interact with each other, and this is also important for interop with external libraries.  CanJS uses symbols to identify object types, property access methods, and for event handling. can-symbol also has a polyfill function that will fake symbols on unsupported platforms.">
+							can-symbol
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-vdom.html"
+							title="A browser-lite environment for Node.js or a worker thread.">
+							can-vdom
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-core.html"
+							title="The best, most hardened and generally useful libraries in CanJS.">
+							Core
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						">
+						<a class="page"
+							href="can-infrastructure.html"
+							title="Utility libraries that power the core and ecosystem collection.">
+							Infrastructure
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-global.html"
+							title="can-global">
+							can-global
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-test-helpers.html"
+							title="Common utilities for effectively testing the features of CanJS.">
+							can-test-helpers
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-ecosystem.html"
+							title="Useful libraries that extend or add important features to the core collection.">
+							Ecosystem
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-legacy.html"
+							title="Former libraries that we still accept patches for, but are not under active development.">
+							Legacy
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>can-observe</h1>
+			<ul class="title-social">
+				
+				<li>
+					<a class="npm-button" href="https://www.npmjs.com/package/can-observe">
+						<img src="https://img.shields.io/badge/npm%20package-2.3.2-brightgreen.svg" alt="npm package badge" />
+					</a>
+				</li>
+				<li>
+					<a class="github-button nav-social" href="https://github.com/canjs/can-observe" data-show-count="true">Star</a>
+				</li>
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/can-observe/edit/master/doc/can-observe.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Create observable objects, arrays, and functions that work like plain JavaScript objects, arrays, and functions.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+<div class="signature">
+  <h2 class="signature-title">
+    <code>observe(target)</code>
+  </h2>
+  <p>Create an observable object that acts as a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy">proxy</a> for a target object.</p>
+<pre><code class="language-js">import observe from &quot;can-observe&quot;;
+import canReflect from &quot;can-refect&quot;;
+
+const dog = observe( {} );
+
+// non-plain JS object behavior exposed through
+// symbols used by can-reflect
+canReflect.onKeyValue( dog, &quot;name&quot;, function( newVal ) {
+    newVal; //-&gt; 'Wilbur'
+} );
+
+dog.name = &quot;Wilbur&quot;;
+</code></pre>
+
+  
+  <div class="parameters">
+    <h3 class="parameters-title" data-skip>Parameters</h3>
+      <ol>
+        
+          <li><b>target</b> <code>{Object|Array|function}</code>: <p>The object from which an observable
+instance is created. Depending on what type is passed, the proxy will behave slightly differently:</p>
+<ul>
+<li><p><strong>Object</strong> - An observable proxy to the <code>target</code> will be returned. All properties
+<em>not</em> on the prototype will be observable. Any non-primitive and non-built-in property value will be converted to an observable. The <strong>Object Behaviors</strong> listed in the sidebar
+are available to <a href="can-reflect.html" title="Perform operations and read information on unknown data types.">can-reflect</a>.</p></li>
+<li><p><strong>Array</strong> - Behaves like <strong>Object</strong>, but supports providing list-like
+<a href="can-symbol/types/Patch.html" title="A patch object that describes a mutation on an object.">Patch</a>es to <a href="can-symbol/symbols/onPatches.html" title="Defines how to listen to patch changes on an object.">can.onPatches</a>.  The <strong>Array Behaviors</strong>
+listed in the sidebar are overwritten to generate <a href="can-observe/can.onPatches.html" title="See @@can.onPatches">@can.onPatches</a>
+events. The <strong>Object Behaviors</strong> listed in the sidebar
+are available to <a href="can-reflect.html" title="Perform operations and read information on unknown data types.">can-reflect</a>.</p></li>
+<li><p><strong>Function</strong> - Behaves like <strong>Object</strong>, but when called with <code>new</code>, makes the
+instance observable. Also, makes the return value observable if
+it is already not observable. The <strong>Object Behaviors</strong> and <strong>Function Behaviors</strong>
+listed in the sidebar are available to <a href="can-reflect.html" title="Perform operations and read information on unknown data types.">can-reflect</a>.</p></li>
+</ul>
+</li>
+        
+      </ol>
+  </div>
+  
+  
+  <div class="returns">
+    <h3 class="returns-title" data-skip>Returns</h3>
+     <p> <code>{Proxy}</code>: <p>A proxy for the target object.</p>
+</p>
+  </div>
+  
+  
+</div>
+
+
+
+
+
+  
+    <section class="body">
+    <h3>Use Cases</h3>
+<p><code>can-observe</code> can be used to make data observable for use with CanJS. CanJS uses observables to communicate state changes in the application. The following
+creates a <code>dog</code> observable object and uses it to render a <a href="can-stache.html" title="Live binding templates.">can-stache</a>
+template.  When <code>dog</code>'s <code>name</code> is set, the page will be updated.</p>
+<pre><code class="language-js">import observe from &quot;can-observe&quot;;
+import stache from &quot;can-stache&quot;;
+
+const dog = observe( {} );
+
+const frag = stache( &quot;&lt;p&gt;dog's name is {{name}}&lt;/p&gt;&quot; )( dog );
+document.body.appendChild( frag );
+
+dog.name = &quot;Wilbur&quot;;
+
+document.body; //-&gt; &lt;p&gt;dog's name is Wilbur&lt;/p&gt;
+</code></pre>
+<p><code>can-observe</code>'s exported <code>observe</code> function can also be used to make observable types useful as <strong>Models</strong> and <strong>ViewModels</strong>. However, its <a href="can-observe.Object.html" title="Create observable key-value instances or types.">observe.Object</a> and <a href="can-observe.Array.html" title="Create observable Array instances or types.">observe.Array</a> properties are designed specifically for this
+purpose.  <a href="can-observe.Object.html" title="Create observable key-value instances or types.">observe.Object</a> and <a href="can-observe.Array.html" title="Create observable Array instances or types.">observe.Array</a> support &quot;computed&quot; getters. For example, once the following <code>fullName</code> property is bound, it only updates itself when one of its computed dependencies change:</p>
+<pre><code class="language-js">import observe from &quot;can-observe&quot;;
+class Person extends observe.Object {
+    fullName() {
+        return this.first + &quot; &quot; + this.last;
+    }
+}
+</code></pre>
+<p><code>can-observe</code> allows you to create observable objects where any property added is immediately observable, including nested objects. This makes <code>can-observe</code> ideal for use-cases where the data may be dynamic, or where the more rigid approach of <a href="can-define.html" title="Defines observable properties and their behavior on a prototype object. This function is not commonly used directly. map
+and list are more commonly used. Types and
+behaviors shared by both map
+and list are documented here.">can-define</a> is not needed.</p>
+<h2>Make data observable</h2>
+<p><code>can-observe</code> exports a function that takes an object, array or function, and returns an observable <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy">Proxy</a> to that
+object, array or function.</p>
+<p>The following example uses <code>can-observe</code> to create an observable <code>superWoman</code>:</p>
+<pre><code class="language-js">import observe from &quot;can-observe&quot;;
+
+const superWoman = observe( {
+    name: {
+        first: &quot;Luma&quot;,
+        last: &quot;Lynai&quot;
+    },
+    hobbies: [ &quot;justice&quot;, &quot;soaking up rays (orange sun-only)&quot; ],
+    age: 33
+} );
+</code></pre>
+<p>You can now add, delete, and set <code>superWoman</code>'s properties like you would a normal JavaScript object:</p>
+<pre><code class="language-js">superWoman.name.last = &quot;Lang&quot;;
+superWoman.power = &quot;overpowered&quot;;
+delete superWoman.age;
+</code></pre>
+<p>And you can mutate arrays and call all of their methods available to the browser:</p>
+<pre><code class="language-js">superWoman.hobbies.push( &quot;Protecting Staryl&quot; );
+superWoman.hobbies.includes( &quot;Justice&quot; ); //-&gt; true
+</code></pre>
+<p>All of these changes publish events observable by the rest of CanJS. For example, <a href="can-observation.html" title="Create observable values that derive their value from other observable
+values.">can-observation</a>
+is able create a computed value for superWoman's <code>fullName</code> like:</p>
+<pre><code class="language-js">import Observation from &quot;can-observation&quot;;
+
+const fullName = new Observation( function() {
+    return superWoman.name.first + &quot; &quot; + superWoman.name.last;
+} );
+
+fullName.on( function( newVal ) {
+    console.log( newVal ); // -&gt; &quot;Lana Lang&quot;
+} );
+
+superWoman.name.first = &quot;Lana&quot;;
+</code></pre>
+<p>If you wish to observe changes in an observable made with <code>observe</code> for yourself, either:</p>
+<ul>
+<li>Use <a href="can-reflect.html" title="Perform operations and read information on unknown data types.">can-reflect</a>:</li>
+</ul>
+<pre><code class="language-js">import canReflect from &quot;can-reflect&quot;;
+
+canReflect.onKeyValue( superWoman, &quot;age&quot;, function( newVal ) {
+    console.log( newVal ); //-&gt; 34
+} );
+
+superWoman.age = 34;
+</code></pre>
+<ul>
+<li>Use <a href="can-observe.Object.html" title="Create observable key-value instances or types.">Object</a> or <a href="can-observe.Array.html" title="Create observable Array instances or types.">Array</a> that include methods for binding directly on the object:</li>
+</ul>
+<pre><code class="language-js">const superWoman = new observe.Object( {
+    name: { first: &quot;Luma&quot;, last: &quot;Lynai&quot; },
+    age: 33
+} );
+superWoman.on( &quot;age&quot;, function( newVal ) {
+    console.log( newVal ); //-&gt; 34
+} );
+
+superWoman.age = 34;
+</code></pre>
+<p>Using <code>observe</code> directly isn't extremely common in larger CanJS apps that use <a href="can-observe.Object.html" title="Create observable key-value instances or types.">Object</a> or <a href="can-observe.Array.html" title="Create observable Array instances or types.">Array</a> to create special types. However, it can be useful for simple apps, where a well-defined type is not needed.</p>
+<p>For example, the following creates a simple counter application:</p>
+<pre><code class="language-js">import stache from &quot;can-stache&quot;;
+import observe from &quot;can-observe&quot;;
+
+const counter = observe( {
+    count: 0,
+    add: function() {
+        this.count++;
+    }
+} );
+
+const view = stache( &quot;&lt;button on:click='add()'&gt;+1&lt;/button&gt;  Count: {{count}}&quot; );
+
+document.body.appendChild( view( counter ) );
+</code></pre>
+<h2>Nested Objects</h2>
+<p>Any Object property in a <code>can-observe</code> will be replaced with a <code>can-observe</code> observed Proxy on read or write.  This allows deep path traversal in objects, with observable changes all along the way.</p>
+<pre><code class="language-js">import observe from &quot;can-observe&quot;;
+
+const name = { first: &quot;Justin&quot;, last: &quot;Meyer&quot; };
+const person = {
+    name: name
+};
+
+const observed = observe( person );
+observed;       // -&gt; observed is a Proxy;
+observed.name;  // -&gt; also a Proxy
+person.name;    // -&gt; this is a plain object instead
+
+observed.address = { city: &quot;Chicago&quot; };  // this gets proxified on set, so...
+person.address; // -&gt; this is a Proxy
+</code></pre>
+<h2>Defining Observable Types</h2>
+<p>There are several ways to use <code>observe</code> to define observable types.  If you wish to
+have observable methods like <code>.on</code> and <code>.off</code> on your types, use
+<a href="can-observe.Object.html" title="Create observable key-value instances or types.">observe.Object</a> or <a href="can-observe.Array.html" title="Create observable Array instances or types.">observe.Array</a> to create special types.</p>
+<p>However, <code>can-observe</code> can be used directly to create constructor functions that produce
+observables in two ways:</p>
+<ul>
+<li>Calling <code>observe(Type)</code> on the constructor function or class.</li>
+<li>Having the constructor function or class return an <code>observe(instance)</code> wrapped instance.</li>
+</ul>
+<h3>Using <code>observe</code> on constructor functions and classes.</h3>
+<p>If <code>observe</code> is called with a constructor function as follows:</p>
+<pre><code class="language-js">const Animal = observe( function Animal( name ) {
+    this.name = name;
+    this.calories = 100;
+} );
+Animal.prototype.eat = function() {
+    this.calories++;
+};
+</code></pre>
+<p>All instances of <code>Animal</code> will be observable:</p>
+<pre><code class="language-js">const sponge = new Animal( &quot;Bob&quot; );
+canReflect.onKeyValue( sponge, &quot;calories&quot;, function( newVal ) {
+    console.log( newVal ); //-&gt; 101
+} );
+sponge.eat();
+</code></pre>
+<p>Similarly, if <code>observe</code> is called on a <code>Class</code> function as follows:</p>
+<pre><code class="language-js">Animal = observe( class Animal {
+    constructor( name ) {
+        this.name = name;
+        this.calories = 100;
+    }
+    eat() {
+        this.calories++;
+    }
+} );
+</code></pre>
+<p>All instances of <code>Animal</code> will be observable:</p>
+<pre><code class="language-js">const sponge = new Animal( &quot;Bob&quot; );
+canReflect.onKeyValue( sponge, &quot;calories&quot;, function( newVal ) {
+    console.log( newVal ); //-&gt; 101
+} );
+sponge.eat();
+</code></pre>
+<blockquote>
+<p>NOTE: <code>observe</code> does not change the function passed into it.  If instances of the function passed to <code>observe</code> are created, they will not be observable.</p>
+</blockquote>
+<pre><code class="language-js">class Animal {
+    constructor( name ) {
+        this.name = name;
+        this.calories = 100;
+    }
+    eat() {
+        this.calories++;
+    }
+}
+const ObservableAnimal = observe( Animal );
+
+const sponge1 = new Animal( &quot;Bob&quot; );           // NOT OBSERVABLE
+const sponge2 = new ObservableAnimal( &quot;Bob&quot; ); // OBSERVABLE
+</code></pre>
+<h3>Returning an <code>observe(instance)</code> wrapped instance.</h3>
+<p>To make instances of an existing type observable, you can
+return the <code>observe</code>-wrapped proxy from the <code>constructor()</code> function
+as follows:</p>
+<pre><code class="language-js">import observe from &quot;can-observe&quot;;
+
+class WidgetViewModel {
+    constructor( obj ) {
+
+        // view model instances receive properties as an object on instantiation
+        Object.assign( this, obj );
+        return observe( this );
+    }
+    fixedMessage() {
+        return &quot;Hello&quot;;
+    }
+
+    // ...more static and prototype functions.
+}
+</code></pre>
+<h2>Extending can-observe with rich property behaviors</h2>
+<p>Like <a href="can-define.types.get.html#get_lastSetValue_resolve_value__" title="Specify what happens when a certain property is read on a map. get functions
+work like a can-compute and automatically update themselves when a dependent
+observable value is changed.">async getters</a>, <a href="can-define.types.html" title="Specify a type to convert values to. Type coercion only applies when setting a property.
+All types leave null and undefined as is except for
+the &quot;htmlbool&quot; type converter.">type coercion</a>, <a href="can-define-stream.html" title="Add useful stream conversion methods to a supplied map or list constructor using a stream interface such as can-stream-kefir.">streams</a>, etc from <a href="can-define.html" title="Defines observable properties and their behavior on a prototype object. This function is not commonly used directly. map
+and list are more commonly used. Types and
+behaviors shared by both map
+and list are documented here.">can-define</a>, can-observe supports a number of rich behaviors. However, rather than baking these behaviors into the library directly, can-observe provides mechanism to extend proxy-wrapped objects with custom rich behaviors.</p>
+<p>To that end, can-observe recognizes a <code>can.computedPropertyDefinitions</code> property: an object whose values are functions which return a single-value observable; getting or setting a key on the proxy-wrapped object that matches a key in the <code>can.computedPropertyDefinitions</code> object will use those observations. The first time one of these properties is accessed, the function is run, and the observation is cached, to be used for all future use on <em>that instance</em>.</p>
+<p>See <a href="can-observe/defineProperty.html" title="Define a rich property behavior on a proxy-wrapped object.">defineProperty</a> for details about defining your own behaviors.</p>
+<h2>Browser support</h2>
+<p>can-observe uses the Proxy feature of JavaScript to observe arbitrary properties. Proxies are available in <a href="http://caniuse.com/#feat=proxy">all modern browsers</a>.</p>
+<p>A <a href="https://github.com/GoogleChrome/proxy-polyfill">polyfill is available</a> that brings Proxies back to IE9, with the caveat that only existing properties on the target object can be observed. This means this code:</p>
+<pre><code class="language-js">const person = observe( { first: &quot;&quot;, last: &quot;&quot; } );
+</code></pre>
+<p>The <em>first</em> and <em>last</em> properties are observable in older browsers, but any other property added would not be. To ensure maximum compatibility make sure to give all properties a default value.</p>
+<h2>Use with other observables</h2>
+<p><code>can-observe</code> can be combined with any other CanJS observable type, like <a href="can-define.html" title="Defines observable properties and their behavior on a prototype object. This function is not commonly used directly. map
+and list are more commonly used. Types and
+behaviors shared by both map
+and list are documented here.">can-define</a> or <a href="can-compute.html" title="Create an observable value.">can-compute</a>. In this example we create a compute that changes when a can-observe proxy changes. Note that with computes we use <a href="can-reflect/observe.onValue.html" title="Register an event handler on an observable ValueLike object, based on a change in its value">canReflect.onValue</a> to set up the event listener and handler.</p>
+<pre><code class="language-js">import compute from &quot;can-compute&quot;;
+import observe from &quot;can-observe&quot;;
+import canReflect from &quot;can-reflect&quot;;
+
+const person = observe( {
+    name: new DefineMap( { first: &quot;Justin&quot;, last: &quot;Meyer&quot; } ),
+    age: 35
+} );
+
+const fullName = compute( function() {
+    return person.name.first + &quot; &quot; + person.name.last;
+} );
+
+fullName.on( &quot;change&quot;, function( ev, newVal ) {
+    console.log( newVal ); // -&gt; Chasen Le Hara
+} );
+
+
+person.name.first = &quot;Chasen&quot;;
+person.name.last = &quot;Le Hara&quot;;
+</code></pre>
+<p><code>can-observe</code> will <strong>not</strong> convert nested property values it recognizes as:</p>
+<ul>
+<li>Primitives</li>
+<li>Built-ins (like <code>Date</code>)</li>
+<li>Other CanJS observables (like <code>can-define</code>).</li>
+</ul>
+<h2>How it works</h2>
+<p><code>can-observe</code> works by:</p>
+<ol>
+<li>Creating <em>base functions</em> that make objects, arrays, and functions observable using proxies in:
+<a href="http://canjs.github.io/can-observe/docs/-make-object.html">-make-object.js</a>, <a href="http://canjs.github.io/can-observe/docs/-make-array.html">-make-array.js</a>, and <a href="http://canjs.github.io/can-observe/docs/-make-function.html">-make-function.js</a>.
+<ul>
+<li>These proxies call <a href="can-observation-recorder.html" title="Specify how to listen to changes in a value being read and record those specifications between two points in time.
+Record observables being read and indicate how to listen to changes
+in a value being read.">can-observation-recorder</a> when observables are read.  They also support <a href="can-reflect.html" title="Perform operations and read information on unknown data types.">can-reflect</a>'s observable symbols.</li>
+</ul></li>
+<li>A place that stores the observable proxies created for non-observable objects and a set that contains a list of proxies: <a href="http://canjs.github.io/can-observe/docs/-observable-store.html">-observable-store.js</a>
+<ul>
+<li>This prevents duplicating observables for the same non-observable object and a means for identifying something that is already a proxied observable.</li>
+</ul></li>
+<li>A <code>makeObserve</code> function that checks the type and calls the right observable function:
+<a href="http://canjs.github.io/can-observe/docs/-make-observe.html">-observable-store.js</a>
+<ul>
+<li>This will be passed to all the <em>base functions</em> so they are able to create the right observable with nested data.</li>
+</ul></li>
+<li>Finally, <a href="http://canjs.github.io/can-observe/docs/-can-observe.html">can-observe.js</a> points the <code>makeObserve</code> function at all
+the right <strong>base functions</strong>.</li>
+</ol>
+<p><code>can-observe.Object</code> and <code>can-observe.Array</code> mostly use their underlying <em>base function</em> to setup their
+behavior. The primary exception is that they support &quot;computed&quot; getters.  This behavior works by:</p>
+<ol>
+<li>We make sure a <code>can.computedPropertyDefinitions</code> symbol is added to the prototype (see above for details on <code>can.computedPropertyDefinitions</code>).</li>
+<li>We create definitions, which return observations derived from the getter function: <a href="http://canjs.github.io/can-observe/docs/-computed-helpers.html">-computed-helpers.js</a></li>
+</ol>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/otTT5_zat0I" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"node_modules/can-observe/doc/can-observe.md"},"description":"Create observable objects, arrays, and functions that work like plain JavaScript objects, arrays, and functions.\n\n\n","type":"module","title":"","types":[{"type":"function","returns":{"types":[{"type":"undefined"}]},"params":[]}],"name":"can-observe","parent":"can-observables","collection":"can-ecosystem","package":{"author":{"name":"Bitovi"},"bugs":{"url":"https://github.com/canjs/can-observe/issues"},"bundleDependencies":false,"dependencies":{"can-event-queue":"<2.0.0","can-globals":"^1.2.1","can-key-tree":"<2.0.0","can-namespace":"^1.0.0","can-observation-recorder":"<2.0.0","can-queues":"<2.0.0","can-reflect":"^1.4.2","can-simple-observable":"^2.0.0","can-symbol":"^1.2.0"},"deprecated":false,"description":"Like can.Map, but without the .attr method.","devDependencies":{"can-observation":"^4.0.0","can-reflect-tests":"^0.3.0","can-simple-map":"^4.0.0","can-simple-observable":"^2.0.0","can-util":"^3.2.2","detect-cyclic-packages":"^1.1.0","docco":"^0.7.0","jshint":"^2.9.1","steal":"^1.0.0","steal-qunit":"^2.0.0","steal-tools":"^1.9.1","testee":"^0.9.1"},"homepage":"https://github.com/canjs/can-observe","keywords":["CanJS"],"license":"MIT","main":"can-observe.js","name":"can-observe","repository":{"type":"git","url":"git+https://github.com/canjs/can-observe.git"},"scripts":{"build":"node build.js","detect-cycle":"detect-cyclic-packages --ignore done-serve","docco":"docco src/*.js array/array.js object/object.js can-observe.js","jshint":"jshint *.js src/*.js object/*.js array/*.js test/*.js --exclude=decorators-test.js --config","postversion":"git push --tags && git checkout master && git branch -D release && git push","preversion":"npm test && npm run build","release:major":"npm version major && npm publish","release:minor":"npm version minor && npm publish","release:patch":"npm version patch && npm publish","release:pre":"npm version prerelease && npm publish --tag pre","test":"npm run detect-cycle && npm run jshint && npm run testee","testee":"testee test.html --browsers firefox","version":"git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/"},"version":"2.3.2"},"signatures":[{"code":"observe(target)","description":"\n\nCreate an observable object that acts as a [proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) for a target object.\n\n```js\nimport observe from \"can-observe\";\nimport canReflect from \"can-refect\";\n\nconst dog = observe( {} );\n\n// non-plain JS object behavior exposed through\n// symbols used by can-reflect\ncanReflect.onKeyValue( dog, \"name\", function( newVal ) {\n\tnewVal; //-> 'Wilbur'\n} );\n\ndog.name = \"Wilbur\";\n```\n","params":[{"types":[{"type":"Object"},{"type":"Array"},{"type":"function","returns":{"types":[{"type":"undefined"}]},"params":[]}],"name":"target","description":"The object from which an observable\ninstance is created. Depending on what type is passed, the proxy will behave slightly differently:\n\n- __Object__ - An observable proxy to the `target` will be returned. All properties\n  _not_ on the prototype will be observable. Any non-primitive and non-built-in property value will be converted to an observable. The __Object Behaviors__ listed in the sidebar\n  are available to [can-reflect].\n\n- __Array__ - Behaves like __Object__, but supports providing list-like\n  [can-symbol/types/Patch]es to [can-symbol/symbols/onPatches].  The __Array Behaviors__\n  listed in the sidebar are overwritten to generate [can-observe/can.onPatches]\n  events. The __Object Behaviors__ listed in the sidebar\n  are available to [can-reflect].\n- __Function__ - Behaves like __Object__, but when called with `new`, makes the\n  instance observable. Also, makes the return value observable if\n  it is already not observable. The __Object Behaviors__ and __Function Behaviors__\n  listed in the sidebar are available to [can-reflect].\n"}],"returns":{"types":[{"type":"Proxy"}],"description":"A proxy for the target object.\n"}}],"_curParam":{"types":[{"type":"Object"},{"type":"Array"},{"type":"function","returns":{"types":[{"type":"undefined"}]},"params":[]}],"name":"target","description":"The object from which an observable\ninstance is created. Depending on what type is passed, the proxy will behave slightly differently:\n\n- __Object__ - An observable proxy to the `target` will be returned. All properties\n  _not_ on the prototype will be observable. Any non-primitive and non-built-in property value will be converted to an observable. The __Object Behaviors__ listed in the sidebar\n  are available to [can-reflect].\n\n- __Array__ - Behaves like __Object__, but supports providing list-like\n  [can-symbol/types/Patch]es to [can-symbol/symbols/onPatches].  The __Array Behaviors__\n  listed in the sidebar are overwritten to generate [can-observe/can.onPatches]\n  events. The __Object Behaviors__ listed in the sidebar\n  are available to [can-reflect].\n- __Function__ - Behaves like __Object__, but when called with `new`, makes the\n  instance observable. Also, makes the return value observable if\n  it is already not observable. The __Object Behaviors__ and __Function Behaviors__\n  listed in the sidebar are available to [can-reflect].\n"},"_curReturn":{"types":[{"type":"Proxy"}],"description":"A proxy for the target object.\n"},"comment":" ","pathToRoot":".."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="./static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix="."></div>
+
+	</body>
+</html>

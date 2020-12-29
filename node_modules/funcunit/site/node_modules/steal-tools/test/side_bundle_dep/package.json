@@ -1,0 +1,8 @@
+{
+	"name": "side",
+	"main": "main.js",
+	"version": "0.0.1",
+	"dependencies": {
+		"dep": "1.0.0"
+	}
+}

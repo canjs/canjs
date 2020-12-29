@@ -1,0 +1,77 @@
+/**
+* @stylesheet base.less Base Styles
+* @parent Styles.baseline-elements 0
+*
+* @description 
+* Styles on base-level tags should live here, including table and form styles. Styles for specific elements or helper classes should go in their separate, respective, files. Typography is housed in its own typography file due to the typical complexity. Global styles, or styles on the body/html should live here.
+**/
+
+body {
+	background: @pageBackground;
+}
+body.style-demo {
+	background: @clear; 
+	padding: 10px;
+}
+section {
+	margin-bottom: 15px;
+}
+
+/**
+* @styles forms Forms
+*
+* @demo demos/forms.html
+**/
+input,textarea{
+	font-size:1em;
+	padding:5px;
+}
+input[type="submit"]{
+	cursor:pointer;
+}
+:focus{
+	outline:none;
+}
+form label{
+	display: block;
+	margin-bottom: 5px;
+}
+form input, form textarea, form select {
+	display: block;
+	margin-bottom: 10px;
+}
+option{
+	padding:1px 3px;
+}
+
+/**
+* @styles table Tables
+*
+* @demo demos/tables.html
+**/
+table {
+	border-spacing:0;
+	margin-bottom:21px;
+	width:100%;
+	border-collapse:separate;
+	border-top: 1px solid @haze;
+	border-left: 1px solid @haze;
+	background: @clear;
+	border-radius: 2px;
+}
+td,th{
+	padding:3px 6px;
+	border-bottom:1px solid @haze;
+	border-right:1px solid @haze;
+	.text-shadow-light;
+}
+th{
+	background: @fog;
+}
+
+iframe {
+	margin-bottom: 20px;
+	body {
+		background-color: @clear;
+	}
+}

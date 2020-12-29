@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>can.observe.validations.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="can.construct.proxy.html">
+                can.construct.proxy.js
+              </a>
+            
+              
+              <a class="source" href="can.construct.super.html">
+                can.construct.super.js
+              </a>
+            
+              
+              <a class="source" href="can.control.plugin.html">
+                can.control.plugin.js
+              </a>
+            
+              
+              <a class="source" href="can.dojo.html">
+                can.dojo.js
+              </a>
+            
+              
+              <a class="source" href="can.fixture.html">
+                can.fixture.js
+              </a>
+            
+              
+              <a class="source" href="can.jquery-all.html">
+                can.jquery-all.js
+              </a>
+            
+              
+              <a class="source" href="can.jquery.html">
+                can.jquery.js
+              </a>
+            
+              
+              <a class="source" href="can.model.queue.html">
+                can.model.queue.js
+              </a>
+            
+              
+              <a class="source" href="can.mootools.html">
+                can.mootools.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.attributes.html">
+                can.observe.attributes.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.backup.html">
+                can.observe.backup.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.delegate.html">
+                can.observe.delegate.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.setter.html">
+                can.observe.setter.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.validations.html">
+                can.observe.validations.js
+              </a>
+            
+              
+              <a class="source" href="can.view.modifiers.html">
+                can.view.modifiers.js
+              </a>
+            
+              
+              <a class="source" href="can.view.mustache.html">
+                can.view.mustache.js
+              </a>
+            
+              
+              <a class="source" href="can.yui.html">
+                can.yui.js
+              </a>
+            
+              
+              <a class="source" href="can.zepto.html">
+                can.zepto.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>can.observe.validations.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="comment">/*!
+* CanJS - 1.1.5 (2013-03-27)
+* http://canjs.us/
+* Copyright (c) 2013 Bitovi
+* Licensed MIT
+*/</span>
+(<span class="function"><span class="keyword">function</span> <span class="params">(can, window, undefined)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2>can/observe/validations/validations.js</h2>
+<p>validations object is by property.  You can have validations that
+span properties, but this way we know which ones to run.
+ proc should return true if there&#39;s an error or the error message</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> validate = <span class="function"><span class="keyword">function</span> <span class="params">(attrNames, options, proc)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>normalize argumetns</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (!proc) {
+            proc = options;
+            options = {};
+        }
+
+        options = options || {};
+        attrNames = can.makeArray(attrNames)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>run testIf if it exists</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (options.testIf &amp;&amp; !options.testIf.call(<span class="keyword">this</span>)) {
+            <span class="keyword">return</span>;
+        }
+
+        <span class="keyword">var</span> self = <span class="keyword">this</span>;
+        can.each(attrNames, <span class="function"><span class="keyword">function</span> <span class="params">(attrName)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Add a test function for each attribute</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (!self.validations[attrName]) {
+                self.validations[attrName] = [];
+            }
+
+            self.validations[attrName].push(<span class="function"><span class="keyword">function</span> <span class="params">(newVal)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>if options has a message return that, otherwise, return the error</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">var</span> res = proc.call(<span class="keyword">this</span>, newVal, attrName);
+                <span class="keyword">return</span> res === <span class="literal">undefined</span> ? <span class="literal">undefined</span> : (options.message || res);
+            })
+        });
+    };
+
+    <span class="keyword">var</span> old = can.Observe.prototype.__set;
+    can.Observe.prototype.__set = <span class="function"><span class="keyword">function</span> <span class="params">(prop, value, current, success, error)</span> {</span>
+        <span class="keyword">var</span> self = <span class="keyword">this</span>,
+            validations = self.constructor.validations,
+            errorCallback = <span class="function"><span class="keyword">function</span> <span class="params">(errors)</span> {</span>
+                <span class="keyword">var</span> stub = error &amp;&amp; error.call(self, errors);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>if &#39;setter&#39; is on the page it will trigger
+the error itself and we dont want to trigger
+the event twice. :)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (stub !== <span class="literal">false</span>) {
+                    can.trigger(self, <span class="string">"error"</span>, [prop, errors], <span class="literal">true</span>);
+                }
+
+                <span class="keyword">return</span> <span class="literal">false</span>;
+            };
+
+        old.call(self, prop, value, current, success, errorCallback);
+
+        <span class="keyword">if</span> (validations &amp;&amp; validations[prop]) {
+            <span class="keyword">var</span> errors = self.errors(prop);
+            errors &amp;&amp; errorCallback(errors)
+        }
+
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+
+    can.each([can.Observe, can.Model], <span class="function"><span class="keyword">function</span> <span class="params">(clss)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>in some cases model might not be defined quite yet.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (clss === <span class="literal">undefined</span>) {
+            <span class="keyword">return</span>;
+        }
+        <span class="keyword">var</span> oldSetup = clss.setup;
+
+        can.extend(clss, {
+            setup: <span class="function"><span class="keyword">function</span> <span class="params">(superClass)</span> {</span>
+                oldSetup.apply(<span class="keyword">this</span>, arguments);
+                <span class="keyword">if</span> (!<span class="keyword">this</span>.validations || superClass.validations === <span class="keyword">this</span>.validations) {
+                    <span class="keyword">this</span>.validations = {};
+                }
+            },
+
+            validate: validate,
+
+
+            validationMessages: {
+                format: <span class="string">"is invalid"</span>,
+                inclusion: <span class="string">"is not a valid option (perhaps out of range)"</span>,
+                lengthShort: <span class="string">"is too short"</span>,
+                lengthLong: <span class="string">"is too long"</span>,
+                presence: <span class="string">"can't be empty"</span>,
+                range: <span class="string">"is out of range"</span>
+            },
+
+
+            validateFormatOf: <span class="function"><span class="keyword">function</span> <span class="params">(attrNames, regexp, options)</span> {</span>
+                validate.call(<span class="keyword">this</span>, attrNames, options, <span class="function"><span class="keyword">function</span> <span class="params">(value)</span> {</span>
+                    <span class="keyword">if</span> ((<span class="keyword">typeof</span> value !== <span class="string">'undefined'</span> &amp;&amp; value !== <span class="literal">null</span> &amp;&amp; value !== <span class="string">''</span>) &amp;&amp; String(value).match(regexp) == <span class="literal">null</span>) {
+                        <span class="keyword">return</span> <span class="keyword">this</span>.constructor.validationMessages.format;
+                    }
+                });
+            },
+
+
+            validateInclusionOf: <span class="function"><span class="keyword">function</span> <span class="params">(attrNames, inArray, options)</span> {</span>
+                validate.call(<span class="keyword">this</span>, attrNames, options, <span class="function"><span class="keyword">function</span> <span class="params">(value)</span> {</span>
+                    <span class="keyword">if</span> (<span class="keyword">typeof</span> value == <span class="string">'undefined'</span>) {
+                        <span class="keyword">return</span>;
+                    }
+
+                    <span class="keyword">if</span> (can.grep(inArray, <span class="function"><span class="keyword">function</span> <span class="params">(elm)</span> {</span>
+                        <span class="keyword">return</span> (elm == value);
+                    }).length == <span class="number">0</span>) {
+                        <span class="keyword">return</span> <span class="keyword">this</span>.constructor.validationMessages.inclusion;
+                    }
+                });
+            },
+
+
+            validateLengthOf: <span class="function"><span class="keyword">function</span> <span class="params">(attrNames, min, max, options)</span> {</span>
+                validate.call(<span class="keyword">this</span>, attrNames, options, <span class="function"><span class="keyword">function</span> <span class="params">(value)</span> {</span>
+                    <span class="keyword">if</span> (((<span class="keyword">typeof</span> value === <span class="string">'undefined'</span> || value === <span class="literal">null</span>) &amp;&amp; min &gt; <span class="number">0</span>) || (<span class="keyword">typeof</span> value !== <span class="string">'undefined'</span> &amp;&amp; value !== <span class="literal">null</span> &amp;&amp; value.length &lt; min)) {
+                        <span class="keyword">return</span> <span class="keyword">this</span>.constructor.validationMessages.lengthShort + <span class="string">" (min="</span> + min + <span class="string">")"</span>;
+                    } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> value != <span class="string">'undefined'</span> &amp;&amp; value !== <span class="literal">null</span> &amp;&amp; value.length &gt; max) {
+                        <span class="keyword">return</span> <span class="keyword">this</span>.constructor.validationMessages.lengthLong + <span class="string">" (max="</span> + max + <span class="string">")"</span>;
+                    }
+                });
+            },
+
+
+            validatePresenceOf: <span class="function"><span class="keyword">function</span> <span class="params">(attrNames, options)</span> {</span>
+                validate.call(<span class="keyword">this</span>, attrNames, options, <span class="function"><span class="keyword">function</span> <span class="params">(value)</span> {</span>
+                    <span class="keyword">if</span> (<span class="keyword">typeof</span> value == <span class="string">'undefined'</span> || value === <span class="string">""</span> || value === <span class="literal">null</span>) {
+                        <span class="keyword">return</span> <span class="keyword">this</span>.constructor.validationMessages.presence;
+                    }
+                });
+            },
+
+
+            validateRangeOf: <span class="function"><span class="keyword">function</span> <span class="params">(attrNames, low, hi, options)</span> {</span>
+                validate.call(<span class="keyword">this</span>, attrNames, options, <span class="function"><span class="keyword">function</span> <span class="params">(value)</span> {</span>
+                    <span class="keyword">if</span> (((<span class="keyword">typeof</span> value == <span class="string">'undefined'</span> || value === <span class="literal">null</span>) &amp;&amp; low &gt; <span class="number">0</span>) || (<span class="keyword">typeof</span> value !== <span class="string">'undefined'</span> &amp;&amp; value !== <span class="literal">null</span> &amp;&amp; (value &lt; low || value &gt; hi))) {
+                        <span class="keyword">return</span> <span class="keyword">this</span>.constructor.validationMessages.range + <span class="string">" ["</span> + low + <span class="string">","</span> + hi + <span class="string">"]"</span>;
+                    }
+                });
+            }
+        });
+    });
+
+    can.extend(can.Observe.prototype, {
+
+        errors: <span class="function"><span class="keyword">function</span> <span class="params">(attrs, newVal)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>convert attrs to an array</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (attrs) {
+                attrs = can.isArray(attrs) ? attrs : [attrs];
+            }
+
+            <span class="keyword">var</span> errors = {},
+                self = <span class="keyword">this</span>,
+                attr,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>helper function that adds error messages to errors object
+attr - the name of the attribute
+funcs - the validation functions</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                addErrors = <span class="function"><span class="keyword">function</span> <span class="params">(attr, funcs)</span> {</span>
+                    can.each(funcs, <span class="function"><span class="keyword">function</span> <span class="params">(func)</span> {</span>
+                        <span class="keyword">var</span> res = func.call(self, isTest ? (self.__convert ? self.__convert(attr, newVal) : newVal) : self[attr]);
+                        <span class="keyword">if</span> (res) {
+                            <span class="keyword">if</span> (!errors[attr]) {
+                                errors[attr] = [];
+                            }
+                            errors[attr].push(res);
+                        }
+
+                    });
+                },
+                validations = <span class="keyword">this</span>.constructor.validations,
+                isTest = attrs &amp;&amp; attrs.length === <span class="number">1</span> &amp;&amp; arguments.length === <span class="number">2</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>go through each attribute or validation and
+add any errors</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            can.each(attrs || validations || {}, <span class="function"><span class="keyword">function</span> <span class="params">(funcs, attr)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>if we are iterating through an array, use funcs
+as the attr name</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (<span class="keyword">typeof</span> attr == <span class="string">'number'</span>) {
+                    attr = funcs;
+                    funcs = validations[attr];
+                }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>add errors to the</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                addErrors(attr, funcs || []);
+            });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>return errors as long as we have one</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">return</span> can.isEmptyObject(errors) ? <span class="literal">null</span> : isTest ? errors[attrs[<span class="number">0</span>]] : errors;
+        }
+    });
+
+})(can, <span class="keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

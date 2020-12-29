@@ -1,0 +1,1 @@
+window.variable = "bar";

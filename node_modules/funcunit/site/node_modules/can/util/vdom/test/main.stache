@@ -1,0 +1,2 @@
+<can-import from="can/util/vdom/test/hello-world"/>
+<hello-world></hello-world>

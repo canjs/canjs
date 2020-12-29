@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>can.fixture.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="can.construct.proxy.html">
+                can.construct.proxy.js
+              </a>
+            
+              
+              <a class="source" href="can.construct.super.html">
+                can.construct.super.js
+              </a>
+            
+              
+              <a class="source" href="can.control.plugin.html">
+                can.control.plugin.js
+              </a>
+            
+              
+              <a class="source" href="can.dojo.html">
+                can.dojo.js
+              </a>
+            
+              
+              <a class="source" href="can.fixture.html">
+                can.fixture.js
+              </a>
+            
+              
+              <a class="source" href="can.jquery-all.html">
+                can.jquery-all.js
+              </a>
+            
+              
+              <a class="source" href="can.jquery.html">
+                can.jquery.js
+              </a>
+            
+              
+              <a class="source" href="can.model.queue.html">
+                can.model.queue.js
+              </a>
+            
+              
+              <a class="source" href="can.mootools.html">
+                can.mootools.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.attributes.html">
+                can.observe.attributes.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.backup.html">
+                can.observe.backup.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.delegate.html">
+                can.observe.delegate.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.setter.html">
+                can.observe.setter.js
+              </a>
+            
+              
+              <a class="source" href="can.observe.validations.html">
+                can.observe.validations.js
+              </a>
+            
+              
+              <a class="source" href="can.view.modifiers.html">
+                can.view.modifiers.js
+              </a>
+            
+              
+              <a class="source" href="can.view.mustache.html">
+                can.view.mustache.js
+              </a>
+            
+              
+              <a class="source" href="can.yui.html">
+                can.yui.js
+              </a>
+            
+              
+              <a class="source" href="can.zepto.html">
+                can.zepto.js
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>can.fixture.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="comment">/*!
+* CanJS - 1.1.5 (2013-03-27)
+* http://canjs.us/
+* Copyright (c) 2013 Bitovi
+* Licensed MIT
+*/</span>
+(<span class="function"><span class="keyword">function</span> <span class="params">(can, window, undefined)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2>can/util/object/object.js</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> isArray = can.isArray,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>essentially returns an object that has all the must have comparisons ...
+must haves, do not return true when provided undefined</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        cleanSet = <span class="function"><span class="keyword">function</span> <span class="params">(obj, compares)</span> {</span>
+            <span class="keyword">var</span> copy = can.extend({}, obj);
+            <span class="keyword">for</span> (<span class="keyword">var</span> prop <span class="keyword">in</span> copy) {
+                <span class="keyword">var</span> compare = compares[prop] === <span class="literal">undefined</span> ? compares[<span class="string">"*"</span>] : compares[prop];
+                <span class="keyword">if</span> (same(copy[prop], <span class="literal">undefined</span>, compare)) {
+                    <span class="keyword">delete</span> copy[prop]
+                }
+            }
+            <span class="keyword">return</span> copy;
+        },
+        propCount = <span class="function"><span class="keyword">function</span> <span class="params">(obj)</span> {</span>
+            <span class="keyword">var</span> count = <span class="number">0</span>;
+            <span class="keyword">for</span> (<span class="keyword">var</span> prop <span class="keyword">in</span> obj) count++;
+            <span class="keyword">return</span> count;
+        };
+
+    can.Object = {};
+
+    <span class="keyword">var</span> same = can.Object.same = <span class="function"><span class="keyword">function</span> <span class="params">(a, b, compares, aParent, bParent, deep)</span> {</span>
+        <span class="keyword">var</span> aType = <span class="keyword">typeof</span> a,
+            aArray = isArray(a),
+            comparesType = <span class="keyword">typeof</span> compares,
+            compare;
+
+        <span class="keyword">if</span> (comparesType == <span class="string">'string'</span> || compares === <span class="literal">null</span>) {
+            compares = compareMethods[compares];
+            comparesType = <span class="string">'function'</span>
+        }
+        <span class="keyword">if</span> (comparesType == <span class="string">'function'</span>) {
+            <span class="keyword">return</span> compares(a, b, aParent, bParent)
+        }
+        compares = compares || {};
+
+        <span class="keyword">if</span> (a <span class="keyword">instanceof</span> Date) {
+            <span class="keyword">return</span> a === b;
+        }
+        <span class="keyword">if</span> (deep === -<span class="number">1</span>) {
+            <span class="keyword">return</span> aType === <span class="string">'object'</span> || a === b;
+        }
+        <span class="keyword">if</span> (aType !== <span class="keyword">typeof</span> b || aArray !== isArray(b)) {
+            <span class="keyword">return</span> <span class="literal">false</span>;
+        }
+        <span class="keyword">if</span> (a === b) {
+            <span class="keyword">return</span> <span class="literal">true</span>;
+        }
+        <span class="keyword">if</span> (aArray) {
+            <span class="keyword">if</span> (a.length !== b.length) {
+                <span class="keyword">return</span> <span class="literal">false</span>;
+            }
+            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; a.length; i++) {
+                compare = compares[i] === <span class="literal">undefined</span> ? compares[<span class="string">"*"</span>] : compares[i]
+                <span class="keyword">if</span> (!same(a[i], b[i], a, b, compare)) {
+                    <span class="keyword">return</span> <span class="literal">false</span>;
+                }
+            };
+            <span class="keyword">return</span> <span class="literal">true</span>;
+        } <span class="keyword">else</span> <span class="keyword">if</span> (aType === <span class="string">"object"</span> || aType === <span class="string">'function'</span>) {
+            <span class="keyword">var</span> bCopy = can.extend({}, b);
+            <span class="keyword">for</span> (<span class="keyword">var</span> prop <span class="keyword">in</span> a) {
+                compare = compares[prop] === <span class="literal">undefined</span> ? compares[<span class="string">"*"</span>] : compares[prop];
+                <span class="keyword">if</span> (!same(a[prop], b[prop], compare, a, b, deep === <span class="literal">false</span> ? -<span class="number">1</span> : <span class="literal">undefined</span>)) {
+                    <span class="keyword">return</span> <span class="literal">false</span>;
+                }
+                <span class="keyword">delete</span> bCopy[prop];
+            }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>go through bCopy props ... if there is no compare .. return false</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">for</span> (prop <span class="keyword">in</span> bCopy) {
+                <span class="keyword">if</span> (compares[prop] === <span class="literal">undefined</span> || !same(<span class="literal">undefined</span>, b[prop], compares[prop], a, b, deep === <span class="literal">false</span> ? -<span class="number">1</span> : <span class="literal">undefined</span>)) {
+                    <span class="keyword">return</span> <span class="literal">false</span>;
+                }
+            }
+            <span class="keyword">return</span> <span class="literal">true</span>;
+        }
+        <span class="keyword">return</span> <span class="literal">false</span>;
+    };
+
+    can.Object.subsets = <span class="function"><span class="keyword">function</span> <span class="params">(checkSet, sets, compares)</span> {</span>
+        <span class="keyword">var</span> len = sets.length,
+            subsets = [],
+            checkPropCount = propCount(checkSet),
+            setLength;
+
+        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; len; i++) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>check this subset</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">var</span> set = sets[i];
+            <span class="keyword">if</span> (can.Object.subset(checkSet, set, compares)) {
+                subsets.push(set)
+            }
+        }
+        <span class="keyword">return</span> subsets;
+    };
+
+    can.Object.subset = <span class="function"><span class="keyword">function</span> <span class="params">(subset, set, compares)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>go through set {type: &#39;folder&#39;} and make sure every property
+is in subset {type: &#39;folder&#39;, parentId :5}
+then make sure that set has fewer properties
+make sure we are only checking &#39;important&#39; properties
+in subset (ones that have to have a value)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> setPropCount = <span class="number">0</span>,
+            compares = compares || {};
+
+        <span class="keyword">for</span> (<span class="keyword">var</span> prop <span class="keyword">in</span> set) {
+
+            <span class="keyword">if</span> (!same(subset[prop], set[prop], compares[prop], subset, set)) {
+                <span class="keyword">return</span> <span class="literal">false</span>;
+            }
+        }
+        <span class="keyword">return</span> <span class="literal">true</span>;
+    }
+
+    <span class="keyword">var</span> compareMethods = {
+        <span class="string">"null"</span>: <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+            <span class="keyword">return</span> <span class="literal">true</span>;
+        },
+        i: <span class="function"><span class="keyword">function</span> <span class="params">(a, b)</span> {</span>
+            <span class="keyword">return</span> (<span class="string">""</span> + a).toLowerCase() == (<span class="string">""</span> + b).toLowerCase()
+        }
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <h2>can/util/fixture/fixture.js</h2>
+<p>Get the URL from old Steal root, new Steal config or can.fixture.rootUrl</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">var</span> getUrl = <span class="function"><span class="keyword">function</span> <span class="params">(url)</span> {</span>
+        <span class="keyword">if</span> (<span class="keyword">typeof</span> steal !== <span class="string">'undefined'</span>) {
+            <span class="keyword">if</span> (can.isFunction(steal.config)) {
+                <span class="keyword">return</span> steal.config().root.mapJoin(url).toString();
+            }
+            <span class="keyword">return</span> steal.root.join(url).toString();
+        }
+        <span class="keyword">return</span> (can.fixture.rootUrl || <span class="string">''</span>) + url;
+    }
+
+    <span class="keyword">var</span> updateSettings = <span class="function"><span class="keyword">function</span> <span class="params">(settings, originalOptions)</span> {</span>
+        <span class="keyword">if</span> (!can.fixture.on) {
+            <span class="keyword">return</span>;
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>simple wrapper for logging</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> _logger = <span class="function"><span class="keyword">function</span> <span class="params">(type, arr)</span> {</span>
+            <span class="keyword">if</span> (console.log.apply) {
+                Function.prototype.call.apply(console[type], [console].concat(arr));</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>console[type].apply(console, arr)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            } <span class="keyword">else</span> {
+                console[type](arr)
+            }
+        },
+            log = <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+                <span class="keyword">if</span> (window.console &amp;&amp; console.log) {
+                    Array.prototype.unshift.call(arguments, <span class="string">'fixture INFO:'</span>);
+                    _logger(<span class="string">"log"</span>, Array.prototype.slice.call(arguments));
+                }
+                <span class="keyword">else</span> <span class="keyword">if</span> (window.opera &amp;&amp; window.opera.postError) {
+                    opera.postError(<span class="string">"fixture INFO: "</span> + Array.prototype.join.call(arguments, <span class="string">','</span>));
+                }
+            }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>We always need the type which can also be called method, default to GET</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            settings.type = settings.type || settings.method || <span class="string">'GET'</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>add the fixture option if programmed in</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> data = overwrite(settings);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>if we don&#39;t have a fixture, do nothing</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (!settings.fixture) {
+            <span class="keyword">if</span> (window.location.protocol === <span class="string">"file:"</span>) {
+                log(<span class="string">"ajax request to "</span> + settings.url + <span class="string">", no fixture found"</span>);
+            }
+            <span class="keyword">return</span>;
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>if referencing something else, update the fixture option</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (<span class="keyword">typeof</span> settings.fixture === <span class="string">"string"</span> &amp;&amp; can.fixture[settings.fixture]) {
+            settings.fixture = can.fixture[settings.fixture];
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>if a string, we just point to the right url</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (<span class="keyword">typeof</span> settings.fixture == <span class="string">"string"</span>) {
+            <span class="keyword">var</span> url = settings.fixture;
+
+            <span class="keyword">if</span> (<span class="regexp">/^\/\//</span>.test(url)) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>this lets us use rootUrl w/o having steal...</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                url = getUrl(settings.fixture.substr(<span class="number">2</span>));
+            }
+
+            <span class="keyword">if</span> (data) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Template static fixture URLs</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                url = can.sub(url, data);
+            }
+
+            <span class="keyword">delete</span> settings.fixture;
+
+
+
+            settings.url = url;
+            settings.data = <span class="literal">null</span>;
+            settings.type = <span class="string">"GET"</span>;
+            <span class="keyword">if</span> (!settings.error) {
+                settings.error = <span class="function"><span class="keyword">function</span> <span class="params">(xhr, error, message)</span> {</span>
+                    <span class="keyword">throw</span> <span class="string">"fixtures.js Error "</span> + error + <span class="string">" "</span> + message;
+                };
+            }
+        }
+        <span class="keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>it&#39;s a function ... add the fixture datatype so our fixture transport handles it
+TODO: make everything go here for timing and other fun stuff
+add to settings data from fixture ...</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            settings.dataTypes &amp;&amp; settings.dataTypes.splice(<span class="number">0</span>, <span class="number">0</span>, <span class="string">"fixture"</span>);
+
+            <span class="keyword">if</span> (data &amp;&amp; originalOptions) {
+                can.extend(originalOptions.data, data)
+            }
+        }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>A helper function that takes what&#39;s called with response
+and moves some common args around to make it easier to call</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        extractResponse = <span class="function"><span class="keyword">function</span> <span class="params">(status, statusText, responses, headers)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>if we get response(RESPONSES, HEADERS)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (<span class="keyword">typeof</span> status != <span class="string">"number"</span>) {
+                headers = statusText;
+                responses = status;
+                statusText = <span class="string">"success"</span>
+                status = <span class="number">200</span>;
+            }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>if we get response(200, RESPONSES, HEADERS)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (<span class="keyword">typeof</span> statusText != <span class="string">"string"</span>) {
+                headers = responses;
+                responses = statusText;
+                statusText = <span class="string">"success"</span>;
+            }
+            <span class="keyword">if</span> (status &gt;= <span class="number">400</span> &amp;&amp; status &lt;= <span class="number">599</span>) {
+                <span class="keyword">this</span>.dataType = <span class="string">"text"</span>
+            }
+            <span class="keyword">return</span> [status, statusText, extractResponses(<span class="keyword">this</span>, responses), headers];
+        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>If we get data instead of responses,
+make sure we provide a response type that matches the first datatype (typically json)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        extractResponses = <span class="function"><span class="keyword">function</span> <span class="params">(settings, responses)</span> {</span>
+            <span class="keyword">var</span> next = settings.dataTypes ? settings.dataTypes[<span class="number">0</span>] : (settings.dataType || <span class="string">'json'</span>);
+            <span class="keyword">if</span> (!responses || !responses[next]) {
+                <span class="keyword">var</span> tmp = {}
+                tmp[next] = responses;
+                responses = tmp;
+            }
+            <span class="keyword">return</span> responses;
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>used to check urls
+check if jQuery</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> (can.ajaxPrefilter &amp;&amp; can.ajaxTransport) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>the pre-filter needs to re-route the url</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        can.ajaxPrefilter(updateSettings);
+
+        can.ajaxTransport(<span class="string">"fixture"</span>, <span class="function"><span class="keyword">function</span> <span class="params">(s, original)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>remove the fixture from the datatype</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            s.dataTypes.shift();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>we&#39;ll return the result of the next data type</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">var</span> timeout, stopped = <span class="literal">false</span>;
+
+            <span class="keyword">return</span> {
+                send: <span class="function"><span class="keyword">function</span> <span class="params">(headers, callback)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>we&#39;ll immediately wait the delay time for all fixtures</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    timeout = setTimeout(<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>if the user wants to call success on their own, we allow it ...</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        <span class="keyword">var</span> success = <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+                            <span class="keyword">if</span> (stopped === <span class="literal">false</span>) {
+                                callback.apply(<span class="literal">null</span>, extractResponse.apply(s, arguments));
+                            }
+                        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>get the result form the fixture</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                            result = s.fixture(original, success, headers, s);
+                        <span class="keyword">if</span> (result !== <span class="literal">undefined</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>make sure the result has the right dataType</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                            callback(<span class="number">200</span>, <span class="string">"success"</span>, extractResponses(s, result), {});
+                        }
+                    }, can.fixture.delay);
+                },
+                abort: <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+                    stopped = <span class="literal">true</span>;
+                    clearTimeout(timeout)
+                }
+            };
+        });
+    } <span class="keyword">else</span> {
+        <span class="keyword">var</span> AJAX = can.ajax;
+        can.ajax = <span class="function"><span class="keyword">function</span> <span class="params">(settings)</span> {</span>
+            updateSettings(settings, settings);
+            <span class="keyword">if</span> (settings.fixture) {
+                <span class="keyword">var</span> timeout, d = <span class="keyword">new</span> can.Deferred(),
+                    stopped = <span class="literal">false</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>TODO this should work with response</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                d.getResponseHeader = <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>call success and fail</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                d.then(settings.success, settings.fail);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>abort should stop the timeout and calling success</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                d.abort = <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+                    clearTimeout(timeout);
+                    stopped = <span class="literal">true</span>;
+                    d.reject(d)
+                }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>set a timeout that simulates making a request ....</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                timeout = setTimeout(<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>if the user wants to call success on their own, we allow it ...</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    <span class="keyword">var</span> success = <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+                        <span class="keyword">var</span> response = extractResponse.apply(settings, arguments),
+                            status = response[<span class="number">0</span>];
+
+                        <span class="keyword">if</span> ((status &gt;= <span class="number">200</span> &amp;&amp; status &lt; <span class="number">300</span> || status === <span class="number">304</span>) &amp;&amp; stopped === <span class="literal">false</span>) {
+                            d.resolve(response[<span class="number">2</span>][settings.dataType])
+                        } <span class="keyword">else</span> {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>TODO probably resolve better</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                            d.reject(d, <span class="string">'error'</span>, response[<span class="number">1</span>]);
+                        }
+                    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>get the result form the fixture</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                        result = settings.fixture(settings, success, settings.headers, settings);
+                    <span class="keyword">if</span> (result !== <span class="literal">undefined</span>) {
+                        d.resolve(result)
+                    }
+                }, can.fixture.delay);
+
+                <span class="keyword">return</span> d;
+            } <span class="keyword">else</span> {
+                <span class="keyword">return</span> AJAX(settings);
+            }
+        }
+    }
+
+    <span class="keyword">var</span> typeTest = <span class="regexp">/^(script|json|text|jsonp)$/</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>a list of &#39;overwrite&#39; settings object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        overwrites = [],</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>returns the index of an overwrite function</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        find = <span class="function"><span class="keyword">function</span> <span class="params">(settings, exact)</span> {</span>
+            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; overwrites.length; i++) {
+                <span class="keyword">if</span> ($fixture._similar(settings, overwrites[i], exact)) {
+                    <span class="keyword">return</span> i;
+                }
+            }
+            <span class="keyword">return</span> -<span class="number">1</span>;
+        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p>overwrites the settings fixture if an overwrite matches</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        overwrite = <span class="function"><span class="keyword">function</span> <span class="params">(settings)</span> {</span>
+            <span class="keyword">var</span> index = find(settings);
+            <span class="keyword">if</span> (index &gt; -<span class="number">1</span>) {
+                settings.fixture = overwrites[index].fixture;
+                <span class="keyword">return</span> $fixture._getData(overwrites[index].url, settings.url)
+            }
+
+        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>Makes an attempt to guess where the id is at in the url and returns it.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        getId = <span class="function"><span class="keyword">function</span> <span class="params">(settings)</span> {</span>
+            <span class="keyword">var</span> id = settings.data.id;
+
+            <span class="keyword">if</span> (id === <span class="literal">undefined</span> &amp;&amp; <span class="keyword">typeof</span> settings.data === <span class="string">"number"</span>) {
+                id = settings.data;
+            }
+
+
+
+            <span class="keyword">if</span> (id === <span class="literal">undefined</span>) {
+                settings.url.replace(<span class="regexp">/\/(\d+)(\/|$|\.)/g</span>, <span class="function"><span class="keyword">function</span> <span class="params">(all, num)</span> {</span>
+                    id = num;
+                });
+            }
+
+            <span class="keyword">if</span> (id === <span class="literal">undefined</span>) {
+                id = settings.url.replace(<span class="regexp">/\/(\w+)(\/|$|\.)/g</span>, <span class="function"><span class="keyword">function</span> <span class="params">(all, num)</span> {</span>
+                    <span class="keyword">if</span> (num != <span class="string">'update'</span>) {
+                        id = num;
+                    }
+                })
+            }
+
+            <span class="keyword">if</span> (id === <span class="literal">undefined</span>) { <span class="comment">// if still not set, guess a random number</span>
+                id = Math.round(Math.random() * <span class="number">1000</span>)
+            }
+
+            <span class="keyword">return</span> id;
+        };
+
+    <span class="keyword">var</span> $fixture = can.fixture = <span class="function"><span class="keyword">function</span> <span class="params">(settings, fixture)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <p>if we provide a fixture ...</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (fixture !== <span class="literal">undefined</span>) {
+            <span class="keyword">if</span> (<span class="keyword">typeof</span> settings == <span class="string">'string'</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <p>handle url strings</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="keyword">var</span> matches = settings.match(<span class="regexp">/(GET|POST|PUT|DELETE) (.+)/i</span>);
+                <span class="keyword">if</span> (!matches) {
+                    settings = {
+                        url: settings
+                    };
+                } <span class="keyword">else</span> {
+                    settings = {
+                        url: matches[<span class="number">2</span>],
+                        type: matches[<span class="number">1</span>]
+                    };
+                }
+
+            }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <p>handle removing.  An exact match if fixture was provided, otherwise, anything similar</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">var</span> index = find(settings, !! fixture);
+            <span class="keyword">if</span> (index &gt; -<span class="number">1</span>) {
+                overwrites.splice(index, <span class="number">1</span>)
+            }
+            <span class="keyword">if</span> (fixture == <span class="literal">null</span>) {
+                <span class="keyword">return</span>
+            }
+            settings.fixture = fixture;
+            overwrites.push(settings)
+        } <span class="keyword">else</span> {
+            can.each(settings, <span class="function"><span class="keyword">function</span> <span class="params">(fixture, url)</span> {</span>
+                $fixture(url, fixture);
+            })
+        }
+    };
+    <span class="keyword">var</span> replacer = can.replacer;
+
+    can.extend(can.fixture, {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-44">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-44">&#182;</a>
+              </div>
+              <p>given ajax settings, find an overwrite</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        _similar: <span class="function"><span class="keyword">function</span> <span class="params">(settings, overwrite, exact)</span> {</span>
+            <span class="keyword">if</span> (exact) {
+                <span class="keyword">return</span> can.Object.same(settings, overwrite, {
+                    fixture: <span class="literal">null</span>
+                })
+            } <span class="keyword">else</span> {
+                <span class="keyword">return</span> can.Object.subset(settings, overwrite, can.fixture._compare)
+            }
+        },
+        _compare: {
+            url: <span class="function"><span class="keyword">function</span> <span class="params">(a, b)</span> {</span>
+                <span class="keyword">return</span> !!$fixture._getData(b, a)
+            },
+            fixture: <span class="literal">null</span>,
+            type: <span class="string">"i"</span>
+        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-45">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-45">&#182;</a>
+              </div>
+              <p>gets data from a url like &quot;/todo/{id}&quot; given &quot;todo/5&quot;</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        _getData: <span class="function"><span class="keyword">function</span> <span class="params">(fixtureUrl, url)</span> {</span>
+            <span class="keyword">var</span> order = [],
+                fixtureUrlAdjusted = fixtureUrl.replace(<span class="string">'.'</span>, <span class="string">'\\.'</span>).replace(<span class="string">'?'</span>, <span class="string">'\\?'</span>),
+                res = <span class="keyword">new</span> RegExp(fixtureUrlAdjusted.replace(replacer, <span class="function"><span class="keyword">function</span> <span class="params">(whole, part)</span> {</span>
+                    order.push(part)
+                    <span class="keyword">return</span> <span class="string">"([^\/]+)"</span>
+                }) + <span class="string">"$"</span>).exec(url),
+                data = {};
+
+            <span class="keyword">if</span> (!res) {
+                <span class="keyword">return</span> <span class="literal">null</span>;
+            }
+            res.shift();
+            can.each(order, <span class="function"><span class="keyword">function</span> <span class="params">(name)</span> {</span>
+                data[name] = res.shift()
+            })
+            <span class="keyword">return</span> data;
+        },
+
+        store: <span class="function"><span class="keyword">function</span> <span class="params">(types, count, make, filter)</span> {</span>
+
+            <span class="keyword">var</span> items = [],</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-46">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-46">&#182;</a>
+              </div>
+              <p>TODO: change this to a hash</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                findOne = <span class="function"><span class="keyword">function</span> <span class="params">(id)</span> {</span>
+                    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; items.length; i++) {
+                        <span class="keyword">if</span> (id == items[i].id) {
+                            <span class="keyword">return</span> items[i];
+                        }
+                    }
+                },
+                methods = {};
+
+            <span class="keyword">if</span> (<span class="keyword">typeof</span> types === <span class="string">"string"</span>) {
+                types = [types + <span class="string">"s"</span>, types]
+            } <span class="keyword">else</span> <span class="keyword">if</span> (!can.isArray(types)) {
+                filter = make;
+                make = count;
+                count = types;
+            }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-47">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-47">&#182;</a>
+              </div>
+              <p>make all items</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            can.extend(methods, {
+
+                findAll: <span class="function"><span class="keyword">function</span> <span class="params">(request)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-48">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-48">&#182;</a>
+              </div>
+              <p>copy array of items</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    <span class="keyword">var</span> retArr = items.slice(<span class="number">0</span>);
+                    request.data = request.data || {};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-49">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-49">&#182;</a>
+              </div>
+              <p>sort using order
+order looks like [&quot;age ASC&quot;,&quot;gender DESC&quot;]</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    can.each((request.data.order || []).slice(<span class="number">0</span>).reverse(), <span class="function"><span class="keyword">function</span> <span class="params">(name)</span> {</span>
+                        <span class="keyword">var</span> split = name.split(<span class="string">" "</span>);
+                        retArr = retArr.sort(<span class="function"><span class="keyword">function</span> <span class="params">(a, b)</span> {</span>
+                            <span class="keyword">if</span> (split[<span class="number">1</span>].toUpperCase() !== <span class="string">"ASC"</span>) {
+                                <span class="keyword">if</span> (a[split[<span class="number">0</span>]] &lt; b[split[<span class="number">0</span>]]) {
+                                    <span class="keyword">return</span> <span class="number">1</span>;
+                                } <span class="keyword">else</span> <span class="keyword">if</span> (a[split[<span class="number">0</span>]] == b[split[<span class="number">0</span>]]) {
+                                    <span class="keyword">return</span> <span class="number">0</span>
+                                } <span class="keyword">else</span> {
+                                    <span class="keyword">return</span> -<span class="number">1</span>;
+                                }
+                            }
+                            <span class="keyword">else</span> {
+                                <span class="keyword">if</span> (a[split[<span class="number">0</span>]] &lt; b[split[<span class="number">0</span>]]) {
+                                    <span class="keyword">return</span> -<span class="number">1</span>;
+                                } <span class="keyword">else</span> <span class="keyword">if</span> (a[split[<span class="number">0</span>]] == b[split[<span class="number">0</span>]]) {
+                                    <span class="keyword">return</span> <span class="number">0</span>
+                                } <span class="keyword">else</span> {
+                                    <span class="keyword">return</span> <span class="number">1</span>;
+                                }
+                            }
+                        });
+                    });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-50">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-50">&#182;</a>
+              </div>
+              <p>group is just like a sort</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    can.each((request.data.group || []).slice(<span class="number">0</span>).reverse(), <span class="function"><span class="keyword">function</span> <span class="params">(name)</span> {</span>
+                        <span class="keyword">var</span> split = name.split(<span class="string">" "</span>);
+                        retArr = retArr.sort(<span class="function"><span class="keyword">function</span> <span class="params">(a, b)</span> {</span>
+                            <span class="keyword">return</span> a[split[<span class="number">0</span>]] &gt; b[split[<span class="number">0</span>]];
+                        });
+                    });
+
+                    <span class="keyword">var</span> offset = parseInt(request.data.offset, <span class="number">10</span>) || <span class="number">0</span>,
+                        limit = parseInt(request.data.limit, <span class="number">10</span>) || (items.length - offset),
+                        i = <span class="number">0</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-51">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-51">&#182;</a>
+              </div>
+              <p>filter results if someone added an attr like parentId</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    <span class="keyword">for</span> (<span class="keyword">var</span> param <span class="keyword">in</span> request.data) {
+                        i = <span class="number">0</span>;
+                        <span class="keyword">if</span> (request.data[param] !== <span class="literal">undefined</span> &amp;&amp; <span class="comment">// don't do this if the value of the param is null (ignore it)</span>
+                        (param.indexOf(<span class="string">"Id"</span>) != -<span class="number">1</span> || param.indexOf(<span class="string">"_id"</span>) != -<span class="number">1</span>)) {
+                            <span class="keyword">while</span> (i &lt; retArr.length) {
+                                <span class="keyword">if</span> (request.data[param] != retArr[i][param]) {
+                                    retArr.splice(i, <span class="number">1</span>);
+                                } <span class="keyword">else</span> {
+                                    i++;
+                                }
+                            }
+                        }
+                    }
+
+                    <span class="keyword">if</span> (filter) {
+                        i = <span class="number">0</span>;
+                        <span class="keyword">while</span> (i &lt; retArr.length) {
+                            <span class="keyword">if</span> (!filter(retArr[i], request)) {
+                                retArr.splice(i, <span class="number">1</span>);
+                            } <span class="keyword">else</span> {
+                                i++;
+                            }
+                        }
+                    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-52">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-52">&#182;</a>
+              </div>
+              <p>return data spliced with limit and offset</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    <span class="keyword">return</span> {
+                        <span class="string">"count"</span>: retArr.length,
+                        <span class="string">"limit"</span>: request.data.limit,
+                        <span class="string">"offset"</span>: request.data.offset,
+                        <span class="string">"data"</span>: retArr.slice(offset, offset + limit)
+                    };
+                },
+
+                findOne: <span class="function"><span class="keyword">function</span> <span class="params">(request, response)</span> {</span>
+                    <span class="keyword">var</span> item = findOne(getId(request));
+                    response(item ? item : <span class="literal">undefined</span>);
+                },
+
+                update: <span class="function"><span class="keyword">function</span> <span class="params">(request, response)</span> {</span>
+                    <span class="keyword">var</span> id = getId(request);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-53">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-53">&#182;</a>
+              </div>
+              <p>TODO: make it work with non-linear ids ..</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    can.extend(findOne(id), request.data);
+                    response({
+                        id: getId(request)
+                    }, {
+                        location: request.url || <span class="string">"/"</span> + getId(request)
+                    });
+                },
+
+                destroy: <span class="function"><span class="keyword">function</span> <span class="params">(request)</span> {</span>
+                    <span class="keyword">var</span> id = getId(request);
+                    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; items.length; i++) {
+                        <span class="keyword">if</span> (items[i].id == id) {
+                            items.splice(i, <span class="number">1</span>);
+                            <span class="keyword">break</span>;
+                        }
+                    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-54">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-54">&#182;</a>
+              </div>
+              <p>TODO: make it work with non-linear ids ..</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    can.extend(findOne(id) || {}, request.data);
+                    <span class="keyword">return</span> {};
+                },
+
+                create: <span class="function"><span class="keyword">function</span> <span class="params">(settings, response)</span> {</span>
+                    <span class="keyword">var</span> item = make(items.length, items);
+
+                    can.extend(item, settings.data);
+
+                    <span class="keyword">if</span> (!item.id) {
+                        item.id = items.length;
+                    }
+
+                    items.push(item);
+                    <span class="keyword">var</span> id = item.id || parseInt(Math.random() * <span class="number">100000</span>, <span class="number">10</span>);
+                    response({
+                        id: id
+                    }, {
+                        location: settings.url + <span class="string">"/"</span> + id
+                    })
+                }
+            });
+
+            <span class="keyword">var</span> reset = <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+                items = [];
+                <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; (count); i++) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-55">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-55">&#182;</a>
+              </div>
+              <p>call back provided make</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    <span class="keyword">var</span> item = make(i, items);
+
+                    <span class="keyword">if</span> (!item.id) {
+                        item.id = i;
+                    }
+                    items.push(item);
+                }
+                <span class="keyword">if</span> (can.isArray(types)) {
+                    can.fixture[<span class="string">"~"</span> + types[<span class="number">0</span>]] = items;
+                    can.fixture[<span class="string">"-"</span> + types[<span class="number">0</span>]] = methods.findAll;
+                    can.fixture[<span class="string">"-"</span> + types[<span class="number">1</span>]] = methods.findOne;
+                    can.fixture[<span class="string">"-"</span> + types[<span class="number">1</span>] + <span class="string">"Update"</span>] = methods.update;
+                    can.fixture[<span class="string">"-"</span> + types[<span class="number">1</span>] + <span class="string">"Destroy"</span>] = methods.destroy;
+                    can.fixture[<span class="string">"-"</span> + types[<span class="number">1</span>] + <span class="string">"Create"</span>] = methods.create;
+                }
+            }
+            reset()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-56">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-56">&#182;</a>
+              </div>
+              <p>if we have types given add them to can.fixture</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">return</span> can.extend({
+                getId: getId,
+
+                find: <span class="function"><span class="keyword">function</span> <span class="params">(settings)</span> {</span>
+                    <span class="keyword">return</span> findOne(getId(settings));
+                },
+
+                reset: reset
+            }, methods);
+        },
+
+        rand: <span class="function"><span class="keyword">function</span> <span class="params">(arr, min, max)</span> {</span>
+            <span class="keyword">if</span> (<span class="keyword">typeof</span> arr == <span class="string">'number'</span>) {
+                <span class="keyword">if</span> (<span class="keyword">typeof</span> min == <span class="string">'number'</span>) {
+                    <span class="keyword">return</span> arr + Math.floor(Math.random() * (min - arr));
+                } <span class="keyword">else</span> {
+                    <span class="keyword">return</span> Math.floor(Math.random() * arr);
+                }
+
+            }
+            <span class="keyword">var</span> rand = arguments.callee;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-57">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-57">&#182;</a>
+              </div>
+              <p>get a random set</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (min === <span class="literal">undefined</span>) {
+                <span class="keyword">return</span> rand(arr, rand(arr.length + <span class="number">1</span>))
+            }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-58">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-58">&#182;</a>
+              </div>
+              <p>get a random selection of arr</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">var</span> res = [];
+            arr = arr.slice(<span class="number">0</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-59">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-59">&#182;</a>
+              </div>
+              <p>set max</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (!max) {
+                max = min;
+            }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-60">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-60">&#182;</a>
+              </div>
+              <p>random max</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            max = min + Math.round(rand(max - min))
+            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; max; i++) {
+                res.push(arr.splice(rand(arr.length), <span class="number">1</span>)[<span class="number">0</span>])
+            }
+            <span class="keyword">return</span> res;
+        },
+
+        xhr: <span class="function"><span class="keyword">function</span> <span class="params">(xhr)</span> {</span>
+            <span class="keyword">return</span> can.extend({}, {
+                abort: can.noop,
+                getAllResponseHeaders: <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+                    <span class="keyword">return</span> <span class="string">""</span>;
+                },
+                getResponseHeader: <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+                    <span class="keyword">return</span> <span class="string">""</span>;
+                },
+                open: can.noop,
+                overrideMimeType: can.noop,
+                readyState: <span class="number">4</span>,
+                responseText: <span class="string">""</span>,
+                responseXML: <span class="literal">null</span>,
+                send: can.noop,
+                setRequestHeader: can.noop,
+                status: <span class="number">200</span>,
+                statusText: <span class="string">"OK"</span>
+            }, xhr);
+        },
+
+        on: <span class="literal">true</span>
+    });
+
+    can.fixture.delay = <span class="number">200</span>;
+
+
+    can.fixture.rootUrl = getUrl(<span class="string">''</span>);
+
+    can.fixture[<span class="string">"-handleFunction"</span>] = <span class="function"><span class="keyword">function</span> <span class="params">(settings)</span> {</span>
+        <span class="keyword">if</span> (<span class="keyword">typeof</span> settings.fixture === <span class="string">"string"</span> &amp;&amp; can.fixture[settings.fixture]) {
+            settings.fixture = can.fixture[settings.fixture];
+        }
+        <span class="keyword">if</span> (<span class="keyword">typeof</span> settings.fixture == <span class="string">"function"</span>) {
+            setTimeout(<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+                <span class="keyword">if</span> (settings.success) {
+                    settings.success.apply(<span class="literal">null</span>, settings.fixture(settings, <span class="string">"success"</span>));
+                }
+                <span class="keyword">if</span> (settings.complete) {
+                    settings.complete.apply(<span class="literal">null</span>, settings.fixture(settings, <span class="string">"complete"</span>));
+                }
+            }, can.fixture.delay);
+            <span class="keyword">return</span> <span class="literal">true</span>;
+        }
+        <span class="keyword">return</span> <span class="literal">false</span>;
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-61">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-61">&#182;</a>
+              </div>
+              <p>Expose this for fixture debugging</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    can.fixture.overwrites = overwrites;
+    can.fixture.make = can.fixture.store;
+
+})(can, <span class="keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

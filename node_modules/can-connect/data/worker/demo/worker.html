@@ -1,0 +1,18 @@
+<body>
+
+<div id='list'></div>
+
+<script src="../../../node_modules/steal/steal.js" id="demo-source">
+var todoConnection = require("can-connect/data/worker/demo/todo_connection");
+
+todoConnection.getList({}).then(function(todos){
+	var html = "";
+	todos.forEach(function(todo){
+		html += "<li>"+todo.name+"</li>";
+	});
+	document.getElementById('list').innerHTML = html;
+});
+
+
+</script>
+</body>

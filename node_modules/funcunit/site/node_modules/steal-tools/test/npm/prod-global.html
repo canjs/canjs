@@ -1,0 +1,14 @@
+<body>
+<script>
+	// jquery shim
+	window.$ = function(tag){
+		var el = document.getElementsByTagName(tag)[0];
+		return {
+			html: function(html){
+				el.innerHTML = html;
+			}
+		};
+	};
+</script>
+<script src="dist/global/npm-test.js"></script>
+</body>

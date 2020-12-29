@@ -1,0 +1,1 @@
+import './can-string-test';

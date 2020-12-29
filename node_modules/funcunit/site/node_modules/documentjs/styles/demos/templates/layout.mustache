@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<!--[if lt IE 7]>
+<html class="no-js ie lt-ie9 lt-ie8 lt-ie7" lang="en">
+<![endif]-->
+<!--[if IE 7]>
+<html class="no-js ie lt-ie9 lt-ie8" lang="en">
+<![endif]-->
+<!--[if IE 8]>
+<html class="no-js ie lt-ie9" lang="en">
+<![endif]-->
+<!--[if IE 9]>
+<html class="no-js ie ie9" lang="en">
+<![endif]-->
+<!--[if gt IE 9]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<title>{{makeParentTitle}} {{#if title}}- {{title}} {{else}} {{#if name}}- {{name}}{{/if}}{{/if}}</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="stylesheet" href="./static/bundles/static.css" />
+	<style>
+      ul.icons-demo {
+        list-style-type: none;
+        margin: 0;
+        padding-left: 0;
+      }
+      ul.icons-demo li {
+        display: inline-block;
+        text-align: center;
+        margin-bottom: 20px;
+        width: 24%;
+      }
+      ul.icons-demo span {
+        font-size: 3em;
+      }
+      ul.icons-demo code {
+        font-size: .8em;
+      }
+	</style>
+  {{#if description}}
+    {{{description}}}
+  {{/if}}
+	<!--[if lt IE 9]>
+   <script type="text/javascript" src="static/html5shiv.js"></script>
+    <!--<![endif]-->
+</head>
+
+<body class="style-demo">
+	{{{body}}}
+</body>
+
+</html>

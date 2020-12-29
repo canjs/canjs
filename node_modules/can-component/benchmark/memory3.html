@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<title>Memory tests</title>
+<style>
+	body {
+		font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	}
+
+	button {
+		font-size: 200%;
+		background: salmon;
+		border: 2px solid black;
+		color: black;
+		padding: .5em 1em;
+		cursor: pointer;
+	}
+
+	#runner {
+		text-align: center;
+	}
+</style>
+<h1>connectedCallback memory leak</h1>
+<p>This tests a leak in using ViewModel#connectedCallback when the element is never inserted into the page. Use the devtools memory tool and click <strong>run me</strong>. Every time you click run a new component is created. Hopefully there are no leaks.</p>
+<div id="runner">
+	<button type="button">Run me</button>
+</div>
+<div id="root"></div>
+<script src="../node_modules/steal/steal.js"></script>
+<script type="steal-module">
+	var Component = require("can-component");
+	var nodeLists = require("can-view-nodelist");
+
+	var MyComponent = Component.extend({
+		tag: "my-thing",
+		view: "Hello world",
+		ViewModel: {
+			// Any connectedCallback will do, just the existence causes a leak.
+			connectedCallback: function(){}
+		}
+	});
+
+	function run() {
+		var inst = new MyComponent();
+		nodeLists.unregister(inst.nodeList);
+	}
+
+	document.querySelector('button').addEventListener('click', run);
+</script>

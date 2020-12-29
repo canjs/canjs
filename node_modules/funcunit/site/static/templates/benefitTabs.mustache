@@ -1,0 +1,8 @@
+  <ul class="circle-tabs">
+ 	{{#makeTabs tabs}}
+ 	<li class="{{className}}" data-benefit="{{className}}"><a href="{{link}}">{{title}}</a></li>
+ 	{{/makeTabs}}
+ </ul>
+ {{#with selectedTab}}
+ <div class="tab-description {{className}}">{{tagline}} <a class="readmore" href="{{link}}">More &#187;</a></div>
+ {{/with}}

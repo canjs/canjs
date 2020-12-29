@@ -1,0 +1,33 @@
+{
+  "name": "can-ndjson-stream-demo",
+  "version": "1.0.0",
+  "description": "Demo with ndjson server for can-ndjson-stream module which parses a stream of ndjson data into a stream of JS objects.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "ndjson",
+    "stream",
+    "ReadableStream",
+    "can-ndjson-stream",
+    "canjs"
+  ],
+  "author": {
+    "name": "Bitovi",
+    "email": "contact@bitovi.com",
+    "url": "http://bitovi.com"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "can-ndjson-stream": "0.0.1",
+    "express": "^4.15.3",
+    "fs": "0.0.1-security",
+    "ndjson": "^1.5.0"
+  },
+  "devDependencies": {
+    "steal": "^1.5.4",
+    "steal-tools": "^1.3.5"
+  }
+}

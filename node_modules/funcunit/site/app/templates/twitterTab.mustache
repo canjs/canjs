@@ -1,0 +1,17 @@
+<div class="tab-description twitter">
+	<div class="pull-right categories">
+		<a href="http://twitter.com/canjs" class="button"><span class="icon-twitter"></span> Follow on Twitter</a>
+	</div><!-- categories -->
+	<div class="posts">
+		<h1>Recent CanJS Tweets</h1>
+		<div class="bithub-content">
+			{{#tweets}}
+			{{>docs/static/templates/tweet.mustache}}
+			{{/tweets}}
+			{{^tweets}}
+			<div class="loading"/>
+			{{/tweets}}
+		</div>
+	</div>
+	<br class="clear" />
+</div>

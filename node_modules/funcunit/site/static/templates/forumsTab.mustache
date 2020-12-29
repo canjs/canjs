@@ -1,0 +1,33 @@
+<div class="tab-description forums">
+	<form id="forumSearch">
+		<input type="search" placeholder="Search the forums..." />
+		<button type="button">Go</button>
+	</form>
+	<div class="posts">
+		<h1>Recent Posts</h1>
+		<div class="bithub-content">
+		{{#forumPosts}}
+		{{>docs/static/templates/forumPost.mustache}}
+		{{/forumPosts}}
+		{{^forumPosts}}
+		<div class="loading"/>
+		{{/forumPosts}}
+		</div>
+	</div>
+	<div class="pull-right categories">
+		<ul>
+			<li><a href="https://forum.javascriptmvc.com/#filter/discussions">Discussions</a></li>
+			<li><a href="https://forum.javascriptmvc.com/#filter/announcement">Announcements</a></li>
+			<li><a href="https://forum.javascriptmvc.com/#filter/questions">Questions</a></li>
+			<li><a href="https://forum.javascriptmvc.com/#filter/ideas">Ideas</a></li>
+			<li><a href="https://forum.javascriptmvc.com/#filter/problems">Problems</a></li>
+		</ul>
+		<!--<ul>
+			<li><a href="#">Today</a></li>
+			<li><a href="#">This Week</a></li>
+			<li><a href="#">This Month</a></li>
+			<li><a href="#">This Year</a></li>
+		</ul>-->
+	</div>
+	<br class="clear" />
+</div><!-- .tab-description -->

@@ -1,0 +1,2655 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/experiment/todomvc/todomvc.md
+	@page guides/todomvc
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>TodoMVC Guide | app guides | Guides | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+	<meta property="og:title" content="TodoMVC Guide | app guides | Guides | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "TodoMVC Guide | app guides | Guides | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/todomvc" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>getting started</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="crud-beginner.html"
+							title="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+							CRUD Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="setup.html"
+							title="Learn how to install CanJS in your environment.">
+							Setting Up CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="technology-overview.html"
+							title="Learn the basics of CanJS’s technology.">
+							Technology Overview
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>topics</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="html.html"
+							title="Learn how to update HTML and listen to user interactions.">
+							HTML
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="routing.html"
+							title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+							Routing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="data.html"
+							title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">
+							Service Layer
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="debugging.html"
+							title="Learn how to debug CanJS applications.">
+							Debugging
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="forms.html"
+							title="Learn how to create amazing &lt;form&gt;s with CanJS.">
+							Forms
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="testing.html"
+							title="Learn how to test CanJS applications.">
+							Testing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="logic.html"
+							title="Learn how to write observables in an organized, maintainable, and testable way.">
+							Logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="server-side-rendering.html"
+							title="Learn how to set up SSR for CanJS.">
+							Server-Side Rendering
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>app guides</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="chat.html"
+							title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+							Chat Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="todomvc.html"
+							title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+							TodoMVC Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/todomvc-with-steal.html"
+							title="This tutorial walks through building TodoMVC with StealJS. It includes KeyNote presentations covering CanJS core libraries.">
+							TodoMVC with StealJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>beginner recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/canvas-clock.html"
+							title="This beginner guide walks you through building a clock with the Canvas API.">
+							Canvas Clock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-simple.html"
+							title="This beginner guide walks through building a very simple credit card payment form.  It uses Stripe.js v2 API to create a token which can be used to create a charge.  It also performs simple validation on the payment form values.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-simple.html"
+							title="This beginner guide walks you through building a simple file navigation widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.0.0. Check out the file-navigator-advanced for an example that makes AJAX requests for its data and uses can-stache-element.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/signup-simple.html"
+							title="This beginner guide walks through building simple signup, login forms and a logout button.">
+							Signup and Login
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/video-player.html"
+							title="This beginner guide walks you through building custom video controls around a video element.">
+							Video Player
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/weather-report-simple.html"
+							title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.2.">
+							Weather Report
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>intermediate recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/cta-bus-map.html"
+							title="This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map. You&#x27;ll learn how to create a StacheElement that integrates with 3rd party widgets.">
+							CTA Bus Map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/modals.html"
+							title="This intermediate guide shows how to create a multiple modal form.">
+							Multiple Modals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/text-editor.html"
+							title="This intermediate guide walks you through building a basic rich text editor.">
+							Text Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/tinder-carousel.html"
+							title="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+							Tinder Carousel
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>advanced recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-advanced.html"
+							title="This advanced guide walks through building a simple credit card payment form with validations. It doesn’t use can-define. Instead it uses Kefir.js streams to make a ViewModel. can-kefir is used to make the Kefir streams observable to can-stache.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-advanced.html"
+							title="This advanced guide walks you through building a file navigation widget that requests data with fetch. It takes about 45 minutes to complete.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/playlist-editor.html"
+							title="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+							Playlist Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/search-list-details.html"
+							title="This advanced guide walks through building a Search, List, Details flow with lazy-loaded routes.">
+							Search, List, Details
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>upgrade</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-3.html"
+							title="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+							Migrating to CanJS 3
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-4.html"
+							title="This guide walks you through the step-by-step process to upgrade a 3.x app to CanJS 4.">
+							Migrating to CanJS 4
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-5.html"
+							title="This guide walks you through the process to upgrade a 4.x app to CanJS 5.x.">
+							Migrating to CanJS 5
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-6.html"
+							title="This guide walks you through the process to upgrade a 5.x app to CanJS 6.x.">
+							Migrating to CanJS 6
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="upgrade/using-codemods.html"
+							title="Learn how to migrate your app to CanJS 6 using can-migrate.">
+							Using Codemods
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>other</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="api.html"
+							title="This page walks through how to use and understand CanJS’s API documentation.">
+							Reading the API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>TodoMVC Guide</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/experiment/todomvc/todomvc.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>This guide will walk you through building a slightly modified version of <a href="http://todomvc.com/" title="TodoMVC">TodoMVC</a> with CanJS’s <a href="../can-core.html" title="The best, most hardened and generally useful libraries in CanJS.">Core libraries</a> and <a href="../can-fixture.html" title="Intercept AJAX requests and simulate the response.">can-fixture</a>. It takes about 1 hour to complete.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <h2>Setup</h2>
+<p>The easiest way to get started is to fork the following CodePen by clicking the <strong>CodePen</strong> button on the top right:</p>
+<p class="codepen" data-height="520" data-theme-id="0" data-default-tab="html,result" data-user="bitovi" data-slug-hash="LYPWwNK" style="height: 520px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6.0 - TodoMVC Start">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/LYPWwNK/">
+  CanJS 6.0 - TodoMVC Start</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<p>The CodePen starts
+with the static HTML and CSS a designer might turn over to a JS developer. We will be
+adding all the JavaScript functionality.</p>
+<p>Read <a href="setup.html" title="Learn how to install CanJS in your environment.">Setting Up CanJS</a> for instructions on alternate CanJS setups.</p>
+<h2>Define and use the main component</h2>
+<h3>the problem</h3>
+<p>In this section, we will define a custom <code>&lt;todo-mvc&gt;</code> element and use it
+in the page’s HTML.</p>
+<h3>the solution</h3>
+<p>Replace the content of the <strong>HTML</strong> tab with the <code>&lt;todo-mvc&gt;</code> element:</p>
+<pre><code class="language-html">&lt;todo-mvc&gt;&lt;/todo-mvc&gt;
+
+</code></pre>
+<div line-highlight='1'></div>
+<p>Update the <code>JavaScript</code> tab to define the <code>&lt;todo-mvc&gt;</code> element by:</p>
+<ul>
+<li>Extending <a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">StacheElement</a> and registering a custom element
+with the tag name <code>todo-mvc</code>.</li>
+<li>Setting the <a href="../can-stache-element.html#Defininganelement_sview" title="Create a custom element with ObservableObject-like properties and stache views.">view</a> to the html that should be displayed within
+the <code>&lt;todo-mvc&gt;</code> element. In this case it is the HTML that was originally in the page.</li>
+<li>Instead of the hard-coded <code>&lt;h1&gt;Todos&lt;/h1&gt;</code> title, we will read the title
+from the element’s properties. We'll do this by:
+<ul>
+<li>Adding magic tags like <code>{{ this.appName }}</code> that read <code>appTitle</code> from the element’s properties.</li>
+<li>Defining an <code>appName</code> property that <a href="../can-observable-object/define/default.html" title="Specifies the default value for instances of the defined type.">default</a>s to <code>&quot;TodoMVC&quot;</code>.</li>
+</ul></li>
+</ul>
+<pre><code class="language-js">import { StacheElement } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class TodoMVC extends StacheElement {
+  static view = `
+    &lt;section id=&quot;todoapp&quot;&gt;
+      &lt;header id=&quot;header&quot;&gt;
+        &lt;h1&gt;{{ this.appName }}&lt;/h1&gt;
+        &lt;input id=&quot;new-todo&quot; placeholder=&quot;What needs to be done?&quot;&gt;
+      &lt;/header&gt;
+      &lt;section id=&quot;main&quot;&gt;
+        &lt;input id=&quot;toggle-all&quot; type=&quot;checkbox&quot;/&gt;
+        &lt;label for=&quot;toggle-all&quot;&gt;Mark all as complete&lt;/label&gt;
+        &lt;ul id=&quot;todo-list&quot;&gt;
+          &lt;li class=&quot;todo&quot;&gt;
+            &lt;div class=&quot;view&quot;&gt;
+              &lt;input class=&quot;toggle&quot; type=&quot;checkbox&quot;&gt;
+              &lt;label&gt;Do the dishes&lt;/label&gt;
+              &lt;button class=&quot;destroy&quot;&gt;&lt;/button&gt;
+            &lt;/div&gt;
+            &lt;input class=&quot;edit&quot; type=&quot;text&quot; value=&quot;Do the dishes&quot;&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;todo completed&quot;&gt;
+            &lt;div class=&quot;view&quot;&gt;
+              &lt;input class=&quot;toggle&quot; type=&quot;checkbox&quot;&gt;
+              &lt;label&gt;Mow the lawn&lt;/label&gt;
+              &lt;button class=&quot;destroy&quot;&gt;&lt;/button&gt;
+            &lt;/div&gt;
+            &lt;input class=&quot;edit&quot; type=&quot;text&quot; value=&quot;Mow the lawn&quot;&gt;
+          &lt;/li&gt;
+          &lt;li class=&quot;todo editing&quot;&gt;
+            &lt;div class=&quot;view&quot;&gt;
+              &lt;input class=&quot;toggle&quot; type=&quot;checkbox&quot;&gt;
+              &lt;label&gt;Pick up dry cleaning&lt;/label&gt;
+              &lt;button class=&quot;destroy&quot;&gt;&lt;/button&gt;
+            &lt;/div&gt;
+            &lt;input class=&quot;edit&quot; type=&quot;text&quot; value=&quot;Pick up dry cleaning&quot;&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/section&gt;
+      &lt;footer id=&quot;footer&quot; class=&quot;&quot;&gt;
+        &lt;span id=&quot;todo-count&quot;&gt;
+          &lt;strong&gt;2&lt;/strong&gt; items left
+        &lt;/span&gt;
+        &lt;ul id=&quot;filters&quot;&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!&quot; class=&quot;selected&quot;&gt;All&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!active&quot;&gt;Active&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!complete&quot;&gt;Completed&lt;/a&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;button id=&quot;clear-completed&quot;&gt;
+          Clear completed (1)
+        &lt;/button&gt;
+      &lt;/footer&gt;
+    &lt;/section&gt;
+  `;
+
+  static props = {
+    appName: { default: &quot;TodoMVC&quot; }
+  };
+}
+customElements.define(&quot;todo-mvc&quot;, TodoMVC);
+
+</code></pre>
+<div line-highlight='3-4,7,62-64,66'></div>
+<p>When complete, you should see the same content as before.  Only now, it’s
+rendered with a live-bound stache template.  The live binding means that
+when the template’s data is changed, it will update automatically. You can see this by entering the
+following in the console:</p>
+<pre><code class="language-js">document.querySelector(&quot;todo-mvc&quot;).appName = &quot;My Todos&quot;;
+</code></pre>
+<h2>Define the todos type and show the active and complete count</h2>
+<h3>the problem</h3>
+<p>In this section, we will:</p>
+<ul>
+<li>Create a list of todos and show them.</li>
+<li>Show the number of active (<code>complete === true</code>) and complete todos.</li>
+<li>Connect a todo’s <code>complete</code> property to a checkbox so that when
+we toggle the checkbox the number of active and complete todos changes.</li>
+</ul>
+<h3>the solution</h3>
+<p>In the <code>JavaScript</code> tab:</p>
+<ul>
+<li>Define a <code>Todo</code> type with <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">ObservableObject</a>.</li>
+<li>Define a <code>Todo.List</code> type along with an <code>active</code> and <code>complete</code> property with <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">ObservableArray</a>.</li>
+</ul>
+<p>In <code>&lt;todo-mvc&gt;</code>’s props:</p>
+<ul>
+<li>Create a list of todos and pass those to the template.</li>
+</ul>
+<p>In <code>&lt;todo-mvc&gt;</code>’s <code>view</code>:</p>
+<ul>
+<li>Use <a href="../can-stache.helpers.for-of.html" title="Loop through a list of values, keys in an object, or integers."><code>{{# for(of) }}</code></a> to loop through every todo.</li>
+<li>Add <code>completed</code> to the <code>&lt;li&gt;</code>’s <code>className</code> if the <code>&lt;li&gt;</code>’s todo is complete.</li>
+<li>Use <a href="../can-stache-bindings.twoWay.html" title="Two-way bind a value in the StacheElement, can-component ViewModel, or element to the parent scope."><code>checked:bind</code></a> to two-way bind the checkbox’s <code>checked</code> property to its todo’s <code>complete</code> property.</li>
+<li>Use <a href="../can-stache.tags.escaped.html" title="Insert the value of the expression into the output of the template."><code>{{ todo.name }}</code></a> to insert the value todo’s <code>name</code> as the content of the <code>&lt;label&gt;</code> and
+<code>value</code> of the text <code>&lt;input&gt;</code>.</li>
+<li>Insert the active and complete number of todos.</li>
+</ul>
+<pre><code class="language-js">import { ObservableArray, ObservableObject, StacheElement, type } from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class Todo extends ObservableObject {
+  static props = {
+    id: { type: type.convert(Number) },
+    name: String,
+    complete: { type: type.convert(Boolean), default: false }
+  };
+}
+
+class TodoList extends ObservableArray {
+  static items = Todo;
+
+  static props = {
+    get active() {
+      return this.filter({ complete: false });
+    },
+
+    get complete() {
+      return this.filter({ complete: true });
+    }
+  };
+}
+
+class TodoMVC extends StacheElement {
+  static view = `
+    &lt;section id=&quot;todoapp&quot;&gt;
+      &lt;header id=&quot;header&quot;&gt;
+        &lt;h1&gt;{{ this.appName }}&lt;/h1&gt;
+        &lt;input id=&quot;new-todo&quot; placeholder=&quot;What needs to be done?&quot;&gt;
+      &lt;/header&gt;
+      &lt;section id=&quot;main&quot; class=&quot;&quot;&gt;
+        &lt;input id=&quot;toggle-all&quot; type=&quot;checkbox&quot;&gt;
+        &lt;label for=&quot;toggle-all&quot;&gt;Mark all as complete&lt;/label&gt;
+        &lt;ul id=&quot;todo-list&quot;&gt;
+          {{# for(todo of this.todos) }}
+            &lt;li class=&quot;todo {{# if(todo.complete) }}completed{{/ if }}&quot;&gt;
+              &lt;div class=&quot;view&quot;&gt;
+                &lt;input class=&quot;toggle&quot; type=&quot;checkbox&quot; checked:bind=&quot;todo.complete&quot;&gt;
+                &lt;label&gt;{{ todo.name }}&lt;/label&gt;
+                &lt;button class=&quot;destroy&quot;&gt;&lt;/button&gt;
+              &lt;/div&gt;
+              &lt;input class=&quot;edit&quot; type=&quot;text&quot; value=&quot;{{ todo.name }}&quot;&gt;
+            &lt;/li&gt;
+          {{/ for }}
+        &lt;/ul&gt;
+      &lt;/section&gt;
+      &lt;footer id=&quot;footer&quot; class=&quot;&quot;&gt;
+        &lt;span id=&quot;todo-count&quot;&gt;
+          &lt;strong&gt;{{ this.todos.active.length }}&lt;/strong&gt; items left
+        &lt;/span&gt;
+        &lt;ul id=&quot;filters&quot;&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!&quot; class=&quot;selected&quot;&gt;All&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!active&quot;&gt;Active&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!complete&quot;&gt;Completed&lt;/a&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;button id=&quot;clear-completed&quot;&gt;
+          Clear completed ({{ this.todos.complete.length }})
+        &lt;/button&gt;
+      &lt;/footer&gt;
+    &lt;/section&gt;
+  `;
+
+  static props = {
+    appName: { default: &quot;TodoMVC&quot; },
+    todos: {
+      get default() {
+        return new TodoList([
+          { id: 5, name: &quot;mow lawn&quot;, complete: false },
+          { id: 6, name: &quot;dishes&quot;, complete: true },
+          { id: 7, name: &quot;learn canjs&quot;, complete: false }
+        ]);
+      }
+    }
+  };
+}
+customElements.define(&quot;todo-mvc&quot;, TodoMVC);
+
+</code></pre>
+<div line-highlight='1,3-9,11-23,36-45,50,64,72-80,only'></div>
+<p>When complete, you should be able to toggle the checkboxes and see the number of
+items left and the completed count change automatically. This is because
+<a href="../can-stache.html" title="Live binding templates.">can-stache</a> is able to listen for changes in observables like <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">ObservableObject</a> and <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">ObservableArray</a>.</p>
+<video controls>
+   <source src="../../docs/can-guides/experiment/todomvc/2-items-left/completed.mp4" type="video/mp4">
+   <source src="../../docs/can-guides/experiment/todomvc/2-items-left/completed.webm" type="video/webm">
+</video>
+<h2>Get todos from the server</h2>
+<h3>the problem</h3>
+<p>In this section, we will:</p>
+<ul>
+<li>Load todos from a RESTful service.</li>
+<li>Fake that RESTful service.</li>
+</ul>
+<h3>the solution</h3>
+<p>In the <code>Todo</code> type:</p>
+<ul>
+<li>Specify <code>id</code> as the <a href="../can-observable-object/define/identity.html" title="Specifies that the property uniquely identifies instances of the type.">identity</a> property of the <code>Todo</code> type.</li>
+</ul>
+<p>Update the <code>JavaScript</code> tab to:</p>
+<ul>
+<li>Create a fake data store that is initialized with data for 3 todos with <a href="../can-fixture.store.html" title="Creates a store.">store</a>.</li>
+<li>Trap AJAX requests to <code>&quot;/api/todos&quot;</code> and provide responses with the data from the fake data store with <a href="../can-fixture.html" title="Intercept AJAX requests and simulate the response.">can-fixture</a>.</li>
+<li>Connect the <code>Todo</code> and <code>Todo.List</code> types to the RESTful <code>&quot;/api/todos&quot;</code> endpoint using <a href="../can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">can-realtime-rest-model</a>.  This allows you to load, create, update, and destroy todos
+on the server.</li>
+</ul>
+<p>In <code>&lt;todo-mvc&gt;</code>’s <code>props</code>:</p>
+<ul>
+<li>Use <a href="../can-connect/can/map/map.getList.html" title="Retrieve a list of instance.">getList</a> to load a list of all todos on the server. The result
+of <code>getList</code> is a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a> that resolves to a <code>Todo.List</code> with the todos returned from the fake data store.  That <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>
+is available to the template as <code>this.todosPromise</code>.</li>
+</ul>
+<p>In <code>&lt;todo-mvc&gt;</code>’s <code>view</code>:</p>
+<ul>
+<li>Use <a href="../can-stache.helpers.for-of.html" title="Loop through a list of values, keys in an object, or integers."><code>{{# for(todo of todosPromise.value) }}</code></a> to loop through the promise’s resolved value, which is the list of todos returned by the server.</li>
+<li>Read the active and completed number of todos from the promise’s resolved value.</li>
+</ul>
+<pre><code class="language-js">import {
+  fixture,
+  ObservableArray,
+  ObservableObject,
+  realtimeRestModel,
+  StacheElement,
+  type
+} from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class Todo extends ObservableObject {
+  static props = {
+    id: { type: type.convert(Number), identity: true },
+    name: String,
+    complete: { type: type.convert(Boolean), default: false }
+  };
+}
+
+class TodoList extends ObservableArray {
+  static items = Todo;
+
+  static props = {
+    get active() {
+      return this.filter({ complete: false });
+    },
+
+    get complete() {
+      return this.filter({ complete: true });
+    }
+  };
+}
+
+const todoStore = fixture.store(
+  [
+    { name: &quot;mow lawn&quot;, complete: false, id: 5 },
+    { name: &quot;dishes&quot;, complete: true, id: 6 },
+    { name: &quot;learn canjs&quot;, complete: false, id: 7 }
+  ],
+  Todo
+);
+
+fixture(&quot;/api/todos&quot;, todoStore);
+fixture.delay = 200;
+
+realtimeRestModel({
+  url: &quot;/api/todos&quot;,
+  ObjectType: Todo,
+  ArrayType: TodoList
+});
+
+class TodoMVC extends StacheElement {
+  static view = `
+    &lt;section id=&quot;todoapp&quot;&gt;
+      &lt;header id=&quot;header&quot;&gt;
+        &lt;h1&gt;{{ this.appName }}&lt;/h1&gt;
+        &lt;input id=&quot;new-todo&quot; placeholder=&quot;What needs to be done?&quot;&gt;
+      &lt;/header&gt;
+      &lt;section id=&quot;main&quot; class=&quot;&quot;&gt;
+        &lt;input id=&quot;toggle-all&quot; type=&quot;checkbox&quot;&gt;
+        &lt;label for=&quot;toggle-all&quot;&gt;Mark all as complete&lt;/label&gt;
+        &lt;ul id=&quot;todo-list&quot;&gt;
+          {{# for(todo of this.todosPromise.value) }}
+            &lt;li class=&quot;todo {{# if(todo.complete) }}completed{{/ if }}&quot;&gt;
+              &lt;div class=&quot;view&quot;&gt;
+                &lt;input class=&quot;toggle&quot; type=&quot;checkbox&quot; checked:bind=&quot;todo.complete&quot;&gt;
+                &lt;label&gt;{{ todo.name }}&lt;/label&gt;
+                &lt;button class=&quot;destroy&quot;&gt;&lt;/button&gt;
+              &lt;/div&gt;
+              &lt;input class=&quot;edit&quot; type=&quot;text&quot; value=&quot;{{ todo.name }}&quot;&gt;
+            &lt;/li&gt;
+          {{/ for }}
+        &lt;/ul&gt;
+      &lt;/section&gt;
+      &lt;footer id=&quot;footer&quot; class=&quot;&quot;&gt;
+        &lt;span id=&quot;todo-count&quot;&gt;
+          &lt;strong&gt;{{ this.todosPromise.value.active.length }}&lt;/strong&gt; items left
+        &lt;/span&gt;
+        &lt;ul id=&quot;filters&quot;&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!&quot; class=&quot;selected&quot;&gt;All&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!active&quot;&gt;Active&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!complete&quot;&gt;Completed&lt;/a&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;button id=&quot;clear-completed&quot;&gt;
+          Clear completed ({{ this.todosPromise.value.complete.length }})
+        &lt;/button&gt;
+      &lt;/footer&gt;
+    &lt;/section&gt;
+  `;
+
+  static props = {
+    appName: { default: &quot;TodoMVC&quot; },
+    get todosPromise() {
+      return Todo.getList({});
+    }
+  };
+}
+customElements.define(&quot;todo-mvc&quot;, TodoMVC);
+
+</code></pre>
+<div line-highlight='2,5,12,32-48,61,75,89,97-99,only'></div>
+<p>When complete, you’ll notice a 1 second delay before seeing the list of todos as
+they load from the fixtured data store.</p>
+<h2>Destroy todos</h2>
+<h3>the problem</h3>
+<p>In this section, we will:</p>
+<ul>
+<li>Delete a todo on the server when its destroy button is clicked.</li>
+<li>Remove the todo from the page after it’s deleted.</li>
+</ul>
+<h3>the solution</h3>
+<p>Update <code>&lt;todo-mvc&gt;</code>’s <code>view</code> to:</p>
+<ul>
+<li>Add <code>destroying</code> to the <code>&lt;li&gt;</code>’s <code>className</code> if the <code>&lt;li&gt;</code>’s todo is being destroyed using <a href="../can-connect/can/map/map.prototype.isDestroying.html" title="Returns if the instance is currently being destroyed.">isDestroying</a>.</li>
+<li>Call the <code>todo</code>’s <a href="../can-connect/can/map/map.prototype.destroy.html" title="Delete an instance from the service via the connection.">destroy</a> method when the <code>&lt;button&gt;</code> is clicked using <a href="../can-stache-bindings.event.html" title="Respond to events on elements or component ViewModels."><code>on:click</code></a>.</li>
+</ul>
+<pre><code class="language-js">import {
+  fixture,
+  ObservableArray,
+  ObservableObject,
+  realtimeRestModel,
+  StacheElement,
+  type
+} from &quot;//unpkg.com/can@6/core.mjs&quot;;
+
+class Todo extends ObservableObject {
+  static props = {
+    id: { type: type.convert(Number), identity: true },
+    name: String,
+    complete: { type: type.convert(Boolean), default: false }
+  };
+}
+
+class TodoList extends ObservableArray {
+  static items = Todo;
+
+  static props = {
+    get active() {
+      return this.filter({ complete: false });
+    },
+
+    get complete() {
+      return this.filter({ complete: true });
+    }
+  };
+}
+
+const todoStore = fixture.store(
+  [
+    { name: &quot;mow lawn&quot;, complete: false, id: 5 },
+    { name: &quot;dishes&quot;, complete: true, id: 6 },
+    { name: &quot;learn canjs&quot;, complete: false, id: 7 }
+  ],
+  Todo
+);
+
+fixture(&quot;/api/todos&quot;, todoStore);
+fixture.delay = 200;
+
+realtimeRestModel({
+  url: &quot;/api/todos&quot;,
+  ObjectType: Todo,
+  ArrayType: TodoList
+});
+
+class TodoMVC extends StacheElement {
+  static view = `
+    &lt;section id=&quot;todoapp&quot;&gt;
+      &lt;header id=&quot;header&quot;&gt;
+        &lt;h1&gt;{{ this.appName }}&lt;/h1&gt;
+        &lt;input id=&quot;new-todo&quot; placeholder=&quot;What needs to be done?&quot;&gt;
+      &lt;/header&gt;
+      &lt;section id=&quot;main&quot; class=&quot;&quot;&gt;
+        &lt;input id=&quot;toggle-all&quot; type=&quot;checkbox&quot;&gt;
+        &lt;label for=&quot;toggle-all&quot;&gt;Mark all as complete&lt;/label&gt;
+        &lt;ul id=&quot;todo-list&quot;&gt;
+          {{# for(todo of this.todosPromise.value) }}
+            &lt;li class=&quot;todo {{# if(todo.complete) }}completed{{/ if }}
+              {{# if(todo.isDestroying()) }}destroying{{/ if }}&quot;&gt;
+              &lt;div class=&quot;view&quot;&gt;
+                &lt;input class=&quot;toggle&quot; type=&quot;checkbox&quot; checked:bind=&quot;todo.complete&quot;&gt;
+                &lt;label&gt;{{ todo.name }}&lt;/label&gt;
+                &lt;button class=&quot;destroy&quot; on:click=&quot;todo.destroy()&quot;&gt;&lt;/button&gt;
+              &lt;/div&gt;
+              &lt;input class=&quot;edit&quot; type=&quot;text&quot; value=&quot;{{todo.name}}&quot;&gt;
+            &lt;/li&gt;
+          {{/ for }}
+        &lt;/ul&gt;
+      &lt;/section&gt;
+      &lt;footer id=&quot;footer&quot; class=&quot;&quot;&gt;
+        &lt;span id=&quot;todo-count&quot;&gt;
+          &lt;strong&gt;{{ this.todosPromise.value.active.length }}&lt;/strong&gt; items left
+        &lt;/span&gt;
+        &lt;ul id=&quot;filters&quot;&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!&quot; class=&quot;selected&quot;&gt;All&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!active&quot;&gt;Active&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!complete&quot;&gt;Completed&lt;/a&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;button id=&quot;clear-completed&quot;&gt;
+          Clear completed ({{ this.todosPromise.value.complete.length }})
+        &lt;/button&gt;
+      &lt;/footer&gt;
+    &lt;/section&gt;
+  `;
+
+  static props = {
+    appName: { default: &quot;TodoMVC&quot; },
+    get todosPromise() {
+      return Todo.getList({});
+    }
+  };
+}
+customElements.define(&quot;todo-mvc&quot;, TodoMVC);
+
+</code></pre>
+<div line-highlight='63,67,only'></div>
+<p>When complete, you should be able to delete a todo by clicking its delete button.  After
+clicking the todo, its name will turn red and italic.  Once deleted, the todo will be
+automatically removed from the page.</p>
+<p>The deleted todo is automatically removed from the page because <a href="../can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">can-realtime-rest-model</a> adds the <a href="../can-connect/real-time/real-time.html" title="Update lists to include or exclude instances based
+on set logic.">real-time</a> behavior.  The
+<a href="../can-connect/real-time/real-time.html" title="Update lists to include or exclude instances based
+on set logic.">real-time</a> behavior automatically updates lists (like <code>Todo.List</code>) when instances
+are created, updated or destroyed.</p>
+<video controls>
+   <source src="../../docs/can-guides/experiment/todomvc/4-destroy/completed.mp4" type="video/mp4">
+   <source src="../../docs/can-guides/experiment/todomvc/4-destroy/completed.webm" type="video/webm">
+</video>
+<h2>Create todos</h2>
+<h3>the problem</h3>
+<p>In this section, we will:</p>
+<ul>
+<li>Define a custom <code>&lt;todo-create&gt;</code> element that can create todos on the server.</li>
+<li>Use that custom element.</li>
+</ul>
+<h3>the solution</h3>
+<p>The <code>&lt;todo-create&gt;</code> component will respond to a user hitting the <code>enter</code>
+key. The <a href="../can-event-dom-enter.html" title="Watch for when enter keys are pressed on a DomEventTarget.">can-event-dom-enter</a> event provides this functionality, but it
+is an <a href="../can-ecosystem.html" title="Useful libraries that extend or add important features to the core collection.">Ecosystem</a> module.  So to use the enter event we need to:</p>
+<ul>
+<li>Import <a href="../can-event-dom-enter.html" title="Watch for when enter keys are pressed on a DomEventTarget.">enterEvent</a> from <code>everything.mjs</code> (which includes <code>enterEvent</code>) instead of <code>core.mjs</code>.</li>
+<li>Import <a href="../can-dom-events.html" title="Listen to DOM events and special events, and register special events.">domEvents</a> (CanJS’s global event registry).</li>
+<li>Add the <code>enterEvent</code> to <code>domEvents</code>.</li>
+</ul>
+<p>Update the <code>JavaScript</code> tab to define a <code>&lt;todo-create&gt;</code> component with the following:</p>
+<ul>
+<li>A <a href="../can-stache-element.html#Defininganelement_sview" title="Create a custom element with ObservableObject-like properties and stache views.">view</a> that:
+<ul>
+<li>Updates the <code>todo</code>’s <code>name</code> with the <code>&lt;input&gt;</code>’s <code>value</code> using <a href="../can-stache-bindings.twoWay.html" title="Two-way bind a value in the StacheElement, can-component ViewModel, or element to the parent scope."><code>value:bind</code></a>.</li>
+<li>Calls <code>createTodo</code> when the <code>enter</code> key is pressed using   <a href="../can-event-dom-enter.html" title="Watch for when enter keys are pressed on a DomEventTarget."><code>on:enter</code></a>.</li>
+</ul></li>
+<li>The following [can-stache-element.html#Defininganelement_sproperties props]:
+<ul>
+<li>A <code>todo</code> property that holds a new <code>Todo</code> instance.</li>
+<li>A <code>createTodo</code> method that <a href="../can-connect/can/map/map.prototype.save.html" title="Save or update client data to the persisted data source.">save</a>s the <code>Todo</code> instance and replaces it with a new one once saved.</li>
+</ul></li>
+</ul>
+<p>Update <code>&lt;todo-mvc&gt;</code>’s <code>view</code> to:</p>
+<ul>
+<li>Use the <code>&lt;todo-create&gt;</code> component.</li>
+</ul>
+<p>This results in the following code:</p>
+<pre><code class="language-js">import {
+  StacheElement,
+  ObservableArray,
+  ObservableObject,
+  fixture,
+  realtimeRestModel,
+  type,
+  domEvents,
+  enterEvent
+} from &quot;//unpkg.com/can@6/everything.mjs&quot;;
+
+domEvents.addEvent(enterEvent);
+
+class Todo extends ObservableObject {
+  static props = {
+    id: { type: type.convert(Number), identity: true },
+    name: String,
+    complete: { type: type.convert(Boolean), default: false }
+  };
+}
+
+class TodoListModel extends ObservableArray {
+  static items = Todo;
+
+  static props = {
+    get active() {
+      return this.filter({ complete: false });
+    },
+
+    get complete() {
+      return this.filter({ complete: true });
+    }
+  };
+}
+
+const todoStore = fixture.store(
+  [
+    { name: &quot;mow lawn&quot;, complete: false, id: 5 },
+    { name: &quot;dishes&quot;, complete: true, id: 6 },
+    { name: &quot;learn canjs&quot;, complete: false, id: 7 }
+  ],
+  Todo
+);
+
+fixture(&quot;/api/todos&quot;, todoStore);
+fixture.delay = 200;
+
+realtimeRestModel({
+  url: &quot;/api/todos&quot;,
+  ObjectType: Todo,
+  ArrayType: TodoListModel
+});
+
+class TodoCreate extends StacheElement {
+  static view = `
+    &lt;input id=&quot;new-todo&quot;
+      placeholder=&quot;What needs to be done?&quot;
+      value:bind=&quot;this.todo.name&quot;
+      on:enter=&quot;this.createTodo()&quot;
+    &gt;
+  `;
+
+  static props = {
+    todo: {
+      get default() {
+        return new Todo();
+      }
+    }
+  };
+
+  createTodo() {
+    this.todo.save().then(() =&gt; {
+      this.todo = new Todo();
+    });
+  }
+}
+customElements.define(&quot;todo-create&quot;, TodoCreate);
+
+class TodoMVC extends StacheElement {
+  static view = `
+    &lt;section id=&quot;todoapp&quot;&gt;
+      &lt;header id=&quot;header&quot;&gt;
+        &lt;h1&gt;{{ this.appName }}&lt;/h1&gt;
+        &lt;todo-create /&gt;
+      &lt;/header&gt;
+      &lt;section id=&quot;main&quot; class=&quot;&quot;&gt;
+        &lt;input id=&quot;toggle-all&quot; type=&quot;checkbox&quot;&gt;
+        &lt;label for=&quot;toggle-all&quot;&gt;Mark all as complete&lt;/label&gt;
+        &lt;ul id=&quot;todo-list&quot;&gt;
+          {{# for(todo of this.todosPromise.value) }}
+            &lt;li class=&quot;todo {{# if(todo.complete) }}completed{{/ if }}
+              {{# if(todo.isDestroying()) }}destroying{{/ if }}&quot;&gt;
+              &lt;div class=&quot;view&quot;&gt;
+                &lt;input class=&quot;toggle&quot; type=&quot;checkbox&quot; checked:bind=&quot;todo.complete&quot;&gt;
+                &lt;label&gt;{{ todo.name }}&lt;/label&gt;
+                &lt;button class=&quot;destroy&quot; on:click=&quot;todo.destroy()&quot;&gt;&lt;/button&gt;
+              &lt;/div&gt;
+              &lt;input class=&quot;edit&quot; type=&quot;text&quot; value=&quot;{{ todo.name }}&quot;&gt;
+            &lt;/li&gt;
+          {{/ for }}
+        &lt;/ul&gt;
+      &lt;/section&gt;
+      &lt;footer id=&quot;footer&quot; class=&quot;&quot;&gt;
+        &lt;span id=&quot;todo-count&quot;&gt;
+          &lt;strong&gt;{{ this.todosPromise.value.active.length }}&lt;/strong&gt; items left
+        &lt;/span&gt;
+        &lt;ul id=&quot;filters&quot;&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!&quot; class=&quot;selected&quot;&gt;All&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!active&quot;&gt;Active&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!complete&quot;&gt;Completed&lt;/a&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;button id=&quot;clear-completed&quot;&gt;
+          Clear completed ({{ this.todosPromise.value.complete.length }})
+        &lt;/button&gt;
+      &lt;/footer&gt;
+    &lt;/section&gt;
+  `;
+
+  static props = {
+    appName: { default: &quot;TodoMVC&quot; },
+    get todosPromise() {
+      return Todo.getList({});
+    }
+  };
+}
+customElements.define(&quot;todo-mvc&quot;, TodoMVC);
+
+</code></pre>
+<div line-highlight='8-10,54-77,84,only'></div>
+<p>When complete, you will be able to create a todo by typing the name of the todo and pressing
+<code>enter</code>. Notice that the new todo automatically appears in the list of todos. This
+is also because <a href="../can-realtime-rest-model.html" title="Connect a type to a restful data source and automatically manage lists.">can-realtime-rest-model</a> automatically inserts newly created items into lists that they belong within.</p>
+<h2>List todos</h2>
+<h3>the problem</h3>
+<p>In this section, we will:</p>
+<ul>
+<li>Define a custom element for showing a list of todos.</li>
+<li>Use that custom element by passing it the list of fetched todos.</li>
+</ul>
+<h3>the solution</h3>
+<p>Update the <code>JavaScript</code> tab to:</p>
+<ul>
+<li>Define a <code>&lt;todo-list&gt;</code> component with:
+<ul>
+<li>A <code>todos</code> property that should be provided by the parent element.</li>
+<li>A view that loops through a list of <code>todos</code> (instead of <code>todosPromise.value</code>).</li>
+</ul></li>
+<li>In <code>&lt;todo-mvc&gt;</code>’s view, create a <code>&lt;todo-list&gt;</code> element and set its <code>todos</code> property to the resolved value of <code>todosPromise</code>
+using <a href="../can-stache-bindings.toChild.html" title="One-way bind a value in the parent scope to the StacheElement, can-component ViewModel, or element."><code>todos:from='this.todosPromise.value'</code></a>.</li>
+</ul>
+<pre><code class="language-js">import {
+  StacheElement,
+  ObservableArray,
+  ObservableObject,
+  fixture,
+    realtimeRestModel,
+    type,
+  domEvents,
+  enterEvent
+} from &quot;//unpkg.com/can@6/everything.mjs&quot;;
+
+domEvents.addEvent(enterEvent);
+
+class Todo extends ObservableObject {
+  static props = {
+    id: { type: type.convert(Number), identity: true },
+    name: String,
+    complete: { type: type.convert(Boolean), default: false }
+  };
+}
+
+class TodoList extends ObservableArray {
+  static items = Todo;
+
+  static props = {
+    get active() {
+      return this.filter({ complete: false });
+    },
+
+    get complete() {
+      return this.filter({ complete: true });
+    }
+  };
+}
+
+const todoStore = fixture.store(
+  [
+    { name: &quot;mow lawn&quot;, complete: false, id: 5 },
+    { name: &quot;dishes&quot;, complete: true, id: 6 },
+    { name: &quot;learn canjs&quot;, complete: false, id: 7 }
+  ],
+  Todo
+);
+
+fixture(&quot;/api/todos&quot;, todoStore);
+fixture.delay = 200;
+
+realtimeRestModel({
+  url: &quot;/api/todos&quot;,
+  ObjectType: Todo,
+  ArrayType: TodoList
+});
+
+class TodoCreate extends StacheElement {
+  static view = `
+    &lt;input id=&quot;new-todo&quot;
+      placeholder=&quot;What needs to be done?&quot;
+      value:bind=&quot;this.todo.name&quot;
+      on:enter=&quot;this.createTodo()&quot;
+    &gt;
+  `;
+
+  static props = {
+    todo: {
+      get default() {
+        return new Todo();
+      }
+    }
+  };
+
+  createTodo() {
+    this.todo.save().then(() =&gt; {
+      this.todo = new Todo();
+    });
+  }
+}
+customElements.define(&quot;todo-create&quot;, TodoCreate);
+
+class TodoListElement extends StacheElement {
+  static view = `
+    &lt;ul id=&quot;todo-list&quot;&gt;
+      {{# for(todo of this.todos) }}
+        &lt;li class=&quot;todo {{# if(todo.complete) }}completed{{/ if }}
+          {{# if(todo.isDestroying()) }}destroying{{/ if }}&quot;&gt;
+          &lt;div class=&quot;view&quot;&gt;
+            &lt;input class=&quot;toggle&quot; type=&quot;checkbox&quot; checked:bind=&quot;todo.complete&quot;&gt;
+            &lt;label&gt;{{ todo.name }}&lt;/label&gt;
+            &lt;button class=&quot;destroy&quot; on:click=&quot;todo.destroy()&quot;&gt;&lt;/button&gt;
+          &lt;/div&gt;
+          &lt;input class=&quot;edit&quot; type=&quot;text&quot; value=&quot;{{ todo.name }}&quot;&gt;
+        &lt;/li&gt;
+      {{/ for }}
+    &lt;/ul&gt;
+  `;
+
+  static props = {
+    todos: type.maybeConvert(TodoList)
+  };
+}
+customElements.define(&quot;todo-list&quot;, TodoListElement);
+
+class TodoMVC extends StacheElement {
+  static view = `
+    &lt;section id=&quot;todoapp&quot;&gt;
+      &lt;header id=&quot;header&quot;&gt;
+        &lt;h1&gt;{{ this.appName }}&lt;/h1&gt;
+        &lt;todo-create /&gt;
+      &lt;/header&gt;
+      &lt;section id=&quot;main&quot; class=&quot;&quot;&gt;
+        &lt;input id=&quot;toggle-all&quot; type=&quot;checkbox&quot;&gt;
+        &lt;label for=&quot;toggle-all&quot;&gt;Mark all as complete&lt;/label&gt;
+        &lt;todo-list todos:from=&quot;this.todosPromise.value&quot; /&gt;
+      &lt;/section&gt;
+      &lt;footer id=&quot;footer&quot; class=&quot;&quot;&gt;
+        &lt;span id=&quot;todo-count&quot;&gt;
+          &lt;strong&gt;{{ this.todosPromise.value.active.length }}&lt;/strong&gt; items left
+        &lt;/span&gt;
+        &lt;ul id=&quot;filters&quot;&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!&quot; class=&quot;selected&quot;&gt;All&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!active&quot;&gt;Active&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!complete&quot;&gt;Completed&lt;/a&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;button id=&quot;clear-completed&quot;&gt;
+          Clear completed ({{ this.todosPromise.value.complete.length }})
+        &lt;/button&gt;
+      &lt;/footer&gt;
+    &lt;/section&gt;
+  `;
+
+  static props = {
+    appName: { default: &quot;TodoMVC&quot; },
+    get todosPromise() {
+      return Todo.getList({});
+    }
+  };
+}
+customElements.define(&quot;todo-mvc&quot;, TodoMVC);
+
+</code></pre>
+<div line-highlight='79-100,112,only'></div>
+<p>When complete, everything should work the same. We didn’t add any new functionality, we
+just moved code around to make it more isolated, potentially reusable, and more maintainable.</p>
+<h2>Edit todos</h2>
+<h3>the problem</h3>
+<p>In this section, we will:</p>
+<ul>
+<li>Make it possible to edit a todo’s <code>name</code> and save that change to the server.</li>
+</ul>
+<h3>the solution</h3>
+<p>Update the <code>&lt;todo-list&gt;</code>’s <code>view</code> to:</p>
+<ul>
+<li>Use the <code>isEditing</code> method to add <code>editing</code> to the <code>className</code> of the <code>&lt;li&gt;</code> being edited.</li>
+<li>When the checkbox changes, update the todo on the server with <a href="../can-connect/can/map/map.prototype.save.html" title="Save or update client data to the persisted data source.">save</a>,</li>
+<li>Call <code>edit</code> with the current <code>todo</code>.</li>
+<li>Set up the edit input to:
+<ul>
+<li>Two-way bind its value to the current todo’s <code>name</code> using <a href="../can-stache-bindings.twoWay.html" title="Two-way bind a value in the StacheElement, can-component ViewModel, or element to the parent scope."><code>value:bind</code></a>.</li>
+<li>Call <code>updateName</code> when the enter key is pressed using <a href="../can-stache-bindings.event.html" title="Respond to events on elements or component ViewModels."><code>on:enter</code></a>.</li>
+<li>Focus the input when <code>isEditing</code> is true using the special [can-util/dom/attr/attr.special.focused] attribute.</li>
+<li>Call <code>cancelEdit</code> if the input element loses focus.</li>
+</ul></li>
+</ul>
+<p>Update the <code>&lt;todo-list&gt;</code>’s <code>props</code> to include the methods and properties needed to edit a todo’s name, including:</p>
+<ul>
+<li>An <code>editing</code> property of type <code>Todo</code> that stores which todo is being edited.</li>
+<li>A <code>backupName</code> property that stores the todo’s name before being edited.</li>
+<li>An <code>edit</code> method that sets up the editing state.</li>
+<li>A <code>cancelEdit</code> method that undos the editing state if in the editing state.</li>
+<li>An <code>updateName</code> method that updates the editing todo and <a href="../can-connect/can/map/map.prototype.save.html" title="Save or update client data to the persisted data source.">saves</a> it to the server.</li>
+</ul>
+<pre><code class="language-js">import {
+  StacheElement,
+  ObservableArray,
+  ObservableObject,
+  fixture,
+  realtimeRestModel,
+  type,
+  domEvents,
+  enterEvent
+} from &quot;//unpkg.com/can@6/everything.mjs&quot;;
+
+domEvents.addEvent(enterEvent);
+
+class Todo extends ObservableObject {
+  static props = {
+    id: { type: type.convert(Number), identity: true },
+    name: String,
+    complete: { type: type.convert(Boolean), default: false }
+  };
+}
+
+class TodoList extends ObservableArray {
+  static items = Todo;
+
+  static props = {
+    get active() {
+      return this.filter({ complete: false });
+    },
+
+    get complete() {
+      return this.filter({ complete: true });
+    }
+  };
+}
+
+const todoStore = fixture.store(
+  [
+    { name: &quot;mow lawn&quot;, complete: false, id: 5 },
+    { name: &quot;dishes&quot;, complete: true, id: 6 },
+    { name: &quot;learn canjs&quot;, complete: false, id: 7 }
+  ],
+  Todo
+);
+
+fixture(&quot;/api/todos&quot;, todoStore);
+fixture.delay = 200;
+
+realtimeRestModel({
+  url: &quot;/api/todos&quot;,
+  ObjectType: Todo,
+  ArrayType: TodoList
+});
+
+class TodoCreate extends StacheElement {
+  static view = `
+    &lt;input id=&quot;new-todo&quot;
+      placeholder=&quot;What needs to be done?&quot;
+      value:bind=&quot;this.todo.name&quot;
+      on:enter=&quot;this.createTodo()&quot;
+    &gt;
+  `;
+
+  static props = {
+    todo: {
+      get default() {
+        return new Todo();
+      }
+    }
+  };
+
+  createTodo() {
+    this.todo.save().then(() =&gt; {
+      this.todo = new Todo();
+    });
+  }
+}
+customElements.define(&quot;todo-create&quot;, TodoCreate);
+
+class TodoListElement extends StacheElement {
+  static view = `
+    &lt;ul id=&quot;todo-list&quot;&gt;
+      {{# for(todo of this.todos) }}
+        &lt;li class=&quot;todo {{# if(todo.complete) }}completed{{/ if }}
+          {{# if(todo.isDestroying()) }}destroying{{/ if }}
+          {{# if(this.isEditing(todo)) }}editing{{/ if }}&quot;&gt;
+          &lt;div class=&quot;view&quot;&gt;
+            &lt;input 
+              class=&quot;toggle&quot;
+              type=&quot;checkbox&quot;
+              checked:bind=&quot;todo.complete&quot;
+              on:change=&quot;todo.save()&quot;
+            &gt;
+            &lt;label on:dblclick=&quot;this.edit(todo)&quot;&gt;{{ todo.name }}&lt;/label&gt;
+            &lt;button class=&quot;destroy&quot; on:click=&quot;todo.destroy()&quot;&gt;&lt;/button&gt;
+          &lt;/div&gt;
+          &lt;input 
+            class=&quot;edit&quot;
+            type=&quot;text&quot;
+            value:bind=&quot;todo.name&quot;
+            on:enter=&quot;this.updateName()&quot;
+            focused:from=&quot;this.isEditing(todo)&quot;
+            on:blur=&quot;this.cancelEdit()&quot;
+          &gt;
+        &lt;/li&gt;
+      {{/ for }}
+    &lt;/ul&gt;
+  `;
+
+  static props = {
+    todos: type.maybeConvert(TodoListModel),
+    editing: Todo,
+    backupName: String
+  };
+
+  isEditing(todo) {
+    return todo === this.editing;
+  }
+
+  edit(todo) {
+    this.backupName = todo.name;
+    this.editing = todo;
+  }
+
+  cancelEdit() {
+    if (this.editing) {
+      this.editing.name = this.backupName;
+    }
+    this.editing = null;
+  }
+
+  updateName() {
+    this.editing.save();
+    this.editing = null;
+  }
+}
+customElements.define(&quot;todo-list&quot;, TodoListElement);
+
+class TodoMVC extends StacheElement {
+  static view = `
+    &lt;section id=&quot;todoapp&quot;&gt;
+      &lt;header id=&quot;header&quot;&gt;
+        &lt;h1&gt;{{ this.appName }}&lt;/h1&gt;
+        &lt;todo-create /&gt;
+      &lt;/header&gt;
+      &lt;section id=&quot;main&quot; class=&quot;&quot;&gt;
+        &lt;input id=&quot;toggle-all&quot; type=&quot;checkbox&quot;&gt;
+        &lt;label for=&quot;toggle-all&quot;&gt;Mark all as complete&lt;/label&gt;
+        &lt;todo-list todos:from=&quot;this.todosPromise.value&quot; /&gt;
+      &lt;/section&gt;
+      &lt;footer id=&quot;footer&quot; class=&quot;&quot;&gt;
+        &lt;span id=&quot;todo-count&quot;&gt;
+          &lt;strong&gt;{{ this.todosPromise.value.active.length }}&lt;/strong&gt; items left
+        &lt;/span&gt;
+        &lt;ul id=&quot;filters&quot;&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!&quot; class=&quot;selected&quot;&gt;All&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!active&quot;&gt;Active&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;#!complete&quot;&gt;Completed&lt;/a&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;button id=&quot;clear-completed&quot;&gt;
+          Clear completed ({{ this.todosPromise.value.complete.length }})
+        &lt;/button&gt;
+      &lt;/footer&gt;
+    &lt;/section&gt;
+  `;
+
+  static props = {
+    appName: { default: &quot;TodoMVC&quot; },
+    get todosPromise() {
+      return Todo.getList({});
+    }
+  };
+}
+customElements.define(&quot;todo-mvc&quot;, TodoMVC);
+
+</code></pre>
+<div line-highlight='84-85,87-92,96-103,111,112,115-134,only'></div>
+<p>When complete, you should be able to edit a todo’s name.</p>
+<video controls>
+   <source src="../../docs/can-guides/experiment/todomvc/7-edit/edit.mp4" type="video/mp4">
+   <source src="../../docs/can-guides/experiment/todomvc/7-edit/edit.webm" type="video/webm">
+</video>
+<h2>Routing</h2>
+<h3>the problem</h3>
+<p>In this section, we will:</p>
+<ul>
+<li>Make it possible to use the browser’s forwards and backwards buttons to change
+between showing all todos, only active todos, or only completed todos.</li>
+<li>Add links to change between showing all todos, only active todos, or only completed todos.</li>
+<li>Make those links bold when the site is currently showing that link.</li>
+</ul>
+<h3>the solution</h3>
+<p>Update the <code>JavaScript</code> tab to:</p>
+<ul>
+<li>Import <a href="../can-route.html" title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">route</a>.</li>
+</ul>
+<p>Update <code>&lt;todo-mvc&gt;</code>’s <code>view</code> to:</p>
+<ul>
+<li>Set the page links <code>href</code>s to a URL that will set the desired properties on <a href="../can-route.data.html" title="An observable key-value object used to cross bind to the url observable can-route.urlData. Set it to cross-bind a top level state object (Application ViewModel) to can-route.">route.data</a> when clicked using
+<a href="../can-stache-route-helpers.routeUrl.html" title="Returns a url using route.url.">routeUrl(hashes)</a>.</li>
+<li>Add <code>class='selected'</code> to the link if the current route matches the current properties on <a href="../can-route.data.html" title="An observable key-value object used to cross bind to the url observable can-route.urlData. Set it to cross-bind a top level state object (Application ViewModel) to can-route.">route.data</a>
+using <a href="../can-stache-route-helpers.routeCurrent.html" title="Returns if the hash values match the can-route’s current properties.">routeCurrent(hash)</a>.</li>
+</ul>
+<p>Update <code>&lt;todo-mvc&gt;</code>’s <code>props</code> to:</p>
+<ul>
+<li>Provide access to the observable <a href="../can-route.data.html" title="An observable key-value object used to cross bind to the url observable can-route.urlData. Set it to cross-bind a top level state object (Application ViewModel) to can-route.">route.data</a> by:
+<ul>
+<li>Defining a <code>routeData</code> property whose value is <a href="../can-route.data.html" title="An observable key-value object used to cross bind to the url observable can-route.urlData. Set it to cross-bind a top level state object (Application ViewModel) to can-route.">route.data</a>.</li>
+<li>Create a pretty routing rule so if the URL looks like <code>&quot;#!active&quot;</code>, the <code>filter</code> property of
+<code>route.data</code> will be set to <code>&quot;active&quot;</code> with <a href="../can-route.register.html" title="Create a route matching rule.">route.register</a>.</li>
+<li>Initialize <a href="../can-route.data.html" title="An observable key-value object used to cross bind to the url observable can-route.urlData. Set it to cross-bind a top level state object (Application ViewModel) to can-route.">route.data</a>’s values with <a href="../can-route.start.html" title="Initializes the two way relationship between the url and route.data.">route.start()</a>.</li>
+</ul></li>
+<li>Change <code>todosPromise</code> to check if <code>this.routeData.filter</code> is:
+<ul>
+<li><code>falsy</code> - then return all todos.</li>
+<li><code>&quot;complete&quot;</code> - then return all complete todos.</li>
+<li><code>&quot;incomplete&quot;</code> - then return all incomplete todos.</li>
+</ul></li>
+</ul>
+<pre><code class="language-js">import {
+  StacheElement,
+  ObservableArray,
+  ObservableObject,
+  fixture,
+  realtimeRestModel,
+  type,
+  domEvents,
+  enterEvent,
+  route
+} from &quot;//unpkg.com/can@6/everything.mjs&quot;;
+
+domEvents.addEvent(enterEvent);
+
+class Todo extends ObservableObject {
+  static props = {
+    id: { type: type.convert(Number), identity: true },
+    name: String,
+    complete: { type: type.convert(Boolean), default: false }
+  };
+}
+
+class TodoList extends ObservableArray {
+  static items = Todo;
+
+  static props = {
+    get active() {
+      return this.filter({ complete: false });
+    },
+
+    get complete() {
+      return this.filter({ complete: true });
+    }
+  };
+}
+
+const todoStore = fixture.store(
+  [
+    { name: &quot;mow lawn&quot;, complete: false, id: 5 },
+    { name: &quot;dishes&quot;, complete: true, id: 6 },
+    { name: &quot;learn canjs&quot;, complete: false, id: 7 }
+  ],
+  Todo
+);
+
+fixture(&quot;/api/todos&quot;, todoStore);
+fixture.delay = 200;
+
+realtimeRestModel({
+  url: &quot;/api/todos&quot;,
+  ObjectType: Todo,
+  ArrayType: TodoList
+});
+
+class TodoCreate extends StacheElement {
+  static view = `
+    &lt;input id=&quot;new-todo&quot;
+      placeholder=&quot;What needs to be done?&quot;
+      value:bind=&quot;this.todo.name&quot;
+      on:enter=&quot;this.createTodo()&quot;
+    &gt;
+  `;
+
+  static props = {
+    todo: {
+      get default() {
+        return new Todo();
+      }
+    }
+  };
+
+  createTodo() {
+    this.todo.save().then(() =&gt; {
+      this.todo = new Todo();
+    });
+  }
+}
+customElements.define(&quot;todo-create&quot;, TodoCreate);
+
+class TodoListElement extends StacheElement {
+  static view = `
+    &lt;ul id=&quot;todo-list&quot;&gt;
+      {{# for(todo of this.todos) }}
+        &lt;li class=&quot;todo {{# if(todo.complete) }}completed{{/ if }}
+          {{# if(todo.isDestroying()) }}destroying{{/ if }}
+          {{# if(this.isEditing(todo)) }}editing{{/ if }}&quot;&gt;
+          &lt;div class=&quot;view&quot;&gt;
+            &lt;input 
+              class=&quot;toggle&quot;
+              type=&quot;checkbox&quot;
+              checked:bind=&quot;todo.complete&quot;
+              on:change=&quot;todo.save()&quot;
+            &gt;
+            &lt;label on:dblclick=&quot;this.edit(todo)&quot;&gt;{{ todo.name }}&lt;/label&gt;
+            &lt;button class=&quot;destroy&quot; on:click=&quot;todo.destroy()&quot;&gt;&lt;/button&gt;
+          &lt;/div&gt;
+          &lt;input 
+            class=&quot;edit&quot;
+            type=&quot;text&quot;
+            value:bind=&quot;todo.name&quot;
+            on:enter=&quot;this.updateName()&quot;
+            focused:from=&quot;this.isEditing(todo)&quot;
+            on:blur=&quot;this.cancelEdit()&quot;
+          &gt;
+        &lt;/li&gt;
+      {{/ for }}
+    &lt;/ul&gt;
+  `;
+
+  static props = {
+    todos: type.maybeConvert(TodoListModel),
+    editing: Todo,
+    backupName: String
+  };
+
+  isEditing(todo) {
+    return todo === this.editing;
+  }
+
+  edit(todo) {
+    this.backupName = todo.name;
+    this.editing = todo;
+  }
+
+  cancelEdit() {
+    if (this.editing) {
+      this.editing.name = this.backupName;
+    }
+    this.editing = null;
+  }
+
+  updateName() {
+    this.editing.save();
+    this.editing = null;
+  }
+}
+customElements.define(&quot;todo-list&quot;, TodoListElement);
+
+class TodoMVC extends StacheElement {
+  static view = `
+    &lt;section id=&quot;todoapp&quot;&gt;
+      &lt;header id=&quot;header&quot;&gt;
+        &lt;h1&gt;{{ this.appName }}&lt;/h1&gt;
+        &lt;todo-create /&gt;
+      &lt;/header&gt;
+      &lt;section id=&quot;main&quot; class=&quot;&quot;&gt;
+        &lt;input id=&quot;toggle-all&quot; type=&quot;checkbox&quot;&gt;
+        &lt;label for=&quot;toggle-all&quot;&gt;Mark all as complete&lt;/label&gt;
+        &lt;todo-list todos:from=&quot;this.todosPromise.value&quot; /&gt;
+      &lt;/section&gt;
+      &lt;footer id=&quot;footer&quot; class=&quot;&quot;&gt;
+        &lt;span id=&quot;todo-count&quot;&gt;
+          &lt;strong&gt;{{ this.todosPromise.value.active.length }}&lt;/strong&gt; items left
+        &lt;/span&gt;
+        &lt;ul id=&quot;filters&quot;&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;{{ routeUrl(filter=undefined) }}&quot;
+              {{# routeCurrent(filter=undefined) }}class=&quot;selected&quot;{{/ routeCurrent }}&gt;All&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;{{ routeUrl(filter='active') }}&quot;
+              {{# routeCurrent(filter='active') }}class=&quot;selected&quot;{{/ routeCurrent }}&gt;Active&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;{{ routeUrl(filter='complete') }}&quot;
+              {{# routeCurrent(filter='complete') }}class=&quot;selected&quot;{{/ routeCurrent }}&gt;Completed&lt;/a&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;button id=&quot;clear-completed&quot;&gt;
+          Clear completed ({{ this.todosPromise.value.complete.length }})
+        &lt;/button&gt;
+      &lt;/footer&gt;
+    &lt;/section&gt;
+  `;
+
+  static props = {
+    appName: { default: &quot;TodoMVC&quot; },
+    routeData: {
+      get default() {
+        route.register(&quot;{filter}&quot;);
+        route.start();
+        return route.data;
+      }
+    },
+    get todosPromise() {
+      if (!this.routeData.filter) {
+        return Todo.getList({});
+      } else {
+        return Todo.getList({
+          filter: { complete: this.routeData.filter === &quot;complete&quot; }
+        });
+      }
+    }
+  };
+}
+customElements.define(&quot;todo-mvc&quot;, TodoMVC);
+
+</code></pre>
+<div line-highlight='10,157-158,161-162,165-166,178-184,186-192,only'></div>
+<p>When complete, you should be able to click the <code>All</code>, <code>Active</code>, and <code>Completed</code> links and
+see the right data.</p>
+<video controls>
+   <source src="../../docs/can-guides/experiment/todomvc/8-routing/routing.mp4" type="video/mp4">
+   <source src="../../docs/can-guides/experiment/todomvc/8-routing/routing.webm" type="video/webm">
+</video>
+<h2>Toggle all and clear completed</h2>
+<h3>the problem</h3>
+<p>In this section, we will:</p>
+<ul>
+<li>Make the <code>toggle-all</code> button change all todos to complete or incomplete.</li>
+<li>Make the <code>clear-completed</code> button delete all complete todos.</li>
+</ul>
+<h3>the solution</h3>
+<p>Add the following to the <code>Todo.List</code> model:</p>
+<ul>
+<li>An <code>allComplete</code> property that returns <code>true</code> if every todo is complete.</li>
+<li>A <code>saving</code> property that returns todos that are being saved using <a href="../can-connect/can/map/map.prototype.isSaving.html" title="Returns if the instance is currently being saved.">isSaving</a>.</li>
+<li>An <code>updateCompleteTo</code> method that updates every todo’s <code>complete</code> property to the specified value and updates the compute on the server with <a href="../can-connect/can/map/map.prototype.save.html" title="Save or update client data to the persisted data source.">save</a>.</li>
+<li>A <code>destroyComplete</code> method that deletes every complete todo with <a href="../can-connect/can/map/map.prototype.destroy.html" title="Delete an instance from the service via the connection.">destroy</a>.</li>
+</ul>
+<p>Update <code>&lt;todo-mvc&gt;</code>’s <code>view</code> to:</p>
+<ul>
+<li>Cross bind the <code>toggle-all</code> <code>&lt;input&gt;</code>’s <code>checked</code> property to the <code>&lt;todo-mvc&gt;</code>’s <code>allChecked</code> property.</li>
+<li>Disable the <code>toggle-all</code> button while any todo is saving.</li>
+<li>Call the <code>Todo.List</code>’s <code>destroyComplete</code> method when the <code>clear-completed</code> button is clicked on.</li>
+</ul>
+<p>Update <code>&lt;todo-mvc&gt;</code>’s <code>props</code> to include:</p>
+<ul>
+<li>A <code>todosList</code> property that gets its value from the <code>todosPromise</code> using an <a href="../can-observable-object/define/async.html" title="async
+Specify an asynchronous property whose value will be resolved later. async
+properties are computed and automatically update themselves when a dependent
+observable value is changed.">asynchronous getter</a>.</li>
+<li>An <code>allChecked</code> property that returns <code>true</code> if every todo is complete.  The property can also be set to <code>true</code> or <code>false</code> and it will set every todo to that value.</li>
+</ul>
+<pre><code class="language-js">import {
+  domEvents,
+  enterEvent,
+  fixture,
+  ObservableArray,
+  ObservableObject,
+  realtimeRestModel,
+  route,
+  StacheElement,
+  type
+} from &quot;//unpkg.com/can@6/everything.mjs&quot;;
+
+domEvents.addEvent(enterEvent);
+
+class Todo extends ObservableObject {
+  static props = {
+    id: { type: type.convert(Number), identity: true },
+    name: String,
+    complete: false
+  };
+}
+
+class TodoList extends ObservableArray {
+    static items = Todo;
+
+  static props = {
+    get active() {
+      return this.filter({ complete: false });
+    },
+
+    get complete() {
+      return this.filter({ complete: true });
+    },
+
+    get allComplete() {
+      return this.length === this.complete.length;
+    },
+
+    get saving() {
+      return this.filter(function(todo) {
+        return todo.isSaving();
+      });
+    }
+  };
+
+  updateCompleteTo(value) {
+    this.forEach(function(todo) {
+      todo.complete = value;
+      todo.save();
+    });
+  }
+
+  destroyComplete() {
+    this.complete.forEach(function(todo) {
+      todo.destroy();
+    });
+  }
+}
+
+const todoStore = fixture.store(
+  [
+    { name: &quot;mow lawn&quot;, complete: false, id: 5 },
+    { name: &quot;dishes&quot;, complete: true, id: 6 },
+    { name: &quot;learn canjs&quot;, complete: false, id: 7 }
+  ],
+  Todo
+);
+
+fixture(&quot;/api/todos&quot;, todoStore);
+fixture.delay = 200;
+
+realtimeRestModel({
+  url: &quot;/api/todos&quot;,
+  ObjectType: Todo,
+  ArrayType: TodoList
+});
+
+class TodoCreate extends StacheElement {
+  static view = `
+    &lt;input id=&quot;new-todo&quot;
+      placeholder=&quot;What needs to be done?&quot;
+      value:bind=&quot;this.todo.name&quot;
+      on:enter=&quot;this.createTodo()&quot;
+    &gt;
+  `;
+
+  static props = {
+    todo: {
+      get default() {
+        return new Todo();
+      }
+    }
+  };
+
+  createTodo() {
+    this.todo.save().then(() =&gt; {
+      this.todo = new Todo();
+    });
+  }
+}
+
+customElements.define(&quot;todo-create&quot;, TodoCreate);
+
+class TodoListElement extends StacheElement {
+  static view = `
+    &lt;ul id=&quot;todo-list&quot;&gt;
+      {{# for(todo of this.todos) }}
+        &lt;li class=&quot;todo {{# if(todo.complete) }}completed{{/ if }}
+          {{# if(todo.isDestroying()) }}destroying{{/ if }}
+          {{# if(this.isEditing(todo)) }}editing{{/ if }}&quot;&gt;
+          &lt;div class=&quot;view&quot;&gt;
+            &lt;input 
+              class=&quot;toggle&quot;
+              type=&quot;checkbox&quot;
+              checked:bind=&quot;todo.complete&quot;
+              on:change=&quot;todo.save()&quot;
+            &gt;
+            &lt;label on:dblclick=&quot;this.edit(todo)&quot;&gt;{{ todo.name }}&lt;/label&gt;
+            &lt;button class=&quot;destroy&quot; on:click=&quot;todo.destroy()&quot;&gt;&lt;/button&gt;
+          &lt;/div&gt;
+          &lt;input 
+            class=&quot;edit&quot;
+            type=&quot;text&quot;
+            value:bind=&quot;todo.name&quot;
+            on:enter=&quot;this.updateName()&quot;
+            focused:from=&quot;this.isEditing(todo)&quot;
+            on:blur=&quot;this.cancelEdit()&quot;
+          &gt;
+        &lt;/li&gt;
+      {{/ for }}
+    &lt;/ul&gt;
+  `;
+
+  static props = {
+    todos: type.maybeConvert(TodoList),
+    editing: Todo,
+    backupName: String
+  };
+
+  isEditing(todo) {
+    return todo === this.editing;
+  }
+
+  edit(todo) {
+    this.backupName = todo.name;
+    this.editing = todo;
+  }
+
+  cancelEdit() {
+    if (this.editing) {
+      this.editing.name = this.backupName;
+    }
+    this.editing = null;
+  }
+
+  updateName() {
+    this.editing.save();
+    this.editing = null;
+  }
+}
+
+customElements.define(&quot;todo-list&quot;, TodoListElement);
+
+class TodoMVC extends StacheElement {
+  static view = `
+    &lt;section id=&quot;todoapp&quot;&gt;
+      &lt;header id=&quot;header&quot;&gt;
+        &lt;h1&gt;{{ this.appName }}&lt;/h1&gt;
+        &lt;todo-create/&gt;
+      &lt;/header&gt;
+      &lt;section id=&quot;main&quot;&gt;
+        &lt;input 
+          id=&quot;toggle-all&quot; 
+          type=&quot;checkbox&quot;
+          checked:bind=&quot;this.allChecked&quot;
+          disabled:from=&quot;this.todosList.saving.length&quot;
+        &gt;
+        &lt;label for=&quot;toggle-all&quot;&gt;Mark all as complete&lt;/label&gt;
+        &lt;todo-list todos:from=&quot;this.todosPromise.value&quot;/&gt;
+      &lt;/section&gt;
+      &lt;footer id=&quot;footer&quot;&gt;
+        &lt;span id=&quot;todo-count&quot;&gt;
+          &lt;strong&gt;{{ this.todosPromise.value.active.length }}&lt;/strong&gt; items left
+        &lt;/span&gt;
+        &lt;ul id=&quot;filters&quot;&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;{{ routeUrl(filter=undefined) }}&quot;
+              {{# routeCurrent(filter=undefined) }}class=&quot;selected&quot;{{/ routeCurrent }}&gt;All&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;{{ routeUrl(filter='active') }}&quot;
+              {{# routeCurrent(filter='active') }}class=&quot;selected&quot;{{/ routeCurrent }}&gt;Active&lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;a href=&quot;{{ routeUrl(filter='complete') }}&quot;
+              {{# routeCurrent(filter='complete') }}class=&quot;selected&quot;{{/ routeCurrent }}&gt;Completed&lt;/a&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;button id=&quot;clear-completed&quot; on:click=&quot;this.todosList.destroyComplete()&quot;&gt;
+          Clear completed ({{ this.todosPromise.value.complete.length }})
+        &lt;/button&gt;
+      &lt;/footer&gt;
+    &lt;/section&gt;
+  `;
+
+  static props = {
+    appName: { default: &quot;TodoMVC&quot; },
+    routeData: {
+      get default() {
+        route.register(&quot;{filter}&quot;);
+        route.start();
+        return route.data;
+      }
+    },
+    get todosPromise() {
+      if (!this.routeData.filter) {
+        return Todo.getList({});
+      } else {
+        return Todo.getList({
+          filter: { complete: this.routeData.filter === &quot;complete&quot; }
+        });
+      }
+    },
+    todosList: {
+      async(resolve) {
+        this.todosPromise.then(resolve);
+      }
+    },
+    get allChecked() {
+      return this.todosList &amp;&amp; this.todosList.allComplete;
+    },
+    set allChecked(newVal) {
+      this.todosList &amp;&amp; this.todosList.updateCompleteTo(newVal);
+    }
+  };
+}
+customElements.define(&quot;todo-mvc&quot;, TodoMVC);
+
+</code></pre>
+<div line-highlight='35-57,172-177,199,224-235,only'></div>
+<p>When complete, you should be able to toggle all todos <code>complete</code> state and
+delete the completed todos.  You should also have a really good idea how CanJS works!</p>
+<video controls>
+   <source src="../../docs/can-guides/experiment/todomvc/9-toggle/toggle.mp4" type="video/mp4">
+   <source src="../../docs/can-guides/experiment/todomvc/9-toggle/toggle.webm" type="video/webm">
+</video>
+<h2>Result</h2>
+<p>When finished, you should see something like the following CodePen:</p>
+<p class="codepen" data-height="526" data-theme-id="0" data-default-tab="js,result" data-user="bitovi" data-slug-hash="xxKgQdy" style="height: 526px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid black; margin: 1em 0; padding: 1em;" data-pen-title="CanJS 6.0 - TodoMVC End">
+  <span>See the Pen <a href="https://codepen.io/bitovi/pen/xxKgQdy/">
+  CanJS 6.0 - TodoMVC End</a> by Bitovi (<a href="https://codepen.io/bitovi">@bitovi</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/experiment/todomvc/todomvc.md"},"description":"This guide will walk you through building a slightly modified version of [http://todomvc.com/ TodoMVC] with CanJS’s [can-core Core libraries] and [can-fixture]. It takes about 1 hour to complete.\n\n","name":"guides/todomvc","title":"TodoMVC Guide","type":"page","parent":"guides/experiment","order":2,"templateRender":["<%","%>"],"comment":" ","pathToRoot":"../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix=".."></div>
+
+	</body>
+</html>

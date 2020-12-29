@@ -1,0 +1,29 @@
+{
+  "name": "bundle-false",
+  "main": "main",
+  "dependencies": {
+    "jqueryt": "2.2.0"
+  },
+  "system": {
+    "directories": {
+      "lib": "src"
+    },
+    "meta": {
+      "bar": "foo",
+      "foobar": {
+        "foo": "bar"
+      },
+      "jqueryt": {
+        "foo": "bar"
+      }
+    },
+    "envs": {
+      "window-production": {
+        "map": {
+          "jqueryt": "@empty",
+          "src/dep": "@empty"
+        }
+      }
+    }
+  }
+}

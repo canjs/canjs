@@ -1,0 +1,2232 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/commitment/recipes/weather-report/advanced/weather-report-advanced.md
+	@page guides/recipes/weather-report-advanced
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Weather Report | advanced recipes | Guides | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="This advanced guides you through extending the Beginner Weather Report Guide to remove imperative code and automatically look up the user’s location using the browser’s geolocation API.  Both of these will be done with event streams. This guide continues where the Beginner Weather Report Guide left off.  It takes about 25 minutes to complete.  It was written with CanJS 4.1.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="This advanced guides you through extending the Beginner Weather Report Guide to remove imperative code and automatically look up the user’s location using the browser’s geolocation API.  Both of these will be done with event streams. This guide continues where the Beginner Weather Report Guide left off.  It takes about 25 minutes to complete.  It was written with CanJS 4.1.">
+	<meta property="og:title" content="Weather Report | advanced recipes | Guides | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "This advanced guides you through extending the Beginner Weather Report Guide to remove imperative code and automatically look up the user’s location using the browser’s geolocation API.  Both of these will be done with event streams. This guide continues where the Beginner Weather Report Guide left off.  It takes about 25 minutes to complete.  It was written with CanJS 4.1.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Weather Report | advanced recipes | Guides | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/recipes/weather-report-advanced" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>getting started</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../crud-beginner.html"
+							title="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+							CRUD Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../setup.html"
+							title="Learn how to install CanJS in your environment.">
+							Setting Up CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../technology-overview.html"
+							title="Learn the basics of CanJS’s technology.">
+							Technology Overview
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>topics</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../html.html"
+							title="Learn how to update HTML and listen to user interactions.">
+							HTML
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../routing.html"
+							title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+							Routing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../data.html"
+							title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">
+							Service Layer
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../debugging.html"
+							title="Learn how to debug CanJS applications.">
+							Debugging
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../forms.html"
+							title="Learn how to create amazing &lt;form&gt;s with CanJS.">
+							Forms
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../testing.html"
+							title="Learn how to test CanJS applications.">
+							Testing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../logic.html"
+							title="Learn how to write observables in an organized, maintainable, and testable way.">
+							Logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../server-side-rendering.html"
+							title="Learn how to set up SSR for CanJS.">
+							Server-Side Rendering
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>app guides</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../chat.html"
+							title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+							Chat Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../todomvc.html"
+							title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+							TodoMVC Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="todomvc-with-steal.html"
+							title="This tutorial walks through building TodoMVC with StealJS. It includes KeyNote presentations covering CanJS core libraries.">
+							TodoMVC with StealJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>beginner recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="canvas-clock.html"
+							title="This beginner guide walks you through building a clock with the Canvas API.">
+							Canvas Clock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="credit-card-simple.html"
+							title="This beginner guide walks through building a very simple credit card payment form.  It uses Stripe.js v2 API to create a token which can be used to create a charge.  It also performs simple validation on the payment form values.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="file-navigator-simple.html"
+							title="This beginner guide walks you through building a simple file navigation widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.0.0. Check out the file-navigator-advanced for an example that makes AJAX requests for its data and uses can-stache-element.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="signup-simple.html"
+							title="This beginner guide walks through building simple signup, login forms and a logout button.">
+							Signup and Login
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="video-player.html"
+							title="This beginner guide walks you through building custom video controls around a video element.">
+							Video Player
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="weather-report-simple.html"
+							title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.2.">
+							Weather Report
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>intermediate recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="cta-bus-map.html"
+							title="This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map. You&#x27;ll learn how to create a StacheElement that integrates with 3rd party widgets.">
+							CTA Bus Map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="modals.html"
+							title="This intermediate guide shows how to create a multiple modal form.">
+							Multiple Modals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="text-editor.html"
+							title="This intermediate guide walks you through building a basic rich text editor.">
+							Text Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="tinder-carousel.html"
+							title="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+							Tinder Carousel
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>advanced recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="credit-card-advanced.html"
+							title="This advanced guide walks through building a simple credit card payment form with validations. It doesn’t use can-define. Instead it uses Kefir.js streams to make a ViewModel. can-kefir is used to make the Kefir streams observable to can-stache.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="file-navigator-advanced.html"
+							title="This advanced guide walks you through building a file navigation widget that requests data with fetch. It takes about 45 minutes to complete.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="playlist-editor.html"
+							title="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+							Playlist Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="search-list-details.html"
+							title="This advanced guide walks through building a Search, List, Details flow with lazy-loaded routes.">
+							Search, List, Details
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>upgrade</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../migrate-3.html"
+							title="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+							Migrating to CanJS 3
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../migrate-4.html"
+							title="This guide walks you through the step-by-step process to upgrade a 3.x app to CanJS 4.">
+							Migrating to CanJS 4
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../migrate-5.html"
+							title="This guide walks you through the process to upgrade a 4.x app to CanJS 5.x.">
+							Migrating to CanJS 5
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../migrate-6.html"
+							title="This guide walks you through the process to upgrade a 5.x app to CanJS 6.x.">
+							Migrating to CanJS 6
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../upgrade/using-codemods.html"
+							title="Learn how to migrate your app to CanJS 6 using can-migrate.">
+							Using Codemods
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>other</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../api.html"
+							title="This page walks through how to use and understand CanJS’s API documentation.">
+							Reading the API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Weather Report</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/commitment/recipes/weather-report/advanced/weather-report-advanced.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>This advanced guides you through extending the <a href="weather-report-simple.html" title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with
+CanJS 6.2.">Beginner Weather Report Guide</a> to remove imperative code and automatically look up the user’s location using the
+browser’s <a href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation">geolocation API</a>.  Both of these will be done with event streams.</p>
+<p>This guide continues where the <a href="weather-report-simple.html" title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with
+CanJS 6.2.">Beginner Weather Report Guide</a> left off.  It takes about 25 minutes to complete.  It was written with CanJS 4.1.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <p>The final widget looks like:</p>
+<p><a class="jsbin-embed" href="https://jsbin.com/jiwabof/4/embed?html,js,output">JS Bin on jsbin.com</a></p>
+<p><strong>Start this tutorial by cloning the following JS Bin</strong>:</p>
+<p><a class="jsbin-embed" href="https://jsbin.com/jiwabof/1/embed?html,js,output">JS Bin on jsbin.com</a></p>
+<p>This is the ending JS Bin for the <a href="weather-report-simple.html" title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with
+CanJS 6.2.">Beginner Weather Report Guide</a> with <a href="https://kefirjs.github.io/kefir/">Kefir.js</a> added.</p>
+<p>The following sections are broken down into:</p>
+<ul>
+<li>Problem — A description of what the section is trying to accomplish.</li>
+<li>What you need to know — Information about CanJS that is useful for solving the problem.</li>
+<li>Solution — The solution to the problem.</li>
+</ul>
+<h2>Removing Imperative Code</h2>
+<h3>The problem</h3>
+<p>Currently, when a new <code>location</code> is set, the <code>place</code> property is set to <code>null</code>:</p>
+<pre><code class="language-js">const WeatherViewModel = can.DefineMap.extend({
+  location: {
+    type: &quot;string&quot;,
+    set: function() {
+      this.place = null;
+    }
+  },
+  // ...
+});
+</code></pre>
+<p>This is <a href="https://en.wikipedia.org/wiki/Imperative_programming">imperative code</a>.
+It uses side-effects to change the value
+of <code>place</code> when <code>location</code> is changed.  The rules for how <code>place</code> behaves are not
+defined in one place, which makes the code harder to follow.</p>
+<p>Instead, we want to completely define the behavior of <code>place</code> within the place definition, which looks like
+this:</p>
+<pre><code class="language-js">const WeatherViewModel = can.DefineMap.extend({
+  // ...
+  place: {
+    type: &quot;any&quot;,
+    get: function(lastSet) {
+      if (lastSet) {
+        return lastSet;
+      } else {
+        if (this.places &amp;&amp; this.places.length === 1) {
+          return this.places[0];
+        }
+      }
+    }
+  },
+  // ...
+});
+</code></pre>
+<p>We want to define the behavior of <code>place</code> so that it becomes <code>null</code> when <code>location</code> changes.</p>
+<h3>What you need to know</h3>
+<ul>
+<li><p><a href="../../can-define/map/map.html" title="Create observable objects.">DefineMap</a> <a href="../../can-define.types.get.html" title="Specify what happens when a certain property is read on a map. get functions
+work like a can-compute and automatically update themselves when a dependent
+observable value is changed.">getters</a> can only derive a value from other values.  They can’t
+derive a value from the change in other values.  However, event-stream libraries like <a href="https://kefirjs.github.io/kefir/">KefirJS</a>
+can do this.</p>
+<p>For example, we can create a <code>Kefir</code> stream that counts the number of times the following <code>person</code> map’s <code>name</code>
+property changes using the <a href="../../can-stream-kefir.html" title="Convert observable values into streams. Kefir is used to provide the stream functionality.">can-stream-kefir</a> module as follows:</p>
+<pre><code class="language-js">const person = new can.DefineMap({name: &quot;Justin&quot;});
+
+// Create a stream from person’s name
+const nameStream = can.streamKefir.toStream(person,&quot;.name&quot;);
+
+// Every time `.name` changes, increase the count 1.
+const nameChangeCountStream = nameStream.scan(function(lastValue) {
+    return lastValue + 1;
+}, 0);
+
+// Log the current nameChangeStream value
+nameChangeStream.onValue(function(newValue) {
+    console.log(newValue);
+});
+
+person.name = &quot;Ramiya&quot; // logs 1
+
+person.name = &quot;Payal&quot;  // logs 2
+</code></pre></li>
+<li><p>The <code>toStream</code> method can take an observable object and a property (or event) and create an event stream. The following creates a stream of the <code>person.name</code> property values:</p>
+<pre><code class="language-js">const person = new can.DefineMap({name: &quot;Justin&quot;});
+const nameStream = can.streamKefir.toStream(person,&quot;.name&quot;);
+
+nameStream.onValue(function(newValue) {
+    console.log(newValue);
+});
+
+person.name = &quot;Ramiya&quot; // logs &quot;Ramiya&quot;
+person.name = &quot;Payal&quot; // logs &quot;Payal&quot;
+</code></pre></li>
+<li><p>Kefir’s <a href="https://kefirjs.github.io/kefir/#map">map</a> method can be used to convert event-stream values into new values.  The following creates an event stream of upper-cased names:</p>
+<pre><code class="language-js">const person = new can.DefineMap({name: &quot;Justin&quot;});
+const capitalizedNameStream = can.streamKefir.toStream(person,&quot;.name&quot;)
+  .map(function(name) {
+      return name.toUpperCase()
+  });
+
+nameStream.onValue(function(newValue) {
+    console.log(newValue);
+});
+
+person.name = &quot;Ramiya&quot; // logs &quot;RAMIYA&quot;
+person.name = &quot;Payal&quot; // logs &quot;PAYAL&quot;
+</code></pre></li>
+<li><p>The <a href="../../can-define-stream-kefir.html" title="Export a function that takes a map or list constructor and uses can-stream-kefir to create streamable properties.">can-define-stream-kefir</a> module lets you define a property value using
+a stream. For example, we can define a <code>nameChangeCount</code> property of a <code>Person</code> type using <code>stream</code> like:</p>
+<pre><code class="language-js">Person = can.DefineMap.extend({
+    name: &quot;string&quot;,
+    nameChangeCount: {
+        stream: function() {
+            return this.toStream(&quot;.name&quot;).scan(function(lastValue) {
+                return lastValue + 1;
+            }, 0);
+        }
+    }
+});
+can.defineStreamKefir(Person);
+</code></pre>
+<p>Notice that the <a href="../../can-define-stream-kefir.html" title="Export a function that takes a map or list constructor and uses can-stream-kefir to create streamable properties.">can-define-stream-kefir</a> module is used as a <a href="https://developer.mozilla.org/en-US/docs/Glossary/Mixin">mixin</a>. When called on a type (like <code>Person</code>), the mixin
+looks for <a href="../../can-define.types.propDefinition.html" title="Defines the type, initial value, and get, set, and serialize behavior for an
+observable property.  These behaviors can be specified with as an Object, String,
+Constructor function, Array, a getter expression, or setter expression.">PropDefinition</a>s with <code>stream</code>
+property definition functions.  It uses the stream instance returned by the <code>stream</code> property definition function as the value of the property.</p>
+<p>Stream properties, like asynchronous getters, only have a value when
+bound to.  To read the <code>nameChangeCount</code>, first use <code>.on</code> like:</p>
+<pre><code class="language-js">const me = new Person({name: &quot;Justin&quot;});
+me.on(&quot;nameChangeCount&quot;, function(ev, newValue) {
+    console.log(newValue);
+});
+
+me.nameChangeCount //-&gt; 0
+
+me.name = &quot;Ramiya&quot; // logs 1
+
+me.nameChangeCount //-&gt; 1
+</code></pre></li>
+<li><p>The <code>stream</code> property definition function is passed <code>setStream</code> which is
+a stream of values set on the property.  The following allows a
+user to set <code>nameChangeCount</code> to reset the count at some new value:</p>
+<pre><code class="language-js">Person = can.DefineMap.extend({
+  name: &quot;string&quot;,
+  nameChangeCount: {
+      stream: function(setStream) {
+          const reset = setStream.map(function(value) {
+              return {type: &quot;reset&quot;, value: value};
+          });
+          const increment = this.toStream(&quot;.name&quot;).map(function() {
+              return {type: &quot;increment&quot;}
+          });
+
+          return reset.merge(increment).scan(function(lastValue, next) {
+              if (next.type === &quot;increment&quot;) {
+                  return lastValue + 1;
+              } else {
+                  return next.value;
+              }
+          }, 0);
+      }
+  }
+});
+can.defineStreamKefir(Person);
+</code></pre>
+<p>The following shows the behavior of this property:</p>
+<pre><code class="language-js">const me = new Person({name: &quot;Justin&quot;});
+me.on(&quot;nameChangeCount&quot;, function(ev, newValue) {
+  console.log(newValue);
+});
+
+me.nameChangeCount = 10;
+
+me.name = &quot;Ramiya&quot; // logs 11
+
+me.nameChangeCount //-&gt; 11
+</code></pre></li>
+<li><p>The <a href="../../can-define-stream-kefir.html" title="Export a function that takes a map or list constructor and uses can-stream-kefir to create streamable properties.">can-define-stream-kefir</a> module adds a <code>map.toStream</code> method which is an alias for
+<code>canStream.toStream</code>.  Use it to create streams from properties and events on a map instance like:</p>
+<pre><code class="language-js">const Person = can.DefineMap.extend({
+    name: &quot;string&quot;
+});
+
+const me = new Person({name: &quot;Justin&quot;});
+
+const nameStream = me.toStream(&quot;.name&quot;);
+
+nameStream.onValue(function() { /* ... */ })
+</code></pre></li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab to:</p>
+<ol>
+<li>Remove the setter side-effects from <code>location</code>.</li>
+<li>Change <code>place</code> to derive its value from:
+<ul>
+<li>changes in <code>location</code> -  <code>place</code> should be <code>null</code> if <code>location</code> changes.</li>
+<li>the <code>.places</code> value - <code>place</code> should be the one and only <em>place</em> in <code>places</code> if there is only one <em>place</em> in <code>places</code>.</li>
+<li>the set <code>.place</code> value.</li>
+</ul></li>
+<li>Mix <a href="../../can-define-stream-kefir.html" title="Export a function that takes a map or list constructor and uses can-stream-kefir to create streamable properties.">can-define-stream-kefir</a> into the <code>WeatherViewModel</code>.</li>
+</ol>
+<pre><code class="language-js">const yqlURL = &quot;https://query.yahooapis.com/v1/public/yql?&quot;;
+
+const WeatherViewModel = can.DefineMap.extend({
+  location: &quot;string&quot;,
+  get forecastPromise() {
+    if (this.location &amp;&amp; this.location.length &gt; 2) {
+      return fetch(
+        yqlURL +
+        can.param({
+          q: 'select * from geo.places where text=&quot;' + this.location + '&quot;',
+          format: &quot;json&quot;
+        })
+      ).then(response =&gt; {
+        return response.json();
+      }).then(data =&gt; {
+        console.log(data);
+        if (Array.isArray(data.query.results.place)) {
+          return data.query.results.place;
+        } else {
+          return [data.query.results.place];
+        }
+      });
+    }
+  },
+  places: {
+    get: function(lastSet, resolve) {
+      if (this.forecastPromise) {
+        this.forecastPromise.then(resolve);
+      }
+    }
+  },
+  get showPlacePicker() {
+    return !this.place &amp;&amp; this.places &amp;&amp; this.places.length &gt; 1;
+  },
+  place: {
+    stream: function(setStream) {
+      const resetStream = this.toStream(&quot;.location&quot;).map(function() {
+        return null;
+      });
+      const onePlaceResultStream = this.toStream(&quot;.places&quot;).map(function(places) {
+        if (places.length === 1) {
+          return places[0];
+        } else {
+          return null;
+        }
+      });
+
+      return onePlaceResultStream
+      .merge(setStream)
+      .merge(resetStream);
+    }
+  },
+  pickPlace: function(place) {
+    this.place = place;
+  },
+  get forecastPromise() {
+    if (this.place) {
+      console.log(&quot;place&quot;, this.place);
+      return fetch(
+        yqlURL +
+        can.param({
+          q: 'select * from weather.forecast where woeid=' + this.place.woeid,
+          format: &quot;json&quot;
+        })
+      ).then(response =&gt; {
+        return response.json();
+      }).then(data =&gt; {
+        console.log(&quot;forecast data&quot;, data);
+        const forecast = data.query.results.channel.item.forecast;
+
+        return forecast;
+      });
+    }
+  },
+  toClassName: function(text) {
+    return text.toLowerCase().replace(/ /g, &quot;-&quot;);
+  }
+});
+can.defineStreamKefir(WeatherViewModel);
+
+const vm = new WeatherViewModel();
+
+const template = can.stache.from(&quot;app-template&quot;);
+const fragment = template(vm);
+document.body.appendChild(fragment);
+
+</code></pre>
+<div line-highlight='4,35-52,79,only'></div>
+<h2>Get the geoLocation’s latitude and longitude</h2>
+<h3>The problem</h3>
+<p>Instead of requiring the user to search for their city,
+let’s change the app to use the browser’s <a href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation">geolocation</a> API to look up their location.  For this step, we
+will add the following behaviors:</p>
+<ul>
+<li>If the user enables location services, we will write their latitude and longitude.</li>
+<li>If the user disables location services or there is some other type of error,
+we will print the error message.</li>
+</ul>
+<p>We will do this by:</p>
+<ul>
+<li>Creating a Kefir stream of the User’s position or error messages.</li>
+<li>Using that stream to create the <code>geoLocation</code> and <code>geoLocationError</code> properties.</li>
+<li>Displaying the data of those properties in the template.</li>
+</ul>
+<h3>What you need to know</h3>
+<ul>
+<li><p>The <a href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation">geolocation</a>
+API allows you to <em>request</em> the user’s position as follows:</p>
+<pre><code class="language-js">navigator.geolocation.getCurrentPosition(
+    function(position) { /* ... */ },
+    function(err) { /* ... */ });
+</code></pre></li>
+<li><p>The <a href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation">geolocation</a>
+API allows you to <em>monitor changes</em> in the user’s position as follows:</p>
+<pre><code class="language-js">const watch = navigator.geolocation.watchPosition(
+    function(position) { /* ... */ },
+    function(err) { /* ... */ });
+</code></pre>
+<p>To cancel watching, call:</p>
+<pre><code class="language-js">navigator.geolocation.clearWatch(watch);
+</code></pre></li>
+<li><p>To create a <code>Kefir</code> stream, call <code>Kefir.stream</code> as follows:</p>
+<pre><code class="language-js">const myStream = Kefir.stream(function setup(emitter) {
+
+    // INITIALIZATION CODE
+
+    return function teardown() {
+        // TEARDOWN CODE
+    }
+});
+</code></pre>
+<p><code>Kefir.stream</code> is passed an event emitter which can emit values like:</p>
+<pre><code class="language-js">emitter.value(123);
+</code></pre>
+<p>or errors like:</p>
+<pre><code class="language-js">emitter.error(&quot;something went wrong&quot;);
+</code></pre>
+<p>or end the stream of values like:</p>
+<pre><code class="language-js">emitter.end();
+</code></pre>
+<p>Typically, you listen to sources and emit values in the <code>setup</code> function
+and stop listening to sources in the <code>teardown</code> function.  For example,
+the following might listen to where the user’s mouse is on the page:</p>
+<pre><code class="language-js">const cursorPosition = Kefir.stream(function(emitter) {
+    const handler = function(ev) {
+        emitter.emit({pageX: ev.pageX, pageY: pageY});
+    };
+    document.documentElement.addEventListener(&quot;mousemove&quot;,handler);
+
+    return function() {
+        document.documentElement.removeEventListener(&quot;mousemove&quot;,handler);
+    }
+})
+</code></pre></li>
+<li><p>Kefir’s <code>stream.withHandler( handler(emitter, event) )</code> is able to convert one stream’s events to another stream. All other stream methods like <code>stream.map</code> and <code>stream.scan</code> can be implemented with <code>stream.withHandler</code>. For example, the following maps the <code>cursorPosition</code> stream to a <code>cursorDistance</code> stream:</p>
+<pre><code class="language-js">cursorDistance = cursorPosition.withHandler(function(emitter, event) {
+    if (event.type === &quot;end&quot;) {
+      emitter.end();
+    }
+    if (event.type === &quot;error&quot;) {
+      emitter.error(event.value);
+    }
+    if (event.type === &quot;value&quot;) {
+      const pageX = event.value.pageX;
+      const pageY = event.value.pageY;
+      emitter.value( Math.sqrt(pageX*pageX + pageY*pageY) );
+    }
+});
+</code></pre>
+<p>Notice how <code>withHandler</code> is called with the emitter of <code>cursorDistance</code>
+and the events of <code>cursorPosition</code>.</p></li>
+</ul>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab:</p>
+<pre><code class="language-js">const yqlURL = &quot;https://query.yahooapis.com/v1/public/yql?&quot;;
+
+const geoLocationStream = Kefir.stream(function(emitter) {
+  navigator.geolocation.getCurrentPosition(function(position) {
+    emitter.value(position);
+  }, function(err) {
+    console.log(&quot;getCurrentPositionErr&quot;,err);
+    emitter.error(err);
+  });
+
+
+  const watch = navigator.geolocation.watchPosition(function(position) {
+    emitter.value(position);
+  }, function(err) {
+    emitter.error(err);
+  });
+
+  return function() {
+    navigator.geolocation.clearWatch(watch);
+  };
+});
+
+const WeatherViewModel = can.DefineMap.extend({
+  geoLocation: {
+    stream: function() {
+      return geoLocationStream;
+    }
+  },
+  geoLocationError: {
+    stream: function() {
+      return geoLocationStream.withHandler(function(emitter, event) {
+        if (event.type === &quot;end&quot;) {
+          emitter.end();
+        }
+        if (event.type === &quot;error&quot;) {
+          emitter.value(event.value);
+        }
+      });
+    }
+  },
+  location: &quot;string&quot;,
+  get forecastPromise() {
+    if (this.location &amp;&amp; this.location.length &gt; 2) {
+      return fetch(
+        yqlURL +
+        can.param({
+          q: 'select * from geo.places where text=&quot;' + this.location + '&quot;',
+          format: &quot;json&quot;
+        })
+      ).then(response =&gt; {
+        return response.json();
+      }).then(data =&gt; {
+        console.log(data);
+        if (Array.isArray(data.query.results.place)) {
+          return data.query.results.place;
+        } else {
+          return [data.query.results.place];
+        }
+      });
+    }
+  },
+  places: {
+    get: function(lastSet, resolve) {
+      if (this.forecastPromise) {
+        this.forecastPromise.then(resolve);
+      }
+    }
+  },
+  get showPlacePicker() {
+    return !this.place &amp;&amp; this.places &amp;&amp; this.places.length &gt; 1;
+  },
+  place: {
+    stream: function(setStream) {
+      const resetStream = this.toStream(&quot;.location&quot;).map(function() {
+        return null;
+      });
+      const onePlaceResultStream = this.toStream(&quot;.places&quot;).map(function(places) {
+        if (places.length === 1) {
+          return places[0];
+        } else {
+          return null;
+        }
+      });
+
+      return onePlaceResultStream
+      .merge(setStream)
+      .merge(resetStream);
+    }
+  },
+  pickPlace: function(place) {
+    this.place = place;
+  },
+  get forecastPromise() {
+    if (this.place) {
+      console.log(&quot;place&quot;, this.place);
+      return fetch(
+        yqlURL +
+        can.param({
+          q: 'select * from weather.forecast where woeid=' + this.place.woeid,
+          format: &quot;json&quot;
+        })
+      ).then(response =&gt; {
+        return response.json();
+      }).then(data =&gt; {
+        console.log(&quot;forecast data&quot;, data);
+        const forecast = data.query.results.channel.item.forecast;
+
+        return forecast;
+      });
+    }
+  },
+  toClassName: function(text) {
+    return text.toLowerCase().replace(/ /g, &quot;-&quot;);
+  }
+});
+can.defineStreamKefir(WeatherViewModel);
+
+const vm = new WeatherViewModel();
+
+const template = can.stache.from(&quot;app-template&quot;);
+const fragment = template(vm);
+document.body.appendChild(fragment);
+
+</code></pre>
+<div line-highlight='3-21,24-40,only'></div>
+<p>Update the <strong>HTML</strong> tab:</p>
+<pre><code class="language-html">Latitude: {{ geoLocation.coords.latitude }},
+Longitude: {{ geoLocation.coords.longitude }},
+Error: {{ geoLocationError.message }}
+
+&lt;div class=&quot;weather-widget&quot;&gt;
+
+  &lt;div class=&quot;location-entry&quot;&gt;
+    &lt;label for=&quot;location&quot;&gt;Enter your location:&lt;/label&gt;
+    &lt;input id=&quot;location&quot; type=&quot;text&quot; value:to=&quot;this.location&quot; /&gt;
+  &lt;/div&gt;
+
+  {{# if(forecastPromise.isPending) }}
+    &lt;p class=&quot;loading-message&quot;&gt;
+      Loading forecast…
+    &lt;/p&gt;
+  {{/ if }}
+
+  {{# if(showPlacePicker) }}
+    &lt;div class=&quot;location-options&quot;&gt;
+      &lt;label&gt;Pick your place:&lt;/label&gt;
+      &lt;ul&gt;
+        {{# for(place of forecastPromise.value) }}
+          &lt;li on:click=&quot;this.pickPlace(place)&quot;&gt;{{ place.name }}, {{ place.admin1.content }},
+              {{ place.country.code }} ({{ place.placeTypeName.content }})&lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  {{/ if }}
+
+  {{# if(place) }}
+    &lt;div class=&quot;forecast&quot;&gt;
+      &lt;h1&gt;10 day {{ place.name }} Weather Forecast&lt;/h1&gt;
+      &lt;ul&gt;
+        {{# for(forecast of forecastPromise.value) }}
+          &lt;li&gt;
+            &lt;span class=&quot;date&quot;&gt;{{ forecast.date }}&lt;/span&gt;
+            &lt;span class=&quot;description {{ toClassName(forecast.text) }}&quot;&gt;{{ forecast.text }}&lt;/span&gt;
+            &lt;span class=&quot;high-temp&quot;&gt;{{ forecast.high }}&lt;sup&gt;&amp;deg;&lt;/sup&gt;&lt;/span&gt;
+            &lt;span class=&quot;low-temp&quot;&gt;{{ forecast.low }}&lt;sup&gt;&amp;deg;&lt;/sup&gt;&lt;/span&gt;
+          &lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  {{/ if }}
+
+&lt;/div&gt;
+
+</code></pre>
+<div line-highlight='1-3,only'></div>
+<h2>Find the user’s place by latitude and longitude</h2>
+<h3>The problem</h3>
+<p>We need to get which place the user is in by their
+latitude and longitude. We will save this place as the
+<code>geoPlace</code> property and use it in the <code>place</code> property definition.</p>
+<h3>What you need to know</h3>
+<p>Flickr has an API that can get a place that is recognized by
+Yahoo’s weather APIs.  It can be retrieved with <code>fetch</code> like:</p>
+<pre><code class="language-js">fetch(&quot;https://api.flickr.com/services/rest/?&quot;+
+    can.param({
+        method: &quot;flickr.places.findByLatLon&quot;,
+        api_key: &quot;df0a221bb43ecbc2abb03426bd84e598&quot;,
+        lat: LATITUDE,
+        lon: LONGITUDE,
+        format: &quot;json&quot;,
+        nojsoncallback: 1
+    })
+).then(response =&gt; {
+    return response.json()
+}).then(function(responseJSON) {
+    return responseJSON.places.place[0];
+});
+</code></pre>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab:</p>
+<pre><code class="language-js">const yqlURL = &quot;https://query.yahooapis.com/v1/public/yql?&quot;;
+
+const geoLocationStream = Kefir.stream(function(emitter) {
+  navigator.geolocation.getCurrentPosition(function(position) {
+    emitter.value(position);
+  }, function(err) {
+    console.log(&quot;getCurrentPositionErr&quot;,err);
+    emitter.error(err);
+  });
+
+
+  const watch = navigator.geolocation.watchPosition(function(position) {
+    emitter.value(position);
+  }, function(err) {
+    emitter.error(err);
+  });
+
+  return function() {
+    navigator.geolocation.clearWatch(watch);
+  };
+});
+
+const WeatherViewModel = can.DefineMap.extend({
+  geoLocation: {
+    stream: function() {
+      return geoLocationStream;
+    }
+  },
+  geoLocationError: {
+    stream: function() {
+      return geoLocationStream.withHandler(function(emitter, event) {
+        if (event.type === &quot;end&quot;) {
+          emitter.end();
+        }
+        if (event.type === &quot;error&quot;) {
+          emitter.value(event.value);
+        }
+      });
+    }
+  },
+  geoPlace: {
+    get: function(lastSet, resolve) {
+      if (this.geoLocation) {
+        fetch(&quot;https://api.flickr.com/services/rest/?&quot; +
+          can.param({
+            method: &quot;flickr.places.findByLatLon&quot;,
+            api_key: &quot;df0a221bb43ecbc2abb03426bd84e598&quot;,
+            lat: this.geoLocation.coords.latitude,
+            lon: this.geoLocation.coords.longitude,
+            format: &quot;json&quot;,
+            nojsoncallback: 1
+          })
+        ).then(response =&gt; {
+          return response.json();
+        }).then(function(responseJSON) {
+          return responseJSON.places.place[0];
+        }).then(resolve);
+      }
+    }
+  },
+  location: &quot;string&quot;,
+  get forecastPromise() {
+    if (this.location &amp;&amp; this.location.length &gt; 2) {
+      return fetch(
+        yqlURL +
+        can.param({
+          q: 'select * from geo.places where text=&quot;' + this.location + '&quot;',
+          format: &quot;json&quot;
+        })
+      ).then(response =&gt; {
+        return response.json();
+      }).then(data =&gt; {
+        console.log(data);
+        if (Array.isArray(data.query.results.place)) {
+          return data.query.results.place;
+        } else {
+          return [data.query.results.place];
+        }
+      });
+    }
+  },
+  places: {
+    get: function(lastSet, resolve) {
+      if (this.forecastPromise) {
+        this.forecastPromise.then(resolve);
+      }
+    }
+  },
+  get showPlacePicker() {
+    return !this.place &amp;&amp; this.places &amp;&amp; this.places.length &gt; 1;
+  },
+  place: {
+    stream: function(setStream) {
+      const resetStream = this.toStream(&quot;.location&quot;).map(function() {
+        return null;
+      });
+      const onePlaceResultStream = this.toStream(&quot;.places&quot;).map(function(places) {
+        if (places.length === 1) {
+          return places[0];
+        } else {
+          return null;
+        }
+      });
+
+      return onePlaceResultStream
+      .merge(setStream)
+      .merge(resetStream)
+      .merge(this.toStream(&quot;.geoPlace&quot;));
+    }
+  },
+  pickPlace: function(place) {
+    this.place = place;
+  },
+  get forecastPromise() {
+    if (this.place) {
+      console.log(&quot;place&quot;, this.place);
+      return fetch(
+        yqlURL +
+        can.param({
+          q: 'select * from weather.forecast where woeid=' + this.place.woeid,
+          format: &quot;json&quot;
+        })
+      ).then(response =&gt; {
+        return response.json();
+      }).then(data =&gt; {
+        console.log(&quot;forecast data&quot;, data);
+        const forecast = data.query.results.channel.item.forecast;
+
+        return forecast;
+      });
+    }
+  },
+  toClassName: function(text) {
+    return text.toLowerCase().replace(/ /g, &quot;-&quot;);
+  }
+});
+can.defineStreamKefir(WeatherViewModel);
+
+const vm = new WeatherViewModel();
+
+const template = can.stache.from(&quot;app-template&quot;);
+const fragment = template(vm);
+document.body.appendChild(fragment);
+
+</code></pre>
+<div line-highlight='41-60,108,only'></div>
+<h2>Add &quot;Enable Location Services&quot; message</h2>
+<h3>The problem</h3>
+<p>When a user first views the page, they will be prompted to enable location
+services. While they are prompted, we will display a <code>Please Enable Location Services…</code> message.</p>
+<h3>What you need to know</h3>
+<p>Display the message while <code>geoLocation</code> and <code>geoLocationError</code> are undefined.</p>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab:</p>
+<pre><code class="language-js">const yqlURL = &quot;https://query.yahooapis.com/v1/public/yql?&quot;;
+
+const geoLocationStream = Kefir.stream(function(emitter) {
+  navigator.geolocation.getCurrentPosition(function(position) {
+    emitter.value(position);
+  }, function(err) {
+    console.log(&quot;getCurrentPositionErr&quot;,err);
+    emitter.error(err);
+  });
+
+
+  const watch = navigator.geolocation.watchPosition(function(position) {
+    emitter.value(position);
+  }, function(err) {
+    emitter.error(err);
+  });
+
+  return function() {
+    navigator.geolocation.clearWatch(watch);
+  };
+});
+
+const WeatherViewModel = can.DefineMap.extend({
+  geoLocation: {
+    stream: function() {
+      return geoLocationStream;
+    }
+  },
+  geoLocationError: {
+    stream: function() {
+      return geoLocationStream.withHandler(function(emitter, event) {
+        if (event.type === &quot;end&quot;) {
+          emitter.end();
+        }
+        if (event.type === &quot;error&quot;) {
+          emitter.value(event.value);
+        }
+      });
+    }
+  },
+  geoPlace: {
+    get: function(lastSet, resolve) {
+      if (this.geoLocation) {
+        fetch(&quot;https://api.flickr.com/services/rest/?&quot; +
+          can.param({
+            method: &quot;flickr.places.findByLatLon&quot;,
+            api_key: &quot;df0a221bb43ecbc2abb03426bd84e598&quot;,
+            lat: this.geoLocation.coords.latitude,
+            lon: this.geoLocation.coords.longitude,
+            format: &quot;json&quot;,
+            nojsoncallback: 1
+          })
+        ).then(response =&gt; {
+          return response.json();
+        }).then(function(responseJSON) {
+          return responseJSON.places.place[0];
+        }).then(resolve);
+      }
+    }
+  },
+  get showEnableGeoLocationMessage() {
+    return !this.geoLocation &amp;&amp; !this.geoLocationError;
+  },
+  location: &quot;string&quot;,
+  get forecastPromise() {
+    if (this.location &amp;&amp; this.location.length &gt; 2) {
+      return fetch(
+        yqlURL +
+        can.param({
+          q: 'select * from geo.places where text=&quot;' + this.location + '&quot;',
+          format: &quot;json&quot;
+        })
+      ).then(response =&gt; {
+        return response.json();
+      }).then(data =&gt; {
+        console.log(data);
+        if (Array.isArray(data.query.results.place)) {
+          return data.query.results.place;
+        } else {
+          return [data.query.results.place];
+        }
+      });
+    }
+  },
+  places: {
+    get: function(lastSet, resolve) {
+      if (this.forecastPromise) {
+        this.forecastPromise.then(resolve);
+      }
+    }
+  },
+  get showPlacePicker() {
+    return !this.place &amp;&amp; this.places &amp;&amp; this.places.length &gt; 1;
+  },
+  place: {
+    stream: function(setStream) {
+      const resetStream = this.toStream(&quot;.location&quot;).map(function() {
+        return null;
+      });
+      const onePlaceResultStream = this.toStream(&quot;.places&quot;).map(function(places) {
+        if (places.length === 1) {
+          return places[0];
+        } else {
+          return null;
+        }
+      });
+
+      return onePlaceResultStream
+      .merge(setStream)
+      .merge(resetStream)
+      .merge(this.toStream(&quot;.geoPlace&quot;));
+    }
+  },
+  pickPlace: function(place) {
+    this.place = place;
+  },
+  get forecastPromise() {
+    if (this.place) {
+      console.log(&quot;place&quot;, this.place);
+      return fetch(
+        yqlURL +
+        can.param({
+          q: 'select * from weather.forecast where woeid=' + this.place.woeid,
+          format: &quot;json&quot;
+        })
+      ).then(response =&gt; {
+        return response.json();
+      }).then(data =&gt; {
+        console.log(&quot;forecast data&quot;, data);
+        const forecast = data.query.results.channel.item.forecast;
+
+        return forecast;
+      });
+    }
+  },
+  toClassName: function(text) {
+    return text.toLowerCase().replace(/ /g, &quot;-&quot;);
+  }
+});
+can.defineStreamKefir(WeatherViewModel);
+
+const vm = new WeatherViewModel();
+
+const template = can.stache.from(&quot;app-template&quot;);
+const fragment = template(vm);
+document.body.appendChild(fragment);
+
+</code></pre>
+<div line-highlight='61-63,only'></div>
+<p>Update the <strong>HTML</strong> tab:</p>
+<pre><code class="language-html">Latitude: {{ geoLocation.coords.latitude }},
+Longitude: {{ geoLocation.coords.longitude }},
+Error: {{ geoLocationError.message }}
+
+&lt;div class=&quot;weather-widget&quot;&gt;
+  {{# if(showEnableGeoLocationMessage) }}
+    &lt;p class=&quot;loading-message&quot;&gt;
+      Please Enable Location Services…
+    &lt;/p&gt;
+  {{/ if }}
+
+  &lt;div class=&quot;location-entry&quot;&gt;
+    &lt;label for=&quot;location&quot;&gt;Enter your location:&lt;/label&gt;
+    &lt;input id=&quot;location&quot; type=&quot;text&quot; value:to=&quot;this.location&quot; /&gt;
+  &lt;/div&gt;
+
+  {{# if(forecastPromise.isPending) }}
+    &lt;p class=&quot;loading-message&quot;&gt;
+      Loading forecast…
+    &lt;/p&gt;
+  {{/ if }}
+
+  {{# if(showPlacePicker) }}
+    &lt;div class=&quot;location-options&quot;&gt;
+      &lt;label&gt;Pick your place:&lt;/label&gt;
+      &lt;ul&gt;
+        {{# for(place of forecastPromise.value) }}
+          &lt;li on:click=&quot;this.pickPlace(place)&quot;&gt;{{ place.name }}, {{ place.admin1.content }},
+              {{ place.country.code }} ({{ place.placeTypeName.content }})&lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  {{/ if }}
+
+  {{# if(place) }}
+    &lt;div class=&quot;forecast&quot;&gt;
+      &lt;h1&gt;10 day {{ place.name }} Weather Forecast&lt;/h1&gt;
+      &lt;ul&gt;
+        {{# for(forecast of forecastPromise.value) }}
+          &lt;li&gt;
+            &lt;span class=&quot;date&quot;&gt;{{ forecast.date }}&lt;/span&gt;
+            &lt;span class=&quot;description {{ toClassName(forecast.text) }}&quot;&gt;{{ forecast.text }}&lt;/span&gt;
+            &lt;span class=&quot;high-temp&quot;&gt;{{ forecast.high }}&lt;sup&gt;&amp;deg;&lt;/sup&gt;&lt;/span&gt;
+            &lt;span class=&quot;low-temp&quot;&gt;{{ forecast.low }}&lt;sup&gt;&amp;deg;&lt;/sup&gt;&lt;/span&gt;
+          &lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  {{/ if }}
+
+&lt;/div&gt;
+
+</code></pre>
+<div line-highlight='6-11,only'></div>
+<h2>Allow user to enter location only if location services failed</h2>
+<h3>The problem</h3>
+<p>Show the location entry <code>&lt;div&gt;</code> only when geo location has failed.</p>
+<h3>What you need to know</h3>
+<p>Nothing, you’ve learned it all by this point.  Apply what you know!</p>
+<h3>The solution</h3>
+<p>Update the <strong>JavaScript</strong> tab:</p>
+<pre><code class="language-js">const yqlURL = &quot;https://query.yahooapis.com/v1/public/yql?&quot;;
+
+const geoLocationStream = Kefir.stream(function(emitter) {
+  navigator.geolocation.getCurrentPosition(function(position) {
+    emitter.value(position);
+  }, function(err) {
+    console.log(&quot;getCurrentPositionErr&quot;,err);
+    emitter.error(err);
+  });
+
+
+  const watch = navigator.geolocation.watchPosition(function(position) {
+    emitter.value(position);
+  }, function(err) {
+    emitter.error(err);
+  });
+
+  return function() {
+    navigator.geolocation.clearWatch(watch);
+  };
+});
+
+const WeatherViewModel = can.DefineMap.extend({
+  geoLocation: {
+    stream: function() {
+      return geoLocationStream;
+    }
+  },
+  geoLocationError: {
+    stream: function() {
+      return geoLocationStream.withHandler(function(emitter, event) {
+        if (event.type === &quot;end&quot;) {
+          emitter.end();
+        }
+        if (event.type === &quot;error&quot;) {
+          emitter.value(event.value);
+        }
+      });
+    }
+  },
+  geoPlace: {
+    get: function(lastSet, resolve) {
+      if (this.geoLocation) {
+        fetch(&quot;https://api.flickr.com/services/rest/?&quot; +
+          can.param({
+            method: &quot;flickr.places.findByLatLon&quot;,
+            api_key: &quot;df0a221bb43ecbc2abb03426bd84e598&quot;,
+            lat: this.geoLocation.coords.latitude,
+            lon: this.geoLocation.coords.longitude,
+            format: &quot;json&quot;,
+            nojsoncallback: 1
+          })
+        ).then(response =&gt; {
+          return response.json();
+        }).then(function(responseJSON) {
+          return responseJSON.places.place[0];
+        }).then(resolve);
+      }
+    }
+  },
+  get showEnableGeoLocationMessage() {
+    return !this.geoLocation &amp;&amp; !this.geoLocationError;
+  },
+  get showEnterLocation() {
+    return !!this.geoLocationError;
+  },
+  location: &quot;string&quot;,
+  get forecastPromise() {
+    if (this.location &amp;&amp; this.location.length &gt; 2) {
+      return fetch(
+        yqlURL +
+        can.param({
+          q: 'select * from geo.places where text=&quot;' + this.location + '&quot;',
+          format: &quot;json&quot;
+        })
+      ).then(response =&gt; {
+        return response.json();
+      }).then(data =&gt; {
+        console.log(data);
+        if (Array.isArray(data.query.results.place)) {
+          return data.query.results.place;
+        } else {
+          return [data.query.results.place];
+        }
+      });
+    }
+  },
+  places: {
+    get: function(lastSet, resolve) {
+      if (this.forecastPromise) {
+        this.forecastPromise.then(resolve);
+      }
+    }
+  },
+  get showPlacePicker() {
+    return !this.place &amp;&amp; this.places &amp;&amp; this.places.length &gt; 1;
+  },
+  place: {
+    stream: function(setStream) {
+      const resetStream = this.toStream(&quot;.location&quot;).map(function() {
+        return null;
+      });
+      const onePlaceResultStream = this.toStream(&quot;.places&quot;).map(function(places) {
+        if (places.length === 1) {
+          return places[0];
+        } else {
+          return null;
+        }
+      });
+
+      return onePlaceResultStream
+      .merge(setStream)
+      .merge(resetStream)
+      .merge(this.toStream(&quot;.geoPlace&quot;));
+    }
+  },
+  pickPlace: function(place) {
+    this.place = place;
+  },
+  get forecastPromise() {
+    if (this.place) {
+      console.log(&quot;place&quot;, this.place);
+      return fetch(
+        yqlURL +
+        can.param({
+          q: 'select * from weather.forecast where woeid=' + this.place.woeid,
+          format: &quot;json&quot;
+        })
+      ).then(response =&gt; {
+        return response.json();
+      }).then(data =&gt; {
+        console.log(&quot;forecast data&quot;, data);
+        const forecast = data.query.results.channel.item.forecast;
+
+        return forecast;
+      });
+    }
+  },
+  toClassName: function(text) {
+    return text.toLowerCase().replace(/ /g, &quot;-&quot;);
+  }
+});
+can.defineStreamKefir(WeatherViewModel);
+
+const vm = new WeatherViewModel();
+
+const template = can.stache.from(&quot;app-template&quot;);
+const fragment = template(vm);
+document.body.appendChild(fragment);
+
+</code></pre>
+<div line-highlight='64-66,only'></div>
+<p>Update the <strong>HTML</strong> tab:</p>
+<pre><code class="language-html">Latitude: {{ geoLocation.coords.latitude }},
+Longitude: {{ geoLocation.coords.longitude }},
+Error: {{ geoLocationError.message }}
+
+&lt;div class=&quot;weather-widget&quot;&gt;
+  {{# if(showEnableGeoLocationMessage) }}
+    &lt;p class=&quot;loading-message&quot;&gt;
+      Please Enable Location Services…
+    &lt;/p&gt;
+  {{/ if }}
+
+  {{# if(showEnterLocation) }}
+    &lt;div class=&quot;location-entry&quot;&gt;
+      &lt;label for=&quot;location&quot;&gt;Enter your location:&lt;/label&gt;
+      &lt;input id=&quot;location&quot; type=&quot;text&quot; value:to=&quot;this.location&quot; /&gt;
+    &lt;/div&gt;
+  {{/ if }}
+
+  {{# if(forecastPromise.isPending) }}
+    &lt;p class=&quot;loading-message&quot;&gt;
+      Loading forecast…
+    &lt;/p&gt;
+  {{/ if }}
+
+  {{# if(showPlacePicker) }}
+    &lt;div class=&quot;location-options&quot;&gt;
+      &lt;label&gt;Pick your place:&lt;/label&gt;
+      &lt;ul&gt;
+        {{# for(place of forecastPromise.value) }}
+          &lt;li on:click=&quot;this.pickPlace(place)&quot;&gt;{{ place.name }}, {{ place.admin1.content }},
+              {{ place.country.code }} ({{ place.placeTypeName.content }})&lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  {{/ if }}
+
+  {{# if(place) }}
+    &lt;div class=&quot;forecast&quot;&gt;
+      &lt;h1&gt;10 day {{ place.name }} Weather Forecast&lt;/h1&gt;
+      &lt;ul&gt;
+        {{# for(forecast of forecastPromise.value) }}
+          &lt;li&gt;
+            &lt;span class=&quot;date&quot;&gt;{{ forecast.date }}&lt;/span&gt;
+            &lt;span class=&quot;description {{ toClassName(forecast.text) }}&quot;&gt;{{ forecast.text }}&lt;/span&gt;
+            &lt;span class=&quot;high-temp&quot;&gt;{{ forecast.high }}&lt;sup&gt;&amp;deg;&lt;/sup&gt;&lt;/span&gt;
+            &lt;span class=&quot;low-temp&quot;&gt;{{ forecast.low }}&lt;sup&gt;&amp;deg;&lt;/sup&gt;&lt;/span&gt;
+          &lt;/li&gt;
+        {{/ for }}
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  {{/ if }}
+
+&lt;/div&gt;
+
+</code></pre>
+<div line-highlight='12,17,only'></div>
+<h2>Result</h2>
+<p>When finished, you should see something like the following JS Bin:</p>
+<p><a class="jsbin-embed" href="https://jsbin.com/jiwabof/4/embed?html,js,output">JS Bin on jsbin.com</a></p>
+<script src="https://static.jsbin.com/js/embed.min.js?4.1.2"></script>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/commitment/recipes/weather-report/advanced/weather-report-advanced.md"},"description":"This advanced guides you through extending the [guides/recipes/weather-report-simple Beginner Weather Report Guide] to remove imperative code and automatically look up the user’s location using the\nbrowser’s [geolocation API](https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation).  Both of these will be done with event streams.\n\nThis guide continues where the [guides/recipes/weather-report-simple Beginner Weather Report Guide] left off.  It takes about 25 minutes to complete.  It was written with CanJS 4.1.\n\n","name":"guides/recipes/weather-report-advanced","title":"Weather Report","type":"page","parent":"guides/recipes/advanced","hide":true,"comment":" ","pathToRoot":"../../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix="../.."></div>
+
+	</body>
+</html>

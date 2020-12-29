@@ -1,0 +1,37 @@
+<body>
+
+
+<script>
+	window.QUnit = window.parent.QUnit;
+	window.removeMyself = window.parent.removeMyself;
+</script>
+<script>
+	steal = {
+		paths: {
+			"live-reload": "fake_live.js"
+		}
+	};
+</script>
+<script src='../../steal.js' main='@empty' data-config="./config-live.js"
+	env="window-staging">
+
+	var oldConfig = System.config;
+	System.config = function(cfg){
+		if(cfg.envs) {
+			setTimeout(checkConfig, 3);
+		}
+		return oldConfig.apply(this, arguments);
+	};
+
+	function checkConfig() {
+		if(window.QUnit) {
+			QUnit.equal(System.map.mod, "other", "Map was applied");
+			QUnit.start();
+			removeMyself();
+		} else {
+			console.log("Map:", System.map);
+		}
+	}
+
+</script>
+</body>

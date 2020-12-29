@@ -1,0 +1,10 @@
+{
+  "name": "steal-conditional-test",
+	"main": "main",
+	"version": "0.0.1",
+	"system": {
+		"configDependencies": [
+			"./conditional"
+		]
+	}
+}

@@ -1,0 +1,37 @@
+.carousel {
+	list-style-type: none;
+	margin: 0 auto;
+	padding: 0;
+}
+.carousel li {
+	display: inline-block;
+	margin-left: 30px;
+	text-align: left;
+}
+.carousel li:first-child {
+	margin-left: 0px;
+}
+.carousel li a {
+	font-size: 18px;
+	line-height: 24px;
+	text-decoration: none;
+	display: block;
+	width: 200px;
+}
+.carousel li img, .carousel li a canvas.gsCanvas {
+	display: block;
+	border: 3px solid @color;
+	.border-radius(@borderRadius);
+}
+.carousel li a:hover img {
+	border-color: @dark;
+}
+.gsWrapper, .carousel li a canvas.gsCanvas {
+	display: block;
+}
+.carousel li div {
+	margin-top: 4px;
+}
+.index .carousel li a {
+	width: 163px;
+}

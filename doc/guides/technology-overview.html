@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/experiment/technology/technology.md
+	@page guides/technology-overview
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Technology Overview | getting started | Guides | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="Learn the basics of CanJS’s technology.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Learn the basics of CanJS’s technology.">
+	<meta property="og:title" content="Technology Overview | getting started | Guides | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "Learn the basics of CanJS’s technology.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Technology Overview | getting started | Guides | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/technology-overview" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>getting started</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="crud-beginner.html"
+							title="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+							CRUD Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="setup.html"
+							title="Learn how to install CanJS in your environment.">
+							Setting Up CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="technology-overview.html"
+							title="Learn the basics of CanJS’s technology.">
+							Technology Overview
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>topics</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="html.html"
+							title="Learn how to update HTML and listen to user interactions.">
+							HTML
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="routing.html"
+							title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+							Routing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="data.html"
+							title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">
+							Service Layer
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="debugging.html"
+							title="Learn how to debug CanJS applications.">
+							Debugging
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="forms.html"
+							title="Learn how to create amazing &lt;form&gt;s with CanJS.">
+							Forms
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="testing.html"
+							title="Learn how to test CanJS applications.">
+							Testing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="logic.html"
+							title="Learn how to write observables in an organized, maintainable, and testable way.">
+							Logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="server-side-rendering.html"
+							title="Learn how to set up SSR for CanJS.">
+							Server-Side Rendering
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>app guides</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="chat.html"
+							title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+							Chat Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="todomvc.html"
+							title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+							TodoMVC Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/todomvc-with-steal.html"
+							title="This tutorial walks through building TodoMVC with StealJS. It includes KeyNote presentations covering CanJS core libraries.">
+							TodoMVC with StealJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>beginner recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/canvas-clock.html"
+							title="This beginner guide walks you through building a clock with the Canvas API.">
+							Canvas Clock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-simple.html"
+							title="This beginner guide walks through building a very simple credit card payment form.  It uses Stripe.js v2 API to create a token which can be used to create a charge.  It also performs simple validation on the payment form values.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-simple.html"
+							title="This beginner guide walks you through building a simple file navigation widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.0.0. Check out the file-navigator-advanced for an example that makes AJAX requests for its data and uses can-stache-element.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/signup-simple.html"
+							title="This beginner guide walks through building simple signup, login forms and a logout button.">
+							Signup and Login
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/video-player.html"
+							title="This beginner guide walks you through building custom video controls around a video element.">
+							Video Player
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/weather-report-simple.html"
+							title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.2.">
+							Weather Report
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>intermediate recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/cta-bus-map.html"
+							title="This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map. You&#x27;ll learn how to create a StacheElement that integrates with 3rd party widgets.">
+							CTA Bus Map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/modals.html"
+							title="This intermediate guide shows how to create a multiple modal form.">
+							Multiple Modals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/text-editor.html"
+							title="This intermediate guide walks you through building a basic rich text editor.">
+							Text Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/tinder-carousel.html"
+							title="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+							Tinder Carousel
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>advanced recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-advanced.html"
+							title="This advanced guide walks through building a simple credit card payment form with validations. It doesn’t use can-define. Instead it uses Kefir.js streams to make a ViewModel. can-kefir is used to make the Kefir streams observable to can-stache.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-advanced.html"
+							title="This advanced guide walks you through building a file navigation widget that requests data with fetch. It takes about 45 minutes to complete.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/playlist-editor.html"
+							title="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+							Playlist Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/search-list-details.html"
+							title="This advanced guide walks through building a Search, List, Details flow with lazy-loaded routes.">
+							Search, List, Details
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>upgrade</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-3.html"
+							title="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+							Migrating to CanJS 3
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-4.html"
+							title="This guide walks you through the step-by-step process to upgrade a 3.x app to CanJS 4.">
+							Migrating to CanJS 4
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-5.html"
+							title="This guide walks you through the process to upgrade a 4.x app to CanJS 5.x.">
+							Migrating to CanJS 5
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-6.html"
+							title="This guide walks you through the process to upgrade a 5.x app to CanJS 6.x.">
+							Migrating to CanJS 6
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="upgrade/using-codemods.html"
+							title="Learn how to migrate your app to CanJS 6 using can-migrate.">
+							Using Codemods
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>other</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="api.html"
+							title="This page walks through how to use and understand CanJS’s API documentation.">
+							Reading the API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Technology Overview</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/experiment/technology/technology.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Learn the basics of CanJS’s technology.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <style>
+table.panels .background td {
+    background: #f4f4f4;
+    padding: 5px 5px 5px 5px;
+    border: solid 1px white;
+    margin: 1px;
+    vertical-align: top;
+}
+table.panels pre {
+    margin-top: 0px;
+}
+.obs {color: #800020;}
+.code-toolbar + a {
+    text-align: center; color: gray; display: block;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+}
+.object-svg {
+    max-width: 600px;
+    padding-bottom: 15px;
+}
+</style>
+<h2>Overview</h2>
+<p>CanJS, at its most simplified, consists of key-value <span class='obs'>observables</span>
+connected to web browser APIs using various libraries.</p>
+<object type='image/svg+xml' data='../../docs/can-guides/experiment/technology/overview.svg' class='bit-docs-screenshot object-svg'>
+    Observables are the center hub.  They are connected to the DOM by the view layer, the service layer by the data modeling layer, and the window location by the routing layer
+</object>
+<p>The general idea is that you create <span class='obs'>observable</span> objects that encapsulate
+the logic and state of your application and connect those <span class='obs'>observable</span>
+objects to:</p>
+<ul>
+<li>The Document Object Model (DOM) to update your <a href="html.html" title="Learn how to update HTML and listen to user interactions.">HTML</a> automatically.</li>
+<li>The browser URL to support the forward and back buttons through <a href="routing.html" title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">Routing</a>.</li>
+<li>Your service layer to make receiving, creating, updating, and deleting <a href="data.html" title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">service data</a> easier.</li>
+</ul>
+<p>Instead of worrying about calling the various browser APIs, CanJS abstracts this
+away, so you can focus on the logic of your application. The logic of your
+application is contained within <span class='obs'>observables</span>.</p>
+<p>The rest of this page walks through the basics of <span class='obs'>observables</span> and brief examples
+of connecting observables to browser APIs. For a deeper dive, please read through the <a href="html.html" title="Learn how to update HTML and listen to user interactions.">HTML</a>, <a href="routing.html" title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">Routing</a> and <a href="data.html" title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">Service Layer</a>
+guides.</p>
+<h2>Key-Value Observables</h2>
+<p>The <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">ObservableObject</a> and
+<a href="../can-observable-array.html" title="Create observable arrays with defined properties.">ObservableArray</a> <span class='obs'>observables</span> define the logic and state
+in your application. For example, the following uses <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">ObservableObject</a> to:</p>
+<ul>
+<li>Model a simple <code>Counter</code> type.</li>
+<li>Create instances of <code>Counter</code>, call its methods, and inspect its state.</li>
+</ul>
+<pre><code class="language-js">import {ObservableObject} from &quot;can&quot;;
+
+// Extend ObservableObject to create a custom observable type.
+class Counter extends ObservableObject {
+  static props = {
+    // Defines a `count` property that defaults to 0.
+    count: 0
+  }
+
+  // Defines an `increment` method that increments
+  // the `count` property.
+  increment() {
+    this.count++;
+  }
+}
+
+// Create an instance of the Counter observable type.
+const myCounter = new Counter();
+
+// Read the `count` property.
+console.log( myCounter.count ) //-&gt; 0
+
+// Calls the `increment` method.
+myCounter.increment()
+
+// Read the `count` property again.
+console.log( myCounter.count ) //-&gt; 1
+</code></pre>
+<div class='codepen'></div>
+<p><code>myCounter</code> is an instance of <code>Counter</code>. <code>myCounter.count</code> is part of the <em>state</em> of the <code>myCounter</code> instance.  <code>myCounter.increment</code> is part of the <em>logic</em> that controls the
+state of <code>myCounter</code>.</p>
+<p><code>myCounter</code> is an <span class='obs'>observable</span> because you can listen to when
+its state changes.  The following uses <a href="../can-event-queue/map/map.listenTo.html" title="Listen to an event and register the binding for simplified unbinding.">listenTo</a>
+to log each time the <a href="../can-define/map/map/PropertyNameEvent.html" title="Event fired when a property on the map changes values.">count</a> changes:</p>
+<pre><code class="language-js">import {ObservableObject} from &quot;can&quot;;
+
+class Counter extends ObservableObject {
+  static props = {
+    count: 0
+  }
+
+  increment() {
+    this.count++;
+  }
+}
+
+const myCounter = new Counter();
+
+myCounter.listenTo(&quot;count&quot;, (event, newCount) =&gt; {
+  console.log(newCount); // logs 1, 10, then 11
+});
+
+myCounter.increment();
+myCounter.count = 10;
+myCounter.increment();
+</code></pre>
+<div line-highlight='15-17'></div>
+<div class='codepen'></div>
+<p><a href="../can-observable-array.html" title="Create observable arrays with defined properties.">ObservableArray</a> creates <span class='obs'>observable</span> lists. Observable lists are most commonly
+used with the <a href="#Observablesandtheservicelayer">service layer</a>. The following
+defines a <code>Counters</code> list type. Instances of <code>Counters</code> will have a <code>sum</code> property that returns the sum of
+each <code>Counter</code> within the list:</p>
+<pre><code class="language-js">import {ObservableObject, ObservableArray, type} from &quot;can&quot;;
+
+class Counter extends ObservableObject {
+  static props = {
+    count: 0
+  }
+
+  increment() {
+    this.count++;
+  }
+}
+
+class Counters extends ObservableArray {
+  // Specifies the type of items in the list.
+  // Plain objects will be converted to Counter instances.
+  static items = type.convert(Counter)
+
+  // Defines a getter for sum
+  get sum(){
+    // Loop through each counter and sum its count;
+    let sum = 0;
+    this.forEach( (counter) =&gt; sum += counter.count );
+    return sum;
+  }
+}
+
+// Create an instance of Counters
+let myCounters = new Counters([
+  new Counter(),
+  // Initializes count with value 3
+  new Counter({count: 3}),
+  // Plain objects will be converted to Counter instances.
+  {count: 4}
+]);
+
+console.log( myCounters[0].count ) //-&gt; 0
+
+console.log( myCounters.sum )      //-&gt; 7
+
+myCounters[0].increment();
+console.log( myCounters.sum )      //-&gt; 8
+</code></pre>
+<div class='codepen'></div>
+<blockquote>
+<p><strong>NOTE:</strong> CanJS application logic is coded within instances of <a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">ObservableObject</a> and <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">ObservableArray</a>.
+You often don’t need the DOM for unit testing!</p>
+</blockquote>
+<p><a href="../can-observable-object.html" title="Create observable objects used to manage state in explicitly defined ways.">ObservableObject</a> and <a href="../can-observable-array.html" title="Create observable arrays with defined properties.">ObservableArray</a> have a wide variety of features and shorthands for defining property behavior. For more information about how to write logic within
+CanJS’s observables read the <a href="../can-observable-object.html#Use" title="Create observable objects used to manage state in explicitly defined ways.">ObservableObject Use section</a> and the
+<a href="../can-observable-object/object.types.definitionObject.html" title="Defines the type, initial value, and get, set, and serialize behavior for an
+observable property.  These behaviors can be specified with as an Object,
+Constructor function, or a can-type.typeobject.">DefinitionObject documentation</a>.</p>
+<h2>Observables and HTML elements</h2>
+<p>CanJS applications use <a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">Components</a> to connect <span class='obs'>observables</span>
+to a page's HTML elements. We can use <a href="../can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">StacheElement</a> to create a counting widget
+for the <code>Counter</code> <span class='obs'>observables</span> we just created.</p>
+<p>The following widget counts the number of times the <button>+1</button> button is clicked:</p>
+<div class='demo_wrapper' data-demo-src='demos/technology-overview/my-counter.html'></div>
+<div class='codepen'></div>
+<p>In CanJS, widgets are encapsulated with custom elements. Custom elements allow us to put an
+element in our HTML like <code>&lt;my-counter&gt;&lt;/my-counter&gt;</code>, and the widget will spring to life.</p>
+<p>The previous demo defines its <code>view</code> and <code>ViewModel</code> as separate entities. However,
+a Component's <a href="../can-component.prototype.ViewModel.html" title="Defines a class used to provide values and methods to the component’s view. The class is initialized with values specified by the component element’s data bindings.">ViewModel</a> and view are typically defined inline as follows:</p>
+<pre><code class="language-html">&lt;my-counter&gt;&lt;/my-counter&gt;
+
+&lt;script type=&quot;module&quot;&gt;
+import { StacheElement } from &quot;can&quot;;
+
+class MyCounter extends StacheElement {
+  static view = `
+    Count: &lt;span&gt;{{this.count}}&lt;/span&gt;
+    &lt;button on:click='this.increment()'&gt;+1&lt;/button&gt;
+  `
+
+  static props = {
+    count: 0
+  }
+
+  increment() {
+    this.count++;
+  }
+}
+customElements.define(&quot;my-counter&quot;, MyCounter);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<p>You might have noticed that StacheElements are mostly 2 parts:</p>
+<ul>
+<li>A <a href="../can-stache-element/static.view.html" title="Provides a way to render the element's innerHTML using a can-stache template.">view</a> that specifies the HTML content within the custom element. In this case, we’re adding a <code>&lt;span&gt;</code> and a <code>&lt;button&gt;</code> within the <code>&lt;my-counter&gt;</code> element. Magic tags
+like <code>{{count}}</code> are provided by <a href="../can-stache.html" title="Live binding templates.">stache</a> and bindings like <code>on:click</code> are provided by
+<a href="../can-stache-bindings.html" title="Listen to events and create one-way and two-way bindings.">stacheBindings</a>.</li>
+<li><a href="../can-observable-object/object.static.props.html" title="Specifies properties and their associated definitions.">Properties</a> that manages the logic and state of the application.</li>
+</ul>
+<p>These work together to receive input from the user, update the state of the application, and then update
+the HTML the user sees accordingly. See how in this 2 minute video:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/3zMwoEuyX9g" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<p>For more information on how to connect observables to the DOM, read the
+<a href="html.html" title="Learn how to update HTML and listen to user interactions.">HTML</a> guide.</p>
+<h2>Observables and the browser's location</h2>
+<p>CanJS applications use <a href="../can-route.html" title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">route</a> (or mixin <a href="../can-route-pushstate.html" title="An observable that can be used as can-route's can-route.urlData.">RoutePushstate</a>) to connect an <span class='obs'>observable</span> to the browser's URL. The observable acts like a key-value
+store of the data in the URL.</p>
+<p>The following example shows that:</p>
+<ul>
+<li>When the observable state updates, the URL changes.</li>
+<li>When the URL changes, the observable state updates.</li>
+</ul>
+<pre><code class="language-js">import {route, ObservableObject} from &quot;can&quot;;
+
+location.hash = &quot;#!&amp;page=todos&amp;id=1&quot;;
+
+route.data = new ObservableObject();
+route.start();
+
+// The route data matches what's in the hash.
+console.log(route.data.serialize())
+//-&gt; {id: &quot;1&quot;, page: &quot;todos&quot; }
+
+// If you change the route data ...
+route.data.id = 2;
+
+setTimeout(() =&gt; {
+    // ... the hash is updated!
+    console.log(location.hash)
+    //-&gt; &quot;#!&amp;page=todos&amp;id=2&quot;
+
+    // If you change the hash ...
+    location.hash = &quot;#!&amp;page=login&quot;
+},20);
+
+setTimeout(()=&gt;{
+    // ... the route data is updated!
+    console.log(route.data.serialize())
+    //-&gt; { page: &quot;login&quot; }
+},40);
+</code></pre>
+<div class='codepen'></div>
+<p>The following shows the browser's forward and back buttons connected to the <code>&lt;my-counter&gt;</code> Component's observable state. Click <code>+1</code> a few times, then click
+the forward (<code>⇦</code>) and back (<code>⇨</code>) buttons to see the count change:</p>
+<div class='demo_wrapper' data-demo-src='demos/technology-overview/route-counter.html'></div>
+<p>Notice how the URL changes when you click the <code>+1</code> button AND the <em>Count</em> changes when the
+forward and back button are clicked.</p>
+<p>The following connects the <code>&lt;my-counter&gt;</code> to the browser's URL:</p>
+<pre><code class="language-html">&lt;mock-url&gt;&lt;/mock-url&gt;
+&lt;my-counter&gt;&lt;/my-counter&gt;
+
+&lt;script type='module'&gt;
+// Imports the &lt;mock-url&gt; element that provides
+// a fake back, forward, and URL controls.
+import &quot;//unpkg.com/mock-url@5&quot;;
+
+import {route, StacheElement} from &quot;can&quot;;
+
+class MyCounter extends StacheElement {
+  static view = `
+    Count: &lt;span&gt;{{this.count}}&lt;/span&gt;
+    &lt;button on:click='this.increment()'&gt;+1&lt;/button&gt;
+  `
+
+  static props = {
+    count: 0
+  }
+
+  increment() {
+    this.count++;
+  }
+}
+customElements.define(&quot;my-counter&quot;, MyCounter);
+
+// The `.data` property specifies the observable to cross
+// bind the URL to.
+route.data = document.querySelector(&quot;my-counter&quot;);
+route.start();
+&lt;/script&gt;
+</code></pre>
+<div line-highlight='29-30'></div>
+<div class='codepen'></div>
+<p>Use <a href="../can-route.register.html" title="Create a route matching rule.">route.register</a> to create routing rules.
+Instead of URLs like <code>#!&amp;count=1</code>, <code>#!&amp;count=2</code>, <code>#!&amp;count=3</code>;
+the following changes the URLs to look like <code>#!1</code>, <code>#!2</code>, <code>#!3</code>:</p>
+<pre><code class="language-html">&lt;mock-url&gt;&lt;/mock-url&gt;
+&lt;my-counter&gt;&lt;/my-counter&gt;
+
+&lt;script type='module'&gt;
+// Imports the &lt;mock-url&gt; element that provides
+// a fake back, forward, and URL controls.
+import &quot;//unpkg.com/mock-url@^5.0.0&quot;;
+
+import {route, StacheElement} from &quot;can&quot;;
+
+class MyCounter extends StacheElement {
+  static view = `
+    Count: &lt;span&gt;{{this.count}}&lt;/span&gt;
+    &lt;button on:click='this.increment()'&gt;+1&lt;/button&gt;
+  `
+
+  static props = {
+    count: 0
+  }
+
+  increment() {
+    this.count++;
+  }
+}
+customElements.define(&quot;my-counter&quot;, MyCounter);
+
+// Register rules that translate from the URL to
+// setting properties on the cross-bound observable.
+route.register(&quot;{count}&quot;);
+route.data = document.querySelector(&quot;my-counter&quot;);
+route.start();
+&lt;/script&gt;
+</code></pre>
+<div line-highlight='29'></div>
+<div class='codepen'></div>
+<p>For more information on how to connect observables to the browser's URL, read the
+<a href="routing.html" title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">Routing</a> guide.</p>
+<h2>Observables and the service layer</h2>
+<p>CanJS applications use models to connect
+<span class='obs'>observables</span> to backend services. For example,
+lets say the service layer is providing a JSON list of todo data at <code>/api/todos</code>. The
+response looks like:</p>
+<pre><code class="language-js">{
+    data: [
+        { &quot;id&quot;: 1, &quot;name&quot;: &quot;cook food&quot;,
+          &quot;complete&quot;: false, &quot;dueDate&quot;: &quot;Wed Jul 11 2018 13:42:31 GMT-0500&quot; },
+        { &quot;id&quot;: 2, &quot;name&quot;: &quot;do taxes&quot;,
+          &quot;complete&quot;: true, &quot;dueDate&quot;: &quot;Sun Jul 29 2018 20:58:25 GMT-0500&quot; },
+        ...
+    ]
+}
+</code></pre>
+<p>The following loads this list of data and logs it to the console by:</p>
+<ul>
+<li>Defining an observable data type to represent individual todos (<code>Todo</code>).</li>
+<li>Defining an observable data type to represent a list of todos (<code>Todo.List</code>).</li>
+<li>Connecting those observable data types to the RESTFUL service layer
+with <a href="../can-rest-model.html" title="Connect a type to a restful service layer.">restModel</a>.</li>
+<li>Using the <a href="../can-connect/can/map/map.getList.html" title="Retrieve a list of instance.">getList</a> method mixed-into the <code>Todo</code> type to get
+the todos from the server and log them to the console.</li>
+</ul>
+<pre><code class="language-js">import {restModel, ObservableObject, ObservableArray, type } from &quot;can&quot;;
+import mockTodosService from &quot;//unpkg.com/todos-fixture@1&quot;;
+
+// Defines the observable Todo type and its properties
+class Todo extends ObservableObject {
+  static props = {
+    // `identity: true` specifies that `id` values must be unique.
+    id: { type: Number, identity: true },
+    complete: false,
+    dueDate: type.convert(Date),
+    name: String
+  }
+}
+
+// Defines an observable list of Todo instances and its methods
+Todo.List = class extends ObservableArray {
+  static items = type.convert(Todo)
+
+  // A helper method to complete every todo in the list.
+  completeAll(){
+    return this.forEach((todo) =&gt; { todo.complete = true; });
+  }
+}
+
+// Mixes in methods on `Todo` useful for
+// creating, retrieving, updating and deleting
+// data at the URL provided.
+restModel({
+  Map: Todo,
+  url: &quot;/api/todos/{id}&quot;
+});
+
+// Call to setup the mock server before we make a request.
+mockTodosService(20);
+
+// Gets a Promise that resolves to a `Todo.List` of `Todo` instances.
+let todosPromise = Todo.getList();
+todosPromise.then(function(todos){
+  // .get() converts the Todo instances back to plain JS objects
+  // for easier to read logging.
+  console.log(todos.get())
+});
+</code></pre>
+<div line-highlight='28-31,37-42'></div>
+<div class='codepen'></div>
+<p>The following lists the todos in the page by defining a <code>&lt;todo-list&gt;</code> component
+that:</p>
+<ul>
+<li>Gets a promise that resolves to a list of all todos with <code>Todo.getList({})</code>.</li>
+<li>Loops through the list of todos and creates an <code>&lt;li&gt;</code> for each one with
+<code>{{# for(todo of todosPromise.value) }}</code>.</li>
+</ul>
+<pre><code class="language-html">&lt;todo-list&gt;&lt;/todo-list&gt;
+
+&lt;script type='module'&gt;
+import {restModel, ObservableObject, ObservableArray, StacheElement, type } from &quot;can&quot;;
+import mockTodosService from &quot;//unpkg.com/todos-fixture@1&quot;;
+
+class Todo extends ObservableObject {
+  static props = {
+    id: { type: Number, identity: true },
+    complete: false,
+    dueDate: type.convert(Date),
+    name: String
+  }
+}
+
+Todo.List = class extends ObservableArray {
+  static items = Todo;
+
+  completeAll(){
+    return this.forEach((todo) =&gt; { todo.complete = true; });
+  }
+}
+
+restModel({
+  Map: Todo,
+  url: &quot;/api/todos/{id}&quot;
+});
+
+mockTodosService(20);
+
+class TodoListElement extends StacheElement {
+  static view = `
+    &lt;ul&gt;
+      {{# for(todo of this.todosPromise.value) }}
+        &lt;li&gt;
+          &lt;input type='checkbox' checked:from='todo.complete' disabled/&gt;
+          &lt;label&gt;{{todo.name}}&lt;/label&gt;
+          &lt;input type='date' valueAsDate:from='todo.dueDate' disabled/&gt;
+        &lt;/li&gt;
+      {{/ for }}
+    &lt;/ul&gt;
+  `
+
+  static props = {
+    todosPromise: {
+      get default() {
+        return Todo.getList({});
+      }
+    }
+  }
+}
+customElements.define(&quot;todo-list&quot;, TodoListElement);
+&lt;/script&gt;
+</code></pre>
+<div line-highlight='31-52'></div>
+<div class='codepen'></div>
+<p>You can do a lot more with CanJS’s data layer besides showing a list of data. Read
+the <a href="data.html" title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">Service Layer</a> guide for more information on how to:</p>
+<ul>
+<li>Create, update and delete data.</li>
+<li>Automatically insert or remove items from lists when data is created, updated or deleted (automatic list management).</li>
+</ul>
+<h2>Next Steps</h2>
+<p>Now that you've got a rough idea idea on the major pieces of CanJS, we suggest:</p>
+<ul>
+<li><a href="html.html" title="Learn how to update HTML and listen to user interactions.">HTML</a></li>
+<li><a href="routing.html" title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">Routing</a></li>
+<li><a href="data.html" title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">Service Layer</a></li>
+</ul>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/experiment/technology/technology.md"},"description":"Learn the basics of CanJS’s technology. \n","name":"guides/technology-overview","title":"Technology Overview","type":"page","parent":"guides/getting-started","order":3,"outline":{"depth":2},"comment":" ","codepen":[["\"can\"","\"//unpkg.com/can@6/core.mjs\""],["\"can/ecosystem\"","\"//unpkg.com/can@6/ecosystem.mjs\""],["\"can/everything\"","\"//unpkg.com/can@6/everything.mjs\""],["\"can/demos/technology-overview/mock-url\"","\"//unpkg.com/mock-url@^6.0.0/mock-url.mjs\""],["\"can/demos/technology-overview/route-mini-app-components\"","\"//unpkg.com/route-mini-app@^5.0.0/components.mjs\""],["return steal.import(","return import("],["\"can/demos/technology-overview/page-login\"","\"//unpkg.com/route-mini-app@^5.0.0/page-login.mjs\""],["`can/demos/technology-overview/page-${this.page}`","`//unpkg.com/route-mini-app@^5.0.0/page-${this.page}.mjs`"]],"pathToRoot":"../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix=".."></div>
+
+	</body>
+</html>

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<title>Memory tests</title>
+<button type="button">Run me</button>
+<div id="root"></div>
+<script src="../node_modules/steal/steal.js"></script>
+<script type="steal-module">
+	var Component = require("can-component");
+	var nodeLists = require("can-view-nodelist");
+
+	var MyComponent = Component.extend({
+		tag: "my-thing",
+		view: "Hello world"
+	});
+
+	function run() {
+		var inst = new MyComponent();
+		nodeLists.unregister(inst.nodeList);
+	}
+
+	document.querySelector('button').addEventListener('click', run);
+</script>

@@ -1,0 +1,13 @@
+[
+	{"can-map-define": [
+		"can-map-define.attrDefinition",
+		"can-map-define.get",
+		"can-map-define.remove",
+		"can-map-define.serialize",
+		"can-map-define.set",
+		"can-map-define.type",
+		"can-map-define.TypeConstructor",
+		"can-map-define.value",
+		"can-map-define.ValueConstructor"
+	]}
+]

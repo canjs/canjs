@@ -1,0 +1,27 @@
+<button class="customize">Customize <span class="arrow down"></span></button>
+<div class="customize-box">
+	<form method="get" action="http://bitbuilder.herokuapp.com/can.custom.js">
+		<div class="general-options">
+			<div class="dropdown">
+			<select name="configuration" class="library">
+				{{#configuration.libraries}}
+				<option value="{{id}}" {{#isDefault}}checked{{/isDefault}}>{{description}}</option>
+				{{/configuration.libraries}}
+			</select>
+			</div>
+			<input id="minified" type="checkbox" name="minify" value="true" {{#minified}}checked{{/minified}}><label for="minified" class="checkbox"></label><label for="minified">Minified</label>
+		</div>
+		<ul class="half">
+			{{#configuration.types.core.modules}}
+			<li class="checkbox-wrap"><input id="{{id}}" class="module" type="checkbox" name="plugins" value="{{path}}" {{#isDefault}}checked{{/isDefault}} {{data 'module'}}/><label for="{{id}}" class="checkbox"></label><label for="{{id}}">{{name}}</label></li>
+			{{/configuration.types.core.modules}}
+		</ul>
+		<ul class="half">
+			{{#configuration.types.plugin.modules}}
+			<li class="checkbox-wrap"><input id="{{id}}" class="module" type="checkbox" name="plugins" value="{{path}}" {{#isDefault}}checked{{/isDefault}} {{data 'module'}}/><label for="{{id}}" class="checkbox"></label><label for="{{id}}">{{name}}</label></li>
+			{{/configuration.types.plugin.modules}}
+		</ul>
+		<button class="color download" type="submit">Download</button>
+	</form>
+</div>
+<p class="button-desc">Works with: JQuery, Zepto, Dojo, Mootools, YUI</p>

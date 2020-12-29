@@ -1,0 +1,1923 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: docs/can-guides/topics/forms.md
+	@page guides/forms
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Forms | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.</title>
+	<meta name="description" content="Learn how to create amazing &lt;form&gt;s with CanJS.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Learn how to create amazing &lt;form&gt;s with CanJS.">
+	<meta property="og:title" content="Forms | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "https://github.com/canjs/canjs",
+			"description": "Learn how to create amazing &lt;form&gt;s with CanJS.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "Forms | topics | Guides | CanJS — Build CRUD apps in fewer lines of code.",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "6.6.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="../static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="guides/forms" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="../guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>getting started</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="crud-beginner.html"
+							title="Learn how to build a basic CRUD app with CanJS in 30 minutes.">
+							CRUD Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="setup.html"
+							title="Learn how to install CanJS in your environment.">
+							Setting Up CanJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="technology-overview.html"
+							title="Learn the basics of CanJS’s technology.">
+							Technology Overview
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>topics</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="html.html"
+							title="Learn how to update HTML and listen to user interactions.">
+							HTML
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="routing.html"
+							title="Learn how to make your application respond to changes in the URL and work with the browser’s back and forward buttons.">
+							Routing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="data.html"
+							title="Learn how to use can-connect to integrate service layer APIs into your CanJS application.">
+							Service Layer
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="debugging.html"
+							title="Learn how to debug CanJS applications.">
+							Debugging
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						
+           						expanded">
+						<a class="page"
+							href="forms.html"
+							title="Learn how to create amazing &lt;form&gt;s with CanJS.">
+							Forms
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="testing.html"
+							title="Learn how to test CanJS applications.">
+							Testing
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="logic.html"
+							title="Learn how to write observables in an organized, maintainable, and testable way.">
+							Logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="server-side-rendering.html"
+							title="Learn how to set up SSR for CanJS.">
+							Server-Side Rendering
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>app guides</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="chat.html"
+							title="This guide will walk you through building a real-time chat application with CanJS’s Core libraries.  It takes about 30 minutes to complete.">
+							Chat Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="todomvc.html"
+							title="This guide will walk you through building a slightly modified version of TodoMVC with CanJS’s Core libraries and can-fixture. It takes about 1 hour to complete.">
+							TodoMVC Guide
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/todomvc-with-steal.html"
+							title="This tutorial walks through building TodoMVC with StealJS. It includes KeyNote presentations covering CanJS core libraries.">
+							TodoMVC with StealJS
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>beginner recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/canvas-clock.html"
+							title="This beginner guide walks you through building a clock with the Canvas API.">
+							Canvas Clock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-simple.html"
+							title="This beginner guide walks through building a very simple credit card payment form.  It uses Stripe.js v2 API to create a token which can be used to create a charge.  It also performs simple validation on the payment form values.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-simple.html"
+							title="This beginner guide walks you through building a simple file navigation widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.0.0. Check out the file-navigator-advanced for an example that makes AJAX requests for its data and uses can-stache-element.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/signup-simple.html"
+							title="This beginner guide walks through building simple signup, login forms and a logout button.">
+							Signup and Login
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/video-player.html"
+							title="This beginner guide walks you through building custom video controls around a video element.">
+							Video Player
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/weather-report-simple.html"
+							title="This beginner guide walks you through building a simple weather report widget.  It takes about 25 minutes to complete.  It was written with CanJS 6.2.">
+							Weather Report
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>intermediate recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/cta-bus-map.html"
+							title="This intermediate guide walks you through showing Chicago Transit Authority (CTA) bus locations on a Google Map. You&#x27;ll learn how to create a StacheElement that integrates with 3rd party widgets.">
+							CTA Bus Map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/modals.html"
+							title="This intermediate guide shows how to create a multiple modal form.">
+							Multiple Modals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/text-editor.html"
+							title="This intermediate guide walks you through building a basic rich text editor.">
+							Text Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/tinder-carousel.html"
+							title="This intermediate guide walks you through building a Tinder-like carousel. Learn how to build apps that use dragging user interactions.">
+							Tinder Carousel
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>advanced recipes</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/credit-card-advanced.html"
+							title="This advanced guide walks through building a simple credit card payment form with validations. It doesn’t use can-define. Instead it uses Kefir.js streams to make a ViewModel. can-kefir is used to make the Kefir streams observable to can-stache.">
+							Credit Card
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/file-navigator-advanced.html"
+							title="This advanced guide walks you through building a file navigation widget that requests data with fetch. It takes about 45 minutes to complete.">
+							File Navigator
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/playlist-editor.html"
+							title="Learn how to use YouTube’s API to search for videos and make a playlist.  This makes authenticated requests with OAuth2. It uses jQuery++ for drag/drop events. It shows using custom attributes and custom events.  This advanced guide takes an hour to complete.  This recipe uses YouTube API Services and follows YouTube Terms of Service and Google Privacy Policy">
+							Playlist Editor
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="recipes/search-list-details.html"
+							title="This advanced guide walks through building a Search, List, Details flow with lazy-loaded routes.">
+							Search, List, Details
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>upgrade</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-3.html"
+							title="This guide walks you through the step-by-step process to upgrade a 2.x app to CanJS 3.">
+							Migrating to CanJS 3
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-4.html"
+							title="This guide walks you through the step-by-step process to upgrade a 3.x app to CanJS 4.">
+							Migrating to CanJS 4
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-5.html"
+							title="This guide walks you through the process to upgrade a 4.x app to CanJS 5.x.">
+							Migrating to CanJS 5
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../migrate-6.html"
+							title="This guide walks you through the process to upgrade a 5.x app to CanJS 6.x.">
+							Migrating to CanJS 6
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="upgrade/using-codemods.html"
+							title="Learn how to migrate your app to CanJS 6 using can-migrate.">
+							Using Codemods
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>other</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="api.html"
+							title="This page walks through how to use and understand CanJS’s API documentation.">
+							Reading the API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="../community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>Forms</h1>
+			<ul class="title-social">
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/canjs/edit/master/docs/can-guides/topics/forms.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Learn how to create amazing <code>&lt;form&gt;</code>s with CanJS.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+
+
+
+  
+    <section class="body">
+    <h2>Overview</h2>
+<p>There are three main tasks when working with forms and form elements:</p>
+<ul>
+<li>setting form element attributes based on view-model data</li>
+<li>responding to browser events</li>
+<li>converting data to formats convenient for your business logic</li>
+</ul>
+<p>CanJS provides many useful utilities and techniques to help with these tasks. This guide will walk you through:</p>
+<ul>
+<li>binding to form elements using <a href="forms.html#Attributebinding" title="Learn how to create amazing &lt;form&gt;s with CanJS.">one-way</a>, <a href="forms.html#Two_waybinding" title="Learn how to create amazing &lt;form&gt;s with CanJS.">two-way</a>, and <a href="forms.html#Eventbinding" title="Learn how to create amazing &lt;form&gt;s with CanJS.">event</a> binding</li>
+<li>combining bindings in a <a href="forms.html#Datadown_actionsup" title="Learn how to create amazing &lt;form&gt;s with CanJS.">“data down, actions up”</a> pattern</li>
+<li>using shorthand bindings like <a href="forms.html#Bindingattributesonspecificevents" title="Learn how to create amazing &lt;form&gt;s with CanJS."><code>on:input:value:to</code></a></li>
+<li>storing view-related data in <a href="forms.html#Bindingtotemplatevariables" title="Learn how to create amazing &lt;form&gt;s with CanJS.">template variables</a></li>
+<li>working with <a href="forms.html#Commonformelements" title="Learn how to create amazing &lt;form&gt;s with CanJS.">common form elements</a></li>
+<li>using type converters like <a href="forms.html#Numberinput" title="Learn how to create amazing &lt;form&gt;s with CanJS."><code>type=&quot;number&quot;</code></a></li>
+<li>using more complex converters like <a href="forms.html#Bindingacheckboxtonon_booleanvalues" title="Learn how to create amazing &lt;form&gt;s with CanJS.">either-or</a>, <a href="forms.html#Bindingcheckboxestoalist" title="Learn how to create amazing &lt;form&gt;s with CanJS.">boolean-to-inList</a>, <a href="forms.html#Radiobutton" title="Learn how to create amazing &lt;form&gt;s with CanJS.">equal</a>, and <a href="forms.html#Bindingoptionsbyindex" title="Learn how to create amazing &lt;form&gt;s with CanJS.">index-to-selected</a></li>
+<li>using custom events like <a href="forms.html#BindingtotheEnterkey" title="Learn how to create amazing &lt;form&gt;s with CanJS.">enter</a> and <a href="forms.html#Radiobutton" title="Learn how to create amazing &lt;form&gt;s with CanJS.">radiochange</a></li>
+<li>using custom attributes such as <a href="forms.html#Selectmultiple" title="Learn how to create amazing &lt;form&gt;s with CanJS.">values</a> and <a href="forms.html#Bindingtotemplatevariables" title="Learn how to create amazing &lt;form&gt;s with CanJS.">focused</a></li>
+<li>validating forms using <a href="forms.html#Manualformvalidation" title="Learn how to create amazing &lt;form&gt;s with CanJS.">virtual properties</a> and validation libraries like <a href="forms.html#Formvalidationusingaplugin" title="Learn how to create amazing &lt;form&gt;s with CanJS.">validatejs</a></li>
+<li>indentifying and navigating <a href="forms.html#Bindingconflicts" title="Learn how to create amazing &lt;form&gt;s with CanJS.">bindings conflicts</a></li>
+<li>working with <a href="forms.html#Workingwithrelateddata" title="Learn how to create amazing &lt;form&gt;s with CanJS.">related data</a>, <a href="forms.html#Usingpromises" title="Learn how to create amazing &lt;form&gt;s with CanJS.">promises</a>, and <a href="forms.html#Resettingaselectionwhenitsparentlistchanges" title="Learn how to create amazing &lt;form&gt;s with CanJS.">parent-child relationships</a></li>
+</ul>
+<p>We recommend reading the <a href="forms.html#Bindings" title="Learn how to create amazing &lt;form&gt;s with CanJS.">Bindings overview</a> section first before jumping to the topic that interests you—or start at the top to become an expert on it all.</p>
+<h2>Bindings</h2>
+<p>When working with form elements, there are two basic kinds of bindings—<em>event bindings</em> and <em>attribute bindings</em>. Event bindings allow you to respond to <a href="https://developer.mozilla.org/en-US/docs/Web/Events" title="DOM Events">DOM Events</a> and attribute bindings allow you to bind the value of <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes" title="HTML Attributes">HTML Attributes</a> to properties in your <a href="../can-view-scope.html" title="Create a lookup node for keys.">scope</a>.</p>
+<p>The following sections will explain how to use each of these bindings on their own, as well as how to combine them in more advanced binding formats.</p>
+<h3>Event binding</h3>
+<p>Event bindings allow you to respond to <a href="https://developer.mozilla.org/en-US/docs/Web/Events" title="DOM Events">DOM Events</a>. To set up an event binding, add an attribute to your element like <code>on:DOM_EVENT=&quot;CALL_EXPRESSION&quot;</code> where <code>DOM_EVENT</code> is the event you want to respond to and <code>CALL_EXPRESSION</code> is a <a href="../can-stache/expressions/call.html" title="">Call Expression</a> for the function you want to call when the event occurs. Here is a simple example:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/bindings-event.html'></div>
+<p>This example calls the <code>plusOne</code> function in the scope when a <code>&quot;click&quot;</code> event is triggered on the button. There are many other events that you can listen to. Many of these will be shown in the examples throughout this guide, or you can take a look at <a href="https://developer.mozilla.org/en-US/docs/Web/Events" title="https://developer.mozilla.org/en-US/docs/Web/Events">https://developer.mozilla.org/en-US/docs/Web/Events</a> for a list.</p>
+<h3>Attribute binding</h3>
+<p>Unlike event bindings, which can only be used to call a function when an event occurs, attribute bindings can be used in two directions.</p>
+<p>You can use attribute bindings to update the value of an attribute when a property in the scope changes:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/bindings-attribute-tochild.html'></div>
+<p>In this example, we create a <code>progressValue</code> property in the scope that continually counts up from 0 to 100. We then use <code>value:from=&quot;progressValue&quot;</code> to set the <code>value</code> attribute of the <code>&lt;progress&gt;</code> element whenever the <code>progressValue</code> property in the scope changes.</p>
+<p>You can also use attribute bindings to update properties in the scope when the value of an attribute changes:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/bindings-attribute-toparent.html'></div>
+<p>This example uses <code>checked:to=&quot;isItChecked&quot;</code> to update the value of the <code>isItChecked</code> property in the scope whenever the checkbox’s <code>checked</code> attribute changes.</p>
+<p>Attribute bindings work with any HTML attribute. You will see examples of attributes that are useful to bind to in the <a href="forms.html#Commonformelements" title="Learn how to create amazing &lt;form&gt;s with CanJS.">Common form elements</a> section or you can take a look at <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes" title="List of Attributes">List of Attributes</a> for a comprehensive list.</p>
+<h3>Data down, actions up</h3>
+<p>You can combine Event and Attribute bindings in a <a href="https://dockyard.com/blog/2015/10/14/best-practices-data-down-actions-up">“data down, actions up”</a> pattern to keep a form element attribute in sync with a property in your scope:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/bindings-ddau.html'></div>
+<p>This example uses <code>value:from=&quot;name&quot;</code> to set the <code>value</code> attribute of both text fields when <code>name</code> in the scope changes. It also uses <code>on:change=&quot;handleAction('set', 'name', scope.element.value)&quot;</code> to listen for <code>&quot;change&quot;</code> events on the text fields and call the <code>handleAction</code> function with the text field’s <a href="http://localhost/canjs/doc/can-stache/keys/scope" title="value">value</a>.</p>
+<p>Data is passed <em>down</em> from the scope to each element using <code>value:from</code> and the action of changing the data is passed <em>up</em> through <code>on:change=&quot;handleAction( /* ... */ )&quot;</code>, which means that the <code>value</code> attribute of the text field is always in sync with the <code>name</code> property in the scope.</p>
+<p>To see a larger example of this pattern, check out the <a href="forms.html#Datadown_actionsupwithmultiplecomponents" title="Learn how to create amazing &lt;form&gt;s with CanJS.">extended example</a>.</p>
+<h3>Two-way binding</h3>
+<p>You can achieve the same behavior as the previous example using <a href="../can-stache-bindings.twoWay.html" title="Two-way bind a value in the StacheElement, can-component ViewModel, or element to the parent scope.">two-way</a> binding. It is not as explicit as the “data down, actions up” approach, but it greatly reduces the boilerplate in your code. Here is the same example using two-way binding:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/bindings-two-way.html'></div>
+<p>In this example, <code>value:bind=&quot;name&quot;</code> is set on each text field to achieve two-way binding between the <code>value</code> attribute and the <code>name</code> property in the scope.</p>
+<h3>Binding attributes on specific events</h3>
+<p>One other situation where you may want to use separate attribute and event bindings is when you want to listen to events other than <code>&quot;change&quot;</code>. Attribute bindings like <code>value:to=&quot;name&quot;</code> work by listening for <a href="https://developer.mozilla.org/en-US/docs/Web/Events/change" title="change events">change events</a> in order to know when to update the scope property. For most form elements,<code>&quot;change&quot;</code> events are fired when the element loses focus—not each time the user types into the element.</p>
+<p>In order to update a value in the scope each time the user types, you could use the “data down, actions up” approach and listen <code>on:</code> <a href="https://developer.mozilla.org/en-US/docs/Web/Events/input" title="input">input</a> events, but there is also a <a href="../can-stache-bindings.toParent.html#on_VIEW_MODEL_OR_DOM_EVENT_value_to__SCOPE_VALUE_" title="One-way bind a value from the StacheElement, can-component ViewModel, or element to the parent scope.">shorthand</a> available for updating a value in the scope with the value of an attribute when a specific event occurs. In order to achieve this behavior, you can use <code>on:input:value:to=&quot;name&quot;</code>. You can combine this with <code>value:from=&quot;name&quot;</code> to achieve two-way binding with updates on input events:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/bindings-on-input-value-to.html'></div>
+<h3>Binding to template variables</h3>
+<p>All of the examples shown so far have used variables from the scope for event and attribute bindings. It can be useful to bind to variables without having to create a property on the scope for things that are purely presentational. To create variables local to the template, you can use <a href="../can-stache.helpers.let.html" title="Create a block-level variable.">let variables</a>:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/bindings-scope-vars.html'></div>
+<p>This example creates a template variable <code>focusedOnName</code> that is bound to the <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XUL/Attribute/focused" title="focused attribute">focused attribute</a> of the text field and uses it to set a class on the associated <code>&lt;span&gt;</code>. Since this is used entirely for CSS in the template, it makes sense to make <code>focusedOnName</code> a variable local to the template with <code>{{ let }}</code>.</p>
+<h2>Common form elements</h2>
+<p>The <a href="forms.html#Bindings" title="Learn how to create amazing &lt;form&gt;s with CanJS.">bindings</a> above make it easy to work with the most common form elements. The following sections describe the most useful attribute and event bindings to use with each of these elements, as well as anything else that is unique to element.</p>
+<h3>Text field</h3>
+<pre><code class="language-html">&lt;input type=&quot;text&quot;&gt;
+</code></pre>
+<p>Text fields are one of the most common form elements and have many attributes that can be useful to bind to. The most common attribute is <code>value</code>—this is the current value of the text entered into the text field.</p>
+<p>Here is an example showing different formats for binding to the <code>value</code> attribute:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-text.html'></div>
+<h4>Binding to the Enter key</h4>
+<p>CanJS also allows you to use custom events within event bindings. A custom event that is very useful with text fields is the <code>enter</code> event provided by the <a href="../can-event-dom-enter.html" title="Watch for when enter keys are pressed on a DomEventTarget.">can-event-dom-enter</a> package. This event listens for <a href="https://developer.mozilla.org/en-US/docs/Web/Events/keyup" title="keyup events">keyup events</a> and filters them to only events where the Enter key is released.</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-text-enter.html'></div>
+<blockquote>
+<p><strong>Note:</strong> since this is a custom event, you need to opt-in to using it. If you want to use the <code>enter</code> event, make sure you register it like:</p>
+<pre><code class="language-js">import domEvents from &quot;can-dom-events&quot;;
+import enterEvent from &quot;can-event-dom-enter&quot;;
+
+domEvents.addEvent(enterEvent);
+</code></pre>
+</blockquote>
+<h3>Checkbox</h3>
+<pre><code class="language-html">&lt;input type=&quot;checkbox&quot;&gt;
+</code></pre>
+<p>The simplest way to work with checkboxes in CanJS is to bind the <code>checked</code> attribute to a property in the scope:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-checkbox.html'></div>
+<p>This allows you to toggle the scope property between <code>true</code> and <code>false</code>.</p>
+<h4>Binding a checkbox to non-boolean values</h4>
+<p>You can use a checkbox to represent values other than <code>true</code> and <code>false</code> using the <a href="../can-stache-converters.either-or.html" title="A converter that two-way binds to a checkbox two values provided as arguments. This converter is useful when you have a binary decision between two fixed values.">either-or</a> converter.</p>
+<p>This converter allows you to pass a scope property and two values—the value that the scope property should be set to if the checkbox is checked and another that should be used if the checkbox is unchecked.</p>
+<blockquote>
+<p><strong>Note:</strong> you need to import the <code>can-stache-converters</code> package in order to use the <code>either-or</code> converter.</p>
+</blockquote>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-checkbox-either-or.html'></div>
+<p>Notice that the <code>{{ bestTypeOfPet }}</code> property is initially set to <code>&quot;Cats&quot;</code> because <del>that is obviously the correct answer</del> the checkbox is unchecked.</p>
+<p>If you would like to choose <code>&quot;Dogs&quot;</code> by default, you can set the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input" title="checked attribute">checked attribute</a>.</p>
+<blockquote>
+<p><strong>Note:</strong> <code>checked</code> is a boolean attribute, so it is the <em>presence</em> of this attribute that sets it to <code>true</code>. This means that any of these will set the <code>bestTypeOfPet</code> property in the scope to <code>&quot;Dogs&quot;</code>:</p>
+<ul>
+<li><code>&lt;input type=&quot;checkbox&quot; checked&gt;</code></li>
+<li><code>&lt;input type=&quot;checkbox&quot; checked=true&gt;</code></li>
+<li><code>&lt;input type=&quot;checkbox&quot; checked=false&gt;</code></li>
+<li><code>&lt;input type=&quot;checkbox&quot; checked=&quot;true&quot;&gt;</code></li>
+<li><code>&lt;input type=&quot;checkbox&quot; checked=&quot;false&quot;&gt;</code></li>
+<li><code>&lt;input type=&quot;checkbox&quot; checked=&quot;any other value&quot;&gt;</code></li>
+</ul>
+</blockquote>
+<h4>Binding checkboxes to a list</h4>
+<p>Using a checkbox to toggle a property between two values is very useful, but you often want to use checkboxes to select one or many items from a list. To do this, you can use the <a href="../can-stache-converters.boolean-to-inList.html" title="A converter that binds a boolean attribute, such as an &lt;input&gt; value, to whether or not an item is in a list.">boolean-to-inList</a> converter. This will bind the <code>checked</code> attribute to whether or not the item is in a list.</p>
+<p>The <code>boolean-to-inList</code> converter will set the <code>checked</code> attribute to <code>true</code> or <code>false</code> based on whether a value is in the list and add or remove an item from the list when the <code>checked</code> attribute changes.</p>
+<blockquote>
+<p><strong>Note:</strong> you need to import the <code>can-stache-converters</code> package in order to use the <code>boolean-to-inList</code> converter.</p>
+</blockquote>
+<p>This might be easier to understand with an example:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-checkbox-boolean-to-inlist.html'></div>
+<h3>Radio button</h3>
+<pre><code class="language-html">&lt;input type=&quot;radio&quot;&gt;
+</code></pre>
+<p>When using radio buttons in CanJS, you often want to set the value of a single scope property to a different value for each radio button in a group. The <a href="../can-stache-converters.equal.html" title="A converter that is usually for binding to a &lt;input type=&quot;radio&quot;&gt; group, so that a scope value can be set the radio group’s selected value.">equal converter</a> does exactly this.</p>
+<blockquote>
+<p><strong>Note:</strong> you need to import the <code>can-stache-converters</code> package in order to use the <code>equal</code> converter.</p>
+</blockquote>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-radio-equal.html'></div>
+<p>This example binds the <code>checked</code> attribute to the <code>equal</code> converter for each radio button, passing the <code>favoriteColor</code> scope property and the color value for each radio button.</p>
+<h3>Number input</h3>
+<pre><code class="language-html">&lt;input type=&quot;number&quot;&gt;
+</code></pre>
+<p>When working with number inputs, it is important to set the <a href="../can-observable-object/define/type.html" title="Specify a type for the property.">type</a> to <code>type.maybeConvert(Number)</code> to ensure that the value is stored as a number in the scope.</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-number.html'></div>
+<h3>File input</h3>
+<pre><code class="language-html">&lt;input type=&quot;file&quot;&gt;
+</code></pre>
+<p>When using a file input, the <code>value</code> attribute can be used to get a representation of the path to the selected file:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-file-value.html'></div>
+<p>The <code>files</code> property cannot be accessed through an attribute binding (since it is not an attribute); however, you can still use the <a href="https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications" title="File API">File API</a> by passing <code>scope.element.files</code> through a <code>&quot;change&quot;</code> event listener:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-file-files.html'></div>
+<p>You could also use <code>on:change=&quot;scope.set('selectedFiles', scope.element.files)&quot;</code> as described in the <a href="forms.html#Datadown_actionsup" title="Learn how to create amazing &lt;form&gt;s with CanJS.">Data down, actions up</a> section if you only need to display the data, but it is more likely that you would want to use the <a href="https://developer.mozilla.org/en-US/docs/Web/API/FileList" title="FileList object">FileList object</a> along with the File JavaScript API.</p>
+<h3>Date input</h3>
+<pre><code class="language-html">&lt;input type=&quot;date&quot;&gt;
+</code></pre>
+<p>When using a date input, the <code>valueAsDate</code> property can be used to bind a <code>Date</code> property on the component to the input.</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-date.html'></div>
+<h3>Select</h3>
+<pre><code class="language-html">&lt;select&gt;
+</code></pre>
+<p>When working with <code>&lt;select&gt;</code> elements, the <code>value</code> attribute of the element will be set to the <code>value</code> of the selected option. This means that using <code>value:bind=&quot;...&quot;</code> will allow you to bind the selected value to a property in the scope:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-select.html'></div>
+<p>By default, the <code>value</code> will be set to the text of the option if there is no <code>value</code> attribute. Take a look at the difference between the HTML of the previous example and the following:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-select-no-value.html'></div>
+<h4>Binding options by index</h4>
+<p>There are times when you need to use numeric indexes for the <code>&lt;option&gt;</code> values. When doing this, you can use the <a href="../can-stache-converters.index-to-selected.html" title="A converter that binds to a &lt;select&gt; value in order to two-way bind a selected item from a list to the selected item's index as a viewModel property.">index-to-selected</a> converter to keep “nice” values in your scope property.</p>
+<blockquote>
+<p><strong>Note:</strong> you need to import the <code>can-stache-converters</code> package in order to use the <code>index-to-selected</code> converter.</p>
+</blockquote>
+<p>To use this converter, pass it the property in the scope you want to bind and the list that contains the available options. It will convert the index given by the <code>value</code> of the <code>&lt;option&gt;</code> to the selected item in the list.</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-select-index-to-selected.html'></div>
+<p>The HTML for this example is intentionally verbose to make it easier to understand. Normally you would use stache to generate the <code>&lt;option&gt;</code>s directly from the <code>months</code> list like:</p>
+<pre><code class="language-html">&lt;select value:bind=&quot;index-to-selected(selectedMonth, months)&quot;&gt;
+    {{# for(months, index=index month=value) }}
+        &lt;option value:from=&quot;index&quot;&gt;{{ month }}&lt;/option&gt;
+    {{/ for }}
+&lt;/select&gt;
+</code></pre>
+<p>The <a href="../can-stache-converters.selected-to-index.html" title="A converter that binds an index in a list to the selected item's value as a viewModel property.">selected-to-index</a> converter is also very useful when you want to bind the <code>&lt;select&gt;</code> element directly to the index instead of converting it to the selected item right away but you still want to be able to use the selected item in another part of your template.</p>
+<blockquote>
+<p><strong>Note:</strong> you need to import the <code>can-stache-converters</code> package in order to use the <code>selected-to-index</code> converter.</p>
+</blockquote>
+<p>In the following example, the <code>&lt;select&gt;</code> element is using <code>value:bind=&quot;selectedIndex&quot;</code> instead of converting it from an index to the selected item. The text field below it passes that index and the <code>months</code> list to the <code>selected-to-index</code> converter in order to display the corresponding value from the <code>months</code> list. The <code>&lt;select&gt;</code> and <code>&lt;input&gt;</code> are both two-way bound, so changing either the will update the other.</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-select-selected-to-index.html'></div>
+<h4>Binding options to non-string values</h4>
+<p>There are times when you want to two-way bind the value selected and convert the string value into its primitive value (e.g. object, string). You can use the <a href="../can-stache-converters.string-to-any.html" title="A converter that binds a value to a primitive value, two-way converted back to that primitive value when the attribute changes.">string-to-any</a> converter to do so.</p>
+<p>In the following example, the selector is converting the value selected to a primitive and then two-way binding to the variable <code>primitiveValue</code>. When presenting the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof" title="&lt;code&gt;typeof primitiveValue&lt;/code&gt;"><code>typeof primitiveValue</code></a>, you can see that the string stored in the value has been converted.</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-select-string-to-any.html'></div>
+<blockquote>
+<p><strong>Note:</strong> you need to import the <code>can-stache-converters</code> package in order to use the <code>string-to-any</code> converter.</p>
+</blockquote>
+<h3>Select multiple</h3>
+<pre><code class="language-html">&lt;select multiple&gt;
+</code></pre>
+<p>When using a <code>&lt;select&gt;</code> element to select multiple values, the <code>value</code> attribute will only give the first value that was selected. In order to get a list of all selected values, CanJS provides the custom <a href="../can-attribute-observable.html" title="Create an observable value from an element's property or attribute.">values</a> attribute. This makes it very easy to work with <code>&lt;select multiple&gt;</code> elements:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-select-multiple.html'></div>
+<h3>Textarea</h3>
+<pre><code class="language-html">&lt;textarea&gt;
+</code></pre>
+<p>You can use any of the techniques for <a href="forms.html#Textfield" title="Learn how to create amazing &lt;form&gt;s with CanJS.">text fields</a> with <code>&lt;textarea&gt;</code>s:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-textarea.html'></div>
+<h3>Submit button</h3>
+<pre><code class="language-html">&lt;input type=&quot;submit&quot;&gt;
+</code></pre>
+<p>Submit buttons by default will submit the form to the server when clicked. With CanJS apps, you usually want to handle this with JavaScript instead of using this default behavior. To do this, you just need to set up an event binding and use <a href="../can-stache/keys/scope.html#scope_event" title="The template context">scope.event</a> so you can call <a href="https://developer.mozilla.org/en-US/docs/Web/API/Event/preventDefault" title="preventDefault">preventDefault</a> to prevent the form from being submitted automatically.</p>
+<p>Here is an example of what happens by default. Click the Submit button an notice that the demo reloads:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-submit-no-prevent.html'></div>
+<p>This happens because the form is being submitted, which performs a GET request for the same URL. Adding the click handler and <code>event.preventDefault</code> prevents this behavior:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-submit.html'></div>
+<p>This will prevent the form from being submitted when the user explicitly clicks the submit button or presses the Enter key while focused on one of the text fields; however, there are times when a form can be <a href="https://www.w3.org/TR/html5/single-page.html" title="implicitly submitted">implicitly submitted</a> that this <code>click</code> handler might not catch. In order to handle these cases in all browsers, use an <code>on:submit=&quot;...&quot;</code> handler directly on the <code>&lt;form&gt;</code> element:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/elements-submit-form.html'></div>
+<h2>Advanced topics</h2>
+<h3>Form validation</h3>
+<p>Validating forms in CanJS has two primary steps—validating your component and displaying errors.</p>
+<p>Separating these responsibilities by validating the component directly makes it much easier to unit test your validation rules.</p>
+<p>The following section shows how to do form validation manually.</p>
+<h4>Manual form validation</h4>
+<p>For forms with a small number of fields, validating input values can be as simple as creating <a href="../can-observable-object/define/get.html#Virtualproperties" title="Specify what happens when a certain property is read on an object. get functions
+are computed and automatically update themselves when a dependent
+observable value is changed.">virtual properties</a> that represent the validity of each user input.</p>
+<p>When the user input is invalid, errors can be displayed using a CSS class: <code>{{# if(error) }}class=&quot;error&quot;{{/ if }}</code>.</p>
+<p>Also, in this example the submit button is disabled using the <code>disabled:from=&quot;error&quot;</code> binding.</p>
+<p>Here is an example showing this kind of manual validation for a phone number:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/advanced-manual-validation.html'></div>
+<h3>Binding conflicts</h3>
+<p>There are times when using two-way binding where the attribute can become out of sync with the scope property it is bound to. To understand this, it is important to understand a little about how bindings work.</p>
+<p>When using a binding like <code>value:bind=&quot;scopeProp&quot;</code>, there are two things that get set up:</p>
+<ul>
+<li>Event Listener 1 listens for <code>&quot;change&quot;</code> events on the element, reads the <code>value</code> attribute, and sets <code>scopeProp</code></li>
+<li>Event Listener 2 listens for changes to <code>scopeProp</code> and sets the <code>value</code> attribute of the element</li>
+</ul>
+<p>The problem occurs when setting <code>scopeProp</code> causes the value of <code>scopeProp</code> to be something other than the <code>value</code> attribute of the element.</p>
+<p>For example, if <code>scopeProp</code> is defined like this:</p>
+<pre><code class="language-js">set scopeProp(val) {
+    return val.toUpperCase();
+}
+</code></pre>
+<p>In this scenario, if you type <code>&quot;hello&quot;</code> into the <code>&lt;input&gt;</code> element</p>
+<ul>
+<li>the input’s <code>value</code> attribute is set to <code>&quot;hello&quot;</code></li>
+<li>a <code>&quot;change&quot;</code> event is dispatched on the <code>&lt;input&gt;</code></li>
+<li>Event Listener 1 is triggered and calls the <code>scopeProp</code> setter</li>
+<li>the <code>scopeProp</code> setter sets the value of <code>scopeProp</code> to <code>&quot;HELLO&quot;</code></li>
+<li>Event Listener 2 is triggered and sets the <code>value</code> of the <code>&lt;input&gt;</code> to <code>&quot;HELLO&quot;</code></li>
+</ul>
+<p>If you then type <code>&quot;hello&quot;</code> in the <code>&lt;input&gt;</code> element again</p>
+<ul>
+<li>the <code>value</code> attribute is set to <code>&quot;hello&quot;</code></li>
+<li>a <code>&quot;change&quot;</code> event is dispatched on the <code>&lt;input&gt;</code></li>
+<li>Event Listener 1 is triggered and calls the <code>scopeProp</code> setter</li>
+<li>the <code>scopeProp</code> setter sets the value of <code>scopeProp</code> to <code>&quot;HELLO&quot;</code></li>
+<li>Event Listener 2 is NOT triggered since <code>scopeProp</code> did not change</li>
+</ul>
+<p>At this point the <code>value</code> attribute of the element and <code>scopeProp</code> are no longer the same. However, if you try this in the example below, you’ll notice that the two are always kept in sync:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/advanced-sticky.html'></div>
+<p>This is because when using <code>:bind</code>, CanJS will check for this scenario and update the <code>value</code> of the <code>&lt;input&gt;</code> element to be in sync with <code>scopeProp</code>.</p>
+<p>If you are using separate bindings like <code>value:from=&quot;this.scopeProp&quot; on:change:value:to=&quot;this.scopeProp&quot;</code>, <a href="https://github.com/canjs/can-stache-bindings/issues/439">this does not happen and the values can become out of sync</a>:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/advanced-not-sticky.html'></div>
+<p>With this example it is somewhat complicated to cause the issue; however, there are other scenarios that make it more likely to happen. One of these is when using the <a href="../can-observable-object/define/value.html" title="Specify the behavior of a property by listening to changes in other properties.">value behavior</a> to <em>conditionally</em> <code>resolve</code> with a new value.</p>
+<p>The following example sets up a number input that only allows the user to enter odd numbers. It does this by checking the new value whenever <code>lastSet</code> changes and only calling <code>resolve</code> if the number is odd. Try out this example below to see how this works:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/advanced-sticky-resolve.html'></div>
+<p>Since this example is using <code>value:bind=&quot;this.oddNumber&quot;</code>, it works correctly. However, if the binding is changed to <code>value:from=&quot;this.oddNumber&quot; on:input:value:to=&quot;this.oddNumber&quot;</code>, the <code>&lt;input&gt;</code> can incorrectly end up with even-numbered values:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/advanced-not-sticky-resolve.html'></div>
+<h2>Extended examples</h2>
+<h3>Data down, actions up with multiple components</h3>
+<p>The benefits of the “data down, actions up” pattern become clear when you have multiple components passing actions up to the top-level component. With this setup, there is only one place where state can change within the application, which can make debugging much easier.</p>
+<p>The following example has a top-level <code>&lt;pizza-form&gt;</code> component that keeps the lists of ingredients that a user has chosen to top their pizza. It also provides an <code>updateIngredients</code> function for handling the different actions the user can perform. The <code>&lt;pizza-form&gt;</code> passes this function to its children:</p>
+<pre><code class="language-html">&lt;p&gt;
+    Selected Ingredients:
+    {{# for(meat of this.selectedMeats) }}
+        {{ meat }},
+    {{/ for }}
+
+    {{# for(veggie of this.selectedVegetables) }}
+        {{ veggie }},
+    {{/ for }}
+
+    {{# if(this.selectedCheese) }}
+        {{ this.selectedCheese }} cheese
+    {{/ if }}
+&lt;/p&gt;
+
+&lt;div&gt;
+    &lt;select-one
+        listName:raw=&quot;cheese&quot;
+        update:from=&quot;this.updateIngredients&quot;
+        default:from=&quot;this.selectedCheese&quot;
+        options:from=&quot;this.availableCheeses&quot;&gt;
+    &lt;/select-one&gt;
+&lt;/div&gt;
+
+&lt;div&gt;
+    &lt;meat-picker
+        update:from=&quot;this.updateIngredients&quot;
+        options:from=&quot;this.availableMeats&quot;&gt;
+    &lt;/meat-picker&gt;
+&lt;/div&gt;
+
+&lt;div&gt;
+    &lt;select-many
+        listName:raw=&quot;vegetables&quot;
+        update:from=&quot;this.updateIngredients&quot;
+        options:from=&quot;this.availableVegetables&quot;&gt;
+    &lt;/select-many&gt;
+&lt;/div&gt;
+</code></pre>
+<div line-highlight='19,28,36,only'></div>
+<p>The child <code>&lt;meat-picker&gt;</code> component uses this function to clear the &quot;meats&quot; list and also passes it to a child of its own:</p>
+<pre><code class="language-html">{{ let showOptions=null }}
+&lt;div&gt;
+    &lt;label&gt;
+        Vegetarian?
+            &lt;input
+                checked:bind=&quot;not( scope.vars.showOptions )&quot;
+                on:change=&quot;this.update('meats', 'clear')&quot;
+                type=&quot;checkbox&quot;&gt;
+    &lt;/label&gt;
+
+    {{# if(showOptions) }}
+        &lt;select-many
+            update:from=&quot;update&quot;
+            listName:raw=&quot;meats&quot;
+            options:from=&quot;options&quot;&gt;
+        &lt;/select-many&gt;
+    {{/ if }}
+&lt;/div&gt;
+</code></pre>
+<div line-highlight='7,13,only'></div>
+<p>This strategy means that all updates throughout the application go through the top-level <code>updateIngredients</code> function. This makes debugging very easy since it is obvious where to put a breakpoint to trace exactly what is causing a change.</p>
+<p>Take a look at the example below to see this in <em>action</em>:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/extended-pizza-example.html'></div>
+<h3>Working with related data</h3>
+<p>The form below has three <code>&lt;select&gt;</code> elements for selecting a make, model and year. Once all three have been selected, a list of vehicles matching the selection is displayed. There are three different APIs being used to load the data for this component:</p>
+<ul>
+<li><code>/makes</code> — loads the makes</li>
+<li><code>/models</code> — loads the models and years for a selected make</li>
+<li><code>/vehicles</code> — loads the vehicles for a selected make, model, and year</li>
+</ul>
+<p>There are many useful techniques for working with related data. Before diving in to them, take a look at the example to see how it all works:</p>
+<div class='demo_wrapper' data-demo-src='demos/forms/extended-make-model-year.html'></div>
+<h4>Loading initial data</h4>
+<p>In order to load the initial data, the component makes a request to the <code>/makes</code> API when the page first loads. The component uses a <a href="../can-observable-object/define/get.html" title="Specify what happens when a certain property is read on an object. get functions
+are computed and automatically update themselves when a dependent
+observable value is changed.">getter</a> to make this API call:</p>
+<pre><code class="language-js">static props = {
+    makeId: type.maybeConvert(String),
+    makes: {
+        get() {
+            return ajax({
+                type: &quot;GET&quot;,
+                url: &quot;/makes&quot;
+            }).then(resp =&gt; resp.data);
+        }
+    },
+    modelId: {
+        type: String,
+        value({ lastSet, listenTo, resolve }) {
+            listenTo(lastSet, resolve);
+
+            listenTo(&quot;makeId&quot;, () =&gt; resolve(&quot;&quot;));
+        }
+    },
+    get modelsPromise() {
+        let makeId = this.makeId;
+        if( makeId ) {
+            return ajax({
+                type: &quot;GET&quot;,
+                url: &quot;/models&quot;,
+                data: { makeId }
+            }).then(resp =&gt; {
+                return resp.data;
+            });
+        }
+    },
+    models: {
+        async(resolve) {
+            let promise = this.modelsPromise;
+            if(promise) {
+                promise.then(resolve);
+            }
+        }
+    },
+    get model() {
+        let models = this.models,
+            modelId = this.modelId;
+
+        if(models &amp;&amp; models.length &amp;&amp; modelId) {
+            let matched = models.filter(model =&gt; {
+                return modelId == model.id;
+            });
+            return matched[0];
+        }
+    },
+    get years() {
+        let model = this.model;
+        return model &amp;&amp; model.years;
+    },
+    year: {
+        type: String,
+        value({ lastSet, listenTo, resolve }) {
+            listenTo(lastSet, resolve);
+
+            listenTo(&quot;modelId&quot;, () =&gt; resolve(&quot;&quot;));
+        }
+    },
+    vehicles: {
+        async(resolve) {
+            let year = this.year,
+                modelId = this.modelId;
+
+            if(modelId &amp;&amp; year) {
+                ajax({
+                    type: &quot;GET&quot;,
+                    url: &quot;/vehicles&quot;,
+                    data: { modelId, year }
+                }).then(resp =&gt; {
+                    resolve(resp.data);
+                });
+            } else {
+                resolve([]);
+            }
+        }
+    }
+}
+</code></pre>
+<div line-highlight='3-10,only'></div>
+<p>This value is initialized the first time the <code>makes</code> property is used in the view:</p>
+<pre><code class="language-html">&lt;select value:bind=&quot;this.makeId&quot;
+    {{# if(this.makes.isPending) }}disabled{{/ if }}&gt;
+    {{# if(this.makes.isPending) }}
+      &lt;option value=''&gt;Loading…&lt;/option&gt;
+    {{ else }}
+      {{^ this.makeId }}
+        &lt;option value=''&gt;Select a Make&lt;/option&gt;
+      {{/ this.makeId }}
+      {{# for( make of this.makes.value) }}
+        &lt;option value:from=&quot;make.id&quot;&gt;{{ make.name }}&lt;/option&gt;
+      {{/ for }}
+    {{/ if }}
+&lt;/select&gt;
+
+{{# if(this.modelsPromise) }}
+    {{# if(this.models) }}
+        &lt;select value:bind=&quot;this.modelId&quot;&gt;
+            {{^ this.modelId }}
+                &lt;option value=''&gt;Select a Model&lt;/option&gt;
+            {{/ this.modelId }}
+            {{# for(model of this.models) }}
+                &lt;option value:from=&quot;model.id&quot;&gt;{{ model.name }}&lt;/option&gt;
+            {{/ for }}
+        &lt;/select&gt;
+    {{ else }}
+        &lt;select disabled&gt;&lt;option&gt;Loading Models&lt;/option&gt;&lt;/select&gt;
+    {{/ if }}
+{{ else }}
+    &lt;select disabled&gt;&lt;option&gt;Models&lt;/option&gt;&lt;/select&gt;
+{{/ if }}
+
+{{# if(this.years) }}
+    &lt;select value:bind=&quot;this.year&quot;&gt;
+        {{^ this.year }}
+            &lt;option value=''&gt;Select a Year&lt;/option&gt;
+        {{/ this.year }}
+        {{# for(year of this.years ) }}
+            &lt;option value:from=&quot;year&quot;&gt;{{ year }}&lt;/option&gt;
+        {{/ for }}
+    &lt;/select&gt;
+{{ else }}
+    &lt;select disabled&gt;&lt;option&gt;Years&lt;/option&gt;&lt;/select&gt;
+{{/ if }}
+
+&lt;div&gt;
+    {{# for(vehicle of this.vehicles) }}
+        &lt;h2&gt;{{ vehicle.name }}&lt;/h2&gt;
+        &lt;img src:from=&quot;vehicle.thumb&quot; width=&quot;200px&quot;/&gt;
+    {{/ for }}
+&lt;/div&gt;
+</code></pre>
+<div line-highlight='2,only'></div>
+<h4>Using promises</h4>
+<p>The <code>makes</code> property is set to the result of calling <a href="../can-ajax.html" title="Make an asynchronous HTTP (AJAX) request.">can-ajax</a>, which returns a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" title="promise">promise</a>.</p>
+<p>This promise is decorated by <a href="../can-reflect-promise.html" title="Expose an observable, Map-like API on Promise types.">can-reflect-promise</a> so that in the view you can easily use metadata related to the promise’s <a href="https://github.com/domenic/promises-unwrapping/blob/master/docs/states-and-fates.md" title="state">state</a>:</p>
+<ul>
+<li><code>state</code> — one of &quot;pending&quot;, &quot;resolved&quot;, or &quot;rejected&quot;</li>
+<li><code>isPending</code> — true if the promise is neither resolved nor rejected, false otherwise.</li>
+<li><code>isResolved</code> — true if the promise is resolved, false otherwise.</li>
+<li><code>isRejected</code> — true if the promise is rejected, false otherwise.</li>
+</ul>
+<p>This also means that in order to get the <code>makes</code> data, we need to use the <code>value</code> of the promise:</p>
+<pre><code class="language-html">&lt;select value:bind=&quot;this.makeId&quot;
+    {{# if(this.makes.isPending) }}disabled{{/ if }}&gt;
+    {{# if(this.makes.isPending) }}
+      &lt;option value=''&gt;Loading…&lt;/option&gt;
+    {{ else }}
+      {{^ this.makeId }}
+        &lt;option value=''&gt;Select a Make&lt;/option&gt;
+      {{/ this.makeId }}
+      {{# for( make of this.makes.value) }}
+        &lt;option value:from=&quot;make.id&quot;&gt;{{ make.name }}&lt;/option&gt;
+      {{/ for }}
+    {{/ if }}
+&lt;/select&gt;
+
+{{# if(this.modelsPromise) }}
+    {{# if(this.models) }}
+        &lt;select value:bind=&quot;this.modelId&quot;&gt;
+            {{^ this.modelId }}
+                &lt;option value=''&gt;Select a Model&lt;/option&gt;
+            {{/ this.modelId }}
+            {{# for(model of this.models) }}
+                &lt;option value:from=&quot;model.id&quot;&gt;{{ model.name }}&lt;/option&gt;
+            {{/ for }}
+        &lt;/select&gt;
+    {{ else }}
+        &lt;select disabled&gt;&lt;option&gt;Loading Models&lt;/option&gt;&lt;/select&gt;
+    {{/ if }}
+{{ else }}
+    &lt;select disabled&gt;&lt;option&gt;Models&lt;/option&gt;&lt;/select&gt;
+{{/ if }}
+
+{{# if(this.years) }}
+    &lt;select value:bind=&quot;this.year&quot;&gt;
+        {{^ this.year }}
+            &lt;option value=''&gt;Select a Year&lt;/option&gt;
+        {{/ this.year }}
+        {{# for(year of this.years ) }}
+            &lt;option value:from=&quot;year&quot;&gt;{{ year }}&lt;/option&gt;
+        {{/ for }}
+    &lt;/select&gt;
+{{ else }}
+    &lt;select disabled&gt;&lt;option&gt;Years&lt;/option&gt;&lt;/select&gt;
+{{/ if }}
+
+&lt;div&gt;
+    {{# for(vehicle of this.vehicles) }}
+        &lt;h2&gt;{{ vehicle.name }}&lt;/h2&gt;
+        &lt;img src:from=&quot;vehicle.thumb&quot; width=&quot;200px&quot;/&gt;
+    {{/ for }}
+&lt;/div&gt;
+</code></pre>
+<div line-highlight='9,only'></div>
+<p>In order to avoid having to use <code>.value</code> every time you want to use the data, it can be very useful to split promises into two separate properties—one for the promise and one for the value. Using this “promise splitting” technique, this code could be written like this:</p>
+<pre><code class="language-js">makesPromise: {
+    get() {
+        return ajax({
+            type: &quot;GET&quot;,
+            url: &quot;/makes&quot;
+        }).then(resp =&gt; {
+            return resp.data;
+        });
+    }
+},
+makes: {
+    async(resolve) {
+        this.makesPromise.then(resolve);
+    }
+}
+</code></pre>
+<p>This uses a <code>get</code> value for the <code>makesPromise</code> and an <a href="../can-observable-object/define/async.html" title="async
+Specify an asynchronous property whose value will be resolved later. async
+properties are computed and automatically update themselves when a dependent
+observable value is changed.">asynchronous getter</a> for the <code>makes</code> property.</p>
+<p>The asynchronous getter does not return anything, instead it passes the list of <code>makes</code> to <code>resolve</code>. The code above is the same as:</p>
+<pre><code class="language-js">this.makesPromise.then(makes =&gt; {
+    resolve(makes);
+});
+</code></pre>
+<h4>Loading new data</h4>
+<p>In order to load the correct <code>models</code> for a make, a request to the <code>/models</code> API must be made whenever a make is selected. In order to do this, the make <code>&lt;select&gt;</code> element is bound to the <code>makeId</code> property:</p>
+<pre><code class="language-html">&lt;select value:bind=&quot;this.makeId&quot;
+    {{# if(this.makes.isPending) }}disabled{{/ if }}&gt;
+    {{# if(this.makes.isPending) }}
+      &lt;option value=''&gt;Loading…&lt;/option&gt;
+    {{ else }}
+      {{^ this.makeId }}
+        &lt;option value=''&gt;Select a Make&lt;/option&gt;
+      {{/ this.makeId }}
+      {{# for( make of this.makes.value) }}
+        &lt;option value:from=&quot;make.id&quot;&gt;{{ make.name }}&lt;/option&gt;
+      {{/ for }}
+    {{/ if }}
+&lt;/select&gt;
+
+{{# if(this.modelsPromise) }}
+    {{# if(this.models) }}
+        &lt;select value:bind=&quot;this.modelId&quot;&gt;
+            {{^ this.modelId }}
+                &lt;option value=''&gt;Select a Model&lt;/option&gt;
+            {{/ this.modelId }}
+            {{# for(model of this.models) }}
+                &lt;option value:from=&quot;model.id&quot;&gt;{{ model.name }}&lt;/option&gt;
+            {{/ for }}
+        &lt;/select&gt;
+    {{ else }}
+        &lt;select disabled&gt;&lt;option&gt;Loading Models&lt;/option&gt;&lt;/select&gt;
+    {{/ if }}
+{{ else }}
+    &lt;select disabled&gt;&lt;option&gt;Models&lt;/option&gt;&lt;/select&gt;
+{{/ if }}
+
+{{# if(this.years) }}
+    &lt;select value:bind=&quot;this.year&quot;&gt;
+        {{^ this.year }}
+            &lt;option value=''&gt;Select a Year&lt;/option&gt;
+        {{/ this.year }}
+        {{# for(year of this.years ) }}
+            &lt;option value:from=&quot;year&quot;&gt;{{ year }}&lt;/option&gt;
+        {{/ for }}
+    &lt;/select&gt;
+{{ else }}
+    &lt;select disabled&gt;&lt;option&gt;Years&lt;/option&gt;&lt;/select&gt;
+{{/ if }}
+
+&lt;div&gt;
+    {{# for(vehicle of this.vehicles) }}
+        &lt;h2&gt;{{ vehicle.name }}&lt;/h2&gt;
+        &lt;img src:from=&quot;vehicle.thumb&quot; width=&quot;200px&quot;/&gt;
+    {{/ for }}
+&lt;/div&gt;
+</code></pre>
+<div line-highlight='1,only'></div>
+<p>The component then uses this property in the <code>modelsPromise</code> getter:</p>
+<pre><code class="language-js">static props = {
+    makeId: type.maybeConvert(String),
+    makes: {
+        get() {
+            return ajax({
+                type: &quot;GET&quot;,
+                url: &quot;/makes&quot;
+            }).then(resp =&gt; resp.data);
+        }
+    },
+    modelId: {
+        type: String,
+        value({ lastSet, listenTo, resolve }) {
+            listenTo(lastSet, resolve);
+
+            listenTo(&quot;makeId&quot;, () =&gt; resolve(&quot;&quot;));
+        }
+    },
+    get modelsPromise() {
+        let makeId = this.makeId;
+        if( makeId ) {
+            return ajax({
+                type: &quot;GET&quot;,
+                url: &quot;/models&quot;,
+                data: { makeId }
+            }).then(resp =&gt; {
+                return resp.data;
+            });
+        }
+    },
+    models: {
+        async(resolve) {
+            let promise = this.modelsPromise;
+            if(promise) {
+                promise.then(resolve);
+            }
+        }
+    },
+    get model() {
+        let models = this.models,
+            modelId = this.modelId;
+
+        if(models &amp;&amp; models.length &amp;&amp; modelId) {
+            let matched = models.filter(model =&gt; {
+                return modelId == model.id;
+            });
+            return matched[0];
+        }
+    },
+    get years() {
+        let model = this.model;
+        return model &amp;&amp; model.years;
+    },
+    year: {
+        type: String,
+        value({ lastSet, listenTo, resolve }) {
+            listenTo(lastSet, resolve);
+
+            listenTo(&quot;modelId&quot;, () =&gt; resolve(&quot;&quot;));
+        }
+    },
+    vehicles: {
+        async(resolve) {
+            let year = this.year,
+                modelId = this.modelId;
+
+            if(modelId &amp;&amp; year) {
+                ajax({
+                    type: &quot;GET&quot;,
+                    url: &quot;/vehicles&quot;,
+                    data: { modelId, year }
+                }).then(resp =&gt; {
+                    resolve(resp.data);
+                });
+            } else {
+                resolve([]);
+            }
+        }
+    }
+}
+</code></pre>
+<div line-highlight='20,25,only'></div>
+<p>When the <code>view</code> uses the <code>modelsPromise</code> property, it will become <a href="../can-event-queue/map/map.can.isBound.html" title="Return if the observable is bound to.">bound</a>, which means it</p>
+<ul>
+<li>will be called once to get its value</li>
+<li>will cache this initial value</li>
+<li>will set up listeners for any observables used within the getter</li>
+</ul>
+<p>If the <code>modelsPromise</code> is read a second time, the cached value will be returned.</p>
+<p>If the <code>makeId</code> property changes, the getter will be called again and a new request will be made to the <code>/models</code> API.</p>
+<h4>Resetting a selection when its parent list changes</h4>
+<p>Similar to the <code>makeId</code>, the <code>&lt;select&gt;</code> for models is bound to the <code>modelId</code> property:</p>
+<pre><code class="language-html">&lt;select value:bind=&quot;this.makeId&quot;
+    {{# if(this.makes.isPending) }}disabled{{/ if }}&gt;
+    {{# if(this.makes.isPending) }}
+      &lt;option value=''&gt;Loading…&lt;/option&gt;
+    {{ else }}
+      {{^ this.makeId }}
+        &lt;option value=''&gt;Select a Make&lt;/option&gt;
+      {{/ this.makeId }}
+      {{# for( make of this.makes.value) }}
+        &lt;option value:from=&quot;make.id&quot;&gt;{{ make.name }}&lt;/option&gt;
+      {{/ for }}
+    {{/ if }}
+&lt;/select&gt;
+
+{{# if(this.modelsPromise) }}
+    {{# if(this.models) }}
+        &lt;select value:bind=&quot;this.modelId&quot;&gt;
+            {{^ this.modelId }}
+                &lt;option value=''&gt;Select a Model&lt;/option&gt;
+            {{/ this.modelId }}
+            {{# for(model of this.models) }}
+                &lt;option value:from=&quot;model.id&quot;&gt;{{ model.name }}&lt;/option&gt;
+            {{/ for }}
+        &lt;/select&gt;
+    {{ else }}
+        &lt;select disabled&gt;&lt;option&gt;Loading Models&lt;/option&gt;&lt;/select&gt;
+    {{/ if }}
+{{ else }}
+    &lt;select disabled&gt;&lt;option&gt;Models&lt;/option&gt;&lt;/select&gt;
+{{/ if }}
+
+{{# if(this.years) }}
+    &lt;select value:bind=&quot;this.year&quot;&gt;
+        {{^ this.year }}
+            &lt;option value=''&gt;Select a Year&lt;/option&gt;
+        {{/ this.year }}
+        {{# for(year of this.years ) }}
+            &lt;option value:from=&quot;year&quot;&gt;{{ year }}&lt;/option&gt;
+        {{/ for }}
+    &lt;/select&gt;
+{{ else }}
+    &lt;select disabled&gt;&lt;option&gt;Years&lt;/option&gt;&lt;/select&gt;
+{{/ if }}
+
+&lt;div&gt;
+    {{# for(vehicle of this.vehicles) }}
+        &lt;h2&gt;{{ vehicle.name }}&lt;/h2&gt;
+        &lt;img src:from=&quot;vehicle.thumb&quot; width=&quot;200px&quot;/&gt;
+    {{/ for }}
+&lt;/div&gt;
+</code></pre>
+<div line-highlight='17,only'></div>
+<p>This works great for selecting a model from the list given for a particular make; however, if the make changes, the selected <code>modelId</code> will point to a different model in the list for the new make—or it might not exist at all.</p>
+<p>In order to handle this parent-child relationship correctly, the <code>modelId</code> property needs to be bound to the value in its own <code>&lt;select&gt;</code> element, but it also needs to be cleared when the value of the parent <code>&lt;select&gt;</code> element changes. The <a href="../can-observable-object/define/value.html" title="Specify the behavior of a property by listening to changes in other properties.">value behavior</a> makes it possible to define properties that are composed from events of other properties on the map.</p>
+<p>In order to define <code>modelId</code>, the <code>value</code> behavior will</p>
+<ul>
+<li>call <code>resolve</code> with the new <code>modelId</code> when <code>lastSet</code> changes—this is whenever a new model is chosen from the <code>&lt;select&gt;</code></li>
+<li>call <code>resolve</code> with an empty string when <code>makeId</code> changes to reset the <code>&lt;select&gt;</code> back to the default <code>&lt;option&gt;</code></li>
+</ul>
+<pre><code class="language-js">static props = {
+    makeId: String,
+    makes: {
+        get() {
+            return ajax({
+                type: &quot;GET&quot;,
+                url: &quot;/makes&quot;
+            }).then(resp =&gt;
+                return resp.data;
+            });
+        }
+    },
+    modelId: {
+        type: String,
+        value({ lastSet, listenTo, resolve }) {
+            listenTo(lastSet, resolve);
+
+            listenTo(&quot;makeId&quot;, () =&gt; resolve(&quot;&quot;));
+        }
+    },
+    get modelsPromise() {
+        let makeId = this.makeId;
+        if( makeId ) {
+            return ajax({
+                type: &quot;GET&quot;,
+                url: &quot;/models&quot;,
+                data: { makeId }
+            }).then(resp =&gt; {
+                return resp.data;
+            });
+        }
+    },
+    models: {
+        async(resolve) {
+            let promise = this.modelsPromise;
+            if(promise) {
+                promise.then(resolve);
+            }
+        }
+    },
+    get model() {
+        let models = this.models,
+            modelId = this.modelId;
+
+        if(models &amp;&amp; models.length &amp;&amp; modelId) {
+            let matched = models.filter(model)] =&gt; {
+                return modelId == model.id;
+            });
+            return matched[0];
+        }
+    },
+    get years() {
+        let model = this.model;
+        return model &amp;&amp; model.years;
+    },
+    year: {
+        type: String,
+        value({ lastSet, listenTo, resolve }) {
+            listenTo(lastSet, resolve);
+
+            listenTo(&quot;modelId&quot;, () =&gt; resolve(&quot;&quot;));
+        }
+    },
+    vehicles: {
+        async(resolve) {
+            let year = this.year,
+                modelId = this.modelId;
+
+            if(modelId &amp;&amp; year) {
+                ajax({
+                    type: &quot;GET&quot;,
+                    url: &quot;/vehicles&quot;,
+                    data: { modelId, year }
+                }).then(resp =&gt; {
+                    resolve(resp.data);
+                });
+            } else {
+                resolve([]);
+            }
+        }
+    }
+}
+</code></pre>
+<div line-highlight='15-19,only'></div>
+<p>Using this technique allows you to easily define the parent-child relationship between <code>make</code> and <code>model</code> while also keeping all of the code that specifies how <code>modelId</code> works within the <code>modelId</code> <a href="../can-observable-object/object.types.definitionObject.html" title="Defines the type, initial value, and get, set, and serialize behavior for an
+observable property.  These behaviors can be specified with as an Object,
+Constructor function, or a can-type.typeobject.">DefinitionObject</a>.</p>
+<h4>Creating and updating data</h4>
+<p>Interested in adding examples for how to create and update data on the server? Take a look at <a href="https://github.com/canjs/canjs/issues/4007">this issue</a>.</p>
+<h2>Have a question?</h2>
+<p>Please ask on <a href="https://forums.bitovi.com/c/canjs">our forums</a> or in <a href="https://www.bitovi.com/community/slack">Slack</a>!</p>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"docs/can-guides/topics/forms.md"},"description":"Learn how to create amazing `<form>`s with CanJS. \n","name":"guides/forms","title":"Forms","type":"page","parent":"guides/topics","order":7,"outline":{"depth":3},"comment":" ","pathToRoot":"../.."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="../static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix=".."></div>
+
+	</body>
+</html>

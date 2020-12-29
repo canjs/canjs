@@ -1,0 +1,41 @@
+ul.pager {
+	list-style: none;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	clear: both;
+	
+	li {
+		display: inline-block;
+	}
+	.next {
+		float: right;
+	}
+	.previous {
+		float: left;
+	}
+	&::before, &::after {
+		display: table;
+		content: " ";
+	}
+	&::after {
+		clear: both;
+	}
+}
+a.next {
+	text-transform: uppercase;
+	color: @thunderStorm;
+	font-weight: bold;
+	font-size: 12px;
+	line-height: 14px;
+	text-decoration: none;
+	&:hover {
+		text-decoration: underline;
+	}
+	&:after {
+		content: '\e015';
+		text-decoration: inherit;
+		display: inline;
+		font: normal normal 18px/12px Bitstrap;
+	}
+}

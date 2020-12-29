@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" id='docs'>
+
+<head>
+	<meta charset="utf-8">
+	<title>Lo-Dash documentation</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+	{{^devBuild}}
+	<link rel="stylesheet" type="text/css" href="./static/bundles/static.css">
+	{{/devBuild}}
+	<!--[if lt IE 9]>
+   <script type="text/javascript" src="static/html5shiv.js"></script>
+    <!--<![endif]-->
+</head>
+
+<body>
+	<h1><a href="/">Lo-Dash</a> <span>v2.4.1</span></h1>
+	<div class='toc-container'>
+		{{#eachCategory}}
+			<div>
+				<h2><code>{{name}}</code></h2>
+				<ul>
+					{{#eachItem name}}
+						<li>
+							<a href="#{{url}}" {{#isAlias}}class="alias"{{/isAlias}}>
+								<code>_.<span class='mel'>{{name}}</span></code>
+								{{#isAlias}}
+								 → <code>{{newName}}</code>
+								{{/isAlias}}
+							</a>
+						</li>
+					{{/eachItem}}
+				</ul>
+			</div>
+		{{/eachCategory}}
+	</div>
+	<div class='doc-container'>
+		{{{content}}}
+	</div>
+	<script type="text/javascript">
+		var docObject = {{{docObjectString}}};
+	</script>
+	
+	{{#if devBuild}}
+		<script type='text/javascript' 
+				data-main="static"
+				data-config="./static/config.js"
+				src="./static/steal/steal.js"></script>
+	{{else}}
+		<script>
+		  steal = {
+		    instantiated: {
+		      "bundles/static.css!$css" : null
+		    }
+		  }
+		</script>
+		<script type='text/javascript' 
+				data-main="static"
+				src="./static/steal.production.js"
+		    		bundles-path="bundles"></script>
+	{{/if}}
+</body>
+
+</html>

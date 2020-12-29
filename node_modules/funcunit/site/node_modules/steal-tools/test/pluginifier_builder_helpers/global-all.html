@@ -1,0 +1,22 @@
+<html>
+	<head>
+
+	</head>
+	<body>
+
+		<div id='tabs'></div>
+		<!-- jQuery should be included in the build
+		<script src="./node_modules/jquery/dist/jquery.js"></script>
+		-->
+		<script>
+			steal = { config: function(){} };
+		</script>
+		<script src="./dist/global/tabs.js"></script>
+		<script>
+			_define("foo",["tabs"], function(tabs){
+				window.TABS = tabs["default"] || tabs;
+			});
+			$("#tabs").tabs();
+		</script>
+	</body>
+</html>

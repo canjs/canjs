@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="resources/jasmine.css">
+		<style>
+			iframe {
+				border: 0;
+				width: 550px;
+				height: 500px;
+				display: block;
+				margin:10px auto 0;
+				overflow: hidden;
+			}
+		</style>
+		<title>Jasmine w/ FuncUnit Test</title>
+	</head>
+	<body>
+		<iframe src="todo/index.html" name="todo"></iframe>
+		<script src='resources/jquery.js'></script>
+		<script src='resources/jasmine.js'></script>
+		<script src='resources/jasmine-html.js'></script>
+
+		<script src='resources/funcunit.js'></script>
+		<script src='todo_jasmine.js'></script>
+		<script type="text/javascript">
+			var jasmineEnv = jasmine.getEnv();
+			jasmineEnv.updateInterval = 1000;
+
+			var htmlReporter = new jasmine.HtmlReporter();
+
+			jasmineEnv.addReporter(htmlReporter);
+
+			jasmineEnv.specFilter = function(spec) {
+				return htmlReporter.specFilter(spec);
+			};
+
+			if(!/init/.test(window.location.search)) {
+				jasmineEnv.execute();
+			}
+		</script>
+	</body>
+</html>

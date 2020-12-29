@@ -1,0 +1,23 @@
+{
+  "maxerr": 50,
+
+  "curly": true,
+  "eqeqeq": true,
+  "freeze": true,
+  "latedef": true,
+  "noarg": true,
+  "undef": true,
+  "unused": true,
+  "maxdepth": 4,
+  "boss": true,
+  "eqnull": true,
+  "evil": true,
+  "loopfunc": true,
+  "browser": true,
+  "node": true,
+  "esnext": true,
+
+  "globals": {
+    "QUnit": true
+  }
+}

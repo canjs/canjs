@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>can-route-mock - A Plugin for DoneJS</title>
+    <style>
+      * {box-sizing: border-box;}
+      body {
+        margin: 0px;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        border-top: 2px solid #CB3036;
+      }
+      .container {
+        margin: 20px auto;
+        max-width: 800px;
+        padding: 20px;
+      }
+      .text-right {
+        text-align: right;
+      }
+      pre {
+        background-color: #eee;
+        border-radius: 2px;
+        color: #222;
+        margin-bottom: 1.5em;
+        overflow-x: scroll;
+        padding: 10px;
+      }
+
+      header h1 {
+        margin: 0px;
+        color: #111;
+      }
+
+      header h2 {
+        margin: 0px 1em 0px 0px;
+        color: #222;
+      }
+
+      .links {
+        float: right;
+      }
+
+      h3 {
+        margin: 5px 0px;
+        color: #555;
+        font-size: 1.1em;
+      }
+
+      p {
+        color: #333;
+        margin: 0 0 1em 0;
+      }
+
+      a {
+        color: #2c83a0;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+
+      footer {
+        font-size: 0.9em;
+        opacity: 0.9;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class='links'>
+          <p><a href="https://github.com/canjs/can-route-mock">View on GitHub</a></p>
+          <p class="text-right"><a href="https://travis-ci.org/canjs/can-route-mock"><img alt='Build Status' src='https://travis-ci.org/canjs/can-route-mock.svg?branch=master'/></a></p>
+        </div>
+        <h1>can-route-mock</h1>
+        <h2>a fake url for routing</h2>
+      </header>
+
+      <h2 id="usage">Usage</h2>
+
+      <h3 id="es6use">ES6 use</h3>
+
+      <p>With StealJS, you can import this module directly in a template that is autorendered:</p>
+
+      <pre><code class="js language-js">import plugin from 'can-route-mock';</code></pre>
+
+      <h3 id="commonjsuse">CommonJS use</h3>
+
+      <p>Use <code>require</code> to load <code>can-route-mock</code> and everything else
+      needed to create a template that uses <code>can-route-mock</code>:</p>
+
+      <pre><code class="js language-js">var plugin = require("can-route-mock");</code></pre>
+
+      <h3 id="standaloneuse">Standalone use</h3>
+
+      <p>Load the <code>global</code> version of the plugin:</p>
+
+      <pre><code class="html language-html">&lt;script src='./node_modules/can-route-mock/dist/global/can-route-mock.js'&gt;&lt;/script&gt;</code></pre>
+
+      <p>This plugin is one of many. Check out all of the <a href="https://www.npmjs.com/search?q=keywords:donejs-plugin">DoneJS plugins on NPM</a>.</p>
+
+      <footer>
+        <p>This page was created with the
+          <a href='https://donejs.com/plugin.html'>DoneJS</a>
+          <a href='https://www.bitovi.com/blog/create-reusable-components-for-your-donejs-applications'>plugin generator</a>.
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

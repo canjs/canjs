@@ -1,0 +1,1 @@
+define("foo", {foo: function(){}} );

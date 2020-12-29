@@ -1,0 +1,1 @@
+global2 = "bar";

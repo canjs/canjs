@@ -1,0 +1,12 @@
+[
+	{"can-list": [
+		"can-list.extend",
+		"can-list.Map",
+		"can-list.prototype.attr",
+		"can-list.prototype.filter",
+		"can-list.prototype.splice",
+		"can-list.prototype.each",
+		"can-list.prototype.reverse",
+		"can-list.prototype.map"
+	]}
+]

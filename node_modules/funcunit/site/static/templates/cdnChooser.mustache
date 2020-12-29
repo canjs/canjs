@@ -1,0 +1,11 @@
+<h4>CDN:</h4>
+<div class="input">
+	<div class="dropdown">
+	  <select>
+	    {{#libraries}}
+	    <option value="{{id}}">{{description}}</option>
+	    {{/libraries}}
+	  </select>
+  </div>
+  <span class="cdn-link">{{cdn}}/{{version}}/can.{{selectedLibrary}}.js</span>
+</div>

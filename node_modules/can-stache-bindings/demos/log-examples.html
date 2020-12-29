@@ -1,0 +1,29 @@
+<script src="../node_modules/steal/steal.js" main='@empty'>
+var queues = require("can-queues");
+window.can = {queues: queues};
+
+var DefineMap = require("can-define/map/map");
+var stache = require("can-stache");
+require("can-stache-bindings");
+
+
+var CounterVM = DefineMap.extend("CounterVM",{
+  count: {value: 0, type: "number"},
+  add: function(){
+    this.count++;
+  }
+});
+
+var tempate = stache(`
+      <span>{{count}}</span>
+      <button on:click="add()">+1</button>
+`);
+
+var instance = new CounterVM();
+
+document.body.appendChild(tempate(instance));
+
+instance.on("count", function instanceCountChanged(){
+    debugger;
+});
+</script>

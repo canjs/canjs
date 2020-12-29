@@ -1,0 +1,19 @@
+<script>
+	define = function(name, deps, cb){
+		if(typeof deps === "function") {
+			cb = deps;
+			deps = null;
+		}
+		if(Array.isArray(name) && name[0] === "exports") {
+			return cb(exports);
+		}
+		if(!deps && cb.length === 3) {
+			return cb(require, exports, module);
+		}
+		cb();
+	};
+	exports = {};
+	module = { exports: exports };
+	require = function(){};
+</script>
+<script src="expected/es62_amd_cont_sm.js"></script>

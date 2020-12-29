@@ -1,0 +1,4687 @@
+<!DOCTYPE html>
+<!--####################################################################
+	THIS IS A GENERATED FILE — ANY CHANGES MADE WILL BE OVERWRITTEN
+
+	INSTEAD CHANGE:
+	source: node_modules/can-stache/docs/stache.md
+	@module can-stache
+######################################################################## -->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>can-stache | Views | API Docs | CanJS</title>
+	<meta name="description" content="Live binding templates.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta property="og:image" content="https://www.bitovi.com/hubfs/open-source/os-canjs.png">
+	<meta property="og:description" content="Live binding templates.">
+	<meta property="og:title" content="can-stache | Views | API Docs | CanJS">
+	<script type="application/ld+json">
+		{
+			"@context": "http://www.schema.org",
+			"@type": "SoftwareSourceCode",
+			"applicationCategory": "DeveloperApplication",
+			"brand": "Bitovi",
+			"category": "JavaScript Frameworks",
+			"codeRepository": "git://github.com/canjs/can-stache.git",
+			"description": "Live binding templates.",
+			"image": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"license": "https://github.com/canjs/canjs/blob/master/license.md",
+			"logo": "https://www.bitovi.com/hubfs/open-source/os-canjs.png",
+			"name": "can-stache | Views | API Docs | CanJS",
+			"programmingLanguage": "JavaScript",
+			"softwareVersion" : "5.1.1"
+		}
+	</script>
+	
+		<link rel="stylesheet" type="text/css" href="./static/bundles/bit-docs-site/static.css">
+		<link rel="shortcut icon" sizes="16x16 24x24 32x32 48x48 64x64" href="/docs/images/canjs_favicon.ico">
+		<link rel="apple-touch-icon" sizes="57x57" href="../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon-precomposed" sizes="57x57" href="../docs/images/canjs_favicon_57x57.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="../docs/images/canjs_favicon_72x72.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="../docs/images/canjs_favicon_114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="../docs/images/canjs_favicon_128x128.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="../docs/images/canjs_favicon_144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="../docs/images/canjs_favicon_152x152.png">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+	  	<meta name="apple-mobile-web-app-status-bar-style" content="white-translucent">
+	
+	
+		<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+			ga('create', 'UA-2302003-11', 'auto');
+			ga('send', 'pageview');
+		</script>
+	
+</head>
+	<body>
+		<input type="checkbox" id="nav-trigger" class="nav-trigger"/>
+	  	<div data-current-page="can-stache" id="everything">
+  <div class="header">
+    
+	<label for="nav-trigger">Menu</label>
+	<div class="brand">
+		<div class="logo">
+			<a href="../index.html" alt="CanJS"></a>
+			<div class="dropdown project-dropdown">
+				<a href="https://donejs.com/">DoneJS</a>
+				<a href="https://stealjs.com/">StealJS</a>
+				<a href="https://jquerypp.com/">jQuery++</a>
+				<a href="https://funcunit.com/">FuncUnit</a>
+				<a href="https://documentjs.com/">DocumentJS</a>
+			</div>
+		</div>
+		<div class="version">
+			<div class="version-number">
+				6.6.1
+			</div>
+			<div class="dropdown version-dropdown">
+				
+					<a href="https://v5.canjs.com">5.33.3</a>
+				
+					<a href="https://v4.canjs.com">4.3.0</a>
+				
+					<a href="https://v3.canjs.com">3.14.1</a>
+				
+					<a href="https://v2.canjs.com">2.3.35</a>
+				
+			</div>
+		</div>
+	</div>
+
+
+	
+	<ul class="top-right-links">
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="current">
+						<a class="page"
+							href="api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+					</li>
+				
+			
+		
+			
+				
+					<li class="">
+						<a class="page"
+							href="guides/contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+					</li>
+				
+			
+		
+	</ul>
+
+
+
+<div class="search-section">
+	<div class="search-bar">
+	<div class="search-wrap" style="display:none;">
+		<span class="search-icon"></span>
+		<input
+			type="text"
+			size="6"
+			class="search"
+			placeholder="Search"
+			autocomplete="off"
+			autocorrect="off"
+			autocapitalize="none"
+			spellcheck="false"/>
+			<span class="search-icon-cancel"></span>
+	</div>
+</div>
+
+	<div class="search-bar-container">
+	</div>
+	<div class="search-results-container">
+	<div class="search-results-wrap"></div>
+</div>
+
+</div>
+<ul class="top-right-bitovi">
+	<li class="dropdown">
+		<a href="https://www.bitovi.com" class="bitovi by-bitovi">Bitovi</a>
+		<ul class="dropdown-menu">
+			<li><a href="https://www.bitovi.com/">Bitovi.com</a></li>
+			<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+			<li><a href="https://www.bitovi.com/design">Design</a></li>
+			<li><a href="https://www.bitovi.com/development">Development</a></li>
+			<li><a href="https://www.bitovi.com/training">Training</a></li>
+			<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+			<li><a href="https://www.bitovi.com/about">About</a></li>
+			<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+		</ul>
+	</li>
+</ul>
+
+  </div>
+  <div id="left" class="column">
+
+      <div class="nav-menu">
+        
+            
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="about.html"
+							title="Learn about CanJS’s mission, technical highlights, who uses CanJS, and our future roadmap.">
+							About
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides.html"
+							title="Welcome to CanJS! These guides are here to help you master CanJS development, get involved with the CanJS community, and contribute back to CanJS.">
+							Guides
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						expanded">
+						<a class="page"
+							href="api.html"
+							title="Welcome to the CanJS API documentation! This page is a CHEAT-SHEET for the most common APIs within CanJS. Read the technology-overview page for background on the following APIs.">
+							API Docs
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>Observables</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-bind.html"
+							title="Updates one observable value with the value of another observable.">
+							can-bind
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-compute.html"
+							title="Create an observable value.">
+							can-compute
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-debug.html"
+							title="Useful debugging utilities.">
+							can-debug
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-deep-observable.html"
+							title="Create observable objects where nested objects and arrays are also observable.">
+							can-deep-observable
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define.html"
+							title="Defines observable properties and their behavior on a prototype object. This function is not commonly used directly. map and list are more commonly used. Types and behaviors shared by both map and list are documented here.">
+							can-define
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define/list/list.html"
+							title="Create observable lists.">
+							can-define/list/list
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define/map/map.html"
+							title="Create observable objects.">
+							can-define/map/map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-backup.html"
+							title="">
+							can-define-backup
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-stream.html"
+							title="Add useful stream conversion methods to a supplied map or list constructor using a stream interface such as can-stream-kefir.">
+							can-define-stream
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-stream-kefir.html"
+							title="Export a function that takes a map or list constructor and uses can-stream-kefir to create streamable properties.">
+							can-define-stream-kefir
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-event-queue.html"
+							title="Mixin observable behavior to your types.">
+							can-event-queue
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-kefir.html"
+							title="Integrate KefirJS streams directly within can-stache and other parts of CanJS.">
+							can-kefir
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-list.html"
+							title="">
+							can-list
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-map.html"
+							title="Create observable objects.">
+							can-map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-map-compat.html"
+							title="can-map-compat">
+							can-map-compat
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-map-define.html"
+							title="Defines the type, initial value, get, set, remove, and serialize behavior for attributes of a Map.">
+							can-map-define
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observable-array.html"
+							title="Create observable arrays with defined properties.">
+							can-observable-array
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observable-object.html"
+							title="Create observable objects used to manage state in explicitly defined ways.">
+							can-observable-object
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observation.html"
+							title="Create observable values that derive their value from other observable values.">
+							can-observation
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observation-recorder.html"
+							title="Specify how to listen to changes in a value being read and record those specifications between two points in time. Record observables being read and indicate how to listen to changes in a value being read.">
+							can-observation-recorder
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observe.html"
+							title="Create observable objects, arrays, and functions that work like plain JavaScript objects, arrays, and functions.">
+							can-observe
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-simple-map.html"
+							title="A performant live-bound map.">
+							can-simple-map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-simple-observable.html"
+							title="Create an observable value.">
+							can-simple-observable
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stream.html"
+							title="Create useful stream methods from a minimal stream wrapper implementation.">
+							can-stream
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stream-kefir.html"
+							title="Convert observable values into streams. Kefir is used to provide the stream functionality.">
+							can-stream-kefir
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-value.html"
+							title="Get an observable that’s bound to a specific property on another object.">
+							can-value
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Views</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-attribute-observable.html"
+							title="Create an observable value from an element&#x27;s property or attribute.">
+							can-attribute-observable
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-component.html"
+							title="Create a custom element that can be used to manage widgets or application logic.">
+							can-component
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-observable-bindings.html"
+							title="">
+							can-observable-bindings
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="current
+           						parent
+           						expanded">
+						<a class="module"
+							href="can-stache.html"
+							title="Live binding templates.">
+							can-stache
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li>
+						<span>Tags</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.tags.escaped.html"
+							title="Insert the value of the expression into the output of the template.">
+							{{expression}}
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.tags.unescaped.html"
+							title="Insert the unescaped value of the expression into the output of the template.">
+							{{{expression}}}
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.tags.section.html"
+							title="Renders a subsection one or more times depending on the type of expression or the expression’s return value.">
+							{{#expression}}
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.tags.close.html"
+							title="">
+							{{/expression}}
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.else.html"
+							title="">
+							{{else}}
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.tags.named-partial.html"
+							title="Create an inline named partial within the current template.">
+							{{&lt;partialName}}
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.tags.comment.html"
+							title="A comment that doesn’t get inserted into the rendered result.">
+							{{!expression}}
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-stache.tags.whitespace.html"
+							title="Omit whitespace from around the output of the template.">
+							{{-expression-}}
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Helpers</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.and.html"
+							title="Perform a logical AND (&amp;&amp;).">
+							and
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.console.html"
+							title="All console methods are available as stache helpers. A few of these are shown below, but any method available on the global console can be called from stache.">
+							console
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.debugger.html"
+							title="In development, breaks at the given point in the template to inspect the current scope in the console.">
+							debugger
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.domData.html"
+							title="Associate data with an HTML element. This is useful for integrating with other technologies.">
+							domData
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.eq.html"
+							title="Render something if two values are equal.">
+							eq
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.for-of.html"
+							title="Loop through a list of values, keys in an object, or integers.">
+							for(of)
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.portal.html"
+							title="">
+							portal
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.if.html"
+							title="can-stache.helpers.if">
+							if
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.joinBase.html"
+							title="">
+							joinBase
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.let.html"
+							title="Create a block-level variable.">
+							let
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.not.html"
+							title="">
+							not
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.or.html"
+							title="Perform a logical OR (||).">
+							or
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.switch.html"
+							title="">
+							switch
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.case.html"
+							title="">
+							case
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.default.html"
+							title="">
+							default
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Expressions</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache/expressions/bracket.html"
+							title="">
+							Bracket Expression
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache/expressions/call.html"
+							title="">
+							Call Expression
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache/expressions/hash.html"
+							title="">
+							Hash Expression
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache/expressions/key-lookup.html"
+							title="">
+							KeyLookup Expression
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache/expressions/literal.html"
+							title="Specify a JavaScript primitive type.">
+							Literal Expression
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Methods</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.addBindings.html"
+							title="Add a set of view binding callbacks.">
+							addBindings
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.addConverter.html"
+							title="Register a helper for bidirectional value conversion.">
+							addConverter
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.addHelper.html"
+							title="Register a global helper function.">
+							addHelper
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.addLiveHelper.html"
+							title="Register a helper that gets passed values.">
+							addLiveHelper
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.from.html"
+							title="Return a template loaded from an element.">
+							from
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.safeString.html"
+							title="Indicate that a string does not need to be escaped to be safely inserted into the page.">
+							safeString
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Key Operators</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache/keys/compute.html"
+							title="Pass a compute instead of a value if an observable is found within call.">
+							~compute
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache/keys/current.html"
+							title="Lookup a value in only the current context.">
+							./current
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache/keys/parent.html"
+							title="Start looking for values in the parent context.">
+							../parent
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache/keys/scope.html"
+							title="The template context">
+							scope
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache/keys/scope/key.html"
+							title="Looks up the key on the scope or helper scope in a template, walking until a value is found.">
+							scope/key
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache/keys/this.html"
+							title="Write out or return the current context.">
+							this
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache.key.html"
+							title="A named reference to a value in the scope or helper scope in a template.">
+							key
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Pages</span>
+						
+	<ul>
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-stache.expressions.html"
+							title="In addition to different magic tag types, stache supports different expression types.  These can be used in various combinations to call helper methods or viewModel methods.  The following is an example of all the expressions combined:">
+							Expressions
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-stache.Helpers.html"
+							title="Helpers are functions that can be registered and called from within templates.  These functions are typically used to provide functionality that is more appropriate for the view than the viewModel.">
+							Helpers
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Types</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache.getterSetter.html"
+							title="The getterSetter argument passed to registerConverter.">
+							getterSetter
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache.helper.html"
+							title="A helper function passed to can-stache.addLiveHelper. Given the arguments, returns the content that should be shown in the DOM or a function that will be called on the DOM element the helper was called on.">
+							helper
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache.helperOptions.html"
+							title="The options argument passed to a helper function when called by a helper.">
+							helperOptions
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache.sectionRenderer.html"
+							title="Renders a section. These functions are usually provided as .fn and .inverse on a stache helper’s options.">
+							sectionRenderer
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache.simpleHelper.html"
+							title="A helper function passed to can-stache.addHelper.">
+							simpleHelper
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache.view.html"
+							title="A function returned by can-stache that renders a template into an html documentFragment.">
+							view
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Deprecated</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache/expressions/helper.html"
+							title="">
+							Helper Expression
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="typedef"
+							href="can-stache/keys/scope/scope.vars.html"
+							title="Used to reference variables specific to the template context">
+							scope.vars
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.data.html"
+							title="">
+							{{data name}}
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.each.html"
+							title="">
+							{{#each(expression)}}
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.is.html"
+							title="">
+							{{#is(expressions)}}
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.unless.html"
+							title="">
+							{{#unless(expression)}}
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.helpers.with.html"
+							title="">
+							{{#with(expression)}}
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.registerConverter.html"
+							title="Register a helper for bidirectional value conversion.">
+							registerConverter
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.registerHelper.html"
+							title="Register a helper.">
+							registerHelper
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.registerPartial.html"
+							title="Register a partial template that can be rendered with can-stache.tags.partial.">
+							registerPartial
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-stache.scopeAndContext.html"
+							title="">
+							Legacy Scope Behavior
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.tags.inverse.html"
+							title="Like can-stache.tags.section, but renders the opposite subsection depending on the type of expression or the expression’s return value.">
+							{{^expression}}
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-stache.tags.partial.html"
+							title="">
+							{{&gt;key}}
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-bindings.html"
+							title="Listen to events and create one-way and two-way bindings.">
+							can-stache-bindings
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-converters.html"
+							title="Provides a set of converters useful for two-way binding with form elements such as &lt;input&gt; and &lt;select&gt;.">
+							can-stache-converters
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-element.html"
+							title="Create a custom element with ObservableObject-like properties and stache views.">
+							can-stache-element
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-stache-route-helpers.html"
+							title="Adds routeUrl and routeCurrent helpers to stache.">
+							can-stache-route-helpers
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-autorender.html"
+							title="A module that automatically renders script and other elements with the can-autorender attribute. This function is useful to know when the templates have finished rendering.">
+							can-view-autorender
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-callbacks.html"
+							title="Registered callbacks for behaviors">
+							can-view-callbacks
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-import.html"
+							title="">
+							can-view-import
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-live.html"
+							title="Setup live-binding between the DOM and a compute manually.">
+							can-view-live
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-model.html"
+							title="Gets the ViewModel of an element.">
+							can-view-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-parser.html"
+							title="Parse HTML and mustache tokens.">
+							can-view-parser
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-scope.html"
+							title="Create a lookup node for keys.">
+							can-view-scope
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-view-target.html"
+							title="">
+							can-view-target
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="steal-stache.html"
+							title="A StealJS extension that allows stache templates as dependencies.">
+							steal-stache
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Data Modeling</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-connect.html"
+							title="can-connect provides persisted data middleware. Assemble powerful model layers from fully modularized behaviors (i.e. plugins).">
+							can-connect
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-connect-ndjson.html"
+							title="Get a list of data from an NDJSON service endpoint.">
+							can-connect-ndjson
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-connect-tag.html"
+							title="Create custom elements that can be used to retrieve model instances.">
+							can-connect-tag
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-realtime-rest-model.html"
+							title="Connect a type to a restful data source and automatically manage lists.">
+							can-define-realtime-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-rest-model.html"
+							title="Connect a type to a restful service layer.">
+							can-define-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-fixture.html"
+							title="Intercept AJAX requests and simulate the response.">
+							can-fixture
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-fixture-socket.html"
+							title="Simulate socket.io services.">
+							can-fixture-socket
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-local-store.html"
+							title="Create, update, delete and query data saved in localStorage.">
+							can-local-store
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-memory-store.html"
+							title="Create, update, delete and query data saved in memory.">
+							can-memory-store
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-ndjson-stream.html"
+							title="Parses an NDJSON stream into a stream of JavaScript objects.">
+							can-ndjson-stream
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-query-logic.html"
+							title="Perform data queries and compare queries against each other. Provides logic useful for data caching and real-time behavior.">
+							can-query-logic
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-realtime-rest-model.html"
+							title="Connect a type to a restful data source and automatically manage lists.">
+							can-realtime-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-rest-model.html"
+							title="Connect a type to a restful service layer.">
+							can-rest-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-set-legacy.html"
+							title="can-set-legacy supports a legacy can-set API that creates a can-query-logic instance.">
+							can-set-legacy
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-super-model.html"
+							title="Connect a type to a restful data source, automatically manage lists, combine requests, and use a fall-through localstorage cache.">
+							can-super-model
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Routing</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-deparam.html"
+							title="Deserialize a query string into an array or object.">
+							can-deparam
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-param.html"
+							title="Serialize an object or array into a query string.">
+							can-param
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route.html"
+							title="Manage browser history and client state by synchronizing the window.location.hash with an observable. See the Routing for in depth examples.">
+							can-route
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route-hash.html"
+							title="An observable that is cross bound to the window.location.hash.">
+							can-route-hash
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route-mock.html"
+							title="Simulate routing without having to change the URL.">
+							can-route-mock
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-route-pushstate.html"
+							title="An observable that can be used as can-route&#x27;s can-route.urlData.">
+							can-route-pushstate
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>JS Utilities</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-assign.html"
+							title="A simplified version of Object.assign, which only accepts a single source argument.">
+							can-assign
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-define-lazy-value.html"
+							title="can-define-lazy-value">
+							can-define-lazy-value
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-diff.html"
+							title="Utilities for comparing and applying differences between data structures.">
+							can-diff
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-globals.html"
+							title="An environment agnostic container for global variables. Useful for testing and server-side rendering (SSR), typically used internally by CanJS.">
+							can-globals
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-join-uris.html"
+							title="Join together a URI path to a base.">
+							can-join-uris
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-key.html"
+							title="Utilities that read and write nested properties on objects and arrays.">
+							can-key
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-key-tree.html"
+							title="Store values in a tree structure.">
+							can-key-tree
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-make-map.html"
+							title="Convert a comma-separated string into a plain JavaScript object.">
+							can-make-map
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-parse-uri.html"
+							title="can-parse-uri">
+							can-parse-uri
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-queues.html"
+							title="A light weight queue system for scheduling tasks.">
+							can-queues
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-string.html"
+							title="String utilities.">
+							can-string
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-string-to-any.html"
+							title="Turns a string representation of a primitive type back into the associated primitive.">
+							can-string-to-any
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>DOM Utilities</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-ajax.html"
+							title="Make an asynchronous HTTP (AJAX) request.">
+							can-ajax
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-attribute-encoder.html"
+							title="Encode and decode attribute names.">
+							can-attribute-encoder
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-child-nodes.html"
+							title="">
+							can-child-nodes
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-control.html"
+							title="Create organized, memory-leak free, rapidly performing, stateful controls with declarative event binding. Use Control to create UI controls like tabs, grids, and context menus, and organize them into higher-order business rules with can.route. It can serve as both a traditional view and a traditional controller.">
+							can-control
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-dom-data.html"
+							title="Associate key/value pair data with a DOM node in a memory-safe way.">
+							can-dom-data
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-dom-events.html"
+							title="Listen to DOM events and special events, and register special events.">
+							can-dom-events
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-dom-mutate.html"
+							title="Dispatch and listen for DOM mutations.">
+							can-dom-mutate
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-event-dom-enter.html"
+							title="Watch for when enter keys are pressed on a DomEventTarget.">
+							can-event-dom-enter
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-event-dom-radiochange.html"
+							title="A custom event for listening to changes of inputs with type &quot;radio&quot;, which fires when a conflicting radio input changes. A &quot;conflicting&quot; radio button has the same &quot;name&quot; attribute and exists within in the same form, or lack thereof. This event coordinates state bound to whether a radio is checked. The &quot;change&quot; event does not fire for deselected radios. By using this event instead, deselected radios receive notification.">
+							can-event-dom-radiochange
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-fragment.html"
+							title="Convert a String, HTMLElement, documentFragment, contentArray, or object with a can.toDOM symbol into a documentFragment.">
+							can-fragment
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Data Validation</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-type.html"
+							title="Define types that can verify values are of the correct type, or convert values to the correct type.">
+							can-type
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate.html"
+							title="Shared utilities and type definitions to process validation errors.">
+							can-validate
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate-interface.html"
+							title="can-validate-interface provides simple property existence validation. Use to prevent errors resulting from missing properties on input objects.">
+							can-validate-interface
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate-legacy.html"
+							title="A plugin for CanJS that wraps any validation library to can.validate. Can-Validate doesn&#x27;t do any validation of its own but instead provides some abstraction to your library of choice. The chosen library is registered with can-validate using a shim.">
+							can-validate-legacy
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-validate-validatejs.html"
+							title="Create can-validate.validator functions using validate.js.">
+							can-validate-validatejs
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Typed Data</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-cid.html"
+							title="Utility for getting a unique identifier for an object.">
+							can-cid
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-construct.html"
+							title="Provides a way to easily use the power of prototypal inheritance without worrying about hooking up all the particulars yourself. Use can-construct.extend to create an inheritable constructor function of your own.">
+							can-construct
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-construct-super.html"
+							title="can.Construct.super is a plugin that makes it easier to call base functions from inside inheriting functions.">
+							can-construct-super
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-data-types.html"
+							title="A package of type objects that are used to test if a value is a member of the type and convert values to the type.">
+							can-data-types
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-namespace.html"
+							title="Namespace where can-* packages are registered.">
+							can-namespace
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-reflect.html"
+							title="Perform operations and read information on unknown data types.">
+							can-reflect
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-reflect-dependencies.html"
+							title="Functions to keep track of observable dependencies.">
+							can-reflect-dependencies
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="function"
+							href="can-reflect-promise.html"
+							title="Expose an observable, Map-like API on Promise types.">
+							can-reflect-promise
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-types.html"
+							title="A stateful container for CanJS type information.">
+							can-types
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li>
+						<span>Polyfills</span>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-symbol.html"
+							title="Symbols used to detail how CanJS may operate on different objects CanJS has a consistent internal interface for objects to interact with each other, and this is also important for interop with external libraries.  CanJS uses symbols to identify object types, property access methods, and for event handling. can-symbol also has a polyfill function that will fake symbols on unsupported platforms.">
+							can-symbol
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-vdom.html"
+							title="A browser-lite environment for Node.js or a worker thread.">
+							can-vdom
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-core.html"
+							title="The best, most hardened and generally useful libraries in CanJS.">
+							Core
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						parent
+           						">
+						<a class="page"
+							href="can-infrastructure.html"
+							title="Utility libraries that power the core and ecosystem collection.">
+							Infrastructure
+						</a>
+						
+	<ul>
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-global.html"
+							title="can-global">
+							can-global
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="module"
+							href="can-test-helpers.html"
+							title="Common utilities for effectively testing the features of CanJS.">
+							can-test-helpers
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-ecosystem.html"
+							title="Useful libraries that extend or add important features to the core collection.">
+							Ecosystem
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="can-legacy.html"
+							title="Former libraries that we still accept patches for, but are not under active development.">
+							Legacy
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="community.html"
+							title="Get involved with one of the most inviting communities on the internet!">
+							Community
+						</a>
+						
+
+					</li>
+				
+			
+		
+			
+				
+					<li class="
+           						
+           						">
+						<a class="page"
+							href="guides/contribute.html"
+							title="Learn how to contribute to CanJS!">
+							Contributing
+						</a>
+						
+
+					</li>
+				
+			
+		
+	</ul>
+
+
+        
+      </div>
+      <div class="social-side-container">
+        <ul class="social-side">
+  <li>
+    <a class="header-mobile github" href="https://github.com/canjs/canjs" target="_blank"><img class="social-icon-small" src="../docs/images/github.png">GitHub</a>
+  </li>
+  <li>
+    <a class="header-mobile twitter" href="https://twitter.com/canjs" target="_blank"><img class="social-icon-small" src="../docs/images/twitter.png">Twitter</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/community/slack" target="_blank">Chat</a>
+  </li>
+  <li>
+    <a class="header-mobile" href="https://forums.bitovi.com/c/canjs" target="_blank">Forum</a>
+  </li>
+</ul>
+<ul class="social-side">
+  <li>
+    <a class="header-mobile" href="https://www.bitovi.com/blog/topic/canjs" target="_blank">News</a>
+  </li>
+  <li></li>
+</ul>
+
+      </div>
+      <div class="by-bitovi-container">
+        <a href="https://www.bitovi.com" target="_blank" class="bitovi by-bitovi">Bitovi</a>
+      </div>
+
+  </div>
+  <div id="right" class="column">
+
+      <article>
+  <section class="title">
+	<div class="page-type">
+		<h1>can-stache</h1>
+			<ul class="title-social">
+				
+				<li>
+					<a class="npm-button" href="https://www.npmjs.com/package/can-stache">
+						<img src="https://img.shields.io/badge/npm%20package-5.1.1-brightgreen.svg" alt="npm package badge" />
+					</a>
+				</li>
+				<li>
+					<a class="github-button nav-social" href="https://github.com/canjs/can-stache" data-show-count="true">Star</a>
+				</li>
+				
+				
+				<li>
+					<a class="button-link" href="//github.com/canjs/can-stache/edit/master/docs/stache.md">Edit on GitHub</a>
+				</li>
+				
+			</ul>
+	</div>
+	<div class="clear-both"></div>
+	
+  
+	<section class="description">
+    <p>Live binding templates.</p>
+
+</section>
+
+  
+	
+</section>
+<section class="on-this-page-table">
+	<!--<h2 class="on-this-page-title" data-skip>Page Content</h2>-->
+</section>
+
+
+
+
+
+
+
+<div class="signature">
+  <h2 class="signature-title">
+    <code>stache([name,] template)</code>
+  </h2>
+  <p>Processes the <code>template</code> string and returns a <a href="can-stache.view.html" title="A function returned by can-stache that renders a template into an html documentFragment.">view function</a> that can
+be used to create HTML elements with data.</p>
+<pre><code class="language-js">import {stache} from &quot;can&quot;;
+
+// parses the template string and returns a view function:
+const view = stache(`&lt;h1&gt;Hello {{this.subject}}&lt;/h1&gt;`);
+
+// Calling the view function returns HTML elements:
+const documentFragment = view({subject: &quot;World&quot;});
+
+// Adds those elements to the page
+document.body.appendChild( documentFragment );
+
+console.log(document.body.innerHTML) //-&gt; &quot;&lt;h1&gt;Hello World&lt;/h1&gt;&quot;;
+</code></pre>
+<div class='codepen' data-codepen=''></div>
+<p><code>stache</code> is most commonly used by <a href="can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a> to define a component's
+<a href="can-stache-element/static.view.html" title="Provides a way to render the element's innerHTML using a can-stache template.">view</a>:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+  static view = `
+    &lt;h1&gt;Hello {{this.subject}}&lt;/h1&gt;
+  `;
+
+  static props = {
+    subject: {default: &quot;World&quot;}
+  };
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<p>Use <a href="steal-stache.html" title="A StealJS extension that allows stache templates as dependencies.">steal-stache</a> to import template view functions with <a href="http://stealjs.com" title="StealJS">StealJS</a>.</p>
+<p>Use <a href="https://npmjs.com/package/can-stache-loader">can-stache-loader</a> to import template
+view functions with <a href="https://webpack.js.org/">webpack</a>.</p>
+
+  
+  <div class="parameters">
+    <h3 class="parameters-title" data-skip>Parameters</h3>
+      <ol>
+        
+          <li><b>name</b> <code>{String}</code>: <p>Provides an optional name for this type that will show up
+nicely in errors. Files imported with <a href="steal-stache.html" title="A StealJS extension that allows stache templates as dependencies.">steal-stache</a> will use their filename.</p>
+</li>
+        
+          <li><b>template</b> <code>{String}</code>: <p>The text of a stache template.</p>
+</li>
+        
+      </ol>
+  </div>
+  
+  
+  <div class="returns">
+    <h3 class="returns-title" data-skip>Returns</h3>
+     <p> <code>{<a href="can-stache.view.html" title="A function returned by can-stache that renders a template into an html documentFragment.">view</a>(data, helpers)}</code>: <p>A <a href="can-stache.view.html" title="A function returned by can-stache that renders a template into an html documentFragment.">view</a> function that returns
+a live document fragment that can be inserted in the page.</p>
+</p>
+  </div>
+  
+  
+</div>
+
+
+
+
+
+  
+    <section class="body">
+    <h2>Purpose</h2>
+<p>Stache templates are used to:</p>
+<ul>
+<li>Convert data into HTML.</li>
+<li>Update the HTML when observable data changes.</li>
+<li>Enable <a href="can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">custom elements</a> and <a href="can-stache-bindings.html" title="Listen to events and create one-way and two-way bindings.">event and data bindings</a>.</li>
+</ul>
+<p>Stache is designed to be:</p>
+<ul>
+<li>Safe. It does not use <code>eval</code> in <strong>any</strong> form of its use.</li>
+<li>Easy for beginners to understand - It looks a lot like JavaScript.
+<pre><code class="language-html">{{# for( item of this.items ) }}
+   &lt;li&gt;
+     &lt;span&gt;{{ item.name }}&lt;/span&gt;
+     &lt;label&gt;{{ this.getLabelFor(item) }}&lt;/label&gt;
+   &lt;/li&gt;
+{{/ }}
+</code></pre></li>
+<li>Limited - Complex logic should be done in the <code>ViewModel</code> where it is more easily
+tested. Stache only supports a subset of JavaScript expressions.</li>
+<li>Powerful (where you want it) - Stache adds a few things JavaScript doesn't support
+but are very useful for views:
+<ul>
+<li>Stache tolerates undefined property values - The following will not error. Instead
+stache will simply warn:
+<pre><code class="language-html">{{this.property.does.not.exist}}
+</code></pre></li>
+<li>Stache is able to read from promises and other observables directly:
+<pre><code class="language-html">{{# if(promise.isPending) }} Pending {{/ if }}
+{{# if(promise.isRejected) }}
+  {{ promise.reason.message }}
+{{/ if }}
+{{# if(promise.isResolved) }}
+  {{ promise.value.message }}
+{{/ if}}
+</code></pre></li>
+<li>Stache has an <code>{{else}}</code> case for empty lists:
+<pre><code class="language-html">{{# for( item of this.items ) }}
+   &lt;li&gt;{{ item.name }}&lt;/li&gt;
+{{ else }}
+   &lt;li&gt;There are no items&lt;/li&gt;
+{{/ }}
+</code></pre></li>
+</ul></li>
+</ul>
+<h2>Basic Use</h2>
+<p>The following sections show you how to:</p>
+<ul>
+<li><a href="#Loadingtemplates">Load templates</a> so they be processed into views.</li>
+<li><a href="#Writingvalues">Writing values</a> within HTML to the page.</li>
+<li>Writing some HTML to the page or some other HTML to the page with <a href="#BranchingLogic">branch logic</a>.</li>
+<li><a href="#Looping">Loop</a> over a list of values and writing some HTML out for each value.</li>
+<li><a href="#Listeningtoevents">Listen to events</a> on elements.</li>
+<li><a href="#Bindingtopropertiesandattributes">Read and write</a> to element properties and attributes.</li>
+<li>Simplifying your templates with:
+<ul>
+<li><a href="#Creatingvariables">Variables</a></li>
+<li><a href="#Creatinghelpers">Helpers</a></li>
+<li><a href="#Creatingpartials">Partials</a></li>
+</ul></li>
+</ul>
+<h3>Loading templates</h3>
+<p>There are several ways to load a stache template:</p>
+<ul>
+<li><p>As a component's <a href="can-stache-element/static.view.html" title="Provides a way to render the element's innerHTML using a can-stache template.">view</a>.</p>
+<p><a href="can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a> automatically processes strings passed to the <code>view</code> property as
+<a href="can-stache.html" title="Live binding templates.">can-stache</a> templates.</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+  static view = `
+    &lt;h1&gt;Hello {{ this.subject }}&lt;/h1&gt;
+  `;
+
+  static props = {
+    subject: &quot;World&quot;
+  };
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre></li>
+</ul>
+<div class='codepen' data-codepen=''></div>
+<ul>
+<li><p>Programmatically.</p>
+<p>Create a <a href="can-stache.view.html" title="A function returned by can-stache that renders a template into an html documentFragment.">view</a> function by importing stache and passing it a string.</p>
+<pre><code class="language-js">import {stache} from &quot;can&quot;;
+
+// parses the template string and returns a view function:
+const view = stache(`&lt;h1&gt;Hello {{ this.subject }}&lt;/h1&gt;`);
+
+// Calling the view function returns HTML elements:
+const documentFragment = view({subject: &quot;World&quot;});
+
+// Adds those elements to the page
+document.body.appendChild( documentFragment );
+
+console.log(document.body.innerHTML) //-&gt; &quot;&lt;h1&gt;Hello World&lt;/h1&gt;&quot;;
+</code></pre></li>
+</ul>
+<div class='codepen' data-codepen=''></div>
+<ul>
+<li><p>Imported and pre-parsed.</p>
+<p>If you are using <a href="http://stealjs.com" title="StealJS">StealJS</a> use <a href="steal-stache.html" title="A StealJS extension that allows stache templates as dependencies.">steal-stache</a>
+or if you are using <a href="https://webpack.js.org/">webpack</a> use <a href="https://npmjs.com/package/can-stache-loader">can-stache-loader</a> to
+create <code>.stache</code> file and import them like:</p>
+<pre><code class="language-js">import {StacheElement} from &quot;can&quot;;
+import view from &quot;./my-component.stache&quot;;
+
+static MyComponent extends StacheElement {
+  static view = view;
+  static props = { ... }
+}
+
+customElements.define(&quot;my-component&quot;, MyComponent);
+</code></pre></li>
+</ul>
+<h3>Writing values</h3>
+<p>Use <a href="can-stache.tags.escaped.html" title="Insert the value of the expression into the output of the template.">{{expression}}</a> to write out values into the page. The following
+uses <a href="can-stache.tags.escaped.html" title="Insert the value of the expression into the output of the template.">{{expression}}</a> to write out the <code>ViewModel</code>'s <code>subject</code>:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;h1&gt;Hello {{ this.subject }}&lt;/h1&gt;
+    `;
+
+    static props = {
+        subject: &quot;World&quot;
+    };
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<p>You can use <a href="can-stache.tags.escaped.html" title="Insert the value of the expression into the output of the template.">{{expression}}</a> on any part of an HTML element except the tag name:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;h1 class='{{this.className}}' {{this.otherAttributes}}&gt;
+            Hello {{ this.subject }}
+        &lt;/h1&gt;
+    `;
+
+    static props = {
+        subject: &quot;World&quot;,
+        className: &quot;bigger&quot;,
+        otherAttributes: &quot;id='123'&quot;
+    };
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<p>You can call methods within <a href="can-stache.tags.escaped.html" title="Insert the value of the expression into the output of the template.">{{expression}}</a> too:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;h1&gt;Hello {{ this.caps( this.subject ) }}&lt;/h1&gt;
+    `;
+
+    static props = {
+        subject: &quot;World&quot;
+    };
+
+    caps(text) {
+        return text.toUpperCase();
+    }
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<p><a href="can-stache.tags.escaped.html" title="Insert the value of the expression into the output of the template.">{{expression}}</a> will escape the value being inserted into the page. This
+is <strong>critical</strong> to avoiding <a href="https://en.wikipedia.org/wiki/Cross-site_scripting">cross-site scripting</a> attacks. However, if you have HTML to insert and you know it is safe, you can use <a href="can-stache.tags.unescaped.html" title="Insert the unescaped value of the expression into the output of the template.">{{{expression}}}</a>
+to insert it.</p>
+<h3>Branching Logic</h3>
+<p>Stache provides severals helpers that help render logic conditionally.
+For example, the following renders a sun if the <code>time</code> property equals <code>&quot;day&quot;</code>:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;p on:click=&quot;this.toggle()&quot;&gt;
+            Time:
+            {{# eq(this.time,&quot;day&quot;) }}
+                SUN 🌞
+            {{ else }}
+                MOON 🌚
+            {{/ eq }}
+        &lt;/p&gt;
+    `;
+
+    static props = {
+        time: &quot;day&quot;
+    };
+
+    toggle() {
+        this.time = (this.time === &quot;day&quot; ? &quot;night&quot; : &quot;day&quot;);
+    }
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<p>Notice that branching is performed using the <a href="can-stache.tags.section.html" title="Renders a subsection one or more times depending on the type of expression
+or the expression’s return value.">{{#expression}}</a>,
+<a href="can-stache.helpers.else.html" title="">{{else}}</a> and
+<a href="can-stache.tags.close.html" title="">{{/expression}}</a> magic tags.  These define &quot;sections&quot; of content to render depending on
+what the helper does.  We call these the <em>TRUTHY</em> and <em>FALSY</em> sections. In the example above, the <a href="can-stache.helpers.eq.html" title="Render something if two values are equal.">eq</a> helper renders the <em>TRUTHY</em> section (<code>SUN 🌞</code>) if <code>this.time</code> equals <code>&quot;day&quot;</code>. If
+<code>this.time</code> is <strong>not</strong> equal to <code>&quot;day&quot;</code>, the <em>FALSY</em> section (<code>MOON 🌚</code>) is rendered.</p>
+<p>The following helpers are used to render conditionally:</p>
+<ul>
+<li><a href="can-stache.helpers.if.html" title="can-stache.helpers.if">if</a> - Renders the <em>TRUTHY</em> section if the value is truthy.
+<pre><code class="language-html">EXAMPLE
+</code></pre></li>
+<li><a href="can-stache.helpers.not.html" title="">not</a> - Renders the <em>TRUTHY</em> section if the value is falsy.</li>
+<li><a href="can-stache.helpers.eq.html" title="Render something if two values are equal.">eq</a> - Renders the <em>TRUTHY</em> section all values are equal.</li>
+<li><a href="can-stache.helpers.and.html" title="Perform a logical AND (&amp;&amp;).">and</a> - Renders the  <em>TRUTHY</em> section if all values are truthy.</li>
+<li><a href="can-stache.helpers.or.html" title="Perform a logical OR (||).">or</a> - Renders the  <em>TRUTHY</em> section if any value is truthy.</li>
+<li><a href="can-stache.helpers.switch.html" title="">switch</a> with <a href="can-stache.helpers.case.html" title="">case</a> - Renders the case section that matches the value.</li>
+<li><a href="can-stache.helpers.else.html" title="">{{else}}</a> - Renders the  <em>FALSY</em> section if the value is falsy.</li>
+</ul>
+<p>These helpers (except for <a href="can-stache.helpers.switch.html" title="">switch</a>) can be combined. For example,
+we can show the sun if <code>this.time</code> equals <code>&quot;day&quot;</code> or <code>&quot;afternoon&quot;</code> as follows:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;p on:click=&quot;this.toggle()&quot;&gt;
+            Time:
+            {{# or( eq(this.time,&quot;day&quot;), eq(this.time, &quot;afternoon&quot;) ) }}
+                SUN 🌞
+            {{ else }}
+                MOON 🌚
+            {{/ eq }}
+        &lt;/p&gt;
+    `;
+
+    static props = {
+        time: &quot;day&quot;
+    };
+
+    toggle() {
+        this.time = (this.time === &quot;day&quot; ? &quot;night&quot; :
+            (this.time === &quot;night&quot; ? &quot;afternoon&quot; : &quot;day&quot;));
+    }
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<blockquote>
+<p>NOTE: One of stache's goals is to keep your templates as simple as possible.
+It might be better to create a <code>isSunUp</code> method in the ViewModel and use that instead.</p>
+</blockquote>
+<h3>Looping</h3>
+<p>Use <a href="can-stache.helpers.for-of.html" title="Loop through a list of values, keys in an object, or integers.">for(of)</a> to loop through values. The following writes out the name of
+each todo:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;ul&gt;
+            {{# for(todo of this.todos) }}
+                &lt;li&gt;{{ todo.name }}&lt;/li&gt;
+            {{/ for }}
+        &lt;/ul&gt;
+    `;
+
+    static props = {
+        todos: {
+            get default() {
+                return [
+                    {name: &quot;Writing&quot;},
+                    {name: &quot;Branching&quot;},
+                    {name: &quot;Looping&quot;}
+                ]
+            }
+        }
+    };
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<p>Use <a href="can-stache/keys/scope.html" title="The template context">scope.index</a> to access the index of a value in the
+array. The following writes out the index with each todo's name:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;ul&gt;
+            {{# for(todo of this.todos) }}
+                &lt;li&gt;{{scope.index}} {{ todo.name }}&lt;/li&gt;
+            {{/ for }}
+        &lt;/ul&gt;
+    `;
+
+    static props = {
+        todos: {
+            get default() {
+                return [
+                    {name: &quot;Writing&quot;},
+                    {name: &quot;Branching&quot;},
+                    {name: &quot;Looping&quot;}
+                ]
+            }
+        }
+    };
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<p>Use <a href="can-stache.helpers.for-of.html" title="Loop through a list of values, keys in an object, or integers.">for(of)</a> to loop through key-value objects.</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;ul&gt;
+            {{# for(value of this.object) }}
+                &lt;li&gt;{{scope.key}} {{ value }}&lt;/li&gt;
+            {{/ for }}
+        &lt;/ul&gt;
+    `;
+
+    static props = {
+        object: {
+            get default() {
+                return {
+                    first: &quot;FIRST&quot;,
+                    value: &quot;VALUE&quot;
+                };
+            }
+        }
+    };
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<h3>Listening to events</h3>
+<p><a href="can-stache-bindings.event.html" title="Respond to events on elements or component ViewModels.">on:event</a> documents how you can listen to events on elements or
+<a href="can-stache-element/static.props.html" title="A static property used to create ObservableObject-like properties on each StacheElement instance.">props</a>. The following listens to <code>click</code>s on a button:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;button on:click=&quot;this.increment()&quot;&gt;+1&lt;/button&gt;
+        Count: {{this.count}}
+    `;
+
+    static props = {
+        count: 0
+    };
+
+    increment() {
+        this.count++;
+    }
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<h3>Binding to properties and attributes</h3>
+<p><a href="can-stache-bindings.html" title="Listen to events and create one-way and two-way bindings.">can-stache-bindings</a> provides directional bindings to connect
+values in stache to element <a href="can-stache-element/static.props.html" title="A static property used to create ObservableObject-like properties on each StacheElement instance.">props</a> or attributes.</p>
+<p>This makes it easy to:</p>
+<ul>
+<li><p>Write out property values.</p>
+<p>The following updates the checkboxes <code>checked</code> property
+if the status is <strong>not</strong> equal to 'critical':</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;input type=&quot;checkbox&quot;
+            checked:from=&quot;not( eq(this.status, 'critical') )&quot; /&gt;
+            Can ignore?
+
+        &lt;button on:click=&quot;this.status = 'critical'&quot;&gt;Critical&lt;/button&gt;
+        &lt;button on:click=&quot;this.status = 'medium'&quot;&gt;Medium&lt;/button&gt;
+        &lt;button on:click=&quot;this.status = 'low'&quot;&gt;Low&lt;/button&gt;
+    `;
+
+    static props = {
+        status: &quot;low&quot;
+    };
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre></li>
+</ul>
+<div class='codepen' data-codepen=''></div>
+<ul>
+<li><p>Update a value when an element property changes.</p>
+<p>The following updates the <a href="can-stache-element/static.props.html" title="A static property used to create ObservableObject-like properties on each StacheElement instance.">props</a> <code>name</code>
+when the <code>&lt;input/&gt;</code> changes:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;input value:to=&quot;this.name&quot; placeholder=&quot;name&quot;/&gt;
+        Name: {{ this.name }}
+    `;
+
+    static props = {
+        name: &quot;&quot;
+    };
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre></li>
+</ul>
+<div class='codepen' data-codepen=''></div>
+<p><a href="can-stache-bindings.html" title="Listen to events and create one-way and two-way bindings.">can-stache-bindings</a> supports a wide variety of different bindings.  Please checkout its documentation.</p>
+<h3>Creating variables</h3>
+<p>The <a href="can-stache.helpers.let.html" title="Create a block-level variable.">let</a> helper lets you create local variables.  For example, we can
+create a <code>name</code> variable and write to that:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        {{ let name='' }}
+        &lt;input value:to=&quot;name&quot; placeholder=&quot;name&quot;/&gt;
+        Name: {{ name }}
+    `;
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<p>Variables can help you avoid unnecessary <a href="can-stache-element/static.props.html" title="A static property used to create ObservableObject-like properties on each StacheElement instance.">props</a>
+like above. This is very handy when wiring <a href="can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">StacheElement</a>s within a
+<a href="can-stache.helpers.for-of.html" title="Loop through a list of values, keys in an object, or integers.">for(of)</a> loop as follows:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        {{# for(todo of this.todos) }}
+            {{ let locked=true }}
+            &lt;div&gt;
+                &lt;p&gt;
+                    Locked:
+                    &lt;input type='checkbox' checked:bind=&quot;locked&quot;/&gt;
+                &lt;/p&gt;
+                &lt;p&gt;
+                    &lt;input type='value' value:bind=&quot;todo.name&quot; disabled:from=&quot;locked&quot;/&gt;
+                &lt;/p&gt;
+            &lt;/div&gt;
+        {{/ for }}
+    `;
+
+    static props = {
+        todos: {
+            get default() {
+                return [
+                    {name: &quot;Writing&quot;},
+                    {name: &quot;Branching&quot;},
+                    {name: &quot;Looping&quot;}
+                ];
+            }
+        }
+    };
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<p>Currently, you can only create variables with <a href="can-stache.helpers.let.html" title="Create a block-level variable.">let</a> for the entire template or
+within <a href="can-stache.helpers.for-of.html" title="Loop through a list of values, keys in an object, or integers.">for(of)</a>.  If there are other blocks where you would find this useful, please
+let us know!</p>
+<h3>Creating helpers</h3>
+<p>Helpers can simplify your stache code.  While CanJS comes with many helpers, adding
+your own can reduce code. There are several different types of helpers, each with
+different benefits.</p>
+<p><strong>Global Helpers</strong></p>
+<p>Use <a href="can-stache.addHelper.html" title="Register a global helper function.">addHelper</a> to create a helper function that can be called from every
+template. The following makes an <code>upperCase</code> helper:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {stache, StacheElement} from &quot;can&quot;;
+
+stache.addHelper(&quot;upperCase&quot;, function(value){
+    return value.toUpperCase();
+})
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;h1&gt;Hello {{ upperCase(this.subject) }}&lt;/h1&gt;
+    `;
+
+    static props = {
+        subject: &quot;World&quot;
+    };
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<p>Global helpers are easy to create and understand, but
+they might create conflicts if another CanJS library defines
+a similar helper.</p>
+<p><strong>Component Methods</strong></p>
+<p>Instead of creating a global helper, add your helper functions on
+your component.  The following adds the <code>upperCase</code> method to the component.</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { stache, StacheElement, type } from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+      &lt;h1&gt;Hello {{ this.upperCase(this.subject) }}&lt;/h1&gt;
+    `;
+
+    static props = {
+      subject: &quot;World&quot;
+    };
+
+    // View Helpers
+    upperCase(value) {
+      return value.toUpperCase();
+    }
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<p><details>
+<summary>Importing Functions</summary></p>
+<p>If you are using a module loader to import stache files, <a href="can-view-import.html" title="">can-view-import</a> can
+be used to import a function to a <a href="can-stache.helpers.let.html" title="Create a block-level variable.">let variable</a>:</p>
+<pre><code class="language-html">&lt;can-import from=&quot;app/helpers/upperCase&quot;  module.default:to=&quot;upperCase&quot;/&gt;
+{{upperCase(name)}}
+</code></pre>
+<p></details></p>
+<h3>Creating partials</h3>
+<p>Partials are snippets of HTML that might be used several places. There are a few
+ways of reusing HTML.</p>
+<p><strong>Using Custom Elements</strong></p>
+<p>You can always define and use <a href="can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a>. The following defines and uses
+an <code>&lt;address-view&gt;</code> component:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class AddressView extends StacheElement {
+    static view = `
+        &lt;address&gt;{{this.street}}, {{this.city}}&lt;/address&gt;
+    `;
+};
+
+customElements.define(&quot;address-view&quot;, AddressView);
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;h2&gt;{{this.user1.name}}&lt;/h2&gt;
+        &lt;address-view street:from=&quot;user1.street&quot; city:from=&quot;user1.city&quot;/&gt;
+        &lt;h2&gt;{{this.user2.name}}&lt;/h2&gt;
+        &lt;address-view street:from=&quot;user2.street&quot; city:from=&quot;user2.city&quot;/&gt;
+    `;
+
+    static props = {
+        user1: {
+            get default() {
+                return {name: &quot;Ramiya&quot;, street: &quot;Stave&quot;, city: &quot;Chicago&quot;}
+            }
+        },
+        user2: {
+            get default() {
+                return {name: &quot;Bohdi&quot;, street: &quot;State&quot;, city: &quot;Chi-city&quot;}
+            }
+        }
+    };
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<p><strong>Calling views</strong></p>
+<p>You can create views programmatically with <code>stache</code>, make those views available
+to another view (typically through the <a href="can-stache-element/static.props.html" title="A static property used to create ObservableObject-like properties on each StacheElement instance.">props</a>).  The following
+creates an <code>addressView</code> and makes it available to <code>&lt;my-demo&gt;</code>'s <a href="can-stache-element/static.view.html" title="Provides a way to render the element's innerHTML using a can-stache template.">view</a>
+through the <code>addressView</code> property on the <code>ViewModel</code>:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {stache, StacheElement} from &quot;can&quot;;
+
+const addressView = stache(`&lt;address&gt;{{this.street}}, {{this.city}}&lt;/address&gt;`);
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;h2&gt;{{this.user1.name}}&lt;/h2&gt;
+        {{ addressView(street=user1.street city=user1.city) }}
+        &lt;h2&gt;{{this.user2.name}}&lt;/h2&gt;
+        {{ addressView(street=user2.street city=user2.city) }}
+    `;
+
+    static props = {
+      addressView: {
+          get default() {
+              return addressView;
+          }
+      },
+      user1: {
+          get default() {
+              return {name: &quot;Ramiya&quot;, street: &quot;Stave&quot;, city: &quot;Chicago&quot;}
+          }
+      },
+      user2: {
+          get default() {
+              return {name: &quot;Bohdi&quot;, street: &quot;State&quot;, city: &quot;Chi-city&quot;}
+          }
+      }
+  };
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<p><strong>Inline Partials</strong></p>
+<p>If a single template needs the same HTML multiple places, use <a href="can-stache.tags.named-partial.html" title="Create an inline named partial within the current template.">{{&lt;partialName}}</a>
+to create an inline partial:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        {{&lt; addressView }}
+            &lt;address&gt;{{ this.street}}, {{ this.city }}&lt;/address&gt;
+        {{/ addressView }}
+        &lt;h2&gt;{{ this.user1.name }}&lt;/h2&gt;
+        {{ addressView(user1) }}
+        &lt;h2&gt;{{ this.user2.name }}&lt;/h2&gt;
+        {{ addressView(user2) }}
+    `;
+
+    static props = {
+        user1: {
+            get default() {
+                return {name: &quot;Ramiya&quot;, street: &quot;Stave&quot;, city: &quot;Chicago&quot;}
+            }
+        },
+        user2: {
+            get default() {
+                return {name: &quot;Bohdi&quot;, street: &quot;State&quot;, city: &quot;Chi-city&quot;}
+            }
+        }
+    };
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<h2>Other uses</h2>
+<h3>Reading promises</h3>
+<p>Stache can read &quot;virtual&quot; properties from <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promises</a> and other types configured to work with
+<a href="can-reflect.getKeyValue.html" title="Get the value of a named property on a MapLike object.">getKeyValue</a>.</p>
+<p>The following &quot;virtual&quot; keys can be read from promises:</p>
+<ul>
+<li><code>isPending</code> - <code>true</code> if the promise has not been resolved or rejected.</li>
+<li><code>isResolved</code> - <code>true</code> if the promise has resolved.</li>
+<li><code>isRejected</code> - <code>true</code> if the promise was rejected.</li>
+<li><code>value</code> - the resolved value.</li>
+<li><code>reason</code> - the rejected value.</li>
+</ul>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import { StacheElement, type } from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;div&gt;
+            {{# if(promise.isPending) }} Pending... {{/ if }}
+            {{# if(promise.isRejected) }}
+                Rejected! {{ promise.reason }}
+            {{/ if }}
+            {{# if(promise.isResolved) }}
+                Resolved: {{ promise.value }}
+            {{/ if}}
+        &lt;/div&gt;
+        &lt;button on:click=&quot;resolve('RESOLVED',2000)&quot;&gt;Resolve in 2s&lt;/button&gt;
+        &lt;button on:click=&quot;reject('REJECTED',2000)&quot;&gt;Reject in 2s&lt;/button&gt;
+    `;
+
+    static props = {
+        promise: type.Any
+    };
+
+    resolve(value, time) {
+        this.promise = new Promise((resolve)=&gt;{
+            setTimeout(()=&gt;{
+                resolve(value);
+            },time)
+        });
+    }
+
+    reject(value, time) {
+        this.promise = new Promise((resolve, reject)=&gt;{
+            setTimeout(()=&gt;{
+                reject(value);
+            },time)
+        });
+    }
+
+    connected() {
+        this.resolve(&quot;RESOLVED&quot;, 2000);
+    }
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<h3>Animation</h3>
+<p>Use <a href="can-stache-bindings.event.html" title="Respond to events on elements or component ViewModels.">on:event</a> to listen to an event and call an animation library.</p>
+<p>The following listens to when a todo's <code>complete</code> event is fired and calls <code>this.shake</code>.
+<code>this.shake</code> uses <a href="http://animejs.com/">anime</a> to animate the <code>&lt;div&gt;</code>:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script src=&quot;//cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {ObservableObject, StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        {{# for(todo of todos) }}
+            &lt;div on:complete:by:todo=&quot;this.shake(scope.element)&quot;&gt;
+                &lt;input type=&quot;checkbox&quot; checked:bind=&quot;todo.complete&quot;/&gt;
+                {{todo.name}}
+            &lt;/div&gt;
+        {{/ for }}
+    `;
+
+    static props = {
+        todos: {
+            get default() {
+                return [
+                    new ObservableObject({name: &quot;animate&quot;, complete: false}),
+                    new ObservableObject({name: &quot;celebrate&quot;, complete: true})
+                ];
+            }
+        }
+    };
+
+    shake(element) {
+        anime({
+            targets: element,
+            translateX: [ 10,-10,0 ],
+            easing: 'linear'
+        });
+    }
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<h3>Syntax Highlighting</h3>
+<p>Stache is very similar to handlebars and mustache.  Most editors have plugins for one of these
+formats.</p>
+<h3>Spacing and formatting</h3>
+<p>Stache tolerates spacing similar to JavaScript. However, we try to following the following
+spacing in the following example:</p>
+<pre><code class="language-html">{{# if( this.check ) }}
+    {{ this.value }}
+{{ else }}
+    {{ this.method( arg1 ) }}
+{{/ if}}
+</code></pre>
+<p>You can use the following regular expressions to create this spacing:</p>
+<ul>
+<li>replace <code>\{\{([^ #\/\^!])</code> with <code>{{ $1</code></li>
+<li>replace <code>\{\{([#\/\^!])([^ ])</code> with <code>{{$1 $2</code></li>
+<li>replace <code>([^ ])\}\}</code> with <code>$1 }}</code></li>
+</ul>
+<h3>Accessing a helper if your property overwrites</h3>
+<p>Sometimes you have data with properties that conflict with stache's
+helpers, but you still need to access those helpers.  To do this,
+you can access all those helpers on <code>scope.helpers</code> like <code>scope.helpers.eq</code>.</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;p on:click=&quot;this.toggle()&quot;&gt;
+            Time:
+            {{# scope.helpers.eq(this.eq,&quot;day&quot;) }}
+                SUN 🌞
+            {{ else }}
+                MOON 🌚
+            {{/ }}
+        &lt;/p&gt;
+    `;
+
+    static props = {
+        eq: &quot;day&quot;
+    };
+
+    toggle() {
+        this.eq = (this.eq === &quot;day&quot; ? &quot;night&quot; : &quot;day&quot;);
+    }
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<h3>Removing whitespace</h3>
+<p>Stache renders whitespace. For example, the following will render the space between
+the <code>&lt;h1&gt;</code> tags and the <code>{{this.message}}</code> magic tag:</p>
+<pre><code class="language-js">import {stache} from &quot;can&quot;;
+
+var view = stache(`&lt;h1&gt;
+    {{this.message}}
+&lt;/h1&gt;`);
+
+var fragment = view({message: &quot;Hi&quot;});
+
+console.log( fragment.firstChild.innerHTML ) //-&gt; &quot;\n\tHi\n&quot;
+</code></pre>
+<div class='codepen'></div>
+<p>You can use <a href="can-stache.tags.whitespace.html" title="Omit whitespace from around the output of the template.">{{-expression-}}</a> to remove this whitespace like:</p>
+<pre><code class="language-js">import {stache} from &quot;can&quot;;
+
+var view = stache(`&lt;h1&gt;
+    {{-this.message-}}
+&lt;/h1&gt;`);
+
+var fragment = view({message: &quot;Hi&quot;});
+
+console.log( fragment.firstChild.innerHTML ) //-&gt; &quot;Hi&quot;
+</code></pre>
+<div class='codepen'></div>
+<h2>Understanding the stache language</h2>
+<p>Stache has a variety of magic tags and expressions that control the behavior of
+the DOM it produces.  Furthermore, you are able to customize this behavior
+to a large extent.</p>
+<p>The following sections outline stache's formal syntax and grammar.  This knowledge
+can be useful when attempting to combine features into advanced functionality.</p>
+<ul>
+<li>Magic tags - Magic tags like <a href="can-stache.tags.escaped.html" title="Insert the value of the expression into the output of the template.">{{expression}}</a> and <a href="can-stache.tags.unescaped.html" title="Insert the unescaped value of the expression into the output of the template.">{{{expression}}}</a>
+control control how stache operates on the DOM.</li>
+<li>Expression types - This is the valid semantics within a magic tag. For example, you
+can call functions like <code>{{ this.callSomeMethod() }}</code>.</li>
+<li>Scope and context - How variables and <code>this</code> get looked up.</li>
+</ul>
+<h3>Magic tags</h3>
+<p>Rendering behavior is controlled with magic tags that look like <code>{{}}</code>.  There
+are several forms of magic tags:</p>
+<ul>
+<li>Insertion tags
+<ul>
+<li><a href="can-stache.tags.escaped.html" title="Insert the value of the expression into the output of the template.">{{expression}}</a> - Insert escaped content into the DOM.</li>
+<li><a href="can-stache.tags.unescaped.html" title="Insert the unescaped value of the expression into the output of the template.">{{{expression}}}</a> - Insert unescaped content into the DOM.</li>
+<li><a href="can-stache.tags.comment.html" title="A comment that doesn’t get inserted into the rendered result.">{{!expression}}</a> - Make a comment.</li>
+</ul></li>
+<li>Section tags - optional render a sub-section.
+<ul>
+<li><a href="can-stache.tags.section.html" title="Renders a subsection one or more times depending on the type of expression
+or the expression’s return value.">{{#expression}}</a>TRUTHY<a href="can-stache.helpers.else.html" title="">{{else}}</a>FALSY<a href="can-stache.tags.close.html" title="">{{/expression}}</a> - Optionally render the <em>TRUTHY</em> or <em>FALSY</em> section.</li>
+<li><a href="can-stache.tags.inverse.html" title="Like can-stache.tags.section, but renders the opposite subsection depending on the type of expression
+or the expression’s return value.">{{^expression}}</a>FALSY<a href="can-stache.helpers.else.html" title="">{{else}}</a>TRUTHY<a href="can-stache.tags.close.html" title="">{{/expression}}</a> - Optionally render the <em>TRUTHY</em> or <em>FALSY</em> section.</li>
+</ul></li>
+<li>Special
+<ul>
+<li><a href="can-stache.tags.named-partial.html" title="Create an inline named partial within the current template.">{{&lt;partialName}}</a>...<a href="can-stache.tags.close.html" title="">{{/partialName}}</a> - Create
+an inline partial.</li>
+<li><a href="can-stache.tags.whitespace.html" title="Omit whitespace from around the output of the template.">{{-expression-}}</a> - Remove whitespace.</li>
+</ul></li>
+</ul>
+<p>Magic tags are valid in the following places in HTML:</p>
+<ul>
+<li>Between a open and closed tag:
+<pre><code class="language-html">&lt;div&gt; {{magic}} &lt;/div&gt;
+&lt;div&gt; {{#magic}} {{/magic}} &lt;/div&gt;
+</code></pre></li>
+<li>Wrapping a series of opening and closing tags:
+<pre><code class="language-html">&lt;div&gt; {{#magic}} &lt;label&gt;&lt;/label&gt; {{/magic}} &lt;/div&gt;
+&lt;div&gt; {{#magic}} &lt;label&gt;&lt;/label&gt;&lt;span&gt;&lt;/span&gt; {{/magic}} &lt;/div&gt;
+</code></pre></li>
+<li>Within an attribute:
+<pre><code class="language-html">&lt;div class=&quot;selected {{magic}}&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;{{#magic}}selected{{/magic}}&quot;&gt;&lt;/div&gt;
+</code></pre></li>
+<li>Within a tag:
+<pre><code class="language-html">&lt;div {{magic}}&gt;&lt;/div&gt;
+</code></pre></li>
+<li>Within a tag, wrapping attributes:
+<pre><code class="language-html">&lt;div {{#magic}}class=&quot;selected&quot;{{/magic}}&gt;&lt;/div&gt;
+&lt;input {{#magic}}checked{{/magic}}&gt;&lt;/div&gt;
+</code></pre></li>
+</ul>
+<p>The following places are not supported:</p>
+<ul>
+<li>Defining the tag name:
+<pre><code class="language-html">&lt;{{tagName}}&gt;&lt;/{{tagName}}&gt;
+</code></pre></li>
+<li>Wrapping an opening or closing tag:
+<pre><code class="language-html">&lt;div&gt; {{#magic}} &lt;label&gt; {{/magic}} &lt;/label&gt;&lt;/div&gt;
+&lt;div&gt; &lt;label&gt; {{#magic}} &lt;/label&gt;&lt;span&gt;&lt;/span&gt; {{/magic}} &lt;/div&gt;
+</code></pre></li>
+<li>Intersecting part of an attribute:
+<pre><code class="language-html">&lt;div {{attributeName}}=&quot;selected&quot;&gt;&lt;/div&gt;
+&lt;div {{#magic}}class=&quot;{{/magic}}selected&quot;&gt;&lt;/div&gt;
+</code></pre></li>
+<li>Attribute values without quotes:
+<pre><code class="language-html">&lt;div attribute={{#magic}}&quot;foo&quot;{{/magic}}&gt;&lt;/div&gt;
+&lt;div key:raw={{#magic}}&quot;foo&quot;{{/magic}}&gt;&lt;/div&gt;
+&lt;div key:from={{#magic}}{{foo}}{{/magic}}&gt;&lt;/div&gt;
+</code></pre></li>
+</ul>
+<h3>Expression types</h3>
+<p>Stache supports different expression types within most of the magic tags. The following
+uses most of the expressions available:</p>
+<pre><code class="language-html">&lt;div&gt; {{ this.method( 1, keyA=null keyB=true )[key]( &quot;string&quot;, value ) }}
+</code></pre>
+<p>There are 6 expression types stache supports:</p>
+<ul>
+<li>Literal expressions like <code>{{&quot;string&quot;}}</code></li>
+<li>KeyLookup expressions like <code>{{key}}</code></li>
+<li>Call expressions like <code>{{method(arg)}}</code></li>
+<li>Hash expressions like <code>{{prop=key}}</code></li>
+<li>Bracket expressions like <code>{{[key]}}</code></li>
+<li>Helper expressions like <code>{{helper arg}}</code> (deprecated, but will probably be supported forever)</li>
+</ul>
+<h4>Literal expressions</h4>
+<p>A <a href="can-stache/expressions/literal.html" title="Specify a JavaScript primitive type.">Literal Expression</a> specifies JS primitive values like:</p>
+<ul>
+<li>Strings <code>&quot;strings&quot;</code></li>
+<li>Numbers <code>5</code></li>
+<li>Booleans <code>true</code> or <code>false</code></li>
+<li>And <code>null</code> or <code>undefined</code></li>
+</ul>
+<p>They are usually passed as arguments to Call expressions like:</p>
+<pre><code class="language-html">{{ task.filter( &quot;completed&quot;, true ) }}
+</code></pre>
+<h4>KeyLookup expressions</h4>
+<p>A <a href="can-stache/expressions/key-lookup.html" title="">KeyLookup Expression</a> specifies a value in the <a href="can-view-scope.html" title="Create a lookup node for keys.">scope</a>
+that will be looked up. KeyLookup expressions
+can be the entire stache expression like:</p>
+<pre><code class="language-html">{{ key }}
+</code></pre>
+<p>Or they can make up the method, arguments, bracket, and hash value parts of
+Call and Hash expressions:</p>
+<pre><code class="language-html">{{ method( arg1, arg2 ) }}      Call
+{{ method( prop=hashValue ) }}  Hash
+{{ [key] }}                     Bracket
+</code></pre>
+<p>The value returned up by a KeyLookup depends on what the <a href="can-stache.key.html" title="A named reference to a value in the scope or helper scope in a template.">key</a> looks like, and
+the scope.</p>
+<h4>Call expressions</h4>
+<p>A <a href="can-stache/expressions/call.html" title="">Call Expression</a> calls a function looked up in the <a href="can-view-scope.html" title="Create a lookup node for keys.">scope</a>. It looks like:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;h1&gt;{{ this.pluralize(this.type, this.ages.length) }}&lt;/h1&gt;
+    `;
+
+    static props = {
+        ages: {
+            get default() {
+                return [ 22, 32, 42 ];
+            }
+        },
+
+        type: &quot;age&quot;
+    };
+
+    pluralize(type, count) {
+        return type + ( count === 1 ? &quot;&quot; : &quot;s&quot; );
+    }
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<p>Call expression arguments are comma (,) separated.  If a Hash expression is an argument,
+an object with the hash properties and values will be passed. For example:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;h1&gt;{{ this.pluralize(word=this.type count=this.ages.length) }}&lt;/h1&gt;
+    `;
+
+    static props = {
+        ages: {
+            get default() {
+                return [ 22, 32, 42 ];
+            }
+        },
+
+        type: &quot;age&quot;
+    };
+
+    pluralize(options) {
+        return options.word + ( options.count === 1 ? &quot;&quot; : &quot;s&quot; );
+    }
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<h4>Hash expressions</h4>
+<p>A <a href="can-stache/expressions/hash.html" title="">Hash Expression</a> specifies a property value on a object
+argument. Notice how <code>method</code> is called below:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;h1&gt;{{ this.method(a=this.aProp b=null, c=this.func() ) }}&lt;/h1&gt;
+    `;
+
+    static props = {
+        aProp: &quot;aValue&quot;
+    };
+
+    method(arg1, arg2) {
+        console.log(arg1, arg2) //-&gt; {aProp: &quot;aValue&quot;, b: null},{c:&quot;FUNC&quot;}
+    }
+
+    func() {
+        return &quot;FUNC&quot;;
+    }
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<h4>Bracket expressions</h4>
+<p>A <a href="can-stache/expressions/bracket.html" title="">Bracket Expression</a> can be used to look up a dynamic property in the <a href="can-view-scope.html" title="Create a lookup node for keys.">scope</a>. This is very useful when looping through properties to write out on many records:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;table&gt;
+            {{# for(record of records) }}
+                &lt;tr&gt;
+                    {{# for(key of keys )}}
+                        &lt;td&gt;{{ record[key] }}&lt;/td&gt;
+                    {{/ for}}
+                &lt;/tr&gt;
+            {{/ for}}
+        &lt;/table&gt;
+    `;
+
+    static props = {
+        records: {
+            get default() {
+                return [
+                    {first: &quot;Justin&quot;, last: &quot;Meyer&quot;, label: &quot;Dad&quot;},
+                    {first: &quot;Payal&quot;, last: &quot;Meyer&quot;, label: &quot;Mom&quot;},
+                    {first: &quot;Ramiya&quot;, last: &quot;Meyer&quot;, label: &quot;Babu&quot;},
+                    {first: &quot;Bohdi&quot;, last: &quot;Meyer&quot;, label: &quot;Baby&quot;}
+                ];
+            }
+        },
+        keys: {
+            get default() {
+                return [
+                    &quot;first&quot;,&quot;last&quot;,&quot;label&quot;
+                ];
+            }
+        }
+    };
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<p>This can be useful for looking up values using keys containing non-alphabetic characters:</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;h1&gt;{{ this.data[&quot;special:prop&quot;] }}&lt;/h1&gt;
+    `;
+
+    static props = {
+        data: {
+            get default() {
+                return {&quot;special:prop&quot;: &quot;SPECIAL VALUE&quot;}
+            }
+        }
+    };
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<p>Bracket expressions can also be used to look up a value in the result of another expression:</p>
+<pre><code class="language-html">{{ this.getPerson()[key] }}
+</code></pre>
+<h4>Helper expressions</h4>
+<p><a href="can-stache/expressions/helper.html" title="">Helper Expression</a>s are supported but deprecated. It's unlikely they will
+be dropped for a long time.</p>
+<h3>Scope and context</h3>
+<p>Stache maintains a <a href="can-stache/keys/scope.html" title="The template context">scope</a> similar to the one maintained in JavaScript. For example,
+the <code>inner</code> function is able to access the <code>message</code>, <code>last</code>, and <code>first</code> variables:</p>
+<pre><code class="language-js">const message = &quot;Hello&quot;;
+function outer() {
+    const last = &quot;Meyer&quot;;
+
+    function inner() {
+        const first = &quot;Bohdi&quot;;
+        console.log( message + &quot; &quot; + first + &quot; &quot; + last );
+    }
+    inner();
+}
+outer();
+</code></pre>
+<p>Stache was originally built with a handlebars and mustache-type scope. This scope is still
+supported, but deprecated. If you are supporting templates in this style, please read <a href="can-stache.scopeAndContext.html" title="">Legacy Scope Behavior</a>.</p>
+<p>The modern style of stache works much more like JavaScript. A view is rendered with
+a <code>context</code> accessible as <code>this</code>.  For example:</p>
+<pre><code class="language-js">import {stache} from &quot;can&quot;;
+var view = stache(`&lt;h1&gt;Hello {{ this.subject }}&lt;/h1&gt;`);
+
+var context = {
+    message: &quot;World&quot;
+};
+
+var fragment = view(context);
+
+console.log(fragment.firstChild.innerHTML)
+//-&gt; Hello World
+</code></pre>
+<p>The <a href="can-stache.helpers.for-of.html" title="Loop through a list of values, keys in an object, or integers.">for(of)</a> helper creates variables local to the
+section. In the following example <code>todo</code> is only available between <code>{{# for(...)}}</code> and
+<code>{{/ for }}</code>.</p>
+<pre><code class="language-html">&lt;my-demo&gt;&lt;/my-demo&gt;
+&lt;script type=&quot;module&quot;&gt;
+import {StacheElement} from &quot;can&quot;;
+
+class MyDemo extends StacheElement {
+    static view = `
+        &lt;ul&gt;
+            {{# for(todo of this.todos) }}
+                &lt;li&gt;{{ todo.name }}&lt;/li&gt;
+            {{/ for }}
+        &lt;/ul&gt;
+    `;
+
+    static props = {
+        todos: {
+            get default() {
+                return [
+                    {name: &quot;Writing&quot;},
+                    {name: &quot;Branching&quot;},
+                    {name: &quot;Looping&quot;}
+                ];
+            }
+        }
+    };
+};
+customElements.define(&quot;my-demo&quot;, MyDemo);
+&lt;/script&gt;
+</code></pre>
+<div class='codepen'></div>
+<p>When a variable like <code>todo</code> is looked up, it will look for variables in its
+scope and then walk to parent scopes until it finds a value.</p>
+<h2>See also</h2>
+<p><a href="can-view-scope.html" title="Create a lookup node for keys.">can-view-scope</a> is used by <code>stache</code> internally to hold and lookup values.  This is similar to
+how JavaScript’s closures hold variables, except you can use it programmatically.</p>
+<p><a href="can-stache-element.html" title="Create a custom element with ObservableObject-like properties and stache views.">can-stache-element</a> and <a href="can-view-callbacks.tag.html" title="">can-view-callbacks.tag</a> allow you to define custom
+elements for use within a stache template.  <a href="can-view-callbacks.attr.html" title="Register custom behavior for an attribute.">can-view-callbacks.attr</a> allow
+you to define custom attributes.</p>
+<p><a href="can-stache-bindings.html" title="Listen to events and create one-way and two-way bindings.">can-stache-bindings</a> sets up <strong>element and bindings</strong> between a stache template’s <a href="can-view-scope.html" title="Create a lookup node for keys.">can-view-scope</a>,
+component <a href="can-stache-element/static.props.html" title="A static property used to create ObservableObject-like properties on each StacheElement instance.">props</a>, or an element’s attributes.</p>
+<h2>How it works</h2>
+<p>Coming soon!</p>
+
+</section>
+
+  
+
+
+<script type="text/javascript">
+  window.docObject = {"src":{"path":"node_modules/can-stache/docs/stache.md"},"description":"Live binding templates. \n","type":"module","title":"","types":[{"type":"function","returns":{"types":[{"type":"undefined"}]},"params":[]}],"name":"can-stache","parent":"can-views","collection":"can-core","release":"2.1","package":{"author":{"name":"Bitovi","email":"contact@bitovi.com","url":"http://bitovi.com"},"bugs":{"url":"https://github.com/canjs/can-stache/issues"},"bundleDependencies":false,"dependencies":{"can-assign":"^1.1.1","can-attribute-encoder":"^1.0.0","can-child-nodes":"^1.0.0","can-define-lazy-value":"^1.0.2","can-dom-data":"^1.0.1","can-dom-mutate":"^2.0.0","can-fragment":"^1.3.0","can-globals":"^1.1.1","can-import-module":"^1.0.0","can-join-uris":"^1.0.0","can-log":"^1.0.0","can-namespace":"1.0.0","can-observation":"^4.2.0","can-observation-recorder":"^1.3.0","can-reflect":"^1.16.4","can-simple-observable":"^2.0.3","can-stache-ast":"^1.0.0","can-stache-helpers":"^1.0.0","can-stache-key":"^1.3.1","can-string":"<2.0.0","can-symbol":"^1.6.4","can-view-callbacks":"^5.0.0","can-view-live":"^5.0.0","can-view-parser":"^4.0.0","can-view-scope":"^4.12.0","can-view-target":"^5.0.0"},"deprecated":false,"description":"Live binding handlebars templates","devDependencies":{"can-define":"^2.0.4","can-queues":"^1.3.0","can-simple-dom":"^1.7.0","can-simple-map":"^4.0.0","can-test-helpers":"^1.1.2","can-vdom":"^4.0.0","detect-cyclic-packages":"^1.1.0","http-server":"^0.11.0","jshint":"^2.9.4","steal":"^1.5.19","steal-benchmark":"^0.0.1","steal-qunit":"^2.0.0","steal-tools":"^1.0.1","test-saucelabs":"^0.0.6","testee":"^0.9.1"},"homepage":"https://canjs.com/doc/can-stache.html","keywords":["canjs","canjs-plugin","donejs"],"license":"MIT","main":"can-stache","name":"can-stache","repository":{"type":"git","url":"git://github.com/canjs/can-stache.git"},"scripts":{"build":"node build.js","ci":"npm run test && node test/test-saucelabs.js","detect-cycle":"detect-cyclic-packages","http-server":"http-server -p 3000 --silent","jshint":"jshint . --config","postpublish":"git push --tags && git push","preversion":"npm test","release:major":"npm version major && npm publish","release:minor":"npm version minor && npm publish","release:patch":"npm version patch && npm publish","release:pre":"npm version prerelease && npm publish --tag pre","test":"npm run detect-cycle && npm run jshint && npm run testee","testee":"testee test/test.html --browsers firefox"},"version":"5.1.1"},"outline":{"depth":2},"signatures":[{"code":"stache([name,] template)","description":"\n\n  Processes the `template` string and returns a [can-stache.view view function] that can\n  be used to create HTML elements with data.\n\n  ```js\n  import {stache} from \"can\";\n\n  // parses the template string and returns a view function:\n  const view = stache(`<h1>Hello {{this.subject}}</h1>`);\n\n  // Calling the view function returns HTML elements:\n  const documentFragment = view({subject: \"World\"});\n\n  // Adds those elements to the page\n  document.body.appendChild( documentFragment );\n\n  console.log(document.body.innerHTML) //-> \"<h1>Hello World</h1>\";\n  ```\n<div class='codepen' data-codepen=''></div>\n\n\n  `stache` is most commonly used by [can-stache-element] to define a component's\n  [can-stache-element/static.view]:\n\n  ```html\n  <my-demo></my-demo>\n  <script type=\"module\">\n  import {StacheElement} from \"can\";\n\n  class MyDemo extends StacheElement {\n    static view = `\n      <h1>Hello {{this.subject}}</h1>\n    `;\n\n    static props = {\n      subject: {default: \"World\"}\n    };\n  };\n  customElements.define(\"my-demo\", MyDemo);\n  <\/script>\n  ```\n\n  Use [steal-stache] to import template view functions with [http://stealjs.com StealJS].\n\n  Use [can-stache-loader](https://npmjs.com/package/can-stache-loader) to import template\n  view functions with [webpack](https://webpack.js.org/).\n","params":[{"types":[{"type":"String"}],"optional":true,"name":"name","description":"Provides an optional name for this type that will show up\nnicely in errors. Files imported with [steal-stache] will use their filename.\n"},{"types":[{"type":"String"}],"name":"template","description":"The text of a stache template.\n"}],"returns":{"types":[{"type":"can-stache.view"}],"description":"A [can-stache.view view] function that returns\na live document fragment that can be inserted in the page.\n"}}],"codepen":[["\"can\"","\"//unpkg.com/can@6/core.mjs\""],["\"can/ecosystem\"","\"//unpkg.com/can@6/ecosystem.mjs\""],["\"can/everything\"","\"//unpkg.com/can@6/everything.mjs\""],["\"can/demos/technology-overview/mock-url\"","\"//unpkg.com/mock-url@^6.0.0/mock-url.mjs\""],["\"can/demos/technology-overview/route-mini-app-components\"","\"//unpkg.com/route-mini-app@^5.0.0/components.mjs\""],["return steal.import(","return import("],["\"can/demos/technology-overview/page-login\"","\"//unpkg.com/route-mini-app@^5.0.0/page-login.mjs\""],["`can/demos/technology-overview/page-${this.page}`","`//unpkg.com/route-mini-app@^5.0.0/page-${this.page}.mjs`"]],"_curParam":{"types":[{"type":"String"}],"name":"template","description":"The text of a stache template.\n"},"_curReturn":{"types":[{"type":"can-stache.view"}],"description":"A [can-stache.view view] function that returns\na live document fragment that can be inserted in the page.\n"},"comment":" ","pathToRoot":".."};
+</script>
+</article>
+      
+        <footer><p>CanJS is part of <a href="https://donejs.com" target="_blank">DoneJS</a>. Created and maintained by the core <a href="https://donejs.com/About.html#team" target="_blank">DoneJS team</a> and <a href="https://www.bitovi.com" target="_blank">Bitovi</a>. <strong>Currently 6.6.1.</strong></p>
+</footer>
+      
+
+  </div>
+  <div id="toc-sidebar" class="column">
+    <nav>
+      <h1 class="hide">On this page</h1>
+    </nav>
+    <div class="get-help">
+      <h1>Get help</h1>
+      <ul>
+        <li><a href="https://www.bitovi.com/community/slack" target="_blank" class="icon-slack">Chat with us</a></li>
+        <li><a href="https://github.com/canjs/canjs/issues/new" target="_blank" class="icon-github">File an issue</a></li>
+        <li><a href="https://forums.bitovi.com/c/canjs" target="_blank" class="icon-forums">Ask questions</a></li>
+        <li><a href="https://www.bitovi.com/blog/topic/canjs" target="_blank" class="icon-blog">Read latest news</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+		
+			<script>
+				steal = {
+				  	instantiated: {
+				    	"bundles/bit-docs-site/static.css!$css" : null
+				  	}
+			  	};
+			</script>
+			<script type='text/javascript' data-main="bit-docs-site/static" src="./static/steal.production.js"></script>
+		
+		<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+		<!-- root-level elements with attributes necessary for the app -->
+		<div path-prefix="."></div>
+
+	</body>
+</html>

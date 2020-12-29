@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<title>can-route</title>
+<script src="../node_modules/steal/steal-with-promises.js" main="can-route/test/test-without-proxy"></script>
+<script>
+	steal.config({
+		paths: {
+			"can-route*src/routedata": "src/routedata-definemap.js"
+		}
+	});
+</script>
+<div id="qunit-fixture"></div>

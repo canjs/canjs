@@ -1,0 +1,9 @@
+[ignore]
+.*/node_modules/.*/test/.*
+
+[include]
+
+[libs]
+
+[options]
+suppress_comment=\\(.\\|\n\\)*\\$ExpectError

@@ -1,0 +1,9 @@
+{
+  "generator-donejs": {
+    "promptValues": {
+      "authorName": "Ryan Wheale",
+      "authorEmail": "ryan@bitovi.com",
+      "authorUrl": ""
+    }
+  }
+}

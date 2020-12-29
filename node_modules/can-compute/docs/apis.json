@@ -1,0 +1,8 @@
+[
+	{"can-compute": [
+		"can-compute.computed",
+		"can-compute.async",
+		"can-compute.asyncComputer",
+		"computeSettings"
+	]}
+]
