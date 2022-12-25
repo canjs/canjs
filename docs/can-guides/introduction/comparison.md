@@ -396,7 +396,7 @@ With **CanJS** we have a guiding principle: You shouldn’t have to rewrite your
 
 ### Modularity
 
-Sometimes, you’re not building the next Gmail, you only have a few interactive forms on your site that could use some pizzaz. Sometimes, you already have a working app, and you want to move progressively into a new framework, not do a whole re-write of what is already working.
+Sometimes, you’re not building the next Gmail, you only have a few interactive forms on your site that could use some pizzazz. Sometimes, you already have a working app, and you want to move progressively into a new framework, not do a whole re-write of what is already working.
 
 The key in these times, is to pick something you can use a piece at a time, as you need it, and pick the parts you need, without bringing in the kitchen sink. You’ll want modularity,
 
