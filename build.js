@@ -62,6 +62,9 @@ var globalBuilds = stealTools.export({
 			"can-observable-object": "can-observable-object/dist/can-observable-object",
 			"can-observable-mixin": "can-observable-mixin/dist/mixins",
 			"can-stache-element": "can-stache-element/dist/can-stache-element"
+		},
+		paths: {
+			"can-import-module@1.3.0#loader/es6": "node_modules/can-import-module/compat-loader/es6.js"
 		}
 	},
 	options: {
@@ -89,7 +92,10 @@ var globalBuilds = stealTools.export({
 var esBuilds = stealTools.export({
 	steal: {
 		config: __dirname + "/package.json!npm",
-		main: "can/can"
+		main: "can/can",
+		map: {
+			"can-import-module@1.3.0#loader/es6": "can-import-module@1.3.0#compat-loader/es6"
+		}
 	},
 	options: {
 		useNormalizedDependencies: false,

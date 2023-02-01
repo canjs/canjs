@@ -7,7 +7,7 @@ export { default as ObservationRecorder } from "./es/can-observation-recorder";
 export { default as SimpleMap } from "./es/can-simple-map";
 export { default as ObservableObject } from "./es/can-observable-object";
 export { default as ObservableArray } from "./es/can-observable-array";
-export { fromAttribute } from "can-observable-bindings";
+export { fromAttribute } from "./es/can-observable-bindings";
 
 // -> Infrastruture
 export { default as bind } from "./es/can-bind";

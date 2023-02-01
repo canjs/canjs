@@ -30,6 +30,7 @@ require('can-event-dom-enter/can-event-dom-enter-test');
 require('can-event-dom-radiochange/can-event-dom-radiochange-test');
 require('can-event-queue/can-event-queue-test');
 require('can-globals/can-globals-test');
+require('can-import-module/test');
 require('can-key/can-key-test');
 require('can-key-tree/can-key-tree-test');
 // require('can-observation/can-observation_test'); in dev-only

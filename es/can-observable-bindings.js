@@ -1,1 +1,1 @@
-export { fromAttribute } from "can-observable-bindings";
+export { default as fromAttribute } from "can-observable-bindings/from-attribute";
