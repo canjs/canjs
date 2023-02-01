@@ -26,7 +26,7 @@ CanJS provides many useful utilities and techniques to help with these tasks. Th
 * using custom events like [guides/forms#BindingtotheEnterkey enter] and [guides/forms#Radiobutton radiochange]
 * using custom attributes such as [guides/forms#Selectmultiple values] and [guides/forms#Bindingtotemplatevariables focused]
 * validating forms using [guides/forms#Manualformvalidation virtual properties] and validation libraries like [guides/forms#Formvalidationusingaplugin validatejs]
-* indentifying and navigating [guides/forms#Bindingconflicts bindings conflicts]
+* identifying and navigating [guides/forms#Bindingconflicts bindings conflicts]
 * working with [guides/forms#Workingwithrelateddata related data], [guides/forms#Usingpromises promises], and [guides/forms#Resettingaselectionwhenitsparentlistchanges parent-child relationships]
 
 We recommend reading the [guides/forms#Bindings Bindings overview] section first before jumping to the topic that interests you—or start at the top to become an expert on it all.

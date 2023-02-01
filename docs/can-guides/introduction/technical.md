@@ -101,7 +101,7 @@ core libraries:
  - [can-observable-object] - Observable objects.
 
 This section shows examples using [can-value.returnedBy value.returnedBy()].  However,
-as [can-obserable-object] and [can-observable-array] use `returnedBy()` internally for [computed getter properties](#Computedgetterproperties)
+as [can-observable-object] and [can-observable-array] use `returnedBy()` internally for [computed getter properties](#Computedgetterproperties)
 and [asynchronous computed getter properties](##Asynccomputedgetterproperties), the benefits
 of computes extend to [can-observable-object] and [can-observable-array]. In a few examples cases, we’ll use [computed getter properties](#Computedgetterproperties) to
 show the advantages of computes.
@@ -1154,7 +1154,7 @@ The following sections cover:
 
  - [The powerful syntaxes](#MustacheandHandlebarsextendedsyntax) that support the transformation of any ViewModel into HTML.
  - How [custom elements and attributes](#Customelementsandattributes) make
-   applications easer to assemble and debug.
+   applications easier to assemble and debug.
  - The [binding syntaxes](#DataandEventBindings) that allow HTML to
    call methods back on the ViewModel.
  - The strategies used to keep [DOM updates to a minimum](#MinimalDOMupdates).
