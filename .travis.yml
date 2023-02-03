@@ -1,5 +1,6 @@
 sudo: false
 language: node_js
+dist: focal
 services:
 - xvfb
 before_install:
@@ -18,24 +19,24 @@ after_install:
 - "echo 'Install has finished'"
 matrix:
   include:
-    - node_js: 12
+    - node_js: 14
       env: TEST_SUITE=sauce-labs
       addons:
         sauce_connect: true
         hosts: canjs.test
-    - node_js: 12
+    - node_js: 14
       env: TEST_SUITE=development
       addons:
         firefox: latest
-    - node_js: 12
+    - node_js: 14
       env: TEST_SUITE=production
       addons:
         firefox: latest
-    - node_js: 12
+    - node_js: 14
       env: TEST_SUITE=builders
       addons:
         firefox: latest
-    - node_js: 12
+    - node_js: 14
       env: TEST_SUITE=global-build
       addons:
         firefox: latest
