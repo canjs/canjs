@@ -211,7 +211,7 @@ observables. Use it to:
 
 
 - Update element attribute and property values with observable values.  The following uses [can-stache-bindings.toChild]
-  to update the `<input>`’s _value from_  the [can-stache-element/static.props]’s `count` property.
+  to update the `input`’s _value from_  the [can-stache-element/static.props]’s `count` property.
   ```html
   <my-demo></my-demo>
 
