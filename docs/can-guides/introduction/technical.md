@@ -382,7 +382,7 @@ can improve performance by preventing compute recalculations.
 
 ## Outstanding Observable Objects
 
-[can-observable-object] and [can-observable-array] is used to create observable [Models](#MalleableModels) and [ViewModels](#VeraciousViewModels) like:
+[can-observable-object] and [can-observable-array] is used to create observable [Models](#MalleableModels) and [observable properties](#VeraciousObservableProperties) like:
 
 ```js
 import { ObservableObject } from "can";
@@ -713,18 +713,18 @@ and they use the `Order` model to create an order by making a `POST` request to
 
 _Custom Elements_ are broken down themselves into two layers:
 
-- [ViewModels](#VeraciousViewModels) that manage the logic of a custom element.
+- [Observable properties](#VeraciousObservableProperties) that manage the logic of a custom element.
 - [Views](#VivaciousViews) that convert the data and values of the
- _ViewModel_ into HTML elements. Views update their HTML
- elements when the _ViewModel_ changes and are able to
- call methods on the _ViewModel_ when a user interacts
+ _Observable Properties_ into HTML elements. Views update their HTML
+ elements when the _Observable Properties_ changes and are able to
+ call methods on the _Observable Properties_ when a user interacts
  with their HTML.
 
 All of these parts, _Custom Elements_, _Models_,
-_View Models_, and _Views_, are __mostly__ written using just
+_Observable Properties_, and _Views_, are __mostly__ written using just
 a couple APIs:
 
-- [can-observable-object] and [can-observable-array] observables for _ViewModels_ and _Models_.
+- [can-observable-object] and [can-observable-array] observables for _Observable properties_ and _Models_.
 - [can-stache] templates with [can-stache-bindings] for _Views_.
 
 The rest of the core APIs are just decorators, used
@@ -745,7 +745,7 @@ and [can-stache].
 
 ### Independent
 
-CanJS’s Models, Views, and ViewModels are all independent, individually
+CanJS’s Models, Views, and Observable properties are all independent, individually
 useful layers.  This independence is the source for the benefits of
 MVVM architecture discussed in the following sections:
 
@@ -838,7 +838,7 @@ This model can independently make requests to a RESTful service layer.
   todo.destroy().then((todo) => {})
   ```
 
-The __ViewModel__, in _components/todo-list/view-model.js_, looks like:
+The __Observable Object__, in _components/todo-list/view-model.js_, looks like:
 
 ```js
 import { ObservableObject } from "can";
@@ -879,7 +879,7 @@ export default class Model extends ObservableObject {
 }
 ```
 
-This _ViewModel_ will be tested independent of the view in the
+This _Observable Object_ will be tested independent of the view in the
 [testable](#Testable) section.
 
 The __View__, in _components/todo-list/view.stache_, looks like:
@@ -949,7 +949,7 @@ and compose-able code.
 ### Testable
 
 CanJS’s MVVM architecture results in testable code. In the previous
-section, we created the [guides/todomvc]’s `<todo-list>`’s Model, ViewModel, and View code.
+section, we created the [guides/todomvc]’s `<todo-list>`’s Model, Observable Properties, and View code.
 The following shows examples of testing each part.
 
 Testing the __Model__’s `active` and `complete` properties:
@@ -965,7 +965,7 @@ test("Todo active and complete", () => {
 });
 ```
 
-Testing the __ViewModel__’s `edit` and `cancelEdit` methods:
+Testing the __Observable Object__’s `edit` and `cancelEdit` methods:
 
 ```js
 test("TodoListVM cancelEdit", () => {
@@ -1065,7 +1065,7 @@ We believe that application state should be federated:
 
 > [Federated](https://en.oxforddictionaries.com/definition/federate) - form or be formed into a single centralized unit, within which each state or organization keeps some internal autonomy.
 
-CanJS applications are composed from hierarchical [can-component]s, each containing their own independent state (their own ViewModel). This architecture is at the core of CanJS’s approach to building large applications.
+CanJS applications are composed from hierarchical [can-stache-element]s, each containing their own independent state (their own Observable Properties). This architecture is at the core of CanJS’s approach to building large applications.
 
 > The secret to building large apps is never build large apps. Break your applications into small pieces. Then, assemble those testable, bite-sized pieces into your big application.
 
@@ -1090,10 +1090,10 @@ becomes an implicit dependency of every component in the application. This creat
 
 * Individual components become harder to test in isolation, since testing them requires importing or mocking large external dependencies.
 
-## Veracious ViewModels
+## Veracious observable properties
 
-CanJS’s ViewModels are [can-observable-object] and [can-observable-array] observables that manage the state of a [can-component].
-As ViewModels are observables, CanJS’s ViewModels have all the benefits of
+CanJS’s objects are [can-observable-object] and [can-observable-array] observables that manage the state of a [can-stache-element].
+As [can-stache-element] properties are observables, CanJS’s observables have all the benefits of
 CanJS’s outstanding observable objects, namely:
 
  - [Expressive property definition syntax](#Expressivepropertydefinitionsyntax)
@@ -1101,8 +1101,8 @@ CanJS’s outstanding observable objects, namely:
  - [Computed getter properties](#Computedgetterproperties)
  - [Async computed getter properties](#Asynccomputedgetterproperties)
 
-In CanJS, the ViewModel is its own layer, completely independent from the
-template and the component. This is why ViewModels are largely responsible for
+In CanJS, the observable properties is its own layer, completely independent from the
+template and the component. This is why observable properties are largely responsible for
 many of the benefits of CanJS’s maintainable MVVM architecture:
 
  - [Independence](#Independent)
@@ -1110,13 +1110,13 @@ many of the benefits of CanJS’s maintainable MVVM architecture:
  - [Testable](#Testable)
  - [Compose-able](#Compose_able)
 
-The introduction of a strong ViewModel provides key advantages for maintaining large applications:
+The introduction of a strong observable properties provides key advantages for maintaining large applications:
 
-* Decouples the presentation from its business logic - A ViewModel is essentially an object and methods representing the state of a View. This separation of concerns enables simple, HTML-based Views containing minimal logic, while the ViewModel manages the complexities of application logic.
+* Decouples the presentation from its business logic - Observable properties are essentially an object and methods representing the state of a View. This separation of concerns enables simple, HTML-based Views containing minimal logic, while the observable properties manage the complexities of application logic.
 
 * Enables designer/developer cooperation - Because the view is stripped of code and application logic, designers can safely and comfortably change the View without fear of breaking things.
 
-* Enables easier testing - ViewModels can be unit tested easily. Because they represent the view’s state without any knowledge of the DOM, they provide a simple interface for testing.
+* Enables easier testing - observable properties can be unit tested easily. Because they represent the view’s state without any knowledge of the DOM, they provide a simple interface for testing.
 
 ## Vivacious Views
 
@@ -1152,11 +1152,11 @@ and view bindings like [can-stache-bindings.twoWay] in the template. For example
 
 The following sections cover:
 
- - [The powerful syntaxes](#MustacheandHandlebarsextendedsyntax) that support the transformation of any ViewModel into HTML.
+ - [The powerful syntaxes](#MustacheandHandlebarsextendedsyntax) that support the transformation of any observable property into HTML.
  - How [custom elements and attributes](#Customelementsandattributes) make
    applications easier to assemble and debug.
  - The [binding syntaxes](#DataandEventBindings) that allow HTML to
-   call methods back on the ViewModel.
+   call methods back on the observable property.
  - The strategies used to keep [DOM updates to a minimum](#MinimalDOMupdates).
  - How Views can fit in your larger ecosystem with [template minification](#Templateminification),
    [dependency declarations](#In_templatedependencydeclarations), and [progressive loading](#ProgressiveLoading).
@@ -1167,7 +1167,7 @@ The following sections cover:
 [Mustache](https://mustache.github.io/mustache.5.html), adopt many of
 the [Handlebars](http://handlebarsjs.com/) extensions, and provide a few extensions of
 their own.  The result is a simple syntax that covers the most common things needed in a template,
-but is capable of translating any ViewModel into HTML.
+but is capable of translating any observable property into HTML.
 
 
 [can-stache] is built on the Mustache spec because Mustache simplifies the most common needs of templates into
@@ -1186,7 +1186,7 @@ A simple template might look like:
 {{/}}
 ```
 
-This is not enough to translate every ViewModel into HTML, so [can-stache] supports
+This is not enough to translate every observable property into HTML, so [can-stache] supports
 additional JavaScript-like syntaxes such as the
 ability to [can-stache/expressions/call call methods] and use [can-stache.helpers.for-of for(of)]
 loops.
@@ -1295,7 +1295,7 @@ if the data passed to the following template changes, the DOM is automatically u
 
 In addition to the default Mustache data bindings, the [can-stache-bindings] module
 adds more powerful data and event bindings. These event bindings provide full control over how
-data and control flows between the DOM, ViewModels, and the [can-view-scope]. Bindings look like:
+data and control flows between the DOM, observable properties, and the [can-view-scope]. Bindings look like:
 
  - `on:event="key()"` for [can-stache-bindings.event event binding].
  - `prop:from="key"` for [can-stache-bindings.toChild one-way binding to a child].
