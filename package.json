@@ -164,7 +164,7 @@
     "es6-promise-polyfill": "^1.2.0",
     "funcunit": "^3.4.2",
     "gzip-size": "^4.1.0",
-    "http-server": "^0.11.1",
+    "http-server": "^0.12.0",
     "jquery": "2.x - 3.x",
     "jquery-ui": "^1.12.0",
     "kefir": "^3.8.0",
