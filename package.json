@@ -160,7 +160,7 @@
     "bundlesize": "^0.18.0",
     "can-reflect-tests": "^1.0.0",
     "can-test-helpers": "^1.1.1",
-    "core-js": "^2.5.7",
+    "core-js": "^3.3.3",
     "es6-promise-polyfill": "^1.2.0",
     "funcunit": "^3.4.2",
     "gzip-size": "^4.1.0",
